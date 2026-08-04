@@ -49,7 +49,7 @@ Pane {
                     currentIndex: stackLayout.currentIndex
 
                     // The 'model' is the data. Here it's just a simple list of strings.
-                    model: ["Video", "Performance", "System", "UI"]
+                    model: ["Video", "Performance", "System", "Privacy", "UI"]
 
                     // 'delegate' defines how each individual item in the list looks
                     delegate: ItemDelegate {
@@ -412,15 +412,101 @@ Pane {
                             HelpButton {
                                 Layout.fillWidth: false
                             }
-                            CheckBox {
-                                text: "Use Truststore"
-                                checked: appSettings.use_truststore
-                                onCheckedChanged: appSettings.use_truststore = checked
+                            TextField {
+                                id: "httpVersion"
+                                placeholderText: "HTTP Version may be: v1; v2; v3"
                                 Layout.fillWidth: true
+                                text: appSettings.http_version
+                                onEditingFinished: appSettings.http_version = text
                             }
                         }
                     }
 
+                    // ===============
+                    // TAB 4: Privacy Settings
+                    // ===============
+
+                    ScrollView {
+                        clip: true
+                        id: "scrollviewPrivacy"
+
+                        GridLayout {
+                            columnSpacing: 15
+                            columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
+                            width: scrollviewPerformance.availableWidth
+                            Layout.fillWidth: true
+                            rowSpacing: 15
+
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            CheckBox {
+                                text: "Anonymous Mode"
+                                Layout.fillWidth: true
+                                checked: appSettings.update_checks
+                                onCheckedChanged: appSettings.update_checks = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            CheckBox {
+                                text: "Encrypted Client Hello"
+                                Layout.fillWidth: true
+                                checked: appSettings.encrypted_ch
+                                onCheckedChanged: appSettings.encrypted_ch = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            CheckBox {
+                                text: "DNS over HTTPS"
+                                Layout.fillWidth: true
+                                checked: appSettings.dns_over_https
+                                onCheckedChanged: appSettings.dns_over_https = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            TextField {
+                                id: "dnsPrimaryInput"
+                                placeholderText: "Enter Primary DNS (Must support DNS over HTTPS)"
+                                Layout.fillWidth: true
+                                text: appSettings.dns_server
+                                onEditingFinished: appSettings.dns_server = text
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            TextField {
+                                id: "dnsFallbackInput"
+                                placeholderText: "Enter Fallback DNS (Must support DNS over HTTPS)"
+                                Layout.fillWidth: true
+                                text: appSettings.fallback_dns
+                                onEditingFinished: appSettings.fallback_dns = text
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            CheckBox {
+                                text: "SNI Obfuscation"
+                                Layout.fillWidth: true
+                                checked: appSettings.sni_obfuscation
+                                onCheckedChanged: appSettings.sni_obfuscation = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                            }
+                            TextField {
+                                id: "proxyInput"
+                                placeholderText: "Global Proxy e.g.,: http://username:password@server:port"
+                                Layout.fillWidth: true
+                                text: appSettings.proxy
+                                onEditingFinished: appSettings.proxy = text
+                            }
+
+
+                        }
+                    }
                     // ==========================================
                     // TAB 4: UI SETTINGS
                     // ==========================================

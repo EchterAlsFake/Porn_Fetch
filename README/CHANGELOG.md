@@ -668,7 +668,7 @@ to be refactored.
 # V 3.9
 
 # Legal changes
-Porn Fetch is now fully legal, and you can SAFELY use it, however, due to specific laws in Germany
+Porn Fetch is now fully legal, and you can (probably) safely use it (under german law), however, due to specific laws in Germany
 and the fact that I am now acting as a corporate entity I had to remove some features...
 
 #### Deprecations
@@ -685,19 +685,32 @@ Due to the protection of minors Porn Fetch can not by itself expose or facilitat
 By having a search feature I would (under German law) need to put Porn Fetch behind ID verification either
 for everyone or implement Geo-blocking.
 
-MissAV.ws and HQPorner.com are piracy sites. Since I am now operating commercially, I can not continue 
-to support them.
-
-
+# Bug Fixes
+- Fixed a bug where Porn Fetch would consume gigabytes of memory after downloading a video temporarily
+- Fixed website blocks by updating user agents + correct TLS fingerprinting
+- Fixed pagination issues
 
 # New Features
 - Added support for Redtube.com 
 - Added support for Thumbzilla.com
 - Added support for Tube8.com
 - Support for all proxy types
+- Speed Limit (Actually works now)
+- Settings are dynamically changed without needing to restart
+- Support for accent colors, Material UI and QML
+- QML re-write for parts of the application
+- Support for binding Porn Fetch to a specific network interface
+- Encrypted Client Hello support
+- DNS over HTTPS support (Default = Mullvad)
+
+# Optimizations
+- Increased parsing speed by 10-20x 
+- Support for multipart downloads leading to way faster MP4 downloads
+- Switched to dataclass memory efficient models reducing memory usage per video by up to 99%
+
 
 # Backend
 - Asynchronous Networking (way faster)
-- HTTP3 / HTTP support
+- HTTP3 / HTTP2 support
 - Browser impersonation support with curl_cffi
 - 

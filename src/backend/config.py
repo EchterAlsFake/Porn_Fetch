@@ -31,11 +31,11 @@ TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
-    speedLimitChanged = Signal(float)
     debugModeChanged = Signal(bool)
     languageChanged = Signal(int)
     fontSizeChanged = Signal(int)
     themeChanged = Signal(int)
+    reloadClients = Signal(object)
 
     def __init__(self):
         super().__init__()
@@ -146,7 +146,7 @@ class SettingsManager(QObject):
         # noinspection PyTypeChecker
         return self._settings.value("Performance/retries", defaultValue=4, type=int)
 
-    @Property(float, notify=speedLimitChanged)
+    @Property(float, notify=reloadClients)
     def speed_limit(self) -> float:
         # noinspection PyTypeChecker
         return self._settings.value("Performance/speed_limit", defaultValue=0.0, type=float)
@@ -161,11 +161,6 @@ class SettingsManager(QObject):
     def update_checks(self) -> bool:
         # noinspection PyTypeChecker
         return self._settings.value("Misc/update_checks", defaultValue=True, type=bool)
-
-    @Property(bool, notify=anonymousModeChanged)
-    def anonymous_mode(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/anonymous_mode", defaultValue=False, type=bool)
 
     @Property(bool)
     def supress_errors(self) -> bool:
@@ -182,10 +177,50 @@ class SettingsManager(QObject):
         # noinspection PyTypeChecker
         return self._settings.value("Misc/debug_mode", defaultValue=False, type=bool)
 
-    @Property(bool)
-    def use_truststore(self) -> bool:
+    @Property(str, notify=reloadClients)
+    def interface(self) -> str:
         # noinspection PyTypeChecker
-        return self._settings.value("Misc/use_truststore", defaultValue=False, type=bool)
+        return self._settings.value("Misc/interface", defaultValue=None, type=str)
+
+    @Property(str, notify=reloadClients)
+    def http_version(self) -> str:
+        # noinspection PyTypeChecker
+        return self._settings.value("Misc/http_version", defaultValue="v2", type=str)
+
+    @Property(bool, notify=anonymousModeChanged)
+    def anonymous_mode(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/anonymous_mode", defaultValue=False, type=bool)
+
+    @Property(bool, notify=reloadClients)
+    def encrypted_ch(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/encrypted_ch", defaultValue=True, type=bool)
+
+    @Property(bool, notify=reloadClients)
+    def dns_over_https(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/dns_over_https", defaultValue=True, type=bool)
+
+    @Property(str, notify=reloadClients)
+    def dns_server(self) -> str:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/dns_server", defaultValue="https://dns.mullvad.net/dns-query", type=str)
+
+    @Property(str, notify=reloadClients)
+    def fallback_dns(self) -> str:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/fallback_dns", defaultValue="https://dns.quad9.net/dns-query", type=str)
+
+    @Property(bool, notify=reloadClients)
+    def sni_obfuscation(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/sni_obfuscation", defaultValue=False, type=bool)
+
+    @Property(str, notify=reloadClients)
+    def proxy(self) -> str:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/proxy", defaultValue="", type=str)
 
     @Property(int, notify=languageChanged)
     def language(self) -> int:
@@ -326,12 +361,6 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/update_checks", val)
             self.updateChecksChanged.emit(val)
 
-    @anonymous_mode.setter
-    def anonymous_mode(self, val):
-        if val != self.anonymous_mode:
-            self._settings.setValue("Misc/anonymous_mode", val)
-            self.anonymousModeChanged.emit(val)
-
     @supress_errors.setter
     def supress_errors(self, val):
         if val != self.supress_errors:
@@ -350,10 +379,11 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/debug_mode", val)
             self.debugModeChanged.emit(val)
 
-    @use_truststore.setter
-    def use_truststore(self, val):
-        if val != self.use_truststore:
-            self._settings.setValue("Misc/use_truststore", val)
+    @anonymous_mode.setter
+    def anonymous_mode(self, val):
+        if val != self.anonymous_mode:
+            self._settings.setValue("Privacy/anonymous_mode", val)
+            self.anonymousModeChanged.emit(val)
 
     @language.setter
     def language(self, val):

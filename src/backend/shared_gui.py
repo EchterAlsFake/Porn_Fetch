@@ -1,89 +1,130 @@
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QMainWindow, QMessageBox
-from PySide6.QtCore import Signal, QObject, QCoreApplication
+import os
+from pathlib import Path
+
+os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Material")
+os.environ.setdefault("QT_QUICK_CONTROLS_MATERIAL_THEME", "Dark")
+
+from PySide6.QtGui import  QGuiApplication
+from PySide6.QtQml import QQmlEngine, QQmlComponent
+from PySide6.QtWidgets import QMessageBox, QApplication
+from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop, QThread, Qt, QMetaObject, Slot
+
+_qml_engine = None
+_dispatcher = None
 
 
-def ui_popup(text, title="Notice"):
-    """A styled UI popup for small messages to the user."""
+def _get_qml_engine():
+    global _qml_engine
+    if _qml_engine is None:
+        _qml_engine = QQmlEngine()
+    return _qml_engine
+
+
+class _PopupDispatcher(QObject):
+    @Slot(str, str)
+    def show_popup_slot(self, text: str, title: str):
+        _show_qml_popup_impl(text, title)
+
+
+def _get_dispatcher():
+    global _dispatcher
+    if _dispatcher is None:
+        _dispatcher = _PopupDispatcher()
+        app = QCoreApplication.instance()
+        if app:
+            _dispatcher.moveToThread(app.thread())
+    return _dispatcher
+
+
+def _fallback_popup(text: str, title: str):
     message_box = QMessageBox()
     message_box.setWindowTitle(title)
     message_box.setText(text)
-
-    # Apply custom style sheet
-    message_box.setStyleSheet("""
-    /* Dialog surface */
-    QMessageBox {
-      background: #2B2B2B;
-      color: #FFFFFF;
-      border: 1px solid #4B4B4B;
-      border-radius: 12px;
-    }
-
-    /* Main text */
-    QMessageBox QLabel#qt_msgbox_label {
-      color: #FFFFFF;
-      font-size: 11pt;
-      padding: 2px 0px;
-    }
-
-    /* Optional informative text (if you use setInformativeText) */
-    QMessageBox QLabel#qt_msgbox_informativelabel {
-      color: #BBBBBB;
-      font-size: 10pt;
-      padding-top: 4px;
-    }
-
-    /* Icon spacing */
-    QMessageBox QLabel#qt_msgboxex_icon_label {
-      padding-right: 14px;
-    }
-
-    /* Button row spacing */
-    QMessageBox QDialogButtonBox {
-      margin-top: 12px;
-    }
-
-    /* Buttons (mirror your global QPushButton rule) */
-    QMessageBox QPushButton {
-      border: 1px solid #555555;
-      background: #3C3C3C;
-      color: #FFFFFF;
-      border-radius: 8px;
-      padding: 6px 12px;
-      min-width: 96px;
-    }
-
-    QMessageBox QPushButton:hover {
-      background: #4C4C4C;
-      border-color: #555555;
-    }
-
-    QMessageBox QPushButton:pressed {
-      background: #5C5C5C;
-    }
-
-    /* Make the default action look like your primary intent */
-    QMessageBox QPushButton:default {
-      background: #007ACC;
-      border-color: #007ACC;
-      color: white;
-    }
-
-    QMessageBox QPushButton:default:hover {
-      background: #005A9E;
-      border-color: #005A9E;
-    }
-
-    /* Disabled */
-    QMessageBox QPushButton:disabled {
-      color: #888888;
-      background: #3C3C3C;
-      border-color: #555555;
-    }
-    """)
-
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
+
+
+def _show_qml_popup_impl(text: str, title: str):
+    app = QApplication.instance()
+    if not app:
+        return
+
+    qml_file = Path(__file__).parent.parent / "frontend" / "UI" / "MessageBox.qml"
+    if not qml_file.exists():
+        _fallback_popup(text, title)
+        return
+
+    engine = _get_qml_engine()
+    component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml_file.resolve())))
+
+    if component.isError():
+        print(f"[shared_gui] QML Error loading MessageBox.qml: {component.errors()}")
+        _fallback_popup(text, title)
+        return
+
+    obj = component.create()
+    if not obj:
+        _fallback_popup(text, title)
+        return
+
+    obj.setProperty("dialogTitle", str(title))
+    obj.setProperty("messageText", str(text))
+
+    # Center on active window or primary screen
+    active_win = app.activeWindow()
+    dw = obj.property("width") or 440
+    dh = obj.property("height") or 220
+
+    if active_win and active_win.isVisible():
+        geo = active_win.geometry()
+        cx = geo.x() + (geo.width() - dw) // 2
+        cy = geo.y() + (geo.height() - dh) // 2
+        obj.setProperty("x", max(0, cx))
+        obj.setProperty("y", max(0, cy))
+    else:
+        screen = QGuiApplication.primaryScreen()
+        if screen:
+            geo = screen.geometry()
+            cx = geo.x() + (geo.width() - dw) // 2
+            cy = geo.y() + (geo.height() - dh) // 2
+            obj.setProperty("x", max(0, cx))
+            obj.setProperty("y", max(0, cy))
+
+    loop = QEventLoop()
+    obj.closed.connect(loop.quit)
+    obj.show()
+    obj.raise_()
+    obj.requestActivate()
+    loop.exec()
+    obj.deleteLater()
+
+
+def ui_popup(text, title="Notice"):
+    """A styled QML UI popup for small messages and notifications to the user."""
+    if text is None:
+        text = ""
+    else:
+        text = str(text)
+
+    if title is None or not isinstance(title, str):
+        title = "Notice"
+
+    app = QApplication.instance()
+    if not app:
+        print(f"[{title}] {text}")
+        return
+
+    if QThread.currentThread() == app.thread():
+        _show_qml_popup_impl(text, title)
+    else:
+        dispatcher = _get_dispatcher()
+        QMetaObject.invokeMethod(
+            dispatcher,
+            "show_popup_slot",
+            Qt.ConnectionType.BlockingQueuedConnection,
+            text,
+            title
+        )
 
 
 def reset_pornfetch():

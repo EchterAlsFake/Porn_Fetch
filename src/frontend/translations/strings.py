@@ -58,3 +58,20 @@ to happen.
 
 Please report this with the exact things you did to trigger this on GitHub!"""
     metadata_write_error = "Couldn't write metadata into the file. Please report this error!"
+    update_failed = "Couldn't check for updates. Server is probably down and I am already working on it :)"
+    sni_leak = """
+Porn Fetch tried to protect your privacy by modifying the SNI packet in the encrypted TLS layer. This packet tells
+where the request goes. This means that your ISP or any middleman in your network can see the domain you are reaching.
+Porn Fetch tries to hide this by obfuscating the packet into multiple packets with the domain name split.
+
+However, while verifying if this actually worked I saw that it failed. The request will be dropped and not retried.
+This is a very specific error. If you want to help, please enable the debug_mode in Porn Fetch settings, do the exact
+same thing you just did again (after restarting) and send an error report along with the .log files to:
+
+EchterAlsFakeBS@proton.me
+Thank you :) 
+
+If this happens frequently, disable the SNI Obfuscation feature and use a Proxy / VPN instead. 
+This feature is only relevant to prevent MiTM attacks and to prevent state firewall blocks.
+    
+"""

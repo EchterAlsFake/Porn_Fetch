@@ -1,13 +1,14 @@
 import os
 import sys
 import shutil
+import subprocess
 import ctypes
-import clients as clients
+from src.backend import clients as clients
 
-from config import __version__
+from src.backend.config import __version__
 from curl_cffi import Response
 from PySide6.QtCore import Slot, QObject
-from shared_functions import configure_app_logging, handle_error_gracefully
+from src.backend.shared_functions import configure_app_logging, handle_error_gracefully
 
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
@@ -81,7 +82,8 @@ class CheckUpdates:
     See: https://echteralsfake.me/privacy_policy for more information
     """
 
-    async def check(self):
+    @staticmethod
+    async def check():
         url = f"https://echteralsfake.me/update"
         try:
             response: Response = await clients.core.fetch(url=url, get_response=True)
@@ -107,7 +109,7 @@ class CheckUpdates:
                 logger.error("Server is currently offline. Probably already fixing it :)")
 
         except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
+            raise CheckUpdates
 
 
 

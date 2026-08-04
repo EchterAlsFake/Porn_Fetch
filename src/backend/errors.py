@@ -41,6 +41,18 @@ class MetadataWriteError(Exception):
         self.msg = msg
 
 
+class UpdateCheckFailed(Exception):
+    def __init__(self, msg: str = TRANSLATE_ERRORS.update_failed):
+        super().__init__(msg)
+        self.msg = msg
+
+
+class SNILeak(Exception):
+    def __init__(self, msg: str = TRANSLATE_ERRORS.sni_leak):
+        super().__init__(msg)
+        self.msg = msg
+
+
 class AppNetworkError(Exception): pass
 class AppNotFoundError(Exception): pass
 class AppBotBlocked(Exception): pass

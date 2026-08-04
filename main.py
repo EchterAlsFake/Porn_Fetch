@@ -22,12 +22,10 @@ Discord: echteralsfake (faster response)
 import os
 import sys
 import tempfile
-from string import Template
 
 # Pre-Load PySide6 to show a loading splashscreen
+from string import Template
 from PySide6.QtWidgets import QApplication
-
-from backend.clients import AllowedVideoType
 
 app = QApplication(sys.argv)
 
@@ -74,7 +72,7 @@ import webbrowser
 
 from pathlib import Path
 from datetime import datetime
-from threading import Event, Lock
+from threading import Event
 from asyncstdlib import islice, chain
 from typing import AsyncGenerator, AsyncIterator
 
@@ -86,12 +84,11 @@ app.processEvents()
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtQml import QQmlEngine
-from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QFile, Slot,
-                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QSettings)
-from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QSizePolicy, QLayout,
-                               QInputDialog, QMainWindow, QProgressBar, QComboBox, QWidget, QPushButton,
-                                QHBoxLayout)
+from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
+from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot,
+                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
+from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView,
+                               QInputDialog, QMainWindow, QComboBox)
 
 
 splash.showMessage("Importing (Backend).")
@@ -109,7 +106,7 @@ from src.backend.shared_gui import (ui_popup, reset_pornfetch, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
 from src.backend.helper_functions import (default_license_path, safe_rmtree, make_debug_log, get_widget_value,
                                           set_widget_value)
-
+from src.backend.update_service import CheckUpdates
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.errors import (UnsupportedPlatform, AppDownloadFailed, AppNetworkError, AppNotFoundError,
@@ -160,6 +157,7 @@ last_index = 0 # Tracks the last index of the tree widget in case the user does 
 x: bool = False # Don't ask (this is a secret ;)
 w = None
 
+
 class ProcessVideos(QObject):
     error_signal = Signal(str)
 
@@ -167,7 +165,6 @@ class ProcessVideos(QObject):
     This class is responsible for processing the videos in the background, loading the data, adjusting paths and
     handling errors
     """
-
     def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
                  download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path,
                  video_filters: VideoFilters, result_limit: int) -> None:
@@ -270,7 +267,7 @@ class ProcessVideos(QObject):
         return max(parsed_qualities)
 
     @staticmethod
-    async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, VideoObject]:
+    async def process_single_video(video_object: str | clients.AllowedVideoType) -> tuple[clients.AllowedVideoType, VideoObject]:
         video = await clients.get_video(video_object)
         video_attributes = await clients.load_video_attributes(video=video)
         return video, video_attributes
@@ -438,13 +435,11 @@ class PornFetch(QMainWindow):
         This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
         """
 
-        #self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
+        self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
         self.button_connections()  # Connects the buttons to their functions
         #self.shortcuts()  # Activates the keyboard shortcuts
-        #self.logger.debug("Startup: [3/5] Initialized the User Interface")
-        #self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-        #self.app_config = config.SettingsManager()
-        #self.logger.debug("Startup: [4/5] Loaded the user settings")
+        self.logger.debug("Startup: [3/5] Initialized the User Interface")
+        self.logger.debug("Startup: [4/5] Loaded the user settings")
         #self.download_scheduler = DownloadScheduler(self.app_config, self)
         #self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         #self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
@@ -894,81 +889,6 @@ You have all paid features unlocked :)
             item = self.ui.main_tree_widget.topLevelItem(i)
             identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
             self.queue_download(video_id=identifier)
-
-    def load_user_settings(self):
-        # Video related
-        quality = config.app_settings.quality
-        key = next((k for k, v in config.app_settings.mappings_quality.items() if v == quality), None)
-        self.ui.settings_video_combobox_quality.setCurrentIndex(key)
-
-        self.ui.settings_video_combobox_model_videos.setCurrentIndex(config.app_settings.model_videos)
-        self.ui.settings_spinbox_videos_result_limit.setValue(config.app_settings.result_limit)
-        self.ui.settings_lineedit_videos_output_path.setText(config.app_settings.output_path)
-        self.ui.settings_checkbox_videos_write_metadata.setChecked(config.app_settings.write_metadata)
-        self.ui.settings_checkbox_videos_skip_existing_files.setChecked(config.app_settings.skip_existing_files)
-        self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(config.app_settings.track_videos)
-        self.ui.settings_lineedit_videos_database_path.setText(config.app_settings.database_path)
-
-        # Performance related
-        self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(config.app_settings.parallel_downloads)
-        self.ui.settings_spinbox_performance_network_delay.setValue(config.app_settings.network_delay)
-        self.ui.settings_spinbox_performance_videos_concurrency.setValue(config.app_settings.videos_concurrency)
-        self.ui.settings_spinbox_performance_pages_concurrency.setValue(config.app_settings.pages_concurrency)
-        self.ui.settings_spinbox_performance_download_workers.setValue(config.app_settings.download_workers)
-        self.ui.settings_spinbox_performance_maximal_timeout.setValue(config.app_settings.maximal_timeout)
-        self.ui.settings_spinbox_performance_maximal_retries.setValue(config.app_settings.retries)
-        self.ui.settings_doublespinbox_performance_speed_limit.setValue(config.app_settings.speed_limit)
-        self.ui.settings_spinbox_performance_processing_delay.setValue(config.app_settings.processing_delay)
-
-        # System / Misc related
-        self.ui.settings_checkbox_system_update_checks.setChecked(config.app_settings.update_checks)
-        self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(config.app_settings.enable_anonymous_mode)
-        self.ui.settings_checkbox_system_supress_errors.setChecked(config.app_settings.supress_errors)
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(config.app_settings.enable_logging)
-        self.ui.settings_checkbox_system_enable_debug_mode.setChecked(config.app_settings.debug_mode)
-        self.ui.settings_checkbox_use_truststore.setChecked(config.app_settings.use_truststore)
-
-        # UI
-        language = config.app_settings.language
-        key = next((key for key, value in config.app_settings.mappings_ui_language.items() if value == language), None)
-        self.ui.settings_ui_combobox_language.setCurrentIndex(key)
-
-        theme = config.app_settings.theme
-        if hasattr(self.ui, "settings_combobox_ui_theme"):
-            self.ui.settings_combobox_ui_theme.setCurrentIndex(theme)
-
-        self.ui.settings_spinbox_ui_font_size.setValue(config.app_settings.font_size)
-
-
-    def save_user_settings(self):
-        config.app_settings.quality = self.ui.settings_video_combobox_quality.currentIndex()
-        config.app_settings.model_videos = self.ui.settings_video_combobox_model_videos.currentIndex()
-        config.app_settings.result_limit = self.ui.settings_spinbox_videos_result_limit.value()
-        config.app_settings.output_path = self.ui.settings_lineedit_videos_output_path.text()
-        config.app_settings.write_metadata = self.ui.settings_checkbox_videos_write_metadata.isChecked()
-        config.app_settings.skip_existing_files = self.ui.settings_checkbox_videos_skip_existing_files.isChecked()
-        config.app_settings.track_videos = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
-        config.app_settings.database_path = self.ui.settings_lineedit_videos_database_path.text()
-        config.app_settings.parallel_downloads = self.ui.settings_spinbox_performance_simultaneous_downloads.value()
-        config.app_settings.network_delay = self.ui.settings_spinbox_performance_network_delay.value()
-        config.app_settings.videos_concurrency = self.ui.settings_spinbox_performance_videos_concurrency.value()
-        config.app_settings.pages_concurrency = self.ui.settings_spinbox_performance_pages_concurrency.value()
-        config.app_settings.download_workers = self.ui.settings_spinbox_performance_download_workers.value()
-        config.app_settings.timeout = self.ui.settings_spinbox_performance_maximal_timeout.value()
-        config.app_settings.retries = self.ui.settings_spinbox_performance_maximal_retries.value()
-        config.app_settings.speed_limit = self.ui.settings_doublespinbox_performance_speed_limit.value()
-        config.app_settings.processing_delay = self.ui.settings_spinbox_performance_processing_delay.value()
-
-        config.app_settings.update_checks = self.ui.settings_checkbox_system_update_checks.isChecked()
-        config.app_settings.anonymous_mode = self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked()
-        config.app_settings.suppress_errors = self.ui.settings_checkbox_system_supress_errors.isChecked()
-        config.app_settings.enable_logging = self.ui.settings_checkbox_system_enable_network_logging.isChecked()
-        config.app_settings.debug_mode = self.ui.settings_checkbox_system_enable_debug_mode.isChecked()
-        config.app_settings.use_truststore = self.ui.settings_checkbox_use_truststore.isChecked()
-        config.app_settings.language = self.ui.settings_ui_combobox_language.currentIndex()
-        config.app_settings.font_size = self.ui.settings_spinbox_ui_font_size.value()
-        if hasattr(self.ui, "settings_combobox_ui_theme"):
-            config.app_settings.theme = self.ui.settings_combobox_ui_theme.currentIndex()
 
 
     def set_proxies(self):
