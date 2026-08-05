@@ -11,7 +11,6 @@ Button {
 
     contentItem: IconLabel {
         clip: control.clip
-        color: control.palette.buttonText
         display: control.display
         font: control.font
         icon: control.icon

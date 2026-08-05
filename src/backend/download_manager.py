@@ -30,6 +30,7 @@ class VideoObject:
     status: str
     identifier: str | None = None
     output_path: Path | None = None
+    index: int | None = None
 
 
 class DownloadManager(QObject): # Inherit from QObject so we can work with Slots and Signals

@@ -25,7 +25,7 @@ import tempfile
 
 # Pre-Load PySide6 to show a loading splashscreen
 from string import Template
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QSizePolicy
 
 app = QApplication(sys.argv)
 
@@ -37,7 +37,6 @@ if sys.platform == "darwin":
     # Handles Sparkle Updates + macOS Installation
 
 # Necessary imports for splashscreen
-import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!
 from PySide6.QtGui import QPixmap
 from src.frontend.UI.splashscreen import ModernSplashScreen
 
@@ -87,7 +86,7 @@ from PySide6.QtQml import QQmlEngine
 from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot,
                             QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
-from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView,
+from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
                                QInputDialog, QMainWindow, QComboBox)
 
 
@@ -96,20 +95,16 @@ app.processEvents()
 # Backend imports
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
-from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
-from src.backend.database import save_video_metadata, init_db
-from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP_DIRECTORY,
+from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
-from src.backend.shared_functions import handle_error_gracefully
-from src.backend.shared_gui import (ui_popup, reset_pornfetch, Signals,
-                                    available_title_formatting_options, on_checkbox_clicked)
-from src.backend.helper_functions import (default_license_path, safe_rmtree, make_debug_log, get_widget_value,
-                                          set_widget_value)
+from src.backend.shared_gui import (ui_popup, Signals,
+                                    available_title_formatting_options)
+from src.backend.helper_functions import (safe_rmtree, make_debug_log)
 from src.backend.update_service import CheckUpdates
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
-from src.backend.errors import (UnsupportedPlatform, AppDownloadFailed, AppNetworkError, AppNotFoundError,
+from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
 from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
 
@@ -118,7 +113,7 @@ app.processEvents()
 # Frontend imports
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
-from src.frontend.UI.theme import (apply_theme, apply_theme_light, mark, install_focus_outline,
+from backend.theme_manager import (apply_theme, apply_theme_light, mark, install_focus_outline,
                                    pretty_combo)
 from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
                                               TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
@@ -313,6 +308,7 @@ class ProcessVideos(QObject):
                     output_path = self.create_output_path(video_object, idx, self.custom_path_options)
                     video_object.output_path = output_path
                     video_object.identifier = identifier
+                    video_object.index = idx
 
                     self.download_manager.add_video(video_object)
                     last_index += 1
@@ -397,7 +393,7 @@ class PornFetch(QMainWindow):
         settings_widget.rootContext().setContextProperty("appSettings", app_settings)
         settings_widget.setClearColor(Qt.GlobalColor.transparent)
         settings_widget.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
-        settings_widget.setSource(QUrl.fromLocalFile("src/frontend/UI/Settings.qml"))
+        settings_widget.setSource(QUrl.fromLocalFile("src/frontend/UI/SettingsPage.qml"))
         self.ui.settings_vlayout_1.addWidget(settings_widget)
 
 
@@ -534,14 +530,14 @@ class PornFetch(QMainWindow):
         self.ui.credits_textbrowser.hide()
         self.credits_qml = QQuickWidget(qml_engine, self)
         self.credits_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
-        self.credits_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "CreditsWidget.qml")))
+        self.credits_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "InfoPage.qml")))
         self.ui.scrollarea_credits_vboxlayout.addWidget(self.credits_qml)
         
         # Setup Supported Sites QML
         self.ui.supported_sites_textbrowser.hide()
         self.supported_sites_qml = QQuickWidget(qml_engine, self)
         self.supported_sites_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
-        self.supported_sites_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "SupportedSitesWidget.qml")))
+        self.supported_sites_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "SupportedWebsitesPage.qml")))
         self.ui.gridLayout_20.addWidget(self.supported_sites_qml, 0, 0, 1, 1)
 
     def load_style(self):
@@ -761,6 +757,54 @@ class PornFetch(QMainWindow):
         # Stacked Tree Widget
         self.ui.treewidget_button_downloads.clicked.connect(self.switch_to_treewidget_downloads)
         self.ui.treewidget_button_advanced_configuration.clicked.connect(self.switch_to_treewidget_advanced_configuration)
+
+
+    def video_added_signal(self, video: VideoObject):
+        self.last_index += 1
+
+        title = video.title
+        author = video.author
+        length = video.length
+        index = video.index
+
+        item = QTreeWidgetItem(self.ui.main_tree_widget)
+
+        item.setToolTip(self.COL_TITLE, title)
+        item.setToolTip(self.COL_AUTHOR, author)
+        item.setToolTip(self.COL_LENGTH, str(length))
+
+        if self._anonymous_mode:
+            title = "[redacted]"
+            author = "[redacted]"
+
+        if length in (None, "Not available"):
+            display_duration = "Not available"
+            formatted_duration = "000000000"
+
+        else:
+            display_duration = length // 60
+            formatted_duration = f"{length:05d}"
+
+        item.setText(self.COL_TITLE, f"{index}) {title}")
+        item.setText(self.COL_AUTHOR, author)
+        item.setText(self.COL_LENGTH, str(display_duration))
+
+        download_btn = QPushButton("Download", self)
+        download_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        # This button is used for starting the actual download and will be connected to the download manager
+
+        available = video.qualities
+        preferred = app_settings.quality
+
+
+
+
+    def video_removed_signal(self):
+        ...
+
+    def video_updated_signal(self):
+        ...
+
 
     def initialize_pornfetch(self):
         """
@@ -1613,6 +1657,33 @@ Don't tell anyone, and don't change your language in settings
     QtAsyncio.run()
 
 
+
+async def main() -> int:
+    from PySide6.QtQml import QQmlApplicationEngine
+
+    # This object owns the application-facing state and commands.
+    #controller = AppController(parent=app)
+    splash.finish(w)
+    engine = QQmlApplicationEngine()
+
+    # Pass the controller to the root QML object.
+    #
+    # Main.qml must contain:
+    #     required property var backend
+    #engine.setInitialProperties({
+    #    "backend": controller,
+    #})
+
+    qml_file = Path(__file__).parent / "src" / "frontend" / "UI" / "Main.qml"
+    engine.load(QUrl.fromLocalFile(str(qml_file)))
+
+    # If QML contains a syntax/import error, no root object is created.
+    if not engine.rootObjects():
+        return 1
+
+    return app.exec()
+
+
 if __name__ == "__main__":
     """
     These functions are static functions which I won't need while coding.
@@ -1648,6 +1719,7 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--portable", help="Forces a portable run of Porn Fetch (skips install dialog)", action="store_true")
     parser.add_argument("-t", "--test_mode", help="Runs the gui silently and exists, test's functionality on all systems after build", action="store_true")
     args = parser.parse_args()
-    main(args)
+    #main(args)
+    QtAsyncio.run(main())
 
 # EOF

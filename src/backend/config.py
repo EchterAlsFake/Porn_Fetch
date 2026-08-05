@@ -7,7 +7,6 @@ each other.
 # config.py
 from pathlib import Path
 from PySide6.QtCore import QObject, Signal, QSettings, Property
-from src.frontend.UI.theme import MATERIAL_THEMES, THEME_DISPLAY_NAMES, get_theme_colors
 
 __license__ = "GPL 3"
 __version__ = "3.9"
@@ -37,6 +36,11 @@ class SettingsManager(QObject):
     themeChanged = Signal(int)
     reloadClients = Signal(object)
 
+    # For Theming
+    coreStyleChanged = Signal(str)
+    darkModeChanged = Signal(bool)
+    accentColorChanged = Signal(str)
+
     def __init__(self):
         super().__init__()
         self._settings = QSettings()
@@ -54,7 +58,6 @@ class SettingsManager(QObject):
             10: 240,
             11: 144
         }
-        self.mappings_ui_theme = {i: name for i, name in enumerate(THEME_DISPLAY_NAMES)}
         self.mappings_ui_language = {
             0: "system",
             1: "english",
@@ -217,6 +220,16 @@ class SettingsManager(QObject):
         # noinspection PyTypeChecker
         return self._settings.value("Privacy/sni_obfuscation", defaultValue=False, type=bool)
 
+    @Property(bool, notify=reloadClients)
+    def sni_obfuscation_lite(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/sni_obfuscation_lite", defaultValue=False, type=bool)
+
+    @Property(bool, notify=reloadClients)
+    def sni_obfuscation_strict(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("Privacy/sni_obfuscation_strict", defaultValue=False, type=bool)
+
     @Property(str, notify=reloadClients)
     def proxy(self) -> str:
         # noinspection PyTypeChecker
@@ -232,30 +245,40 @@ class SettingsManager(QObject):
         # noinspection PyTypeChecker
         return self._settings.value("UI/font_size", defaultValue=12, type=int)
 
-    @Property(int, notify=themeChanged)
-    def theme(self) -> int:
+    @Property(str, notify=coreStyleChanged)
+    def core_style(self) -> str:
+        # Basic, Fusion, Material, Universal, Windows
         # noinspection PyTypeChecker
-        return self._settings.value("UI/theme", defaultValue=0, type=int)
+        return self._settings.value("UI/core_style", defaultValue="Material", type=str)
 
-    @Property(list, constant=True)
-    def theme_names(self) -> list:
-        return THEME_DISPLAY_NAMES
+    @core_style.setter
+    def core_style(self, val: str):
+        if val != self.core_style:
+            self._settings.setValue("UI/core_style", val)
+            self.coreStyleChanged.emit(val)
 
-    @Property(str, notify=themeChanged)
-    def theme_primary_color(self) -> str:
-        return get_theme_colors(self.theme)["primary"]
+    @Property(bool, notify=darkModeChanged)
+    def dark_mode(self) -> bool:
+        # noinspection PyTypeChecker
+        return self._settings.value("UI/dark_mode", defaultValue=True, type=bool)
 
-    @Property(str, notify=themeChanged)
-    def theme_bg_color(self) -> str:
-        return get_theme_colors(self.theme)["background"]
+    @dark_mode.setter
+    def dark_mode(self, val: bool):
+        if val != self.dark_mode:
+            self._settings.setValue("UI/dark_mode", val)
+            self.darkModeChanged.emit(val)
 
-    @Property(str, notify=themeChanged)
-    def theme_fg_color(self) -> str:
-        return get_theme_colors(self.theme)["foreground"]
+    @Property(str, notify=accentColorChanged)
+    def accent_color(self) -> str:
+        # noinspection PyTypeChecker
+        return self._settings.value("UI/accent_color", defaultValue="#6366f1", type=str)
 
-    @Property(bool, notify=themeChanged)
-    def theme_is_dark(self) -> bool:
-        return get_theme_colors(self.theme)["is_dark"]
+    @accent_color.setter
+    def accent_color(self, val: str):
+        if val != self.accent_color:
+            self._settings.setValue("UI/accent_color", val)
+            self.accentColorChanged.emit(val)
+
 
     #### --------------- Writing Settings ---------------- ####
 
@@ -379,11 +402,71 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/debug_mode", val)
             self.debugModeChanged.emit(val)
 
+    @interface.setter
+    def interface(self, val):
+        if val != self.interface:
+            self._settings.setValue("Misc/interface", val)
+            self.reloadClients.emit(val)
+
+    @http_version.setter
+    def http_version(self, val):
+        if val != self.http_version:
+            self._settings.setValue("Misc/http_version", val)
+            self.reloadClients.emit(val)
+
     @anonymous_mode.setter
     def anonymous_mode(self, val):
         if val != self.anonymous_mode:
             self._settings.setValue("Privacy/anonymous_mode", val)
             self.anonymousModeChanged.emit(val)
+
+    @encrypted_ch.setter
+    def encrypted_ch(self, val):
+        if val != self.encrypted_ch:
+            self._settings.setValue("Privacy/encrypted_ch", val)
+            self.reloadClients.emit(val)
+
+    @dns_over_https.setter
+    def dns_over_https(self, val):
+        if val != self.dns_over_https:
+            self._settings.setValue("Privacy/dns_over_https", val)
+            self.reloadClients.emit(val)
+
+    @dns_server.setter
+    def dns_server(self, val):
+        if val != self.dns_server:
+            self._settings.setValue("Privacy/dns_server", val)
+            self.reloadClients.emit(val)
+
+    @fallback_dns.setter
+    def fallback_dns(self, val):
+        if val != self.fallback_dns:
+            self._settings.setValue("Privacy/fallback_dns", val)
+            self.reloadClients.emit(val)
+
+    @sni_obfuscation.setter
+    def sni_obfuscation(self, val):
+        if val != self.sni_obfuscation:
+            self._settings.setValue("Privacy/sni_obfuscation", val)
+            self.reloadClients.emit(val)
+
+    @sni_obfuscation_lite.setter
+    def sni_obfuscation_lite(self, val):
+        if val != self.sni_obfuscation_lite:
+            self._settings.setValue("Privacy/sni_obfuscation_lite", val)
+            self.reloadClients.emit(val)
+
+    @sni_obfuscation_strict.setter
+    def sni_obfuscation_strict(self, val):
+        if val != self.sni_obfuscation_strict:
+            self._settings.setValue("Privacy/sni_obfuscation_strict", val)
+            self.reloadClients.emit(val)
+
+    @proxy.setter
+    def proxy(self, val):
+        if val != self.proxy:
+            self._settings.setValue("Proxy/proxy", val)
+            self.reloadClients.emit(val)
 
     @language.setter
     def language(self, val):
@@ -396,12 +479,5 @@ class SettingsManager(QObject):
         if val != self.font_size:
             self._settings.setValue("UI/font_size", val)
             self.fontSizeChanged.emit(val)
-
-    @theme.setter
-    def theme(self, val):
-        val = int(val)
-        if val != self.theme:
-            self._settings.setValue("UI/theme", val)
-            self.themeChanged.emit(val)
 
 app_settings = SettingsManager() # Singleton instance shared globally :)

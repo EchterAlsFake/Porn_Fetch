@@ -5,14 +5,9 @@ import QtQuick.Window
 import QtQuick.Controls.impl
 import QtQuick.Controls.Material
 
-// ApplicationWindow is the root element for our main window.
-// It provides a standard top-level window with background color and basic properties.
 Pane {
     font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
-    Material.theme: appSettings ? (appSettings.theme_is_dark ? Material.Dark : Material.Light) : Material.Dark
-    Material.accent: appSettings ? appSettings.theme_primary_color : "#6366f1"
-    Material.primary: appSettings ? appSettings.theme_primary_color : "#6366f1"
     // We set a slightly custom background color.
     // Since we enabled Material Dark theme in Python, most things will automatically be dark,
     // but setting a specific background ensures a clean, cohesive look.
@@ -493,6 +488,18 @@ Pane {
                                 checked: appSettings.sni_obfuscation
                                 onCheckedChanged: appSettings.sni_obfuscation = checked
                             }
+                            RadioButton {
+                                text: "Lite SNI Obfuscation"
+                                Layout.fillWidth: false
+                                checked: appSettings.sni_obfuscation_lite
+                                onCheckedChanged: appSettings.sni_obfuscation_life = checked
+                            }
+                            RadioButton {
+                                text: "Strict SNI Obfuscation (Requires Admin / root rights)"
+                                Layout.fillWidth: false
+                                checked: appSettings.sni_obfuscation_strict
+                                onCheckedChanged: appSettings.sni_obfuscation_strict = checked
+                            }
                             HelpButton {
                                 Layout.fillWidth: false
                             }
@@ -545,22 +552,35 @@ Pane {
                                 value: appSettings.font_size
                                 onValueModified: appSettings.font_size = value
                             }
-                            HelpButton {
-                                Layout.fillWidth: false
-                            }
-                            Label {
-                                text: "Theme:"
-                            }
+                            Label { text: "Application Style (Requires Restart):" }
                             ComboBox {
                                 Layout.fillWidth: true
-                                model: appSettings ? appSettings.theme_names : []
-                                currentIndex: appSettings ? appSettings.theme : 0
-                                onCurrentIndexChanged: {
-                                    if (appSettings && currentIndex >= 0 && currentIndex !== appSettings.theme) {
-                                        appSettings.theme = currentIndex
-                                    }
-                                }
+                                model: ["Material", "Fusion", "Universal", "Windows"]
+                                // Automatically select the saved style
+                                Component.onCompleted: currentIndex = find(appSettings.core_style)
+                                onActivated: appSettings.core_style = currentText
                             }
+                            HelpButton { Layout.fillWidth: false }
+
+                            // 2. Dark/Light Mode
+                            Label { text: "Dark Mode:" }
+                            Switch {
+                                Layout.fillWidth: true
+                                checked: appSettings.dark_mode
+                                onCheckedChanged: appSettings.dark_mode = checked
+                            }
+                            HelpButton { Layout.fillWidth: false }
+
+                            // 3. Accent Color
+                            Label { text: "Accent Color:" }
+                            ComboBox {
+                                Layout.fillWidth: true
+                                // You can replace these hex codes with a ListModel containing readable names if preferred
+                                model: ["#6366f1", "#f44336", "#4caf50", "#ff9800", "#9c27b0"]
+                                Component.onCompleted: currentIndex = find(appSettings.accent_color)
+                                onActivated: appSettings.accent_color = currentText
+                            }
+                            HelpButton { Layout.fillWidth: false }
 
                         }
                     }
