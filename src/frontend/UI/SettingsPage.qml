@@ -170,7 +170,7 @@ Pane {
                                     Layout.fillWidth: true
                                     text: "Write metadata"
                                     checked: appSettings.write_metadata
-                                    onCheckedChanged: appSettings.write_metadata = checked
+                                    onToggled: appSettings.write_metadata = checked
 
                                 }
 
@@ -179,7 +179,7 @@ Pane {
                                     Layout.fillWidth: true
                                     text: "Skip existing files"
                                     checked: appSettings.skip_existing_files
-                                    onCheckedChanged: appSettings.skip_existing_files = checked
+                                    onToggled: appSettings.skip_existing_files = checked
                                 }
 
                             }
@@ -357,7 +357,7 @@ Pane {
                                 text: "Search for Updates (On startup)"
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
-                                onCheckedChanged: appSettings.update_checks = checked
+                                onToggled: appSettings.update_checks = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -366,7 +366,7 @@ Pane {
                                 text: "Anonymous mode"
                                 Layout.fillWidth: true
                                 checked: appSettings.anonymous_mode
-                                onCheckedChanged: appSettings.anonymous_mode = checked
+                                onToggled: appSettings.anonymous_mode = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -375,7 +375,7 @@ Pane {
                                 text: "Ignore Errors"
                                 Layout.fillWidth: true
                                 checked: appSettings.supress_errors
-                                onCheckedChanged: appSettings.supress_errors = checked
+                                onToggled: appSettings.supress_errors = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -385,7 +385,7 @@ Pane {
                                 text: "Allow error reports (100% anonymous)"
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_logging
-                                onCheckedChanged: appSettings.enable_logging  = checked
+                                onToggled: appSettings.enable_logging  = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -402,8 +402,16 @@ Pane {
                                 text: "Enable Debug Mode (Not recommended)"
                                 Layout.fillWidth: true
                                 checked: appSettings.debug_mode
-                                onCheckedChanged: appSettings.debug_mode = checked
+                                onToggled: appSettings.debug_mode = checked
                             }
+
+                            ComboBox {
+                                    Layout.fillWidth: true
+                                    model: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+                                    currentIndex: appSettings.log_level
+                                    onCurrentIndexChanged: appSettings.log_level = currentIndex
+                                }
+                                
                             HelpButton {
                                 Layout.fillWidth: false
                             }
@@ -439,7 +447,7 @@ Pane {
                                 text: "Anonymous Mode"
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
-                                onCheckedChanged: appSettings.update_checks = checked
+                                onToggled: appSettings.update_checks = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -448,7 +456,7 @@ Pane {
                                 text: "Encrypted Client Hello"
                                 Layout.fillWidth: true
                                 checked: appSettings.encrypted_ch
-                                onCheckedChanged: appSettings.encrypted_ch = checked
+                                onToggled: appSettings.encrypted_ch = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -457,7 +465,7 @@ Pane {
                                 text: "DNS over HTTPS"
                                 Layout.fillWidth: true
                                 checked: appSettings.dns_over_https
-                                onCheckedChanged: appSettings.dns_over_https = checked
+                                onToggled: appSettings.dns_over_https = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -486,19 +494,19 @@ Pane {
                                 text: "SNI Obfuscation"
                                 Layout.fillWidth: true
                                 checked: appSettings.sni_obfuscation
-                                onCheckedChanged: appSettings.sni_obfuscation = checked
+                                onToggled: appSettings.sni_obfuscation = checked
                             }
                             RadioButton {
                                 text: "Lite SNI Obfuscation"
                                 Layout.fillWidth: false
                                 checked: appSettings.sni_obfuscation_lite
-                                onCheckedChanged: appSettings.sni_obfuscation_life = checked
+                                onToggled: appSettings.sni_obfuscation_life = checked
                             }
                             RadioButton {
                                 text: "Strict SNI Obfuscation (Requires Admin / root rights)"
                                 Layout.fillWidth: false
                                 checked: appSettings.sni_obfuscation_strict
-                                onCheckedChanged: appSettings.sni_obfuscation_strict = checked
+                                onToggled: appSettings.sni_obfuscation_strict = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -567,7 +575,7 @@ Pane {
                             Switch {
                                 Layout.fillWidth: true
                                 checked: appSettings.dark_mode
-                                onCheckedChanged: appSettings.dark_mode = checked
+                                onToggled: appSettings.dark_mode = checked
                             }
                             HelpButton { Layout.fillWidth: false }
 
@@ -575,10 +583,17 @@ Pane {
                             Label { text: "Accent Color:" }
                             ComboBox {
                                 Layout.fillWidth: true
-                                // You can replace these hex codes with a ListModel containing readable names if preferred
-                                model: ["#6366f1", "#f44336", "#4caf50", "#ff9800", "#9c27b0"]
-                                Component.onCompleted: currentIndex = find(appSettings.accent_color)
-                                onActivated: appSettings.accent_color = currentText
+                                textRole: "text"
+                                valueRole: "value"
+                                model: ListModel {
+                                    ListElement { text: "Indigo"; value: "#6366f1" }
+                                    ListElement { text: "Red"; value: "#f44336" }
+                                    ListElement { text: "Green"; value: "#4caf50" }
+                                    ListElement { text: "Orange"; value: "#ff9800" }
+                                    ListElement { text: "Purple"; value: "#9c27b0" }
+                                }
+                                Component.onCompleted: currentIndex = indexOfValue(appSettings.accent_color)
+                                onActivated: appSettings.accent_color = currentValue
                             }
                             HelpButton { Layout.fillWidth: false }
 

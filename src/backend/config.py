@@ -43,7 +43,14 @@ class SettingsManager(QObject):
 
     def __init__(self):
         super().__init__()
-        self._settings = QSettings()
+        self._settings = QSettings(__org_name__, __app_name__)
+        self.log_level_map: dict[int, str] = {
+            0: "DEBUG",
+            1: "INFO",
+            2: "WARNING",
+            3: "ERROR",
+            4: "CRITICAL"
+        }
         self.mappings_quality: dict[int, str | int] = {
             0: "best",
             1: "half",
@@ -67,7 +74,7 @@ class SettingsManager(QObject):
         }
 
     def refresh(self):
-        self._settings = QSettings()
+        self._settings = QSettings(__org_name__, __app_name__)
 
     def sync(self):
         self._settings.sync()
@@ -179,6 +186,10 @@ class SettingsManager(QObject):
     def debug_mode(self) -> bool:
         # noinspection PyTypeChecker
         return self._settings.value("Misc/debug_mode", defaultValue=False, type=bool)
+
+    @Property(str, notify=None) # Can't be changed dynamically
+    def log_level(self) -> str:
+        return self._settings.value("Misc/log_level")
 
     @Property(str, notify=reloadClients)
     def interface(self) -> str:
@@ -401,6 +412,11 @@ class SettingsManager(QObject):
         if val != self.debug_mode:
             self._settings.setValue("Misc/debug_mode", val)
             self.debugModeChanged.emit(val)
+
+    @log_level.setter
+    def log_level(self, val):
+        if val != self.log_level:
+            self._settings.setValue("Misc/log_level", val)
 
     @interface.setter
     def interface(self, val):

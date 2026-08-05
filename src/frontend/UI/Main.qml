@@ -3,12 +3,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Controls.Universal
-import "pages"
 
 ApplicationWindow {
     id: window
-    required property var backend
 
     width: 1350
     height: 720
@@ -17,8 +14,6 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("Video Downloader")
-
-    color: "#172023"
 
     ColumnLayout {
         anchors.fill: parent
@@ -74,22 +69,46 @@ ApplicationWindow {
             currentIndex: navigation.currentIndex
 
             DownloadsPage {
-                backend: window.backend
             }
 
             AccountPage {
-                backend: window.backend
             }
 
             SettingsPage {
                 // Pass a settings controller here when necessary.
             }
 
-            InfoPage {
+            Item {
+                InfoPage {
+                    anchors.fill: parent
+                    visible: !appSettings.anonymous_mode
+                }
+
+                Label {
+                    anchors.centerIn: parent
+                    text: qsTr("Widget is hidden due to your privacy settings...")
+                    font.pixelSize: appSettings.font_size
+                    visible: appSettings.anonymous_mode
+                }
+
             }
 
-            SupportedWebsitesPage {
+
+            Item {
+                SupportedWebsitesPage {
+                    anchors.fill: parent
+                    visible: !appSettings.anonymous_mode
+                }
+
+                Label {
+                    anchors.centerIn: parent
+                    text: qsTr("Widget is hidden due to your privacy settings...")
+                    font.pixelSize: appSettings.font_size
+                    visible: appSettings.anonymous_mode
+                }
+
             }
+
         }
     }
 }

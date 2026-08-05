@@ -6,15 +6,14 @@ import QtQuick.Layouts
 
 Pane {
     id: root
-
-    required property var backend
-
+    
     property string selectedProvider:
         providerTabs.currentIndex === 0 ? "Provider A" : "Provider B"
 
     padding: 8
 
     background: Rectangle {
+        color: "transparent"
         border.width: 2
         radius: 10
     }
@@ -121,6 +120,7 @@ Pane {
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            color: "transparent"
 
             Label {
                 anchors.centerIn: parent

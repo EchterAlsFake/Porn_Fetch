@@ -6,12 +6,10 @@ import QtQuick.Layouts
 
 Pane {
     id: root
-
-    required property var backend
-
     padding: 0
 
     background: Rectangle {
+        color: "transparent"
         border.width: 2
         radius: 10
     }
@@ -38,53 +36,27 @@ Pane {
 
             TextField {
                 id: videoUrlField
-
+                focus: true // This automatically focuses the element when the app starts cuz you probably gotta download a video xD
                 Layout.fillWidth: true
 
                 placeholderText: qsTr("Enter a video URL")
                 selectByMouse: true
 
                 onAccepted: {
-                    root.backend.fetch_video(text)
+                    backend.process_single_url(videoUrlField.text, customOptions.text)
+                    videoUrlField.text = ""
                 }
             }
 
             Button {
-                text: qsTr("FETCH VIDEOS")
+                text: qsTr("Get Video")
 
                 enabled: videoUrlField.text.trim().length > 0
                          && !root.backend.busy
 
                 onClicked: {
-                    root.backend.fetch_video(videoUrlField.text)
-                }
-            }
-
-            Label {
-                text: qsTr("Playlist URL:")
-            }
-
-            TextField {
-                id: playlistUrlField
-
-                Layout.fillWidth: true
-
-                placeholderText: qsTr("Enter a playlist URL")
-                selectByMouse: true
-
-                onAccepted: {
-                    root.backend.fetch_playlist(text)
-                }
-            }
-
-            Button {
-                text: qsTr("FETCH VIDEOS")
-
-                enabled: playlistUrlField.text.trim().length > 0
-                         && !root.backend.busy
-
-                onClicked: {
-                    root.backend.fetch_playlist(playlistUrlField.text)
+                    backend.process_single_url(videoUrlField.text, customOptions.text)
+                    videoUrlField.text = ""
                 }
             }
 
@@ -101,20 +73,54 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
-                    root.backend.fetch_model(text)
+                    backend.process_model_url(text, customOptions.text)
+                    modelUrlField.text = ""
                 }
             }
 
             Button {
-                text: qsTr("FETCH VIDEOS")
+                text: qsTr("Get Videos")
 
                 enabled: modelUrlField.text.trim().length > 0
                          && !root.backend.busy
 
                 onClicked: {
-                    root.backend.fetch_model(modelUrlField.text)
+                    backend.process_model_url(modelUrlField.text, customOptions.text)
+                    modelUrlField.text = ""
                 }
             }
+
+
+            Label {
+                text: qsTr("Playlist URL:")
+            }
+
+            TextField {
+                id: playlistUrlField
+
+                Layout.fillWidth: true
+
+                placeholderText: qsTr("Enter a playlist URL")
+                selectByMouse: true
+
+                onAccepted: {
+                    backend.process_playlist_url(text, customOptions.text)
+                    playlistUrlField.text = ""
+                }
+            }
+
+            Button {
+                text: qsTr("Get Videos")
+
+                enabled: playlistUrlField.text.trim().length > 0
+                         && !root.backend.busy
+
+                onClicked: {
+                    backend.process_playlist_url(playlistUrlField.text, customOptions.text)
+                    playlistUrlField.text = ""
+                }
+            }
+
         }
 
         // ------------------------------------------
@@ -128,7 +134,7 @@ Pane {
             Button {
                 Layout.fillWidth: true
 
-                text: qsTr("DOWNLOADS")
+                text: qsTr("Downloads")
                 highlighted: contentStack.currentIndex === 0
 
                 onClicked: {
@@ -139,7 +145,7 @@ Pane {
             Button {
                 Layout.fillWidth: true
 
-                text: qsTr("ADVANCED CONFIGURATION")
+                text: qsTr("Advanced Configuration")
                 highlighted: contentStack.currentIndex === 1
 
                 onClicked: {
@@ -150,12 +156,12 @@ Pane {
             Button {
                 Layout.fillWidth: true
 
-                text: qsTr("CANCEL LOADING")
+                text: qsTr("Cancel Loading")
 
                 enabled: root.backend.busy
 
                 onClicked: {
-                    root.backend.cancel_fetching()
+                    backend.cancel_fetching()
                 }
             }
         }
@@ -180,6 +186,7 @@ Pane {
                     Rectangle {
                         Layout.fillWidth: true
                         implicitHeight: 40
+                        color: "transparent"
 
                         RowLayout {
                             anchors.fill: parent
@@ -194,22 +201,22 @@ Pane {
 
                             Label {
                                 Layout.fillWidth: true
-                                text: qsTr("TITLE")
+                                text: qsTr("Title")
                             }
 
                             Label {
                                 Layout.preferredWidth: 160
-                                text: qsTr("AUTHOR")
+                                text: qsTr("Author")
                             }
 
                             Label {
                                 Layout.preferredWidth: 75
-                                text: qsTr("LENGTH")
+                                text: qsTr("Duration")
                             }
 
                             Label {
                                 Layout.preferredWidth: 80
-                                text: qsTr("QUALITY")
+                                text: qsTr("Quality")
                             }
 
                             Label {
@@ -219,7 +226,7 @@ Pane {
 
                             Label {
                                 Layout.preferredWidth: 180
-                                text: qsTr("PROGRESS")
+                                text: qsTr("Progress")
                             }
                         }
                     }
@@ -327,11 +334,78 @@ Pane {
             // --------------------------------------
 
             Rectangle {
+                color: "transparent"
 
-                Label {
-                    anchors.centerIn: parent
+                GridLayout {
+                    anchors.fill: parent
+                    columns: 2
 
-                    text: qsTr("Advanced configuration")
+                    // Row 1
+                    CheckBox {
+                        text: qsTr("Do not clear videos")
+                        Layout.fillWidth: true
+                    }
+
+                    CheckBox {
+                        text: qsTr("Cleanup on stop (disables resume feature for HLS)")
+                        Layout.fillWidth: true
+                    }
+
+                    // Row 2
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Label {
+                            text: qsTr("Start:")
+                        }
+                        SpinBox {
+                            value: 0
+                            editable: true
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Label {
+                            text: qsTr("End:")
+                        }
+                        SpinBox {
+                            value: 0
+                            editable: true
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    // Row 3
+                    RowLayout {
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+
+                        Label {
+                            text: qsTr("Custom Title formatting:")
+                        }
+                        TextField {
+                            id: customOptions
+                            placeholderText: "$title"
+                            Layout.fillWidth: true
+                        }
+                        Button {
+                            text: qsTr("Options")
+                        }
+                    }
+
+                    // Row 4
+                    Button {
+                        text: qsTr("Keyboard shortcuts")
+                        Layout.columnSpan: 2
+                        Layout.fillWidth: true
+                    }
+
+                    // Spacer item to push the layout cleanly to the top
+                    Item {
+                        Layout.columnSpan: 2
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
@@ -358,6 +432,7 @@ Pane {
             Rectangle {
                 Layout.fillWidth: true
                 implicitHeight: 24
+                color: "transparent"
 
                 Label {
                     anchors.centerIn: parent
