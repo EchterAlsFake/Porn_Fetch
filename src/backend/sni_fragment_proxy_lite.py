@@ -1,3 +1,4 @@
+from __future__ import annotations
 #!/usr/bin/env python3
 """
 AI Transparency:
@@ -66,7 +67,7 @@ HTTP/1.1 or HTTP/2 in curl-cffi while this feature is enabled.
 Python 3.10+; standard library only.
 """
 
-from __future__ import annotations
+
 
 import argparse
 import asyncio

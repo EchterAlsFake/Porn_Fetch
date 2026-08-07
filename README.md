@@ -1,7 +1,7 @@
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
-<h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
+<h1 align="center">Porn Fetch - The Ultimate Open-Source Porn Downloader</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
@@ -38,7 +38,6 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 > [!IMPORTANT]
 > Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ANTIVIRUS_FLAGS.md) for an explanation why this is.
 > For downloading and running Porn Fetch you NEED to disable Real-Time protection in Windows defender!
-
 
 ## 🚀 Quick Links
 - [Features](#-features)

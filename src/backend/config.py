@@ -79,188 +79,182 @@ class SettingsManager(QObject):
     def sync(self):
         self._settings.sync()
 
+    def get_bool(self, key: str, default: bool = False) -> bool:
+        val = self._settings.value(key, defaultValue=default)
+        if isinstance(val, bool):
+            return val
+        if isinstance(val, str):
+            return val.lower() == 'true'
+        return bool(val)
+
+    def get_int(self, key: str, default: int = 0) -> int:
+        val = self._settings.value(key, defaultValue=default)
+        try:
+            return int(val)
+        except (ValueError, TypeError):
+            return default
+
+    def get_float(self, key: str, default: float = 0.0) -> float:
+        val = self._settings.value(key, defaultValue=default)
+        try:
+            return float(val)
+        except (ValueError, TypeError):
+            return default
+
+    def get_str(self, key: str, default: str = "") -> str:
+        val = self._settings.value(key, defaultValue=default)
+        if val is None:
+            return default
+        return str(val)
+
+
     # Video related
     @Property(int)
     def quality(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/quality", defaultValue=5, type=int)
+        return self.get_int("Video/quality", 5)
 
     @Property(int)
     def model_videos(self) -> int:
-        # noinspection PyTypeChecker
-        return int(self._settings.value("Video/model_videos", defaultValue=0, type=int))
+        return self.get_int("Video/model_videos", 0)
 
     @Property(int)
     def result_limit(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/result_limit", defaultValue=50, type=int)
+        return self.get_int("Video/result_limit", 50)
 
     @Property(str)
     def output_path(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/output_path", defaultValue="./", type=str)
+        return self.get_str("Video/output_path", "./")
 
     @Property(bool)
     def write_metadata(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/write_metadata", defaultValue=True, type=bool)
+        return self.get_bool("Video/write_metadata", True)
 
     @Property(bool)
     def skip_existing_files(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/skip_existing_files", defaultValue=True, type=bool)
+        return self.get_bool("Video/skip_existing_files", True)
 
     @Property(bool)
     def track_videos(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/track_videos", defaultValue=False, type=bool)
+        return self.get_bool("Video/track_videos", False)
 
     @Property(str)
     def database_path(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Video/database_path", defaultValue="./downloads.db", type=str)
+        return self.get_str("Video/database_path", "./downloads.db")
 
     # Performance related
     @Property(int)
     def parallel_downloads(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/semaphore", defaultValue=1, type=int)
+        return self.get_int("Performance/semaphore", 1)
 
     @Property(int)
     def network_delay(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/network_delay", defaultValue=0, type=int)
+        return self.get_int("Performance/network_delay", 0)
 
     @Property(int)
     def videos_concurrency(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/videos_concurrency", defaultValue=10, type=int)
+        return self.get_int("Performance/videos_concurrency", 10)
 
     @Property(int)
     def pages_concurrency(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/pages_concurrency", defaultValue=2, type=int)
+        return self.get_int("Performance/pages_concurrency", 2)
 
     @Property(int)
     def download_workers(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/download_workers", defaultValue=20, type=int)
+        return self.get_int("Performance/download_workers", 20)
 
     @Property(int)
     def timeout(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/timeout", defaultValue=10, type=int)
+        return self.get_int("Performance/timeout", 10)
 
     @Property(int)
     def retries(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/retries", defaultValue=4, type=int)
+        return self.get_int("Performance/retries", 4)
 
     @Property(float, notify=reloadClients)
     def speed_limit(self) -> float:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/speed_limit", defaultValue=0.0, type=float)
+        return self.get_float("Performance/speed_limit", 0.0)
 
     @Property(int)
     def processing_delay(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("Performance/processing_delay", defaultValue=0, type=int)
+        return self.get_int("Performance/processing_delay", 0)
 
     # System / Misc related
     @Property(bool, notify=updateChecksChanged)
     def update_checks(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/update_checks", defaultValue=True, type=bool)
+        return self.get_bool("Misc/update_checks", True)
 
     @Property(bool)
     def supress_errors(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/supress_errors", defaultValue=False, type=bool)
+        return self.get_bool("Misc/supress_errors", False)
 
     @Property(bool)
     def enable_logging(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/network_logging", defaultValue=False, type=bool)
+        return self.get_bool("Misc/network_logging", False)
 
     @Property(bool, notify=debugModeChanged)
     def debug_mode(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/debug_mode", defaultValue=False, type=bool)
+        return self.get_bool("Misc/debug_mode", False)
 
     @Property(str, notify=None) # Can't be changed dynamically
     def log_level(self) -> str:
-        return self._settings.value("Misc/log_level")
+        return self.get_str("Misc/log_level", "INFO")
 
     @Property(str, notify=reloadClients)
     def interface(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/interface", defaultValue=None, type=str)
+        return self.get_str("Misc/interface", None)
 
     @Property(str, notify=reloadClients)
     def http_version(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Misc/http_version", defaultValue="v2", type=str)
+        return self.get_str("Misc/http_version", "v2")
 
     @Property(bool, notify=anonymousModeChanged)
     def anonymous_mode(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/anonymous_mode", defaultValue=False, type=bool)
+        return self.get_bool("Privacy/anonymous_mode", False)
 
     @Property(bool, notify=reloadClients)
     def encrypted_ch(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/encrypted_ch", defaultValue=True, type=bool)
+        return self.get_bool("Privacy/encrypted_ch", True)
 
     @Property(bool, notify=reloadClients)
     def dns_over_https(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/dns_over_https", defaultValue=True, type=bool)
+        return self.get_bool("Privacy/dns_over_https", True)
 
     @Property(str, notify=reloadClients)
     def dns_server(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/dns_server", defaultValue="https://dns.mullvad.net/dns-query", type=str)
+        return self.get_str("Privacy/dns_server", "https://dns.mullvad.net/dns-query")
 
     @Property(str, notify=reloadClients)
     def fallback_dns(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/fallback_dns", defaultValue="https://dns.quad9.net/dns-query", type=str)
+        return self.get_str("Privacy/fallback_dns", "https://dns.quad9.net/dns-query")
 
     @Property(bool, notify=reloadClients)
     def sni_obfuscation(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/sni_obfuscation", defaultValue=False, type=bool)
+        return self.get_bool("Privacy/sni_obfuscation", False)
 
     @Property(bool, notify=reloadClients)
     def sni_obfuscation_lite(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/sni_obfuscation_lite", defaultValue=False, type=bool)
+        return self.get_bool("Privacy/sni_obfuscation_lite", False)
 
     @Property(bool, notify=reloadClients)
     def sni_obfuscation_strict(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/sni_obfuscation_strict", defaultValue=False, type=bool)
+        return self.get_bool("Privacy/sni_obfuscation_strict", False)
 
     @Property(str, notify=reloadClients)
     def proxy(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("Privacy/proxy", defaultValue="", type=str)
+        return self.get_str("Privacy/proxy", "")
 
     @Property(int, notify=languageChanged)
     def language(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("UI/language", defaultValue=0, type=int)
+        return self.get_int("UI/language", 0)
 
     @Property(int, notify=fontSizeChanged)
     def font_size(self) -> int:
-        # noinspection PyTypeChecker
-        return self._settings.value("UI/font_size", defaultValue=12, type=int)
+        return self.get_int("UI/font_size", 12)
 
     @Property(str, notify=coreStyleChanged)
     def core_style(self) -> str:
         # Basic, Fusion, Material, Universal, Windows
-        # noinspection PyTypeChecker
-        return self._settings.value("UI/core_style", defaultValue="Material", type=str)
+        return self.get_str("UI/core_style", "Material")
 
     @core_style.setter
     def core_style(self, val: str):
@@ -270,8 +264,7 @@ class SettingsManager(QObject):
 
     @Property(bool, notify=darkModeChanged)
     def dark_mode(self) -> bool:
-        # noinspection PyTypeChecker
-        return self._settings.value("UI/dark_mode", defaultValue=True, type=bool)
+        return self.get_bool("UI/dark_mode", True)
 
     @dark_mode.setter
     def dark_mode(self, val: bool):
@@ -281,8 +274,7 @@ class SettingsManager(QObject):
 
     @Property(str, notify=accentColorChanged)
     def accent_color(self) -> str:
-        # noinspection PyTypeChecker
-        return self._settings.value("UI/accent_color", defaultValue="#6366f1", type=str)
+        return self.get_str("UI/accent_color", "#6366f1")
 
     @accent_color.setter
     def accent_color(self, val: str):

@@ -94,6 +94,15 @@ wheels = [
 ]
 
 [[package]]
+name = "cachetools"
+version = "7.1.7"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/70/d2/47e8bc06fe2a06d3f5bdf20f1126ab66c4e99dc48d940e7ba873f7ac7131/cachetools-7.1.7.tar.gz", hash = "sha256:a3e2a00b14d8f8a6b70c1dae7b4685e7ad3bc965c5b42124a2d6ce895da6cf50", size = 40680, upload-time = "2026-08-01T21:20:40.434Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e4/d8/767faeda872075724b95dd675466a645f1b92aadcdcf2d1429dcfd76c176/cachetools-7.1.7-py3-none-any.whl", hash = "sha256:ef98ef375ad188819ef2f9b3645e3987f4b8c5b7550e436ad998c2de78296df0", size = 16830, upload-time = "2026-08-01T21:20:38.977Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2026.7.22"
 source = { registry = "https://pypi.org/simple" }
@@ -307,11 +316,31 @@ wheels = [
 
 [[package]]
 name = "eaf-base-api"
-version = "3.3.4"
-source = { git = "https://github.com/echteralsfake/eaf_base_api#eec47e3389c188a91c4052f06e8be71c1ac3ae61" }
+version = "4.0.0"
+source = { editable = "../eaf_base_api" }
 dependencies = [
+    { name = "cachetools" },
     { name = "curl-cffi" },
     { name = "tenacity" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "python_full_version >= '3.12' and extra == 'hls'" },
+    { name = "cachetools", specifier = ">=7.0.0" },
+    { name = "curl-cffi" },
+    { name = "m3u8", marker = "extra == 'hls'" },
+    { name = "tenacity", specifier = ">=9.1.2" },
+]
+provides-extras = ["hls"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy" },
+    { name = "pylint" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "types-m3u8" },
 ]
 
 [[package]]
@@ -470,11 +499,11 @@ wheels = [
 
 [[package]]
 name = "packaging"
-version = "26.2"
+version = "26.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d7/f1/e7a6dd94a8d4a5626c03e4e99c87f241ba9e350cd9e6d75123f992427270/packaging-26.2.tar.gz", hash = "sha256:ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661", size = 228134, upload-time = "2026-04-24T20:15:23.917Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz", hash = "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79", size = 313412, upload-time = "2026-08-04T18:15:28.737Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/df/b2/87e62e8c3e2f4b32e5fe99e0b86d576da1312593b39f47d8ceef365e95ed/packaging-26.2-py3-none-any.whl", hash = "sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e", size = 100195, upload-time = "2026-04-24T20:15:22.081Z" },
+    { url = "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl", hash = "sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c", size = 129956, upload-time = "2026-08-04T18:15:27.159Z" },
 ]
 
 [[package]]
@@ -488,11 +517,11 @@ wheels = [
 
 [[package]]
 name = "pip"
-version = "26.2"
+version = "26.2.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/db/96/e6f8e9d9d7b9cc4457092712a7e919c3186aa2c2fa9ffed2c5d29cc947e8/pip-26.2.tar.gz", hash = "sha256:2d8542afcc84cdd8e846c2b36b2861fad1da376dd98f8e7113e9108a3c331690", size = 1848845, upload-time = "2026-07-29T21:57:56.407Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz", hash = "sha256:f6ad667e89a1fe78046c8f13232b247200f5258d7828f3f7883d660878e0813f", size = 1848877, upload-time = "2026-08-04T22:51:14.148Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/62/36/a3aed958d60531cb442b7ab4596cda7b3621cfb916f8ae1d6769795c7dc1/pip-26.2-py3-none-any.whl", hash = "sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad", size = 1816475, upload-time = "2026-07-29T21:57:54.763Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl", hash = "sha256:71138adf1f4ca900cdb7d289c21b7494329f2332b6d85f0e1c42108c0384ed3e", size = 1816632, upload-time = "2026-08-04T22:51:12.472Z" },
 ]
 
 [[package]]
@@ -523,6 +552,7 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "unofficial-api-for-beeg" },
     { name = "unofficial-api-for-eporner" },
+    { name = "unofficial-api-for-hqporner" },
     { name = "unofficial-api-for-pornhub" },
     { name = "unofficial-api-for-porntrex" },
     { name = "unofficial-api-for-redtube" },
@@ -577,7 +607,7 @@ requires-dist = [
     { name = "colorama" },
     { name = "cryptography", marker = "extra == 'dev'" },
     { name = "cryptography", marker = "extra == 'gui'" },
-    { name = "eaf-base-api", git = "https://github.com/echteralsfake/eaf_base_api" },
+    { name = "eaf-base-api", editable = "../eaf_base_api" },
     { name = "fake-useragent" },
     { name = "hue-shift", marker = "extra == 'cli'" },
     { name = "hue-shift", marker = "extra == 'dev'" },
@@ -602,19 +632,20 @@ requires-dist = [
     { name = "soupsieve" },
     { name = "truststore", marker = "extra == 'dev'" },
     { name = "typing-extensions" },
-    { name = "unofficial-api-for-beeg", git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg" },
-    { name = "unofficial-api-for-eporner", git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner" },
-    { name = "unofficial-api-for-pornhub", git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub" },
-    { name = "unofficial-api-for-porntrex", git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex" },
-    { name = "unofficial-api-for-redtube", git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube" },
-    { name = "unofficial-api-for-spankbang", git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang" },
-    { name = "unofficial-api-for-thumbzilla", git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla" },
-    { name = "unofficial-api-for-tube8", git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8" },
-    { name = "unofficial-api-for-xfreehd", git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd" },
-    { name = "unofficial-api-for-xhamster", git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster" },
-    { name = "unofficial-api-for-xnxx", git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx" },
-    { name = "unofficial-api-for-xvideos", git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos" },
-    { name = "unofficial-api-for-youporn", git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn" },
+    { name = "unofficial-api-for-beeg", editable = "../unofficial-api-for-beeg" },
+    { name = "unofficial-api-for-eporner", editable = "../unofficial-api-for-eporner" },
+    { name = "unofficial-api-for-hqporner", editable = "../unofficial-api-for-hqporner" },
+    { name = "unofficial-api-for-pornhub", editable = "../unofficial-api-for-pornhub" },
+    { name = "unofficial-api-for-porntrex", editable = "../unofficial-api-for-porntrex" },
+    { name = "unofficial-api-for-redtube", editable = "../unofficial-api-for-redtube" },
+    { name = "unofficial-api-for-spankbang", editable = "../unofficial-api-for-spankbang" },
+    { name = "unofficial-api-for-thumbzilla", editable = "../unofficial-api-for-thumbzilla" },
+    { name = "unofficial-api-for-tube8", editable = "../unofficial-api-for-tube8" },
+    { name = "unofficial-api-for-xfreehd", editable = "../unofficial-api-for-xfreehd" },
+    { name = "unofficial-api-for-xhamster", editable = "../unofficial-api-for-xhamster" },
+    { name = "unofficial-api-for-xnxx", editable = "../unofficial-api-for-xnxx" },
+    { name = "unofficial-api-for-xvideos", editable = "../unofficial-api-for-xvideos" },
+    { name = "unofficial-api-for-youporn", editable = "../unofficial-api-for-youporn" },
     { name = "urllib3" },
 ]
 provides-extras = ["gui", "cli", "dev", "av"]
@@ -928,96 +959,63 @@ wheels = [
 [[package]]
 name = "unofficial-api-for-beeg"
 version = "1.6"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#a8464998c15b16b9b156c6722cd9be858aefdab3" }
+source = { editable = "../unofficial-api-for-beeg" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+]
+provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-eporner"
 version = "2.4"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#faffbdd5bad31d3cc86b9a4890ae21f0eba852a5" }
+source = { editable = "../unofficial-api-for-eporner" }
 dependencies = [
+    { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "selectolax" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "rich", marker = "extra == 'cli'" },
+    { name = "rich-argparse", marker = "extra == 'cli'" },
+    { name = "selectolax" },
+]
+provides-extras = ["cli"]
+
+[[package]]
+name = "unofficial-api-for-hqporner"
+version = "2.4"
+source = { editable = "../unofficial-api-for-hqporner" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "rich", marker = "extra == 'cli'" },
+    { name = "selectolax" },
+]
+provides-extras = ["cli"]
 
 [[package]]
 name = "unofficial-api-for-pornhub"
-version = "5.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#fe6c84e7d377fd90c8d967e33a557f04f0a08a9e" }
-dependencies = [
-    { name = "chompjs" },
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-porntrex"
-version = "1.7"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#b75913e498b32635d0d755a6b5fafde61b13f494" }
-dependencies = [
-    { name = "eaf-base-api" },
-    { name = "json5" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-redtube"
-version = "1.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#09c5ae339add705bf428a8d08197c9df2e0cca35" }
-dependencies = [
-    { name = "chompjs" },
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-spankbang"
-version = "2.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#1486c7ae3c523b6d8e0c7be26893571a0d35eec8" }
-dependencies = [
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-thumbzilla"
-version = "1.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#e27e1ccd50275f100505a65ea971f4e397320ad9" }
-dependencies = [
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-tube8"
-version = "1.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#0d48878cbdbf4d16ce590fff5fba463bd579e8c4" }
-dependencies = [
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-xfreehd"
-version = "1.6"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#468e0878dd33128357c0db276a8f592e32bb358e" }
-dependencies = [
-    { name = "eaf-base-api" },
-    { name = "selectolax" },
-]
-
-[[package]]
-name = "unofficial-api-for-xhamster"
-version = "2.4"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#db5a0f648531f18a194ccc84b30815e09d21996a" }
+version = "5.3.1"
+source = { editable = "../unofficial-api-for-pornhub" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1026,35 +1024,220 @@ dependencies = [
     { name = "selectolax" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "chompjs" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", editable = "../eaf_base_api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
 [[package]]
-name = "unofficial-api-for-xnxx"
-version = "2.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#4ea29e9e4fb5b69fd7a2408615a0637be56e67e7" }
+name = "unofficial-api-for-porntrex"
+version = "1.7"
+source = { editable = "../unofficial-api-for-porntrex" }
 dependencies = [
+    { name = "eaf-base-api" },
+    { name = "json5" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "json5" },
+    { name = "selectolax" },
+]
+
+[[package]]
+name = "unofficial-api-for-redtube"
+version = "1.3"
+source = { editable = "../unofficial-api-for-redtube" }
+dependencies = [
+    { name = "chompjs" },
+    { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "chompjs" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-spankbang"
+version = "2.3"
+source = { editable = "../unofficial-api-for-spankbang" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "python_full_version >= '3.10' and extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-thumbzilla"
+version = "1.2"
+source = { editable = "../unofficial-api-for-thumbzilla" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-tube8"
+version = "1.2"
+source = { editable = "../unofficial-api-for-tube8" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-xfreehd"
+version = "1.6"
+source = { editable = "../unofficial-api-for-xfreehd" }
+dependencies = [
+    { name = "eaf-base-api" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "selectolax" },
+]
+
+[[package]]
+name = "unofficial-api-for-xhamster"
+version = "2.4"
+source = { editable = "../unofficial-api-for-xhamster" }
+dependencies = [
+    { name = "chompjs" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "chompjs" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-xnxx"
+version = "2.3"
+source = { editable = "../unofficial-api-for-xnxx" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xvideos"
 version = "2.4"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#9b31a3f83b2a7a25bbacc0daa788c0b27d90c216" }
+source = { editable = "../unofficial-api-for-xvideos" }
 dependencies = [
+    { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
 [[package]]
 name = "unofficial-api-for-youporn"
 version = "1.7"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#7330f09c89b0064acfae29b1e8ca337b9f105964" }
+source = { editable = "../unofficial-api-for-youporn" }
 dependencies = [
+    { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", editable = "../eaf_base_api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
 
 [[package]]
 name = "urllib3"

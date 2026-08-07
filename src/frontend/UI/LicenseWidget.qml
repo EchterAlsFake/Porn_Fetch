@@ -188,13 +188,13 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 visible: bridge && bridge.isValid && bridge.licenseKey !== ""
-                height: visible ? keyCol.implicitHeight + 24 : 0
+                Layout.preferredHeight: visible ? keyCol.implicitHeight + 24 : 0
                 radius: 12
                 color: bgInput
                 border.color: border
                 border.width: 1
 
-                Behavior on height { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+                Behavior on Layout.preferredHeight { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
                 ColumnLayout {
                     id: keyCol

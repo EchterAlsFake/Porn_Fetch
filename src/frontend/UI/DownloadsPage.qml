@@ -14,6 +14,20 @@ Pane {
         radius: 10
     }
 
+    function getFilters() {
+        return {
+            "duration_minimum": minDurationSpin.value === 0 ? null : minDurationSpin.value,
+            "duration_maximum": maxDurationSpin.value === 0 ? null : maxDurationSpin.value,
+            "author_regex": authorRegexField.text === "" ? null : authorRegexField.text,
+            "tags_regex": tagsRegexField.text === "" ? null : tagsRegexField.text,
+            "title_regex": titleRegexField.text === "" ? null : titleRegexField.text,
+            "quality_minimum": minQualityCombo.currentText === "Any" ? null : minQualityCombo.currentText,
+            "quality_maximum": maxQualityCombo.currentText === "Any" ? null : maxQualityCombo.currentText,
+            "published_after": afterDateField.text === "" ? null : afterDateField.text,
+            "published_before": beforeDateField.text === "" ? null : beforeDateField.text
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
@@ -43,7 +57,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
-                    backend.process_single_url(videoUrlField.text, customOptions.text)
+                    backend.process_single_url(videoUrlField.text, customOptions.text, root.getFilters())
                     videoUrlField.text = ""
                 }
             }
@@ -52,10 +66,10 @@ Pane {
                 text: qsTr("Get Video")
 
                 enabled: videoUrlField.text.trim().length > 0
-                         && !root.backend.busy
+                         && !backend.busy
 
                 onClicked: {
-                    backend.process_single_url(videoUrlField.text, customOptions.text)
+                    backend.process_single_url(videoUrlField.text, customOptions.text, getFilters())
                     videoUrlField.text = ""
                 }
             }
@@ -73,7 +87,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
-                    backend.process_model_url(text, customOptions.text)
+                    backend.process_model_url(text, customOptions.text, getFilters())
                     modelUrlField.text = ""
                 }
             }
@@ -82,10 +96,10 @@ Pane {
                 text: qsTr("Get Videos")
 
                 enabled: modelUrlField.text.trim().length > 0
-                         && !root.backend.busy
+                         && !backend.busy
 
                 onClicked: {
-                    backend.process_model_url(modelUrlField.text, customOptions.text)
+                    backend.process_model_url(modelUrlField.text, customOptions.text, getFilters())
                     modelUrlField.text = ""
                 }
             }
@@ -104,7 +118,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
-                    backend.process_playlist_url(text, customOptions.text)
+                    backend.process_playlist_url(text, customOptions.text, getFilters())
                     playlistUrlField.text = ""
                 }
             }
@@ -113,10 +127,10 @@ Pane {
                 text: qsTr("Get Videos")
 
                 enabled: playlistUrlField.text.trim().length > 0
-                         && !root.backend.busy
+                         && !backend.busy
 
                 onClicked: {
-                    backend.process_playlist_url(playlistUrlField.text, customOptions.text)
+                    backend.process_playlist_url(playlistUrlField.text, customOptions.text, getFilters())
                     playlistUrlField.text = ""
                 }
             }
@@ -158,7 +172,7 @@ Pane {
 
                 text: qsTr("Cancel Loading")
 
-                enabled: root.backend.busy
+                enabled: backend.busy
 
                 onClicked: {
                     backend.cancel_fetching()
@@ -195,8 +209,8 @@ Pane {
                             spacing: 8
 
                             Label {
-                                Layout.preferredWidth: 70
-                                text: qsTr("DOWNLOAD")
+                                Layout.preferredWidth: 90
+                                text: qsTr("Download?")
                             }
 
                             Label {
@@ -205,27 +219,27 @@ Pane {
                             }
 
                             Label {
-                                Layout.preferredWidth: 160
+                                Layout.preferredWidth: 140
                                 text: qsTr("Author")
                             }
 
                             Label {
-                                Layout.preferredWidth: 75
+                                Layout.preferredWidth: 60
                                 text: qsTr("Duration")
                             }
 
                             Label {
-                                Layout.preferredWidth: 80
+                                Layout.preferredWidth: 100
                                 text: qsTr("Quality")
                             }
 
                             Label {
-                                Layout.preferredWidth: 65
+                                Layout.preferredWidth: 40
                                 text: qsTr("STOP")
                             }
 
                             Label {
-                                Layout.preferredWidth: 180
+                                Layout.preferredWidth: 150
                                 text: qsTr("Progress")
                             }
                         }
@@ -240,7 +254,7 @@ Pane {
                         clip: true
                         spacing: 1
 
-                        model: root.backend.downloads
+                        model: backend.downloads
 
                         delegate: Rectangle {
                             id: downloadRow
@@ -249,12 +263,13 @@ Pane {
                             required property string title
                             required property string author
                             required property string duration
-                            required property string quality
+                            required property var availableQualities
+                            required property string selectedQuality
                             required property int progress
 
                             width: ListView.view.width
                             height: 48
-
+                            color: "transparent"
                             RowLayout {
                                 anchors.fill: parent
                                 anchors.leftMargin: 8
@@ -267,30 +282,74 @@ Pane {
 
                                 Label {
                                     Layout.fillWidth: true
-
-                                    text: downloadRow.title
-
+                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.title
                                     elide: Text.ElideRight
                                 }
 
                                 Label {
-                                    Layout.preferredWidth: 160
-
-                                    text: downloadRow.author
-
+                                    Layout.preferredWidth: 140
+                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.author
                                     elide: Text.ElideRight
                                 }
 
                                 Label {
-                                    Layout.preferredWidth: 75
-
+                                    Layout.preferredWidth: 60
                                     text: downloadRow.duration
                                 }
 
-                                Label {
-                                    Layout.preferredWidth: 80
+                                ComboBox {
+                                    Layout.preferredWidth: 100
 
-                                    text: downloadRow.quality
+                                    // 1. Feed the list of qualities from Python to the dropdown
+                                    model: availableQualities
+
+                                    // 2. Set the currently displayed item
+                                    currentIndex: availableQualities.indexOf(selectedQuality)
+
+                                    // 3. Send the change back to Python when the user picks a new option
+                                    onActivated: {
+                                        backend.update_video_quality(jobId, currentValue)
+                                    }
+
+                                    contentItem: Text {
+                                        text: parent.displayText
+                                        color: "white"
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+
+                                    // 4. Custom look for the dropdown items (Freemium logic)
+                                    delegate: ItemDelegate {
+                                        width: parent.width
+
+                                        // Parse "1080p" -> 1080. If it fails (like "best"), default to 0.
+                                        readonly property int res: parseInt(modelData) || 0
+
+                                        // Determine if it requires premium (e.g., higher than 720p or specifically "4k")
+                                        readonly property bool isPremiumRes: res > 720 || String(modelData).toLowerCase() === "4k"
+
+                                        // Disable the row entirely if it's premium AND the user isn't premium
+                                        enabled: !isPremiumRes || bridge.isPremium
+
+                                        contentItem: RowLayout {
+                                            spacing: 5
+
+                                            Text {
+                                                Layout.fillWidth: true
+                                                text: modelData
+                                                // Gray out the text if it's disabled
+                                                color: parent.enabled ? "white" : "gray"
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+
+                                            // Show a padlock icon for locked qualities
+                                            Text {
+                                                text: "🔒"
+                                                visible: isPremiumRes && !bridge.isPremium
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+                                        }
+                                    }
                                 }
 
                                 Button {
@@ -299,7 +358,7 @@ Pane {
                                     text: "■"
 
                                     onClicked: {
-                                        root.backend.stop_download(
+                                        backend.stop_download(
                                             downloadRow.jobId
                                         )
                                     }
@@ -333,77 +392,206 @@ Pane {
             // Advanced configuration
             // --------------------------------------
 
-            Rectangle {
-                color: "transparent"
+            // --------------------------------------
+            // Advanced configuration
+            // --------------------------------------
 
-                GridLayout {
-                    anchors.fill: parent
-                    columns: 2
+            ScrollView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                contentWidth: availableWidth
 
-                    // Row 1
-                    CheckBox {
-                        text: qsTr("Do not clear videos")
-                        Layout.fillWidth: true
-                    }
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
 
-                    CheckBox {
-                        text: qsTr("Cleanup on stop (disables resume feature for HLS)")
-                        Layout.fillWidth: true
-                    }
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 15
 
-                    // Row 2
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Label {
-                            text: qsTr("Start:")
-                        }
-                        SpinBox {
-                            value: 0
-                            editable: true
-                            Layout.fillWidth: true
-                        }
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Label {
-                            text: qsTr("End:")
-                        }
-                        SpinBox {
-                            value: 0
-                            editable: true
-                            Layout.fillWidth: true
-                        }
-                    }
-
-                    // Row 3
-                    RowLayout {
-                        Layout.columnSpan: 2
+                    // --- 1. GENERAL OPERATIONS ---
+                    GroupBox {
+                        title: qsTr("General Operations")
                         Layout.fillWidth: true
 
-                        Label {
-                            text: qsTr("Custom Title formatting:")
-                        }
-                        TextField {
-                            id: customOptions
-                            placeholderText: "$title"
-                            Layout.fillWidth: true
-                        }
-                        Button {
-                            text: qsTr("Options")
+                        GridLayout {
+                            anchors.fill: parent
+                            columns: 2
+                            columnSpacing: 15
+                            rowSpacing: 10
+
+                            CheckBox {
+                                id: doNotClearCheck
+                                text: qsTr("Do not clear videos")
+                                Layout.fillWidth: true
+                            }
+
+                            CheckBox {
+                                id: cleanupStopCheck
+                                text: qsTr("Cleanup on stop (disables resume for HLS)")
+                                Layout.fillWidth: true
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label { text: qsTr("Start:") }
+                                SpinBox {
+                                    id: startSpin
+                                    value: 0
+                                    editable: true
+                                    Layout.fillWidth: true
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label { text: qsTr("End:") }
+                                SpinBox {
+                                    id: endSpin
+                                    value: 0
+                                    editable: true
+                                    Layout.fillWidth: true
+                                }
+                            }
                         }
                     }
 
-                    // Row 4
+                    // --- 2. VIDEO FILTERS ---
+                    GroupBox {
+                        title: qsTr("Video Filters (Applied during fetch)")
+                        Layout.fillWidth: true
+
+                        GridLayout {
+                            anchors.fill: parent
+                            columns: 2
+                            columnSpacing: 15
+                            rowSpacing: 10
+
+                            // Duration
+                            Label { text: qsTr("Duration (Minutes):") }
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 10
+
+                                SpinBox {
+                                    id: minDurationSpin
+                                    from: 0; to: 9999
+                                    value: 0
+                                    editable: true
+                                    Layout.fillWidth: true
+                                    // Shows "Any" when 0, otherwise "X min"
+                                    textFromValue: function(value) { return value === 0 ? qsTr("Any") : value + qsTr(" min") }
+                                }
+                                Label { text: "-" }
+                                SpinBox {
+                                    id: maxDurationSpin
+                                    from: 0; to: 9999
+                                    value: 0
+                                    editable: true
+                                    Layout.fillWidth: true
+                                    textFromValue: function(value) { return value === 0 ? qsTr("Any") : value + qsTr(" min") }
+                                }
+                            }
+
+                            // Regex Filters
+                            Label { text: qsTr("Title Regex:") }
+                            TextField {
+                                id: titleRegexField
+                                Layout.fillWidth: true
+                                placeholderText: qsTr("e.g., ^Step.*")
+                            }
+
+                            Label { text: qsTr("Author Regex:") }
+                            TextField {
+                                id: authorRegexField
+                                Layout.fillWidth: true
+                                placeholderText: qsTr("e.g., .*Studio$")
+                            }
+
+                            Label { text: qsTr("Tags Regex:") }
+                            TextField {
+                                id: tagsRegexField
+                                Layout.fillWidth: true
+                                placeholderText: qsTr("e.g., pov|amateur")
+                            }
+
+                            // Quality Range
+                            Label { text: qsTr("Quality Range:") }
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 10
+
+                                ComboBox {
+                                    id: minQualityCombo
+                                    Layout.fillWidth: true
+                                    model: ["Any", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
+                                }
+                                Label { text: qsTr("to") }
+                                ComboBox {
+                                    id: maxQualityCombo
+                                    Layout.fillWidth: true
+                                    model: ["Any", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
+                                }
+                            }
+
+                            // Dates
+                            Label { text: qsTr("Publish Date:") }
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 10
+
+                                TextField {
+                                    id: afterDateField
+                                    Layout.fillWidth: true
+                                    placeholderText: qsTr("After (YYYY-MM-DD)")
+                                    // Forces the user to type a valid date format
+                                    validator: RegularExpressionValidator { regularExpression: /^\d{4}-\d{2}-\d{2}$/ }
+                                }
+                                Label { text: "-" }
+                                TextField {
+                                    id: beforeDateField
+                                    Layout.fillWidth: true
+                                    placeholderText: qsTr("Before (YYYY-MM-DD)")
+                                    validator: RegularExpressionValidator { regularExpression: /^\d{4}-\d{2}-\d{2}$/ }
+                                }
+                            }
+                        }
+                    }
+
+                    // --- 3. FORMATTING & SHORTCUTS ---
+                    GroupBox {
+                        title: qsTr("Output")
+                        Layout.fillWidth: true
+
+                        GridLayout {
+                            anchors.fill: parent
+                            columns: 2
+                            columnSpacing: 15
+
+                            Label { text: qsTr("Custom Title formatting:") }
+                            RowLayout {
+                                Layout.fillWidth: true
+                                TextField {
+                                    id: customOptions
+                                    placeholderText: "$title"
+                                    Layout.fillWidth: true
+                                }
+                                Button {
+                                    text: qsTr("Options")
+                                }
+                            }
+                        }
+                    }
+
                     Button {
                         text: qsTr("Keyboard shortcuts")
-                        Layout.columnSpan: 2
                         Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignTop
                     }
 
-                    // Spacer item to push the layout cleanly to the top
+                    // Spacer item to push everything up
                     Item {
-                        Layout.columnSpan: 2
                         Layout.fillHeight: true
                     }
                 }
@@ -419,7 +607,7 @@ Pane {
 
             visible: text.length > 0
 
-            text: root.backend.statusMessage
+            text: backend.statusMessage
         }
 
         RowLayout {

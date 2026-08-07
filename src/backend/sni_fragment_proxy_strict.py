@@ -1,3 +1,4 @@
+from __future__ import annotations
 #!/usr/bin/env python3
 """
 AI Transparency:
@@ -43,7 +44,7 @@ new connection. HTTP/3/QUIC is UDP and is not handled.
 Administrator/root privileges are required. Python 3.10+.
 """
 
-from __future__ import annotations
+
 
 import argparse
 import asyncio

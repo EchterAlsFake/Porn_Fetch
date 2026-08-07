@@ -446,8 +446,8 @@ Pane {
                             CheckBox {
                                 text: "Anonymous Mode"
                                 Layout.fillWidth: true
-                                checked: appSettings.update_checks
-                                onToggled: appSettings.update_checks = checked
+                                checked: appSettings.anonymous_mode
+                                onToggled: appSettings.anonymous_mode = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -633,11 +633,27 @@ Pane {
                     Material.foreground: "white"   // White text
                     font.bold: true // Make text bold
                     text: "Buy License (19.99€)"
+
+                    onClicked: {
+                        Qt.openUrlExternally("https://echteralsfake.me/buy_license")
+                    }
+
                 }
                 Button {
                     Layout.fillWidth: true
                     text: "Import License File"
                     // No custom colors here, defaults to normal Material dark button
+                    onClicked: {
+                        var component = Qt.createComponent("LicenseWindow.qml")
+                        if (component.status == Component.Ready) {
+                            var win = component.createObject(this)
+                            win.show()
+                        } else {
+                            console.error("Error loading LicenseWindow:", component.errorString())
+                        }
+
+                    }
+
                 }
             }
 

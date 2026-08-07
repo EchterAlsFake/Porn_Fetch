@@ -3,7 +3,8 @@ import sys
 import tempfile
 from pathlib import Path
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
-from backend.config import app_settings
+from src.backend.config import app_settings
+from src.backend.download_manager import DownloadListModel
 from src.backend.config import app_settings
 from src.backend.theme_manager import ThemeManager
 from PySide6.QtCore import QUrl
@@ -15,8 +16,11 @@ from PySide6.QtGui import QGuiApplication, QCursor
 core_style = app_settings.core_style
 is_dark = app_settings.dark_mode
 accent_color = app_settings.accent_color
-log_level = app_settings.log_level_map.get(app_settings.log_level)
+log_level = app_settings.log_level_map.get(int(app_settings.log_level))
 os.environ["QT_QUICK_CONTROLS_STYLE"] = core_style
+
+if sys.platform == "linux":
+    os.environ["QT_QPA_PLATFORMTHEME"] = "xdgdesktopportal"
 
 if core_style == "Material": # Material UI is modern and looks great
     os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark" if is_dark else "Light"
@@ -56,6 +60,7 @@ splash.showMessage("Importing (General).")
 import re
 import time
 import uuid
+import atexit
 import logging
 import asyncio
 import argparse
@@ -64,7 +69,8 @@ import traceback
 import webbrowser
 from string import Template
 from datetime import datetime
-from asyncstdlib import islice, chain
+from asyncstdlib import chain
+from contextlib import aclosing
 from typing import AsyncGenerator, AsyncIterator
 from base_api.modules.logger import configure_app_logging
 
@@ -75,7 +81,7 @@ import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network back
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtQml import QQmlEngine
 from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot,
+from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot, Property,
                             QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
 from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
                                QInputDialog, QMainWindow, QComboBox)
@@ -85,15 +91,19 @@ app.processEvents()
 
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
+from src.backend.license_manager import LicenseManager
+from src.backend.license_bridge import LicenseBridge
 import src.backend.shared_functions as shared_functions
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, Signals,
                                     available_title_formatting_options)
 from src.backend.helper_functions import (safe_rmtree, make_debug_log)
-from src.backend.update_service import CheckUpdates
+from src.backend.update_service import CheckUpdates, SparkleUpdater
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
+from src.backend.sni_fragment_proxy_lite import FragmentingProxyConfig, FragmentingProxyProcess
+from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, StrictFragmentingProxyProcess
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
 from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
@@ -127,6 +137,39 @@ except Exception:
     FORCE_DISABLE_AV = True
 
 
+stop_flag = asyncio.Event()
+last_index = 0
+
+def start_proxy_lite():
+    proxy_config = FragmentingProxyConfig(
+        listen_host="127.0.0.1",
+        listen_port=0,
+        upstream_proxy=app_settings.proxy
+    )
+
+    proxy_proces = FragmentingProxyProcess(proxy_config)
+    local_url = proxy_proces.start()
+    print(f"Fragmenting Proxy running at: {local_url}")
+    atexit.register(proxy_proces.stop)
+    return local_url
+
+
+def start_proxy_strict():
+    proxy_config = StrictFragmentingProxyConfig(
+        listen_host="127.0.0.1",
+        listen_port=0,
+        upstream_proxy=app_settings.proxy
+    )
+
+    proxy_process = StrictFragmentingProxyProcess(proxy_config)
+    local_url = proxy_process.start()
+    print(f"[STRICT] Fragmenting Proxy running at: {local_url}")
+    atexit.register(proxy_process.stop)
+    return local_url
+
+
+
+
 class ProcessVideos(QObject):
     error_signal = Signal(str)
 
@@ -135,19 +178,18 @@ class ProcessVideos(QObject):
     handling errors
     """
 
-    def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
-                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path,
-                 video_filters: VideoFilters, result_limit: int) -> None:
+    def __init__(self, iterator: AsyncGenerator, custom_path_options: str, video_filters: VideoFilters,
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event) -> None:
         super().__init__()
         self.iterator = iterator
         self.custom_path_options = custom_path_options
-        self.max_attempts = max_attempts
         self.download_manager = download_manager
         self.reverse_videos = reverse_videos
         self.stop_flag = stop_flag
-        self.output_path = output_path
         self.video_filters = video_filters
-        self.result_limit = result_limit
+        self.max_attempts = app_settings.retries
+        self.output_path = app_settings.output_path
+        self.result_limit = app_settings.result_limit
         self.logger = configure_app_logging(logger_name="Porn Fetch - [ProcesVideos]", log_file="PornFetch.log", level=log_level)
 
     @staticmethod
@@ -263,114 +305,298 @@ class ProcessVideos(QObject):
     async def start_processing(self):
         global last_index
         self.logger.info("Starting Processing of Iterator!")
-        self.iterator = islice(self.iterator, self.result_limit)
 
         if self.reverse_videos:
             self.iterator = self.reverse_iterator(self.iterator)
 
-        async for idx, video in shared_functions.aenumerate(self.iterator):
-            last_error = None  # Keeps track of the
+        async with aclosing(self.iterator) as iterator:
+            idx = 0
+            async for video in iterator:
+                if self.result_limit is not None and idx >= self.result_limit:
+                    break
 
-            if self.stop_flag.is_set():
-                return  # User hit the abort button
+                last_error = None  # Keeps track of the
 
-            try:
-                self.logger.debug(f"Current Index: {idx}")
-                video, video_object = await safe_api_call(self.process_single_video, video)
+                if self.stop_flag.is_set():
+                    return  # User hit the abort button
 
-                self.logger.info("Checking Filters...")
-                if self.process_filter(self.video_filters, video_object):
-                    identifier = uuid.uuid4().hex
-                    self.logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
-                    output_path = self.create_output_path(video_object, idx, self.custom_path_options)
-                    video_object.output_path = output_path
-                    video_object.identifier = identifier
-                    video_object.index = idx
+                try:
+                    self.logger.debug(f"Current Index: {idx}")
+                    video, video_object = await safe_api_call(self.process_single_video, video)
+                    print(f"Video: {video}")
 
-                    self.download_manager.add_video(video_object)
-                    last_index += 1
+                    self.logger.info("Checking Filters...")
+                    if self.process_filter(self.video_filters, video_object):
+                        identifier = uuid.uuid4().hex
+                        self.logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
+                        output_path = self.create_output_path(video_object, idx, self.custom_path_options)
 
-            # General Errors
-            except AppNetworkError as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                A network error happened, I'll try retrying...""")
-                continue  # Maybe it solves by itself ;)
+                        quality = app_settings.mappings_quality.get(int(app_settings.quality))
+                        quality = quality if quality in video_object.qualities else (video_object.qualities[0] if video_object.qualities else "best")
 
-            except AppNotFoundError as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
-                the correct URL.
+                        video_object.output_path = output_path
+                        video_object.identifier = identifier
+                        video_object.index = idx
+                        video_object.selected_quality = quality
 
-                If you are sure you did, please report this issue
-                """)
+                        self.download_manager.add_video(video_object)
+                        last_index += 1
 
-                break  # If the resource is not there, it won't magically appear lmao
+                # General Errors
+                except AppNetworkError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    A network error happened, I'll try retrying...""")
+                    continue  # Maybe it solves by itself ;)
 
-            except (VideoDisabled, GifPendingReview) as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
-                """)
-                break
+                except AppNotFoundError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
+                    the correct URL.
+    
+                    If you are sure you did, please report this issue
+                    """)
 
-            except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
-                fix this quickly!""")
-                break
+                    break  # If the resource is not there, it won't magically appear lmao
 
-            except RateLimitError as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                You got rate limited by the server. I have already tried solving this, which didn't work. 
-                Please use a (different) proxy or VPN.""")
-                break
+                except (VideoDisabled, GifPendingReview) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
+                    """)
+                    break
 
-            except DataNotLoadedError as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message=f"""
-                If you see this I fucked up developing my API packages and you should immediately open an issue on 
-                GitHub lol""")
-                break
+                except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
+                    fix this quickly!""")
+                    break
 
-            except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
-                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                The website denied access, probably because it detected you as a bot. Please report this, as I probably
-                need to update the headers. 
-                """)
+                except RateLimitError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    You got rate limited by the server. I have already tried solving this, which didn't work. 
+                    Please use a (different) proxy or VPN.""")
+                    break
 
-            finally:
-                self.error_signal.emit(last_error)
+                except DataNotLoadedError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message=f"""
+                    If you see this I fucked up developing my API packages and you should immediately open an issue on 
+                    GitHub lol""")
+                    break
+
+                except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    The website denied access, probably because it detected you as a bot. Please report this, as I probably
+                    need to update the headers. 
+                    """)
+
+                except Exception as e:
+                    self.logger.error(f"UNHANDLED EXCEPTION in start_processing: {e}", exc_info=True)
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="An unexpected error occurred.")
+                    break
+
+                finally:
+                    if last_error is not None:
+                        self.error_signal.emit(last_error)
+
+                idx += 1
 
 
 class Backend(QObject):
+    showMessage = Signal(str, str, str)
+    downloadsChanged = Signal()
+
     def __init__(self):
         super().__init__()
+        self._background_tasks: set[asyncio.Task[object]] = set()
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
+        self._downloads_model = DownloadListModel(self)
+        self.download_manager = DownloadManager()
+        self.download_manager.video_added.connect(self.video_added_signal)
+
+    def _spawn(self, coro, *, name: str) -> None:
+        task = asyncio.create_task(coro, name=name)
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_task_done)
+
+    def _background_task_done(self, task: asyncio.Task) -> None:
+        self._background_tasks.discard(task)
+
+        if task.cancelled():
+            self.logger.debug("Background task cancelled: %s", task.get_name())
+            return
+
+        try:
+            task.result()
+        except Exception:
+            self.logger.exception(
+                "Background task failed: %s",
+                task.get_name(),
+            )
 
     @Slot(str, str)
-    def process_single_url(self, url: str, custom_options: str | None = None) -> bool:
+    def update_video_quality(self, job_id: str, new_quality: str):
+        self._downloads_model.set_video_quality(job_id, new_quality)
+        self.logger.info(f"User changed quality for {job_id} to {new_quality}")
+
+        video = self.download_manager.get_video(job_id)
+        if video:
+            video.selected_quality = new_quality
+            self.logger.info(f"Updated backend quality for: {job_id} to: {new_quality}")
+
+    @Property(QObject, notify=downloadsChanged)
+    def downloads(self):
+        return self._downloads_model
+
+    @Slot(object)
+    def video_added_signal(self, video):
+        quality = str(app_settings.mappings_quality.get(app_settings.quality))
+        self._downloads_model.add_video(video=video, preferred_quality=quality)
+
+    def on_download_progress(self, video_id: str, percentage: int):
+        self._downloads_model.update_progress(video_id, percentage)
+
+    @Slot(str, str, dict)
+    def process_single_url(self, url: str, custom_options: str, filters: dict):
         """
         This function processes either a single Video or a Short depending on the platform.
         """
         print(f"Received Video / Short URL: {url}")
-        print(f"Custom Options: {custom_options}")
+        filters = VideoFilters(**filters)
+        asyncio.create_task(self._process_single_url(url=url, custom_options=custom_options, filters=filters))
 
+    async def _process_single_url(self, url: str, custom_options: str, filters: VideoFilters):
+        self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
 
+        async def single_url_stream():
+            yield url # Patch for the process_video class (look at it and you'll understand why I did this here)
 
+        await self.process_videos(iterator=single_url_stream(), custom_options=custom_options, filters=filters)
 
+    async def process_videos(self, iterator: AsyncIterator, custom_options: str, filters: VideoFilters):
+        """
+        The add_to_tree_widget function is basically the whole magic behind Porn Fetch. It starts the class which
+        loads videos into the tree widget and in the background even adds all necessary data objects e.g.,
+        title, author, duration, etc. to it, so that it can be processed and used later.
+        This makes it possible to only use one network request and use the videos across entire Porn Fetch
+        """
+        if not custom_options:
+            custom_options = "$title"  # Default, otherwise only .mp4 will be the output lol
 
-    @Slot(str, str)
-    def process_model_url(self, url: str, custom_options: str | None = None) -> bool:
+        process_videos = ProcessVideos(iterator=iterator, custom_path_options=custom_options,
+                                       video_filters=filters, download_manager=self.download_manager, reverse_videos=False,
+                                       stop_flag=stop_flag)
+        await process_videos.start_processing()
+
+        self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
+        self.logger.debug("Started the thread for adding videos...")
+
+    @Slot(str, str, dict)
+    def process_model_url(self, url: str, custom_options: str, filters: dict):
         """
         This function loads all the videos of a model, channel, creator or user object and loads them into the
         ListView to allow the user to individually select the videos for download
         """
         print(f"Received Model URL: {url}")
+        filters = VideoFilters(**filters)
+        self._spawn(self._process_model_url(url=url, custom_options=custom_options, filters=filters), name="Deine-Mutter")
 
-    @Slot(str, str)
-    def process_playlist_url(self, url: str, custom_options: str | None = None) -> bool:
+    async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters):
+        videos = None
+        target_obj = None
+
+        # 2. Group by platform to eliminate redundant 'in' checks
+        if "pornhub" in url:
+            if "pornstar" in url or "model" in url:
+                model_object = await clients.ph_client.get_pornstar(url, load_html=True)
+                model_type = app_settings.model_videos
+
+                if model_type == 0:
+                    videos = chain(model_object.get_uploads(pages=30, load_html=True, load_api=True), model_object.get_videos(pages=30, load_html=True, load_api=True))
+                elif model_type == 1:
+                    videos = model_object.get_videos(pages=30, load_html=True, load_api=True)
+                elif model_type == 2:
+                    videos = model_object.get_uploads(pages=30, load_html=True, load_api=True)
+
+            elif "user" in url or "channel" in url:
+                target_obj = await clients.ph_client.get_channel(load_html=True, url=url)
+                videos = target_obj.get_videos(pages=30)
+
+        elif "eporner" in url:
+            target_obj = await clients.ep_client.get_pornstar(url=url, load_html=True)
+
+        elif "xnxx" in url:
+            target_obj = await clients.xn_client.get_user(url=url)
+
+        elif "youporn" in url:
+            if "channel" in url:
+                target_obj = await clients.yp_client.get_channel(url=url)
+            else:
+                target_obj = await clients.yp_client.get_pornstar(url=url)
+
+        elif "xvideos" in url:
+            if "model" in url or "pornstar" in url:
+                target_obj = await clients.xv_client.get_pornstar(url=url)
+            else:
+                target_obj = await clients.xv_client.get_channel(url=url)
+
+        elif "spankbang" in url:
+            if "pornstar" in url:
+                target_obj = await clients.sp_client.get_pornstar(url=url)
+            elif "creator" in url:
+                target_obj = await clients.sp_client.get_creator(url=url)
+            elif "channel" in url:
+                target_obj = await clients.sp_client.get_channel(url=url)
+
+        elif "xhamster" in url:
+            if "pornstars" in url:
+                target_obj = await clients.xh_client.get_pornstar(url=url)
+            elif "creators" in url:
+                target_obj = await clients.xh_client.get_creator(url=url)
+            elif "channels" in url:
+                target_obj = await clients.xh_client.get_channel(url=url)
+
+        elif "porntrex" in url:
+            if "channel" in url:
+                target_obj = await clients.pt_client.get_channel(url=url)
+            elif "model" in url:
+                target_obj = await clients.pt_client.get_model(url=url)
+
+        else:
+            self.showMessage.emit(self.tr("The model URL you entered seems to be invalid. Please check your input",
+                             disambiguation=None))
+            return
+
+        if target_obj and "pornhub" not in url:
+            videos = target_obj.videos(pages=30)
+
+        print(f"Iterator: {type(videos)}")
+        await self.process_videos(iterator=videos, custom_options=custom_options, filters=filters)
+
+    @Slot(str, str, dict)
+    def process_playlist_url(self, url: str, custom_options: str, filters: dict):
         """
         This function loads a Playlist or Collection object and puts all videos again into a ListView
         """
         print(f"Received Playlist URL: {url}")
+        filters = VideoFilters(**filters)
 
+    async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
+        if "pornhub" in str(url) and "playlist" in str(url):
+            playlist = await clients.ph_client.get_playlist(url=url, load_html=True)
+            videos = playlist.get_videos()
+
+        elif "xvideos" in url:
+            videos = await clients.xv_client.get_playlist(url=url, pages=400)
+
+        elif "youporn" in str(url) and "collection" in str(url):
+            videos = await clients.yp_client.get_collection(url)
+            videos = videos.videos()
+
+        else:
+            self.showMessage.emit(TRANSLATE_ERRORS.invalid_input)
+            self.logger.error(f"Unsupported Input provided: {url}")
+            return
+
+        await self.process_videos(iterator=videos, custom_options=custom_options, filters=filters)
 
 
 
@@ -386,6 +612,10 @@ def main():
 
     # 1. Instantiate backend object
     backend_instance = Backend()
+    storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
+    lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
+    bridge_instance = LicenseBridge(lic_manager)
+    engine.rootContext().setContextProperty("bridge", bridge_instance)
     engine.rootContext().setContextProperty("backend", backend_instance)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
@@ -408,4 +638,13 @@ def main():
 
 
 if __name__ == "__main__":
+    local_url = None
+
+    if app_settings.sni_obfuscation:
+        if app_settings.sni_obfuscation_strict:
+            local_url = start_proxy_strict()
+
+        elif app_settings.sni_obfuscation_lite:
+            local_url = start_proxy_lite()
+
     main()

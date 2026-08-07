@@ -36,23 +36,24 @@ dependencies = [
     "typing_extensions",
     "python-dateutil",
     "urllib3",
-    "unofficial-api-for-beeg @ git+https://github.com/EchterAlsFake/unofficial-api-for-beeg",
-    "unofficial-api-for-eporner @ git+https://github.com/EchterAlsFake/unofficial-api-for-eporner",
-    "unofficial-api-for-pornhub @ git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub",
-    "unofficial-api-for-porntrex @ git+https://github.com/EchterAlsFake/unofficial-api-for-porntrex",
-    "unofficial-api-for-spankbang @ git+https://github.com/EchterAlsFake/unofficial-api-for-spankbang",
-    "unofficial-api-for-xfreehd @ git+https://github.com/EchterAlsFake/unofficial-api-for-xfreehd",
-    "unofficial-api-for-xhamster @ git+https://github.com/EchterAlsFake/unofficial-api-for-xhamster",
-    "unofficial-api-for-xnxx @ git+https://github.com/EchterAlsFake/unofficial-api-for-xnxx",
-    "unofficial-api-for-xvideos @ git+https://github.com/EchterAlsFake/unofficial-api-for-xvideos",
-    "unofficial-api-for-youporn @ git+https://github.com/EchterAlsFake/unofficial-api-for-youporn",
-    "unofficial-api-for-redtube @ git+https://github.com/EchterAlsFake/unofficial-api-for-redtube",
-    "unofficial-api-for-tube8 @ git+https://github.com/EchterAlsFake/unofficial-api-for-tube8",
-    "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla",
-    "eaf_base_api @ git+https://github.com/echteralsfake/eaf_base_api",
+    "unofficial-api-for-beeg",
+    "unofficial-api-for-eporner",
+    "unofficial-api-for-pornhub",
+    "unofficial-api-for-porntrex",
+    "unofficial-api-for-spankbang",
+    "unofficial-api-for-xfreehd",
+    "unofficial-api-for-xhamster",
+    "unofficial-api-for-xnxx",
+    "unofficial-api-for-xvideos",
+    "unofficial-api-for-youporn",
+    "unofficial-api-for-redtube",
+    "unofficial-api-for-tube8",
+    "unofficial-api-for-thumbzilla",
+    "eaf-base-api",
     "browser-cookie3>=0.20.1",
     "asyncstdlib>=3.14.0",
     "qt-material>=2.17",
+    "unofficial-api-for-hqporner",
 ]
 
 
@@ -65,3 +66,20 @@ dev = ["rich", "hue_shift", "PySide6", "truststore", "pywin32; sys_platform == '
 av = ['av>=16.1.0; python_version >= "3.10" and platform_system == "Windows" and platform_machine == "AMD64"',
     'av>=16.1.0; python_version >= "3.10" and platform_system == "Darwin"  and (platform_machine == "x86_64" or platform_machine == "arm64")',
     'av>=16.1.0; python_version >= "3.10" and platform_system == "Linux"   and (platform_machine == "x86_64" or platform_machine == "aarch64")']
+
+[tool.uv.sources]
+eaf-base-api = { path = "../eaf_base_api", editable = true }
+unofficial-api-for-beeg = { path = "../unofficial-api-for-beeg", editable = true }
+unofficial-api-for-eporner = { path = "../unofficial-api-for-eporner", editable = true }
+unofficial-api-for-hqporner = { path = "../unofficial-api-for-hqporner", editable = true }
+unofficial-api-for-pornhub = { path = "../unofficial-api-for-pornhub", editable = true }
+unofficial-api-for-porntrex = { path = "../unofficial-api-for-porntrex", editable = true }
+unofficial-api-for-redtube = { path = "../unofficial-api-for-redtube", editable = true }
+unofficial-api-for-spankbang = { path = "../unofficial-api-for-spankbang", editable = true }
+unofficial-api-for-thumbzilla = { path = "../unofficial-api-for-thumbzilla", editable = true }
+unofficial-api-for-tube8 = { path = "../unofficial-api-for-tube8", editable = true }
+unofficial-api-for-xhamster = { path = "../unofficial-api-for-xhamster", editable = true }
+unofficial-api-for-xnxx = { path = "../unofficial-api-for-xnxx", editable = true }
+unofficial-api-for-xvideos = { path = "../unofficial-api-for-xvideos", editable = true }
+unofficial-api-for-youporn = { path = "../unofficial-api-for-youporn", editable = true }
+unofficial-api-for-xfreehd = { path = "../unofficial-api-for-xfreehd", editable = true }

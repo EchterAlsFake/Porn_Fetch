@@ -1,3 +1,13 @@
+- module-name: 'src.backend.update_service'
+  dlls:
+    - from_filenames:
+        relative_path: 'sparkle'
+        prefixes:
+          - 'sparkle_bridge'
+        suffixes:
+          - 'dylib'
+      when: 'macos'
+
 # only-pyav-modules.yml
 - module-name: "av"
   # implicit-imports: only the modules that av.open() and AudioResampler actually hit

@@ -49,7 +49,7 @@ from base_api.modules.config import config # This is the global configuration in
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
 from typing import Any, List, TypeAlias, Optional, Dict
-from pornhub_api import Client as ph_Client, Video as ph_Video
+from pornhub_api import Client as ph_Client, Video as ph_Video, Short as ph_Short
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
@@ -62,7 +62,7 @@ from xhamster_api import Client as xh_Client, Video as xh_Video
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
-from base_api import BaseCore
+from base_api import BaseCore, ScrapeResult
 from src.backend.errors import SomethingStupidHappened, MetadataWriteError
 from base_api.modules.logger import configure_app_logging
 from src.backend.download_manager import VideoObject
@@ -150,7 +150,7 @@ cores = [
 ]
 
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-           rt_Video, th_Video, tu_Video]
+           rt_Video, th_Video, tu_Video, ph_Short]
 
 for _core in cores:
     _core.initialize_session()
@@ -207,31 +207,30 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     This function check the URL and generates the corresponding video object with the correct client.
     If the url is already a video object, the function will simply return it.
     """
+    if isinstance(url, ScrapeResult):
+        if not url.succeeded:
+            if url.error is not None:
+                raise url.error
+
+            raise RuntimeError(f"Scraping failed without an exception: {url.url}")
+
+        video = url.item
+        if video is None:
+            raise RuntimeError(f"Succesful scrpa does not contain a video (how tf did you do that? {url.url}")
+
+        return video
+
     if isinstance(url, tuple(video_objects)):
         return url
 
     if not isinstance(url, str):
+        print(f"Video Type: {url}")
+        print(type(url))
+
         raise SomethingStupidHappened
 
     if not url.startswith("http"):
         raise InvalidInput
-
-    mapping = {
-        "pornhub": await ph_client.get_video(url=url, load_html=True, load_api=True),
-        "eporner": await ep_client.get_video(url=url, load_html=True, load_api=True),
-        "xnxx": await xn_client.get_video(url=url, load_html=True),
-        "xvideos": await xv_client.get_video(url=url, load_html=True),
-        "xhamster": await xh_client.get_video(url=url, load_html=True),
-        "xhamter_short": await xh_client.get_short(url=url, load_html=True),
-        "spankbang": await sp_client.get_video(url=url, load_html=True),
-        "youporn": await yp_client.get_video(url=url, load_html=True),
-        "beeg": await bg_client.get_video(url=url),
-        "porntrex": await pt_client.get_video(url=url),
-        "xfreehd": await xf_client.get_video(url=url),
-        "redtube": await rt_client.get_video(url=url),
-        "thumbzilla": await th_client.get_video(url=url),
-        "tube8": await tu_client.get_video(url=url),
-    }
 
     final_website = None
     hostname = urlparse(url).hostname
@@ -242,7 +241,37 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     if not final_website:
         raise InvalidInput
 
-    return mapping[final_website]
+    # 2. Call ONLY the specific client for that website
+    if final_website == "pornhub":
+        return await ph_client.get_video(url=url, load_html=True, load_api=True)
+    elif final_website == "eporner":
+        return await ep_client.get_video(url=url, load_html=True, load_api=True)
+    elif final_website == "xnxx":
+        return await xn_client.get_video(url=url, load_html=True)
+    elif final_website == "xvideos":
+        return await xv_client.get_video(url=url, load_html=True)
+    elif final_website == "xhamster":
+        return await xh_client.get_video(url=url, load_html=True)
+    elif final_website == "xhamter_short":
+        return await xh_client.get_short(url=url, load_html=True)
+    elif final_website == "spankbang":
+        return await sp_client.get_video(url=url, load_html=True)
+    elif final_website == "youporn":
+        return await yp_client.get_video(url=url, load_html=True)
+    elif final_website == "beeg":
+        return await bg_client.get_video(url=url)
+    elif final_website == "porntrex":
+        return await pt_client.get_video(url=url)
+    elif final_website == "xfreehd":
+        return await xf_client.get_video(url=url)
+    elif final_website == "redtube":
+        return await rt_client.get_video(url=url)
+    elif final_website == "thumbzilla":
+        return await th_client.get_video(url=url)
+    elif final_website == "tube8":
+        return await tu_client.get_video(url=url)
+    else:
+        raise InvalidInput
 
 
 async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
@@ -250,7 +279,11 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     if isinstance(video, ph_Video):
         stuff = await video.author
-        author = stuff.name
+        try:
+            author = stuff.name
+        except AttributeError:
+            author = "Not available"
+
         length = video.duration
         tags = video.tags
         publish_date = video.publish_date
