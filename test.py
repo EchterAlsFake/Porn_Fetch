@@ -506,15 +506,15 @@ class Backend(QObject):
         # 2. Group by platform to eliminate redundant 'in' checks
         if "pornhub" in url:
             if "pornstar" in url or "model" in url:
-                model_object = await clients.ph_client.get_pornstar(url, load_html=True)
+                model_object = await clients.ph_client.get_pornstar(url)
                 model_type = app_settings.model_videos
 
                 if model_type == 0:
-                    videos = chain(model_object.get_uploads(pages=30, load_html=True, load_api=True), model_object.get_videos(pages=30, load_html=True, load_api=True))
+                    videos = chain(model_object.get_uploads(pages=30), model_object.get_videos(pages=30))
                 elif model_type == 1:
-                    videos = model_object.get_videos(pages=30, load_html=True, load_api=True)
+                    videos = model_object.get_videos(pages=30)
                 elif model_type == 2:
-                    videos = model_object.get_uploads(pages=30, load_html=True, load_api=True)
+                    videos = model_object.get_uploads(pages=30)
 
             elif "user" in url or "channel" in url:
                 target_obj = await clients.ph_client.get_channel(load_html=True, url=url)
@@ -578,6 +578,7 @@ class Backend(QObject):
         """
         print(f"Received Playlist URL: {url}")
         filters = VideoFilters(**filters)
+        self._spawn(self._process_playlist_url(url=url, custom_options=custom_options, filters=filters), name="Fortnite")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
         if "pornhub" in str(url) and "playlist" in str(url):

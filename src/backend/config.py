@@ -196,8 +196,8 @@ class SettingsManager(QObject):
         return self.get_bool("Misc/debug_mode", False)
 
     @Property(str, notify=None) # Can't be changed dynamically
-    def log_level(self) -> str:
-        return self.get_str("Misc/log_level", "INFO")
+    def log_level(self) -> int:
+        return self.get_str("Misc/log_level", 0)
 
     @Property(str, notify=reloadClients)
     def interface(self) -> str:
