@@ -4,10 +4,16 @@ import QtQuick.Controls.impl
 
 Button {
     id: control
+    property string helpText: ""
+
     clip: true
     icon.source: "qrc:/images/graphics/tooltip.svg"
     palette.buttonText: "white"
     text: "Help"
+
+    onClicked: {
+        backend.handle_message(helpText)
+    }
 
     contentItem: IconLabel {
         clip: control.clip

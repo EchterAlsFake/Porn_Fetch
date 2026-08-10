@@ -72,6 +72,7 @@ from datetime import datetime
 from asyncstdlib import chain
 from contextlib import aclosing
 from typing import AsyncGenerator, AsyncIterator
+from base_api.modules.config import IteratorConfig
 from base_api.modules.logger import configure_app_logging
 
 splash.showMessage("Importing (Qt)")
@@ -419,12 +420,16 @@ class Backend(QObject):
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
 
-        # ``clients`` creates its curl-cffi sessions during import, so apply a
-        # previously saved proxy once the real GUI backend is initialized.
-        if app_settings.proxy:
-            clients.config.proxy = app_settings.proxy
-            clients.config.verify_ssl = app_settings.proxy_ssl_verification
-            clients.refresh_clients(debug_mode=app_settings.debug_mode)
+        # ``clients`` creates its curl-cffi sessions during import. Apply all
+        # saved request settings once the real GUI backend is initialized and
+        # refresh them immediately when the content locale changes.
+        self.load_clients()
+        app_settings.localeChanged.connect(self.load_clients)
+
+    def load_clients(self, _locale: str | None = None) -> None:
+        clients.config.proxy = app_settings.proxy or None
+        clients.config.verify_ssl = app_settings.proxy_ssl_verification
+        clients.refresh_clients(debug_mode=app_settings.debug_mode)
 
     def _spawn(self, coro, *, name: str) -> None:
         task = asyncio.create_task(coro, name=name)
@@ -658,7 +663,13 @@ class Backend(QObject):
             return
 
         if target_obj and "pornhub" not in url:
-            videos = target_obj.videos(pages=30)
+            if "eporner" in url and app_settings.strict_enforcement:
+                videos = target_obj.videos(
+                    pages=30,
+                    iterator_config=IteratorConfig(load_specific_sources=("html",)),
+                )
+            else:
+                videos = target_obj.videos(pages=30)
 
         print(f"Iterator: {type(videos)}")
         await self.process_videos(iterator=videos, custom_options=custom_options, filters=filters)

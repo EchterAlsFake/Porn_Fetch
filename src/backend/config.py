@@ -32,6 +32,8 @@ class SettingsManager(QObject):
     updateChecksChanged = Signal(bool)
     debugModeChanged = Signal(bool)
     languageChanged = Signal(int)
+    localeChanged = Signal(str)
+    strictEnforcementChanged = Signal(bool)
     fontSizeChanged = Signal(int)
     themeChanged = Signal(int)
     reloadClients = Signal(object)
@@ -124,6 +126,14 @@ class SettingsManager(QObject):
     @Property(str)
     def output_path(self) -> str:
         return self.get_str("Video/output_path", "./")
+
+    @Property(str, notify=localeChanged)
+    def locale(self) -> str:
+        return self.get_str("Video/locale", "en-US")
+
+    @Property(bool, notify=strictEnforcementChanged)
+    def strict_enforcement(self) -> bool:
+        return self.get_bool("Video/strict_enforcement", False)
 
     @Property(bool)
     def write_metadata(self) -> bool:
@@ -313,6 +323,18 @@ class SettingsManager(QObject):
         if val != self.output_path:
             self._settings.setValue("Video/output_path", val)
             self.outputPathChanged.emit(val)
+
+    @locale.setter
+    def locale(self, val: str):
+        if val != self.locale:
+            self._settings.setValue("Video/locale", val)
+            self.localeChanged.emit(val)
+
+    @strict_enforcement.setter
+    def strict_enforcement(self, val: bool):
+        if val != self.strict_enforcement:
+            self._settings.setValue("Video/strict_enforcement", val)
+            self.strictEnforcementChanged.emit(val)
 
     @write_metadata.setter
     def write_metadata(self, val):

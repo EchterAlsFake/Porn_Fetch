@@ -153,6 +153,38 @@ Pane {
                                 }
 
                                 HelpButton {Layout.fillWidth: false}
+                                Label {Layout.fillWidth: false; text: "Content Language"}
+                                ComboBox {
+                                    id: contentLanguageComboBox
+                                    Layout.fillWidth: true
+                                    textRole: "label"
+                                    valueRole: "locale"
+                                    model: ListModel {
+                                        // Alphabetical by each language's local name (using its Latin reading
+                                        // for languages written in another script).
+                                        ListElement { label: "🇨🇿 Čeština"; locale: "cs-CZ" }
+                                        ListElement { label: "🇩🇪 Deutsch"; locale: "de-DE" }
+                                        ListElement { label: "🇺🇸 English"; locale: "en-US" }
+                                        ListElement { label: "🇪🇸 Español"; locale: "es-ES" }
+                                        ListElement { label: "🇵🇭 Filipino"; locale: "fil-PH" }
+                                        ListElement { label: "🇫🇷 Français"; locale: "fr-FR" }
+                                        ListElement { label: "🇮🇹 Italiano"; locale: "it-IT" }
+                                        ListElement { label: "🇳🇱 Nederlands"; locale: "nl-NL" }
+                                        ListElement { label: "🇯🇵 日本語"; locale: "ja-JP" }
+                                        ListElement { label: "🇵🇱 Polski"; locale: "pl-PL" }
+                                        ListElement { label: "🇵🇹 Português"; locale: "pt-PT" }
+                                        ListElement { label: "🇷🇺 Русский"; locale: "ru-RU" }
+                                        ListElement { label: "🇺🇦 Українська"; locale: "uk-UA" }
+                                        ListElement { label: "🇨🇳 中文"; locale: "zh-CN" }
+                                    }
+                                    Component.onCompleted: {
+                                        var savedIndex = indexOfValue(appSettings.locale)
+                                        currentIndex = savedIndex >= 0 ? savedIndex : indexOfValue("en-US")
+                                    }
+                                    onActivated: appSettings.locale = currentValue
+                                }
+
+                                HelpButton {Layout.fillWidth: false}
                                 Label {Layout.fillWidth: false; text: "Max Result Limit"}
                                 SpinBox {
                                     Layout.fillWidth: true
@@ -208,6 +240,18 @@ Pane {
                                     text: "Skip existing files"
                                     checked: appSettings.skip_existing_files
                                     onToggled: appSettings.skip_existing_files = checked
+                                }
+
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.strictEnforcementHelp
+
+                                }
+                                CheckBox {
+                                    Layout.fillWidth: true
+                                    text: "Strict Enforcement for content language"
+                                    checked: appSettings.strict_enforcement
+                                    onToggled: appSettings.strict_enforcement = checked
                                 }
 
                             }

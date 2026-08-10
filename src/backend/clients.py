@@ -43,8 +43,8 @@ except (ModuleNotFoundError, ImportError):
     from handle_ssl import build_ssl_context
 
 from src.backend.errors import InvalidInput
+from src.backend.config import app_settings
 from urllib.parse import urlparse
-from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
@@ -62,7 +62,7 @@ from xhamster_api import Client as xh_Client, Video as xh_Video
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
-from base_api import BaseCore, ScrapeResult
+from base_api import BaseCore, ScrapeResult, Cache
 from src.backend.errors import SomethingStupidHappened, MetadataWriteError
 from base_api.modules.logger import configure_app_logging
 from src.backend.download_manager import VideoObject
@@ -95,6 +95,68 @@ _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
 logger = configure_app_logging(logger_name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
+
+DEFAULT_CONTENT_LOCALE = "en-US"
+SUPPORTED_CONTENT_LOCALES: Dict[str, str] = {
+    "cs-CZ": "cs",
+    "de-DE": "de",
+    "en-US": "en",
+    "es-ES": "es",
+    "fil-PH": "fil",
+    "fr-FR": "fr",
+    "it-IT": "it",
+    "nl-NL": "nl",
+    "ja-JP": "ja",
+    "pl-PL": "pl",
+    "pt-PT": "pt",
+    "ru-RU": "ru",
+    "uk-UA": "uk",
+    "zh-CN": "zh",
+}
+
+
+def generate_locale_headers_and_cookies(
+    locale: str | None = None,
+) -> tuple[Dict[str, str], Dict[str, str]]:
+    """Build curl-cffi-ready headers and cookies for a content locale.
+
+    ``locale`` may be one of the full locale tags used by the settings menu or
+    its short language code (for example, ``"de-DE"`` or ``"de"``). Unknown
+    and empty values safely fall back to English.
+
+    Example::
+
+        headers, cookies = generate_locale_headers_and_cookies("de-DE")
+        session.headers.update(headers)
+        session.cookies.update(cookies)
+    """
+    requested_locale = locale if locale is not None else app_settings.locale
+    normalized_locale = str(requested_locale).strip().replace("_", "-").casefold()
+
+    locale_lookup = {
+        alias.casefold(): canonical_locale
+        for canonical_locale, language_code in SUPPORTED_CONTENT_LOCALES.items()
+        for alias in (canonical_locale, language_code)
+    }
+    canonical_locale = locale_lookup.get(normalized_locale, DEFAULT_CONTENT_LOCALE)
+    language_code = SUPPORTED_CONTENT_LOCALES[canonical_locale]
+
+    if language_code == "en":
+        accept_language = f"{canonical_locale},en;q=0.9"
+    else:
+        accept_language = (
+            f"{canonical_locale},{language_code};q=0.9,"
+            "en-US;q=0.8,en;q=0.7"
+        )
+
+    headers = {"Accept-Language": accept_language}
+    cookies = {
+        "lang": language_code,
+        "language": language_code,
+        "locale": canonical_locale,
+    }
+    return headers, cookies
+
 
 SITE_PATTERNS = [
     ("pornhub", re.compile(r"(?:^|\.)pornhub(?:premium)?\.[a-z.]{2,}$", re.IGNORECASE)),
@@ -159,6 +221,14 @@ logger.debug("Successfully initialized all clients and!")
 
 
 def refresh_clients(debug_mode: bool = False) -> None:
+    # Apply Settings
+    config.videos_concurrency = app_settings.videos_concurrency
+    config.pages_concurrency = app_settings.pages_concurrency
+    config.max_bandwidth_mb = app_settings.speed_limit
+    locale_headers, locale_cookies = generate_locale_headers_and_cookies()
+    config.locale = locale_headers["Accept-Language"]
+    config.cookies = locale_cookies.copy()
+
     logger.info("Refreshing all clients!")
     level = logging.DEBUG if debug_mode else logging.INFO
     core.enable_logging(level=level, log_file="BaseCore.log" if debug_mode else None)
@@ -191,13 +261,23 @@ def refresh_clients(debug_mode: bool = False) -> None:
 
     for c in cores_to_update:
         old_session = c.session
+        c.cache = Cache(c.configuration)
+        c.default_headers.update(locale_headers)
         c.initialize_session()
+
         if old_session is not None and c.session is not None:
             try:
                 c.session.cookies.update(old_session.cookies)
-
+                c.session.headers.update(old_session.headers)
             except Exception as e:
-                logger.warning(f"Couldn't copy cookies during session refresh: {e}")
+                logger.warning(f"Couldn't copy cookies/headers during session refresh: {e}")
+
+        # Language preferences must win over values copied from the old session.
+        if c.session is not None:
+            c.session.headers.update(locale_headers)
+            for cookie_name in locale_cookies:
+                c.session.cookies.delete(cookie_name)
+            c.session.cookies.update(locale_cookies)
 
     logger.debug("Applied in-place clients!")
 
@@ -241,11 +321,13 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     if not final_website:
         raise InvalidInput
 
+    load_api_sources = not app_settings.strict_enforcement
+
     # 2. Call ONLY the specific client for that website
     if final_website == "pornhub":
-        return await ph_client.get_video(url=url, load_html=True, load_api=True)
+        return await ph_client.get_video(url=url, load_html=True, load_api=load_api_sources)
     elif final_website == "eporner":
-        return await ep_client.get_video(url=url, load_html=True, load_api=True)
+        return await ep_client.get_video(url=url, load_html=True, load_api=load_api_sources)
     elif final_website == "xnxx":
         return await xn_client.get_video(url=url, load_html=True)
     elif final_website == "xvideos":
@@ -259,7 +341,7 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     elif final_website == "youporn":
         return await yp_client.get_video(url=url, load_html=True)
     elif final_website == "beeg":
-        return await bg_client.get_video(url=url)
+        return await bg_client.get_video(url=url, load_api=load_api_sources)
     elif final_website == "porntrex":
         return await pt_client.get_video(url=url)
     elif final_website == "xfreehd":
@@ -830,5 +912,3 @@ def parse_length(length: str | int, video_source: str | None = None) -> int | No
 
     except Exception:
         return 0
-
-
