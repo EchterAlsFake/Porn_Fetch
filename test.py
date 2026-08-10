@@ -107,6 +107,8 @@ from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, 
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
 from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
+from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
+from curl_cffi.requests.exceptions import SSLError
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
@@ -403,14 +405,26 @@ class ProcessVideos(QObject):
 class Backend(QObject):
     showMessage = Signal(str, str, str)
     downloadsChanged = Signal()
+    proxyTestSucceeded = Signal(str, "QVariantMap")
+    proxyTestFailed = Signal(str, str)
+    proxySslError = Signal(str, str)
+    proxyApplied = Signal(bool)
 
     def __init__(self):
         super().__init__()
         self._background_tasks: set[asyncio.Task[object]] = set()
+        self._proxy_test_task: asyncio.Task[object] | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
         self._downloads_model = DownloadListModel(self)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
+
+        # ``clients`` creates its curl-cffi sessions during import, so apply a
+        # previously saved proxy once the real GUI backend is initialized.
+        if app_settings.proxy:
+            clients.config.proxy = app_settings.proxy
+            clients.config.verify_ssl = app_settings.proxy_ssl_verification
+            clients.refresh_clients(debug_mode=app_settings.debug_mode)
 
     def _spawn(self, coro, *, name: str) -> None:
         task = asyncio.create_task(coro, name=name)
@@ -431,6 +445,84 @@ class Backend(QObject):
                 "Background task failed: %s",
                 task.get_name(),
             )
+
+    @Slot(str, bool)
+    def testProxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        """Test a proxy asynchronously without blocking the QML render thread."""
+        if self._proxy_test_task is not None and not self._proxy_test_task.done():
+            self._proxy_test_task.cancel()
+
+        task = asyncio.create_task(
+            self._test_proxy(proxy_url, verify_ssl),
+            name="proxy-connectivity-test",
+        )
+        self._proxy_test_task = task
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_task_done)
+
+    async def _test_proxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        try:
+            result = await run_proxy_test(
+                proxy_url,
+                timeout=float(app_settings.timeout),
+                verify_ssl=verify_ssl,
+            )
+        except asyncio.CancelledError:
+            raise
+        except ValueError as error:
+            self.proxyTestFailed.emit(proxy_url, str(error))
+        except SSLError as error:
+            self.logger.warning(
+                "Proxy SSL test failed with curl error code %s",
+                error.code,
+            )
+            if verify_ssl:
+                self.proxySslError.emit(
+                    proxy_url,
+                    self.tr(
+                        "Warning: The SSL connection or certificate verification failed. "
+                        "Continuing without verification "
+                        "can expose your traffic and credentials to interception."
+                    ),
+                )
+            else:
+                self.proxyTestFailed.emit(
+                    proxy_url,
+                    self.tr("The SSL connection failed even with certificate verification disabled."),
+                )
+        except Exception as error:
+            # Do not surface exception strings: curl errors can include a proxy
+            # URL and therefore the user's password.
+            self.logger.warning(
+                f"Proxy connectivity test failed with %s {error}",
+                type(error).__name__,
+            )
+            self.proxyTestFailed.emit(
+                proxy_url,
+                self.tr("Could not connect through this proxy. Check the address and credentials."),
+            )
+        else:
+            self.proxyTestSucceeded.emit(proxy_url, result.as_qml_map())
+
+    @Slot(str, bool)
+    def applyProxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        """Persist the tested proxy and rebuild all curl-cffi sessions."""
+        if proxy_url:
+            try:
+                proxy_url = validate_proxy_url(proxy_url)
+            except ValueError as error:
+                self.proxyTestFailed.emit(proxy_url, str(error))
+                return
+
+        # Disabling a proxy always restores the secure default.
+        verify_ssl = bool(verify_ssl) if proxy_url else True
+        app_settings.proxy = proxy_url
+        app_settings.proxy_ssl_verification = verify_ssl
+        app_settings.sync()
+        clients.config.proxy = proxy_url or None
+        clients.config.verify_ssl = verify_ssl
+        clients.refresh_clients(debug_mode=app_settings.debug_mode)
+        self.proxyApplied.emit(bool(proxy_url))
 
     @Slot(str, str)
     def update_video_quality(self, job_id: str, new_quality: str):

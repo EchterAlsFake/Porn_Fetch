@@ -1,3 +1,7 @@
+> [!CAUTION]
+> THIS IS OUTDATED AS FUCK DON'T TRANSLATE!!!!!!!!!!!
+
+
 # Guide for Localizing Porn Fetch into Your Language
 Thank you for your interest in translating Porn Fetch! Your contribution to localizing the application is highly valued.
 

@@ -243,6 +243,10 @@ class SettingsManager(QObject):
     def proxy(self) -> str:
         return self.get_str("Privacy/proxy", "")
 
+    @Property(bool, notify=reloadClients)
+    def proxy_ssl_verification(self) -> bool:
+        return self.get_bool("Privacy/proxy_ssl_verification", True)
+
     @Property(int, notify=languageChanged)
     def language(self) -> int:
         return self.get_int("UI/language", 0)
@@ -473,7 +477,13 @@ class SettingsManager(QObject):
     @proxy.setter
     def proxy(self, val):
         if val != self.proxy:
-            self._settings.setValue("Proxy/proxy", val)
+            self._settings.setValue("Privacy/proxy", val)
+            self.reloadClients.emit(val)
+
+    @proxy_ssl_verification.setter
+    def proxy_ssl_verification(self, val):
+        if val != self.proxy_ssl_verification:
+            self._settings.setValue("Privacy/proxy_ssl_verification", val)
             self.reloadClients.emit(val)
 
     @language.setter

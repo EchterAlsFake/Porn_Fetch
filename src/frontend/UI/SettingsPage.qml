@@ -8,6 +8,34 @@ import QtQuick.Controls.Material
 Pane {
     font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
+
+    ProxyWindow {
+        id: proxyWindow
+
+        onProxyTestRequested: function(proxyUrl, verifySsl) {
+            backend.testProxy(proxyUrl, verifySsl)
+        }
+        onProxyAccepted: function(proxyUrl, verifySsl) {
+            backend.applyProxy(proxyUrl, verifySsl)
+        }
+        onProxyDisabled: backend.applyProxy("", true)
+    }
+
+    Connections {
+        target: backend
+
+        function onProxyTestSucceeded(proxyUrl, stats) {
+            proxyWindow.showTestSuccess(proxyUrl, stats)
+        }
+
+        function onProxyTestFailed(proxyUrl, message) {
+            proxyWindow.showTestFailure(proxyUrl, message)
+        }
+
+        function onProxySslError(proxyUrl, message) {
+            proxyWindow.showSslWarning(proxyUrl, message)
+        }
+    }
     // We set a slightly custom background color.
     // Since we enabled Material Dark theme in Python, most things will automatically be dark,
     // but setting a specific background ensures a clean, cohesive look.
@@ -393,7 +421,13 @@ Pane {
                             CheckBox {
                                 text: "Enable Proxy"
                                 Layout.fillWidth: true
-                                // TODO
+                                checked: appSettings.proxy.length > 0
+                                onClicked: {
+                                    if (checked)
+                                        proxyWindow.openWithProxy(appSettings.proxy)
+                                    else
+                                        backend.applyProxy("", true)
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -511,12 +545,12 @@ Pane {
                             HelpButton {
                                 Layout.fillWidth: false
                             }
-                            TextField {
-                                id: "proxyInput"
-                                placeholderText: "Global Proxy e.g.,: http://username:password@server:port"
+                            Button {
                                 Layout.fillWidth: true
-                                text: appSettings.proxy
-                                onEditingFinished: appSettings.proxy = text
+                                text: appSettings.proxy.length > 0
+                                      ? qsTr("Configure or test proxy…")
+                                      : qsTr("Set up proxy…")
+                                onClicked: proxyWindow.openWithProxy(appSettings.proxy)
                             }
 
 
