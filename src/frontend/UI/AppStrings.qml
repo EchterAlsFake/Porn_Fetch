@@ -1,10 +1,9 @@
+import QtQuick
 pragma Singleton
 
-import QtQml
 
 // Contains basically the texts for the QML app so that they are in a unified place
 QtObject {
-
     readonly property string videoQualityHelp:
         qsTr("The Video quality that you apply here is the preference meaning all videos fetched will try to be downloaded in the specified quality.
         If the quality is not available the next 'best' quality will be picked.
@@ -14,13 +13,12 @@ QtObject {
         qsTr("Affects only PornHub! A Pornstar may have his own uploaded videos on his PornHub Account but also be featured in other videos from
         different Channels. With this setting you can control whether model videos will include both, only uploaded or only featured videos.")
 
+    readonly property string contentLanguageHelp:
+        qsTr("This setting affects the language of the website itself. E.g., if you set this to french then all video titles will be auto-translated to French by PornHub")
+
     readonly property string resultLimitHelp:
         qsTr("This setting affects how many videos will be loaded into the list view down below. For example if you want to get the videos
         from a channel and the result limit is 50, then only 50 videos will be fetched, even if the channel has 100 videos.")
-
-    readonly property string localeLimitHelp:
-        qsTr("This controls the video titles and metadata language. It depends heavily on the site if this works and you shouldn't take it
-        for guaranteed!")
 
     readonly property string strictEnforcementHelp:
         qsTr("This (unfortunately) disables API data fetching and it will be a bit slower. Sites that do not support HTML scraping yet like beeg.com will
@@ -168,6 +166,9 @@ Porn Fetch by default uses a Mullvad DNS Server. Mullvad has a decade long reput
 However, you can also enter your own DNS.
        ")
 
+    readonly property string dnsPrimaryHelp:
+        qsTr("This DNS Server will be the primary one used for connecting.")
+
     readonly property string fallbackDNSHelp:
         qsTr("
 If DNS acts like Deutsche Bahn and the packets don't arrive, this will be used as a fallback.")
@@ -193,35 +194,47 @@ Disclaimer:
 While this has been tested by intercepting network traffic with Wireshark and using ARP Spoofing with Bettercap
 there's no guarantee that it will work for you too.
 
-For the differences between Lite and Strict SNI read their individual help messages.
+Lite Implementation:
+The Lite version will proxy each network packet before it goes to your system and will try to split packets by writing\nto the buffer with a slight delay. There is no guarantee that the packets will also be split on the system level.\nThis depends on the system you use, your specific settings, internet connection etc.\n\nThis method does not require root / admin rights to run and does not use a modified driver.\nIf you set a proxy in Porn Fetch your request will first go through the SNI proxy and then to your proxy.\n
+
+Strict Implementation:
+The Strict implementation requires elevated privileges e.g., sudo on Linux or 'run as Administrator' on Windows.\nIt uses the WinDivert network driver to create a fully isolated network device and deeply modify packets.\n\nWindows: x86-64\nLinux: Requires Kernel 5.8+, libbpf (x86_64 / aarch64)\nOther: Not supported\n\nApart from the Lite Implementation this will also inject adjusted sequence numbers and checksums.\nIt furthermore guarantees that the network packets are actually split.\n\nThis is still not bulletproof though.
 ")
 
-    readonly property string sniObfuscationLiteHelp:
+    readonly property string torIntegrationHelp:
         qsTr("
-The Lite version will proxy each network packet before it goes to your system and will try to split packets by writing
-to the buffer with a slight delay. There is no guarantee that the packets will also be split on the system level.
-This depends on the system you use, your specific settings, internet connection etc.
+The Tor Network is a heavily encrypted internet which is run by volunteers all over the world. Porn Fetch supports
+a native Tor integration. By enabling this, Porn Fetch will start the Tor service on your PC and route its traffic
+through the onion network.
 
-This method does not require root / admin rights to run and does not use a modified driver.
-If you set a proxy in Porn Fetch your request will first go through the SNI proxy and then to your proxy.
+This is NOT illegal and absolutely a good way to protect your privacy. However:
+It is ethically a bad idea to route internet traffic like video streaming through the Tor network as it slows down
+the entire network for everyone. Please only use this feature if you really have to. (Seriously)
 ")
 
-    readonly property string sniObfuscationStrictHelp:
+    readonly property string onionRoutingHelp:
         qsTr("
-The Strict implementation requires elevated privileges e.g., sudo on Linux or 'run as Administrator' on Windows.
-It uses the WinDivert network driver to create a fully isolated network device and deeply modify packets.
-
-Windows: x86-64
-Linux: Requires Kernel 5.8+, libbpf (x86_64 / aarch64)
-Other: Not supported
-
-Apart from the Lite Implementation this will also inject adjusted sequence numbers and checksums.
-It furthermore guarantees that the network packets are actually split.
-
-This is still not bulletproof though.
+The server of Porn Fetch that is used for Update and License checking has a native .onion Tor domain. By enabling this,
+Porn Fetch will connect to the Tor domain instead of the clearnet domain.
 ")
 
+    readonly property string proxySetupHelp:
+        qsTr("
+A Proxy is basically just a service that routes your internet traffic. It is similar to a VPN. You can find free proxies\non the internet, although I absolutely do not recommend you doing that.\n\nInstead, buy yourself a simple and cheap proxy and use the authentication form below. You can also start the Tor service\non your machine and route through tor.       ")
 
+    readonly property string guiLanguageHelp:
+        qsTr("This defines the language of Porn Fetch's user interace")
 
+    readonly property string fontSizeHelp:
+        qsTr("This sets the point size of the text in the UI")
+
+    readonly property string appStyleHelp:
+        qsTr("Material UI looks like Android, Fusion like the native OS, Universal looks just bad")
+
+    readonly property string darkModeHelp:
+        qsTr("You really need an explanation for this xD")
+
+    readonly property string accentColorHelp:
+        qsTr("You really need an explanation for this xD")
 }
 

@@ -225,6 +225,15 @@ def refresh_clients(debug_mode: bool = False) -> None:
     config.videos_concurrency = app_settings.videos_concurrency
     config.pages_concurrency = app_settings.pages_concurrency
     config.max_bandwidth_mb = app_settings.speed_limit
+    
+    # Map missing settings from UI to base_api RuntimeConfig
+    config.timeout = app_settings.timeout
+    config.request_attempts = app_settings.retries
+    config.max_workers_download = app_settings.download_workers
+    config.interface = app_settings.interface if app_settings.interface else None
+    config.http_version = app_settings.http_version
+    config.dns_over_https = app_settings.dns_server if app_settings.dns_over_https else None
+
     locale_headers, locale_cookies = generate_locale_headers_and_cookies()
     config.locale = locale_headers["Accept-Language"]
     config.cookies = locale_cookies.copy()

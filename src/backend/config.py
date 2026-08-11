@@ -13,7 +13,7 @@ __version__ = "3.9"
 __author__ = "Johannes Habel"
 __next_release__ = "4.0"
 __type__ = "release"
-__bundle_id__ = "me.echteralsfake.pornfetch"
+__bundle_id__ = "fi.echteralsfake.pornfetch"
 __app_id__ = "pornfetch"
 __app_name__ = "Porn Fetch"
 __org_name__ = "EchterAlsFake"
@@ -37,6 +37,8 @@ class SettingsManager(QObject):
     fontSizeChanged = Signal(int)
     themeChanged = Signal(int)
     reloadClients = Signal(object)
+
+    enableTor = Signal(bool)
 
     # For Theming
     coreStyleChanged = Signal(str)
@@ -119,14 +121,6 @@ class SettingsManager(QObject):
     def model_videos(self) -> int:
         return self.get_int("Video/model_videos", 0)
 
-    @Property(int)
-    def result_limit(self) -> int:
-        return self.get_int("Video/result_limit", 50)
-
-    @Property(str)
-    def output_path(self) -> str:
-        return self.get_str("Video/output_path", "./")
-
     @Property(str, notify=localeChanged)
     def locale(self) -> str:
         return self.get_str("Video/locale", "en-US")
@@ -134,6 +128,14 @@ class SettingsManager(QObject):
     @Property(bool, notify=strictEnforcementChanged)
     def strict_enforcement(self) -> bool:
         return self.get_bool("Video/strict_enforcement", False)
+
+    @Property(int)
+    def result_limit(self) -> int:
+        return self.get_int("Video/result_limit", 50)
+
+    @Property(str)
+    def output_path(self) -> str:
+        return self.get_str("Video/output_path", "./")
 
     @Property(bool)
     def write_metadata(self) -> bool:
@@ -153,12 +155,32 @@ class SettingsManager(QObject):
 
     # Performance related
     @Property(int)
-    def parallel_downloads(self) -> int:
-        return self.get_int("Performance/semaphore", 1)
+    def download_workers(self) -> int:
+        return self.get_int("Performance/download_workers", 20)
 
     @Property(int)
     def network_delay(self) -> int:
         return self.get_int("Performance/network_delay", 0)
+
+    @Property(int)
+    def parallel_downloads(self) -> int:
+        return self.get_int("Performance/semaphore", 1)
+
+    @Property(int)
+    def retries(self) -> int:
+        return self.get_int("Performance/retries", 4)
+
+    @Property(int)
+    def timeout(self) -> int:
+        return self.get_int("Performance/timeout", 10)
+
+    @Property(int)
+    def processing_delay(self) -> int:
+        return self.get_int("Performance/processing_delay", 0)
+
+    @Property(float, notify=reloadClients)
+    def speed_limit(self) -> float:
+        return self.get_float("Performance/speed_limit", 0.0)
 
     @Property(int)
     def videos_concurrency(self) -> int:
@@ -169,24 +191,36 @@ class SettingsManager(QObject):
         return self.get_int("Performance/pages_concurrency", 2)
 
     @Property(int)
-    def download_workers(self) -> int:
-        return self.get_int("Performance/download_workers", 20)
+    def response_cache_size(self) -> int:
+        return self.get_int("Performance/response_cache_size", 32)
 
     @Property(int)
-    def timeout(self) -> int:
-        return self.get_int("Performance/timeout", 10)
+    def response_cache_ttl(self) -> int:
+        return self.get_int("Performance/response_cache_ttl", 300)
 
     @Property(int)
-    def retries(self) -> int:
-        return self.get_int("Performance/retries", 4)
-
-    @Property(float, notify=reloadClients)
-    def speed_limit(self) -> float:
-        return self.get_float("Performance/speed_limit", 0.0)
+    def segment_cache_size(self) -> int:
+        return self.get_int("Performance/segment_cache_size", 8)
 
     @Property(int)
-    def processing_delay(self) -> int:
-        return self.get_int("Performance/processing_delay", 0)
+    def segment_cache_ttl(self) -> int:
+        return self.get_int("Performance/segment_cache_ttl", 300)
+
+    @Property(float)
+    def request_initial_retry_delay(self) -> float:
+        return self.get_float("Performance/request_initial_retry_delay", 0.5)
+
+    @Property(float)
+    def request_retry_max_delay(self) -> float:
+        return self.get_float("Performance/request_retry_max_delay", 30)
+
+    @Property(float)
+    def request_retry_multiplier(self) -> float:
+        return self.get_float("Performance/request_retry_multiplier", 2)
+
+    @Property(float)
+    def request_retry_jitter(self) -> float:
+        return self.get_float("Performance/request_retry_jitter", 0.5)
 
     # System / Misc related
     @Property(bool, notify=updateChecksChanged)
@@ -206,16 +240,18 @@ class SettingsManager(QObject):
         return self.get_bool("Misc/debug_mode", False)
 
     @Property(str, notify=None) # Can't be changed dynamically
-    def log_level(self) -> int:
-        return self.get_str("Misc/log_level", 0)
+    def log_level(self) -> str:
+        return self.get_str("Misc/log_level", "0")
+
+    @Property(str, notify=reloadClients)
+    def http_version(self) -> str:
+        return self.get_str("Misc/http_version", "v2")
 
     @Property(str, notify=reloadClients)
     def interface(self) -> str:
         return self.get_str("Misc/interface", None)
 
-    @Property(str, notify=reloadClients)
-    def http_version(self) -> str:
-        return self.get_str("Misc/http_version", "v2")
+    # Privacy Settings
 
     @Property(bool, notify=anonymousModeChanged)
     def anonymous_mode(self) -> bool:
@@ -228,6 +264,14 @@ class SettingsManager(QObject):
     @Property(bool, notify=reloadClients)
     def dns_over_https(self) -> bool:
         return self.get_bool("Privacy/dns_over_https", True)
+
+    @Property(bool, notify=enableTor)
+    def enable_tor(self) -> bool:
+        return self.get_bool("Privacy/enable_tor", False)
+
+    @Property(bool, notify=reloadClients)
+    def enable_tor_server_routing(self):
+        return self.get_bool("Privacy/enable_tor_server_routing", True)
 
     @Property(str, notify=reloadClients)
     def dns_server(self) -> str:
@@ -256,6 +300,8 @@ class SettingsManager(QObject):
     @Property(bool, notify=reloadClients)
     def proxy_ssl_verification(self) -> bool:
         return self.get_bool("Privacy/proxy_ssl_verification", True)
+
+    # UI Settings
 
     @Property(int, notify=languageChanged)
     def language(self) -> int:
@@ -369,42 +415,98 @@ class SettingsManager(QObject):
     def network_delay(self, val):
         if val != self.network_delay:
             self._settings.setValue("Performance/network_delay", val)
+            self.reloadClients.emit(val)
 
     @videos_concurrency.setter
     def videos_concurrency(self, val):
         if val != self.videos_concurrency:
             self._settings.setValue("Performance/videos_concurrency", val)
+            self.reloadClients.emit(val)
 
     @pages_concurrency.setter
     def pages_concurrency(self, val):
         if val != self.pages_concurrency:
             self._settings.setValue("Performance/pages_concurrency", val)
+            self.reloadClients.emit(val)
 
     @download_workers.setter
     def download_workers(self, val):
         if val != self.download_workers:
             self._settings.setValue("Performance/download_workers", val)
+            self.reloadClients.emit(val)
 
     @timeout.setter
     def timeout(self, val):
         if val != self.timeout:
             self._settings.setValue("Performance/timeout", val)
+            self.reloadClients.emit(val)
 
     @retries.setter
     def retries(self, val):
         if val != self.retries:
             self._settings.setValue("Performance/retries", val)
+            self.reloadClients.emit(val)
 
     @speed_limit.setter
     def speed_limit(self, val):
         if val != self.speed_limit:
             self._settings.setValue("Performance/speed_limit", val)
             self.speedLimitChanged.emit(val)
+            self.reloadClients.emit(val)
 
     @processing_delay.setter
     def processing_delay(self, val):
         if val != self.processing_delay:
             self._settings.setValue("Performance/processing_delay", val)
+            self.reloadClients.emit(val)
+
+    @response_cache_size.setter
+    def response_cache_size(self, val):
+        if val != self.response_cache_size:
+            self._settings.setValue("Performance/response_cache_size", val)
+            self.reloadClients.emit(val)
+
+    @response_cache_ttl.setter
+    def response_cache_ttl(self, val):
+        if val != self.response_cache_ttl:
+            self._settings.setValue("Performance/response_cache_ttl", val)
+            self.reloadClients.emit(val)
+
+    @segment_cache_size.setter
+    def segment_cache_size(self, val):
+        if val != self.segment_cache_size:
+            self._settings.setValue("Performance/segment_cache_size", val)
+            self.reloadClients.emit(val)
+
+    @segment_cache_ttl.setter
+    def segment_cache_ttl(self, val):
+        if val != self.segment_cache_ttl:
+            self._settings.setValue("Performance/segment_cache_ttl", val)
+            self.reloadClients.emit(val)
+
+    @request_initial_retry_delay.setter
+    def request_initial_retry_delay(self, val):
+        if val != self.request_initial_retry_delay:
+            self._settings.setValue("Performance/request_initial_retry_delay", val)
+            self.reloadClients.emit(val)
+
+    @request_retry_max_delay.setter
+    def request_retry_max_delay(self, val):
+        if val != self.request_retry_max_delay:
+            self._settings.setValue("Performance/request_retry_max_delay", val)
+            self.reloadClients.emit(val)
+
+    @request_retry_multiplier.setter
+    def request_retry_multiplier(self, val):
+        if val != self.request_retry_multiplier:
+            self._settings.setValue("Performance/request_retry_multiplier", val)
+            self.reloadClients.emit(val)
+
+    @request_retry_jitter.setter
+    def request_retry_jitter(self, val):
+        if val != self.request_retry_jitter:
+            self._settings.setValue("Performance/request_retry_jitter", val)
+            self.reloadClients.emit(val)
 
     # System / Misc related
     @update_checks.setter
@@ -464,6 +566,18 @@ class SettingsManager(QObject):
     def dns_over_https(self, val):
         if val != self.dns_over_https:
             self._settings.setValue("Privacy/dns_over_https", val)
+            self.reloadClients.emit(val)
+
+    @enable_tor.setter
+    def enable_tor(self, val):
+        if val != self.enable_tor:
+            self._settings.setValue("Privacy/enable_tor", val)
+            self.enableTor.emit(val)
+
+    @enable_tor_server_routing.setter
+    def enable_tor_server_routing(self, val):
+        if val != self.enable_tor_server_routing:
+            self._settings.setValue("Privacy/enable_tor_server_routing", val)
             self.reloadClients.emit(val)
 
     @dns_server.setter

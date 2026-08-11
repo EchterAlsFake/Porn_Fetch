@@ -958,7 +958,7 @@ wheels = [
 
 [[package]]
 name = "unofficial-api-for-beeg"
-version = "1.6"
+version = "1.7"
 source = { editable = "../unofficial-api-for-beeg" }
 dependencies = [
     { name = "eaf-base-api" },
@@ -995,7 +995,7 @@ provides-extras = ["cli"]
 
 [[package]]
 name = "unofficial-api-for-hqporner"
-version = "2.4"
+version = "2.5"
 source = { editable = "../unofficial-api-for-hqporner" }
 dependencies = [
     { name = "curl-cffi" },
@@ -1014,7 +1014,7 @@ provides-extras = ["cli"]
 
 [[package]]
 name = "unofficial-api-for-pornhub"
-version = "5.3.1"
+version = "5.4"
 source = { editable = "../unofficial-api-for-pornhub" }
 dependencies = [
     { name = "chompjs" },
@@ -1037,7 +1037,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-porntrex"
-version = "1.7"
+version = "1.8"
 source = { editable = "../unofficial-api-for-porntrex" }
 dependencies = [
     { name = "eaf-base-api" },
@@ -1054,7 +1054,7 @@ requires-dist = [
 
 [[package]]
 name = "unofficial-api-for-redtube"
-version = "1.3"
+version = "1.4"
 source = { editable = "../unofficial-api-for-redtube" }
 dependencies = [
     { name = "chompjs" },
@@ -1077,7 +1077,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-spankbang"
-version = "2.3"
+version = "2.4"
 source = { editable = "../unofficial-api-for-spankbang" }
 dependencies = [
     { name = "curl-cffi" },
@@ -1098,8 +1098,29 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-thumbzilla"
-version = "1.3"
+version = "1.4"
 source = { editable = "../unofficial-api-for-thumbzilla" }
+dependencies = [
+    { name = "curl-cffi" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'av'" },
+    { name = "curl-cffi" },
+    { name = "eaf-base-api", specifier = ">=4.0.0" },
+    { name = "m3u8" },
+    { name = "selectolax" },
+]
+provides-extras = ["av"]
+
+[[package]]
+name = "unofficial-api-for-tube8"
+version = "1.3"
+source = { editable = "../unofficial-api-for-tube8" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1118,29 +1139,8 @@ requires-dist = [
 provides-extras = ["av"]
 
 [[package]]
-name = "unofficial-api-for-tube8"
-version = "1.2"
-source = { editable = "../unofficial-api-for-tube8" }
-dependencies = [
-    { name = "curl-cffi" },
-    { name = "eaf-base-api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
-]
-provides-extras = ["av"]
-
-[[package]]
 name = "unofficial-api-for-xfreehd"
-version = "1.6"
+version = "1.7"
 source = { editable = "../unofficial-api-for-xfreehd" }
 dependencies = [
     { name = "eaf-base-api" },
@@ -1155,7 +1155,7 @@ requires-dist = [
 
 [[package]]
 name = "unofficial-api-for-xhamster"
-version = "2.4"
+version = "2.5"
 source = { editable = "../unofficial-api-for-xhamster" }
 dependencies = [
     { name = "chompjs" },
@@ -1178,7 +1178,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xnxx"
-version = "2.3"
+version = "2.4"
 source = { editable = "../unofficial-api-for-xnxx" }
 dependencies = [
     { name = "curl-cffi" },
@@ -1199,7 +1199,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xvideos"
-version = "2.4"
+version = "2.5"
 source = { editable = "../unofficial-api-for-xvideos" }
 dependencies = [
     { name = "curl-cffi" },
@@ -1220,7 +1220,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-youporn"
-version = "1.7"
+version = "1.8"
 source = { editable = "../unofficial-api-for-youporn" }
 dependencies = [
     { name = "curl-cffi" },

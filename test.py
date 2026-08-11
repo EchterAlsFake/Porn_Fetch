@@ -425,6 +425,11 @@ class Backend(QObject):
         # refresh them immediately when the content locale changes.
         self.load_clients()
         app_settings.localeChanged.connect(self.load_clients)
+        app_settings.reloadClients.connect(self.load_clients)
+
+    @Slot(str)
+    def handle_message(self, message: str) -> None:
+        ui_popup(text=message)
 
     def load_clients(self, _locale: str | None = None) -> None:
         clients.config.proxy = app_settings.proxy or None

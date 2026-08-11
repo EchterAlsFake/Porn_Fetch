@@ -122,20 +122,25 @@ Pane {
                         // Here we use 2 columns: Label on the left, Control on the right.
 
                         ColumnLayout {
+                            id: videoSettingsLayout
                             width: scrollviewVideo.availableWidth
                             Layout.fillWidth: true
 
-
                             GridLayout {
+                                columns: 3
                                 columnSpacing: 15
                                 rowSpacing: 15
-                                width: scrollviewVideo.availableWidth
                                 Layout.fillWidth: true
-                                columns: 3
 
-
-                                HelpButton {Layout.fillWidth: false}
-                                Label {Layout.fillWidth: false; text: "Quality"}
+                                // --- Row 1: Quality ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.videoQualityHelp
+                                }
+                                Label {
+                                    Layout.fillWidth: false
+                                    text: "Quality"
+                                }
                                 ComboBox {
                                     Layout.fillWidth: true
                                     model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "240p", "144p"]
@@ -143,8 +148,15 @@ Pane {
                                     onCurrentIndexChanged: appSettings.quality = currentIndex
                                 }
 
-                                HelpButton {Layout.fillWidth: false}
-                                Label {Layout.fillWidth: false; text: "Model Videos"}
+                                // --- Row 2: Model Videos ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.modelVideosHelp
+                                }
+                                Label {
+                                    Layout.fillWidth: false
+                                    text: "Model Videos"
+                                }
                                 ComboBox {
                                     Layout.fillWidth: true
                                     model: ["Both", "Uploaded Videos", "Featured Videos"]
@@ -152,16 +164,21 @@ Pane {
                                     onCurrentIndexChanged: appSettings.model_videos = currentIndex
                                 }
 
-                                HelpButton {Layout.fillWidth: false}
-                                Label {Layout.fillWidth: false; text: "Content Language"}
+                                // --- Row 3: Content Language ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.contentLanguageHelp
+                                }
+                                Label {
+                                    Layout.fillWidth: false
+                                    text: "Content Language"
+                                }
                                 ComboBox {
                                     id: contentLanguageComboBox
                                     Layout.fillWidth: true
                                     textRole: "label"
                                     valueRole: "locale"
                                     model: ListModel {
-                                        // Alphabetical by each language's local name (using its Latin reading
-                                        // for languages written in another script).
                                         ListElement { label: "🇨🇿 Čeština"; locale: "cs-CZ" }
                                         ListElement { label: "🇩🇪 Deutsch"; locale: "de-DE" }
                                         ListElement { label: "🇺🇸 English"; locale: "en-US" }
@@ -184,58 +201,79 @@ Pane {
                                     onActivated: appSettings.locale = currentValue
                                 }
 
-                                HelpButton {Layout.fillWidth: false}
-                                Label {Layout.fillWidth: false; text: "Max Result Limit"}
+                                // --- Row 4: Strict Enforcement ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.strictEnforcementHelp
+                                }
+                                CheckBox {
+                                    Layout.columnSpan: 2
+                                    Layout.fillWidth: true
+                                    text: "Strict Enforcement for content language"
+                                    checked: appSettings.strict_enforcement
+                                    onToggled: appSettings.strict_enforcement = checked
+                                }
+
+                                // --- Row 5: Max Result Limit ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.resultLimitHelp
+                                }
+                                Label {
+                                    Layout.fillWidth: false
+                                    text: "Max Result Limit"
+                                }
                                 SpinBox {
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 5000
                                     value: appSettings.result_limit
                                     onValueModified: appSettings.result_limit = value
-
                                 }
-                            }
 
-                            GridLayout {
-                                rowSpacing: 15
-                                columnSpacing: 15
-                                width: scrollviewVideo.availableWidth
-                                Layout.fillWidth: true
-
-                                Label {Layout.fillWidth: false; text: "Output Path"}
-                                TextField {
-                                    id: "outputPathInput"
-                                    placeholderText: "Enter the output path for the videos..."
-                                    Layout.fillWidth: true
-                                    text: appSettings.output_path
-                                    onEditingFinished: appSettings.output_path = text
-                                    }
-                                Button {
+                                // --- Row 6: Output Path ---
+                                Item { Layout.fillWidth: false } // Empty spacer for 1st column alignment
+                                Label {
                                     Layout.fillWidth: false
-                                    text: "Select Path"
+                                    text: "Output Path"
+                                }
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 10
+
+                                    TextField {
+                                        id: outputPathInput
+                                        placeholderText: "Enter the output path for the videos..."
+                                        Layout.fillWidth: true
+                                        text: appSettings.output_path
+                                        onEditingFinished: appSettings.output_path = text
                                     }
-
-
+                                    Button {
+                                        Layout.fillWidth: false
+                                        text: "Select Path"
+                                    }
                                 }
 
-                            GridLayout {
-                                columnSpacing: 15
-                                rowSpacing: 15
-                                width: scrollviewVideo.availableWidth
-                                Layout.fillWidth: false
-                                columns: 2
-
-                                HelpButton {Layout.fillWidth: false}
+                                // --- Row 7: Write Metadata ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.writeMetadataHelp
+                                }
                                 CheckBox {
+                                    Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Write metadata"
                                     checked: appSettings.write_metadata
                                     onToggled: appSettings.write_metadata = checked
-
                                 }
 
-                                HelpButton {Layout.fillWidth: false}
+                                // --- Row 8: Skip Existing Files ---
+                                HelpButton {
+                                    Layout.fillWidth: false
+                                    helpText: AppStrings.skipExistingFilesHelp
+                                }
                                 CheckBox {
+                                    Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Skip existing files"
                                     checked: appSettings.skip_existing_files
@@ -244,21 +282,39 @@ Pane {
 
                                 HelpButton {
                                     Layout.fillWidth: false
-                                    helpText: AppStrings.strictEnforcementHelp
-
+                                    helpText: AppStrings.trackVidesHelp
                                 }
                                 CheckBox {
+                                    Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: "Strict Enforcement for content language"
-                                    checked: appSettings.strict_enforcement
-                                    onToggled: appSettings.strict_enforcement = checked
+                                    text: "Track Videos (SQLite Database)"
+                                    checked: appSettings.track_videos
+                                    onToggled: appSettings.track_videos = checked
                                 }
 
+                                Item { Layout.fillWidth: false } // Empty spacer for 1st column alignment
+                                Label {
+                                    Layout.fillWidth: false
+                                    text: "Database Path"
+                                }
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 10
+
+                                    TextField {
+                                        id: databasePathInput
+                                        placeholderText: "Enter the path for the database (.db file)"
+                                        Layout.fillWidth: true
+                                        text: appSettings.output_path
+                                        onEditingFinished: appSettings.database_path = text
+                                    }
+                                    Button {
+                                        Layout.fillWidth: false
+                                        text: "Select Path"
+                                    }
+                                }
                             }
-
                         }
-
-
                     }
 
                     // ==========================================
@@ -269,18 +325,14 @@ Pane {
                         clip: true
 
                         GridLayout {
-
                             columnSpacing: 15
                             columns: 3 // We use 6 columns to create two pairs of (Label, Spinbox)
                             width: scrollviewPerformance.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
 
-
                             // Left Pair                        // Right Pair
-                            HelpButton {
-                                Layout.fillWidth: false
-                            }
+                            HelpButton {Layout.fillWidth: false; helpText: AppStrings.downloadWorkersHelp}
                             Label {
                                 Layout.fillWidth: false
                                 text: "Download workers:"
@@ -292,9 +344,7 @@ Pane {
                                 value: appSettings.download_workers
                                 onValueModified: appSettings.download_workers = value
                             }
-                            HelpButton {
-                                Layout.fillWidth: false
-                            }
+                            HelpButton {Layout.fillWidth: false; helpText: AppStrings.networkDelayHelp}
                             Label {
                                 text: "Network delay (requests/sec):"
                             }
@@ -307,6 +357,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.parallelDownloadsHelp
                             }
                             Label {
                                 text: "Parallel Downloads:"
@@ -320,6 +371,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.retriesHelp
                             }
                             Label {
                                 text: "Maximum retries:"
@@ -333,6 +385,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.timeoutHelp
                             }
                             Label {
                                 text: "Maximum timeout:"
@@ -346,6 +399,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.processingDelay
                             }
                             Label {
                                 text: "Processing Delay (videos/sec):"
@@ -359,6 +413,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.speedLimitHelp
                             }
                             Label {
                                 text: "Speed Limit (MB/s):"
@@ -372,6 +427,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.videosConcurrencyHelp
                             }
                             Label {
                                 text: "Videos Concurrency:"
@@ -385,6 +441,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.pagesConcurrencyHelp
                             }
                             Label {
                                 text: "Pages concurrency:"
@@ -397,6 +454,102 @@ Pane {
                                 onValueModified: appSettings.pages_concurrency = value
                             }
 
+                            GridLayout {
+                                columnSpacing: 15
+                                Layout.columnSpan: 3
+                                columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
+                                width: scrollviewPerformance.availableWidth
+                                Layout.fillWidth: true
+                                rowSpacing: 15
+
+                                Label {
+                                    text: "Response Cache Size (MB/s)"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 2000
+                                    value: appSettings.response_cache_size
+                                    onValueModified: appSettings.response_cache_size = value
+                                }
+
+                                Label {
+                                    text: "Response Cache TTL (Seconds)"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.response_cache_ttl
+                                    onValueModified: appSettings.response_cache_ttl = value
+                                }
+
+                                Label {
+                                    text: "Segment Cache Size (MB/s)"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 2000
+                                    value: appSettings.segment_cache_size
+                                    onValueModified: appSettings.segment_cache_size = value
+                                }
+
+                                Label {
+                                    text: "Segment Cache TTL (Seconds)"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.segment_cache_ttl
+                                    onValueModified: appSettings.segment_cache_ttl = value
+                                }
+
+                                Label {
+                                    text: "Request Initial Retry Delay"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.request_initial_retry_delay
+                                    onValueModified: appSettings.request_initial_retry_delay = value
+                                }
+
+                                Label {
+                                    text: "Request Retry Max Delay"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.request_retry_max_delay
+                                    onValueModified: appSettings.request_retry_max_delay= value
+                                }
+
+                                Label {
+                                    text: "Request Retry Multiplier"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.request_retry_multiplier
+                                    onValueModified: appSettings.request_retry_multiplier = value
+                                }
+
+                                Label {
+                                    text: "Request Retry Jitter"
+                                }
+                                SpinBox {
+                                    Layout.fillWidth: true
+                                    editable: true
+                                    to: 20000
+                                    value: appSettings.request_retry_jitter
+                                    onValueModified: appSettings.request_retry_jitter = value
+                                }
+                            }
                             // Empty spaces for layout balance where the right side has no items
                             Item {
                                 Layout.fillWidth: false
@@ -424,24 +577,17 @@ Pane {
 
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.updateChecks
                             }
                             CheckBox {
-                                text: "Search for Updates (On startup)"
+                                text: "Search for Updates"
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
                                 onToggled: appSettings.update_checks = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
-                            }
-                            CheckBox {
-                                text: "Anonymous mode"
-                                Layout.fillWidth: true
-                                checked: appSettings.anonymous_mode
-                                onToggled: appSettings.anonymous_mode = checked
-                            }
-                            HelpButton {
-                                Layout.fillWidth: false
+                                helpText: AppStrings.supressErrors
                             }
                             CheckBox {
                                 text: "Ignore Errors"
@@ -451,6 +597,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.enableLoggingHelp
                             }
                             CheckBox {
                                 // Use \n for multi-line text
@@ -461,20 +608,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
-                            }
-                            CheckBox {
-                                text: "Enable Proxy"
-                                Layout.fillWidth: true
-                                checked: appSettings.proxy.length > 0
-                                onClicked: {
-                                    if (checked)
-                                        proxyWindow.openWithProxy(appSettings.proxy)
-                                    else
-                                        backend.applyProxy("", true)
-                                }
-                            }
-                            HelpButton {
-                                Layout.fillWidth: false
+                                helpText: AppStrings.debugModeHelp
                             }
                             CheckBox {
                                 text: "Enable Debug Mode (Not recommended)"
@@ -492,6 +626,7 @@ Pane {
                                 
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.httpVersionHelp
                             }
                             TextField {
                                 id: "httpVersion"
@@ -499,6 +634,17 @@ Pane {
                                 Layout.fillWidth: true
                                 text: appSettings.http_version
                                 onEditingFinished: appSettings.http_version = text
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.interfaceHelp
+                            }
+                            TextField {
+                                id: "interface"
+                                placeholderText: "e.g., eth0, wlan0, tun0, 10.6.3.20"
+                                Layout.fillWidth: true
+                                text: appSettings.interface
+                                onEditingFinished: appSettings.interace = text
                             }
                         }
                     }
@@ -520,6 +666,7 @@ Pane {
 
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.anonymousModeHelp
                             }
                             CheckBox {
                                 text: "Anonymous Mode"
@@ -529,6 +676,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.encryptedCHHelp
                             }
                             CheckBox {
                                 text: "Encrypted Client Hello"
@@ -538,6 +686,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.dnsOverHTTPSHelp
                             }
                             CheckBox {
                                 text: "DNS over HTTPS"
@@ -545,8 +694,32 @@ Pane {
                                 checked: appSettings.dns_over_https
                                 onToggled: appSettings.dns_over_https = checked
                             }
+
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.torIntegrationHelp
+                            }
+                            CheckBox {
+                                text: "Enable Tor Integration"
+                                Layout.fillWidth: true
+                                checked: appSettings.sni_obfuscation
+                                onToggled: appSettings.sni_obfuscation = checked
+                            }
+
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.onionRoutingHelp
+                            }
+                            CheckBox {
+                                text: "Route License / Update checking through .onion domain"
+                                Layout.fillWidth: true
+                                checked: appSettings.sni_obfuscation
+                                onToggled: appSettings.sni_obfuscation = checked
+                            }
+
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.dnsPrimaryHelp
                             }
                             TextField {
                                 id: "dnsPrimaryInput"
@@ -557,6 +730,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.fallbackDNSHelp
                             }
                             TextField {
                                 id: "dnsFallbackInput"
@@ -567,27 +741,38 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.sniObfuscationHelp
                             }
                             CheckBox {
-                                text: "SNI Obfuscation"
+                                    text: "SNI Obfuscation"
+                                    Layout.fillWidth: true
+                                    checked: appSettings.sni_obfuscation
+                                    onToggled: appSettings.sni_obfuscation = checked
+                                }
+
+                            GridLayout {
+                                Layout.columnSpan: 2          // <--- Fixes the layout breakage
                                 Layout.fillWidth: true
-                                checked: appSettings.sni_obfuscation
-                                onToggled: appSettings.sni_obfuscation = checked
-                            }
-                            RadioButton {
-                                text: "Lite SNI Obfuscation"
-                                Layout.fillWidth: false
-                                checked: appSettings.sni_obfuscation_lite
-                                onToggled: appSettings.sni_obfuscation_life = checked
-                            }
-                            RadioButton {
-                                text: "Strict SNI Obfuscation (Requires Admin / root rights)"
-                                Layout.fillWidth: false
-                                checked: appSettings.sni_obfuscation_strict
-                                onToggled: appSettings.sni_obfuscation_strict = checked
+                                columns: 2
+                                columnSpacing: 15
+                                rowSpacing: 15
+
+                                RadioButton {
+                                    text: "Lite SNI Obfuscation"
+                                    Layout.fillWidth: false
+                                    checked: appSettings.sni_obfuscation_lite
+                                    onToggled: appSettings.sni_obfuscation_life = checked
+                                }
+                                RadioButton {
+                                    text: "Strict SNI Obfuscation (Requires Admin / root rights)"
+                                    Layout.fillWidth: false
+                                    checked: appSettings.sni_obfuscation_strict
+                                    onToggled: appSettings.sni_obfuscation_strict = checked
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.proxySetupHelp
                             }
                             Button {
                                 Layout.fillWidth: true
@@ -616,6 +801,7 @@ Pane {
 
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.guiLanguageHelp
                             }
                             Label {
                                 text: "Graphical User Interface language:"
@@ -628,6 +814,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.fontSizeHelp
                             }
                             Label {
                                 text: "Font Size:"
@@ -638,6 +825,7 @@ Pane {
                                 value: appSettings.font_size
                                 onValueModified: appSettings.font_size = value
                             }
+                            HelpButton { Layout.fillWidth: false; helpText: AppStrings.appStyleHelp }
                             Label { text: "Application Style (Requires Restart):" }
                             ComboBox {
                                 Layout.fillWidth: true
@@ -646,18 +834,18 @@ Pane {
                                 Component.onCompleted: currentIndex = find(appSettings.core_style)
                                 onActivated: appSettings.core_style = currentText
                             }
-                            HelpButton { Layout.fillWidth: false }
 
                             // 2. Dark/Light Mode
+                            HelpButton { Layout.fillWidth: false; helpText: AppStrings.darkModeHelp }
                             Label { text: "Dark Mode:" }
                             Switch {
                                 Layout.fillWidth: true
                                 checked: appSettings.dark_mode
                                 onToggled: appSettings.dark_mode = checked
                             }
-                            HelpButton { Layout.fillWidth: false }
 
                             // 3. Accent Color
+                            HelpButton { Layout.fillWidth: false; helpText: AppStrings.accentColorHelp }
                             Label { text: "Accent Color:" }
                             ComboBox {
                                 Layout.fillWidth: true
@@ -673,7 +861,6 @@ Pane {
                                 Component.onCompleted: currentIndex = indexOfValue(appSettings.accent_color)
                                 onActivated: appSettings.accent_color = currentValue
                             }
-                            HelpButton { Layout.fillWidth: false }
 
                         }
                     }

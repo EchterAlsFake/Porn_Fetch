@@ -43,9 +43,11 @@ def _fallback_popup(text: str, title: str):
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
 
+from PySide6.QtGui import QGuiApplication
+
 
 def _show_qml_popup_impl(text: str, title: str):
-    app = QApplication.instance()
+    app = QGuiApplication.instance()
     if not app:
         return
 
@@ -58,7 +60,9 @@ def _show_qml_popup_impl(text: str, title: str):
     component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml_file.resolve())))
 
     if component.isError():
-        print(f"[shared_gui] QML Error loading MessageBox.qml: {component.errors()}")
+        print(
+            f"[shared_gui] QML Error loading MessageBox.qml: {component.errors()}"
+        )
         _fallback_popup(text, title)
         return
 
@@ -70,10 +74,12 @@ def _show_qml_popup_impl(text: str, title: str):
     obj.setProperty("dialogTitle", str(title))
     obj.setProperty("messageText", str(text))
 
-    # Center on active window or primary screen
-    active_win = app.activeWindow()
+    # Get dimensions (default fallback if properties aren't set yet)
     dw = obj.property("width") or 440
     dh = obj.property("height") or 220
+
+    # 1. Use focusWindow() instead of activeWindow()
+    active_win = QGuiApplication.focusWindow()
 
     if active_win and active_win.isVisible():
         geo = active_win.geometry()
