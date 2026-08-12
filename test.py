@@ -115,6 +115,7 @@ from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, 
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
 from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
+from src.backend.database import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
 from curl_cffi.requests.exceptions import SSLError
 
@@ -154,7 +155,7 @@ def start_proxy_lite():
     proxy_config = FragmentingProxyConfig(
         listen_host="127.0.0.1",
         listen_port=0,
-        upstream_proxy=app_settings.proxy
+        upstream_proxy=app_settings.proxy or None
     )
 
     proxy_proces = FragmentingProxyProcess(proxy_config)
@@ -168,7 +169,7 @@ def start_proxy_strict():
     proxy_config = StrictFragmentingProxyConfig(
         listen_host="127.0.0.1",
         listen_port=0,
-        upstream_proxy=app_settings.proxy
+        upstream_proxy=app_settings.proxy or None
     )
 
     proxy_process = StrictFragmentingProxyProcess(proxy_config)
@@ -187,7 +188,8 @@ class ProcessVideos(QObject):
     """
 
     def __init__(self, iterator: AsyncGenerator, custom_path_options: str, video_filters: VideoFilters,
-                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event) -> None:
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event,
+                 origin_iterator_url: str | None = None, origin_iterator_name: str | None = None) -> None:
         super().__init__()
         self.iterator = iterator
         self.custom_path_options = custom_path_options
@@ -195,6 +197,8 @@ class ProcessVideos(QObject):
         self.reverse_videos = reverse_videos
         self.stop_flag = stop_flag
         self.video_filters = video_filters
+        self.origin_iterator_url = origin_iterator_url
+        self.origin_iterator_name = origin_iterator_name
         self.max_attempts = app_settings.retries
         self.output_path = app_settings.output_path
         self.result_limit = app_settings.result_limit
@@ -346,6 +350,8 @@ class ProcessVideos(QObject):
                         video_object.identifier = identifier
                         video_object.index = idx
                         video_object.selected_quality = quality
+                        video_object.origin_iterator_url = self.origin_iterator_url
+                        video_object.origin_iterator_name = self.origin_iterator_name
 
                         self.download_manager.add_video(video_object)
                         last_index += 1
@@ -446,18 +452,21 @@ class Backend(QObject):
     def toggle_user_interface_language(self, value: int) -> None:
         ...
 
-    @Slot(bool)
-    def toggle_sni_proxy(self) -> None:
-        ui_popup("Enabling / Disabling SNI requires a restart and choosing between Lite / Strict below!")
+    @Slot()
+    def setting_requires_restart(self) -> None:
+        ui_popup("You have triggered an action that requires a restart before taking effect!")
 
     @Slot(str)
     def handle_message(self, message: str) -> None:
         ui_popup(text=message)
 
+    @Slot(bool)
+    def toggle_network_logging(self, value: bool) -> None:
+        ...
+
+    @Slot(object)
     def load_clients(self, _locale: str | None = None) -> None:
-        clients.config.proxy = app_settings.proxy or None
-        clients.config.verify_ssl = app_settings.proxy_ssl_verification
-        clients.refresh_clients(debug_mode=app_settings.debug_mode)
+        clients.refresh_clients()
 
     def _spawn(self, coro, *, name: str) -> None:
         task = asyncio.create_task(coro, name=name)
@@ -552,7 +561,7 @@ class Backend(QObject):
         app_settings.proxy = proxy_url
         app_settings.proxy_ssl_verification = verify_ssl
         app_settings.sync()
-        clients.config.proxy = proxy_url or None
+        clients.config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or proxy_url or None
         clients.config.verify_ssl = verify_ssl
         clients.refresh_clients(debug_mode=app_settings.debug_mode)
         self.proxyApplied.emit(bool(proxy_url))
@@ -596,7 +605,9 @@ class Backend(QObject):
 
         await self.process_videos(iterator=single_url_stream(), custom_options=custom_options, filters=filters)
 
-    async def process_videos(self, iterator: AsyncIterator, custom_options: str, filters: VideoFilters):
+    async def process_videos(self, iterator: AsyncIterator, custom_options: str, filters: VideoFilters,
+                             origin_iterator_url: str | None = None,
+                             origin_iterator_name: str | None = None):
         """
         The add_to_tree_widget function is basically the whole magic behind Porn Fetch. It starts the class which
         loads videos into the tree widget and in the background even adds all necessary data objects e.g.,
@@ -608,7 +619,8 @@ class Backend(QObject):
 
         process_videos = ProcessVideos(iterator=iterator, custom_path_options=custom_options,
                                        video_filters=filters, download_manager=self.download_manager, reverse_videos=False,
-                                       stop_flag=stop_flag)
+                                       stop_flag=stop_flag, origin_iterator_url=origin_iterator_url,
+                                       origin_iterator_name=origin_iterator_name)
         await process_videos.start_processing()
 
         self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
@@ -632,6 +644,7 @@ class Backend(QObject):
         if "pornhub" in url:
             if "pornstar" in url or "model" in url:
                 model_object = await clients.ph_client.get_pornstar(url)
+                target_obj = model_object
                 model_type = app_settings.model_videos
 
                 if model_type == 0:
@@ -700,7 +713,13 @@ class Backend(QObject):
                 videos = target_obj.videos(pages=30)
 
         print(f"Iterator: {type(videos)}")
-        await self.process_videos(iterator=videos, custom_options=custom_options, filters=filters)
+        await self.process_videos(
+            iterator=videos,
+            custom_options=custom_options,
+            filters=filters,
+            origin_iterator_url=url,
+            origin_iterator_name=self._iterator_display_name(target_obj, url, "model / channel"),
+        )
 
     @Slot(str, str, dict)
     def process_playlist_url(self, url: str, custom_options: str, filters: dict):
@@ -712,23 +731,54 @@ class Backend(QObject):
         self._spawn(self._process_playlist_url(url=url, custom_options=custom_options, filters=filters), name="Fortnite")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
+        source_obj = None
         if "pornhub" in str(url) and "playlist" in str(url):
             playlist = await clients.ph_client.get_playlist(url=url, load_html=True)
+            source_obj = playlist
             videos = playlist.get_videos()
 
         elif "xvideos" in url:
             videos = await clients.xv_client.get_playlist(url=url, pages=400)
 
         elif "youporn" in str(url) and "collection" in str(url):
-            videos = await clients.yp_client.get_collection(url)
-            videos = videos.videos()
+            source_obj = await clients.yp_client.get_collection(url)
+            videos = source_obj.videos()
 
         else:
             self.showMessage.emit(TRANSLATE_ERRORS.invalid_input)
             self.logger.error(f"Unsupported Input provided: {url}")
             return
 
-        await self.process_videos(iterator=videos, custom_options=custom_options, filters=filters)
+        await self.process_videos(
+            iterator=videos,
+            custom_options=custom_options,
+            filters=filters,
+            origin_iterator_url=url,
+            origin_iterator_name=self._iterator_display_name(source_obj, url, "playlist / collection"),
+        )
+
+    @staticmethod
+    def _iterator_display_name(iterator_object, url: str, source_kind: str) -> str:
+        """Prefer an API-provided iterator name and never expose its URL in the UI."""
+        if iterator_object is not None:
+            for attribute in ("name", "title", "display_name", "username"):
+                value = getattr(iterator_object, attribute, None)
+                if value and not callable(value):
+                    return str(value)
+
+        platform_names = {
+            "pornhub": "Pornhub",
+            "eporner": "Eporner",
+            "xnxx": "XNXX",
+            "xvideos": "XVideos",
+            "youporn": "YouPorn",
+            "spankbang": "SpankBang",
+            "xhamster": "xHamster",
+            "porntrex": "PornTrex",
+        }
+        normalized_url = url.lower()
+        platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")
+        return f"{platform} {source_kind}"
 
 
 
@@ -744,11 +794,14 @@ def main():
 
     # 1. Instantiate backend object
     backend_instance = Backend()
+    database_bridge = DatabaseBridge(parent=engine)
+    backend_instance.download_manager.video_updated.connect(database_bridge.on_video_downloaded)
     storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
     lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
     bridge_instance = LicenseBridge(lic_manager)
     engine.rootContext().setContextProperty("bridge", bridge_instance)
     engine.rootContext().setContextProperty("backend", backend_instance)
+    engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
 
@@ -778,5 +831,7 @@ if __name__ == "__main__":
 
         elif app_settings.sni_obfuscation_lite:
             local_url = start_proxy_lite()
+            
+    app_settings.active_sni_proxy_url = local_url
 
     main()

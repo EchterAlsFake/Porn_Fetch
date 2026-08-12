@@ -25,6 +25,7 @@ level frontend AND backend development toolkit for free.**
 
 
 # Graphics
+- <a href="https://iconscout.com/icons/serveranalyse" class="text-underline font-size-sm" target="_blank">Serveranalyse</a> by <a href="https://iconscout.com/de/contributors/khulqi-dsgn/:assets" class="text-underline font-size-sm" target="_blank">Khulqi Design</a>
 - <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a> [*]
 - <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a> [*]
 - <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a> [*]

@@ -29,6 +29,7 @@ TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 
 
 class SettingsManager(QObject):
+    qualityChanged = Signal(int)
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
     languageChanged = Signal(int)
@@ -36,8 +37,7 @@ class SettingsManager(QObject):
     fontSizeChanged = Signal()
     themeChanged = Signal(int)
     reloadClients = Signal(object)
-
-    enableTor = Signal(bool)
+    restartRequired = Signal()
 
     # For Theming
     coreStyleChanged = Signal(str)
@@ -45,15 +45,6 @@ class SettingsManager(QObject):
     accentColorChanged = Signal(str)
 
     # Missing Signals
-    qualityChanged = Signal(int)
-    modelVideosChanged = Signal(int)
-    resultLimitChanged = Signal(int)
-    outputPathChanged = Signal(str)
-    writeMetadataChanged = Signal(bool)
-    skipExistingFilesChanged = Signal(bool)
-    parallelDownloadsChanged = Signal(int)
-    speedLimitChanged = Signal(int)
-    supressErrorsChanged = Signal(bool)
     networkLoggingChanged = Signal(bool)
 
     def __init__(self):
@@ -294,7 +285,6 @@ class SettingsManager(QObject):
     def speed_limit(self, val):
         if val != self.speed_limit:
             self._settings.setValue("Performance/speed_limit", val)
-            self.speedLimitChanged.emit(val)
             self.reloadClients.emit(val)
 
     @Property(int)
@@ -499,7 +489,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Privacy/dns_over_https", val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=enableTor)
+    @Property(bool, notify=restartRequired)
     def enable_tor(self) -> bool:
         return self.get_bool("Privacy/enable_tor", False)
 
@@ -507,7 +497,7 @@ class SettingsManager(QObject):
     def enable_tor(self, val):
         if val != self.enable_tor:
             self._settings.setValue("Privacy/enable_tor", val)
-            self.enableTor.emit(val)
+            self.restartRequired.emit()
 
     @Property(bool, notify=reloadClients)
     def enable_tor_server_routing(self):
@@ -517,7 +507,7 @@ class SettingsManager(QObject):
     def enable_tor_server_routing(self, val):
         if val != self.enable_tor_server_routing:
             self._settings.setValue("Privacy/enable_tor_server_routing", val)
-            self.reloadClients.emit(val)
+            self.restartRequired.emit()
 
     @Property(str, notify=reloadClients)
     def dns_server(self) -> str:
@@ -539,7 +529,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Privacy/fallback_dns", val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=sniProxyChanged)
+    @Property(bool, notify=restartRequired)
     def sni_obfuscation(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation", False)
 
@@ -547,9 +537,9 @@ class SettingsManager(QObject):
     def sni_obfuscation(self, val):
         if val != self.sni_obfuscation:
             self._settings.setValue("Privacy/sni_obfuscation", val)
-            self.sniProxyChanged.emit(val)
+            self.restartRequired.emit()
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=restartRequired)
     def sni_obfuscation_lite(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_lite", False)
 
@@ -557,9 +547,9 @@ class SettingsManager(QObject):
     def sni_obfuscation_lite(self, val):
         if val != self.sni_obfuscation_lite:
             self._settings.setValue("Privacy/sni_obfuscation_lite", val)
-            self.reloadClients.emit(val)
+            self.restartRequired.emit()
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=restartRequired)
     def sni_obfuscation_strict(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_strict", False)
 
@@ -567,7 +557,7 @@ class SettingsManager(QObject):
     def sni_obfuscation_strict(self, val):
         if val != self.sni_obfuscation_strict:
             self._settings.setValue("Privacy/sni_obfuscation_strict", val)
-            self.reloadClients.emit(val)
+            self.restartRequired.emit()
 
     @Property(str, notify=reloadClients)
     def proxy(self) -> str:

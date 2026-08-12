@@ -3,6 +3,8 @@ from datetime import datetime
 from dataclasses import dataclass
 from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Property, Qt
 
+from src.backend.config import app_settings
+
 
 @dataclass(slots=True)
 class VideoFilters:
@@ -19,6 +21,7 @@ class VideoFilters:
 
 @dataclass(slots=True)
 class VideoObject:
+    url: str
     title: str
     author: str
     length: int
@@ -33,6 +36,12 @@ class VideoObject:
     index: int | None = None
     selected_quality: str | None = None
 
+    # These will be dynamically written to
+    origin_iterator_url: str | None = None
+    origin_iterator_name: str | None = None
+    is_hls: bool | None = None
+    missing_segments: list[int] | None = None
+
 
 class DownloadListModel(QAbstractListModel):
     JobIdRole = Qt.ItemDataRole.UserRole + 1
@@ -46,6 +55,21 @@ class DownloadListModel(QAbstractListModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._items = []
+        app_settings.qualityChanged.connect(self.update_all_qualities)
+
+    def update_all_qualities(self, new_quality_idx: int):
+        preferred_quality = str(app_settings.mappings_quality.get(new_quality_idx, "best"))
+
+        for row, item in enumerate(self._items):
+            string_qualities = [str(q) for q in item.get("availableQualities", [])]
+
+            selected_quality = preferred_quality if preferred_quality in string_qualities else (
+                string_qualities[0] if string_qualities else "best")
+
+            if item.get("selectedQuality") != selected_quality:
+                item["selectedQuality"] = selected_quality
+                idx = self.index(row, 0)
+                self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
 
     def roleNames(self):
         return {

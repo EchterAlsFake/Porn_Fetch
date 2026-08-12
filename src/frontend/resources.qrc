@@ -5,10 +5,8 @@
         <file>graphics/settings.svg</file>
         <file>graphics/logo_transparent.png</file>
         <file>graphics/account.svg</file>
-        <file>graphics/unread.svg</file>
-        <file>graphics/done.svg</file>
         <file>graphics/progressbars.svg</file>
-        <file>graphics/tooltip.svg</file>
+        <file>graphics/database.svg</file>
         <file>graphics/logo.png</file>
         <file>graphics/splashscreen.png</file>
     </qresource>

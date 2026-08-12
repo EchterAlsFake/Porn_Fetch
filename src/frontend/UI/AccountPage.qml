@@ -106,7 +106,7 @@ Pane {
 
             enabled: emailField.text.trim().length > 0
                      && passwordField.text.length > 0
-                     && !root.backend.busy
+                     && !backend.busy
 
             onClicked: {
                 root.backend.login(

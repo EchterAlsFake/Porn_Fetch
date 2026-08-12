@@ -43,6 +43,14 @@ ApplicationWindow {
             }
 
             TabButton {
+                icon.source: "qrc:/images/graphics/database.svg"
+                icon.width: 24
+                icon.height: 24
+                icon.color: "transparent"
+                display: AbstractButton.IconOnly
+            }
+
+            TabButton {
                 icon.source: "qrc:/images/graphics/settings.svg"
                 icon.width: 24
                 icon.height: 24
@@ -73,6 +81,9 @@ ApplicationWindow {
             }
 
             AccountPage {
+            }
+
+            StatisticsPage {
             }
 
             SettingsPage {

@@ -69,13 +69,13 @@ from src.backend.download_manager import VideoObject
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
-    type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] | type[tu_Video] |
-    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[rt_Video] | type[th_Video]
+    ph_Video | xn_Video | xv_Video | yp_Video | tu_Video | ph_Short |
+    xh_Video | sp_Video | bg_Video | rt_Video | th_Video
     # Those are all HLS streams
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    type[xf_Video] | type[ep_Video] | type[pt_Video] | type[pt_Video]
+    xf_Video | ep_Video | pt_Video | pt_Video
     # Those are all non HLS streams for now
 )
 
@@ -220,8 +220,11 @@ for _core in cores:
 logger.debug("Successfully initialized all clients and!")
 
 
-def refresh_clients(debug_mode: bool = False) -> None:
+def refresh_clients() -> None:
     # Apply Settings
+    debug_mode = app_settings.debug_mode
+    config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or app_settings.proxy or None
+    config.verify_ssl = app_settings.proxy_ssl_verification
     config.videos_concurrency = app_settings.videos_concurrency
     config.pages_concurrency = app_settings.pages_concurrency
     config.max_bandwidth_mb = app_settings.speed_limit

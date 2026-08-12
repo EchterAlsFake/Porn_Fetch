@@ -4,84 +4,22 @@
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="1024"/>
-        <source>
-Please read this before setting proxies:
-
-I am not a genius in programming and I can NOT guarantee for your safety. However, I did everything possible (in my abilities)
-to make sure this works perfectly. When you apply proxies you need to make sure that they are in the correct format. You&apos;ll
-see a few examples down below.
-
-Also, if you use PUBLIC proxies, then it&apos;s really a gamble if they work or if they don&apos;t. Usually they are really slow and 
-inconsistent, but maybe you are lucky.
-
-About SSL encryption:   
-
-If your proxy does NOT support SSL / TLS or delivers incorrect self-signed certificates, then you can choose to ignore that
-by disabling SSL verification. However, this reduces your security a lot and people in your network will be able to intercept
-your network traffic. 
-
-This is not my fault, it&apos;s just how the internet works. So, get yourself a good proxy and then you are good to go :)
-
-Here are a few examples of valid proxies:
-
-1) http://89.3.64.185:1111
-2) socks5://45.115.114.57:9090
-
-Important:
-Even if your proxy supports https, you need to put it as &apos;http://&apos;. This will NOT disable encryption.
-
-I do not know whether authenticated proxies e.g., with user + password authentication work.
-I can&apos;t test that, since I don&apos;t own such proxies.
-
-
-I will test your proxy before actually using it using requests to httpbin.org to get your IP address. One request with 
-and one request without a proxy. If the IPs are different, then it worked, if not you need to use another proxy.
-
-This is all for your safety!
-
-Warning:
-Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YOU HAVE PROXIES ENABLED!!!
-        </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="1204"/>
-        <source>The model URL you entered seems to be invalid. Please check your input</source>
-        <translation>Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="1094"/>
-        <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
-        <translation>Du hast dem Deaktivieren der SSL Verifikation nicht zugestimmt. Die GUI wird ohne Proxies weiterlaufen...</translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="1098"/>
-        <source>Your proxy seems to be invalid, please try again...</source>
-        <translation>Dein Proxy scheint ungültig zu sein, bitte versuche es erneut ...</translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="1105"/>
-        <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
-        <translation>Proxy IP: {ip_masked} Deine IP: {ip} sind gleich! Bitte überprüfe deinen Proxy, breche ab ...</translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="1311"/>
+        <location filename="../../../../main.py" line="350"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1325"/>
+        <location filename="../../../../main.py" line="364"/>
         <source>Login Successful!</source>
         <translation>Anmeldung erfolgreich!</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1335"/>
+        <location filename="../../../../main.py" line="374"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1413"/>
+        <location filename="../../../../main.py" line="452"/>
         <source>
 Important: 
 
@@ -701,7 +639,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="1737"/>
+        <location filename="../../../../main.py" line="749"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>
