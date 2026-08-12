@@ -96,6 +96,14 @@ For Proof:
 The Server is fully Open-Source. See: https://github.com/EchterAlsFake/Server
 ")
 
+    readonly property string trustEnvironmentHelp:
+        qsTr("
+If you enable ths, Porn Fetch will trust your local Proxy options and other advanced configuration
+that have been applied through environment variables.
+
+This is not recommended to turn on, unless you have a specific reason to.
+")
+
     readonly property string debugModeHelp:
         qsTr("
 Please only enable the debug mode if you have opened an issue on GitHub and I told you to enable it!
@@ -134,6 +142,17 @@ Ask ChatGPT what this is and if you need to change this or not.
 
 The SNI Fragmentation Proxy is not compatible with HTTP/3!
 If you enable HTTP/3, SNI will automatically be disabled!")
+
+    readonly property string impersonationHelp:
+        qsTr("This defines the browser profile that Porn Fetch tries to emulate in order to
+send regular and correct TLS headers.
+
+See: https://curl-cffi.readthedocs.io/en/v0.6.1/impersonate.html
+")
+
+    readonly property string customJA3Help:
+        qsTr("This topic is so complex not even I can tell you anything.
+So you might just want to read: https://medium.com/cu-cyber/impersonating-ja3-fingerprints-b9f555880e42")
 
     readonly property string anonymousModeHelp:
         qsTr("

@@ -418,6 +418,16 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/network_logging", val)
             self.networkLoggingChanged.emit(val)
 
+    @Property(bool)
+    def trust_environment(self, notify=reloadClients) -> bool:
+        return self.get_bool("Misc/trust_environment", False)
+
+    @trust_environment.setter
+    def trust_environment(self, val):
+        if val != self.trust_environment:
+            self._settings.setValue("Misc/trust_environment", val)
+            self.reloadClients.emit(val)
+
     @Property(bool, notify=reloadClients)
     def debug_mode(self) -> bool:
         return self.get_bool("Misc/debug_mode", False)
@@ -445,6 +455,26 @@ class SettingsManager(QObject):
     def http_version(self, val):
         if val != self.http_version:
             self._settings.setValue("Misc/http_version", val)
+            self.reloadClients.emit(val)
+
+    @Property(str, notify=reloadClients)
+    def impersonation(self) -> str:
+        return self.get_str("Misc/impersonation", "chrome")
+
+    @impersonation.setter
+    def impersonation(self, val):
+        if val != self.impersonation:
+            self._settings.setValue("Misc/impersonation", val)
+            self.reloadClients.emit(val)
+
+    @Property(str, notify=reloadClients)
+    def custom_ja3(self) -> str:
+        return self.get_str("Misc/custom_ja3", "")
+
+    @custom_ja3.setter
+    def custom_ja3(self, val):
+        if val != self.custom_ja3:
+            self._settings.setValue("Misc/custom_ja3", val)
             self.reloadClients.emit(val)
 
     @Property(str, notify=reloadClients)

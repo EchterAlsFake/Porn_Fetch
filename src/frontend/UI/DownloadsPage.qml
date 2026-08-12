@@ -199,11 +199,14 @@ Pane {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        implicitHeight: 40
+                        implicitHeight: headerLayout.implicitHeight + 16
                         color: "transparent"
 
                         RowLayout {
-                            anchors.fill: parent
+                            id: headerLayout
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 8
                             anchors.rightMargin: 8
                             spacing: 8
@@ -215,16 +218,20 @@ Pane {
 
                             Label {
                                 Layout.fillWidth: true
+                                Layout.preferredWidth: 60
+                                Layout.minimumWidth: 100
                                 text: qsTr("Title")
                             }
 
                             Label {
-                                Layout.preferredWidth: 140
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 40
+                                Layout.minimumWidth: 80
                                 text: qsTr("Author")
                             }
 
                             Label {
-                                Layout.preferredWidth: 60
+                                Layout.preferredWidth: 90
                                 text: qsTr("Duration")
                             }
 
@@ -234,12 +241,12 @@ Pane {
                             }
 
                             Label {
-                                Layout.preferredWidth: 40
+                                Layout.preferredWidth: 65
                                 text: qsTr("STOP")
                             }
 
                             Label {
-                                Layout.preferredWidth: 150
+                                Layout.preferredWidth: 180
                                 text: qsTr("Progress")
                             }
                         }
@@ -268,43 +275,59 @@ Pane {
                             required property int progress
 
                             width: ListView.view.width
-                            height: 48
+                            implicitHeight: Math.max(48, rowLayout.implicitHeight + 16)
                             color: "transparent"
                             RowLayout {
-                                anchors.fill: parent
+                                id: rowLayout
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
                                 anchors.leftMargin: 8
                                 anchors.rightMargin: 8
                                 spacing: 8
 
                                 CheckBox {
-                                    Layout.preferredWidth: 70
+                                    Layout.preferredWidth: 90
                                 }
 
                                 Label {
                                     Layout.fillWidth: true
-                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.title
-                                    elide: Text.ElideRight
-                                }
-
-                                Label {
-                                    Layout.preferredWidth: 140
-                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.author
-                                    elide: Text.ElideRight
-                                }
-
-                                Label {
                                     Layout.preferredWidth: 60
+                                    Layout.minimumWidth: 100
+                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.title
+                                    wrapMode: Text.Wrap
+                                }
+
+                                Label {
+                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 40
+                                    Layout.minimumWidth: 80
+                                    text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.author
+                                    wrapMode: Text.Wrap
+                                    elide: Text.ElideRight
+                                }
+
+                                Label {
+                                    Layout.preferredWidth: 90
                                     text: downloadRow.duration
                                 }
 
                                 ComboBox {
+                                    id: qualityCombo
                                     Layout.preferredWidth: 100
 
                                     // 1. Feed the list of qualities from Python to the dropdown
                                     model: availableQualities
 
                                     // 2. Set the currently displayed item
-                                    currentIndex: availableQualities.indexOf(selectedQuality)
+                                    function findQualityIndex() {
+                                        var qs = availableQualities || [];
+                                        for (var i = 0; i < qs.length; i++) {
+                                            if (String(qs[i]) === String(selectedQuality)) return i;
+                                        }
+                                        return qs.length > 0 ? 0 : -1;
+                                    }
+                                    currentIndex: findQualityIndex()
 
                                     // 3. Send the change back to Python when the user picks a new option
                                     onActivated: {
@@ -312,9 +335,11 @@ Pane {
                                     }
 
                                     contentItem: Text {
-                                        text: parent.displayText
+                                        text: qualityCombo.currentIndex >= 0 ? availableQualities[qualityCombo.currentIndex] : selectedQuality
                                         color: "white"
+                                        font: qualityCombo.font
                                         verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignHCenter
                                         elide: Text.ElideRight
                                     }
 

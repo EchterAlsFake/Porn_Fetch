@@ -151,6 +151,23 @@ except Exception:
 stop_flag = asyncio.Event()
 last_index = 0
 
+
+def custom_unraisable_hook(unraisable):
+  # Check if the error originates from the cffi callback or your specific issue
+  if unraisable.exc_type is NotImplementedError:
+    print(f"Caught target exception: {unraisable.exc_value}")
+    ui_popup("""
+CRITICAL ERROR!
+
+I tried doing an asynchronous operation with curl-cffi, however, Qt Asyncio raised
+an issue. 
+
+You have probably not executed the patch script in src/scripts/patch_qtasyncio.py
+and applied it to your virtual environment.
+
+You need to run this script, otherwise this application will NOT work!""")
+
+
 def start_proxy_lite():
     proxy_config = FragmentingProxyConfig(
         listen_host="127.0.0.1",
@@ -824,6 +841,7 @@ def main():
 
 if __name__ == "__main__":
     local_url = None
+    sys.unraisablehook = custom_unraisable_hook
 
     if app_settings.sni_obfuscation:
         if app_settings.sni_obfuscation_strict:

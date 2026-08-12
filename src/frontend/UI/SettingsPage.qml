@@ -288,7 +288,7 @@ Pane {
 
                                 HelpButton {
                                     Layout.fillWidth: false
-                                    helpText: AppStrings.trackVidesHelp
+                                    helpText: AppStrings.trackVideosHelp
                                 }
                                 CheckBox {
                                     Layout.columnSpan: 2
@@ -614,6 +614,17 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                helpText: AppStrings.trustEnvironmentHelp
+                            }
+                            CheckBox {
+                                // Use \n for multi-line text
+                                text: "Trust Environment (Advanced)"
+                                Layout.fillWidth: true
+                                checked: appSettings.trust_environment
+                                onToggled: appSettings.trust_environment  = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
                                 helpText: AppStrings.debugModeHelp
                             }
                             CheckBox {
@@ -640,6 +651,28 @@ Pane {
                                 Layout.fillWidth: true
                                 text: appSettings.http_version
                                 onEditingFinished: appSettings.http_version = text
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.impersonationHelp
+                            }
+                            TextField {
+                                id: "impersonation"
+                                placeholderText: "e.g., 'chrome', 'safari', 'edge'"
+                                Layout.fillWidth: true
+                                text: appSettings.impersonation
+                                onEditingFinished: appSettings.impersonation = text
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.customJA3Help
+                            }
+                            TextField {
+                                id: "customJA3"
+                                placeholderText: "Custom JA3 String"
+                                Layout.fillWidth: true
+                                text: appSettings.custom_ja3
+                                onEditingFinished: appSettings.custom_ja3 = text
                             }
                             HelpButton {
                                 Layout.fillWidth: false

@@ -223,20 +223,30 @@ logger.debug("Successfully initialized all clients and!")
 def refresh_clients() -> None:
     # Apply Settings
     debug_mode = app_settings.debug_mode
-    config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or app_settings.proxy or None
-    config.verify_ssl = app_settings.proxy_ssl_verification
-    config.videos_concurrency = app_settings.videos_concurrency
-    config.pages_concurrency = app_settings.pages_concurrency
-    config.max_bandwidth_mb = app_settings.speed_limit
-    
-    # Map missing settings from UI to base_api RuntimeConfig
-    config.timeout = app_settings.timeout
+
+    config.response_cache_size_bytes = app_settings.response_cache_size * 1024 * 1024
+    config.response_cache_ttl = app_settings.response_cache_ttl
+    config.segment_cache_size_bytes = app_settings.segment_cache_size * 1024 * 1024
+    config.segment_cache_ttl = app_settings.segment_cache_ttl
     config.request_attempts = app_settings.retries
-    config.max_workers_download = app_settings.download_workers
-    config.interface = app_settings.interface if app_settings.interface else None
+    config.request_retry_initial_delay = app_settings.request_initial_retry_delay
+    config.request_retry_max_delay = app_settings.request_retry_max_delay
+    config.request_multiplier = app_settings.request_retry_multiplier
+    config.request_retry_jitter = app_settings.request_retry_jitter
+    config.request_delay = app_settings.network_delay
+    config.timeout = app_settings.timeout
+    config.max_bandwidth_mb = app_settings.speed_limit
+    config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or app_settings.proxy or None
     config.http_version = app_settings.http_version
     config.dns_over_https = app_settings.dns_server if app_settings.dns_over_https else None
-
+    config.impersonation = app_settings.impersonation
+    config.custom_ja3 = app_settings.custom_ja3 if app_settings.custom_ja3 else None
+    config.verify_ssl = app_settings.proxy_ssl_verification
+    config.trust_env = app_settings.trust_environment
+    config.max_workers_download = app_settings.download_workers
+    config.videos_concurrency = app_settings.videos_concurrency
+    config.pages_concurrency = app_settings.pages_concurrency
+    config.interface = app_settings.interface if app_settings.interface else None
     locale_headers, locale_cookies = generate_locale_headers_and_cookies()
     config.locale = locale_headers["Accept-Language"]
     config.cookies = locale_cookies.copy()
@@ -478,6 +488,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     publish_dt_utc = parse_publish_date(publish_date)
     title = strip_title(title)
     video_object = VideoObject(
+        url=video.url,
         thumbnail_url=thumbnail,
         video_id=video_id,
         length=length,
