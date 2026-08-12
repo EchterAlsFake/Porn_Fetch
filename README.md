@@ -24,6 +24,9 @@
 ---
 </div>
 
+# I need your help (Affects your Privacy)
+- Please vote at: https://github.com/EchterAlsFake/Porn_Fetch/discussions/131
+
 # Project Rewrite
 Please note, that this project is currently ongoing a massive re-write and switching to a commercial project.
 I am putting serious work here, although my commit history doesn't reflect this. Please be patient the next weeks.
