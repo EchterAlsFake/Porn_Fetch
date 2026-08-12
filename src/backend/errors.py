@@ -1,5 +1,5 @@
-from backend.download_manager import VideoObject
-from frontend.translations.strings import TRANSLATE_ERRORS
+from src.backend.download_manager import VideoObject
+from src.frontend.translations.strings import TRANSLATE_ERRORS
 from typing import Callable, Awaitable, ParamSpec, TypeVar
 P = ParamSpec("P") # Needed for safe_api_call function
 R = TypeVar("R")

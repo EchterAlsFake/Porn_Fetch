@@ -1077,7 +1077,7 @@ provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-spankbang"
-version = "2.4"
+version = "2.3"
 source = { editable = "../unofficial-api-for-spankbang" }
 dependencies = [
     { name = "curl-cffi" },

@@ -2,6 +2,6 @@ module Style
 
 # Singleton registration
 singleton AppStrings 1.0 AppStrings.qml
-
+singleton Theme 1.0 Theme.qml
 # Component registration
 PrimaryButton 1.0 PrimaryButton.qml

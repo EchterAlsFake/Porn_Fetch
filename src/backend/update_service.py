@@ -6,7 +6,7 @@ import tempfile
 import subprocess
 
 from pathlib import Path
-from backend.helper_functions import get_original_executable_path
+from src.backend.helper_functions import get_original_executable_path
 from src.backend import clients as clients
 
 from src.backend.config import __version__

@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: window
+    font.pointSize: appSettings.font_size
 
     width: 1350
     height: 720

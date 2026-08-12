@@ -36,6 +36,13 @@ app = QGuiApplication(sys.argv)
 app.setOrganizationName("EchterAlsFake")
 app.setApplicationName("Porn Fetch")
 
+# Ensure Fusion and other native styles use the correct color scheme
+from PySide6.QtCore import Qt
+try:
+    app.styleHints().setColorScheme(Qt.ColorScheme.Dark if is_dark else Qt.ColorScheme.Light)
+except AttributeError:
+    pass # Older PySide6 versions don't support setColorScheme, fallback gracefully
+
 engine = QQmlApplicationEngine()
 
 from src.backend.splashscreen import SplashController
@@ -169,8 +176,6 @@ def start_proxy_strict():
     print(f"[STRICT] Fragmenting Proxy running at: {local_url}")
     atexit.register(proxy_process.stop)
     return local_url
-
-
 
 
 class ProcessVideos(QObject):
@@ -424,8 +429,26 @@ class Backend(QObject):
         # saved request settings once the real GUI backend is initialized and
         # refresh them immediately when the content locale changes.
         self.load_clients()
-        app_settings.localeChanged.connect(self.load_clients)
+        #app_settings.localeChanged.connect(self.load_clients)
         app_settings.reloadClients.connect(self.load_clients)
+
+    # Slots / Signals connected to the Configuration / Settings
+
+    @Slot(bool)
+    def toggle_anonymous_mode(self, value: bool) -> None:
+        ...
+
+    @Slot(bool)
+    def toggle_update_checks(self, value: bool) -> None:
+        ...
+
+    @Slot(bool)
+    def toggle_user_interface_language(self, value: int) -> None:
+        ...
+
+    @Slot(bool)
+    def toggle_sni_proxy(self) -> None:
+        ui_popup("Enabling / Disabling SNI requires a restart and choosing between Lite / Strict below!")
 
     @Slot(str)
     def handle_message(self, message: str) -> None:

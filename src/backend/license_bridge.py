@@ -19,22 +19,27 @@ class LicenseBridge(QObject):
         self._data = res.data if res.data else {}
         self.statusChanged.emit()
 
+    # noinspection PyPropertyDefinition
     @Property(bool, notify=statusChanged)
     def isValid(self):
         return self._is_valid
 
+    # noinspection PyPropertyDefinition
     @Property(str, notify=statusChanged)
     def reason(self):
         return self._reason
 
+    # noinspection PyPropertyDefinition
     @Property(str, notify=statusChanged)
     def licenseKey(self):
         return self._data.get("license_key", "")
 
+    # noinspection PyPropertyDefinition
     @Property(list, notify=statusChanged)
     def features(self):
         return self._data.get("features", [])
 
+    # noinspection PyPropertyDefinition
     @Property(bool, notify=statusChanged)
     def isPremium(self):
         # Checks if they have the specific feature unlocked

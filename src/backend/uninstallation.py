@@ -7,7 +7,7 @@ import src.backend.config as config
 
 from pathlib import Path
 
-from backend.errors import UnsupportedPlatform
+from src.backend.errors import UnsupportedPlatform
 from src.backend.helper_functions import safe_rmtree
 from base_api.modules.logger import configure_app_logging
 from PySide6.QtCore import QStandardPaths, QCoreApplication

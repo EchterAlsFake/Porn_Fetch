@@ -6,6 +6,7 @@ each other.
 """
 # config.py
 from pathlib import Path
+from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Signal, QSettings, Property
 
 __license__ = "GPL 3"
@@ -30,11 +31,9 @@ TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
-    debugModeChanged = Signal(bool)
     languageChanged = Signal(int)
-    localeChanged = Signal(str)
-    strictEnforcementChanged = Signal(bool)
-    fontSizeChanged = Signal(int)
+    sniProxyChanged = Signal()
+    fontSizeChanged = Signal()
     themeChanged = Signal(int)
     reloadClients = Signal(object)
 
@@ -44,6 +43,18 @@ class SettingsManager(QObject):
     coreStyleChanged = Signal(str)
     darkModeChanged = Signal(bool)
     accentColorChanged = Signal(str)
+
+    # Missing Signals
+    qualityChanged = Signal(int)
+    modelVideosChanged = Signal(int)
+    resultLimitChanged = Signal(int)
+    outputPathChanged = Signal(str)
+    writeMetadataChanged = Signal(bool)
+    skipExistingFilesChanged = Signal(bool)
+    parallelDownloadsChanged = Signal(int)
+    speedLimitChanged = Signal(int)
+    supressErrorsChanged = Signal(bool)
+    networkLoggingChanged = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -93,17 +104,21 @@ class SettingsManager(QObject):
 
     def get_int(self, key: str, default: int = 0) -> int:
         val = self._settings.value(key, defaultValue=default)
-        try:
-            return int(val)
-        except (ValueError, TypeError):
-            return default
+        if isinstance(val, (int, float, str)):
+            try:
+                return int(val)
+            except (ValueError, TypeError):
+                pass
+        return default
 
     def get_float(self, key: str, default: float = 0.0) -> float:
         val = self._settings.value(key, defaultValue=default)
-        try:
-            return float(val)
-        except (ValueError, TypeError):
-            return default
+        if isinstance(val, (int, float, str)):
+            try:
+                return float(val)
+            except (ValueError, TypeError):
+                pass
+        return default
 
     def get_str(self, key: str, default: str = "") -> str:
         val = self._settings.value(key, defaultValue=default)
@@ -117,139 +132,340 @@ class SettingsManager(QObject):
     def quality(self) -> int:
         return self.get_int("Video/quality", 5)
 
+    @quality.setter
+    def quality(self, val):
+        if val != self.quality:      # noinspection PyPropertyDefinition
+            self._settings.setValue("Video/quality", val)
+            self.qualityChanged.emit(val)
+
     @Property(int)
     def model_videos(self) -> int:
         return self.get_int("Video/model_videos", 0)
 
-    @Property(str, notify=localeChanged)
+
+    @model_videos.setter
+    def model_videos(self, val):
+        if val != self.model_videos:
+            self._settings.setValue("Video/model_videos", val)
+            self.modelVideosChanged.emit(val)
+
+    @Property(str, notify=reloadClients)
     def locale(self) -> str:
         return self.get_str("Video/locale", "en-US")
 
-    @Property(bool, notify=strictEnforcementChanged)
+    @locale.setter
+    def locale(self, val: str):
+        if val != self.locale:
+            self._settings.setValue("Video/locale", val)
+
+    @Property(bool)
     def strict_enforcement(self) -> bool:
         return self.get_bool("Video/strict_enforcement", False)
+
+    @strict_enforcement.setter
+    def strict_enforcement(self, val: bool):
+        if val != self.strict_enforcement: # type: ignore
+            self._settings.setValue("Video/strict_enforcement", val)
 
     @Property(int)
     def result_limit(self) -> int:
         return self.get_int("Video/result_limit", 50)
 
+    @result_limit.setter
+    def result_limit(self, val):
+        if val != self.result_limit:
+            self._settings.setValue("Video/result_limit", val)
+            self.resultLimitChanged.emit(val)
+
     @Property(str)
     def output_path(self) -> str:
         return self.get_str("Video/output_path", "./")
+
+    @output_path.setter
+    def output_path(self, val):
+        if val != self.output_path:
+            self._settings.setValue("Video/output_path", val)
+            self.outputPathChanged.emit(val)
 
     @Property(bool)
     def write_metadata(self) -> bool:
         return self.get_bool("Video/write_metadata", True)
 
+    @write_metadata.setter
+    def write_metadata(self, val):
+        if val != self.write_metadata:
+            self._settings.setValue("Video/write_metadata", val)
+            self.writeMetadataChanged.emit(val)
+
     @Property(bool)
     def skip_existing_files(self) -> bool:
         return self.get_bool("Video/skip_existing_files", True)
+
+    @skip_existing_files.setter
+    def skip_existing_files(self, val):
+        if val != self.skip_existing_files:
+            self._settings.setValue("Video/skip_existing_files", val)
+            self.skipExistingFilesChanged.emit(val)
 
     @Property(bool)
     def track_videos(self) -> bool:
         return self.get_bool("Video/track_videos", False)
 
+    @track_videos.setter
+    def track_videos(self, val):
+        if val != self.track_videos:
+            self._settings.setValue("Video/track_videos", val)
+
     @Property(str)
     def database_path(self) -> str:
         return self.get_str("Video/database_path", "./downloads.db")
+
+    @database_path.setter
+    def database_path(self, val):
+        if val != self.database_path:
+            self._settings.setValue("Video/database_path", val)
 
     # Performance related
     @Property(int)
     def download_workers(self) -> int:
         return self.get_int("Performance/download_workers", 20)
 
+    @download_workers.setter
+    def download_workers(self, val):
+        if val != self.download_workers:
+            self._settings.setValue("Performance/download_workers", val)
+            self.reloadClients.emit(val)
+
     @Property(int)
     def network_delay(self) -> int:
         return self.get_int("Performance/network_delay", 0)
+
+    @network_delay.setter
+    def network_delay(self, val):
+        if val != self.network_delay:
+            self._settings.setValue("Performance/network_delay", val)
+            self.reloadClients.emit(val)
 
     @Property(int)
     def parallel_downloads(self) -> int:
         return self.get_int("Performance/semaphore", 1)
 
+    @parallel_downloads.setter
+    def parallel_downloads(self, val):
+        if val != self.parallel_downloads:
+            self._settings.setValue("Performance/semaphore", val)
+            self.parallelDownloadsChanged.emit(val)
+
     @Property(int)
     def retries(self) -> int:
         return self.get_int("Performance/retries", 4)
+
+    @retries.setter
+    def retries(self, val):
+        if val != self.retries:
+            self._settings.setValue("Performance/retries", val)
+            self.reloadClients.emit(val)
 
     @Property(int)
     def timeout(self) -> int:
         return self.get_int("Performance/timeout", 10)
 
+    @timeout.setter
+    def timeout(self, val):
+        if val != self.timeout:
+            self._settings.setValue("Performance/timeout", val)
+            self.reloadClients.emit(val)
+
     @Property(int)
     def processing_delay(self) -> int:
         return self.get_int("Performance/processing_delay", 0)
+
+    @processing_delay.setter
+    def processing_delay(self, val):
+        if val != self.processing_delay:
+            self._settings.setValue("Performance/processing_delay", val)
+            self.reloadClients.emit(val)
 
     @Property(float, notify=reloadClients)
     def speed_limit(self) -> float:
         return self.get_float("Performance/speed_limit", 0.0)
 
+    @speed_limit.setter
+    def speed_limit(self, val):
+        if val != self.speed_limit:
+            self._settings.setValue("Performance/speed_limit", val)
+            self.speedLimitChanged.emit(val)
+            self.reloadClients.emit(val)
+
     @Property(int)
     def videos_concurrency(self) -> int:
         return self.get_int("Performance/videos_concurrency", 10)
+
+    @videos_concurrency.setter
+    def videos_concurrency(self, val):
+        if val != self.videos_concurrency:
+            self._settings.setValue("Performance/videos_concurrency", val)
+            self.reloadClients.emit(val)
 
     @Property(int)
     def pages_concurrency(self) -> int:
         return self.get_int("Performance/pages_concurrency", 2)
 
+    @pages_concurrency.setter
+    def pages_concurrency(self, val):
+        if val != self.pages_concurrency:
+            self._settings.setValue("Performance/pages_concurrency", val)
+            self.reloadClients.emit(val)
+
     @Property(int)
     def response_cache_size(self) -> int:
         return self.get_int("Performance/response_cache_size", 32)
+
+    @response_cache_size.setter
+    def response_cache_size(self, val):
+        if val != self.response_cache_size:
+            self._settings.setValue("Performance/response_cache_size", val)
+            self.reloadClients.emit(val)
 
     @Property(int)
     def response_cache_ttl(self) -> int:
         return self.get_int("Performance/response_cache_ttl", 300)
 
+    @response_cache_ttl.setter
+    def response_cache_ttl(self, val):
+        if val != self.response_cache_ttl:
+            self._settings.setValue("Performance/response_cache_ttl", val)
+            self.reloadClients.emit(val)
+
     @Property(int)
     def segment_cache_size(self) -> int:
         return self.get_int("Performance/segment_cache_size", 8)
+
+    @segment_cache_size.setter
+    def segment_cache_size(self, val):
+        if val != self.segment_cache_size:
+            self._settings.setValue("Performance/segment_cache_size", val)
+            self.reloadClients.emit(val)
 
     @Property(int)
     def segment_cache_ttl(self) -> int:
         return self.get_int("Performance/segment_cache_ttl", 300)
 
+    @segment_cache_ttl.setter
+    def segment_cache_ttl(self, val):
+        if val != self.segment_cache_ttl:
+            self._settings.setValue("Performance/segment_cache_ttl", val)
+            self.reloadClients.emit(val)
+
     @Property(float)
     def request_initial_retry_delay(self) -> float:
         return self.get_float("Performance/request_initial_retry_delay", 0.5)
+
+    @request_initial_retry_delay.setter
+    def request_initial_retry_delay(self, val):
+        if val != self.request_initial_retry_delay:
+            self._settings.setValue("Performance/request_initial_retry_delay", val)
+            self.reloadClients.emit(val)
 
     @Property(float)
     def request_retry_max_delay(self) -> float:
         return self.get_float("Performance/request_retry_max_delay", 30)
 
+    @request_retry_max_delay.setter
+    def request_retry_max_delay(self, val):
+        if val != self.request_retry_max_delay:
+            self._settings.setValue("Performance/request_retry_max_delay", val)
+            self.reloadClients.emit(val)
+
     @Property(float)
     def request_retry_multiplier(self) -> float:
         return self.get_float("Performance/request_retry_multiplier", 2)
 
+    @request_retry_multiplier.setter
+    def request_retry_multiplier(self, val):
+        if val != self.request_retry_multiplier:
+            self._settings.setValue("Performance/request_retry_multiplier", val)
+            self.reloadClients.emit(val)
+
     @Property(float)
     def request_retry_jitter(self) -> float:
         return self.get_float("Performance/request_retry_jitter", 0.5)
+
+    @request_retry_jitter.setter
+    def request_retry_jitter(self, val):
+        if val != self.request_retry_jitter:
+            self._settings.setValue("Performance/request_retry_jitter", val)
+            self.reloadClients.emit(val)
 
     # System / Misc related
     @Property(bool, notify=updateChecksChanged)
     def update_checks(self) -> bool:
         return self.get_bool("Misc/update_checks", True)
 
+    @update_checks.setter
+    def update_checks(self, val):
+        if val != self.update_checks:
+            self._settings.setValue("Misc/update_checks", val)
+            self.updateChecksChanged.emit(val)
+
     @Property(bool)
     def supress_errors(self) -> bool:
         return self.get_bool("Misc/supress_errors", False)
+
+    @supress_errors.setter
+    def supress_errors(self, val):
+        if val != self.supress_errors:
+            self._settings.setValue("Misc/supress_errors", val)
+            self.supressErrorsChanged.emit(val)
 
     @Property(bool)
     def enable_logging(self) -> bool:
         return self.get_bool("Misc/network_logging", False)
 
-    @Property(bool, notify=debugModeChanged)
+    @enable_logging.setter
+    def enable_logging(self, val):
+        if val != self.enable_logging:
+            self._settings.setValue("Misc/network_logging", val)
+            self.networkLoggingChanged.emit(val)
+
+    @Property(bool, notify=reloadClients)
     def debug_mode(self) -> bool:
         return self.get_bool("Misc/debug_mode", False)
+
+    @debug_mode.setter
+    def debug_mode(self, val):
+        if val != self.debug_mode:
+            self._settings.setValue("Misc/debug_mode", val)
+            self.reloadClients.emit(val)
 
     @Property(str, notify=None) # Can't be changed dynamically
     def log_level(self) -> str:
         return self.get_str("Misc/log_level", "0")
 
+    @log_level.setter
+    def log_level(self, val):
+        if val != self.log_level:
+            self._settings.setValue("Misc/log_level", val)
+
     @Property(str, notify=reloadClients)
     def http_version(self) -> str:
         return self.get_str("Misc/http_version", "v2")
 
+    @http_version.setter
+    def http_version(self, val):
+        if val != self.http_version:
+            self._settings.setValue("Misc/http_version", val)
+            self.reloadClients.emit(val)
+
     @Property(str, notify=reloadClients)
     def interface(self) -> str:
-        return self.get_str("Misc/interface", None)
+        return self.get_str("Misc/interface", "")
+
+    @interface.setter
+    def interface(self, val):
+        if val != self.interface:
+            self._settings.setValue("Misc/interface", val)
+            self.reloadClients.emit(val)
 
     # Privacy Settings
 
@@ -257,49 +473,122 @@ class SettingsManager(QObject):
     def anonymous_mode(self) -> bool:
         return self.get_bool("Privacy/anonymous_mode", False)
 
+    @anonymous_mode.setter
+    def anonymous_mode(self, val):
+        if val != self.anonymous_mode:
+            self._settings.setValue("Privacy/anonymous_mode", val)
+            self.anonymousModeChanged.emit(val)
+
     @Property(bool, notify=reloadClients)
     def encrypted_ch(self) -> bool:
         return self.get_bool("Privacy/encrypted_ch", True)
+
+    @encrypted_ch.setter
+    def encrypted_ch(self, val):
+        if val != self.encrypted_ch:
+            self._settings.setValue("Privacy/encrypted_ch", val)
+            self.reloadClients.emit(val)
 
     @Property(bool, notify=reloadClients)
     def dns_over_https(self) -> bool:
         return self.get_bool("Privacy/dns_over_https", True)
 
+    @dns_over_https.setter
+    def dns_over_https(self, val):
+        if val != self.dns_over_https:
+            self._settings.setValue("Privacy/dns_over_https", val)
+            self.reloadClients.emit(val)
+
     @Property(bool, notify=enableTor)
     def enable_tor(self) -> bool:
         return self.get_bool("Privacy/enable_tor", False)
+
+    @enable_tor.setter
+    def enable_tor(self, val):
+        if val != self.enable_tor:
+            self._settings.setValue("Privacy/enable_tor", val)
+            self.enableTor.emit(val)
 
     @Property(bool, notify=reloadClients)
     def enable_tor_server_routing(self):
         return self.get_bool("Privacy/enable_tor_server_routing", True)
 
+    @enable_tor_server_routing.setter
+    def enable_tor_server_routing(self, val):
+        if val != self.enable_tor_server_routing:
+            self._settings.setValue("Privacy/enable_tor_server_routing", val)
+            self.reloadClients.emit(val)
+
     @Property(str, notify=reloadClients)
     def dns_server(self) -> str:
         return self.get_str("Privacy/dns_server", "https://dns.mullvad.net/dns-query")
+
+    @dns_server.setter
+    def dns_server(self, val):
+        if val != self.dns_server:
+            self._settings.setValue("Privacy/dns_server", val)
+            self.reloadClients.emit(val)
 
     @Property(str, notify=reloadClients)
     def fallback_dns(self) -> str:
         return self.get_str("Privacy/fallback_dns", "https://dns.quad9.net/dns-query")
 
-    @Property(bool, notify=reloadClients)
+    @fallback_dns.setter
+    def fallback_dns(self, val):
+        if val != self.fallback_dns:
+            self._settings.setValue("Privacy/fallback_dns", val)
+            self.reloadClients.emit(val)
+
+    @Property(bool, notify=sniProxyChanged)
     def sni_obfuscation(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation", False)
+
+    @sni_obfuscation.setter
+    def sni_obfuscation(self, val):
+        if val != self.sni_obfuscation:
+            self._settings.setValue("Privacy/sni_obfuscation", val)
+            self.sniProxyChanged.emit(val)
 
     @Property(bool, notify=reloadClients)
     def sni_obfuscation_lite(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_lite", False)
 
+    @sni_obfuscation_lite.setter
+    def sni_obfuscation_lite(self, val):
+        if val != self.sni_obfuscation_lite:
+            self._settings.setValue("Privacy/sni_obfuscation_lite", val)
+            self.reloadClients.emit(val)
+
     @Property(bool, notify=reloadClients)
     def sni_obfuscation_strict(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_strict", False)
+
+    @sni_obfuscation_strict.setter
+    def sni_obfuscation_strict(self, val):
+        if val != self.sni_obfuscation_strict:
+            self._settings.setValue("Privacy/sni_obfuscation_strict", val)
+            self.reloadClients.emit(val)
 
     @Property(str, notify=reloadClients)
     def proxy(self) -> str:
         return self.get_str("Privacy/proxy", "")
 
+    @proxy.setter
+    def proxy(self, val):
+        if val != self.proxy:
+            self._settings.setValue("Privacy/proxy", val)
+            self.reloadClients.emit(val)
+
     @Property(bool, notify=reloadClients)
     def proxy_ssl_verification(self) -> bool:
         return self.get_bool("Privacy/proxy_ssl_verification", True)
+
+    @proxy_ssl_verification.setter
+    def proxy_ssl_verification(self, val):
+        if val != self.proxy_ssl_verification:
+            self._settings.setValue("Privacy/proxy_ssl_verification", val)
+            self.reloadClients.emit(val)
+
 
     # UI Settings
 
@@ -307,9 +596,30 @@ class SettingsManager(QObject):
     def language(self) -> int:
         return self.get_int("UI/language", 0)
 
+    @language.setter
+    def language(self, val):
+        if val != self.language:
+            self._settings.setValue("UI/language", val)
+            self.languageChanged.emit(val)
+
     @Property(int, notify=fontSizeChanged)
     def font_size(self) -> int:
         return self.get_int("UI/font_size", 12)
+
+    @font_size.setter
+    def font_size(self, val):
+        if val != self.font_size:
+            self._settings.setValue("UI/font_size", val)
+
+            self.fontSizeChanged.emit()
+            self._apply_global_font(val)
+
+    def _apply_global_font(self, size: int):
+        app = QGuiApplication.instance()
+        if app:
+            font = app.font()
+            font.setPointSize(size)
+            app.setFont(font)
 
     @Property(str, notify=coreStyleChanged)
     def core_style(self) -> str:
@@ -341,297 +651,5 @@ class SettingsManager(QObject):
         if val != self.accent_color:
             self._settings.setValue("UI/accent_color", val)
             self.accentColorChanged.emit(val)
-
-
-    #### --------------- Writing Settings ---------------- ####
-
-    # Video related
-    @quality.setter
-    def quality(self, val):
-        if val != self.quality:
-            self._settings.setValue("Video/quality", val)
-            self.qualityChanged.emit(val)
-
-    @model_videos.setter
-    def model_videos(self, val):
-        if val != self.model_videos:
-            self._settings.setValue("Video/model_videos", val)
-            self.modelVideosChanged.emit(val)
-
-    @result_limit.setter
-    def result_limit(self, val):
-        if val != self.result_limit:
-            self._settings.setValue("Video/result_limit", val)
-            self.resultLimitChanged.emit(val)
-
-    @output_path.setter
-    def output_path(self, val):
-        if val != self.output_path:
-            self._settings.setValue("Video/output_path", val)
-            self.outputPathChanged.emit(val)
-
-    @locale.setter
-    def locale(self, val: str):
-        if val != self.locale:
-            self._settings.setValue("Video/locale", val)
-            self.localeChanged.emit(val)
-
-    @strict_enforcement.setter
-    def strict_enforcement(self, val: bool):
-        if val != self.strict_enforcement:
-            self._settings.setValue("Video/strict_enforcement", val)
-            self.strictEnforcementChanged.emit(val)
-
-    @write_metadata.setter
-    def write_metadata(self, val):
-        if val != self.write_metadata:
-            self._settings.setValue("Video/write_metadata", val)
-            self.writeMetadataChanged.emit(val)
-
-    @skip_existing_files.setter
-    def skip_existing_files(self, val):
-        if val != self.skip_existing_files:
-            self._settings.setValue("Video/skip_existing_files", val)
-            self.skipExistingFilesChanged.emit(val)
-
-    @track_videos.setter
-    def track_videos(self, val):
-        if val != self.track_videos:
-            self._settings.setValue("Video/track_videos", val)
-
-    @database_path.setter
-    def database_path(self, val):
-        if val != self.database_path:
-            self._settings.setValue("Video/database_path", val)
-
-    # Performance related
-    @parallel_downloads.setter
-    def parallel_downloads(self, val):
-        if val != self.parallel_downloads:
-            self._settings.setValue("Performance/semaphore", val)
-            self.parallelDownloadsChanged.emit(val)
-
-    @network_delay.setter
-    def network_delay(self, val):
-        if val != self.network_delay:
-            self._settings.setValue("Performance/network_delay", val)
-            self.reloadClients.emit(val)
-
-    @videos_concurrency.setter
-    def videos_concurrency(self, val):
-        if val != self.videos_concurrency:
-            self._settings.setValue("Performance/videos_concurrency", val)
-            self.reloadClients.emit(val)
-
-    @pages_concurrency.setter
-    def pages_concurrency(self, val):
-        if val != self.pages_concurrency:
-            self._settings.setValue("Performance/pages_concurrency", val)
-            self.reloadClients.emit(val)
-
-    @download_workers.setter
-    def download_workers(self, val):
-        if val != self.download_workers:
-            self._settings.setValue("Performance/download_workers", val)
-            self.reloadClients.emit(val)
-
-    @timeout.setter
-    def timeout(self, val):
-        if val != self.timeout:
-            self._settings.setValue("Performance/timeout", val)
-            self.reloadClients.emit(val)
-
-    @retries.setter
-    def retries(self, val):
-        if val != self.retries:
-            self._settings.setValue("Performance/retries", val)
-            self.reloadClients.emit(val)
-
-    @speed_limit.setter
-    def speed_limit(self, val):
-        if val != self.speed_limit:
-            self._settings.setValue("Performance/speed_limit", val)
-            self.speedLimitChanged.emit(val)
-            self.reloadClients.emit(val)
-
-    @processing_delay.setter
-    def processing_delay(self, val):
-        if val != self.processing_delay:
-            self._settings.setValue("Performance/processing_delay", val)
-            self.reloadClients.emit(val)
-
-    @response_cache_size.setter
-    def response_cache_size(self, val):
-        if val != self.response_cache_size:
-            self._settings.setValue("Performance/response_cache_size", val)
-            self.reloadClients.emit(val)
-
-    @response_cache_ttl.setter
-    def response_cache_ttl(self, val):
-        if val != self.response_cache_ttl:
-            self._settings.setValue("Performance/response_cache_ttl", val)
-            self.reloadClients.emit(val)
-
-    @segment_cache_size.setter
-    def segment_cache_size(self, val):
-        if val != self.segment_cache_size:
-            self._settings.setValue("Performance/segment_cache_size", val)
-            self.reloadClients.emit(val)
-
-    @segment_cache_ttl.setter
-    def segment_cache_ttl(self, val):
-        if val != self.segment_cache_ttl:
-            self._settings.setValue("Performance/segment_cache_ttl", val)
-            self.reloadClients.emit(val)
-
-    @request_initial_retry_delay.setter
-    def request_initial_retry_delay(self, val):
-        if val != self.request_initial_retry_delay:
-            self._settings.setValue("Performance/request_initial_retry_delay", val)
-            self.reloadClients.emit(val)
-
-    @request_retry_max_delay.setter
-    def request_retry_max_delay(self, val):
-        if val != self.request_retry_max_delay:
-            self._settings.setValue("Performance/request_retry_max_delay", val)
-            self.reloadClients.emit(val)
-
-    @request_retry_multiplier.setter
-    def request_retry_multiplier(self, val):
-        if val != self.request_retry_multiplier:
-            self._settings.setValue("Performance/request_retry_multiplier", val)
-            self.reloadClients.emit(val)
-
-    @request_retry_jitter.setter
-    def request_retry_jitter(self, val):
-        if val != self.request_retry_jitter:
-            self._settings.setValue("Performance/request_retry_jitter", val)
-            self.reloadClients.emit(val)
-
-    # System / Misc related
-    @update_checks.setter
-    def update_checks(self, val):
-        if val != self.update_checks:
-            self._settings.setValue("Misc/update_checks", val)
-            self.updateChecksChanged.emit(val)
-
-    @supress_errors.setter
-    def supress_errors(self, val):
-        if val != self.supress_errors:
-            self._settings.setValue("Misc/supress_errors", val)
-            self.supressErrorsChanged.emit(val)
-
-    @enable_logging.setter
-    def enable_logging(self, val):
-        if val != self.enable_logging:
-            self._settings.setValue("Misc/network_logging", val)
-            self.networkLoggingChanged.emit(val)
-
-    @debug_mode.setter
-    def debug_mode(self, val):
-        if val != self.debug_mode:
-            self._settings.setValue("Misc/debug_mode", val)
-            self.debugModeChanged.emit(val)
-
-    @log_level.setter
-    def log_level(self, val):
-        if val != self.log_level:
-            self._settings.setValue("Misc/log_level", val)
-
-    @interface.setter
-    def interface(self, val):
-        if val != self.interface:
-            self._settings.setValue("Misc/interface", val)
-            self.reloadClients.emit(val)
-
-    @http_version.setter
-    def http_version(self, val):
-        if val != self.http_version:
-            self._settings.setValue("Misc/http_version", val)
-            self.reloadClients.emit(val)
-
-    @anonymous_mode.setter
-    def anonymous_mode(self, val):
-        if val != self.anonymous_mode:
-            self._settings.setValue("Privacy/anonymous_mode", val)
-            self.anonymousModeChanged.emit(val)
-
-    @encrypted_ch.setter
-    def encrypted_ch(self, val):
-        if val != self.encrypted_ch:
-            self._settings.setValue("Privacy/encrypted_ch", val)
-            self.reloadClients.emit(val)
-
-    @dns_over_https.setter
-    def dns_over_https(self, val):
-        if val != self.dns_over_https:
-            self._settings.setValue("Privacy/dns_over_https", val)
-            self.reloadClients.emit(val)
-
-    @enable_tor.setter
-    def enable_tor(self, val):
-        if val != self.enable_tor:
-            self._settings.setValue("Privacy/enable_tor", val)
-            self.enableTor.emit(val)
-
-    @enable_tor_server_routing.setter
-    def enable_tor_server_routing(self, val):
-        if val != self.enable_tor_server_routing:
-            self._settings.setValue("Privacy/enable_tor_server_routing", val)
-            self.reloadClients.emit(val)
-
-    @dns_server.setter
-    def dns_server(self, val):
-        if val != self.dns_server:
-            self._settings.setValue("Privacy/dns_server", val)
-            self.reloadClients.emit(val)
-
-    @fallback_dns.setter
-    def fallback_dns(self, val):
-        if val != self.fallback_dns:
-            self._settings.setValue("Privacy/fallback_dns", val)
-            self.reloadClients.emit(val)
-
-    @sni_obfuscation.setter
-    def sni_obfuscation(self, val):
-        if val != self.sni_obfuscation:
-            self._settings.setValue("Privacy/sni_obfuscation", val)
-            self.reloadClients.emit(val)
-
-    @sni_obfuscation_lite.setter
-    def sni_obfuscation_lite(self, val):
-        if val != self.sni_obfuscation_lite:
-            self._settings.setValue("Privacy/sni_obfuscation_lite", val)
-            self.reloadClients.emit(val)
-
-    @sni_obfuscation_strict.setter
-    def sni_obfuscation_strict(self, val):
-        if val != self.sni_obfuscation_strict:
-            self._settings.setValue("Privacy/sni_obfuscation_strict", val)
-            self.reloadClients.emit(val)
-
-    @proxy.setter
-    def proxy(self, val):
-        if val != self.proxy:
-            self._settings.setValue("Privacy/proxy", val)
-            self.reloadClients.emit(val)
-
-    @proxy_ssl_verification.setter
-    def proxy_ssl_verification(self, val):
-        if val != self.proxy_ssl_verification:
-            self._settings.setValue("Privacy/proxy_ssl_verification", val)
-            self.reloadClients.emit(val)
-
-    @language.setter
-    def language(self, val):
-        if val != self.language:
-            self._settings.setValue("UI/language", val)
-            self.languageChanged.emit(val)
-
-    @font_size.setter
-    def font_size(self, val):
-        if val != self.font_size:
-            self._settings.setValue("UI/font_size", val)
-            self.fontSizeChanged.emit(val)
 
 app_settings = SettingsManager() # Singleton instance shared globally :)

@@ -9,6 +9,12 @@ Pane {
     font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
 
+    background: Rectangle {
+        color: "transparent"
+        border.width: 2
+        radius: 10
+    }
+
     ProxyWindow {
         id: proxyWindow
 
@@ -821,6 +827,7 @@ Pane {
                             }
                             SpinBox {
                                 Layout.fillWidth: true
+                                from: 5
                                 to: 72
                                 value: appSettings.font_size
                                 onValueModified: appSettings.font_size = value
@@ -874,7 +881,6 @@ Pane {
         // A simple Rectangle acts as a line to visually separate content from bottom buttons
         Rectangle {
             Layout.fillWidth: true
-            color: "#333333" // Dark grey border
             height: 1
         }
 
