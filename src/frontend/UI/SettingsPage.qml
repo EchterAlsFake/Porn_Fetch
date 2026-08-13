@@ -968,17 +968,17 @@ Pane {
 
                 Button {
                     Layout.fillWidth: true
-                    Material.background: appSettings ? appSettings.theme_primary_color : "#3b82f6" // Dynamic accent color
-                    Material.foreground: "white"
-                    text: "Apply (requires restart)"
-                    onClicked: {appSettings.sync()}
-                }
-                Button {
-                    Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"
                     text: "Reset Porn Fetch to default settings"
+                    onClicked: {backend.reset_pornfetch()}
                 }
+                Button {
+                    Layout.fillWidth: true
+                    text: "Clear Temporary Files"
+                    onClicked: {backend.clear_temporary_files()}
+                }
+
             }
 
             // Row 3
@@ -986,22 +986,30 @@ Pane {
                 Layout.fillWidth: true
                 spacing: 10
 
+                Loader {
+                    id: dialogLoader
+                }
+
                 Button {
                     Layout.fillWidth: true
                     Material.background: "#10b981" // Success Green color
                     Material.foreground: "white"
                     text: "Install Porn Fetch"
+                    onClicked: {
+                        dialogLoader.source = "InstallDialog.qml"
+                        dialogLoader.item.acceptedInput.connect(function(inputValue) {backend.install_pornfetch(inputValue)})
+                        dialogLoader.item.open()
+                    }
                 }
+
                 Button {
                     Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"
                     text: "Uninstall Porn Fetch"
+                    onClicked: {backend.uninstall_pornfetch()}
                 }
-                Button {
-                    Layout.fillWidth: true
-                    text: "Clear Temporary Files"
-                }
+
             }
         }
     }

@@ -449,61 +449,6 @@ class PornFetch(QMainWindow):
         os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
 
     async def uninstall_porn_fetch(self):
-        ui_popup(self.tr("""
-Important: 
-
-Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
-and the main file.
-
-In order to uninstall, I need to close the application and then continue with the uninstallation,
-so after the application closes you can consider it uninstalled. 
-
-If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
-Thank you for using Porn Fetch ^^
-"""))
-
-        uninstaller = UninstallPornFetch()
-        try:
-            await asyncio.to_thread(uninstaller.uninstall)
-            ui_popup("""
-Porn Fetch has been successfully uninstalled, it will close itself now and after that no traces should be left.
-This does NOT include:
-- The database feature (if you enabled it) 
-- Downloaded videos
-- Temporary files from the extraction (restart PC / delete /tmp for this)
-
-Thank you for using Porn Fetch :)
-If you have Feedback, you can write an E-Mail to:
-EchterAlsFake@proton.me <3""")
-            self.close()
-
-        except UnsupportedPlatform:
-            ui_popup(TRANSLATE_ERRORS.installation_unsupported)
-
-    async def install_pornfetch(self):
-        app_name = self.ui.install_dialog_lineedit_custom_app_name.text()
-        if app_name:
-            config.__app_name__ = app_name
-
-        installer = InstallPornFetch()
-        try:
-            await asyncio.to_thread(installer.install)
-            ui_popup("Installation Successful!")
-
-        except UnsupportedPlatform:
-            ui_popup(TRANSLATE_ERRORS.installation_unsupported)
-
-        except FileNotFoundError as e:
-            ui_popup(f"{TRANSLATE_ERRORS.installation_file_not_found} ->: {e}")
-
-        except RuntimeError as e:
-            ui_popup(f"{TRANSLATE_ERRORS.installation_copy_failed} ->: {e}")
-
-        except Exception as e:
-            error = traceback.format_exc()
-            ui_popup(f"""
-During installation an unknown error happened, please report this!
-ERROR: {error}""")
 
 
     def check_for_updates_result(self, success: bool, dictionary: dict):

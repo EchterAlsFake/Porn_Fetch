@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -438,6 +439,7 @@ class Backend(QObject):
     proxyTestFailed = Signal(str, str)
     proxySslError = Signal(str, str)
     proxyApplied = Signal(bool)
+    shutdown_complete = Signal()
 
     def __init__(self):
         super().__init__()
@@ -447,12 +449,12 @@ class Backend(QObject):
         self._downloads_model = DownloadListModel(self)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
+        self._is_shutting_down = False
 
         # ``clients`` creates its curl-cffi sessions during import. Apply all
         # saved request settings once the real GUI backend is initialized and
         # refresh them immediately when the content locale changes.
         self.load_clients()
-        #app_settings.localeChanged.connect(self.load_clients)
         app_settings.reloadClients.connect(self.load_clients)
 
     # Slots / Signals connected to the Configuration / Settings
@@ -480,6 +482,96 @@ class Backend(QObject):
     @Slot(bool)
     def toggle_network_logging(self, value: bool) -> None:
         ...
+
+    @Slot(str, str)
+    def database_changed(self, old_path: str, new_path: str) -> None:
+        os.makedirs(new_path, exist_ok=True)
+        shutil.move(old_path, new_path)
+        ui_popup("Your old database (if existent) has been moved into the new path.")
+
+    @Slot()
+    def cancel_fetching(self):
+        stop_flag.set()
+
+    @Slot()
+    def clear_temporary_files(self):
+        shutil.rmtree(".temp", ignore_errors=True)
+        ui_popup("Temporary files (segments, state files) have been deleted!")
+
+    @Slot()
+    def reset_pornfetch(self):
+        app_settings.reset()
+        ui_popup("Porn Fetch has been reset to its default values. Please restart the application immediately.")
+
+    @Slot()
+    def handle_abort(self):
+        pass
+
+    @Slot(str)
+    def install_pornfetch(self, app_name: str) -> None:
+        if app_name:
+            config.__app_name__ = app_name
+
+        installer = InstallPornFetch()
+
+        async def run_installation():
+            try:
+                await asyncio.to_thread(installer.install)
+                ui_popup("Installation Successful!")
+
+            except UnsupportedPlatform:
+                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+            except FileNotFoundError as e:
+                ui_popup(f"{TRANSLATE_ERRORS.installation_file_not_found} ->: {e}")
+
+            except RuntimeError as e:
+                ui_popup(f"{TRANSLATE_ERRORS.installation_copy_failed} ->: {e}")
+
+            except Exception as e:
+                error = traceback.format_exc()
+                ui_popup(f"""
+            During installation an unknown error happened, please report this!
+            ERROR: {error}""")
+
+        self._spawn(run_installation(), name="installer-")
+
+    @Slot()
+    def uninstall_pornfetch(self):
+        ui_popup(self.tr("""
+        Important: 
+
+        Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
+        and the main file.
+
+        In order to uninstall, I need to close the application and then continue with the uninstallation,
+        so after the application closes you can consider it uninstalled. 
+
+        If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
+        Thank you for using Porn Fetch ^^
+        """))
+
+        uninstaller = UninstallPornFetch()
+
+        async def run_uninstaller():
+            try:
+                await asyncio.to_thread(uninstaller.uninstall)
+
+                ui_popup("""
+            Porn Fetch has been successfully uninstalled, it will close itself now and after that no traces should be left.
+            This does NOT include:
+            - The database feature (if you enabled it) 
+            - Downloaded videos
+            - Temporary files from the extraction (restart PC / delete /tmp for this)
+    
+            Thank you for using Porn Fetch :)
+            If you have Feedback, you can write an E-Mail to:
+            EchterAlsFake@proton.me <3""")
+
+            except UnsupportedPlatform:
+                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+        self._spawn(run_uninstaller(), name="uninstaller-")
 
     @Slot(object)
     def load_clients(self, _locale: str | None = None) -> None:
@@ -580,7 +672,7 @@ class Backend(QObject):
         app_settings.sync()
         clients.config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or proxy_url or None
         clients.config.verify_ssl = verify_ssl
-        clients.refresh_clients(debug_mode=app_settings.debug_mode)
+        clients.refresh_clients()
         self.proxyApplied.emit(bool(proxy_url))
 
     @Slot(str, str)
@@ -797,7 +889,42 @@ class Backend(QObject):
         platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")
         return f"{platform} {source_kind}"
 
+    @Slot()
+    def initiate_shutdown(self):
+        """Called by QML when the user clicks the close button."""
+        if self._is_shutting_down:
+            return
 
+        self._is_shutting_down = True
+        self.logger.info("Application closing. Initiating async teardown...")
+        # Spawn the cleanup routine as one final task
+        asyncio.create_task(self._teardown_routine())
+
+    async def _teardown_routine(self):
+        """Safely cancel all tracked tasks and wait for them to close."""
+        tasks_to_await = list(self._background_tasks)
+
+        if self._proxy_test_task and not self._proxy_test_task.done():
+            tasks_to_await.append(self._proxy_test_task)
+
+        if tasks_to_await:
+            self.logger.info(f"Cancelling {len(tasks_to_await)} background tasks...")
+
+            # Send cancellation requests to all tasks
+            for task in tasks_to_await:
+                task.cancel()
+
+            # Wait for all tasks to acknowledge cancellation and finish
+            # return_exceptions=True prevents CancelledError from bubbling up and crashing this routine
+            await asyncio.gather(*tasks_to_await, return_exceptions=True)
+            self.logger.info("All background tasks stopped successfully.")
+
+        # If DownloadManager handles downloads in separate C++ threads or
+        # distinct processes, tell it to stop here too.
+        # self.download_manager.stop_all()
+
+        # Tell the Qt Event Loop to exit
+        self.shutdown_complete.emit()
 
 def main():
 

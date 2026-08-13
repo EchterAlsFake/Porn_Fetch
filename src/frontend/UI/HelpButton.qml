@@ -7,9 +7,8 @@ Button {
     property string helpText: ""
 
     clip: true
-    icon.source: "qrc:/images/graphics/tooltip.svg"
+    icon.source: "qrc:/images/graphics/information.svg"
     palette.buttonText: "white"
-    text: "Help"
 
     onClicked: {
         backend.handle_message(helpText)

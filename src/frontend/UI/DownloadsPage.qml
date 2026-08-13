@@ -172,8 +172,6 @@ Pane {
 
                 text: qsTr("Cancel Loading")
 
-                enabled: backend.busy
-
                 onClicked: {
                     backend.cancel_fetching()
                 }
@@ -627,32 +625,5 @@ Pane {
         // Status and total area
         // ------------------------------------------
 
-        Label {
-            Layout.fillWidth: true
-
-            visible: text.length > 0
-
-            text: backend.statusMessage
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-
-            Label {
-                text: qsTr("Total (HLS):")
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: 24
-                color: "transparent"
-
-                Label {
-                    anchors.centerIn: parent
-
-                    text: root.backend.totalHls
-                }
-            }
-        }
     }
 }

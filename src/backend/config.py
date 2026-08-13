@@ -33,11 +33,13 @@ class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
     languageChanged = Signal(int)
-    sniProxyChanged = Signal()
-    fontSizeChanged = Signal()
+    sniProxyChanged = Signal(object)
+    fontSizeChanged = Signal(object)
     themeChanged = Signal(int)
     reloadClients = Signal(object)
-    restartRequired = Signal()
+    restartRequired = Signal(object)
+    databaseChanged = Signal(str)
+    moveDatabase = Signal(str, str)
 
     # For Theming
     coreStyleChanged = Signal(str)
@@ -46,6 +48,52 @@ class SettingsManager(QObject):
 
     # Missing Signals
     networkLoggingChanged = Signal(bool)
+
+    # These Signals are not needed yet, but who knows
+    logLevelChanged = Signal(object)
+    supressErrorsChanged = Signal(object)
+    pagesConcurrencyChanged = Signal(object)
+    videosConcurrencyChanged = Signal(object)
+    processingDelayChanged = Signal(object)
+    timeoutChanged = Signal(object)
+    retriesChanged = Signal(object)
+    parallelDownloadsChanged = Signal(object)
+    networkDelayChanged = Signal(object)
+    downloadWorkersChanged = Signal(object)
+    outputPathChanged = Signal(object)
+    skipExistingFilesChanged = Signal(object)
+    writeMetadataChanged = Signal(object)
+    resultLimitChanged = Signal(object)
+    strictEnforcementChanged = Signal(object)
+    modelVideosChanged = Signal(object)
+    localeChanged = Signal(object)
+    trackVideosChanged = Signal(object)
+    speedLimitChanged = Signal(object)
+    responseCacheSizeChanged = Signal(object)
+    responseCacheTTLChanged = Signal(object)
+    segmentCacheSizeChanged = Signal(object)
+    segmentCacheTTLChanged = Signal(object)
+    requestInitialRetryDelayChanged = Signal(object)
+    requestRetryMaxDelayChanged = Signal(object)
+    requestRetryMultiplierChanged = Signal(object)
+    requestRetryJitterChanged = Signal(object)
+    trustEnvironmentChanged = Signal(object)
+    debugModeChanged = Signal(object)
+    httpVersionChanged = Signal(object)
+    impersonationChanged = Signal(object)
+    customJA3Changed = Signal(object)
+    interfaceChanged = Signal(object)
+    encryptedCHChanged = Signal(object)
+    dnsOverHTTPSChanged = Signal(object)
+    enableTorChanged = Signal(object)
+    enableTorServerRoutingChanged = Signal(object)
+    dnsServerChanged = Signal(object)
+    fallbackDNSChanged = Signal(object)
+    sniObfuscationChanged = Signal(object)
+    sniObfuscationLiteChanged = Signal(object)
+    sniObfuscationStrictChanged = Signal(object)
+    proxyChanged = Signal(object)
+    proxySSLVerificationChanged = Signal(object)
 
     def __init__(self):
         super().__init__()
@@ -85,6 +133,9 @@ class SettingsManager(QObject):
     def sync(self):
         self._settings.sync()
 
+    def reset(self):
+        self._settings.clear() # Resets settings back to default
+
     def get_bool(self, key: str, default: bool = False) -> bool:
         val = self._settings.value(key, defaultValue=default)
         if isinstance(val, bool):
@@ -119,7 +170,7 @@ class SettingsManager(QObject):
 
 
     # Video related
-    @Property(int)
+    @Property(int, notify=qualityChanged)
     def quality(self) -> int:
         return self.get_int("Video/quality", 5)
 
@@ -129,10 +180,9 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/quality", val)
             self.qualityChanged.emit(val)
 
-    @Property(int)
+    @Property(int, notify=modelVideosChanged)
     def model_videos(self) -> int:
         return self.get_int("Video/model_videos", 0)
-
 
     @model_videos.setter
     def model_videos(self, val):
@@ -140,7 +190,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/model_videos", val)
             self.modelVideosChanged.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=localeChanged)
     def locale(self) -> str:
         return self.get_str("Video/locale", "en-US")
 
@@ -148,8 +198,10 @@ class SettingsManager(QObject):
     def locale(self, val: str):
         if val != self.locale:
             self._settings.setValue("Video/locale", val)
+            self.localeChanged.emit(val)
+            self.reloadClients.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=strictEnforcementChanged)
     def strict_enforcement(self) -> bool:
         return self.get_bool("Video/strict_enforcement", False)
 
@@ -157,8 +209,9 @@ class SettingsManager(QObject):
     def strict_enforcement(self, val: bool):
         if val != self.strict_enforcement: # type: ignore
             self._settings.setValue("Video/strict_enforcement", val)
+            self.strictEnforcementChanged.emit(val)
 
-    @Property(int)
+    @Property(int, notify=resultLimitChanged)
     def result_limit(self) -> int:
         return self.get_int("Video/result_limit", 50)
 
@@ -168,7 +221,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/result_limit", val)
             self.resultLimitChanged.emit(val)
 
-    @Property(str)
+    @Property(str, notify=outputPathChanged)
     def output_path(self) -> str:
         return self.get_str("Video/output_path", "./")
 
@@ -178,7 +231,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/output_path", val)
             self.outputPathChanged.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=writeMetadataChanged)
     def write_metadata(self) -> bool:
         return self.get_bool("Video/write_metadata", True)
 
@@ -188,7 +241,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/write_metadata", val)
             self.writeMetadataChanged.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=skipExistingFilesChanged)
     def skip_existing_files(self) -> bool:
         return self.get_bool("Video/skip_existing_files", True)
 
@@ -198,7 +251,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Video/skip_existing_files", val)
             self.skipExistingFilesChanged.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=trackVideosChanged)
     def track_videos(self) -> bool:
         return self.get_bool("Video/track_videos", False)
 
@@ -206,18 +259,26 @@ class SettingsManager(QObject):
     def track_videos(self, val):
         if val != self.track_videos:
             self._settings.setValue("Video/track_videos", val)
+            self.trackVideosChanged.emit(val)
+            self.restartRequired.emit(val)
 
-    @Property(str)
+    @Property(str, notify=databaseChanged)
     def database_path(self) -> str:
         return self.get_str("Video/database_path", "./downloads.db")
 
     @database_path.setter
     def database_path(self, val):
         if val != self.database_path:
+
+            current_path = self.database_path
+
             self._settings.setValue("Video/database_path", val)
+            self.databaseChanged.emit(val)
+            self.restartRequired.emit(val)
+            self.moveDatabase.emit(current_path, val)
 
     # Performance related
-    @Property(int)
+    @Property(int, notify=downloadWorkersChanged)
     def download_workers(self) -> int:
         return self.get_int("Performance/download_workers", 20)
 
@@ -225,9 +286,10 @@ class SettingsManager(QObject):
     def download_workers(self, val):
         if val != self.download_workers:
             self._settings.setValue("Performance/download_workers", val)
+            self.downloadWorkersChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=networkDelayChanged)
     def network_delay(self) -> int:
         return self.get_int("Performance/network_delay", 0)
 
@@ -235,9 +297,10 @@ class SettingsManager(QObject):
     def network_delay(self, val):
         if val != self.network_delay:
             self._settings.setValue("Performance/network_delay", val)
+            self.networkDelayChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=parallelDownloadsChanged)
     def parallel_downloads(self) -> int:
         return self.get_int("Performance/semaphore", 1)
 
@@ -247,7 +310,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Performance/semaphore", val)
             self.parallelDownloadsChanged.emit(val)
 
-    @Property(int)
+    @Property(int, notify=retriesChanged)
     def retries(self) -> int:
         return self.get_int("Performance/retries", 4)
 
@@ -255,9 +318,10 @@ class SettingsManager(QObject):
     def retries(self, val):
         if val != self.retries:
             self._settings.setValue("Performance/retries", val)
+            self.retriesChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=timeoutChanged)
     def timeout(self) -> int:
         return self.get_int("Performance/timeout", 10)
 
@@ -265,9 +329,10 @@ class SettingsManager(QObject):
     def timeout(self, val):
         if val != self.timeout:
             self._settings.setValue("Performance/timeout", val)
+            self.timeoutChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=processingDelayChanged)
     def processing_delay(self) -> int:
         return self.get_int("Performance/processing_delay", 0)
 
@@ -275,9 +340,10 @@ class SettingsManager(QObject):
     def processing_delay(self, val):
         if val != self.processing_delay:
             self._settings.setValue("Performance/processing_delay", val)
+            self.processingDelayChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(float, notify=reloadClients)
+    @Property(float, notify=speedLimitChanged)
     def speed_limit(self) -> float:
         return self.get_float("Performance/speed_limit", 0.0)
 
@@ -285,9 +351,10 @@ class SettingsManager(QObject):
     def speed_limit(self, val):
         if val != self.speed_limit:
             self._settings.setValue("Performance/speed_limit", val)
+            self.speedLimitChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=videosConcurrencyChanged)
     def videos_concurrency(self) -> int:
         return self.get_int("Performance/videos_concurrency", 10)
 
@@ -295,9 +362,10 @@ class SettingsManager(QObject):
     def videos_concurrency(self, val):
         if val != self.videos_concurrency:
             self._settings.setValue("Performance/videos_concurrency", val)
+            self.videosConcurrencyChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=pagesConcurrencyChanged)
     def pages_concurrency(self) -> int:
         return self.get_int("Performance/pages_concurrency", 2)
 
@@ -305,9 +373,10 @@ class SettingsManager(QObject):
     def pages_concurrency(self, val):
         if val != self.pages_concurrency:
             self._settings.setValue("Performance/pages_concurrency", val)
+            self.pagesConcurrencyChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=responseCacheSizeChanged)
     def response_cache_size(self) -> int:
         return self.get_int("Performance/response_cache_size", 32)
 
@@ -315,9 +384,10 @@ class SettingsManager(QObject):
     def response_cache_size(self, val):
         if val != self.response_cache_size:
             self._settings.setValue("Performance/response_cache_size", val)
+            self.responseCacheSizeChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=responseCacheTTLChanged)
     def response_cache_ttl(self) -> int:
         return self.get_int("Performance/response_cache_ttl", 300)
 
@@ -325,9 +395,10 @@ class SettingsManager(QObject):
     def response_cache_ttl(self, val):
         if val != self.response_cache_ttl:
             self._settings.setValue("Performance/response_cache_ttl", val)
+            self.responseCacheTTLChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=segmentCacheSizeChanged)
     def segment_cache_size(self) -> int:
         return self.get_int("Performance/segment_cache_size", 8)
 
@@ -335,9 +406,10 @@ class SettingsManager(QObject):
     def segment_cache_size(self, val):
         if val != self.segment_cache_size:
             self._settings.setValue("Performance/segment_cache_size", val)
+            self.segmentCacheSizeChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(int)
+    @Property(int, notify=segmentCacheTTLChanged)
     def segment_cache_ttl(self) -> int:
         return self.get_int("Performance/segment_cache_ttl", 300)
 
@@ -345,9 +417,10 @@ class SettingsManager(QObject):
     def segment_cache_ttl(self, val):
         if val != self.segment_cache_ttl:
             self._settings.setValue("Performance/segment_cache_ttl", val)
+            self.segmentCacheTTLChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(float)
+    @Property(float, notify=requestInitialRetryDelayChanged)
     def request_initial_retry_delay(self) -> float:
         return self.get_float("Performance/request_initial_retry_delay", 0.5)
 
@@ -355,9 +428,10 @@ class SettingsManager(QObject):
     def request_initial_retry_delay(self, val):
         if val != self.request_initial_retry_delay:
             self._settings.setValue("Performance/request_initial_retry_delay", val)
+            self.requestInitialRetryDelayChanged.emit()
             self.reloadClients.emit(val)
 
-    @Property(float)
+    @Property(float, notify=requestRetryMaxDelayChanged)
     def request_retry_max_delay(self) -> float:
         return self.get_float("Performance/request_retry_max_delay", 30)
 
@@ -365,9 +439,10 @@ class SettingsManager(QObject):
     def request_retry_max_delay(self, val):
         if val != self.request_retry_max_delay:
             self._settings.setValue("Performance/request_retry_max_delay", val)
+            self.requestRetryMaxDelayChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(float)
+    @Property(float, notify=requestRetryMultiplierChanged)
     def request_retry_multiplier(self) -> float:
         return self.get_float("Performance/request_retry_multiplier", 2)
 
@@ -375,9 +450,10 @@ class SettingsManager(QObject):
     def request_retry_multiplier(self, val):
         if val != self.request_retry_multiplier:
             self._settings.setValue("Performance/request_retry_multiplier", val)
+            self.requestRetryMultiplierChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(float)
+    @Property(float, notify=requestRetryJitterChanged)
     def request_retry_jitter(self) -> float:
         return self.get_float("Performance/request_retry_jitter", 0.5)
 
@@ -385,6 +461,7 @@ class SettingsManager(QObject):
     def request_retry_jitter(self, val):
         if val != self.request_retry_jitter:
             self._settings.setValue("Performance/request_retry_jitter", val)
+            self.requestRetryJitterChanged.emit()
             self.reloadClients.emit(val)
 
     # System / Misc related
@@ -398,7 +475,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/update_checks", val)
             self.updateChecksChanged.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=supressErrorsChanged)
     def supress_errors(self) -> bool:
         return self.get_bool("Misc/supress_errors", False)
 
@@ -408,7 +485,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/supress_errors", val)
             self.supressErrorsChanged.emit(val)
 
-    @Property(bool)
+    @Property(bool, notify=networkLoggingChanged)
     def enable_logging(self) -> bool:
         return self.get_bool("Misc/network_logging", False)
 
@@ -418,17 +495,18 @@ class SettingsManager(QObject):
             self._settings.setValue("Misc/network_logging", val)
             self.networkLoggingChanged.emit(val)
 
-    @Property(bool)
-    def trust_environment(self, notify=reloadClients) -> bool:
+    @Property(bool, notify=trustEnvironmentChanged)
+    def trust_environment(self) -> bool:
         return self.get_bool("Misc/trust_environment", False)
 
     @trust_environment.setter
     def trust_environment(self, val):
         if val != self.trust_environment:
             self._settings.setValue("Misc/trust_environment", val)
+            self.trustEnvironmentChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=debugModeChanged)
     def debug_mode(self) -> bool:
         return self.get_bool("Misc/debug_mode", False)
 
@@ -436,9 +514,10 @@ class SettingsManager(QObject):
     def debug_mode(self, val):
         if val != self.debug_mode:
             self._settings.setValue("Misc/debug_mode", val)
+            self.debugModeChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=None) # Can't be changed dynamically
+    @Property(str, notify=logLevelChanged) # Can't be changed dynamically
     def log_level(self) -> str:
         return self.get_str("Misc/log_level", "0")
 
@@ -446,8 +525,9 @@ class SettingsManager(QObject):
     def log_level(self, val):
         if val != self.log_level:
             self._settings.setValue("Misc/log_level", val)
+            self.logLevelChanged.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=httpVersionChanged)
     def http_version(self) -> str:
         return self.get_str("Misc/http_version", "v2")
 
@@ -455,9 +535,10 @@ class SettingsManager(QObject):
     def http_version(self, val):
         if val != self.http_version:
             self._settings.setValue("Misc/http_version", val)
+            self.httpVersionChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=impersonationChanged)
     def impersonation(self) -> str:
         return self.get_str("Misc/impersonation", "chrome")
 
@@ -465,9 +546,10 @@ class SettingsManager(QObject):
     def impersonation(self, val):
         if val != self.impersonation:
             self._settings.setValue("Misc/impersonation", val)
+            self.impersonationChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=customJA3Changed)
     def custom_ja3(self) -> str:
         return self.get_str("Misc/custom_ja3", "")
 
@@ -475,9 +557,10 @@ class SettingsManager(QObject):
     def custom_ja3(self, val):
         if val != self.custom_ja3:
             self._settings.setValue("Misc/custom_ja3", val)
+            self.customJA3Changed.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=interfaceChanged)
     def interface(self) -> str:
         return self.get_str("Misc/interface", "")
 
@@ -485,6 +568,7 @@ class SettingsManager(QObject):
     def interface(self, val):
         if val != self.interface:
             self._settings.setValue("Misc/interface", val)
+            self.interfaceChanged.emit(val)
             self.reloadClients.emit(val)
 
     # Privacy Settings
@@ -499,7 +583,7 @@ class SettingsManager(QObject):
             self._settings.setValue("Privacy/anonymous_mode", val)
             self.anonymousModeChanged.emit(val)
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=encryptedCHChanged)
     def encrypted_ch(self) -> bool:
         return self.get_bool("Privacy/encrypted_ch", True)
 
@@ -507,9 +591,10 @@ class SettingsManager(QObject):
     def encrypted_ch(self, val):
         if val != self.encrypted_ch:
             self._settings.setValue("Privacy/encrypted_ch", val)
+            self.encryptedCHChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=dnsOverHTTPSChanged)
     def dns_over_https(self) -> bool:
         return self.get_bool("Privacy/dns_over_https", True)
 
@@ -517,9 +602,10 @@ class SettingsManager(QObject):
     def dns_over_https(self, val):
         if val != self.dns_over_https:
             self._settings.setValue("Privacy/dns_over_https", val)
+            self.dnsOverHTTPSChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=restartRequired)
+    @Property(bool, notify=enableTorChanged)
     def enable_tor(self) -> bool:
         return self.get_bool("Privacy/enable_tor", False)
 
@@ -527,9 +613,10 @@ class SettingsManager(QObject):
     def enable_tor(self, val):
         if val != self.enable_tor:
             self._settings.setValue("Privacy/enable_tor", val)
+            self.enableTorChanged.emit(val)
             self.restartRequired.emit()
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=enableTorServerRoutingChanged)
     def enable_tor_server_routing(self):
         return self.get_bool("Privacy/enable_tor_server_routing", True)
 
@@ -537,9 +624,10 @@ class SettingsManager(QObject):
     def enable_tor_server_routing(self, val):
         if val != self.enable_tor_server_routing:
             self._settings.setValue("Privacy/enable_tor_server_routing", val)
+            self.enableTorServerRoutingChanged.emit(val)
             self.restartRequired.emit()
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=dnsServerChanged)
     def dns_server(self) -> str:
         return self.get_str("Privacy/dns_server", "https://dns.mullvad.net/dns-query")
 
@@ -547,9 +635,10 @@ class SettingsManager(QObject):
     def dns_server(self, val):
         if val != self.dns_server:
             self._settings.setValue("Privacy/dns_server", val)
+            self.dnsServerChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=fallbackDNSChanged)
     def fallback_dns(self) -> str:
         return self.get_str("Privacy/fallback_dns", "https://dns.quad9.net/dns-query")
 
@@ -557,9 +646,10 @@ class SettingsManager(QObject):
     def fallback_dns(self, val):
         if val != self.fallback_dns:
             self._settings.setValue("Privacy/fallback_dns", val)
+            self.fallbackDNSChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=restartRequired)
+    @Property(bool, notify=sniObfuscationChanged)
     def sni_obfuscation(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation", False)
 
@@ -567,9 +657,10 @@ class SettingsManager(QObject):
     def sni_obfuscation(self, val):
         if val != self.sni_obfuscation:
             self._settings.setValue("Privacy/sni_obfuscation", val)
+            self.sniObfuscationChanged.emit(val)
             self.restartRequired.emit()
 
-    @Property(bool, notify=restartRequired)
+    @Property(bool, notify=sniObfuscationLiteChanged)
     def sni_obfuscation_lite(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_lite", False)
 
@@ -577,9 +668,10 @@ class SettingsManager(QObject):
     def sni_obfuscation_lite(self, val):
         if val != self.sni_obfuscation_lite:
             self._settings.setValue("Privacy/sni_obfuscation_lite", val)
+            self.sniObfuscationLiteChanged.emit(val)
             self.restartRequired.emit()
 
-    @Property(bool, notify=restartRequired)
+    @Property(bool, notify=sniObfuscationStrictChanged)
     def sni_obfuscation_strict(self) -> bool:
         return self.get_bool("Privacy/sni_obfuscation_strict", False)
 
@@ -587,9 +679,10 @@ class SettingsManager(QObject):
     def sni_obfuscation_strict(self, val):
         if val != self.sni_obfuscation_strict:
             self._settings.setValue("Privacy/sni_obfuscation_strict", val)
+            self.sniObfuscationStrictChanged.emit(val)
             self.restartRequired.emit()
 
-    @Property(str, notify=reloadClients)
+    @Property(str, notify=proxyChanged)
     def proxy(self) -> str:
         return self.get_str("Privacy/proxy", "")
 
@@ -597,9 +690,10 @@ class SettingsManager(QObject):
     def proxy(self, val):
         if val != self.proxy:
             self._settings.setValue("Privacy/proxy", val)
+            self.proxyChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(bool, notify=reloadClients)
+    @Property(bool, notify=proxySSLVerificationChanged)
     def proxy_ssl_verification(self) -> bool:
         return self.get_bool("Privacy/proxy_ssl_verification", True)
 
@@ -607,8 +701,8 @@ class SettingsManager(QObject):
     def proxy_ssl_verification(self, val):
         if val != self.proxy_ssl_verification:
             self._settings.setValue("Privacy/proxy_ssl_verification", val)
+            self.proxySSLVerificationChanged.emit(val)
             self.reloadClients.emit(val)
-
 
     # UI Settings
 

@@ -15,6 +15,21 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("Video Downloader")
+    property bool safeToClose: false
+    onClosing: (closeEvent) => {
+        if (!safeToClose) {
+            closeEvent.accepted = false
+            backend.initiate_shutdown()
+        }
+    }
+
+    Connections {
+        target: backend
+        function onShutdown_complete() {
+            window.safeToClose = true
+            window.close()
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
