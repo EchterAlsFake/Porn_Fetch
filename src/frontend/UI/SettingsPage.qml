@@ -148,10 +148,53 @@ Pane {
                                     text: "Quality"
                                 }
                                 ComboBox {
+                                    id: defaultQualityCombo
                                     Layout.fillWidth: true
                                     model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "240p", "144p"]
                                     currentIndex: appSettings.quality
-                                    onCurrentIndexChanged: appSettings.quality = currentIndex
+
+                                    function qualityRequiresLicense(index) {
+                                        return index === 0 || index === 1
+                                                || index === 3 || index === 4 || index === 5
+                                    }
+
+                                    onActivated: (index) => {
+                                        if (qualityRequiresLicense(index)
+                                                && !(bridge && bridge.isPremium)) {
+                                            currentIndex = Qt.binding(function() {
+                                                return appSettings.quality
+                                            })
+                                            return
+                                        }
+                                        backend.set_default_quality(index)
+                                    }
+
+                                    delegate: ItemDelegate {
+                                        id: qualityDelegate
+                                        width: defaultQualityCombo.width
+                                        highlighted: defaultQualityCombo.highlightedIndex === index
+                                        readonly property bool qualityLocked:
+                                            defaultQualityCombo.qualityRequiresLicense(index)
+                                            && !(bridge && bridge.isPremium)
+                                        enabled: !qualityLocked
+
+                                        contentItem: RowLayout {
+                                            Label {
+                                                Layout.fillWidth: true
+                                                text: modelData
+                                                color: qualityDelegate.enabled
+                                                       ? qualityDelegate.palette.text
+                                                       : qualityDelegate.palette.mid
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+
+                                            Text {
+                                                text: "🔒"
+                                                visible: qualityDelegate.qualityLocked
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+                                        }
+                                    }
                                 }
 
                                 // --- Row 2: Model Videos ---

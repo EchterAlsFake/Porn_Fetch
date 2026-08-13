@@ -6,6 +6,54 @@ from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Pro
 from src.backend.config import app_settings
 
 
+FREE_MAXIMUM_QUALITY = 720
+PREMIUM_QUALITY_NAMES = {"best", "half", "4k", "uhd", "2k", "qhd", "fullhd", "fhd"}
+
+
+def quality_requires_premium(quality: str | int | None) -> bool:
+    """Return whether a quality can only be used with the full unlock."""
+    normalized = str(quality or "").strip().lower()
+    if normalized in PREMIUM_QUALITY_NAMES:
+        return True
+
+    if normalized.endswith("p"):
+        normalized = normalized[:-1]
+
+    try:
+        return int(normalized) > FREE_MAXIMUM_QUALITY
+    except ValueError:
+        return False
+
+
+def select_allowed_quality(
+    preferred_quality: str | int | None,
+    available_qualities: list[str | int],
+    has_premium: bool,
+) -> str:
+    """Choose the preferred stream or the highest stream the user may access."""
+    available = [str(quality) for quality in available_qualities]
+    preferred = str(preferred_quality or "")
+
+    if preferred in available and (has_premium or not quality_requires_premium(preferred)):
+        return preferred
+
+    allowed = available if has_premium else [
+        quality for quality in available if not quality_requires_premium(quality)
+    ]
+    if not allowed:
+        return ""
+
+    def quality_rank(quality: str) -> tuple[int, int]:
+        normalized = quality.strip().lower().removesuffix("p")
+        try:
+            return 1, int(normalized)
+        except ValueError:
+            # Keep named fallbacks such as "worst" below concrete streams.
+            return 0, 0
+
+    return max(allowed, key=quality_rank)
+
+
 @dataclass(slots=True)
 class VideoFilters:
     duration_minimum: int | None = None
@@ -52,24 +100,33 @@ class DownloadListModel(QAbstractListModel):
     SelectedQualityRole = Qt.ItemDataRole.UserRole + 6
     ProgressRole = Qt.ItemDataRole.UserRole + 7
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, premium_access=None):
         super().__init__(parent)
         self._items = []
+        self._premium_access = premium_access or (lambda: False)
         app_settings.qualityChanged.connect(self.update_all_qualities)
+
+    def has_premium_access(self) -> bool:
+        return bool(self._premium_access())
 
     def update_all_qualities(self, new_quality_idx: int):
         preferred_quality = str(app_settings.mappings_quality.get(new_quality_idx, "best"))
 
         for row, item in enumerate(self._items):
-            string_qualities = [str(q) for q in item.get("availableQualities", [])]
-
-            selected_quality = preferred_quality if preferred_quality in string_qualities else (
-                string_qualities[0] if string_qualities else "best")
+            selected_quality = select_allowed_quality(
+                preferred_quality,
+                item.get("availableQualities", []),
+                self.has_premium_access(),
+            )
 
             if item.get("selectedQuality") != selected_quality:
                 item["selectedQuality"] = selected_quality
+                item["_video"].selected_quality = selected_quality or None
                 idx = self.index(row, 0)
                 self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
+
+    def enforce_quality_access(self) -> None:
+        self.update_all_qualities(app_settings.quality)
 
     def roleNames(self):
         return {
@@ -108,7 +165,7 @@ class DownloadListModel(QAbstractListModel):
 
         return None
 
-    def add_video(self, video: VideoObject, preferred_quality: str):
+    def add_video(self, video: VideoObject, preferred_quality: str) -> str:
         if video.length in (None, "Not Available"):
             display_duration = "N/A"
 
@@ -116,12 +173,12 @@ class DownloadListModel(QAbstractListModel):
             minutes, seconds = divmod(int(video.length), 60)
             display_duration = f"{minutes:02d}:{seconds:02d}"
 
-        # 1. NEW: Force all qualities to be strings so they match QML perfectly
-        string_qualities = [str(q) for q in video.qualities] if video.qualities else []
-
-        # 2. Use the new string list for the fallback check
-        selected_quality = preferred_quality if preferred_quality in string_qualities else (
-            string_qualities[0] if string_qualities else "best")
+        selected_quality = select_allowed_quality(
+            preferred_quality,
+            video.qualities or [],
+            self.has_premium_access(),
+        )
+        video.selected_quality = selected_quality or None
 
         job_id = video.video_id or video.identifier or str(len(self._items))
         item_data = {
@@ -131,22 +188,33 @@ class DownloadListModel(QAbstractListModel):
             "duration": display_duration,
             "availableQualities": video.qualities,
             "selectedQuality": selected_quality,
-            "progress": 0  # Starts at 0%
+            "progress": 0,  # Starts at 0%
+            "_video": video,
         }
 
         self.beginInsertRows(QModelIndex(), len(self._items), len(self._items))
         self._items.append(item_data)
         self.endInsertRows()
+        return selected_quality
 
-    def set_video_quality(self, job_id: str, new_quality: str):
+    def set_video_quality(self, job_id: str, new_quality: str) -> bool:
+        if quality_requires_premium(new_quality) and not self.has_premium_access():
+            return False
+
         for row, item in enumerate(self._items):
             if item["jobId"] == str(job_id):
+                if str(new_quality) not in [str(quality) for quality in item["availableQualities"]]:
+                    return False
+
                 item["selectedQuality"] = new_quality
+                item["_video"].selected_quality = new_quality
 
                 # Tell QML to redraw this specific row
                 idx = self.index(row, 0)
                 self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
-                break
+                return True
+
+        return False
 
     def update_progress(self, job_id: str, progress: int):
         for row, item in enumerate(self._items):

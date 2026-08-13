@@ -383,10 +383,8 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     if isinstance(video, ph_Video):
         stuff = await video.author
-        try:
-            author = stuff.name
-        except AttributeError:
-            author = "Not available"
+        author = stuff.name
+
 
         length = video.duration
         tags = video.tags

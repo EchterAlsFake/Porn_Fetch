@@ -298,45 +298,9 @@ class PornFetch(QMainWindow):
 
 
 
-
-    """
-    The following functions are used to connect data between Threads and the Main UI
-    """
-
-    def on_error_message(self, message: str) -> None:
-        ui_popup(message)
-
-    def update_total_progressbar_range(self, maximum):
-        """Sets the maximum value for the total progressbar"""
-        self.ui.main_progressbar_total.setRange(0, maximum)
-        self.ui.main_progressbar_total.setMaximum(maximum)
-    def update_total_progressbar(self, value):
-        """This updates the total progressbar"""
-        self.ui.main_progressbar_total.setValue(value)
-
-    def start_undefined_range(self):
-        """This starts the undefined range (loading animation) of the total progressbar"""
-        self.logger.info("Starting infinite loading animation")
-        self.ui.main_progressbar_total.setRange(0, 0)
-
-    def stop_undefined_range(self):
-        """This stops the undefined range (loading animation) of the total progressbar"""
-        self.logger.info("Stopped infinite loading animation")
-        self.ui.main_progressbar_total.setMinimum(0)
-        self.ui.main_progressbar_total.setMaximum(100)
-        self.ui.main_progressbar_total.setValue(0)
-
     """
     The following functions are used for opening files / directories with the QFileDialog
     """
-
-    def open_output_path_dialog(self):
-        """This handles the output path from the settings widget"""
-        dialog = QFileDialog()
-        path = dialog.getExistingDirectory()
-        self.ui.settings_lineedit_videos_output_path.setText(str(path))
-        self.output_path = path
-        self.save_user_settings()
 
     def login(self):
         """
@@ -404,18 +368,6 @@ class PornFetch(QMainWindow):
 
     """
 
-    def show_credits(self):
-        """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
-        if self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked() or self._anonymous_mode:
-            self.ui.credits_textbrowser.setText("Running in anonymous mode...")
-
-        else:
-            self.ui.credits_textbrowser.setOpenExternalLinks(True)
-            file = QFile(":/credits/README/CREDITS.md")
-            file.open(QFile.OpenModeFlag.ReadOnly)
-            stream = QTextStream(file)
-            self.ui.credits_textbrowser.setHtml(markdown.markdown(stream.readAll()))
-
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         if sys.platform == "darwin":
@@ -434,21 +386,6 @@ class PornFetch(QMainWindow):
         self.update_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.update_thread.signals.error_signal.connect(ui_popup)
         self.threadpool.start(self.update_thread)
-
-    def clean_temporary_files(self):
-        safe_rmtree(TEMP_DIRECTORY_STATES)
-        safe_rmtree(TEMP_DIRECTORY_SEGMENTS)
-        safe_rmtree(TEMP_DIRECTORY)
-        self.ensure_temp()
-        ui_popup("The temporary directory of Porn Fetch has been deleted :)")
-
-    @staticmethod
-    def ensure_temp():
-        os.makedirs(TEMP_DIRECTORY, exist_ok=True)
-        os.makedirs(TEMP_DIRECTORY_STATES, exist_ok=True)
-        os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
-
-    async def uninstall_porn_fetch(self):
 
 
     def check_for_updates_result(self, success: bool, dictionary: dict):

@@ -43,7 +43,7 @@ class LicenseBridge(QObject):
     @Property(bool, notify=statusChanged)
     def isPremium(self):
         # Checks if they have the specific feature unlocked
-        return "full_unlock" in self.features
+        return self.isValid and "full_unlock" in self.features
 
     @Slot(str)
     def installFromPath(self, file_url: str):

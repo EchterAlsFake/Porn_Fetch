@@ -5,8 +5,6 @@ import tempfile
 from pathlib import Path
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
 from src.backend.config import app_settings
-from src.backend.download_manager import DownloadListModel
-from src.backend.config import app_settings
 from src.backend.theme_manager import ThemeManager
 from PySide6.QtCore import QUrl
 from PySide6.QtQml import QQmlApplicationEngine
@@ -91,7 +89,7 @@ from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtQml import QQmlEngine
 from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot, Property,
-                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
+                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QTimer)
 from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
                                QInputDialog, QMainWindow, QComboBox)
 
@@ -108,14 +106,20 @@ from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
 from src.backend.shared_gui import (ui_popup, Signals,
                                     available_title_formatting_options)
 from src.backend.helper_functions import (safe_rmtree, make_debug_log)
-from src.backend.update_service import CheckUpdates, SparkleUpdater
+from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_fragment_proxy_lite import FragmentingProxyConfig, FragmentingProxyProcess
 from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, StrictFragmentingProxyProcess
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
-from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
+from src.backend.download_manager import (
+    DownloadManager,
+    DownloadListModel,
+    VideoFilters,
+    VideoObject,
+    quality_requires_premium,
+)
 from src.backend.database import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
 from curl_cffi.requests.exceptions import SSLError
@@ -435,6 +439,9 @@ class ProcessVideos(QObject):
 class Backend(QObject):
     showMessage = Signal(str, str, str)
     downloadsChanged = Signal()
+    updateAvailable = Signal("QVariantMap")
+    updateProgress = Signal(int, int)
+    updateStatus = Signal(str)
     proxyTestSucceeded = Signal(str, "QVariantMap")
     proxyTestFailed = Signal(str, str)
     proxySslError = Signal(str, str)
@@ -445,17 +452,50 @@ class Backend(QObject):
         super().__init__()
         self._background_tasks: set[asyncio.Task[object]] = set()
         self._proxy_test_task: asyncio.Task[object] | None = None
+        self._update_check_task: asyncio.Task[object] | None = None
+        self._auto_update_task: asyncio.Task[object] | None = None
+        self._license_bridge: LicenseBridge | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
-        self._downloads_model = DownloadListModel(self)
+        self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
+        self.auto_updater = AutoUpdater(self)
+        self.auto_updater.updateProgress.connect(self.updateProgress)
+        self.auto_updater.statusReport.connect(self.updateStatus)
         self._is_shutting_down = False
+        self.ensure_temp()
 
         # ``clients`` creates its curl-cffi sessions during import. Apply all
         # saved request settings once the real GUI backend is initialized and
         # refresh them immediately when the content locale changes.
         self.load_clients()
         app_settings.reloadClients.connect(self.load_clients)
+
+    def has_premium_access(self) -> bool:
+        return bool(self._license_bridge and self._license_bridge.isPremium)
+
+    def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
+        self._license_bridge = license_bridge
+        license_bridge.statusChanged.connect(self._enforce_quality_access)
+        self._enforce_quality_access()
+
+    def _enforce_quality_access(self) -> None:
+        preferred_quality = app_settings.mappings_quality.get(app_settings.quality, "best")
+        if not self.has_premium_access() and quality_requires_premium(preferred_quality):
+            # 720p is the highest unrestricted entry in mappings_quality.
+            app_settings.quality = 6
+        else:
+            self._downloads_model.enforce_quality_access()
+
+    @Slot(int)
+    def set_default_quality(self, quality_index: int) -> None:
+        quality = app_settings.mappings_quality.get(quality_index)
+        if quality is None:
+            return
+        if quality_requires_premium(quality) and not self.has_premium_access():
+            self.logger.warning("Rejected locked default quality: %s", quality)
+            return
+        app_settings.quality = quality_index
 
     # Slots / Signals connected to the Configuration / Settings
 
@@ -466,6 +506,62 @@ class Backend(QObject):
     @Slot(bool)
     def toggle_update_checks(self, value: bool) -> None:
         ...
+
+    @Slot()
+    def check_for_updates(self) -> None:
+        """Schedule a platform-appropriate check after Qt's event loop starts."""
+        QTimer.singleShot(0, self._start_update_check)
+
+    def _start_update_check(self) -> None:
+        if sys.platform == "darwin":
+            try:
+                if not hasattr(self, "sparkle"):
+                    self.sparkle = SparkleUpdater()
+                self.sparkle.check_for_updates()
+            except Exception:
+                self.logger.exception("Could not start the Sparkle updater")
+            return
+
+        if self._update_check_task is not None and not self._update_check_task.done():
+            return
+
+        self._update_check_task = self._spawn(
+            self._check_for_updates(),
+            name="update-check",
+        )
+
+    async def _check_for_updates(self) -> None:
+        update = await CheckUpdates.check()
+        if update is None:
+            return
+
+        details = {
+            "version": str(update.get("version", "")),
+            "url": str(update.get("url", "")),
+            "anonymous_download": str(update.get("anonymous_download", "")),
+            "important_info": str(update.get("important_info", "")),
+            "changelog": str(update.get("changelog", "")),
+        }
+        self.logger.info("New update found: %s", details["version"])
+        self.updateAvailable.emit(details)
+
+    @Slot()
+    def auto_update(self) -> None:
+        """Download and install the available update without blocking QML."""
+        if IS_SOURCE_RUN:
+            self.updateStatus.emit(
+                "Update failed: Automatic updates are only available in installed builds. "
+                "Use one of the download links instead."
+            )
+            return
+
+        if self._auto_update_task is not None and not self._auto_update_task.done():
+            return
+
+        self._auto_update_task = self._spawn(
+            self.auto_updater.run(),
+            name="auto-update",
+        )
 
     @Slot(bool)
     def toggle_user_interface_language(self, value: int) -> None:
@@ -495,7 +591,10 @@ class Backend(QObject):
 
     @Slot()
     def clear_temporary_files(self):
-        shutil.rmtree(".temp", ignore_errors=True)
+        safe_rmtree(TEMP_DIRECTORY_STATES)
+        safe_rmtree(TEMP_DIRECTORY_SEGMENTS)
+        safe_rmtree(TEMP_DIRECTORY)
+        self.ensure_temp()
         ui_popup("Temporary files (segments, state files) have been deleted!")
 
     @Slot()
@@ -577,10 +676,11 @@ class Backend(QObject):
     def load_clients(self, _locale: str | None = None) -> None:
         clients.refresh_clients()
 
-    def _spawn(self, coro, *, name: str) -> None:
+    def _spawn(self, coro, *, name: str) -> asyncio.Task:
         task = asyncio.create_task(coro, name=name)
         self._background_tasks.add(task)
         task.add_done_callback(self._background_task_done)
+        return task
 
     def _background_task_done(self, task: asyncio.Task) -> None:
         self._background_tasks.discard(task)
@@ -677,7 +777,10 @@ class Backend(QObject):
 
     @Slot(str, str)
     def update_video_quality(self, job_id: str, new_quality: str):
-        self._downloads_model.set_video_quality(job_id, new_quality)
+        if not self._downloads_model.set_video_quality(job_id, new_quality):
+            self.logger.warning("Rejected unavailable or locked quality: %s", new_quality)
+            return
+
         self.logger.info(f"User changed quality for {job_id} to {new_quality}")
 
         video = self.download_manager.get_video(job_id)
@@ -926,6 +1029,13 @@ class Backend(QObject):
         # Tell the Qt Event Loop to exit
         self.shutdown_complete.emit()
 
+    @staticmethod
+    def ensure_temp():
+        os.makedirs(TEMP_DIRECTORY, exist_ok=True)
+        os.makedirs(TEMP_DIRECTORY_STATES, exist_ok=True)
+        os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
+
+
 def main():
 
 
@@ -943,6 +1053,7 @@ def main():
     storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
     lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
     bridge_instance = LicenseBridge(lic_manager)
+    backend_instance.set_license_bridge(bridge_instance)
     engine.rootContext().setContextProperty("bridge", bridge_instance)
     engine.rootContext().setContextProperty("backend", backend_instance)
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)

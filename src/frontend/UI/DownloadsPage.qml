@@ -8,6 +8,15 @@ Pane {
     id: root
     padding: 0
 
+    function qualityRequiresLicense(quality) {
+        var normalized = String(quality || "").trim().toLowerCase()
+        if (["best", "half", "4k", "uhd", "2k", "qhd", "fullhd", "fhd"]
+                .indexOf(normalized) !== -1)
+            return true
+        var resolution = parseInt(normalized)
+        return !isNaN(resolution) && resolution > 720
+    }
+
     background: Rectangle {
         color: "transparent"
         border.width: 2
@@ -323,17 +332,21 @@ Pane {
                                         for (var i = 0; i < qs.length; i++) {
                                             if (String(qs[i]) === String(selectedQuality)) return i;
                                         }
-                                        return qs.length > 0 ? 0 : -1;
+                                        return -1;
                                     }
                                     currentIndex: findQualityIndex()
 
                                     // 3. Send the change back to Python when the user picks a new option
                                     onActivated: {
-                                        backend.update_video_quality(jobId, currentValue)
+                                        if (!root.qualityRequiresLicense(currentValue)
+                                                || (bridge && bridge.isPremium))
+                                            backend.update_video_quality(jobId, currentValue)
                                     }
 
                                     contentItem: Text {
-                                        text: qualityCombo.currentIndex >= 0 ? availableQualities[qualityCombo.currentIndex] : selectedQuality
+                                        text: qualityCombo.currentIndex >= 0
+                                              ? availableQualities[qualityCombo.currentIndex]
+                                              : qsTr("License required")
                                         color: "white"
                                         font: qualityCombo.font
                                         verticalAlignment: Text.AlignVCenter
@@ -345,14 +358,10 @@ Pane {
                                     delegate: ItemDelegate {
                                         width: parent.width
 
-                                        // Parse "1080p" -> 1080. If it fails (like "best"), default to 0.
-                                        readonly property int res: parseInt(modelData) || 0
-
-                                        // Determine if it requires premium (e.g., higher than 720p or specifically "4k")
-                                        readonly property bool isPremiumRes: res > 720 || String(modelData).toLowerCase() === "4k"
+                                        readonly property bool isPremiumRes: root.qualityRequiresLicense(modelData)
 
                                         // Disable the row entirely if it's premium AND the user isn't premium
-                                        enabled: !isPremiumRes || bridge.isPremium
+                                        enabled: !isPremiumRes || (bridge && bridge.isPremium)
 
                                         contentItem: RowLayout {
                                             spacing: 5
@@ -368,7 +377,7 @@ Pane {
                                             // Show a padlock icon for locked qualities
                                             Text {
                                                 text: "🔒"
-                                                visible: isPremiumRes && !bridge.isPremium
+                                                visible: isPremiumRes && !(bridge && bridge.isPremium)
                                                 verticalAlignment: Text.AlignVCenter
                                             }
                                         }

@@ -1,21 +1,32 @@
 import os
+import re
 import sys
+import asyncio
 import ctypes
 import shutil
 import tempfile
 import subprocess
 
 from pathlib import Path
+from base_api.modules.config import DownloadConfigRAW
 from src.backend.helper_functions import get_original_executable_path
 from src.backend import clients as clients
 
 from src.backend.config import __version__
 from curl_cffi import Response
 from PySide6.QtCore import Slot, QObject, QCoreApplication, Signal
-from src.backend.shared_functions import configure_app_logging, handle_error_gracefully, get_os_and_arch
+from src.backend.shared_functions import configure_app_logging, get_os_and_arch
 
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
+
+DEFAULT_UPDATE_URL = "https://echteralsfake.me/update"
+UPDATE_URL_ENVIRONMENT_VARIABLE = "PORNFETCH_UPDATE_URL"
+
+
+def get_update_url() -> str:
+    """Return the production endpoint unless a development override is set."""
+    return os.environ.get(UPDATE_URL_ENVIRONMENT_VARIABLE, DEFAULT_UPDATE_URL)
 
 
 class SparkleUpdater(QObject):
@@ -70,16 +81,17 @@ class CheckUpdates:
     """
 
     @staticmethod
-    async def check():
-        url = f"https://echteralsfake.me/update"
+    async def check() -> dict | None:
+        url = get_update_url()
         try:
-            response: Response = await clients.core.fetch(url=url, get_response=True)
+            response: Response = await clients.core.request(url=url)
             if response.status_code == 200:
-                json_stuff = response.json()
-                version = str(json_stuff["version"]).strip("latest - ")
+                update = response.json()
+                version = str(update["version"]).removeprefix("latest - ").strip()
 
-                if float(version) > float(__version__):
+                if CheckUpdates._version_parts(version) > CheckUpdates._version_parts(__version__):
                     logger.info(f"A new update is available -->: {version}")
+                    return update
 
                 else:
                     logger.info(f"Checked for updates... You are on the latest version :)")
@@ -95,31 +107,60 @@ class CheckUpdates:
             elif response.status_code == 530 or response.status_code == 502:
                 logger.error("Server is currently offline. Probably already fixing it :)")
 
-        except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
-            raise CheckUpdates
+        except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError) as error:
+            logger.warning("Could not check for updates: %s", error)
+        except (KeyError, TypeError, ValueError) as error:
+            logger.error("The update server returned invalid data: %s", error)
+        except Exception as error:
+            # Update checks are deliberately silent: a temporary outage should
+            # never prevent the application from starting.
+            logger.warning("Could not check for updates: %s", error)
+
+        return None
+
+    @staticmethod
+    def _version_parts(version: str) -> tuple[int, ...]:
+        """Return numeric version components without relying on float parsing."""
+        parts = [int(part) for part in re.findall(r"\d+", version)]
+        while len(parts) > 1 and parts[-1] == 0:
+            parts.pop()
+        return tuple(parts) or (0,)
 
 
-class AutoUpdater:
+class AutoUpdater(QObject):
     statusReport = Signal(str)
     updateProgress = Signal(int, int)
 
-    def __init__(self) -> None:
+    def __init__(self, parent: QObject | None = None) -> None:
+        super().__init__(parent)
         self.assets: dict = {}
 
-    def run(self):
+    async def run(self) -> None:
+        try:
+            await self._run()
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            logger.exception("Update failed")
+            self.statusReport.emit(f"Update failed: {error}")
+
+    async def _run(self) -> None:
         logger.info("Fetching release information...")
-        url = "https://echteralsfake.me/update"
-        response: Response = clients.core.fetch(url=url, get_response=True)
+        url = get_update_url()
+        self.statusReport.emit("Fetching release information...")
+        response: Response = await clients.core.request(url=url)
 
         if response.status_code == 200:
             self.assets = response.json()
             logger.info(f"Got Update Information for: {self.assets["version"]}")
 
-        elif response.status_code == 502 or response.status_code == 530 or response.status_code == 500:
-            logger.error("Server is currently unable to return the update information. Please try again later...")
-            self.statusReport.emit("Server is currently unable to return the update information. Please try again later...")
+        else:
+            logger.error("Update server returned HTTP %s", response.status_code)
+            self.statusReport.emit(
+                "Update failed: The server is currently unable to return update information. "
+                "Please try again later."
+            )
             return
-
 
         logger.info("Starting auto-update process...")
         os_arch = get_os_and_arch()
@@ -131,28 +172,29 @@ class AutoUpdater:
             return
 
         logger.info(f"Downloading update from: {download_url}")
+        self.statusReport.emit("Downloading update...")
 
         temp_dir = tempfile.gettempdir()
         filename = download_url.split("/")[-1]
         download_path = Path(temp_dir).joinpath(filename)
 
-        try:
-            clients.core.legacy_download(
-                url=download_url,
-                path=download_path,
-                callback=self.update_progress
-            )
-            logger.info("Download complete. Replacing binary.")
-            self.replace_binary(download_path)
-            logger.info("Update successful. Please restart the application.")
-            self.statusReport.error_signal.emit("Update successful! Please restart the application.")
-        except Exception as e:
-            logger.error(f"Update failed: {e}")
-            self.statusReport.emit(f"Update failed: {e}")
+        configuration = DownloadConfigRAW(
+            quality="best",
+            path=download_path,
+            callback=self.update_progress,
+        )
+        await clients.core.legacy_download(
+            url=download_url,
+            configuration=configuration,
+        )
+        logger.info("Download complete. Replacing binary.")
+        self.statusReport.emit("Download complete. Installing update...")
+        self.replace_binary(download_path)
+        logger.info("Update successful. Please restart the application.")
+        self.statusReport.emit("Update successful! Please restart the application.")
 
     def update_progress(self, current: int, total: int) -> None:
-        self.updateProgress.emit(current)
-        self.updateProgress.emit(total)
+        self.updateProgress.emit(current, total)
 
     def replace_binary(self, new_binary_path: Path) -> None:
         current_binary_path = get_original_executable_path()
@@ -185,4 +227,3 @@ del "%~f0"
             """)
         subprocess.Popen([updater_script_path], creationflags=subprocess.CREATE_NO_WINDOW)
         QCoreApplication.quit()
-
