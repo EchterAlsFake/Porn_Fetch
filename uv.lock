@@ -376,30 +376,15 @@ wheels = [
 [[package]]
 name = "eaf-base-api"
 version = "4.0.0"
-source = { editable = "../eaf_base_api" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cachetools" },
     { name = "curl-cffi" },
     { name = "tenacity" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "python_full_version >= '3.12' and extra == 'hls'" },
-    { name = "cachetools", specifier = ">=7.0.0" },
-    { name = "curl-cffi" },
-    { name = "m3u8", marker = "extra == 'hls'" },
-    { name = "tenacity", specifier = ">=9.1.2" },
-]
-provides-extras = ["hls"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy" },
-    { name = "pylint" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "types-m3u8" },
+sdist = { url = "https://files.pythonhosted.org/packages/77/70/90901a40caa829830338bdaa4746f8bddca0c952bda6f750241f3e255b90/eaf_base_api-4.0.0.tar.gz", hash = "sha256:451748ff0cf0908b419e17b5f1498ea3686881cca9a7a669d1b0dbfa094dfc55", size = 61971, upload-time = "2026-08-11T16:06:46.805Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/98/e24a237971b58d12932d3f2c23efe1c3acd5de3eecd3dd7961cbb75cf01c/eaf_base_api-4.0.0-py3-none-any.whl", hash = "sha256:45d28f489b16e4e122b015f8b6619949b6bd784f7e120a94cb457ac3d2492f51", size = 63539, upload-time = "2026-08-11T16:06:45.451Z" },
 ]
 
 [[package]]
@@ -676,7 +661,7 @@ requires-dist = [
     { name = "colorama" },
     { name = "cryptography", marker = "extra == 'dev'" },
     { name = "cryptography", marker = "extra == 'gui'" },
-    { name = "eaf-base-api", editable = "../eaf_base_api" },
+    { name = "eaf-base-api" },
     { name = "fake-useragent" },
     { name = "hue-shift", marker = "extra == 'cli'" },
     { name = "hue-shift", marker = "extra == 'dev'" },
@@ -702,20 +687,20 @@ requires-dist = [
     { name = "soupsieve" },
     { name = "truststore", marker = "extra == 'dev'" },
     { name = "typing-extensions" },
-    { name = "unofficial-api-for-beeg", editable = "../unofficial-api-for-beeg" },
-    { name = "unofficial-api-for-eporner", editable = "../unofficial-api-for-eporner" },
-    { name = "unofficial-api-for-hqporner", editable = "../unofficial-api-for-hqporner" },
-    { name = "unofficial-api-for-pornhub", editable = "../unofficial-api-for-pornhub" },
-    { name = "unofficial-api-for-porntrex", editable = "../unofficial-api-for-porntrex" },
-    { name = "unofficial-api-for-redtube", editable = "../unofficial-api-for-redtube" },
-    { name = "unofficial-api-for-spankbang", editable = "../unofficial-api-for-spankbang" },
-    { name = "unofficial-api-for-thumbzilla", editable = "../unofficial-api-for-thumbzilla" },
-    { name = "unofficial-api-for-tube8", editable = "../unofficial-api-for-tube8" },
-    { name = "unofficial-api-for-xfreehd", editable = "../unofficial-api-for-xfreehd" },
-    { name = "unofficial-api-for-xhamster", editable = "../unofficial-api-for-xhamster" },
-    { name = "unofficial-api-for-xnxx", editable = "../unofficial-api-for-xnxx" },
-    { name = "unofficial-api-for-xvideos", editable = "../unofficial-api-for-xvideos" },
-    { name = "unofficial-api-for-youporn", editable = "../unofficial-api-for-youporn" },
+    { name = "unofficial-api-for-beeg" },
+    { name = "unofficial-api-for-eporner" },
+    { name = "unofficial-api-for-hqporner" },
+    { name = "unofficial-api-for-pornhub" },
+    { name = "unofficial-api-for-porntrex" },
+    { name = "unofficial-api-for-redtube" },
+    { name = "unofficial-api-for-spankbang" },
+    { name = "unofficial-api-for-thumbzilla" },
+    { name = "unofficial-api-for-tube8" },
+    { name = "unofficial-api-for-xfreehd" },
+    { name = "unofficial-api-for-xhamster" },
+    { name = "unofficial-api-for-xnxx" },
+    { name = "unofficial-api-for-xvideos" },
+    { name = "unofficial-api-for-youporn" },
     { name = "urllib3" },
 ]
 provides-extras = ["gui", "cli", "dev", "av"]
@@ -1029,63 +1014,48 @@ wheels = [
 [[package]]
 name = "unofficial-api-for-beeg"
 version = "1.7"
-source = { editable = "../unofficial-api-for-beeg" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
+sdist = { url = "https://files.pythonhosted.org/packages/d9/0d/a11542d615530266b2e427627dcf73e8f8e98239b4f3c06477dfb10d3175/unofficial_api_for_beeg-1.7.tar.gz", hash = "sha256:97f5b7325083eafc166e32095ee388673d44005bc570daba1f38eb0d887d9bc6", size = 13156, upload-time = "2026-08-11T16:07:10.341Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ac/10/fdefcb13cb04b51195a33dc5fbf7d26cbc0932aeef3a96249a1f35e87048/unofficial_api_for_beeg-1.7-py3-none-any.whl", hash = "sha256:716f2a5e785e90912ba45e8a5ba9038a623246e01aa82f042a662f3314eaa421", size = 15184, upload-time = "2026-08-11T16:07:11.416Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-eporner"
 version = "2.4"
-source = { editable = "../unofficial-api-for-eporner" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "rich", marker = "extra == 'cli'" },
-    { name = "rich-argparse", marker = "extra == 'cli'" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/c7/a1/cd4f1ff7a98803758ed22a61542160e60d5351d2e3925d53cb809a193410/unofficial_api_for_eporner-2.4.tar.gz", hash = "sha256:bbe132d0b90a8304ddbfe370108c1e85264c3388864736f623d33de5a42a4082", size = 25468, upload-time = "2026-08-11T16:07:32.526Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/25/6a/8d744a333499b9999c58de8ffe045d16adc2d29e84282a9f4576f8170935/unofficial_api_for_eporner-2.4-py3-none-any.whl", hash = "sha256:a76a1e7c523caef39c5539f9545a531ed7c4babf7f511ed401b0513e8ebf9515", size = 27403, upload-time = "2026-08-11T16:07:33.552Z" },
 ]
-provides-extras = ["cli"]
 
 [[package]]
 name = "unofficial-api-for-hqporner"
 version = "2.5"
-source = { editable = "../unofficial-api-for-hqporner" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "rich", marker = "extra == 'cli'" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/ae/da/a3691c952463bc3eaf86e8dd28f571268e01182690806746ffe3bdd93bfb/unofficial_api_for_hqporner-2.5.tar.gz", hash = "sha256:44fe1edf6ad7e1dbec946ca8cf4c3336bed76a5087e7b92822e6ab9fcb5f2658", size = 24181, upload-time = "2026-08-11T16:07:56.298Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/02/65/7b4659ed0c51a3cda17809b65492def99fbff957765a4760e2f2dc23713d/unofficial_api_for_hqporner-2.5-py3-none-any.whl", hash = "sha256:0aa28ab552426c1da0076ddaec43247d3150520a4754ee34181cb2c114ecb304", size = 25171, upload-time = "2026-08-11T16:07:54.637Z" },
 ]
-provides-extras = ["cli"]
 
 [[package]]
 name = "unofficial-api-for-pornhub"
 version = "5.4.1"
-source = { editable = "../unofficial-api-for-pornhub" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1093,39 +1063,29 @@ dependencies = [
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "chompjs" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/45/73/e671dc649021499e26b7171355ee300504c68b41a6f89a2ad4c6adbfdca3/unofficial_api_for_pornhub-5.4.1.tar.gz", hash = "sha256:b8d00ed27cdbbe5e3bee45d237876fdf57db3be6bb145112a9623c8c3c9de614", size = 28053, upload-time = "2026-08-13T15:35:48.039Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/71/1d568fe27289d8a2ed80828e91f9f6aebc49baa978f5c625f263c45d1f71/unofficial_api_for_pornhub-5.4.1-py3-none-any.whl", hash = "sha256:7fc33236dd10eb1b5cfc77a9762470b90330d86ffb0e0f681ab0a032867339e9", size = 33539, upload-time = "2026-08-13T15:35:49.112Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-porntrex"
 version = "1.8"
-source = { editable = "../unofficial-api-for-porntrex" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "json5" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "json5" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/80/6f/895346e3f39cff92ea0ee62f94baa8f24db6e242fe7f3f2ada38099dd561/unofficial_api_for_porntrex-1.8.tar.gz", hash = "sha256:aa46a27ac33595a3d4a00d936ecd807c49b9205daa1346c27c82566b04382386", size = 21123, upload-time = "2026-08-11T16:11:24.215Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/09/6a/46d8064e342db1874f07a4696174b226cd7a1b0f1248a183b1948c893a6f/unofficial_api_for_porntrex-1.8-py3-none-any.whl", hash = "sha256:bab59e4159fa5d2156ab0e4c5a77588700507892ac975cf86fe8f2217d0bb1b7", size = 22368, upload-time = "2026-08-11T16:11:23.055Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-redtube"
 version = "1.4"
-source = { editable = "../unofficial-api-for-redtube" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1133,100 +1093,73 @@ dependencies = [
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "chompjs" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/a7/5d/22dd1e6ca02e78fd2b7164f1c250e037dbf9937ce6ca419aa97a5eea8bb4/unofficial_api_for_redtube-1.4.tar.gz", hash = "sha256:a3830d10f3b1c77d001e243047657e9ffdad5b795eeb2d5af170a1295cb2e2c1", size = 18962, upload-time = "2026-08-11T16:11:43.291Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/2e/253ed21ea01fb5cbb1652e93594242e5c55931f66bedbe19a44f9d8ce8d7/unofficial_api_for_redtube-1.4-py3-none-any.whl", hash = "sha256:6dff36490d275069156ef6a7aeef6ad76cbb588775e786d7b970bbc01928cc63", size = 23510, upload-time = "2026-08-11T16:11:44.547Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-spankbang"
-version = "2.3"
-source = { editable = "../unofficial-api-for-spankbang" }
+version = "2.4"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "python_full_version >= '3.10' and extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/3d/5b/1ec53e319e1561e467026d776273a41c8c35d2dcf56ce32dc49183b167aa/unofficial_api_for_spankbang-2.4.tar.gz", hash = "sha256:0c01ba3b308df7f4196faf6cb1d6577e42d9b8d9f8780a73ef4a9545c89499c3", size = 22329, upload-time = "2026-08-11T16:13:27.165Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/74/6b/ad502710fd37a577dcaac4e7bf18248d7dcba2b2dd0d1798a8479b692880/unofficial_api_for_spankbang-2.4-py3-none-any.whl", hash = "sha256:c5379e6f9d89df419563ce692efc17962940e0fb20c19e1a4c56984dd12a1373", size = 23497, upload-time = "2026-08-11T16:13:28.344Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-thumbzilla"
 version = "1.4"
-source = { editable = "../unofficial-api-for-thumbzilla" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/be/55/43e5422c131968490853e0b6970063eba7c953ede31d03274ce054f3fd2d/unofficial_api_for_thumbzilla-1.4.tar.gz", hash = "sha256:2576637279c7e183241df051889d14834542e326c42da9d9fa12311460ab4443", size = 17070, upload-time = "2026-08-11T16:13:49.751Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c3/7d/b950b107184c963a6caee755820bd6bb5534392fe3747f0b456af874623e/unofficial_api_for_thumbzilla-1.4-py3-none-any.whl", hash = "sha256:87b3647c0a7b7cf4f574564da392468bed0dd6a9a10e9000205cb97042f557e2", size = 21173, upload-time = "2026-08-11T16:13:50.935Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-tube8"
 version = "1.3"
-source = { editable = "../unofficial-api-for-tube8" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", editable = "../eaf_base_api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/9e/4a/f64b72486b407f7dbf45155549ee1701bc6d4a11fd0c9fb6446a6414ab9f/unofficial_api_for_tube8-1.3.tar.gz", hash = "sha256:8c7846724892abd459a2d5af56b98c748a11b45b8571b6a62b42f56a632decf4", size = 16862, upload-time = "2026-08-11T16:14:14.229Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8c/99/3a1f3b73b0fb3dbf70b4dd8a5114e4f4ad1f2f917db2e290cd40eafcecda/unofficial_api_for_tube8-1.3-py3-none-any.whl", hash = "sha256:abc113f3b621d5fc04fb0b3712ef5d198436e3c0d58d20c01a353811b5a3fc5c", size = 20709, upload-time = "2026-08-11T16:14:13.029Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xfreehd"
 version = "1.7"
-source = { editable = "../unofficial-api-for-xfreehd" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/35/18/dc8e9606980da825042f4e44dec2c93c2fd012958aa8fc3b79321deb2d1f/unofficial_api_for_xfreehd-1.7.tar.gz", hash = "sha256:0f2767d7e2db3a0fd000f937ad95af6105da5437e4ccb6be087dcb771f092f55", size = 19870, upload-time = "2026-08-11T16:14:33.532Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/86/3a9c5c5bc37c14484476a615588b05ef774e7569bfddc3b080fe6917a528/unofficial_api_for_xfreehd-1.7-py3-none-any.whl", hash = "sha256:811f896ef6c942fbe80e74702cea2da56bd9fb3d40de9631949ff7100bdaad0a", size = 20530, upload-time = "2026-08-11T16:14:32.079Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-xhamster"
 version = "2.5"
-source = { editable = "../unofficial-api-for-xhamster" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1234,80 +1167,55 @@ dependencies = [
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "chompjs" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/14/64/08dbdb77f881ee39a45e9d20e171663a7ea20f920077061296112a3a8ab1/unofficial_api_for_xhamster-2.5.tar.gz", hash = "sha256:2864f497c5cf44c781bb31c60840673c4d7d29224b9f60833890e25117b248ab", size = 23966, upload-time = "2026-08-11T16:14:50.768Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/a0/b8f4c98c4adc2c50c8553ca27038b16ee07da01edff8aa4db232f720f85d/unofficial_api_for_xhamster-2.5-py3-none-any.whl", hash = "sha256:8f59c15524e66c26406ae7490138e6e870e8f5f1c0152111a165d6b5c09fe70e", size = 26208, upload-time = "2026-08-11T16:14:49.667Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xnxx"
 version = "2.4"
-source = { editable = "../unofficial-api-for-xnxx" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/11/60/a387174eb1f9776af07a9750f9c1955a5479a7dc1c8813c6658a54dc5d1e/unofficial_api_for_xnxx-2.4.tar.gz", hash = "sha256:b2e6643b6167f94f578ad76407eaa00b82e5cd39568023e44041975952bd5f58", size = 21310, upload-time = "2026-08-11T16:15:10.37Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/32/5c/f7bacf5c8addedcfa04fedd60081651664ca562ac79b654c0737eb816188/unofficial_api_for_xnxx-2.4-py3-none-any.whl", hash = "sha256:bf5f1249ae0ecc28c3e10ba775c27c616f4a5943d812f2279b61afed01427f78", size = 22637, upload-time = "2026-08-11T16:15:08.948Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-xvideos"
 version = "2.5"
-source = { editable = "../unofficial-api-for-xvideos" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", specifier = ">=4.0.0" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/08/ea/15b2930c0bf01378ef4f43aeb71480132349e37a89ba27661bdacd24bdd5/unofficial_api_for_xvideos-2.5.tar.gz", hash = "sha256:e60042aaac1436d6f97abf6adf00422990aa98ffe8e002ed2c02e9881395bc7f", size = 24972, upload-time = "2026-08-11T16:15:31.671Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1e/0d/6c5e4dfbc8f1f185b9604b92df924af7c7a240196ad6c92405fb8acb96e6/unofficial_api_for_xvideos-2.5-py3-none-any.whl", hash = "sha256:9c8388f400e32d39e0dd0d938c3a0e509da1997f45e59330d9e72a71b87114e2", size = 27753, upload-time = "2026-08-11T16:15:30.424Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "unofficial-api-for-youporn"
 version = "1.8"
-source = { editable = "../unofficial-api-for-youporn" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'av'" },
-    { name = "curl-cffi" },
-    { name = "eaf-base-api", editable = "../eaf_base_api" },
-    { name = "m3u8" },
-    { name = "selectolax" },
+sdist = { url = "https://files.pythonhosted.org/packages/d9/17/e8d9bee641939d3a045dc2a6be1830fc563be98ba934e68ee8dfc1fb4ccd/unofficial_api_for_youporn-1.8.tar.gz", hash = "sha256:8d1e2f6394231ba28db9679cb9f03266114c0f7767dddfbcb0d7c09fd25529ec", size = 23383, upload-time = "2026-08-11T16:15:52.569Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/42/cb/3da3a9fc57fab124e5d039ef142e0dd378d2e02f193e64c171375cbd4717/unofficial_api_for_youporn-1.8-py3-none-any.whl", hash = "sha256:deb31c86974a96be2fad713e580b36d93f0892ac546b6071b1f92a0756fc9594", size = 24587, upload-time = "2026-08-11T16:15:53.789Z" },
 ]
-provides-extras = ["av"]
 
 [[package]]
 name = "urllib3"

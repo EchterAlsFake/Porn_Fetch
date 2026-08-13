@@ -113,6 +113,7 @@ from src.backend.sni_fragment_proxy_lite import FragmentingProxyConfig, Fragment
 from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, StrictFragmentingProxyProcess
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
+from src.backend.tests import run_smoke_tests
 from src.backend.download_manager import (
     DownloadManager,
     DownloadListModel,
@@ -232,7 +233,7 @@ class ProcessVideos(QObject):
         async for video in iterator:
             videos.append(video)  # This is very stupid, please don't use this „feature"!
 
-        return videos.reverse()
+        return reversed(videos)
 
     def process_filter(self, filters: VideoFilters, attributes: VideoObject) -> bool:
         # 1. Duration Filters
@@ -1048,6 +1049,11 @@ def main():
 
     # 1. Instantiate backend object
     backend_instance = Backend()
+
+    if "--test" in sys.argv:
+        exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
+        raise SystemExit(exit_code)
+
     database_bridge = DatabaseBridge(parent=engine)
     backend_instance.download_manager.video_updated.connect(database_bridge.on_video_downloaded)
     storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"

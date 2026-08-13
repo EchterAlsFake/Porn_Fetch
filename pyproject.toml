@@ -67,20 +67,3 @@ dev = ["rich", "hue_shift", "PySide6", "truststore", "pywin32; sys_platform == '
 av = ['av>=16.1.0; python_version >= "3.10" and platform_system == "Windows" and platform_machine == "AMD64"',
     'av>=16.1.0; python_version >= "3.10" and platform_system == "Darwin"  and (platform_machine == "x86_64" or platform_machine == "arm64")',
     'av>=16.1.0; python_version >= "3.10" and platform_system == "Linux"   and (platform_machine == "x86_64" or platform_machine == "aarch64")']
-
-[tool.uv.sources]
-unofficial-api-for-beeg = { path = "../unofficial-api-for-beeg", editable = true }
-unofficial-api-for-eporner = { path = "../unofficial-api-for-eporner", editable = true }
-unofficial-api-for-hqporner = { path = "../unofficial-api-for-hqporner", editable = true }
-unofficial-api-for-pornhub = { path = "../unofficial-api-for-pornhub", editable = true }
-unofficial-api-for-porntrex = { path = "../unofficial-api-for-porntrex", editable = true }
-unofficial-api-for-redtube = { path = "../unofficial-api-for-redtube", editable = true }
-unofficial-api-for-spankbang = { path = "../unofficial-api-for-spankbang", editable = true }
-unofficial-api-for-thumbzilla = { path = "../unofficial-api-for-thumbzilla", editable = true }
-unofficial-api-for-tube8 = { path = "../unofficial-api-for-tube8", editable = true }
-unofficial-api-for-xhamster = { path = "../unofficial-api-for-xhamster", editable = true }
-unofficial-api-for-xnxx = { path = "../unofficial-api-for-xnxx", editable = true }
-unofficial-api-for-xvideos = { path = "../unofficial-api-for-xvideos", editable = true }
-unofficial-api-for-youporn = { path = "../unofficial-api-for-youporn", editable = true }
-unofficial-api-for-xfreehd = { path = "../unofficial-api-for-xfreehd", editable = true }
-eaf-base-api = { path = "../eaf_base_api", editable = true }
