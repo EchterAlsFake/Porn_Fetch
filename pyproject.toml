@@ -1,9 +1,9 @@
 # Needed for UV Project management.
-# Porn Fetch is NOT published in PyPi!
+# Porn Fetch is NOT published on PyPi!
 
 [project]
 requires-python = ">=3.14"
-# 3.14+ is not supported, due to Qt limitations.
+# 3.15+ is not supported, due to Qt limitations.
 # This is ONLY for the GUI, CLI is different
 
 name = "Porn_Fetch"
@@ -52,7 +52,6 @@ dependencies = [
     "eaf-base-api",
     "browser-cookie3>=0.20.1",
     "asyncstdlib>=3.14.0",
-    "qt-material>=2.17",
     "unofficial-api-for-hqporner",
     "peewee>=4.3.0",
 ]

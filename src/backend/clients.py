@@ -66,7 +66,9 @@ from base_api import BaseCore, ScrapeResult, Cache
 from src.backend.errors import SomethingStupidHappened, MetadataWriteError
 from base_api.modules.logger import configure_app_logging
 from src.backend.download_manager import VideoObject
-from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
+from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, strip_title, \
+    normalize_quality_value
+
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     ph_Video | xn_Video | xv_Video | yp_Video | tu_Video | ph_Short |
@@ -384,8 +386,6 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     if isinstance(video, ph_Video):
         stuff = await video.author
         author = stuff.name
-
-
         length = video.duration
         tags = video.tags
         publish_date = video.publish_date
@@ -397,11 +397,12 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
-        thumbnail = video.thumbnail_url[0]
+        thumbnail = video.thumbnail
         video_id = video.title
 
     elif isinstance(video, xv_Video):
-        author = video.author.name
+        author = await video.get_author
+        author = author.name
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
@@ -409,9 +410,20 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.title
 
     elif isinstance(video, ep_Video):
-        author = video.author
+        _authors = []
+        authors = video.get_authors()
+        async for author in authors:
+            _authors.append(author.name)
+            print(f"Received: {author.name}")
+
+        author = "".join(_authors)
+        print(f"Author: {author}")
+
+        if not author:
+            author = video.uploader
+
         length = video.length_minutes
-        tags = ",".join([tag for tag in video.tags])
+        tags = ",".join(video.tags)
         publish_date = video.publish_date
         thumbnail = video.thumbnail
         video_id = video.video_id
@@ -419,7 +431,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     elif isinstance(video, yp_Video):
         stuff = await video.author(load_html=True)
         author = stuff.name
-        length = round(int(video.length) // 60)
+        length = video.length
         tags = ",".join(video.categories)
         thumbnail = video.thumbnail
         publish_date = video.publish_date
@@ -427,7 +439,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     elif isinstance(video, xh_Video):
         author = ",".join(video.pornstars)
-        length = video.length
+        length = video.duration
         tags = video.tags
         thumbnail = video.thumbnail
         publish_date = "Not available"
@@ -435,7 +447,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     elif isinstance(video, sp_Video):
         author = video.author
-        length = round(int(video.length) // 60)
+        length = video.length
         tags = ",".join(video.tags)
         thumbnail = video.thumbnail
         publish_date = video.length
@@ -443,7 +455,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     elif isinstance(video, bg_Video):
         author = "Not available"
-        length = round(int(video.duration // 60))
+        length = video.duration
         tags = "Not available"
         thumbnail = "Not available"
         publish_date = "Not available"
@@ -480,7 +492,15 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     else:
         raise SomethingStupidHappened
 
+    length = parse_length(length)
     qualities = await get_available_qualities(video)  # [144, 240, 360, ...]
+    print(f"Received Qualities: {qualities}")
+    print(f"Putting: {qualities[0]} in function")
+    print(f"Got: {normalize_quality_value(qualities[0])}")
+
+
+    qualities = [normalize_quality(quality) for quality in qualities]
+    print(qualities)
 
     # Normalize publish date into UTC datetime (optional extra field)
     publish_dt_utc = parse_publish_date(publish_date)
@@ -539,7 +559,8 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
         return download_url # Uhhh
 
     elif isinstance(video, ep_Video):
-        return video.direct_download_link(quality=quality, mode="h264") # Pls don't download AV1, thank you
+        # TODO
+        return video.get_direct_download_urls(quality=quality, mode="h264") # Pls don't download AV1, thank you
         # NO I won't spend half on hour to handle this edge case where one video on this whole platform might not have
         # A h264 stream bro
 
@@ -571,8 +592,10 @@ async def get_available_qualities(video: Any) -> List[int]:
 
     # ---- Legacy ----
     # Your legacy wrapper already exposes `video_qualities` as list[str]
-    if isinstance(video, ep_Video):
+    if isinstance(video, (ep_Video, xf_Video)):
         quals = video.video_qualities()
+        print(f"Qualities: {quals}")
+        return quals
 
     else:
         quals = getattr(video, "video_qualities", None)
@@ -759,177 +782,177 @@ def write_tags(path: str, data: VideoObject) -> bool:
     except Exception as e:
         raise MetadataWriteError(str(e))
 
-def parse_length(length: str | int, video_source: str | None = None) -> int | None | str:
-    # DO NOT TOUCH THIS!!!!!!!!!!!!!!!!!!!!!!
-
-    "Entirely written and copied from ChatGPT. My brain is not ready to fix that myself now, seriously..."
+def parse_length(
+    length: str | int | float | None,
+    video_source: str | None = None,
+) -> int | None | str:
     """
-    Parse a video length value and return its duration in minutes (rounded).
+    Parse a video duration and return its length in rounded minutes.
 
-    Notes:
-      - If length is already numeric (int/float), it is assumed to be in minutes.
-      - If length is a string:
-          * A string of the format "mm:ss" (e.g. "16:19") is parsed as minutes and seconds.
-          * A digits-only string is treated based on the source:
-              - If video_source contains "xnxx", then the value is already in minutes.
-              - If video_source contains "eporner" or "phub", then the value is in seconds.
-              - Otherwise, digits-only defaults to minutes.
-          * A string with a decimal point is assumed to be a minute value.
-          * If the string contains "min" (case-insensitive), the numeric part is extracted and used as minutes.
-          * Otherwise, we try to extract components from mixed formats such as "59m 40s" or "24 seconds".
-      - If no valid duration is found (or if the video source provides no length information),
-        returns "Not available".
+    Supported examples:
+        16:19
+        123
+        12.5
+        9 Min
+        247min 02sec
+        59m 40s
+        1h 2m 3s
+        24 seconds
+        PT00H11M42S
+        PT11M42S
+        PT2H
+        PT42S
 
-    In all conversions, if the computed minute value is > 0 but rounds to 0, returns 1 instead.
+    Digits-only strings depend on `video_source`:
+        - xnxx:    value is interpreted as minutes
+        - eporner: value is interpreted as seconds
+        - phub:    value is interpreted as seconds
+        - other:   value is interpreted as minutes
+
+    Returns:
+        int:
+            Rounded duration in minutes.
+            Positive durations below 0.5 minutes are returned as 1.
+
+        "Not available":
+            If no duration was provided.
+
+        None:
+            If the duration format could not be parsed.
     """
-    if length in (None, "", "Not available"):
+
+    def rounded_minutes(minutes: float) -> int:
+        """Round minutes, but keep any positive duration at at least 1 minute."""
+        result = round(minutes)
+        return max(1, result) if minutes > 0 else 0
+
+    if length is None or length == "" or length == "Not available":
         return "Not available"
 
-    try:
-        # If already numeric (non-string) assume minutes.
-        if isinstance(length, (int, float)):
-            # Ensure that a small positive value returns at least 1 minute.
-            result = round(length)
-            return result if result > 0 else (1 if length > 0 else 0)
+    # Already numeric -> assume minutes.
+    if isinstance(length, (int, float)):
+        return rounded_minutes(float(length))
 
-        # Work with a stripped string.
-        s = str(length).strip()
-        s_lower = s.lower()
+    s = str(length).strip()
+    s_lower = s.lower()
 
-        # -------------------------------
-        # Case 1: "mm:ss" format (e.g. "16:19")
-        if ":" in s:
-            parts = s.split(":")
-            if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
-                minutes = int(parts[0])
-                seconds = int(parts[1])
-                total = minutes + seconds / 60.0
-                result = round(total)
-                if result == 0 and total > 0:
-                    result = 1
-                return result
+    if not s:
+        return "Not available"
 
-        # -------------------------------
-        # Case 2: Digits-only string.
-        if s.isdigit():
-            num = int(s)
-            if video_source:
-                src = str(video_source).lower()
-                if "xnxx" in src:
-                    # xnxx provides minutes directly.
-                    return num
-                elif "eporner" in src or "phub" in src:
-                    # These sites give seconds; convert to minutes.
-                    result = round(num / 60)
-                    if result == 0 and num > 0:
-                        result = 1
-                    return result
-                else:
-                    # Default: assume minutes.
-                    return num
-            else:
-                # Without a source hint, default to minutes.
-                return num
+    # ---------------------------------------------------------
+    # ISO 8601 duration:
+    # PT00H11M42S
+    # PT11M42S
+    # PT2H
+    # PT42S
+    # PT1H2.5M
+    iso_match = re.fullmatch(
+        r"PT"
+        r"(?:(?P<hours>\d+(?:\.\d+)?)H)?"
+        r"(?:(?P<minutes>\d+(?:\.\d+)?)M)?"
+        r"(?:(?P<seconds>\d+(?:\.\d+)?)S)?",
+        s,
+        flags=re.IGNORECASE,
+    )
 
-        # -------------------------------
-        # Case 3: Value with a decimal point (assumed to be minutes).
-        if '.' in s:
-            try:
-                val = float(s)
-                result = round(val)
-                if result == 0 and val > 0:
-                    result = 1
-                return result
-            except ValueError:
-                pass
+    if iso_match and any(iso_match.groupdict().values()):
+        hours = float(iso_match.group("hours") or 0)
+        minutes = float(iso_match.group("minutes") or 0)
+        seconds = float(iso_match.group("seconds") or 0)
 
-        # -------------------------------
-        # NEW Case 4a: "<value>min <value>sec/seconds" (e.g. "247min 02sec")
-        # Supports: min|mins|minute|minutes and sec|secs|second|seconds (any case), spaces optional.
-        m = re.search(
-            r'(?i)\b(\d+(?:\.\d+)?)\s*(?:min|mins|minute|minutes)\s*(\d+(?:\.\d+)?)\s*(?:sec|secs|second|seconds)\b',
-            s
+        total_minutes = (
+            hours * 60
+            + minutes
+            + seconds / 60
         )
-        if m:
-            minutes = float(m.group(1))
-            seconds = float(m.group(2))
-            total = minutes + seconds / 60.0
-            result = round(total)
-            if result == 0 and total > 0:
-                result = 1
-            return result
 
-        # -------------------------------
-        # Case 4: Contains "min" (e.g. "9 Min")
-        if "min" in s_lower:
-            # Extract only the first contiguous number near 'min' to avoid picking up trailing seconds.
-            # This keeps existing behavior for strings like "17 min".
-            # If seconds are present, the regex case above will have returned already.
-            num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
-            if num_str:
-                try:
-                    val = float(num_str)
-                    result = round(val)
-                    if result == 0 and val > 0:
-                        result = 1
-                    return result
-                except ValueError:
-                    pass
+        return rounded_minutes(total_minutes)
 
-        # -------------------------------
-        # Case 5: Mixed time units such as "59m 40s" or "1h 2m 3s"
-        # (Extended to accept long-form units too.)
-        time_units = {
-            's': 1 / 60, 'sec': 1 / 60, 'secs': 1 / 60, 'second': 1 / 60, 'seconds': 1 / 60,
-            'm': 1, 'min': 1, 'mins': 1, 'minute': 1, 'minutes': 1,
-            'h': 60, 'hr': 60, 'hrs': 60, 'hour': 60, 'hours': 60
-        }
-        total_minutes = 0.0
-        for part in s.split():
-            # Extract numeric (or decimal) part and letter part.
-            value_str = ''.join(ch for ch in part if ch.isdigit() or ch == '.')
-            unit_str = ''.join(ch for ch in part if ch.isalpha()).lower()
-            if value_str and unit_str in time_units:
-                try:
-                    total_minutes += float(value_str) * time_units[unit_str]
-                except ValueError:
-                    continue
-        if total_minutes > 0:
-            result = round(total_minutes)
-            if result == 0 and total_minutes > 0:
-                result = 1
-            return result
+    # ---------------------------------------------------------
+    # Colon format:
+    # 16:19 -> 16 minutes, 19 seconds
+    #
+    # Also handles:
+    # 1:02:03 -> 1 hour, 2 minutes, 3 seconds
+    parts = s.split(":")
 
-        # -------------------------------
-        # Case 6: Formats like "24 seconds"
-        if s_lower.endswith("second") or s_lower.endswith("seconds") or s_lower.endswith("sec") or s_lower.endswith(
-                "secs"):
-            num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
-            if num_str:
-                try:
-                    sec = float(num_str)
-                    result = round(sec / 60)
-                    if result == 0 and sec > 0:
-                        result = 1
-                    return result
-                except ValueError:
-                    pass
+    if len(parts) in (2, 3) and all(part.isdigit() for part in parts):
+        if len(parts) == 2:
+            minutes, seconds = map(int, parts)
+            total_minutes = minutes + seconds / 60
 
-        # -------------------------------
-        # Case 7: Formats ending with "min" (e.g. "17 min")
-        if s_lower.endswith("min") or s_lower.endswith("mins") or s_lower.endswith("minute") or s_lower.endswith(
-                "minutes"):
-            # Pull the leading number(s)
-            m_only = re.search(r'(\d+(?:\.\d+)?)', s)
-            if m_only:
-                val = float(m_only.group(1))
-                result = round(val)
-                if result == 0 and val > 0:
-                    result = 1
-                return result
+        else:
+            hours, minutes, seconds = map(int, parts)
+            total_minutes = hours * 60 + minutes + seconds / 60
 
-        # If nothing matches, return None.
-        return None
+        return rounded_minutes(total_minutes)
 
-    except Exception:
-        return 0
+    # ---------------------------------------------------------
+    # Digits only.
+    if s.isdigit():
+        value = int(s)
+        source = (video_source or "").lower()
+
+        if "eporner" in source or "phub" in source:
+            return rounded_minutes(value / 60)
+
+        # xnxx and unknown sources are interpreted as minutes.
+        return value
+
+    # ---------------------------------------------------------
+    # Plain decimal -> assume minutes.
+    #
+    # Examples:
+    # 12.5
+    # 0.25
+    if re.fullmatch(r"\d+(?:\.\d+)?", s):
+        return rounded_minutes(float(s))
+
+    # ---------------------------------------------------------
+    # Human-readable units.
+    #
+    # Examples:
+    # 59m 40s
+    # 1h 2m 3s
+    # 247min 02sec
+    # 24 seconds
+    # 17 min
+    # 1 hour 24 minutes
+    unit_multipliers = {
+        # Hours
+        "h": 60,
+        "hr": 60,
+        "hrs": 60,
+        "hour": 60,
+        "hours": 60,
+
+        # Minutes
+        "m": 1,
+        "min": 1,
+        "mins": 1,
+        "minute": 1,
+        "minutes": 1,
+
+        # Seconds
+        "s": 1 / 60,
+        "sec": 1 / 60,
+        "secs": 1 / 60,
+        "second": 1 / 60,
+        "seconds": 1 / 60,
+    }
+
+    matches = re.findall(
+        r"(\d+(?:\.\d+)?)\s*"
+        r"(hours?|hrs?|h|minutes?|mins?|m|seconds?|secs?|s)\b",
+        s_lower,
+    )
+
+    if matches:
+        total_minutes = sum(
+            float(value) * unit_multipliers[unit]
+            for value, unit in matches
+        )
+
+        return rounded_minutes(total_minutes)
+
+    return None

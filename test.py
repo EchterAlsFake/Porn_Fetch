@@ -3,6 +3,9 @@ import shutil
 import sys
 import tempfile
 from pathlib import Path
+
+from base_api import BaseCore
+
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
 from src.backend.config import app_settings
 from src.backend.theme_manager import ThemeManager
@@ -34,6 +37,9 @@ elif core_style == "Universal": # Universal is just bad and shit, don't use it l
 app = QGuiApplication(sys.argv)
 app.setOrganizationName("EchterAlsFake")
 app.setApplicationName("Porn Fetch")
+app_font = app.font()
+app_font.setPointSize(app_settings.font_size)
+app.setFont(app_font)
 
 # Ensure Fusion and other native styles use the correct color scheme
 from PySide6.QtCore import Qt
@@ -438,7 +444,7 @@ class ProcessVideos(QObject):
 
 
 class Backend(QObject):
-    showMessage = Signal(str, str, str)
+    showMessage = Signal(str)
     downloadsChanged = Signal()
     updateAvailable = Signal("QVariantMap")
     updateProgress = Signal(int, int)
@@ -463,6 +469,9 @@ class Backend(QObject):
         self.auto_updater = AutoUpdater(self)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
+        self.showMessage.connect(self.handle_message)
+        app_settings.restartRequired.connect(self.setting_requires_restart)
+        app_settings.moveDatabase.connect(self.database_changed)
         self._is_shutting_down = False
         self.ensure_temp()
 
@@ -564,7 +573,7 @@ class Backend(QObject):
             name="auto-update",
         )
 
-    @Slot(bool)
+    @Slot(int)
     def toggle_user_interface_language(self, value: int) -> None:
         ...
 
@@ -582,9 +591,24 @@ class Backend(QObject):
 
     @Slot(str, str)
     def database_changed(self, old_path: str, new_path: str) -> None:
-        os.makedirs(new_path, exist_ok=True)
-        shutil.move(old_path, new_path)
-        ui_popup("Your old database (if existent) has been moved into the new path.")
+        old_database = Path(old_path).expanduser()
+        new_database = Path(new_path).expanduser()
+
+        if old_database == new_database:
+            return
+
+        new_database.parent.mkdir(parents=True, exist_ok=True)
+        if not old_database.is_file():
+            return
+
+        if new_database.exists():
+            ui_popup(
+                "The selected database already exists, so the old database was not overwritten."
+            )
+            return
+
+        shutil.move(str(old_database), str(new_database))
+        ui_popup("Your old database has been moved to the new path.")
 
     @Slot()
     def cancel_fetching(self):

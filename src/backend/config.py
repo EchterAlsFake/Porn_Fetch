@@ -7,7 +7,7 @@ each other.
 # config.py
 from pathlib import Path
 from PySide6.QtGui import QGuiApplication
-from PySide6.QtCore import QObject, Signal, QSettings, Property
+from PySide6.QtCore import QObject, Property, QSettings, QUrl, Signal, Slot
 
 __license__ = "GPL 3"
 __version__ = "3.9"
@@ -33,11 +33,11 @@ class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
     languageChanged = Signal(int)
-    sniProxyChanged = Signal(object)
-    fontSizeChanged = Signal(object)
+    sniProxyChanged = Signal(str)
+    fontSizeChanged = Signal(int)
     themeChanged = Signal(int)
     reloadClients = Signal(object)
-    restartRequired = Signal(object)
+    restartRequired = Signal()
     databaseChanged = Signal(str)
     moveDatabase = Signal(str, str)
 
@@ -50,50 +50,50 @@ class SettingsManager(QObject):
     networkLoggingChanged = Signal(bool)
 
     # These Signals are not needed yet, but who knows
-    logLevelChanged = Signal(object)
-    supressErrorsChanged = Signal(object)
-    pagesConcurrencyChanged = Signal(object)
-    videosConcurrencyChanged = Signal(object)
-    processingDelayChanged = Signal(object)
-    timeoutChanged = Signal(object)
-    retriesChanged = Signal(object)
-    parallelDownloadsChanged = Signal(object)
-    networkDelayChanged = Signal(object)
-    downloadWorkersChanged = Signal(object)
-    outputPathChanged = Signal(object)
-    skipExistingFilesChanged = Signal(object)
-    writeMetadataChanged = Signal(object)
-    resultLimitChanged = Signal(object)
-    strictEnforcementChanged = Signal(object)
-    modelVideosChanged = Signal(object)
-    localeChanged = Signal(object)
-    trackVideosChanged = Signal(object)
-    speedLimitChanged = Signal(object)
-    responseCacheSizeChanged = Signal(object)
-    responseCacheTTLChanged = Signal(object)
-    segmentCacheSizeChanged = Signal(object)
-    segmentCacheTTLChanged = Signal(object)
-    requestInitialRetryDelayChanged = Signal(object)
-    requestRetryMaxDelayChanged = Signal(object)
-    requestRetryMultiplierChanged = Signal(object)
-    requestRetryJitterChanged = Signal(object)
-    trustEnvironmentChanged = Signal(object)
-    debugModeChanged = Signal(object)
-    httpVersionChanged = Signal(object)
-    impersonationChanged = Signal(object)
-    customJA3Changed = Signal(object)
-    interfaceChanged = Signal(object)
-    encryptedCHChanged = Signal(object)
-    dnsOverHTTPSChanged = Signal(object)
-    enableTorChanged = Signal(object)
-    enableTorServerRoutingChanged = Signal(object)
-    dnsServerChanged = Signal(object)
-    fallbackDNSChanged = Signal(object)
-    sniObfuscationChanged = Signal(object)
-    sniObfuscationLiteChanged = Signal(object)
-    sniObfuscationStrictChanged = Signal(object)
-    proxyChanged = Signal(object)
-    proxySSLVerificationChanged = Signal(object)
+    logLevelChanged = Signal(int)
+    supressErrorsChanged = Signal(bool)
+    pagesConcurrencyChanged = Signal(int)
+    videosConcurrencyChanged = Signal(int)
+    processingDelayChanged = Signal(int)
+    timeoutChanged = Signal(int)
+    retriesChanged = Signal(int)
+    parallelDownloadsChanged = Signal(int)
+    networkDelayChanged = Signal(int)
+    downloadWorkersChanged = Signal(int)
+    outputPathChanged = Signal(str)
+    skipExistingFilesChanged = Signal(bool)
+    writeMetadataChanged = Signal(bool)
+    resultLimitChanged = Signal(int)
+    strictEnforcementChanged = Signal(bool)
+    modelVideosChanged = Signal(int)
+    localeChanged = Signal(str)
+    trackVideosChanged = Signal(bool)
+    speedLimitChanged = Signal(float)
+    responseCacheSizeChanged = Signal(int)
+    responseCacheTTLChanged = Signal(int)
+    segmentCacheSizeChanged = Signal(int)
+    segmentCacheTTLChanged = Signal(int)
+    requestInitialRetryDelayChanged = Signal(float)
+    requestRetryMaxDelayChanged = Signal(float)
+    requestRetryMultiplierChanged = Signal(float)
+    requestRetryJitterChanged = Signal(float)
+    trustEnvironmentChanged = Signal(bool)
+    debugModeChanged = Signal(bool)
+    httpVersionChanged = Signal(str)
+    impersonationChanged = Signal(str)
+    customJA3Changed = Signal(str)
+    interfaceChanged = Signal(str)
+    encryptedCHChanged = Signal(bool)
+    dnsOverHTTPSChanged = Signal(bool)
+    enableTorChanged = Signal(bool)
+    enableTorServerRoutingChanged = Signal(bool)
+    dnsServerChanged = Signal(str)
+    fallbackDNSChanged = Signal(str)
+    sniObfuscationChanged = Signal(bool)
+    sniObfuscationLiteChanged = Signal(bool)
+    sniObfuscationStrictChanged = Signal(bool)
+    proxyChanged = Signal(str)
+    proxySSLVerificationChanged = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -116,8 +116,9 @@ class SettingsManager(QObject):
             7: 540,
             8: 480,
             9: 360,
-            10: 240,
-            11: 144
+            10: 250,
+            11: 240,
+            12: 144
         }
         self.mappings_ui_language = {
             0: "system",
@@ -167,6 +168,26 @@ class SettingsManager(QObject):
         if val is None:
             return default
         return str(val)
+
+    @staticmethod
+    def _absolute_path(path: str) -> Path:
+        return Path(path).expanduser().resolve()
+
+    @Slot(str, result=QUrl)
+    def path_to_file_url(self, path: str) -> QUrl:
+        """Convert a persisted local path into a URL accepted by Qt dialogs."""
+        return QUrl.fromLocalFile(str(self._absolute_path(path)))
+
+    @Slot(str, result=QUrl)
+    def parent_directory_url(self, path: str) -> QUrl:
+        """Return the containing folder URL for a persisted file path."""
+        return QUrl.fromLocalFile(str(self._absolute_path(path).parent))
+
+    @Slot(QUrl, result=str)
+    def local_path_from_url(self, file_url: QUrl) -> str:
+        """Convert a URL selected by a Qt dialog back into a local path."""
+        local_path = file_url.toLocalFile()
+        return str(Path(local_path)) if local_path else ""
 
 
     # Video related
@@ -260,7 +281,7 @@ class SettingsManager(QObject):
         if val != self.track_videos:
             self._settings.setValue("Video/track_videos", val)
             self.trackVideosChanged.emit(val)
-            self.restartRequired.emit(val)
+            self.restartRequired.emit()
 
     @Property(str, notify=databaseChanged)
     def database_path(self) -> str:
@@ -274,7 +295,7 @@ class SettingsManager(QObject):
 
             self._settings.setValue("Video/database_path", val)
             self.databaseChanged.emit(val)
-            self.restartRequired.emit(val)
+            self.restartRequired.emit()
             self.moveDatabase.emit(current_path, val)
 
     # Performance related
@@ -428,7 +449,7 @@ class SettingsManager(QObject):
     def request_initial_retry_delay(self, val):
         if val != self.request_initial_retry_delay:
             self._settings.setValue("Performance/request_initial_retry_delay", val)
-            self.requestInitialRetryDelayChanged.emit()
+            self.requestInitialRetryDelayChanged.emit(val)
             self.reloadClients.emit(val)
 
     @Property(float, notify=requestRetryMaxDelayChanged)
@@ -461,7 +482,7 @@ class SettingsManager(QObject):
     def request_retry_jitter(self, val):
         if val != self.request_retry_jitter:
             self._settings.setValue("Performance/request_retry_jitter", val)
-            self.requestRetryJitterChanged.emit()
+            self.requestRetryJitterChanged.emit(val)
             self.reloadClients.emit(val)
 
     # System / Misc related
@@ -517,9 +538,9 @@ class SettingsManager(QObject):
             self.debugModeChanged.emit(val)
             self.reloadClients.emit(val)
 
-    @Property(str, notify=logLevelChanged) # Can't be changed dynamically
-    def log_level(self) -> str:
-        return self.get_str("Misc/log_level", "0")
+    @Property(int, notify=logLevelChanged) # Can't be changed dynamically
+    def log_level(self) -> int:
+        return self.get_int("Misc/log_level", 0)
 
     @log_level.setter
     def log_level(self, val):
@@ -725,7 +746,7 @@ class SettingsManager(QObject):
         if val != self.font_size:
             self._settings.setValue("UI/font_size", val)
 
-            self.fontSizeChanged.emit()
+            self.fontSizeChanged.emit(val)
             self._apply_global_font(val)
 
     def _apply_global_font(self, size: int):

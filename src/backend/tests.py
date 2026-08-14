@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from src.backend.download_manager import VideoFilters
 from PySide6.QtTest import QAbstractItemModelTester, QSignalSpy
 
-ALLOWED_QUALITIES = {144, 240, 360, 480, 540, 720, 1080, 1440, 2160}
+ALLOWED_QUALITIES = {144, 240, 250, 360, 480, 540, 720, 1080, 1440, 2160}
 
 def normalize_quality(value) -> int | None:
     """

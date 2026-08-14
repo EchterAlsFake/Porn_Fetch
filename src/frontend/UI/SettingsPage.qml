@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
 import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Controls.impl
@@ -8,6 +9,64 @@ import QtQuick.Controls.Material
 Pane {
     font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
+
+    component DecimalSpinBox: SpinBox {
+        property int decimals: 2
+        property real realFrom: 0
+        property real realTo: 100
+        property real realStepSize: 0.1
+        property real realValue: 0
+        readonly property real factor: Math.pow(10, decimals)
+
+        signal realValueModified(real newValue)
+
+        editable: true
+        from: Math.round(realFrom * factor)
+        to: Math.round(realTo * factor)
+        stepSize: Math.max(1, Math.round(realStepSize * factor))
+        value: Math.round(realValue * factor)
+
+        textFromValue: function(value, locale) {
+            return Number(value / factor).toLocaleString(locale, "f", decimals)
+        }
+
+        valueFromText: function(text, locale) {
+            return Math.round(Number.fromLocaleString(locale, text) * factor)
+        }
+
+        onValueModified: realValueModified(value / factor)
+    }
+
+    Dialogs.FolderDialog {
+        id: outputFolderDialog
+
+        title: qsTr("Choose video output folder")
+        currentFolder: appSettings.path_to_file_url(appSettings.output_path)
+
+        onAccepted: {
+            var selectedPath = appSettings.local_path_from_url(selectedFolder)
+            if (selectedPath !== "")
+                appSettings.output_path = selectedPath
+        }
+    }
+
+    Dialogs.FileDialog {
+        id: databaseFileDialog
+
+        title: qsTr("Choose or create a database")
+        fileMode: Dialogs.FileDialog.SaveFile
+        nameFilters: [qsTr("SQLite databases (*.db)"), qsTr("All files (*)")]
+        defaultSuffix: "db"
+        acceptLabel: qsTr("Use Database")
+        currentFolder: appSettings.parent_directory_url(appSettings.database_path)
+        currentFile: appSettings.path_to_file_url(appSettings.database_path)
+
+        onAccepted: {
+            var selectedPath = appSettings.local_path_from_url(selectedFile)
+            if (selectedPath !== "")
+                appSettings.database_path = selectedPath
+        }
+    }
 
     background: Rectangle {
         color: "transparent"
@@ -150,7 +209,7 @@ Pane {
                                 ComboBox {
                                     id: defaultQualityCombo
                                     Layout.fillWidth: true
-                                    model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "240p", "144p"]
+                                    model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "250p", "240p", "144p"]
                                     currentIndex: appSettings.quality
 
                                     function qualityRequiresLicense(index) {
@@ -210,7 +269,7 @@ Pane {
                                     Layout.fillWidth: true
                                     model: ["Both", "Uploaded Videos", "Featured Videos"]
                                     currentIndex: appSettings.model_videos
-                                    onCurrentIndexChanged: appSettings.model_videos = currentIndex
+                                    onActivated: appSettings.model_videos = currentIndex
                                 }
 
                                 // --- Row 3: Content Language ---
@@ -243,9 +302,9 @@ Pane {
                                         ListElement { label: "🇺🇦 Українська"; locale: "uk-UA" }
                                         ListElement { label: "🇨🇳 中文"; locale: "zh-CN" }
                                     }
-                                    Component.onCompleted: {
+                                    currentIndex: {
                                         var savedIndex = indexOfValue(appSettings.locale)
-                                        currentIndex = savedIndex >= 0 ? savedIndex : indexOfValue("en-US")
+                                        return savedIndex >= 0 ? savedIndex : indexOfValue("en-US")
                                     }
                                     onActivated: appSettings.locale = currentValue
                                 }
@@ -299,7 +358,8 @@ Pane {
                                     }
                                     Button {
                                         Layout.fillWidth: false
-                                        text: "Select Path"
+                                        text: qsTr("Choose Folder…")
+                                        onClicked: outputFolderDialog.open()
                                     }
                                 }
 
@@ -354,12 +414,13 @@ Pane {
                                         id: databasePathInput
                                         placeholderText: "Enter the path for the database (.db file)"
                                         Layout.fillWidth: true
-                                        text: appSettings.output_path
+                                        text: appSettings.database_path
                                         onEditingFinished: appSettings.database_path = text
                                     }
                                     Button {
                                         Layout.fillWidth: false
-                                        text: "Select Path"
+                                        text: qsTr("Choose Database…")
+                                        onClicked: databaseFileDialog.open()
                                     }
                                 }
                             }
@@ -467,12 +528,12 @@ Pane {
                             Label {
                                 text: "Speed Limit (MB/s):"
                             }
-                            SpinBox {
+                            DecimalSpinBox {
                                 Layout.fillWidth: true
-                                editable: true
-                                to: 100
-                                value: appSettings.speed_limit
-                                onValueModified: appSettings.speed_limit = value
+                                realTo: 100
+                                realStepSize: 0.25
+                                realValue: appSettings.speed_limit
+                                onRealValueModified: (newValue) => appSettings.speed_limit = newValue
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -558,45 +619,41 @@ Pane {
                                 Label {
                                     text: "Request Initial Retry Delay"
                                 }
-                                SpinBox {
+                                DecimalSpinBox {
                                     Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.request_initial_retry_delay
-                                    onValueModified: appSettings.request_initial_retry_delay = value
+                                    realTo: 20000
+                                    realValue: appSettings.request_initial_retry_delay
+                                    onRealValueModified: (newValue) => appSettings.request_initial_retry_delay = newValue
                                 }
 
                                 Label {
                                     text: "Request Retry Max Delay"
                                 }
-                                SpinBox {
+                                DecimalSpinBox {
                                     Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.request_retry_max_delay
-                                    onValueModified: appSettings.request_retry_max_delay= value
+                                    realTo: 20000
+                                    realValue: appSettings.request_retry_max_delay
+                                    onRealValueModified: (newValue) => appSettings.request_retry_max_delay = newValue
                                 }
 
                                 Label {
                                     text: "Request Retry Multiplier"
                                 }
-                                SpinBox {
+                                DecimalSpinBox {
                                     Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.request_retry_multiplier
-                                    onValueModified: appSettings.request_retry_multiplier = value
+                                    realTo: 20000
+                                    realValue: appSettings.request_retry_multiplier
+                                    onRealValueModified: (newValue) => appSettings.request_retry_multiplier = newValue
                                 }
 
                                 Label {
                                     text: "Request Retry Jitter"
                                 }
-                                SpinBox {
+                                DecimalSpinBox {
                                     Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.request_retry_jitter
-                                    onValueModified: appSettings.request_retry_jitter = value
+                                    realTo: 20000
+                                    realValue: appSettings.request_retry_jitter
+                                    onRealValueModified: (newValue) => appSettings.request_retry_jitter = newValue
                                 }
                             }
                             // Empty spaces for layout balance where the right side has no items
@@ -620,7 +677,7 @@ Pane {
                         GridLayout {
                             columnSpacing: 15
                             columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
-                            width: scrollviewPerformance.availableWidth
+                            width: scrollviewSettings.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
 
@@ -677,12 +734,16 @@ Pane {
                                 onToggled: appSettings.debug_mode = checked
                             }
 
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: AppStrings.logLevel
+                            }
                             ComboBox {
-                                    Layout.fillWidth: true
-                                    model: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-                                    currentIndex: appSettings.log_level
-                                    onCurrentIndexChanged: appSettings.log_level = currentIndex
-                                }
+                                Layout.fillWidth: true
+                                model: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+                                currentIndex: appSettings.log_level
+                                onActivated: appSettings.log_level = currentIndex
+                            }
                                 
                             HelpButton {
                                 Layout.fillWidth: false
@@ -726,7 +787,7 @@ Pane {
                                 placeholderText: "e.g., eth0, wlan0, tun0, 10.6.3.20"
                                 Layout.fillWidth: true
                                 text: appSettings.interface
-                                onEditingFinished: appSettings.interace = text
+                                onEditingFinished: appSettings.interface = text
                             }
                         }
                     }
@@ -742,7 +803,7 @@ Pane {
                         GridLayout {
                             columnSpacing: 15
                             columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
-                            width: scrollviewPerformance.availableWidth
+                            width: scrollviewPrivacy.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
 
@@ -784,8 +845,8 @@ Pane {
                             CheckBox {
                                 text: "Enable Tor Integration"
                                 Layout.fillWidth: true
-                                checked: appSettings.sni_obfuscation
-                                onToggled: appSettings.sni_obfuscation = checked
+                                checked: appSettings.enable_tor
+                                onToggled: appSettings.enable_tor = checked
                             }
 
                             HelpButton {
@@ -795,8 +856,8 @@ Pane {
                             CheckBox {
                                 text: "Route License / Update checking through .onion domain"
                                 Layout.fillWidth: true
-                                checked: appSettings.sni_obfuscation
-                                onToggled: appSettings.sni_obfuscation = checked
+                                checked: appSettings.enable_tor_server_routing
+                                onToggled: appSettings.enable_tor_server_routing = checked
                             }
 
                             HelpButton {
@@ -843,7 +904,7 @@ Pane {
                                     text: "Lite SNI Obfuscation"
                                     Layout.fillWidth: false
                                     checked: appSettings.sni_obfuscation_lite
-                                    onToggled: appSettings.sni_obfuscation_life = checked
+                                    onToggled: appSettings.sni_obfuscation_lite = checked
                                 }
                                 RadioButton {
                                     text: "Strict SNI Obfuscation (Requires Admin / root rights)"
@@ -892,7 +953,7 @@ Pane {
                                 Layout.fillWidth: true
                                 model: ["System", "English", "German", "Chinese", "French"]
                                 currentIndex: appSettings.language
-                                onCurrentIndexChanged: appSettings.language = currentIndex
+                                onActivated: appSettings.language = currentIndex
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -913,8 +974,7 @@ Pane {
                             ComboBox {
                                 Layout.fillWidth: true
                                 model: ["Material", "Fusion", "Universal", "Windows"]
-                                // Automatically select the saved style
-                                Component.onCompleted: currentIndex = find(appSettings.core_style)
+                                currentIndex: Math.max(0, find(appSettings.core_style))
                                 onActivated: appSettings.core_style = currentText
                             }
 
@@ -941,7 +1001,7 @@ Pane {
                                     ListElement { text: "Orange"; value: "#ff9800" }
                                     ListElement { text: "Purple"; value: "#9c27b0" }
                                 }
-                                Component.onCompleted: currentIndex = indexOfValue(appSettings.accent_color)
+                                currentIndex: Math.max(0, indexOfValue(appSettings.accent_color))
                                 onActivated: appSettings.accent_color = currentValue
                             }
 
