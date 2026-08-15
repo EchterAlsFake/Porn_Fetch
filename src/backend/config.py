@@ -92,12 +92,16 @@ class SettingsManager(QObject):
     sniObfuscationChanged = Signal(bool)
     sniObfuscationLiteChanged = Signal(bool)
     sniObfuscationStrictChanged = Signal(bool)
+    sniObfuscationStrictProfileChanged = Signal(str)
     proxyChanged = Signal(str)
     proxySSLVerificationChanged = Signal(bool)
 
     def __init__(self):
         super().__init__()
         self._settings = QSettings(__org_name__, __app_name__)
+        self._normalize_sni_obfuscation_mode()
+        # Runtime-only URL owned by SNIProxyManager; never persist ephemeral ports.
+        self.active_sni_proxy_url: str | None = None
         self.log_level_map: dict[int, str] = {
             0: "DEBUG",
             1: "INFO",
@@ -168,6 +172,54 @@ class SettingsManager(QObject):
         if val is None:
             return default
         return str(val)
+
+    def _normalize_sni_obfuscation_mode(self) -> None:
+        """Repair mode pairs written by older two-way QML toggle handlers."""
+
+        enabled = self.get_bool("Privacy/sni_obfuscation", False)
+        lite = self.get_bool("Privacy/sni_obfuscation_lite", False)
+        strict = self.get_bool("Privacy/sni_obfuscation_strict", False)
+        changed = False
+
+        if lite and strict:
+            # Strict could only become true through an explicit user choice,
+            # whereas Lite was historically left behind by the QML handler.
+            self._settings.setValue("Privacy/sni_obfuscation_lite", False)
+            changed = True
+        elif enabled and not (lite or strict):
+            self._settings.setValue("Privacy/sni_obfuscation_lite", True)
+            changed = True
+
+        if changed:
+            self._settings.sync()
+
+    def _set_sni_obfuscation_mode(self, mode: str) -> None:
+        if mode not in {"lite", "strict"}:
+            raise ValueError(f"Unknown SNI obfuscation mode: {mode!r}")
+
+        lite = mode == "lite"
+        strict = mode == "strict"
+        lite_changed = lite != self.sni_obfuscation_lite
+        strict_changed = strict != self.sni_obfuscation_strict
+        if not (lite_changed or strict_changed):
+            return
+
+        # Persist both halves before notifying QML so observers can never see
+        # an intermediate state with both modes enabled (or neither enabled).
+        self._settings.setValue("Privacy/sni_obfuscation_lite", lite)
+        self._settings.setValue("Privacy/sni_obfuscation_strict", strict)
+        self._settings.sync()
+        if lite_changed:
+            self.sniObfuscationLiteChanged.emit(lite)
+        if strict_changed:
+            self.sniObfuscationStrictChanged.emit(strict)
+        self.restartRequired.emit()
+
+    @Slot(str)
+    def set_sni_obfuscation_mode(self, mode: str) -> None:
+        """Atomically select the Lite or Strict SNI implementation from QML."""
+
+        self._set_sni_obfuscation_mode(mode)
 
     @staticmethod
     def _absolute_path(path: str) -> Path:
@@ -677,6 +729,9 @@ class SettingsManager(QObject):
     @sni_obfuscation.setter
     def sni_obfuscation(self, val):
         if val != self.sni_obfuscation:
+            if val and not (self.sni_obfuscation_lite or self.sni_obfuscation_strict):
+                self._settings.setValue("Privacy/sni_obfuscation_lite", True)
+                self.sniObfuscationLiteChanged.emit(True)
             self._settings.setValue("Privacy/sni_obfuscation", val)
             self.sniObfuscationChanged.emit(val)
             self.restartRequired.emit()
@@ -687,9 +742,13 @@ class SettingsManager(QObject):
 
     @sni_obfuscation_lite.setter
     def sni_obfuscation_lite(self, val):
-        if val != self.sni_obfuscation_lite:
-            self._settings.setValue("Privacy/sni_obfuscation_lite", val)
-            self.sniObfuscationLiteChanged.emit(val)
+        val = bool(val)
+        if val:
+            self._set_sni_obfuscation_mode("lite")
+        elif self.sni_obfuscation_lite:
+            self._settings.setValue("Privacy/sni_obfuscation_lite", False)
+            self._settings.sync()
+            self.sniObfuscationLiteChanged.emit(False)
             self.restartRequired.emit()
 
     @Property(bool, notify=sniObfuscationStrictChanged)
@@ -698,10 +757,26 @@ class SettingsManager(QObject):
 
     @sni_obfuscation_strict.setter
     def sni_obfuscation_strict(self, val):
-        if val != self.sni_obfuscation_strict:
-            self._settings.setValue("Privacy/sni_obfuscation_strict", val)
-            self.sniObfuscationStrictChanged.emit(val)
+        val = bool(val)
+        if val:
+            self._set_sni_obfuscation_mode("strict")
+        elif self.sni_obfuscation_strict:
+            self._settings.setValue("Privacy/sni_obfuscation_strict", False)
+            self._settings.sync()
+            self.sniObfuscationStrictChanged.emit(False)
             self.restartRequired.emit()
+
+    @Property(str, notify=sniObfuscationStrictProfileChanged)
+    def sni_obfuscation_strict_profile(self) -> str:
+        return self.get_str("Privacy/sni_obfuscation_strict_profile", "Strict Fragmentation")
+
+    @sni_obfuscation_strict_profile.setter
+    def sni_obfuscation_strict_profile(self, val):
+        if val != self.sni_obfuscation_strict_profile:
+            self._settings.setValue("Privacy/sni_obfuscation_strict_profile", val)
+            self.sniObfuscationStrictProfileChanged.emit(val)
+            self.restartRequired.emit()
+
 
     @Property(str, notify=proxyChanged)
     def proxy(self) -> str:
@@ -724,6 +799,23 @@ class SettingsManager(QObject):
             self._settings.setValue("Privacy/proxy_ssl_verification", val)
             self.proxySSLVerificationChanged.emit(val)
             self.reloadClients.emit(val)
+
+    def apply_proxy_settings(self, proxy_url: str, verify_ssl: bool) -> None:
+        """Atomically persist proxy settings and rebuild clients exactly once."""
+
+        proxy_changed = proxy_url != self.proxy
+        verification_changed = verify_ssl != self.proxy_ssl_verification
+        if not (proxy_changed or verification_changed):
+            return
+        self._settings.setValue("Privacy/proxy", proxy_url)
+        self._settings.setValue("Privacy/proxy_ssl_verification", verify_ssl)
+        if proxy_changed:
+            # SNIProxyManager receives this before reloadClients and rebuilds its
+            # upstream chain so the new local URL is ready for fresh sessions.
+            self.proxyChanged.emit(proxy_url)
+        if verification_changed:
+            self.proxySSLVerificationChanged.emit(verify_ssl)
+        self.reloadClients.emit(proxy_url)
 
     # UI Settings
 

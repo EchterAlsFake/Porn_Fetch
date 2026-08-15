@@ -900,17 +900,36 @@ Pane {
                                 columnSpacing: 15
                                 rowSpacing: 15
 
+                                ButtonGroup {
+                                    id: sniModeGroup
+                                }
+
                                 RadioButton {
                                     text: "Lite SNI Obfuscation"
                                     Layout.fillWidth: false
+                                    enabled: appSettings.sni_obfuscation
+                                    ButtonGroup.group: sniModeGroup
                                     checked: appSettings.sni_obfuscation_lite
-                                    onToggled: appSettings.sni_obfuscation_lite = checked
+                                    onClicked: appSettings.set_sni_obfuscation_mode("lite")
                                 }
                                 RadioButton {
                                     text: "Strict SNI Obfuscation (Requires Admin / root rights)"
                                     Layout.fillWidth: false
+                                    enabled: appSettings.sni_obfuscation
+                                    ButtonGroup.group: sniModeGroup
                                     checked: appSettings.sni_obfuscation_strict
-                                    onToggled: appSettings.sni_obfuscation_strict = checked
+                                    onClicked: appSettings.set_sni_obfuscation_mode("strict")
+                                }
+                                ComboBox {
+                                    id: strictProfileCombo
+                                    Layout.fillWidth: true
+                                    visible: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
+                                    enabled: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
+                                    model: ["Strict Fragmentation", "Strict Reverse", "Strict Desync"]
+                                    currentIndex: Math.max(0, model.indexOf(appSettings.sni_obfuscation_strict_profile))
+                                    onActivated: {
+                                        appSettings.sni_obfuscation_strict_profile = currentText
+                                    }
                                 }
                             }
                             HelpButton {

@@ -54,6 +54,7 @@ dependencies = [
     "asyncstdlib>=3.14.0",
     "unofficial-api-for-hqporner",
     "peewee>=4.3.0",
+    "rich-argparse>=1.8.0",
 ]
 
 

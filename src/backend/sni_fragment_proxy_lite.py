@@ -89,6 +89,11 @@ from dataclasses import dataclass
 from typing import Final, Iterable, Optional, Protocol
 from urllib.parse import unquote, urlsplit
 
+try:
+    from src.backend.tls_client_hello import TLSClientHelloStreamFragmenter
+except (ImportError, ModuleNotFoundError):
+    from tls_client_hello import TLSClientHelloStreamFragmenter
+
 __all__ = [
     "FragmentingProxyConfig",
     "FragmentingProxyProcess",
@@ -227,13 +232,15 @@ class FragmentingProxyProcess:
     before creating/refreshing curl-cffi sessions and stop it after those
     sessions have been closed or replaced.
 
-    The ``spawn`` start method is used deliberately on every platform so the
-    behavior is consistent with Windows and macOS. Therefore, call ``start``
-    from code protected by ``if __name__ == "__main__":``.
+    The helper uses ``spawn`` to avoid directly forking a multithreaded Qt
+    process. Call ``start`` from code protected by
+    ``if __name__ == "__main__":`` and keep GUI creation out of imported code.
     """
 
     def __init__(self, config: FragmentingProxyConfig | None = None) -> None:
         self.config = (config or FragmentingProxyConfig()).validated()
+        # Spawn avoids an unsafe direct fork of Qt threads. It imports __main__,
+        # so the application also guards GUI creation in multiprocessing children.
         self._ctx = mp.get_context("spawn")
         self._process: mp.Process | None = None
         self._stop_event: object | None = None
@@ -850,8 +857,8 @@ class FragmentingProxyServer:
                 max_header_bytes=self.config.max_header_bytes,
             )
         else:
-            fragmenter = _FirstDataFragmenter(
-                split_at=self.config.split_at,
+            fragmenter = TLSClientHelloStreamFragmenter(
+                fallback_split_at=self.config.split_at,
                 split_delay=self.config.split_delay,
             )
 

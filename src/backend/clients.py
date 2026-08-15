@@ -68,6 +68,7 @@ from base_api.modules.logger import configure_app_logging
 from src.backend.download_manager import VideoObject
 from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, strip_title, \
     normalize_quality_value
+from curl_cffi.const import CurlOpt
 
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
@@ -97,6 +98,8 @@ _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
 logger = configure_app_logging(logger_name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
+_retired_sessions: list[Any] = []
+_session_cleanup_tasks: set[asyncio.Task[None]] = set()
 
 DEFAULT_CONTENT_LOCALE = "en-US"
 SUPPORTED_CONTENT_LOCALES: Dict[str, str] = {
@@ -238,8 +241,11 @@ def refresh_clients() -> None:
     config.request_delay = app_settings.network_delay
     config.timeout = app_settings.timeout
     config.max_bandwidth_mb = app_settings.speed_limit
-    config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or app_settings.proxy or None
-    config.http_version = app_settings.http_version
+    active_sni_proxy = getattr(app_settings, "active_sni_proxy_url", None)
+    config.proxy = active_sni_proxy or app_settings.proxy or None
+    # Both SNI proxy implementations are TCP-only. Never allow HTTP/3/QUIC to
+    # silently bypass the local proxy when obfuscation is enabled.
+    config.http_version = "v2" if active_sni_proxy else app_settings.http_version
     config.dns_over_https = app_settings.dns_server if app_settings.dns_over_https else None
     config.impersonation = app_settings.impersonation
     config.custom_ja3 = app_settings.custom_ja3 if app_settings.custom_ja3 else None
@@ -248,7 +254,9 @@ def refresh_clients() -> None:
     config.max_workers_download = app_settings.download_workers
     config.videos_concurrency = app_settings.videos_concurrency
     config.pages_concurrency = app_settings.pages_concurrency
-    config.interface = app_settings.interface if app_settings.interface else None
+    # With the local proxy enabled curl connects to loopback. The proxy manager
+    # applies the selected interface/source address to its Internet-facing socket.
+    config.interface = None if active_sni_proxy else (app_settings.interface or None)
     locale_headers, locale_cookies = generate_locale_headers_and_cookies()
     config.locale = locale_headers["Accept-Language"]
     config.cookies = locale_cookies.copy()
@@ -285,6 +293,7 @@ def refresh_clients() -> None:
 
     for c in cores_to_update:
         old_session = c.session
+        c.session = None
         c.cache = Cache(c.configuration)
         c.default_headers.update(locale_headers)
         c.initialize_session()
@@ -295,6 +304,7 @@ def refresh_clients() -> None:
                 c.session.headers.update(old_session.headers)
             except Exception as e:
                 logger.warning(f"Couldn't copy cookies/headers during session refresh: {e}")
+            _retired_sessions.append(old_session)
 
         # Language preferences must win over values copied from the old session.
         if c.session is not None:
@@ -302,8 +312,56 @@ def refresh_clients() -> None:
             for cookie_name in locale_cookies:
                 c.session.cookies.delete(cookie_name)
             c.session.cookies.update(locale_cookies)
+            if hasattr(CurlOpt, "ECH"):
+                c.session.curl_options[CurlOpt.ECH] = (
+                    b"true" if app_settings.encrypted_ch else b"false"
+                )
 
     logger.debug("Applied in-place clients!")
+    schedule_retired_session_cleanup()
+
+
+async def close_retired_sessions() -> None:
+    """Close sessions replaced by :func:`refresh_clients`."""
+
+    sessions = list(dict.fromkeys(_retired_sessions))
+    _retired_sessions.clear()
+    for session in sessions:
+        try:
+            await session.close()
+        except Exception:
+            logger.exception("Could not close a retired network session")
+
+
+def schedule_retired_session_cleanup() -> asyncio.Task[None] | None:
+    """Schedule cleanup when a Qt/asyncio loop is currently running."""
+
+    if not _retired_sessions:
+        return None
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return None
+    task = loop.create_task(close_retired_sessions(), name="close-retired-network-sessions")
+    _session_cleanup_tasks.add(task)
+    task.add_done_callback(_session_cleanup_tasks.discard)
+    return task
+
+
+async def close_all_clients() -> None:
+    """Close current and replaced sessions during application shutdown."""
+
+    if _session_cleanup_tasks:
+        await asyncio.gather(*tuple(_session_cleanup_tasks), return_exceptions=True)
+    await close_retired_sessions()
+    unique_cores = set(cores)
+    unique_cores.add(core)
+    for client in (
+        ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
+        yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
+    ):
+        unique_cores.add(client.core)
+    await asyncio.gather(*(item.close() for item in unique_cores), return_exceptions=True)
 
 
 async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:

@@ -49,9 +49,11 @@ Administrator/root privileges are required. Python 3.10+.
 import argparse
 import asyncio
 import base64
+import copy
 import contextlib
 import dataclasses
 import ipaddress
+import itertools
 import logging
 import multiprocessing as mp
 import os
@@ -67,7 +69,13 @@ from dataclasses import dataclass
 from typing import Final, Iterable, Optional, Protocol
 from urllib.parse import unquote, urlsplit
 
+try:
+    from src.backend.tls_client_hello import TLSClientHelloStreamFragmenter
+except (ImportError, ModuleNotFoundError):
+    from tls_client_hello import TLSClientHelloStreamFragmenter
+
 __all__ = [
+    "StrictDesyncConfig",
     "StrictFragmentingProxyConfig",
     "StrictFragmentingProxyProcess",
     "StrictFragmentingProxyServer",
@@ -113,6 +121,16 @@ class UpstreamConnectError(ConnectionError):
 
 
 @dataclass(frozen=True, slots=True)
+class StrictDesyncConfig:
+    """Settings for the optional, intentionally invalid ClientHello decoy."""
+
+    mode: str = "seq_ack"
+    sequence_offset: int = 10_000
+    acknowledgement_offset: int = 66_000
+    fake_sni: str = "www.example.com"
+
+
+@dataclass(frozen=True, slots=True)
 class StrictFragmentingProxyConfig:
     """Configuration shared with the proxy child process.
 
@@ -135,8 +153,10 @@ class StrictFragmentingProxyConfig:
     listen_host: str = "127.0.0.1"
     listen_port: int = 8080
     split_at: int = 2
+    split_delay: float = 0.010
     plaintext_http_ports: tuple[int, ...] = DEFAULT_HTTP_PORTS
     reverse_fragments: bool = False
+    desync_config: StrictDesyncConfig | None = None
     max_segment_payload: int = 1200
     backend_priority: int = 100
     capture_start_timeout: float = 12.0
@@ -161,6 +181,8 @@ class StrictFragmentingProxyConfig:
             raise ValueError("listen_port must be between 0 and 65535")
         if self.split_at <= 0:
             raise ValueError("split_at must be greater than zero")
+        if self.split_delay < 0:
+            raise ValueError("split_delay must not be negative")
         if self.max_segment_payload < 0:
             raise ValueError("max_segment_payload must not be negative")
         if self.max_segment_payload and self.max_segment_payload < self.split_at:
@@ -185,6 +207,33 @@ class StrictFragmentingProxyConfig:
             raise ValueError("read_size must be at least 1024 bytes")
         if self.max_header_bytes < 4096:
             raise ValueError("max_header_bytes must be at least 4096 bytes")
+
+        if self.desync_config is not None:
+            desync = self.desync_config
+            if desync.mode != "seq_ack":
+                raise ValueError("desync mode must be 'seq_ack'")
+            if not 1 <= desync.sequence_offset <= 0xFFFFFFFF:
+                raise ValueError("desync sequence_offset must be between 1 and 2^32-1")
+            if not 1 <= desync.acknowledgement_offset <= 0xFFFFFFFF:
+                raise ValueError(
+                    "desync acknowledgement_offset must be between 1 and 2^32-1"
+                )
+            try:
+                fake_sni = desync.fake_sni.encode("idna").decode("ascii")
+            except UnicodeError as exc:
+                raise ValueError("desync fake_sni must be a valid DNS hostname") from exc
+            labels = fake_sni.rstrip(".").split(".")
+            if (
+                not fake_sni
+                or len(fake_sni) > 253
+                or any(not label or len(label) > 63 for label in labels)
+            ):
+                raise ValueError("desync fake_sni must be a valid DNS hostname")
+            if fake_sni != desync.fake_sni:
+                return dataclasses.replace(
+                    self,
+                    desync_config=dataclasses.replace(desync, fake_sni=fake_sni),
+                ).validated()
 
         ports = tuple(dict.fromkeys(self.plaintext_http_ports))
         for port in ports:
@@ -232,13 +281,15 @@ class StrictFragmentingProxyProcess:
     before creating/refreshing curl-cffi sessions and stop it after those
     sessions have been closed or replaced.
 
-    The ``spawn`` start method is used deliberately on every platform so the
-    behavior is consistent with Windows and macOS. Therefore, call ``start``
-    from code protected by ``if __name__ == "__main__":``.
+    The helper uses ``spawn`` to avoid directly forking a multithreaded Qt
+    process. Call ``start`` from code protected by
+    ``if __name__ == "__main__":`` and keep GUI creation out of imported code.
     """
 
     def __init__(self, config: StrictFragmentingProxyConfig | None = None) -> None:
         self.config = (config or StrictFragmentingProxyConfig()).validated()
+        # Spawn avoids an unsafe direct fork of Qt threads. It imports __main__,
+        # so the application also guards GUI creation in multiprocessing children.
         self._ctx = mp.get_context("spawn")
         self._process: mp.Process | None = None
         self._stop_event: object | None = None
@@ -414,11 +465,14 @@ class _StrictFlowPolicy:
         split_at: int,
         plaintext_http: bool,
         max_segment_payload: int,
+        desync_config: StrictDesyncConfig | None = None,
     ) -> None:
         self.split_at = split_at
         self.plaintext_http = plaintext_http
         self.max_segment_payload = max_segment_payload
+        self.desync_config = desync_config
         self.first_data_seen = False
+        self.desync_injected = False
         self._boundaries: set[int] = set()
 
     def split_offsets(self, seq_num: int, payload: bytes) -> list[int]:
@@ -519,13 +573,20 @@ class _StrictPacketBackend:
         self._pydivert = None
         self._divert_class = None
         self._tasks: dict[_FlowTuple, asyncio.Task[None]] = {}
+        self._allocated_priorities: set[int] = set()
         self._closed = False
         self._validate_platform()
 
     def prepare(self) -> None:
         """Load the native backend before the proxy announces readiness."""
+        system = platform.system().lower()
+        if system == "linux" and hasattr(os, "geteuid") and os.geteuid() != 0:
+            raise StrictBackendUnavailable(
+                "Strict mode requires root privileges on Linux. Start Porn Fetch "
+                "with sudo, or select Lite mode."
+            )
         self._load()
-        if platform.system().lower() == "windows":
+        if system == "windows":
             try:
                 import ctypes
                 if not bool(ctypes.windll.shell32.IsUserAnAdmin()):
@@ -600,9 +661,10 @@ class _StrictPacketBackend:
         if key in self._tasks:
             raise StrictFlowRegistrationError(f"Flow already registered: {key}")
 
+        priority = self._allocate_priority()
         ready: asyncio.Future[None] = asyncio.get_running_loop().create_future()
         task = asyncio.create_task(
-            self._capture_flow(key, ready),
+            self._capture_flow(key, ready, priority),
             name=f"strict-flow-{key.src_port}-{key.dst_port}",
         )
         self._tasks[key] = task
@@ -615,6 +677,21 @@ class _StrictPacketBackend:
             self._tasks.pop(key, None)
             raise
         return _StrictFlowGuard(self, key)
+
+    def _allocate_priority(self) -> int:
+        """Reserve a unique WinDivert/TC priority for one active flow."""
+        base = self.config.backend_priority
+        candidates = itertools.chain(
+            range(base, -30001, -1),
+            range(30000, base, -1),
+        )
+        for priority in candidates:
+            if priority not in self._allocated_priorities:
+                self._allocated_priorities.add(priority)
+                return priority
+        raise StrictFlowRegistrationError(
+            "No packet-divert priorities remain for another strict flow"
+        )
 
     def _task_done(self, key: _FlowTuple, task: asyncio.Task[None]) -> None:
         self._tasks.pop(key, None)
@@ -644,6 +721,7 @@ class _StrictPacketBackend:
         self,
         key: _FlowTuple,
         ready: asyncio.Future[None],
+        priority: int,
     ) -> None:
         assert self._divert_class is not None
         filter_string = _build_exact_flow_filter(key)
@@ -655,25 +733,29 @@ class _StrictPacketBackend:
             split_at=self.config.split_at,
             plaintext_http=key.logical_target_port in self.config.plaintext_http_ports,
             max_segment_payload=self.config.max_segment_payload,
+            desync_config=self.config.desync_config,
         )
 
         try:
             diverter = self._divert_class(
                 filter_string,
-                priority=self.config.backend_priority,
+                priority=priority,
                 **kwargs,
             )
             async with diverter:
-                if not ready.done():
-                    ready.set_result(None)
-                async for packet in diverter:
-                    await _process_strict_packet(
-                        diverter,
-                        packet,
-                        policy,
-                        flow=key,
-                        reverse=self.config.reverse_fragments,
-                    )
+                try:
+                    if not ready.done():
+                        ready.set_result(None)
+                    async for packet in diverter:
+                        await _process_strict_packet(
+                            diverter,
+                            packet,
+                            policy,
+                            flow=key,
+                            reverse=self.config.reverse_fragments,
+                        )
+                finally:
+                    _prepare_linux_diverter_close(diverter)
         except asyncio.CancelledError:
             if not ready.done():
                 ready.cancel()
@@ -687,6 +769,24 @@ class _StrictPacketBackend:
                 )
             else:
                 raise
+        finally:
+            self._allocated_priorities.discard(priority)
+
+
+def _prepare_linux_diverter_close(diverter: object) -> None:
+    """Work around PyDivert 4 passing attach-only fields to bpf_tc_detach.
+
+    libbpf populates ``prog_fd`` and ``prog_id`` during attachment but rejects
+    both fields during detachment. PyDivert currently reuses the populated
+    options structure, causing ``-EINVAL`` and stale TC filters. Clear only
+    those two documented attach-only inputs immediately before ``__aexit__``.
+    """
+    if platform.system().lower() != "linux":
+        return
+    implementation = getattr(diverter, "_impl", None)
+    for _hook, options in tuple(getattr(implementation, "_hooks", ())):
+        options.prog_fd = 0
+        options.prog_id = 0
 
 
 def _flow_tuple_from_writer(
@@ -720,6 +820,77 @@ def _is_windows_arm64(machine: str | None = None) -> bool:
         os.environ.get("PROCESSOR_ARCHITEW6432", "").lower(),
     }
     return bool(values & {"arm64", "aarch64"})
+
+
+def _generate_decoy_client_hello(fake_sni: str) -> bytes:
+    sni_bytes = fake_sni.encode("ascii")
+    sni_len = len(sni_bytes)
+
+    random_bytes = os.urandom(32)
+    session_id = os.urandom(32)
+
+    ciphers = b"\x13\x01\x13\x02\x13\x03\xc0\x2b\xc0\x2f\xc0\x2c\xc0\x30\xcc\xa9\xcc\xa8\xc0\x13\xc0\x14\x00\x9c\x00\x9d\x00\x2f\x00\x35"
+    ciphers_len = len(ciphers)
+
+    sni_ext_data = (
+        b"\x00\x00" +
+        (sni_len + 5).to_bytes(2, "big") +
+        (sni_len + 3).to_bytes(2, "big") +
+        b"\x00" +
+        sni_len.to_bytes(2, "big") +
+        sni_bytes
+    )
+
+    extensions = sni_ext_data + b"\x00\x0b\x00\x02\x01\x00"
+    ext_len = len(extensions)
+
+    hello_data = (
+        b"\x03\x03" +
+        random_bytes +
+        b"\x20" + session_id +
+        ciphers_len.to_bytes(2, "big") + ciphers +
+        b"\x01\x00" +
+        ext_len.to_bytes(2, "big") + extensions
+    )
+
+    record = (
+        b"\x16\x03\x01" +
+        (len(hello_data) + 4).to_bytes(2, "big") +
+        b"\x01" +
+        len(hello_data).to_bytes(3, "big") +
+        hello_data
+    )
+
+    return record
+
+
+async def _inject_desync_decoy(
+    diverter: object,
+    packet: object,
+    config: StrictDesyncConfig,
+) -> None:
+    """Send a cloned ClientHello outside the receiver's TCP window.
+
+    A stateless listener may parse the decoy, while a conforming endpoint drops
+    it because both TCP sequence-space values are deliberately stale. The real
+    packet is never mutated here, so injection failure cannot damage the flow.
+    """
+
+    decoy = copy.copy(packet)
+    tcp = getattr(decoy, "tcp", None)
+    if tcp is None:
+        raise TypeError("captured packet has no TCP header")
+    decoy.payload = _generate_decoy_client_hello(config.fake_sni)
+    tcp.seq_num = (int(tcp.seq_num) - config.sequence_offset) & 0xFFFFFFFF
+    tcp.ack_num = (
+        int(tcp.ack_num) - config.acknowledgement_offset
+    ) & 0xFFFFFFFF
+    tcp.psh = True
+    tcp.fin = False
+    tcp.syn = False
+    if hasattr(decoy, "recalculate_checksums"):
+        decoy.recalculate_checksums()
+    await diverter.send_async(decoy)  # type: ignore[attr-defined]
 
 
 def _build_exact_flow_filter(key: _FlowTuple) -> str:
@@ -786,6 +957,13 @@ async def _process_strict_packet(
         await diverter.send_async(packet)  # type: ignore[attr-defined]
         return
 
+    LOG.debug(
+        "Splitting strict flow %s payload at offsets %s (payload length %d)",
+        flow,
+        offsets,
+        len(payload),
+    )
+
     boundaries = [0, *offsets, len(payload)]
     segments = [
         (boundaries[index], boundaries[index + 1])
@@ -798,6 +976,25 @@ async def _process_strict_packet(
     original_psh = bool(getattr(tcp, "psh", False))
     original_fin = bool(getattr(tcp, "fin", False))
     original_syn = bool(getattr(tcp, "syn", False))
+
+    if (
+        policy.desync_config is not None
+        and not policy.desync_injected
+        and not policy.plaintext_http
+        and payload.startswith(b"\x16\x03")
+    ):
+        policy.desync_injected = True
+        try:
+            await _inject_desync_decoy(diverter, packet, policy.desync_config)
+            LOG.debug(
+                "Injected strict-flow ClientHello decoy for %s with SNI %r",
+                flow,
+                policy.desync_config.fake_sni,
+            )
+        except Exception:
+            # Decoy injection is additive. Preserve connectivity and continue
+            # sending all genuine fragments if the platform cannot clone/send it.
+            LOG.warning("Failed to inject DPI desynchronization decoy", exc_info=True)
 
     sent = False
     try:
@@ -1301,10 +1498,15 @@ class StrictFragmentingProxyServer:
         target_port: int,
     ) -> None:
         del target_port
+        fragmenter = TLSClientHelloStreamFragmenter(
+            fallback_split_at=self.config.split_at,
+            split_delay=self.config.split_delay,
+        )
         client_to_upstream = asyncio.create_task(
-            _relay_raw(
+            _relay_fragmented(
                 client_reader,
                 upstream_writer,
+                fragmenter,
                 read_size=self.config.read_size,
                 idle_timeout=self.config.idle_timeout,
             ),
@@ -1349,6 +1551,26 @@ async def _relay_raw(
             if not data:
                 break
             await _write_bytes(writer, data)
+        await _write_eof(writer)
+    except (ConnectionError, asyncio.TimeoutError):
+        pass
+
+
+async def _relay_fragmented(
+    reader: asyncio.StreamReader,
+    writer: asyncio.StreamWriter,
+    fragmenter: TLSClientHelloStreamFragmenter,
+    *,
+    read_size: int,
+    idle_timeout: float,
+) -> None:
+    try:
+        while True:
+            data = await _read_some(reader, read_size, idle_timeout)
+            if not data:
+                await fragmenter.finish(writer)
+                break
+            await fragmenter.feed(data, writer)
         await _write_eof(writer)
     except (ConnectionError, asyncio.TimeoutError):
         pass
@@ -1672,7 +1894,14 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--split-at", type=int, default=2)
+    parser.add_argument("--split-delay-ms", type=float, default=10.0)
     parser.add_argument("--reverse", action="store_true")
+    parser.add_argument(
+        "--desync",
+        action="store_true",
+        help="send one wrong-sequence/wrong-ACK ClientHello decoy per TLS flow",
+    )
+    parser.add_argument("--fake-sni", default="www.example.com")
     parser.add_argument("--max-segment-payload", type=int, default=1200)
     parser.add_argument("--backend-priority", type=int, default=100)
     parser.add_argument("--linux-interface", action="append", dest="linux_interfaces")
@@ -1711,7 +1940,11 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         listen_host=args.host,
         listen_port=args.port,
         split_at=args.split_at,
-        reverse_fragments=args.reverse,
+        split_delay=args.split_delay_ms / 1000.0,
+        reverse_fragments=args.reverse or args.desync,
+        desync_config=(
+            StrictDesyncConfig(fake_sni=args.fake_sni) if args.desync else None
+        ),
         max_segment_payload=args.max_segment_payload,
         backend_priority=args.backend_priority,
         linux_interfaces=tuple(args.linux_interfaces) if args.linux_interfaces else None,

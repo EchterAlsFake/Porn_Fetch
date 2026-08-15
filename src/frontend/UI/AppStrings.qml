@@ -194,30 +194,52 @@ If DNS acts like Deutsche Bahn and the packets don't arrive, this will be used a
 
     readonly property string sniObfuscationHelp:
         qsTr("
-URGENT WARNING -- MUST READ (seriously)
+What SNI reveals
 
-The (S)erver (N)ame (I)dentification is a packet that you sent with each network request to the target site.
-This packet is unencrypted and contains the target servername e.g., 'pornhub.com'.
+Server Name Indication, or SNI, is a field inside the TLS ClientHello. It usually contains the hostname Porn Fetch is
+connecting to and is normally visible before the encrypted HTTPS session begins. A network provider or other observer
+may therefore learn the hostname even though the later request and response are encrypted.
 
-Your internet service provider and anyone in between can intercept and see this. In some countries watching / downloading
-pornographic content is heavily restricted or you could even face jail-time for it.
+What this feature does
 
-The SNI feature of Porn Fetch tries to heavily obfuscate state sponsored firewalls / interception services
-by splitting the name across multiple network packets.
+Porn Fetch sends its own HTTP/2-over-TCP connections through a local loopback proxy. The proxy divides the TLS
+ClientHello inside the SNI hostname so the complete name is not present in one TCP payload. If another proxy is
+configured, the local SNI proxy connects through it. Unrelated applications are not routed through this proxy.
 
-SNI Proxying is illegal in some countries and using this feature could get you in prison. Please heavily research
-before using this, and YES this is as serious as I am saying it here. If you live in Syria, Russia, North Kora, Iran you
-absolutely need to take this serious.
+Lite mode
 
-Disclaimer:
-While this has been tested by intercepting network traffic with Wireshark and using ARP Spoofing with Bettercap
-there's no guarantee that it will work for you too.
+Lite mode splits the ClientHello into separate socket writes with a short delay. It needs no Administrator or root
+rights and uses no packet driver. The operating system or network hardware may combine those writes again, so Lite
+mode cannot guarantee separate packets on the wire.
 
-Lite Implementation:
-The Lite version will proxy each network packet before it goes to your system and will try to split packets by writing\nto the buffer with a slight delay. There is no guarantee that the packets will also be split on the system level.\nThis depends on the system you use, your specific settings, internet connection etc.\n\nThis method does not require root / admin rights to run and does not use a modified driver.\nIf you set a proxy in Porn Fetch your request will first go through the SNI proxy and then to your proxy.\n
+Strict mode
 
-Strict Implementation:
-The Strict implementation requires elevated privileges e.g., sudo on Linux or 'run as Administrator' on Windows.\nIt uses the WinDivert network driver to create a fully isolated network device and deeply modify packets.\n\nWindows: x86-64\nLinux: Requires Kernel 5.8+, libbpf (x86_64 / aarch64)\nOther: Not supported\n\nApart from the Lite Implementation this will also inject adjusted sequence numbers and checksums.\nIt furthermore guarantees that the network packets are actually split.\n\nThis is still not bulletproof though.
+Strict mode intercepts only the exact outbound TCP flows created by the local proxy and emits genuine TCP segments with
+correct sequence numbers and checksums. It requires root on Linux or Run as Administrator on Windows.
+For a Linux source run, start the app with sudo -E .venv/bin/python3 test.py so it retains your user settings. Plain
+sudo normally reads root's separate settings profile and can make your saved mode appear to reset.
+
+Strict Fragmentation sends the genuine segments in their normal order.
+Strict Reverse sends the later segment first; the destination TCP stack can reorder and reassemble it.
+Strict Desync first sends a harmless fake ClientHello with deliberately invalid sequence and acknowledgement values,
+then sends the genuine fragments in reverse order. The destination should discard the fake packet, while some
+stateless inspection systems may parse it.
+
+Supported strict platforms:
+Windows x86-64 using WinDivert
+Linux x86-64 or aarch64 using PyDivert, eBPF and TC; kernel 5.8 or newer and libbpf are required
+macOS, Windows ARM64 and other platforms are not currently supported
+
+Important limitations
+
+This is obfuscation, not encryption, a VPN or an anonymity system. A stateful observer can buffer and reassemble the TCP
+stream and recover an unencrypted SNI. DNS traffic and the destination IP address can also reveal or suggest the site.
+Encrypted ClientHello, when supported by both client and server, protects SNI more directly. Results depend on the
+network path and inspection system, and no mode guarantees that a hostname will remain hidden.
+
+Porn Fetch forces HTTP/2 over TCP while this feature is active; it does not modify HTTP/3 or other UDP traffic. Verify
+the behavior on your own network and make sure using traffic-obfuscation tools complies with the laws and policies that
+apply to you.
 ")
 
     readonly property string torIntegrationHelp:
@@ -256,4 +278,3 @@ A Proxy is basically just a service that routes your internet traffic. It is sim
     readonly property string accentColorHelp:
         qsTr("You really need an explanation for this xD")
 }
-

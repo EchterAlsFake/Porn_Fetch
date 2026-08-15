@@ -1,4 +1,5 @@
 import os
+import multiprocessing as mp
 import shutil
 import sys
 import tempfile
@@ -13,6 +14,8 @@ from PySide6.QtCore import QUrl
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtGui import QGuiApplication, QCursor
+
+_IS_MULTIPROCESSING_CHILD = mp.current_process().name != "MainProcess"
 
 # Style must be applied before QML Application starts, otherwise they won't be applied
 core_style = app_settings.core_style
@@ -34,33 +37,56 @@ elif core_style == "Universal": # Universal is just bad and shit, don't use it l
     os.environ["QT_QUICK_CONTROLS_UNIVERSAL_ACCENT"] = accent_color
 
 
-app = QGuiApplication(sys.argv)
-app.setOrganizationName("EchterAlsFake")
-app.setApplicationName("Porn Fetch")
-app_font = app.font()
-app_font.setPointSize(app_settings.font_size)
-app.setFont(app_font)
+class _NullApplication:
+    @staticmethod
+    def processEvents() -> None:
+        return None
+
+
+class _NullSplash:
+    @staticmethod
+    def showMessage(_message: str) -> None:
+        return None
+
+    @staticmethod
+    def finish() -> None:
+        return None
+
+
+if _IS_MULTIPROCESSING_CHILD:
+    app = _NullApplication()
+else:
+    app = QGuiApplication(sys.argv)
+    app.setOrganizationName("EchterAlsFake")
+    app.setApplicationName("Porn Fetch")
+    app_font = app.font()
+    app_font.setPointSize(app_settings.font_size)
+    app.setFont(app_font)
 
 # Ensure Fusion and other native styles use the correct color scheme
 from PySide6.QtCore import Qt
-try:
-    app.styleHints().setColorScheme(Qt.ColorScheme.Dark if is_dark else Qt.ColorScheme.Light)
-except AttributeError:
-    pass # Older PySide6 versions don't support setColorScheme, fallback gracefully
+if not _IS_MULTIPROCESSING_CHILD:
+    try:
+        app.styleHints().setColorScheme(Qt.ColorScheme.Dark if is_dark else Qt.ColorScheme.Light)
+    except AttributeError:
+        pass # Older PySide6 versions don't support setColorScheme, fallback gracefully
 
-engine = QQmlApplicationEngine()
+engine = None if _IS_MULTIPROCESSING_CHILD else QQmlApplicationEngine()
 
 from src.backend.splashscreen import SplashController
 
 # Loading the Splashscreen and starting it
 splash_qml_path = Path(__file__).resolve().parent / "src" / "frontend" / "UI" / "SplashScreen.qml"
-splash = SplashController(engine, str(splash_qml_path))
-splash.splash_window.show()
-app.processEvents()
+if _IS_MULTIPROCESSING_CHILD:
+    splash = _NullSplash()
+else:
+    splash = SplashController(engine, str(splash_qml_path))
+    splash.splash_window.show()
+    app.processEvents()
 
 # Turn off Nuitka's own Splash Screen (only relevant for onefile mode in binaries
 # Turn off Nuitka's native splash screen if it exists
-if "NUITKA_ONEFILE_PARENT" in os.environ:
+if not _IS_MULTIPROCESSING_CHILD and "NUITKA_ONEFILE_PARENT" in os.environ:
     splash_filename = os.path.join(
         tempfile.gettempdir(),
         f"onefile_{int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp"
@@ -72,7 +98,6 @@ splash.showMessage("Importing (General).")
 import re
 import time
 import uuid
-import atexit
 import logging
 import asyncio
 import argparse
@@ -83,9 +108,11 @@ from string import Template
 from datetime import datetime
 from asyncstdlib import chain
 from contextlib import aclosing
+from rich_argparse import RichHelpFormatter
 from typing import AsyncGenerator, AsyncIterator
 from base_api.modules.config import IteratorConfig
 from base_api.modules.logger import configure_app_logging
+from importlib.metadata import metadata, packages_distributions, version
 
 splash.showMessage("Importing (Qt)")
 app.processEvents()
@@ -115,8 +142,7 @@ from src.backend.helper_functions import (safe_rmtree, make_debug_log)
 from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
-from src.backend.sni_fragment_proxy_lite import FragmentingProxyConfig, FragmentingProxyProcess
-from src.backend.sni_fragment_proxy_strict import StrictFragmentingProxyConfig, StrictFragmentingProxyProcess
+from src.backend.sni_proxy_manager import SNIProxyManager
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
 from src.backend.tests import run_smoke_tests
@@ -162,6 +188,7 @@ except Exception:
 
 stop_flag = asyncio.Event()
 last_index = 0
+sni_proxy_manager = SNIProxyManager(app_settings)
 
 
 def custom_unraisable_hook(unraisable):
@@ -178,34 +205,6 @@ You have probably not executed the patch script in src/scripts/patch_qtasyncio.p
 and applied it to your virtual environment.
 
 You need to run this script, otherwise this application will NOT work!""")
-
-
-def start_proxy_lite():
-    proxy_config = FragmentingProxyConfig(
-        listen_host="127.0.0.1",
-        listen_port=0,
-        upstream_proxy=app_settings.proxy or None
-    )
-
-    proxy_proces = FragmentingProxyProcess(proxy_config)
-    local_url = proxy_proces.start()
-    print(f"Fragmenting Proxy running at: {local_url}")
-    atexit.register(proxy_proces.stop)
-    return local_url
-
-
-def start_proxy_strict():
-    proxy_config = StrictFragmentingProxyConfig(
-        listen_host="127.0.0.1",
-        listen_port=0,
-        upstream_proxy=app_settings.proxy or None
-    )
-
-    proxy_process = StrictFragmentingProxyProcess(proxy_config)
-    local_url = proxy_process.start()
-    print(f"[STRICT] Fragmenting Proxy running at: {local_url}")
-    atexit.register(proxy_process.stop)
-    return local_url
 
 
 class ProcessVideos(QObject):
@@ -480,6 +479,15 @@ class Backend(QObject):
         # refresh them immediately when the content locale changes.
         self.load_clients()
         app_settings.reloadClients.connect(self.load_clients)
+        QTimer.singleShot(0, clients.schedule_retired_session_cleanup)
+        if sni_proxy_manager.last_error:
+            QTimer.singleShot(
+                0,
+                lambda: ui_popup(
+                    "SNI obfuscation failed to start and networking has been blocked.\n\n"
+                    + str(sni_proxy_manager.last_error)
+                ),
+            )
 
     def has_premium_access(self) -> bool:
         return bool(self._license_bridge and self._license_bridge.isPremium)
@@ -792,12 +800,8 @@ class Backend(QObject):
 
         # Disabling a proxy always restores the secure default.
         verify_ssl = bool(verify_ssl) if proxy_url else True
-        app_settings.proxy = proxy_url
-        app_settings.proxy_ssl_verification = verify_ssl
+        app_settings.apply_proxy_settings(proxy_url, verify_ssl)
         app_settings.sync()
-        clients.config.proxy = getattr(app_settings, 'active_sni_proxy_url', None) or proxy_url or None
-        clients.config.verify_ssl = verify_ssl
-        clients.refresh_clients()
         self.proxyApplied.emit(bool(proxy_url))
 
     @Slot(str, str)
@@ -1047,6 +1051,9 @@ class Backend(QObject):
             await asyncio.gather(*tasks_to_await, return_exceptions=True)
             self.logger.info("All background tasks stopped successfully.")
 
+        await clients.close_all_clients()
+        sni_proxy_manager.stop()
+
         # If DownloadManager handles downloads in separate C++ threads or
         # distinct processes, tell it to stop here too.
         # self.download_manager.stop_all()
@@ -1061,7 +1068,9 @@ class Backend(QObject):
         os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
 
 
-def main():
+def main(test_mode: bool = False) -> None:
+    if engine is None:
+        raise RuntimeError("The GUI cannot start inside a multiprocessing helper")
 
 
     # --- 2. Inject Environment Variables for Styles ---
@@ -1107,17 +1116,90 @@ def main():
     QtAsyncio.run(handle_sigint=True)
 
 
+
+def get_imported_licenses():
+  """Dynamically fetches packages, versions, and licenses
+
+  of third-party libraries currently imported in memory.
+  """
+  pkg_map = packages_distributions()
+
+  # Get root names of all modules currently loaded in sys.modules
+  loaded_modules = {mod.split('.')[0] for mod in sys.modules}
+
+  results = []
+  seen = set()
+
+  for mod in sorted(loaded_modules):
+    # Find matching installed distribution packages for this import name
+    for dist in pkg_map.get(mod, []):
+      if dist not in seen:
+        seen.add(dist)
+        try:
+          meta = metadata(dist)
+          ver = version(dist)
+          # Some packages store full license text or short names
+          lic = meta.get('License', 'Unknown')
+          # Clean up line breaks if the metadata contains text blobs
+          lic = ' '.join(lic.splitlines()) or 'Unknown'
+
+          results.append({'Package': dist, 'Version': ver, 'License': lic})
+        except Exception:
+          pass
+  return results
+
+
+def print_runtime_version_info():
+  """Prints a nicely formatted table of imported packages."""
+  libs = get_imported_licenses()
+
+  print(f'Python Interpreter: {sys.executable}')
+  print(f'Python Version:     {sys.version.split()[0]}\n')
+
+  print(f"{'Package':<25} {'Version':<15} {'License':<25}")
+  print('=' * 65)
+  for lib in libs:
+    # Truncate license string slightly if it's overly verbose text
+    lic_display = (
+        lib['License'][:22] + '...'
+        if len(lib['License']) > 25
+        else lib['License']
+    )
+    print(f"{lib['Package']:<25} {lib['Version']:<15} {lic_display:<25}")
+  print('=' * 65)
+
+
+
 if __name__ == "__main__":
-    local_url = None
+    mp.freeze_support()
+    parser = argparse.ArgumentParser(
+        prog=f"Porn Fetch v{__version__}",
+        description="A source available Adult Archiver that respects your privacy.",
+        formatter_class=RichHelpFormatter
+    )
+
+    parser.add_argument("--test", "-t", action="store_true", help="""
+    Runs an automated Test of Porn Fetch where each supported website will be simulated with real network requests
+    and loaded into the Graphical User Interface which will then be validated.
+
+    This is recommended to run if you want to buy a license so that you can see the current state of the application
+    before maybe buying something that doesn't work anymore.""")
+    parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
+
+    args = parser.parse_args()
+    test_mode = False
+
+    if args.version:
+        print_runtime_version_info()
+        sys.exit(0)
+
+    if args.test:
+        test_mode = True
+
+
     sys.unraisablehook = custom_unraisable_hook
+    local_url = sni_proxy_manager.start()
+    if local_url:
+        print(f"SNI proxy route: {local_url}")
 
-    if app_settings.sni_obfuscation:
-        if app_settings.sni_obfuscation_strict:
-            local_url = start_proxy_strict()
-
-        elif app_settings.sni_obfuscation_lite:
-            local_url = start_proxy_lite()
-            
-    app_settings.active_sni_proxy_url = local_url
-
-    main()
+    main(test_mode)
