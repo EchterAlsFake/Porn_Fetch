@@ -1,65 +1,98 @@
-"""
-Copyright (C) 2023-2026 Johannes Habel
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-Contact:
-
-E-Mail: EchterAlsFake@proton.me
-Discord: echteralsfake (faster response)
-"""
 import os
+import multiprocessing as mp
+import shutil
 import sys
 import tempfile
+from pathlib import Path
 
-# Pre-Load PySide6 to show a loading splashscreen
-from string import Template
-from PySide6.QtWidgets import QApplication, QSizePolicy
+import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
+from src.backend.config import app_settings
+from src.backend.theme_manager import ThemeManager
+from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtQuickControls2 import QQuickStyle
+from PySide6.QtGui import QGuiApplication
 
-os.environ["QT_QUICK_CONTROLS_STYLE"] = "Material"
-os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark"
+_IS_MULTIPROCESSING_CHILD = mp.current_process().name != "MainProcess"
 
-app = QApplication(sys.argv)
+# Style must be applied before QML Application starts, otherwise they won't be applied
+core_style = app_settings.core_style
+is_dark = app_settings.dark_mode
+accent_color = app_settings.accent_color
+log_level = app_settings.log_level_map.get(int(app_settings.log_level))
+os.environ["QT_QUICK_CONTROLS_STYLE"] = core_style
 
-# macOS Setup...
-if sys.platform == "darwin":
-    from src.backend.macos_setup import macos_setup
-    from src.backend.update_service import SparkleUpdater
-    macos_setup()
-    # Handles Sparkle Updates + macOS Installation
+if sys.platform == "linux":
+    os.environ["QT_QPA_PLATFORMTHEME"] = "xdgdesktopportal"
 
-# Necessary imports for splashscreen
-from PySide6.QtGui import QPixmap
-from src.frontend.UI.splashscreen import ModernSplashScreen
+if core_style == "Material": # Material UI is modern and looks great
+    os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark" if is_dark else "Light"
+    os.environ["QT_QUICK_CONTROLS_MATERIAL_ACCENT"] = accent_color
+    os.environ["QT_QUICK_CONTROLS_MATERIAL_PRIMARY"] = accent_color
 
-splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
-splash = ModernSplashScreen(splash_pixmap)
-splash.show() # Starts showing the actual Splash Screen
-app.processEvents()
+elif core_style == "Universal": # Universal is just bad and shit, don't use it lmao
+    os.environ["QT_QUICK_CONTROLS_UNIVERSAL_THEME"] = "Dark" if is_dark else "Light"
+    os.environ["QT_QUICK_CONTROLS_UNIVERSAL_ACCENT"] = accent_color
 
-if "NUITKA_ONEFILE_PARENT" in os.environ:
+
+class _NullApplication:
+    @staticmethod
+    def processEvents() -> None:
+        return None
+
+
+class _NullSplash:
+    @staticmethod
+    def showMessage(_message: str) -> None:
+        return None
+
+    @staticmethod
+    def finish() -> None:
+        return None
+
+
+if _IS_MULTIPROCESSING_CHILD:
+    app = _NullApplication()
+
+else:
+    app = QGuiApplication(sys.argv)
+    app.setOrganizationName("EchterAlsFake")
+    app.setApplicationName("Porn Fetch")
+    app_font = app.font()
+    app_font.setPointSize(app_settings.font_size)
+    app.setFont(app_font)
+
+# Ensure Fusion and other native styles use the correct color scheme
+from PySide6.QtCore import Qt
+if not _IS_MULTIPROCESSING_CHILD:
+    try:
+        app.styleHints().setColorScheme(Qt.ColorScheme.Dark if is_dark else Qt.ColorScheme.Light)
+    except AttributeError:
+        pass # Older PySide6 versions don't support setColorScheme, fallback gracefully
+
+engine = None if _IS_MULTIPROCESSING_CHILD else QQmlApplicationEngine()
+
+from src.backend.splashscreen import SplashController
+
+# Loading the Splashscreen and starting it
+splash_qml_path = Path(__file__).resolve().parent / "src" / "frontend" / "UI" / "SplashScreen.qml"
+if _IS_MULTIPROCESSING_CHILD:
+    splash = _NullSplash()
+else:
+    splash = SplashController(engine, str(splash_qml_path))
+    splash.splash_window.show()
+    app.processEvents()
+
+# Turn off Nuitka's own Splash Screen (only relevant for onefile mode in binaries
+# Turn off Nuitka's native splash screen if it exists
+if not _IS_MULTIPROCESSING_CHILD and "NUITKA_ONEFILE_PARENT" in os.environ:
     splash_filename = os.path.join(
         tempfile.gettempdir(),
         f"onefile_{int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp"
     )
     if os.path.exists(splash_filename):
         os.unlink(splash_filename)
-        # Stops the Nuitka Splash Screen
 
 splash.showMessage("Importing (General).")
-app.processEvents()
-# General imports
 import re
 import time
 import uuid
@@ -69,53 +102,63 @@ import argparse
 import markdown
 import traceback
 import webbrowser
-
-from pathlib import Path
+from string import Template
 from datetime import datetime
-from threading import Event
-from asyncstdlib import islice, chain
+from asyncstdlib import chain
+from contextlib import aclosing
+from rich_argparse import RichHelpFormatter
 from typing import AsyncGenerator, AsyncIterator
+from base_api.modules.config import IteratorConfig
+from base_api.modules.logger import configure_app_logging
+from importlib.metadata import metadata, packages_distributions, version
 
-
-
-splash.showMessage("Importing (PySide6).")
+splash.showMessage("Importing (Qt)")
 app.processEvents()
-# Qt / PySide6 related imports
+
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtQml import QQmlEngine
 from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot,
-                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
+from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot, Property,
+                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QTimer)
 from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
                                QInputDialog, QMainWindow, QComboBox)
 
-
-splash.showMessage("Importing (Backend).")
+splash.showMessage("Importing (Backend)")
 app.processEvents()
-# Backend imports
+
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
+from src.backend.license_manager import LicenseManager
+from src.backend.license_bridge import LicenseBridge
 import src.backend.shared_functions as shared_functions
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, Signals,
                                     available_title_formatting_options)
 from src.backend.helper_functions import (safe_rmtree, make_debug_log)
-from src.backend.update_service import CheckUpdates
+from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
+from src.backend.sni_proxy_manager import SNIProxyManager
 from src.backend.errors import (UnsupportedPlatform, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
-from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
+from src.backend.tests import run_smoke_tests
+from src.backend.download_manager import (
+    DownloadManager,
+    DownloadListModel,
+    VideoFilters,
+    VideoObject,
+    quality_requires_premium,
+)
+from src.backend.database import DatabaseBridge
+from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
+from curl_cffi.requests.exceptions import SSLError
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
+
 # Frontend imports
-from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
-from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
-from backend.theme_manager import (apply_theme, apply_theme_light, mark, install_focus_outline,
-                                   pretty_combo)
 from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
                                               TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
 
@@ -140,503 +183,1021 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-qml_engine = QQmlEngine()
-qml_engine.rootContext().setContextProperty("appSettings", app_settings)
-FORCE_PORTABLE_RUN: bool = False # Holds a value for argparse later (see main function)
-total_segments: int = 0 # Total segments kept in a queue (for total progress tracking)
-downloaded_segments: int = 0 # Amount of segments that have been downloaded (for total progress tracking)
-total_downloaded_videos: int = 0  # All videos that actually successfully downloaded
-session_urls: list = []  # This list saves all URLs used in the current session. Used for the URL export function (CTRL + E)
-logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
-license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
-last_index = 0 # Tracks the last index of the tree widget in case the user does not have auto-clear enabled
-x: bool = False # Don't ask (this is a secret ;)
-w = None
+
+stop_flag = asyncio.Event()
+last_index = 0
+sni_proxy_manager = SNIProxyManager(app_settings)
 
 
+def custom_unraisable_hook(unraisable):
+  # Check if the error originates from the cffi callback or your specific issue
+  if unraisable.exc_type is NotImplementedError:
+    print(f"Caught target exception: {unraisable.exc_value}")
+    ui_popup("""
+CRITICAL ERROR!
+
+I tried doing an asynchronous operation with curl-cffi, however, Qt Asyncio raised
+an issue. 
+
+You have probably not executed the patch script in src/scripts/patch_qtasyncio.py
+and applied it to your virtual environment.
+
+You need to run this script, otherwise this application will NOT work!""")
 
 
-class PornFetch(QMainWindow):
-    COL_DOWNLOAD = 0
-    COL_TITLE = 1
-    COL_AUTHOR = 2
-    COL_LENGTH = 3
-    COL_QUALITY = 4
-    COL_STOP = 5
-    COL_PROGRESS = 6
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.settings = None
-        self.last_update_time = time.time()
-        self.signals = Signals()
-        self.signals.error_signal.connect(ui_popup)
-        self.download_manager = DownloadManager() # Used to track all videos
-        #self.download_manager.video_added.connect() # TODO
-
-        self.update_app_font(app_settings.font_size)
-        app_settings.fontSizeChanged.connect(self.update_app_font)
-        app_settings.themeChanged.connect(self.theme_changed)
-        self.ui = Ui_PornFetch_UI()
-        self.ui.setupUi(self)
-        self.logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
-
-        # Inject the Settings QML Widget
-        settings_widget = QQuickWidget(qml_engine, self)
-        settings_widget.rootContext().setContextProperty("appSettings", app_settings)
-        settings_widget.setClearColor(Qt.GlobalColor.transparent)
-        settings_widget.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
-        settings_widget.setSource(QUrl.fromLocalFile("src/frontend/UI/SettingsPage.qml"))
-        self.ui.settings_vlayout_1.addWidget(settings_widget)
-
-
-        self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
-        self._anonymous_mode = False
-        #self.ensure_temp()
-        #self._row = {} # Video ID -> dict of widgets + state
-        self.load_style()
-        #self._setup_modern_tabs()
-        #self.load_strings()
-        #self.license_manager = LicenseManager(storage_path=default_license_path(), public_key_b64=PUBLIC_KEY_B64)
-        #self.setup_license_restrictions()
-
-        """
-                             ! INDEX LIST !
-
-        0) Main application (downloading, login, tree widget etc.)
-        :: Index list for main application ::
-        - 0: Download
-        - 1: Login
-        - 2: Tools (removed)
-        - 3: Progressbars
-        - 4: Range selector
-        
-        1) Settings
-        2) Credits
-        3) License
-        4) Keyboard Shortcuts
-        5) Install Dialog
-        6) Supported websites
-        7) Donation Nag        
-        8) Disclaimer text
-        9) One-Time Information
-        10) Batch Feature (Not implemented yet)
-        This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
-        """
-
-        self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
-        self.button_connections()  # Connects the buttons to their functions
-        #self.shortcuts()  # Activates the keyboard shortcuts
-        self.logger.debug("Startup: [3/5] Initialized the User Interface")
-        self.logger.debug("Startup: [4/5] Loaded the user settings")
-        #self.download_scheduler = DownloadScheduler(self.app_config, self)
-        #self.download_scheduler.worker_started.connect(self._wire_worker_signals)
-        #self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
-
-        #if config.app_settings.update_checks:
-        #    self.logger.info("Running update checks")
-        #    self.check_for_updates()
-
-        #if config.app_settings.anonymous_mode:
-        #    self.logger.info("Enabling anonymous mode")
-        #    self.anonymous_mode()
-
-        #self.semaphore = asyncio.Semaphore(config.app_settings.parallel_downloads)
-        #self.logger.debug("Startup: [5/5] OK")
-
-
-        #self.initialize_pornfetch()
+class ProcessVideos(QObject):
+    error_signal = Signal(str)
 
     """
-    The following functions just switch the Stacked Widget to the different widgets
+    This class is responsible for processing the videos in the background, loading the data, adjusting paths and
+    handling errors
     """
 
-    """Stacked Widget Main:"""
+    def __init__(self, iterator: AsyncGenerator, custom_path_options: str, video_filters: VideoFilters,
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event,
+                 origin_iterator_url: str | None = None, origin_iterator_name: str | None = None) -> None:
+        super().__init__()
+        self.iterator = iterator
+        self.custom_path_options = custom_path_options
+        self.download_manager = download_manager
+        self.reverse_videos = reverse_videos
+        self.stop_flag = stop_flag
+        self.video_filters = video_filters
+        self.origin_iterator_url = origin_iterator_url
+        self.origin_iterator_name = origin_iterator_name
+        self.max_attempts = app_settings.retries
+        self.output_path = app_settings.output_path
+        self.result_limit = app_settings.result_limit
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [ProcesVideos]", log_file="PornFetch.log", level=log_level)
 
+    @staticmethod
+    async def reverse_iterator(iterator: AsyncIterator):
+        videos = []
+        async for video in iterator:
+            videos.append(video)  # This is very stupid, please don't use this „feature"!
 
+        return reversed(videos)
 
-    def info_dialog_enable_update(self):
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
-        self.ui.settings_checkbox_system_update_checks.setChecked(True)
-        self.save_user_settings(show_dialog=False)
-        self.initialize_pornfetch()
-
-    def info_dialog_disable_all(self):
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
-        self.ui.settings_checkbox_system_update_checks.setChecked(False)
-        self.save_user_settings(show_dialog=False)
-        self.initialize_pornfetch()
-
-    def info_dialog_enable_all(self):
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(True)
-        self.ui.settings_checkbox_system_update_checks.setChecked(True)
-        self.save_user_settings(show_dialog=False)
-        self.initialize_pornfetch()
-
-    def shortcuts(self):
-        quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
-        quit_shortcut.activated.connect(self.close)
-
-        download_all = QShortcut(QKeySequence("Ctrl+T"), self)
-        download_all.activated.connect(self.download_all)
-
-        export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
-        export_urls_shortcut.activated.connect(export_urls)
-
-        enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
-        enable_anonymous_mode.activated.connect(self.enable_anonymous_mode)
-
-        save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
-        save_settings.activated.connect(self.save_user_settings)
-
-    def download_all(self):
-        """Automatically downloads all videos in the tree widget"""
-        for i in range(self.ui.main_tree_widget.topLevelItemCount()):
-            item = self.ui.main_tree_widget.topLevelItem(i)
-            identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
-            self.queue_download(video_id=identifier)
-
-
-
-    """
-    The following functions are used for opening files / directories with the QFileDialog
-    """
-
-    def login(self):
-        """
-        This handles logging in into the users PornHub accounts
-        I need to update this to support more websites
-        """
-        username = self.ui.login_lineedit_username.text()
-        password = self.ui.login_lineedit_password.text()
-        self.logger.info("Trying to login...")
-        if len(username) <= 2 or len(password) <= 2:
-            ui_popup(self.tr("Those credentials don't seem to be valid...", None))
-            return
-
-        self.login_thread = LoginThread(email=username, password=password)
-        self.login_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.login_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.login_thread.signals.login_result.connect(self.login_result)
-        self.threadpool.start(self.login_thread)
-
-    def login_result(self, result: bool):
-        if result:
-            mark(self.ui.login_button_get_recommended_videos, intent="success")
-            mark(self.ui.login_button_get_liked_videos, intent="success")
-            mark(self.ui.login_button_get_watched_videos, intent="success")
-            ui_popup(self.tr("Login Successful!", None))
-
-    def check_login(self):
-        """Checks if the user is logged in, so that no errors are threw if not"""
-        if clients.ph_client.logged:
-            return True
-
-        elif not clients.ph_client.logged:
-            self.login()
-            if not clients.ph_client.logged:
-                text = self.tr("There's a problem with the login. Please make sure you login first and then "
-                               "you try to get videos based on your account.", None)
-                ui_popup(text)
+    def process_filter(self, filters: VideoFilters, attributes: VideoObject) -> bool:
+        # 1. Duration Filters
+        if filters.duration_minimum is not None or filters.duration_maximum is not None:
+            if filters.duration_minimum is not None and attributes.length < filters.duration_minimum:
+                return False
+            if filters.duration_maximum is not None and attributes.length > filters.duration_maximum:
                 return False
 
-            else:
-                return True
+        # 2. Regex Filters
+        if filters.author_regex:
+            if not re.search(filters.author_regex, attributes.author, re.IGNORECASE):
+                return False
 
-    def get_watched_videos(self):
-        """Returns the videos watched by the user"""
-        if self.check_login():
-            watched = clients.ph_client.account.watched
-            self.add_to_tree_widget_thread(watched)
+        if filters.title_regex:
+            if not re.search(filters.title_regex, attributes.title, re.IGNORECASE):
+                return False
 
-    def get_liked_videos(self):
-        """Returns the videos liked by the user"""
-        if self.check_login():
-            liked = clients.ph_client.account.liked
-            self.add_to_tree_widget_thread(liked)
+        if filters.tags_regex:
+            # Fails immediately if the video has no tags to match against
+            if not attributes.tags:
+                return False
+            pattern = re.compile(filters.tags_regex, re.IGNORECASE)
+            # Passes if at least one tag matches the regex
+            if not any(pattern.search(tag) for tag in attributes.tags):
+                return False
 
-    def get_recommended_videos(self):
-        """Returns the videos recommended for the user"""
-        if self.check_login():
-            recommended = clients.ph_client.account.recommended
-            self.add_to_tree_widget_thread(recommended)
+        # 3. Quality Filters (Evaluated based on the highest available quality)
+        if filters.quality_minimum or filters.quality_maximum:
+            max_quality = self._get_max_quality(attributes.qualities)
+
+            if filters.quality_minimum:
+                min_q = self._parse_quality(filters.quality_minimum)
+                if max_quality < min_q:
+                    return False
+
+            if filters.quality_maximum:
+                max_q = self._parse_quality(filters.quality_maximum)
+                if max_quality > max_q:
+                    return False
+
+        # 4. Date Filters
+        if filters.published_after:
+            # .replace(tzinfo=None) safely handles timezone-aware datetimes for comparison
+            after_date = datetime.fromisoformat(filters.published_after).replace(tzinfo=None)
+            pub_date = attributes.publish_date.replace(tzinfo=None)
+            if pub_date < after_date:
+                return False
+
+        if filters.published_before:
+            before_date = datetime.fromisoformat(filters.published_before).replace(tzinfo=None)
+            pub_date = attributes.publish_date.replace(tzinfo=None)
+            if pub_date > before_date:
+                return False
+
+        # If it survives all the checks, all applied filters are True!
+        return True
+
+    @staticmethod
+    def _parse_quality(quality_str: str) -> int:
+        """Extracts the integer resolution from strings like '1080p', '720', '4K'."""
+        if not quality_str:
+            return 0
+
+        # Simple handler for "4k" edge cases
+        if quality_str.lower() == "4k":
+            return 2160
+
+        # Strips all non-digit characters (e.g., "1080p60" -> 108060, so we just grab the resolution part safely)
+        # Assuming typical formats like "1080p", "720p"
+        match = re.search(r'\d+', quality_str)
+        return int(match.group()) if match else 0
+
+    def _get_max_quality(self, qualities: list[str]) -> int:
+        """Finds the highest resolution available in the list of qualities."""
+        if not qualities:
+            return 0
+        parsed_qualities = [self._parse_quality(q) for q in qualities]
+        return max(parsed_qualities)
+
+    @staticmethod
+    async def process_single_video(video_object: str | clients.AllowedVideoType) -> tuple[
+        clients.AllowedVideoType, VideoObject]:
+        video = await clients.get_video(video_object)
+        video_attributes = await clients.load_video_attributes(video=video)
+        return video, video_attributes
+
+    def create_output_path(self, video_attributes: VideoObject, index: int, user_pattern: str) -> Path:
+        base_path = self.output_path
+        context = {
+            "output_path": base_path,
+            "author": video_attributes.author,
+            "title": video_attributes.title,
+            "video_id": video_attributes.video_id,
+            "index": f"{index:02d}",  # Zero-padded index (01, 02, etc.)
+            "publish_date": video_attributes.publish_date,
+            "length": video_attributes.length,
+        }
+
+        template = Template(user_pattern)
+        resolved_string = template.safe_substitute(context)
+        return Path(resolved_string).expanduser()
+
+    async def start_processing(self):
+        global last_index
+        self.logger.info("Starting Processing of Iterator!")
+
+        if self.reverse_videos:
+            self.iterator = self.reverse_iterator(self.iterator)
+
+        async with aclosing(self.iterator) as iterator:
+            idx = 0
+            async for video in iterator:
+                if self.result_limit is not None and idx >= self.result_limit:
+                    break
+
+                last_error = None  # Keeps track of the
+
+                if self.stop_flag.is_set():
+                    return  # User hit the abort button
+
+                try:
+                    self.logger.debug(f"Current Index: {idx}")
+                    video, video_object = await safe_api_call(self.process_single_video, video)
+                    print(f"Video: {video}")
+
+                    self.logger.info("Checking Filters...")
+                    if self.process_filter(self.video_filters, video_object):
+                        identifier = uuid.uuid4().hex
+                        self.logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
+                        output_path = self.create_output_path(video_object, idx, self.custom_path_options)
+
+                        quality = app_settings.mappings_quality.get(int(app_settings.quality))
+                        quality = quality if quality in video_object.qualities else (video_object.qualities[0] if video_object.qualities else "best")
+
+                        video_object.output_path = output_path
+                        video_object.identifier = identifier
+                        video_object.index = idx
+                        video_object.selected_quality = quality
+                        video_object.origin_iterator_url = self.origin_iterator_url
+                        video_object.origin_iterator_name = self.origin_iterator_name
+
+                        self.download_manager.add_video(video_object)
+                        last_index += 1
+
+                # General Errors
+                except AppNetworkError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    A network error happened, I'll try retrying...""")
+                    continue  # Maybe it solves by itself ;)
+
+                except AppNotFoundError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
+                    the correct URL.
+    
+                    If you are sure you did, please report this issue
+                    """)
+
+                    break  # If the resource is not there, it won't magically appear lmao
+
+                except (VideoDisabled, GifPendingReview) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
+                    """)
+                    break
+
+                except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
+                    fix this quickly!""")
+                    break
+
+                except RateLimitError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    You got rate limited by the server. I have already tried solving this, which didn't work. 
+                    Please use a (different) proxy or VPN.""")
+                    break
+
+                except DataNotLoadedError as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message=f"""
+                    If you see this I fucked up developing my API packages and you should immediately open an issue on 
+                    GitHub lol""")
+                    break
+
+                except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    The website denied access, probably because it detected you as a bot. Please report this, as I probably
+                    need to update the headers. 
+                    """)
+
+                except Exception as e:
+                    self.logger.error(f"UNHANDLED EXCEPTION in start_processing: {e}", exc_info=True)
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="An unexpected error occurred.")
+                    break
+
+                finally:
+                    if last_error is not None:
+                        self.error_signal.emit(last_error)
+
+                idx += 1
 
 
-    """
-    These function don't need to be maintained very often or better say I don't need them very often in code,
-    so I moved them down here to get a better focus on the important things yk
+class Backend(QObject):
+    showMessage = Signal(str)
+    downloadsChanged = Signal()
+    updateAvailable = Signal("QVariantMap")
+    updateProgress = Signal(int, int)
+    updateStatus = Signal(str)
+    proxyTestSucceeded = Signal(str, "QVariantMap")
+    proxyTestFailed = Signal(str, str)
+    proxySslError = Signal(str, str)
+    proxyApplied = Signal(bool)
+    shutdown_complete = Signal()
 
-    """
+    def __init__(self):
+        super().__init__()
+        self._background_tasks: set[asyncio.Task[object]] = set()
+        self._proxy_test_task: asyncio.Task[object] | None = None
+        self._update_check_task: asyncio.Task[object] | None = None
+        self._auto_update_task: asyncio.Task[object] | None = None
+        self._license_bridge: LicenseBridge | None = None
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
+        self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
+        self.download_manager = DownloadManager()
+        self.download_manager.video_added.connect(self.video_added_signal)
+        self.auto_updater = AutoUpdater(self)
+        self.auto_updater.updateProgress.connect(self.updateProgress)
+        self.auto_updater.statusReport.connect(self.updateStatus)
+        self.showMessage.connect(self.handle_message)
+        app_settings.restartRequired.connect(self.setting_requires_restart)
+        app_settings.moveDatabase.connect(self.database_changed)
+        self._is_shutting_down = False
+        self.ensure_temp()
 
-    def check_for_updates(self):
-        """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
+        # ``clients`` creates its curl-cffi sessions during import. Apply all
+        # saved request settings once the real GUI backend is initialized and
+        # refresh them immediately when the content locale changes.
+        self.load_clients()
+        app_settings.reloadClients.connect(self.load_clients)
+        QTimer.singleShot(0, clients.schedule_retired_session_cleanup)
+        if sni_proxy_manager.last_error:
+            QTimer.singleShot(
+                0,
+                lambda: ui_popup(
+                    "SNI obfuscation failed to start and networking has been blocked.\n\n"
+                    + str(sni_proxy_manager.last_error)
+                ),
+            )
+
+    def has_premium_access(self) -> bool:
+        return bool(self._license_bridge and self._license_bridge.isPremium)
+
+    def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
+        self._license_bridge = license_bridge
+        license_bridge.statusChanged.connect(self._enforce_quality_access)
+        self._enforce_quality_access()
+
+    def _enforce_quality_access(self) -> None:
+        preferred_quality = app_settings.mappings_quality.get(app_settings.quality, "best")
+        if not self.has_premium_access() and quality_requires_premium(preferred_quality):
+            # 720p is the highest unrestricted entry in mappings_quality.
+            app_settings.quality = 6
+        else:
+            self._downloads_model.enforce_quality_access()
+
+    @Slot(int)
+    def set_default_quality(self, quality_index: int) -> None:
+        quality = app_settings.mappings_quality.get(quality_index)
+        if quality is None:
+            return
+        if quality_requires_premium(quality) and not self.has_premium_access():
+            self.logger.warning("Rejected locked default quality: %s", quality)
+            return
+        app_settings.quality = quality_index
+
+    # Slots / Signals connected to the Configuration / Settings
+
+    @Slot(bool)
+    def toggle_anonymous_mode(self, value: bool) -> None:
+        ...
+
+    @Slot(bool)
+    def toggle_update_checks(self, value: bool) -> None:
+        ...
+
+    @Slot()
+    def check_for_updates(self) -> None:
+        """Schedule a platform-appropriate check after Qt's event loop starts."""
+        QTimer.singleShot(0, self._start_update_check)
+
+    def _start_update_check(self) -> None:
         if sys.platform == "darwin":
-            self.sparkle = SparkleUpdater() # Checks for Updates on macOS using Sparkle Framework
-            self.sparkle.check_for_updates()
+            try:
+                if not hasattr(self, "sparkle"):
+                    self.sparkle = SparkleUpdater()
+                self.sparkle.check_for_updates()
+            except Exception:
+                self.logger.exception("Could not start the Sparkle updater")
+            return
 
-        else:
-            self.update_thread = CheckUpdates()
-            self.update_thread.signals.update_check.connect(self.check_for_updates_result)
-            self.threadpool.start(self.update_thread) # Starts a silent update check that will
-            # if a new version is out show the user a dialog with the changelog and allow for auto updating
+        if self._update_check_task is not None and not self._update_check_task.done():
+            return
 
-    def auto_update(self):
-        self.update_thread = AutoUpdateThread()
-        self.update_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.update_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
-        self.update_thread.signals.error_signal.connect(ui_popup)
-        self.threadpool.start(self.update_thread)
+        self._update_check_task = self._spawn(
+            self._check_for_updates(),
+            name="update-check",
+        )
 
+    async def _check_for_updates(self) -> None:
+        update = await CheckUpdates.check()
+        if update is None:
+            return
 
-    def check_for_updates_result(self, success: bool, dictionary: dict):
-        if success:
-            self.logger.info("New Update found!")
-            version = dictionary["version"]
-            url = dictionary["url"]
-            anonymous_download_url = dictionary["anonymous_download"]
-            changelog = dictionary["changelog"]  # already HTML
-            important_info = dictionary["important_info"]
+        details = {
+            "version": str(update.get("version", "")),
+            "url": str(update.get("url", "")),
+            "anonymous_download": str(update.get("anonymous_download", "")),
+            "important_info": str(update.get("important_info", "")),
+            "changelog": str(update.get("changelog", "")),
+        }
+        self.logger.info("New update found: %s", details["version"])
+        self.updateAvailable.emit(details)
 
-            # Format the HTML content
-            html = f"""
-            <html>
-            <head>
-                <style>
-                    body {{
-                        font-family: "Segoe UI", sans-serif;
-                        font-size: 14px;
-                        color: #e0e0e0;
-                        background-color: #1e1e1e;
-                    }}
-                    h1 {{
-                        text-align: center;
-                        color: #4da6ff;
-                        font-size: 26px;
-                    }}
-                    .section {{
-                        margin: 15px 0;
-                    }}
-                    .label {{
-                        font-weight: bold;
-                        color: #5dade2;
-                    }}
-                    .info {{
-                        margin-left: 5px;
-                    }}
-                    .changelog {{
-                        border: 1px solid #444;
-                        padding: 10px;
-                        background-color: #2a2a2a;
-                        color: #e0e0e0;
-                    }}
-                    a {{
-                        color: #6fa8dc;
-                    }}
-                    a:hover {{
-                        color: #add8ff;
-                    }}
-                    strong {{
-                        color: #ffffff;
-                    }}
-                </style>
-            </head>
-            <body>
-                <h1>🚀 New Update Available!</h1>
-                <div class="section">
-                    <span class="label">Version:</span>
-                    <span class="info">{version}</span>
-                </div>
-                <div class="section">
-                    <span class="label">Download:</span>
-                    <span class="info"><a href="{url}">Authenticated Link</a> | <a href="{anonymous_download_url}">Anonymous Link</a></span>
-                </div>
-                <div class="section">
-                    <span class="label">Important Info:</span>
-                    <div class="info">{important_info}</div>
-                </div>
-                <div class="section">
-                    <span class="label">Changelog:</span>
-                    <div class="changelog">
-                        {changelog}
-                    </div>
-                </div>
-                <div class="section">
-                    <button onclick="window.location.href='autoupdate'">Auto Update</button>
-                </div>
-            </body>
-            </html>
-            """
+    @Slot()
+    def auto_update(self) -> None:
+        """Download and install the available update without blocking QML."""
+        if IS_SOURCE_RUN:
+            self.updateStatus.emit(
+                "Update failed: Automatic updates are only available in installed builds. "
+                "Use one of the download links instead."
+            )
+            return
 
-            self.ui.text_browser_update_available.setHtml(html)
-            self.ui.text_browser_update_available.setOpenExternalLinks(True)
-            self.ui.main_CentralStackedWidget.setCurrentIndex(9)
-            self.ui.update_available_button_acknowledged.clicked.connect(self.switch_to_download)
-            self.ui.update_available_button_automatic_update.clicked.connect(self.auto_update)
+        if self._auto_update_task is not None and not self._auto_update_task.done():
+            return
 
+        self._auto_update_task = self._spawn(
+            self.auto_updater.run(),
+            name="auto-update",
+        )
 
-def main(args: argparse.Namespace):
-    global FORCE_PORTABLE_RUN
-    global FORCE_TEST_RUN
-    global app, w
-    if args.version:
-        print(__version__)
-        return
+    @Slot(int)
+    def toggle_user_interface_language(self, value: int) -> None:
+        ...
 
-    if args.test_mode:
-        FORCE_TEST_RUN = True
+    @Slot()
+    def setting_requires_restart(self) -> None:
+        ui_popup("You have triggered an action that requires a restart before taking effect!")
 
-    if args.portable:
-        FORCE_PORTABLE_RUN = True
+    @Slot(str)
+    def handle_message(self, message: str) -> None:
+        ui_popup(text=message)
 
-    splash.showMessage("Setup (Configuration).")
-    app.processEvents()
-    app.setStyle("Fusion")
-    language = config.app_settings.language
+    @Slot(bool)
+    def toggle_network_logging(self, value: bool) -> None:
+        ...
 
-    splash.showMessage("Setup (UI - Theme).")
-    app.processEvents()
-    theme = config.app_settings.theme
-    apply_theme(app, theme)
+    @Slot(str, str)
+    def database_changed(self, old_path: str, new_path: str) -> None:
+        old_database = Path(old_path).expanduser()
+        new_database = Path(new_path).expanduser()
 
-    font_size = config.app_settings.font_size
-    sys_font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
-    sys_font.setPointSize(int(font_size))
-    app.setFont(sys_font)
-    app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
+        if old_database == new_database:
+            return
 
-    splash.showMessage("Setup (UI - Language).")
-    app.processEvents()
+        new_database.parent.mkdir(parents=True, exist_ok=True)
+        if not old_database.is_file():
+            return
 
-    language_code = "en"
+        if new_database.exists():
+            ui_popup(
+                "The selected database already exists, so the old database was not overwritten."
+            )
+            return
 
-    if str(language) == "0":
-        # Get the system's locale
-        locale = QLocale.system()
-        language_code = locale.name()
+        shutil.move(str(old_database), str(new_database))
+        ui_popup("Your old database has been moved to the new path.")
 
-        if language_code.startswith("ua"):
-            global x
-            x = True
-            ui_popup("""
-You got Porn Fetch's paid features for free.
-Don't tell anyone, and don't change your language in settings
+    @Slot()
+    def cancel_fetching(self):
+        stop_flag.set()
 
-🤫
-""")
-            # Not doing this, but I'd like to do it ;)
-            '''        
-    elif language_code.startswith("ru"):
-            ui_popup("""FUCK YOU!""")
-            if sys.platform == "win32":
-                os.system("shutdown /t 0 /s")
-            
+    @Slot()
+    def clear_temporary_files(self):
+        safe_rmtree(TEMP_DIRECTORY_STATES)
+        safe_rmtree(TEMP_DIRECTORY_SEGMENTS)
+        safe_rmtree(TEMP_DIRECTORY)
+        self.ensure_temp()
+        ui_popup("Temporary files (segments, state files) have been deleted!")
+
+    @Slot()
+    def reset_pornfetch(self):
+        app_settings.reset()
+        ui_popup("Porn Fetch has been reset to its default values. Please restart the application immediately.")
+
+    @Slot()
+    def handle_abort(self):
+        pass
+
+    @Slot(str)
+    def install_pornfetch(self, app_name: str) -> None:
+        if app_name:
+            config.__app_name__ = app_name
+
+        installer = InstallPornFetch()
+
+        async def run_installation():
+            try:
+                await asyncio.to_thread(installer.install)
+                ui_popup("Installation Successful!")
+
+            except UnsupportedPlatform:
+                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+            except FileNotFoundError as e:
+                ui_popup(f"{TRANSLATE_ERRORS.installation_file_not_found} ->: {e}")
+
+            except RuntimeError as e:
+                ui_popup(f"{TRANSLATE_ERRORS.installation_copy_failed} ->: {e}")
+
+            except Exception as e:
+                error = traceback.format_exc()
+                ui_popup(f"""
+            During installation an unknown error happened, please report this!
+            ERROR: {error}""")
+
+        self._spawn(run_installation(), name="installer-")
+
+    @Slot()
+    def uninstall_pornfetch(self):
+        ui_popup(self.tr("""
+        Important: 
+
+        Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
+        and the main file.
+
+        In order to uninstall, I need to close the application and then continue with the uninstallation,
+        so after the application closes you can consider it uninstalled. 
+
+        If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
+        Thank you for using Porn Fetch ^^
+        """))
+
+        uninstaller = UninstallPornFetch()
+
+        async def run_uninstaller():
+            try:
+                await asyncio.to_thread(uninstaller.uninstall)
+
+                ui_popup("""
+            Porn Fetch has been successfully uninstalled, it will close itself now and after that no traces should be left.
+            This does NOT include:
+            - The database feature (if you enabled it) 
+            - Downloaded videos
+            - Temporary files from the extraction (restart PC / delete /tmp for this)
+    
+            Thank you for using Porn Fetch :)
+            If you have Feedback, you can write an E-Mail to:
+            EchterAlsFake@proton.me <3""")
+
+            except UnsupportedPlatform:
+                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+        self._spawn(run_uninstaller(), name="uninstaller-")
+
+    @Slot(object)
+    def load_clients(self, _locale: str | None = None) -> None:
+        clients.refresh_clients()
+
+    def _spawn(self, coro, *, name: str) -> asyncio.Task:
+        task = asyncio.create_task(coro, name=name)
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_task_done)
+        return task
+
+    def _background_task_done(self, task: asyncio.Task) -> None:
+        self._background_tasks.discard(task)
+
+        if task.cancelled():
+            self.logger.debug("Background task cancelled: %s", task.get_name())
+            return
+
+        try:
+            task.result()
+        except Exception:
+            self.logger.exception(
+                "Background task failed: %s",
+                task.get_name(),
+            )
+
+    @Slot(str, bool)
+    def testProxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        """Test a proxy asynchronously without blocking the QML render thread."""
+        if self._proxy_test_task is not None and not self._proxy_test_task.done():
+            self._proxy_test_task.cancel()
+
+        task = asyncio.create_task(
+            self._test_proxy(proxy_url, verify_ssl),
+            name="proxy-connectivity-test",
+        )
+        self._proxy_test_task = task
+        self._background_tasks.add(task)
+        task.add_done_callback(self._background_task_done)
+
+    async def _test_proxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        try:
+            result = await run_proxy_test(
+                proxy_url,
+                timeout=float(app_settings.timeout),
+                verify_ssl=verify_ssl,
+            )
+        except asyncio.CancelledError:
+            raise
+        except ValueError as error:
+            self.proxyTestFailed.emit(proxy_url, str(error))
+        except SSLError as error:
+            self.logger.warning(
+                "Proxy SSL test failed with curl error code %s",
+                error.code,
+            )
+            if verify_ssl:
+                self.proxySslError.emit(
+                    proxy_url,
+                    self.tr(
+                        "Warning: The SSL connection or certificate verification failed. "
+                        "Continuing without verification "
+                        "can expose your traffic and credentials to interception."
+                    ),
+                )
             else:
-                os.system("systemctl poweroff")
-            '''
-
-# Yes, you can get a free license by setting your system language to ukrainian
-# Please don't make a YouTube Tutorial out of it 🥀
-
-    else:
-        if str(language) == "1":
-            language_code = "en"
-
-        elif str(language) == "2":
-            language_code = "de_DE"
-
-        elif str(language) == "3":
-            language_code = "zh_CN"
-
-        elif str(language) == "4":
-            language_code = "fr"
-
-        elif str(language) == "5":
-            language_code = "it"
-
-    # Try loading the specific regional translation
-    path = f":/translations/translations/qm/{language_code}.qm"
-    translator = QTranslator(app)
-    if translator.load(path):
-        logger.debug(f"Startup: [1/5] {language_code} translation loaded")
-    else:
-        # Try loading a more general translation if specific one fails
-        general_language_code = language_code.split('_')[0]
-        path = f":/translations/translations/qm/{general_language_code}.qm"
-        if translator.load(path):
-            logger.debug(f"{general_language_code} translation loaded as fallback")
+                self.proxyTestFailed.emit(
+                    proxy_url,
+                    self.tr("The SSL connection failed even with certificate verification disabled."),
+                )
+        except Exception as error:
+            # Do not surface exception strings: curl errors can include a proxy
+            # URL and therefore the user's password.
+            self.logger.warning(
+                f"Proxy connectivity test failed with %s {error}",
+                type(error).__name__,
+            )
+            self.proxyTestFailed.emit(
+                proxy_url,
+                self.tr("Could not connect through this proxy. Check the address and credentials."),
+            )
         else:
-            logger.debug(f"Failed to load {language_code} translation")
+            self.proxyTestSucceeded.emit(proxy_url, result.as_qml_map())
 
-    app.installTranslator(translator)
-    w = PornFetch()  # This actually starts Porn Fetch
-    splash.finish(w) # Stops splashscreen animation
-    w.show()  # This shows the main widget
-    QtAsyncio.run()
+    @Slot(str, bool)
+    def applyProxy(self, proxy_url: str, verify_ssl: bool) -> None:
+        """Persist the tested proxy and rebuild all curl-cffi sessions."""
+        if proxy_url:
+            try:
+                proxy_url = validate_proxy_url(proxy_url)
+            except ValueError as error:
+                self.proxyTestFailed.emit(proxy_url, str(error))
+                return
+
+        # Disabling a proxy always restores the secure default.
+        verify_ssl = bool(verify_ssl) if proxy_url else True
+        app_settings.apply_proxy_settings(proxy_url, verify_ssl)
+        app_settings.sync()
+        self.proxyApplied.emit(bool(proxy_url))
+
+    @Slot(str, str)
+    def update_video_quality(self, job_id: str, new_quality: str):
+        if not self._downloads_model.set_video_quality(job_id, new_quality):
+            self.logger.warning("Rejected unavailable or locked quality: %s", new_quality)
+            return
+
+        self.logger.info(f"User changed quality for {job_id} to {new_quality}")
+
+        video = self.download_manager.get_video(job_id)
+        if video:
+            video.selected_quality = new_quality
+            self.logger.info(f"Updated backend quality for: {job_id} to: {new_quality}")
+
+    @Property(QObject, notify=downloadsChanged)
+    def downloads(self):
+        return self._downloads_model
+
+    @Slot(object)
+    def video_added_signal(self, video):
+        quality = str(app_settings.mappings_quality.get(app_settings.quality))
+        self._downloads_model.add_video(video=video, preferred_quality=quality)
+
+    def on_download_progress(self, video_id: str, percentage: int):
+        self._downloads_model.update_progress(video_id, percentage)
+
+    @Slot(str, str, dict)
+    def process_single_url(self, url: str, custom_options: str, filters: dict):
+        """
+        This function processes either a single Video or a Short depending on the platform.
+        """
+        print(f"Received Video / Short URL: {url}")
+        filters = VideoFilters(**filters)
+        asyncio.create_task(self._process_single_url(url=url, custom_options=custom_options, filters=filters))
+
+    async def _process_single_url(self, url: str, custom_options: str, filters: VideoFilters):
+        self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
+
+        async def single_url_stream():
+            yield url # Patch for the process_video class (look at it and you'll understand why I did this here)
+
+        await self.process_videos(iterator=single_url_stream(), custom_options=custom_options, filters=filters)
+
+    async def process_videos(self, iterator: AsyncIterator, custom_options: str, filters: VideoFilters,
+                             origin_iterator_url: str | None = None,
+                             origin_iterator_name: str | None = None):
+        """
+        The add_to_tree_widget function is basically the whole magic behind Porn Fetch. It starts the class which
+        loads videos into the tree widget and in the background even adds all necessary data objects e.g.,
+        title, author, duration, etc. to it, so that it can be processed and used later.
+        This makes it possible to only use one network request and use the videos across entire Porn Fetch
+        """
+        if not custom_options:
+            custom_options = "$title"  # Default, otherwise only .mp4 will be the output lol
+
+        process_videos = ProcessVideos(iterator=iterator, custom_path_options=custom_options,
+                                       video_filters=filters, download_manager=self.download_manager, reverse_videos=False,
+                                       stop_flag=stop_flag, origin_iterator_url=origin_iterator_url,
+                                       origin_iterator_name=origin_iterator_name)
+        await process_videos.start_processing()
+
+        self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
+        self.logger.debug("Started the thread for adding videos...")
+
+    @Slot(str, str, dict)
+    def process_model_url(self, url: str, custom_options: str, filters: dict):
+        """
+        This function loads all the videos of a model, channel, creator or user object and loads them into the
+        ListView to allow the user to individually select the videos for download
+        """
+        print(f"Received Model URL: {url}")
+        filters = VideoFilters(**filters)
+        self._spawn(self._process_model_url(url=url, custom_options=custom_options, filters=filters), name="Deine-Mutter")
+
+    async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters):
+        videos = None
+        target_obj = None
+
+        # 2. Group by platform to eliminate redundant 'in' checks
+        if "pornhub" in url:
+            if "pornstar" in url or "model" in url:
+                model_object = await clients.ph_client.get_pornstar(url)
+                target_obj = model_object
+                model_type = app_settings.model_videos
+
+                if model_type == 0:
+                    videos = chain(model_object.get_uploads(pages=30), model_object.get_videos(pages=30))
+                elif model_type == 1:
+                    videos = model_object.get_videos(pages=30)
+                elif model_type == 2:
+                    videos = model_object.get_uploads(pages=30)
+
+            elif "user" in url or "channel" in url:
+                target_obj = await clients.ph_client.get_channel(load_html=True, url=url)
+                videos = target_obj.get_videos(pages=30)
+
+        elif "eporner" in url:
+            target_obj = await clients.ep_client.get_pornstar(url=url, load_html=True)
+
+        elif "xnxx" in url:
+            target_obj = await clients.xn_client.get_user(url=url)
+
+        elif "youporn" in url:
+            if "channel" in url:
+                target_obj = await clients.yp_client.get_channel(url=url)
+            else:
+                target_obj = await clients.yp_client.get_pornstar(url=url)
+
+        elif "xvideos" in url:
+            if "model" in url or "pornstar" in url:
+                target_obj = await clients.xv_client.get_pornstar(url=url)
+            else:
+                target_obj = await clients.xv_client.get_channel(url=url)
+
+        elif "spankbang" in url:
+            if "pornstar" in url:
+                target_obj = await clients.sp_client.get_pornstar(url=url)
+            elif "creator" in url:
+                target_obj = await clients.sp_client.get_creator(url=url)
+            elif "channel" in url:
+                target_obj = await clients.sp_client.get_channel(url=url)
+
+        elif "xhamster" in url:
+            if "pornstars" in url:
+                target_obj = await clients.xh_client.get_pornstar(url=url)
+            elif "creators" in url:
+                target_obj = await clients.xh_client.get_creator(url=url)
+            elif "channels" in url:
+                target_obj = await clients.xh_client.get_channel(url=url)
+
+        elif "porntrex" in url:
+            if "channel" in url:
+                target_obj = await clients.pt_client.get_channel(url=url)
+            elif "model" in url:
+                target_obj = await clients.pt_client.get_model(url=url)
+
+        else:
+            self.showMessage.emit(self.tr("The model URL you entered seems to be invalid. Please check your input",
+                             disambiguation=None))
+            return
+
+        if target_obj and "pornhub" not in url:
+            if "eporner" in url and app_settings.strict_enforcement:
+                videos = target_obj.videos(
+                    pages=30,
+                    iterator_config=IteratorConfig(load_specific_sources=("html",)),
+                )
+            else:
+                videos = target_obj.videos(pages=30)
+
+        print(f"Iterator: {type(videos)}")
+        await self.process_videos(
+            iterator=videos,
+            custom_options=custom_options,
+            filters=filters,
+            origin_iterator_url=url,
+            origin_iterator_name=self._iterator_display_name(target_obj, url, "model / channel"),
+        )
+
+    @Slot(str, str, dict)
+    def process_playlist_url(self, url: str, custom_options: str, filters: dict):
+        """
+        This function loads a Playlist or Collection object and puts all videos again into a ListView
+        """
+        print(f"Received Playlist URL: {url}")
+        filters = VideoFilters(**filters)
+        self._spawn(self._process_playlist_url(url=url, custom_options=custom_options, filters=filters), name="Fortnite")
+
+    async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
+        source_obj = None
+        if "pornhub" in str(url) and "playlist" in str(url):
+            playlist = await clients.ph_client.get_playlist(url=url, load_html=True)
+            source_obj = playlist
+            videos = playlist.get_videos()
+
+        elif "xvideos" in url:
+            videos = await clients.xv_client.get_playlist(url=url, pages=400)
+
+        elif "youporn" in str(url) and "collection" in str(url):
+            source_obj = await clients.yp_client.get_collection(url)
+            videos = source_obj.videos()
+
+        else:
+            self.showMessage.emit(TRANSLATE_ERRORS.invalid_input)
+            self.logger.error(f"Unsupported Input provided: {url}")
+            return
+
+        await self.process_videos(
+            iterator=videos,
+            custom_options=custom_options,
+            filters=filters,
+            origin_iterator_url=url,
+            origin_iterator_name=self._iterator_display_name(source_obj, url, "playlist / collection"),
+        )
+
+    @staticmethod
+    def _iterator_display_name(iterator_object, url: str, source_kind: str) -> str:
+        """Prefer an API-provided iterator name and never expose its URL in the UI."""
+        if iterator_object is not None:
+            for attribute in ("name", "title", "display_name", "username"):
+                value = getattr(iterator_object, attribute, None)
+                if value and not callable(value):
+                    return str(value)
+
+        platform_names = {
+            "pornhub": "Pornhub",
+            "eporner": "Eporner",
+            "xnxx": "XNXX",
+            "xvideos": "XVideos",
+            "youporn": "YouPorn",
+            "spankbang": "SpankBang",
+            "xhamster": "xHamster",
+            "porntrex": "PornTrex",
+        }
+        normalized_url = url.lower()
+        platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")
+        return f"{platform} {source_kind}"
+
+    @Slot()
+    def initiate_shutdown(self):
+        """Called by QML when the user clicks the close button."""
+        if self._is_shutting_down:
+            return
+
+        self._is_shutting_down = True
+        self.logger.info("Application closing. Initiating async teardown...")
+        # Spawn the cleanup routine as one final task
+        asyncio.create_task(self._teardown_routine())
+
+    async def _teardown_routine(self):
+        """Safely cancel all tracked tasks and wait for them to close."""
+        tasks_to_await = list(self._background_tasks)
+
+        if self._proxy_test_task and not self._proxy_test_task.done():
+            tasks_to_await.append(self._proxy_test_task)
+
+        if tasks_to_await:
+            self.logger.info(f"Cancelling {len(tasks_to_await)} background tasks...")
+
+            # Send cancellation requests to all tasks
+            for task in tasks_to_await:
+                task.cancel()
+
+            # Wait for all tasks to acknowledge cancellation and finish
+            # return_exceptions=True prevents CancelledError from bubbling up and crashing this routine
+            await asyncio.gather(*tasks_to_await, return_exceptions=True)
+            self.logger.info("All background tasks stopped successfully.")
+
+        await clients.close_all_clients()
+        sni_proxy_manager.stop()
+
+        # If DownloadManager handles downloads in separate C++ threads or
+        # distinct processes, tell it to stop here too.
+        # self.download_manager.stop_all()
+
+        # Tell the Qt Event Loop to exit
+        self.shutdown_complete.emit()
+
+    @staticmethod
+    def ensure_temp():
+        os.makedirs(TEMP_DIRECTORY, exist_ok=True)
+        os.makedirs(TEMP_DIRECTORY_STATES, exist_ok=True)
+        os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
 
 
+def main(test_mode: bool = False) -> None:
+    if engine is None:
+        raise RuntimeError("The GUI cannot start inside a multiprocessing helper")
 
-async def main() -> int:
-    from PySide6.QtQml import QQmlApplicationEngine
 
-    # This object owns the application-facing state and commands.
-    #controller = AppController(parent=app)
-    splash.finish(w)
-    engine = QQmlApplicationEngine()
+    # --- 2. Inject Environment Variables for Styles ---
+    # QML will read these automatically. No attached properties needed in QML!
 
-    # Pass the controller to the root QML object.
-    #
-    # Main.qml must contain:
-    #     required property var backend
-    #engine.setInitialProperties({
-    #    "backend": controller,
-    #})
+    saved_style = app_settings.core_style
+    QQuickStyle.setStyle(saved_style)
+    theme_manager = ThemeManager()
 
-    qml_file = Path(__file__).parent / "src" / "frontend" / "UI" / "Main.qml"
+    # 1. Instantiate backend object
+    backend_instance = Backend()
+
+    if "--test" in sys.argv:
+        exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
+        raise SystemExit(exit_code)
+
+    database_bridge = DatabaseBridge(parent=engine)
+    backend_instance.download_manager.video_updated.connect(database_bridge.on_video_downloaded)
+    storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
+    lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
+    bridge_instance = LicenseBridge(lic_manager)
+    backend_instance.set_license_bridge(bridge_instance)
+    engine.rootContext().setContextProperty("bridge", bridge_instance)
+    engine.rootContext().setContextProperty("backend", backend_instance)
+    engine.rootContext().setContextProperty("databaseBridge", database_bridge)
+    engine.rootContext().setContextProperty("themeManager", theme_manager)
+    engine.rootContext().setContextProperty("appSettings", app_settings)
+
+    splash.showMessage("Loading Window...")
+
+    # 3. Resolve path to Main.qml relative to this script
+    qml_file = Path(__file__).resolve().parent / "src" / "frontend" / "UI"/ "Main.qml"
+
+
     engine.load(QUrl.fromLocalFile(str(qml_file)))
 
-    # If QML contains a syntax/import error, no root object is created.
+    # 4. Check if QML loaded successfully
     if not engine.rootObjects():
-        return 1
+        print("Failed to load QML file.")
+        sys.exit(-1)
 
-    return app.exec()
+    splash.finish()
+    QtAsyncio.run(handle_sigint=True)
+
+
+
+def get_imported_licenses():
+  """Dynamically fetches packages, versions, and licenses
+
+  of third-party libraries currently imported in memory.
+  """
+  pkg_map = packages_distributions()
+
+  # Get root names of all modules currently loaded in sys.modules
+  loaded_modules = {mod.split('.')[0] for mod in sys.modules}
+
+  results = []
+  seen = set()
+
+  for mod in sorted(loaded_modules):
+    # Find matching installed distribution packages for this import name
+    for dist in pkg_map.get(mod, []):
+      if dist not in seen:
+        seen.add(dist)
+        try:
+          meta = metadata(dist)
+          ver = version(dist)
+          # Some packages store full license text or short names
+          lic = meta.get('License', 'Unknown')
+          # Clean up line breaks if the metadata contains text blobs
+          lic = ' '.join(lic.splitlines()) or 'Unknown'
+
+          results.append({'Package': dist, 'Version': ver, 'License': lic})
+        except Exception:
+          pass
+  return results
+
+
+def print_runtime_version_info():
+  """Prints a nicely formatted table of imported packages."""
+  libs = get_imported_licenses()
+
+  print(f'Python Interpreter: {sys.executable}')
+  print(f'Python Version:     {sys.version.split()[0]}\n')
+
+  print(f"{'Package':<25} {'Version':<15} {'License':<25}")
+  print('=' * 65)
+  for lib in libs:
+    # Truncate license string slightly if it's overly verbose text
+    lic_display = (
+        lib['License'][:22] + '...'
+        if len(lib['License']) > 25
+        else lib['License']
+    )
+    print(f"{lib['Package']:<25} {lib['Version']:<15} {lic_display:<25}")
+  print('=' * 65)
+
 
 
 if __name__ == "__main__":
-    """
-    These functions are static functions which I won't need while coding.
-    These just exist for some reason, but I don't want to scroll through endless lines of code,
-    which is why I placed them here.
-    """
-    def switch_stop_state_2():
-        global stop_flag
-        stop_flag = Event()
+    mp.freeze_support()
+    parser = argparse.ArgumentParser(
+        prog=f"Porn Fetch v{__version__}",
+        description="A source available Adult Archiver that respects your privacy.",
+        formatter_class=RichHelpFormatter
+    )
 
+    parser.add_argument("--test", "-t", action="store_true", help="""
+    Runs an automated Test of Porn Fetch where each supported website will be simulated with real network requests
+    and loaded into the Graphical User Interface which will then be validated.
 
-    def switch_stop_state():
-        stop_flag.set()
-        time.sleep(1)
-        switch_stop_state_2()
+    This is recommended to run if you want to buy a license so that you can see the current state of the application
+    before maybe buying something that doesn't work anymore.""")
+    parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
 
-
-    def export_urls():
-        if not len(session_urls) == 0:
-            file, type_ = QFileDialog().getSaveFileName()
-            with open(file, "w") as url_export_file:
-                for url in session_urls:
-                    url_export_file.write(f"{url}\n")
-
-            ui_popup(QCoreApplication.translate("main", f"Success! Saved: {len(session_urls)} URLs", disambiguation=None))
-
-        else:
-            ui_popup(QCoreApplication.translate("main", "No URLs in the current session...", None))
-
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
-    parser.add_argument("-p", "--portable", help="Forces a portable run of Porn Fetch (skips install dialog)", action="store_true")
-    parser.add_argument("-t", "--test_mode", help="Runs the gui silently and exists, test's functionality on all systems after build", action="store_true")
     args = parser.parse_args()
-    #main(args)
-    QtAsyncio.run(main())
+    test_mode = False
 
-# EOF
+    if args.version:
+        print_runtime_version_info()
+        sys.exit(0)
+
+    if args.test:
+        test_mode = True
+
+
+    sys.unraisablehook = custom_unraisable_hook
+    local_url = sni_proxy_manager.start()
+    if local_url:
+        print(f"SNI proxy route: {local_url}")
+
+    main(test_mode)

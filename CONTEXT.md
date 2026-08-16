@@ -35,11 +35,10 @@ This file is reserved for AI agents and shall not be used by other developers!
 - BACKEND.md -> Explains the eaf_base_api library
 - CONTEXT.md -> This file
 - CONTRIBUTING.md -> Contribute guide and reference
-- main.py -> Old legacy entry point for the Qt Widgets application. OUTDATED! NOT RELEVANT!
+- main.py -> Entry Point
 - Porn_Fetch_CLI.py -> The CLI of Porn Fetch (not relevant during development unless explicitly told)
 - pyproject.toml -> Defines dependencies for UV
 - SECURITY.md -> Document to follow European Security laws for software
-- test.py -> Main entry point file (currently) contains the entire main logic and GUI application written in QML
 - uv.lock -> Locks dependencies with UV
 
 # Frontend

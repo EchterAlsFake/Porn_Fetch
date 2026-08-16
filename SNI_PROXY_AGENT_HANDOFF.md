@@ -196,7 +196,7 @@ Lite or Strict helper for the whole application. It:
 - restarts the proxy when the configured network interface or upstream proxy
   changes.
 
-[`test.py`](test.py) creates this singleton, starts it before entering the main
+[`test.py`](main.py) creates this singleton, starts it before entering the main
 GUI, refreshes the client sessions, displays a fail-closed startup error, and
 stops the proxy during shutdown. Multiprocessing uses `spawn`; the GUI startup
 is guarded so a Strict helper child does not create another Qt application.
@@ -257,7 +257,7 @@ though Strict reverted to Lite/defaults. The normal settings are at:
 For a Linux source run, use:
 
 ```bash
-sudo -E .venv/bin/python3 test.py
+sudo -E .venv/bin/python3 main.py
 ```
 
 On this machine `sudo -E` preserves `HOME=/home/asuna`; an elevated read test
@@ -402,7 +402,7 @@ Current regression command:
   testing.test_client_refresh
 
 qmllint src/frontend/UI/SettingsPage.qml src/frontend/UI/AppStrings.qml
-.venv/bin/python3 -m compileall -q src testing test.py
+.venv/bin/python3 -m compileall -q src testing main.py
 git diff --check
 ```
 

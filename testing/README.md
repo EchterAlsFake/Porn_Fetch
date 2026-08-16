@@ -27,7 +27,7 @@ Then start the QML application from another terminal with the development
 endpoint override:
 
 ```bash
-PORNFETCH_UPDATE_URL=http://127.0.0.1:8765/update python test.py
+PORNFETCH_UPDATE_URL=http://127.0.0.1:8765/update python main.py
 ```
 
 The server advertises version 4.0 with fake HTML release notes and harmless
