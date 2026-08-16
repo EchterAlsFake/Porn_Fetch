@@ -109,6 +109,7 @@ from contextlib import aclosing
 from rich_argparse import RichHelpFormatter
 from typing import AsyncGenerator, AsyncIterator
 from base_api.modules.config import IteratorConfig
+from base_api import DownloadConfigHLS, DownloadConfigRAW
 from base_api.modules.logger import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
@@ -187,6 +188,14 @@ except Exception:
 stop_flag = asyncio.Event()
 last_index = 0
 sni_proxy_manager = SNIProxyManager(app_settings)
+
+
+class DownloadStopEvent(asyncio.Event):
+    """An asyncio stop flag whose identity survives API config copies."""
+
+    def __deepcopy__(self, memo: dict[int, object]) -> "DownloadStopEvent":
+        memo[id(self)] = self
+        return self
 
 
 def custom_unraisable_hook(unraisable):
@@ -338,7 +347,11 @@ class ProcessVideos(QObject):
 
         template = Template(user_pattern)
         resolved_string = template.safe_substitute(context)
-        return Path(resolved_string).expanduser()
+        resolved_path = Path(resolved_string).expanduser()
+        uses_output_path = "$output_path" in user_pattern or "${output_path}" in user_pattern
+        if not resolved_path.is_absolute() and not uses_output_path:
+            resolved_path = Path(base_path).expanduser() / resolved_path
+        return resolved_path
 
     async def start_processing(self):
         global last_index
@@ -376,6 +389,7 @@ class ProcessVideos(QObject):
                         video_object.identifier = identifier
                         video_object.index = idx
                         video_object.selected_quality = quality
+                        video_object.source_video = video
                         video_object.origin_iterator_url = self.origin_iterator_url
                         video_object.origin_iterator_name = self.origin_iterator_name
 
@@ -458,6 +472,9 @@ class Backend(QObject):
         self._proxy_test_task: asyncio.Task[object] | None = None
         self._update_check_task: asyncio.Task[object] | None = None
         self._auto_update_task: asyncio.Task[object] | None = None
+        self._download_tasks: dict[str, asyncio.Task[object]] = {}
+        self._download_stop_events: dict[str, asyncio.Event] = {}
+        self._download_semaphore = asyncio.Semaphore(max(1, int(app_settings.parallel_downloads)))
         self._license_bridge: LicenseBridge | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
@@ -814,6 +831,177 @@ class Backend(QObject):
         if video:
             video.selected_quality = new_quality
             self.logger.info(f"Updated backend quality for: {job_id} to: {new_quality}")
+
+    @Slot(str, bool)
+    def set_video_selected(self, job_id: str, selected: bool) -> None:
+        self._downloads_model.set_selected(job_id, selected)
+
+    @Slot(bool)
+    def select_all_videos(self, selected: bool) -> None:
+        self._downloads_model.set_all_selected(selected)
+
+    @Slot(bool)
+    def download_selected_videos(self, cleanup_on_stop: bool = False) -> None:
+        for job_id in self._downloads_model.selected_job_ids():
+            self.download_video(job_id, cleanup_on_stop)
+
+    @Slot(str, bool)
+    def download_video(self, job_id: str, cleanup_on_stop: bool = False) -> None:
+        job_id = str(job_id)
+        existing_task = self._download_tasks.get(job_id)
+        if existing_task is not None and not existing_task.done():
+            return
+
+        video = self._downloads_model.get_video(job_id)
+        if video is None or video.source_video is None:
+            self.logger.warning("Cannot download unknown video: %s", job_id)
+            return
+
+        is_resume = self._downloads_model.get_status(job_id) in {"cancelled", "failed"}
+        stop_event = DownloadStopEvent()
+        self._download_stop_events[job_id] = stop_event
+        self._downloads_model.set_status(job_id, "queued")
+        if not is_resume:
+            self._downloads_model.update_progress(job_id, 0)
+
+        task = self._spawn(
+            self._download_video(job_id, video, stop_event, cleanup_on_stop),
+            name=f"video-download-{job_id}",
+        )
+        self._download_tasks[job_id] = task
+        task.add_done_callback(
+            lambda completed_task, current_job_id=job_id: self._download_task_finished(
+                current_job_id, completed_task
+            )
+        )
+
+    @Slot(str, bool)
+    def resume_download(self, job_id: str, cleanup_on_stop: bool = False) -> None:
+        """Retry a row using its existing output and HLS resume state."""
+        self.download_video(job_id, cleanup_on_stop)
+
+    def _download_task_finished(self, job_id: str, task: asyncio.Task[object]) -> None:
+        if self._download_tasks.get(job_id) is task:
+            self._download_tasks.pop(job_id, None)
+            self._download_stop_events.pop(job_id, None)
+
+    @Slot(str)
+    def stop_download(self, job_id: str) -> None:
+        job_id = str(job_id)
+        stop_event = self._download_stop_events.get(job_id)
+        if stop_event is None:
+            return
+        stop_event.set()
+        self._downloads_model.set_status(job_id, "stopping")
+
+    async def _download_video(
+        self,
+        job_id: str,
+        video: VideoObject,
+        stop_event: asyncio.Event,
+        cleanup_on_stop: bool,
+    ) -> None:
+        try:
+            async with self._download_semaphore:
+                if stop_event.is_set():
+                    video.status = "cancelled"
+                    self._downloads_model.set_status(job_id, "cancelled")
+                    self.download_manager.update_status(job_id, "cancelled")
+                    return
+
+                if app_settings.processing_delay:
+                    await asyncio.sleep(int(app_settings.processing_delay))
+                    if stop_event.is_set():
+                        video.status = "cancelled"
+                        self._downloads_model.set_status(job_id, "cancelled")
+                        self.download_manager.update_status(job_id, "cancelled")
+                        return
+
+                output_path = Path(video.output_path or video.title)
+                if not output_path.suffix:
+                    output_path = output_path.with_suffix(".mp4")
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                video.output_path = output_path
+
+                if output_path.exists() and app_settings.skip_existing_files:
+                    self._downloads_model.update_progress(job_id, 100)
+                    self._downloads_model.set_status(job_id, "completed")
+                    self.download_manager.update_status(job_id, "completed")
+                    return
+
+                self._downloads_model.set_status(job_id, "downloading")
+
+                def update_progress(position: int, total: int) -> None:
+                    if not total:
+                        return
+                    percentage = max(0, min(100, int(position * 100 / total)))
+                    self._downloads_model.update_progress(job_id, percentage)
+
+                quality = video.selected_quality or "best"
+                source_video = video.source_video
+                raw_video_types = (clients.ep_Video, clients.pt_Video, clients.xf_Video)
+
+                if isinstance(source_video, raw_video_types):
+                    video.is_hls = False
+                    configuration = DownloadConfigRAW(
+                        quality=quality,
+                        path=output_path,
+                        callback=update_progress,
+                        no_title=True,
+                        stop_event=stop_event,
+                        max_workers=app_settings.download_workers,
+                        read_timeout=float(app_settings.timeout),
+                        max_retries=app_settings.retries,
+                    )
+                    if isinstance(source_video, clients.ep_Video):
+                        result = await source_video.download(configuration, mode="h264")
+                    else:
+                        result = await source_video.download(configuration)
+                else:
+                    video.is_hls = True
+                    segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
+                    segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
+                    configuration = DownloadConfigHLS(
+                        quality=quality,
+                        path=output_path,
+                        callback=update_progress,
+                        callback_remux=update_progress,
+                        no_title=True,
+                        stop_event=stop_event,
+                        remux=not FORCE_DISABLE_AV,
+                        segment_state_path=str(segment_state_path),
+                        segment_dir=str(segment_dir),
+                        return_report=True,
+                        cleanup_on_stop=cleanup_on_stop,
+                        keep_segment_dir=not cleanup_on_stop,
+                    )
+                    result = await source_video.download(configuration)
+
+                report_status = getattr(result, "status", None)
+                video.missing_segments = getattr(result, "missing", None)
+                if stop_event.is_set() or report_status == "cancelled":
+                    status = "cancelled"
+                elif report_status == "missing" or result is False:
+                    status = "failed"
+                else:
+                    status = "completed"
+
+                video.status = status
+                self._downloads_model.set_status(job_id, status)
+                if status == "completed":
+                    self._downloads_model.update_progress(job_id, 100)
+                self.download_manager.update_status(job_id, status)
+        except asyncio.CancelledError:
+            video.status = "cancelled"
+            self._downloads_model.set_status(job_id, "cancelled")
+            self.download_manager.update_status(job_id, "cancelled")
+            raise
+        except Exception:
+            video.status = "failed"
+            self._downloads_model.set_status(job_id, "failed")
+            self.download_manager.update_status(job_id, "failed")
+            self.logger.exception("Download failed for %s", job_id)
+            self.showMessage.emit(self.tr("The video download failed. Please check the log for details."))
 
     @Property(QObject, notify=downloadsChanged)
     def downloads(self):

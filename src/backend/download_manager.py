@@ -87,6 +87,7 @@ class VideoObject:
     output_path: Path | None = None
     index: int | None = None
     selected_quality: str | None = None
+    source_video: object | None = None
 
     # These will be dynamically written to
     origin_iterator_url: str | None = None
@@ -104,10 +105,13 @@ class DownloadListModel(QAbstractListModel):
     AvailableQualitiesRole = Qt.ItemDataRole.UserRole + 5
     SelectedQualityRole = Qt.ItemDataRole.UserRole + 6
     ProgressRole = Qt.ItemDataRole.UserRole + 7
+    SelectedRole = Qt.ItemDataRole.UserRole + 8
+    StatusRole = Qt.ItemDataRole.UserRole + 9
 
     def __init__(self, parent=None, premium_access=None):
         super().__init__(parent)
         self._items = []
+        self._row_by_id: dict[str, int] = {}  # O(1) row lookup cache because why not optimizing for nanoseconds xD
         self._premium_access = premium_access or (lambda: False) # The function which checks if user has premium access
         app_settings.qualityChanged.connect(self.update_all_qualities)
         # if the user changed the preferred quality in settings it will instantly update all rows
@@ -115,26 +119,24 @@ class DownloadListModel(QAbstractListModel):
     def has_premium_access(self) -> bool:
         return bool(self._premium_access()) # Evaluates the function
 
-    def update_all_qualities(self, new_quality_idx: int):
+    def update_all_qualities(self, new_quality_idx: int) -> None:
         preferred_quality = str(app_settings.mappings_quality.get(new_quality_idx, "best"))
-        # Gets the actual quality from the idx using the mapping
+        has_premium = self.has_premium_access()
 
-        for row, item in enumerate(self._items): # Iterates through all available rows
+        for row, item in enumerate(self._items):
             selected_quality = select_allowed_quality(
                 preferred_quality,
                 item.get("availableQualities", []),
-                self.has_premium_access(),
-            ) # Examines the available qualities, license enforcement and returns the actual available quality
-              # based on the new preferred one.
-
-            if item.get("selectedQuality") != selected_quality: # If the quality is different, update it
+                has_premium,
+            )
+            if item.get("selectedQuality") != selected_quality:
                 item["selectedQuality"] = selected_quality
-                item["_video"].selected_quality = selected_quality or None # Updates the VideoObject class
-                idx = self.index(row, 0) # Receives  the index
-                self.dataChanged.emit(idx, idx, [self.SelectedQualityRole]) # Updates the quality role
+                item["_video"].selected_quality = selected_quality or None
+                idx = self.index(row, 0)
+                self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
 
     def enforce_quality_access(self) -> None:
-        self.update_all_qualities(app_settings.quality) # Calls the function above, connected to the Signal
+        self.update_all_qualities(app_settings.quality)
 
     def roleNames(self):
         return {
@@ -144,7 +146,9 @@ class DownloadListModel(QAbstractListModel):
             self.DurationRole: b"duration",
             self.AvailableQualitiesRole: b"availableQualities",
             self.SelectedQualityRole: b"selectedQuality",
-            self.ProgressRole: b"progress"
+            self.ProgressRole: b"progress",
+            self.SelectedRole: b"selected",
+            self.StatusRole: b"status",
             # Creates the role names as bytes, so the underlying C++ Shiboken engine doesn't have to convert
             # this in each call. Looks weird I know, but this is more memory efficient and faster
         }
@@ -174,25 +178,30 @@ class DownloadListModel(QAbstractListModel):
             return item.get("selectedQuality", "")
         elif role == self.ProgressRole:
             return item.get("progress", 0) # Please don't be zero ahh
+        elif role == self.SelectedRole:
+            return item.get("selected", False)
+        elif role == self.StatusRole:
+            return item.get("status", "pending")
 
         return None
 
     def add_video(self, video: VideoObject, preferred_quality: str) -> str:
-        if video.length in (None, "Not Available"):
+        """This function is called by the Backend class and adds an actual video. QML picks it up and creates the row"""
+        if video.length in (None, "Not Available"): # Not all videos have a length attribute
             display_duration = "N/A"
 
         else:
-            minutes, seconds = divmod(int(video.length), 60)
+            minutes, seconds = divmod(int(video.length), 60) # Format it pretty to display hours : minutes
             display_duration = f"{minutes:02d}:{seconds:02d}"
 
         selected_quality = select_allowed_quality(
             preferred_quality,
             video.qualities or [],
             self.has_premium_access(),
-        )
+        ) # Determines the quality just like above
         video.selected_quality = selected_quality or None
 
-        job_id = video.video_id or video.identifier or str(len(self._items))
+        job_id = str(video.identifier or video.video_id or len(self._items)) # Job ID for unique reference of the row
         item_data = {
             "jobId": str(job_id),
             "title": f"{video.index}) {video.title}" if video.index else video.title,
@@ -201,53 +210,121 @@ class DownloadListModel(QAbstractListModel):
             "availableQualities": video.qualities,
             "selectedQuality": selected_quality,
             "progress": 0,  # Starts at 0%
-            "_video": video,
+            "selected": False,
+            "status": "pending",
+            "_video": video, # Stores the actual data from the video object
         }
 
-        self.beginInsertRows(QModelIndex(), len(self._items), len(self._items))
-        self._items.append(item_data)
-        self.endInsertRows()
-        return selected_quality
+        new_row = len(self._items)
+        self.beginInsertRows(QModelIndex(), len(self._items), len(self._items)) # Tells Qt to start creating
+        self._items.append(item_data) # Puts the tem data into the row
+        self._row_by_id[job_id] = new_row
+        self.endInsertRows() # Stops creating (QML starts displaying the row here)
+        return selected_quality # For verification the actual quality is returned
 
     def set_video_quality(self, job_id: str, new_quality: str) -> bool:
-        if quality_requires_premium(new_quality) and not self.has_premium_access():
+        """This applies a new quality based on the users choice for a given video"""
+        row = self._row_by_id.get(job_id)
+
+        if row is None:
             return False
 
+        if quality_requires_premium(new_quality) and not self.has_premium_access():
+            return False # aborts if the user doesn't have permission
+
+        item = self._items[row]
+
+        if new_quality not in item.get("availableQualities", []):
+            return False
+
+        if item["selectedQuality"] != new_quality:
+            item["selectedQuality"] = new_quality
+            item["_video"].selected_quality = new_quality
+
+            idx = self.index(row, 0)
+            self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
+
+        return True
+
+    def get_video(self, job_id: str) -> VideoObject | None:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return None
+        return self._items[row]["_video"]
+
+    def get_status(self, job_id: str) -> str | None:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return None
+        return self._items[row].get("status", "pending")
+
+    def selected_job_ids(self) -> list[str]:
+        return [item["jobId"] for item in self._items if item.get("selected", False)]
+
+    def set_selected(self, job_id: str, selected: bool) -> bool:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return False
+
+        item = self._items[row]
+        selected = bool(selected)
+        if item.get("selected") != selected:
+            item["selected"] = selected
+            idx = self.index(row, 0)
+            self.dataChanged.emit(idx, idx, [self.SelectedRole])
+        return True
+
+    def set_all_selected(self, selected: bool) -> None:
+        if not self._items:
+            return
+
+        changed_rows = []
+        selected = bool(selected)
         for row, item in enumerate(self._items):
-            if item["jobId"] == str(job_id):
-                if str(new_quality) not in [str(quality) for quality in item["availableQualities"]]:
-                    return False
+            if item.get("selected") != selected:
+                item["selected"] = selected
+                changed_rows.append(row)
 
-                item["selectedQuality"] = new_quality
-                item["_video"].selected_quality = new_quality
+        if changed_rows:
+            first = self.index(changed_rows[0], 0)
+            last = self.index(changed_rows[-1], 0)
+            self.dataChanged.emit(first, last, [self.SelectedRole])
 
-                # Tell QML to redraw this specific row
-                idx = self.index(row, 0)
-                self.dataChanged.emit(idx, idx, [self.SelectedQualityRole])
-                return True
+    def set_status(self, job_id: str, status: str) -> None:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return
 
-        return False
+        item = self._items[row]
+        if item.get("status") != status:
+            item["status"] = status
+            idx = self.index(row, 0)
+            self.dataChanged.emit(idx, idx, [self.StatusRole])
 
-    def update_progress(self, job_id: str, progress: int):
-        for row, item in enumerate(self._items):
-            if item["jobId"] == str(job_id):
-                item["progress"] = progress
-                index = self.index(row, 0)
-                self.dataChanged.emit(index, index, [self.ProgressRole])
-                break
+
+    def update_progress(self, job_id: str, progress: int) -> None:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return
+
+        item = self._items[row]
+        if item["progress"] != progress:  # Avoid redundant QML repaints
+            item["progress"] = progress
+            idx = self.index(row, 0)
+            self.dataChanged.emit(idx, idx, [self.ProgressRole])
 
 
 class DownloadManager(QObject): # Inherit from QObject so we can work with Slots and Signals
-    video_added = Signal(VideoObject)
-    video_updated = Signal(VideoObject)
-    video_removed = Signal(int)
+    video_added = Signal(VideoObject) # Tells the list model when a new video is there
+    video_updated = Signal(VideoObject) # Updates the status for a video
+    video_removed = Signal(int) # Removes the row
 
     def __init__(self):
         super().__init__()
-        self._videos: dict[str, VideoObject] = {}
+        self._videos: dict[str, VideoObject] = {} # Keeps track of the current videos
 
     def add_video(self, video: VideoObject) -> None:
-        self._videos[video.identifier] = video
+        self._videos[video.identifier] = video # Adds a new video using the identifier
         self.video_added.emit(video)
 
     def update_status(self, identifier: str, new_status):

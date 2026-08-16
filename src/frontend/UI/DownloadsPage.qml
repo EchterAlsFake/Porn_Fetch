@@ -204,6 +204,37 @@ Pane {
                     anchors.fill: parent
                     spacing: 0
 
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 8
+                        Layout.rightMargin: 8
+                        Layout.topMargin: 4
+                        Layout.bottomMargin: 4
+                        spacing: 8
+
+                        Button {
+                            text: qsTr("Select All")
+                            enabled: downloadList.count > 0
+                            onClicked: backend.select_all_videos(true)
+                        }
+
+                        Button {
+                            text: qsTr("Clear Selection")
+                            enabled: downloadList.count > 0
+                            onClicked: backend.select_all_videos(false)
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        Button {
+                            text: qsTr("Download Selected")
+                            enabled: downloadList.count > 0
+                            onClicked: backend.download_selected_videos(cleanupStopCheck.checked)
+                        }
+                    }
+
                     Rectangle {
                         Layout.fillWidth: true
                         implicitHeight: headerLayout.implicitHeight + 16
@@ -219,8 +250,8 @@ Pane {
                             spacing: 8
 
                             Label {
-                                Layout.preferredWidth: 90
-                                text: qsTr("Download?")
+                                Layout.preferredWidth: 180
+                                text: qsTr("Select / Download")
                             }
 
                             Label {
@@ -248,8 +279,8 @@ Pane {
                             }
 
                             Label {
-                                Layout.preferredWidth: 65
-                                text: qsTr("STOP")
+                                Layout.preferredWidth: 90
+                                text: qsTr("Stop / Resume")
                             }
 
                             Label {
@@ -280,6 +311,14 @@ Pane {
                             required property var availableQualities
                             required property string selectedQuality
                             required property int progress
+                            required property bool selected
+                            required property string status
+
+                            readonly property bool downloadActive: status === "queued"
+                                                                   || status === "downloading"
+                                                                   || status === "stopping"
+                            readonly property bool canResume: status === "cancelled"
+                                                              || status === "failed"
 
                             width: ListView.view.width
                             implicitHeight: Math.max(48, rowLayout.implicitHeight + 16)
@@ -293,8 +332,25 @@ Pane {
                                 anchors.rightMargin: 8
                                 spacing: 8
 
-                                CheckBox {
-                                    Layout.preferredWidth: 90
+                                RowLayout {
+                                    Layout.preferredWidth: 180
+                                    spacing: 4
+
+                                    CheckBox {
+                                        checked: downloadRow.selected
+                                        enabled: !downloadRow.downloadActive
+                                        onToggled: backend.set_video_selected(
+                                                       downloadRow.jobId, checked)
+                                    }
+
+                                    Button {
+                                        Layout.fillWidth: true
+                                        text: qsTr("Download")
+                                        enabled: !downloadRow.downloadActive
+                                        onClicked: backend.download_video(
+                                                       downloadRow.jobId,
+                                                       cleanupStopCheck.checked)
+                                    }
                                 }
 
                                 Label {
@@ -385,23 +441,46 @@ Pane {
                                 }
 
                                 Button {
-                                    Layout.preferredWidth: 65
+                                    Layout.preferredWidth: 90
 
-                                    text: "■"
+                                    text: downloadRow.downloadActive ? "■" : "▶"
+                                    enabled: downloadRow.downloadActive
+                                             || downloadRow.canResume
+                                    ToolTip.visible: hovered
+                                    ToolTip.text: downloadRow.downloadActive
+                                                  ? qsTr("Stop download")
+                                                  : qsTr("Resume download")
 
                                     onClicked: {
-                                        backend.stop_download(
-                                            downloadRow.jobId
-                                        )
+                                        if (downloadRow.downloadActive) {
+                                            backend.stop_download(downloadRow.jobId)
+                                        } else {
+                                            backend.resume_download(
+                                                downloadRow.jobId,
+                                                cleanupStopCheck.checked)
+                                        }
                                     }
                                 }
 
-                                ProgressBar {
+                                Item {
                                     Layout.preferredWidth: 180
+                                    implicitHeight: rowProgress.implicitHeight
 
-                                    from: 0
-                                    to: 100
-                                    value: downloadRow.progress
+                                    ProgressBar {
+                                        id: rowProgress
+                                        anchors.fill: parent
+
+                                        from: 0
+                                        to: 100
+                                        value: downloadRow.progress
+                                    }
+
+                                    Label {
+                                        anchors.centerIn: parent
+                                        text: Math.round(downloadRow.progress) + "%"
+                                        color: "white"
+                                        font.bold: true
+                                    }
                                 }
                             }
                         }
