@@ -29,7 +29,7 @@ class DatabaseBridge(QObject):
     # 1. SLOT CALLED BY YOUR BACKEND DOWNLOADER
     # =========================================================================
     @Slot(object)
-    def on_video_downloaded(self, video: VideoObject):
+    def on_video_updated(self, video: VideoObject):
         """
         Call this slot from your Python backend when a download finishes.
         Runs asynchronously off the UI thread!

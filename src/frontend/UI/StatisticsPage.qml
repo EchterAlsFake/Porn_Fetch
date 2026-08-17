@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 Pane {
@@ -20,11 +21,22 @@ Pane {
 
     readonly property color accentColor: (typeof appSettings !== "undefined" && appSettings)
                                          ? appSettings.accent_color : "#7c5cff"
-    readonly property color successColor: "#35d07f"
-    readonly property color failureColor: "#ff627d"
-    readonly property color pendingColor: "#f5b942"
-    readonly property color cardColor: Qt.lighter(palette.window, 1.18)
-    readonly property color subtleTextColor: Qt.rgba(palette.text.r, palette.text.g, palette.text.b, 0.62)
+    readonly property bool materialStyle: (typeof appSettings !== "undefined" && appSettings)
+                                          && appSettings.core_style === "Material"
+    readonly property bool darkMode: materialStyle
+                                     ? Material.theme === Material.Dark
+                                     : ((typeof appSettings !== "undefined" && appSettings)
+                                        ? appSettings.dark_mode : false)
+    readonly property color successColor: darkMode ? "#35d07f" : "#168352"
+    readonly property color failureColor: darkMode ? "#ff627d" : "#c62845"
+    readonly property color pendingColor: darkMode ? "#f5b942" : "#9a6500"
+    readonly property color foregroundColor: materialStyle ? Material.foreground : palette.text
+    readonly property color cardColor: materialStyle
+                                       ? Material.dialogColor
+                                       : (darkMode ? Qt.lighter(palette.window, 1.18) : palette.base)
+    readonly property color subtleTextColor: Qt.rgba(foregroundColor.r,
+                                                     foregroundColor.g,
+                                                     foregroundColor.b, 0.62)
     readonly property bool privacyMode: (typeof appSettings !== "undefined" && appSettings)
                                         ? appSettings.anonymous_mode : false
     readonly property int outcomeTotal: statistics.successful + statistics.failed + statistics.other
@@ -230,7 +242,7 @@ Pane {
                                         context.lineWidth = 22
                                         context.lineCap = "round"
                                         if (root.outcomeTotal === 0) {
-                                            context.strokeStyle = Qt.rgba(root.palette.text.r, root.palette.text.g, root.palette.text.b, 0.12)
+                                            context.strokeStyle = Qt.rgba(root.foregroundColor.r, root.foregroundColor.g, root.foregroundColor.b, 0.12)
                                             context.beginPath()
                                             context.arc(center, center, radius, 0, Math.PI * 2)
                                             context.stroke()
@@ -253,6 +265,9 @@ Pane {
                                     Connections {
                                         target: root
                                         function onStatisticsChanged() { outcomeChart.requestPaint() }
+                                        function onSuccessColorChanged() { outcomeChart.requestPaint() }
+                                        function onFailureColorChanged() { outcomeChart.requestPaint() }
+                                        function onPendingColorChanged() { outcomeChart.requestPaint() }
                                     }
                                 }
 
@@ -427,7 +442,7 @@ Pane {
                                 Layout.fillWidth: true
                                 implicitHeight: 10
                                 radius: height / 2
-                                color: Qt.rgba(root.palette.text.r, root.palette.text.g, root.palette.text.b, 0.08)
+                                color: Qt.rgba(root.foregroundColor.r, root.foregroundColor.g, root.foregroundColor.b, 0.08)
                                 clip: true
 
                                 Rectangle {

@@ -9,6 +9,7 @@ import QtQuick.Controls.Material
 Pane {
     font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
+    readonly property bool materialStyle: appSettings.core_style === "Material"
 
     component DecimalSpinBox: SpinBox {
         property int decimals: 2
@@ -241,9 +242,13 @@ Pane {
                                             Label {
                                                 Layout.fillWidth: true
                                                 text: modelData
-                                                color: qualityDelegate.enabled
-                                                       ? qualityDelegate.palette.text
-                                                       : qualityDelegate.palette.mid
+                                                color: window.materialStyle
+                                                       ? (qualityDelegate.enabled
+                                                          ? qualityDelegate.Material.foreground
+                                                          : qualityDelegate.Material.hintTextColor)
+                                                       : (qualityDelegate.enabled
+                                                          ? qualityDelegate.palette.text
+                                                          : qualityDelegate.palette.mid)
                                                 verticalAlignment: Text.AlignVCenter
                                             }
 

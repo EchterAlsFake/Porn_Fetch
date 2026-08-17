@@ -2,11 +2,14 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 Pane {
     id: root
     padding: 0
+    readonly property bool materialStyle: (typeof appSettings !== "undefined" && appSettings)
+                                          && appSettings.core_style === "Material"
 
     function qualityRequiresLicense(quality) {
         var normalized = String(quality || "").trim().toLowerCase()
@@ -403,7 +406,9 @@ Pane {
                                         text: qualityCombo.currentIndex >= 0
                                               ? availableQualities[qualityCombo.currentIndex]
                                               : qsTr("License required")
-                                        color: "white"
+                                        color: root.materialStyle
+                                               ? qualityCombo.Material.foreground
+                                               : qualityCombo.palette.buttonText
                                         font: qualityCombo.font
                                         verticalAlignment: Text.AlignVCenter
                                         horizontalAlignment: Text.AlignHCenter
@@ -412,6 +417,7 @@ Pane {
 
                                     // 4. Custom look for the dropdown items (Freemium logic)
                                     delegate: ItemDelegate {
+                                        id: qualityDelegate
                                         width: parent.width
 
                                         readonly property bool isPremiumRes: root.qualityRequiresLicense(modelData)
@@ -426,7 +432,13 @@ Pane {
                                                 Layout.fillWidth: true
                                                 text: modelData
                                                 // Gray out the text if it's disabled
-                                                color: parent.enabled ? "white" : "gray"
+                                                color: root.materialStyle
+                                                       ? (qualityDelegate.enabled
+                                                          ? qualityDelegate.Material.foreground
+                                                          : qualityDelegate.Material.hintTextColor)
+                                                       : (qualityDelegate.enabled
+                                                          ? qualityDelegate.palette.text
+                                                          : qualityDelegate.palette.mid)
                                                 verticalAlignment: Text.AlignVCenter
                                             }
 

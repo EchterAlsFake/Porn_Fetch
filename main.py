@@ -478,7 +478,7 @@ class Backend(QObject):
         self._license_bridge: LicenseBridge | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
-        self.download_manager = DownloadManager()
+        self.download_manager = DownloadManager(database_bridge=self.database_bridge)
         self.download_manager.video_added.connect(self.video_added_signal)
         self.auto_updater = AutoUpdater(self)
         self.auto_updater.updateProgress.connect(self.updateProgress)
@@ -1274,6 +1274,9 @@ def main(test_mode: bool = False) -> None:
         raise SystemExit(exit_code)
 
     database_bridge = DatabaseBridge(parent=engine)
+    download_manager = backend_instance.download_manager
+    download_manager.video_added.connect(database_bridge.on_video_updated)
+    download_manager.video_updated.connect(database_bridge.on_video_updated)
     backend_instance.download_manager.video_updated.connect(database_bridge.on_video_downloaded)
     storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
     lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)

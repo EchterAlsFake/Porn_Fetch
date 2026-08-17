@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 
 ComboBox {
     id: control
@@ -8,6 +9,8 @@ ComboBox {
     property var availableHeights: []
     property var preferredQuality: "best"
     property bool hasLicense: false
+    readonly property bool materialStyle: (typeof appSettings !== "undefined" && appSettings)
+                                          && appSettings.core_style === "Material"
 
     // Equivalent to your FREE_MAX_HEIGHT and LOCKED_LABELS
     readonly property int freeMaxHeight: 720
@@ -29,17 +32,25 @@ ComboBox {
 
     // Custom delegate to handle enabled/disabled states (the license check)
     delegate: ItemDelegate {
+        id: qualityDelegate
         width: control.popup.width
         text: model.text
         enabled: model.isItemEnabled
         highlighted: control.highlightedIndex === index
+        Material.foreground: highlighted ? control.Material.accent : control.Material.foreground
 
         contentItem: Text {
             text: parent.text
             font: control.font
-            // Use system palette for dark/light mode support
-            color: parent.enabled ? (parent.highlighted ? control.palette.highlightedText : control.palette.text)
-                                  : control.palette.placeholderText // Grayed out if no license
+            color: control.materialStyle
+                   ? (qualityDelegate.enabled
+                      ? qualityDelegate.Material.foreground
+                      : qualityDelegate.Material.hintTextColor)
+                   : (qualityDelegate.enabled
+                      ? (qualityDelegate.highlighted
+                         ? control.palette.highlightedText
+                         : control.palette.text)
+                      : control.palette.placeholderText)
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
