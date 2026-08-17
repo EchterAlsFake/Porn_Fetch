@@ -326,10 +326,12 @@ class DownloadManager(QObject): # Inherit from QObject so we can work with Slots
         self._videos: dict[str, VideoObject] = {} # Keeps track of the current videos
 
     def add_video(self, video: VideoObject) -> None:
+        # Notice: This function is connected to the database bridge using a Signal
         self._videos[video.identifier] = video # Adds a new video using the identifier
         self.video_added.emit(video)
 
     def update_status(self, identifier: str, new_status):
+        # Notice: This function is connected to the database bridge using a Signal
         if video := self._videos.get(identifier):
             video.status = new_status
             self.video_updated.emit(video)

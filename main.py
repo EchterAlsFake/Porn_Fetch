@@ -11,88 +11,68 @@ from src.backend.theme_manager import ThemeManager
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtGui import QGuiApplication
-
-_IS_MULTIPROCESSING_CHILD = mp.current_process().name != "MainProcess"
-
-# Style must be applied before QML Application starts, otherwise they won't be applied
-core_style = app_settings.core_style
-is_dark = app_settings.dark_mode
-accent_color = app_settings.accent_color
-log_level = app_settings.log_level_map.get(int(app_settings.log_level))
-os.environ["QT_QUICK_CONTROLS_STYLE"] = core_style
-
-if sys.platform == "linux":
-    os.environ["QT_QPA_PLATFORMTHEME"] = "xdgdesktopportal"
-
-if core_style == "Material": # Material UI is modern and looks great
-    os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark" if is_dark else "Light"
-    os.environ["QT_QUICK_CONTROLS_MATERIAL_ACCENT"] = accent_color
-    os.environ["QT_QUICK_CONTROLS_MATERIAL_PRIMARY"] = accent_color
-
-elif core_style == "Universal": # Universal is just bad and shit, don't use it lmao
-    os.environ["QT_QUICK_CONTROLS_UNIVERSAL_THEME"] = "Dark" if is_dark else "Light"
-    os.environ["QT_QUICK_CONTROLS_UNIVERSAL_ACCENT"] = accent_color
-
-
-class _NullApplication:
-    @staticmethod
-    def processEvents() -> None:
-        return None
-
-
-class _NullSplash:
-    @staticmethod
-    def showMessage(_message: str) -> None:
-        return None
-
-    @staticmethod
-    def finish() -> None:
-        return None
-
-
-if _IS_MULTIPROCESSING_CHILD:
-    app = _NullApplication()
-
-else:
-    app = QGuiApplication(sys.argv)
-    app.setOrganizationName("EchterAlsFake")
-    app.setApplicationName("Porn Fetch")
-    app_font = app.font()
-    app_font.setPointSize(app_settings.font_size)
-    app.setFont(app_font)
-
-# Ensure Fusion and other native styles use the correct color scheme
 from PySide6.QtCore import Qt
-if not _IS_MULTIPROCESSING_CHILD:
-    try:
-        app.styleHints().setColorScheme(Qt.ColorScheme.Dark if is_dark else Qt.ColorScheme.Light)
-    except AttributeError:
-        pass # Older PySide6 versions don't support setColorScheme, fallback gracefully
-
-engine = None if _IS_MULTIPROCESSING_CHILD else QQmlApplicationEngine()
-
 from src.backend.splashscreen import SplashController
 
-# Loading the Splashscreen and starting it
-splash_qml_path = Path(__file__).resolve().parent / "src" / "frontend" / "UI" / "SplashScreen.qml"
-if _IS_MULTIPROCESSING_CHILD:
-    splash = _NullSplash()
-else:
+
+# --- MULTIPROCESSING SAFE SPLASH SCREEN ---
+# We check if this is the main process. If so, we initialize the GUI.
+# If it's a child process, we skip GUI initialization and set them to None.
+is_main_process = mp.current_process().name == 'MainProcess'
+
+app = None
+engine = None
+splash = None
+
+if is_main_process:
+    app = QGuiApplication(sys.argv)
+    engine = QQmlApplicationEngine()
+    
+    splash_qml_path = Path(__file__).resolve().parent / "src" / "frontend" / "UI" / "SplashScreen.qml"
     splash = SplashController(engine, str(splash_qml_path))
     splash.splash_window.show()
     app.processEvents()
 
-# Turn off Nuitka's own Splash Screen (only relevant for onefile mode in binaries
-# Turn off Nuitka's native splash screen if it exists
-if not _IS_MULTIPROCESSING_CHILD and "NUITKA_ONEFILE_PARENT" in os.environ:
-    splash_filename = os.path.join(
-        tempfile.gettempdir(),
-        f"onefile_{int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp"
-    )
-    if os.path.exists(splash_filename):
-        os.unlink(splash_filename)
+def update_splash(msg: str):
+    """Safely updates the splash screen only if we are in the main GUI process."""
+    if is_main_process and splash and app:
+        splash.showMessage(msg)
+        app.processEvents()
 
-splash.showMessage("Importing (General).")
+
+def style_app():
+    core_style = app_settings.core_style
+    is_dark = app_settings.dark_mode
+    accent_color = app_settings.accent_color
+    os.environ["QT_QUICK_CONTROLS_STYLE"] = core_style
+
+    if sys.platform == "linux":
+        os.environ["QT_QPA_PLATFORMTHEME"] = "xdgdesktopportal"
+
+    if core_style == "Material":  # Material UI is modern and looks great
+        os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark" if is_dark else "Light"
+        os.environ["QT_QUICK_CONTROLS_MATERIAL_ACCENT"] = accent_color
+        os.environ["QT_QUICK_CONTROLS_MATERIAL_PRIMARY"] = accent_color
+
+    elif core_style == "Universal":  # Universal is just bad and shit, don't use it lmao
+        os.environ["QT_QUICK_CONTROLS_UNIVERSAL_THEME"] = "Dark" if is_dark else "Light"
+        os.environ["QT_QUICK_CONTROLS_UNIVERSAL_ACCENT"] = accent_color
+
+def disable_nuitka_splash():
+    # Turn off Nuitka's own Splash Screen (only relevant for onefile mode in binaries
+    # Turn off Nuitka's native splash screen if it exists
+
+    if "NUITKA_ONEFILE_PARENT" in os.environ:
+        splash_filename = os.path.join(
+            tempfile.gettempdir(),
+            f"onefile_{int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp"
+        )
+        if os.path.exists(splash_filename):
+            os.unlink(splash_filename)
+
+
+
+update_splash("Importing (General).")
 import re
 import time
 import uuid
@@ -113,9 +93,7 @@ from base_api import DownloadConfigHLS, DownloadConfigRAW
 from base_api.modules.logger import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
-splash.showMessage("Importing (Qt)")
-app.processEvents()
-
+update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtQml import QQmlEngine
@@ -125,9 +103,7 @@ from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Sl
 from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
                                QInputDialog, QMainWindow, QComboBox)
 
-splash.showMessage("Importing (Backend)")
-app.processEvents()
-
+update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
 from src.backend.license_manager import LicenseManager
@@ -156,25 +132,20 @@ from src.backend.database import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
 from curl_cffi.requests.exceptions import SSLError
 
-splash.showMessage("Importing (Frontend).")
-app.processEvents()
-
+update_splash("Importing (Frontend).")
 # Frontend imports
 from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
                                               TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
 
 
-splash.showMessage("Importing (APIs).")
-app.processEvents()
-
+update_splash("Importing (APIs).")
 # Errors from different APIs
 from base_api.modules.errors import (ProxySSLError, InvalidProxy, AccessDeniedError, BotProtectionDetected,
                                      SecurityAbort, RateLimitError, ChallengeMathError, DataNotLoadedError)
 from pornhub_api.modules.errors import VideoDisabled, GifPendingReview
 
 
-splash.showMessage("Importing (AV - FFMPEG).")
-app.processEvents()
+update_splash("Importing (AV - FFMPEG).")
 
 try:
     from av import open as av_open  # Don't ask
@@ -1254,34 +1225,83 @@ class Backend(QObject):
         os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
 
 
-def main(test_mode: bool = False) -> None:
-    if engine is None:
-        raise RuntimeError("The GUI cannot start inside a multiprocessing helper")
+def main() -> None:
+    mp.freeze_support()
+    parser = argparse.ArgumentParser(
+        prog=f"Porn Fetch v{__version__}",
+        description="A source available Adult Archiver that respects your privacy.",
+        formatter_class=RichHelpFormatter
+    )
+
+    parser.add_argument("--test", "-t", action="store_true", help="""
+        Runs an automated Test of Porn Fetch where each supported website will be simulated with real network requests
+        and loaded into the Graphical User Interface which will then be validated.
+
+        This is recommended to run if you want to buy a license so that you can see the current state of the application
+        before maybe buying something that doesn't work anymore.""")
+    parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
+
+    args = parser.parse_args()
+    test_mode = False
+
+    if args.version:
+        print_runtime_version_info()
+        sys.exit(0)
+
+    if args.test:
+        test_mode = True
+
+    sys.unraisablehook = custom_unraisable_hook
+    local_url = sni_proxy_manager.start()
+    if local_url:
+        print(f"SNI proxy route: {local_url}")
+
+    global app, engine, splash
+
+    # Initialize the app + organization values
+    # The organization values handle settings, licenses etc, please do not change this :)
+    app.setOrganizationName(config.__org_name__)
+    app.setApplicationName(config.__app_name__)
+    app.setApplicationVersion(config.__version__)
+    app.setWindowIcon(QIcon("qrc:/images/graphics/logo.png"))
+
+    app.styleHints().setColorScheme(Qt.ColorScheme.Dark if app_settings.dark_mode else Qt.ColorScheme.Light)
+
+    app_font = app.font()
+    app_font.setPointSize(app_settings.font_size)
+    app.setFont(app_font)
 
 
-    # --- 2. Inject Environment Variables for Styles ---
-    # QML will read these automatically. No attached properties needed in QML!
 
+    # Loads the theme e.g., Material UI / Fusion + dark / light theme
     saved_style = app_settings.core_style
     QQuickStyle.setStyle(saved_style)
     theme_manager = ThemeManager()
 
-    # 1. Instantiate backend object
+    # The backend instance handles the main logic, see class above
     backend_instance = Backend()
 
+    # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:
         exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
         raise SystemExit(exit_code)
 
+
     database_bridge = DatabaseBridge(parent=engine)
+    # Database bridge is used for tracking the downloads / creating statistics (optional feature)
+
+    # Download manager connects to QML to manage downloads and create the actual rows in the ListView
     download_manager = backend_instance.download_manager
-    download_manager.video_added.connect(database_bridge.on_video_updated)
-    download_manager.video_updated.connect(database_bridge.on_video_updated)
-    backend_instance.download_manager.video_updated.connect(database_bridge.on_video_downloaded)
-    storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "EchterAlsFake" / "PornFetch" / "license.lic"
+    download_manager.video_added.connect(database_bridge.on_video_updated) # Writes to database (optional)
+    download_manager.video_updated.connect(database_bridge.on_video_updated) # Updates existing entry (optional)
+
+    storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "license.lic"
     lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
-    bridge_instance = LicenseBridge(lic_manager)
+    # Loads the license, if you have imported it before. Stores in APPDATA / .local/share
+
+    bridge_instance = LicenseBridge(lic_manager) # License bridge connects QML code to Python
     backend_instance.set_license_bridge(bridge_instance)
+    # Gives some context to QML so that QML can directly access certain things
     engine.rootContext().setContextProperty("bridge", bridge_instance)
     engine.rootContext().setContextProperty("backend", backend_instance)
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
@@ -1302,14 +1322,13 @@ def main(test_mode: bool = False) -> None:
         sys.exit(-1)
 
     splash.finish()
-    QtAsyncio.run(handle_sigint=True)
+    QtAsyncio.run(handle_sigint=True) # sigint means that when someone presses CTRL+C it gets a clean exit
 
 
 
 def get_imported_licenses():
   """Dynamically fetches packages, versions, and licenses
-
-  of third-party libraries currently imported in memory.
+  of third-party libraries currently imported in memory for transparency reasons.
   """
   pkg_map = packages_distributions()
 
@@ -1360,35 +1379,4 @@ def print_runtime_version_info():
 
 
 if __name__ == "__main__":
-    mp.freeze_support()
-    parser = argparse.ArgumentParser(
-        prog=f"Porn Fetch v{__version__}",
-        description="A source available Adult Archiver that respects your privacy.",
-        formatter_class=RichHelpFormatter
-    )
-
-    parser.add_argument("--test", "-t", action="store_true", help="""
-    Runs an automated Test of Porn Fetch where each supported website will be simulated with real network requests
-    and loaded into the Graphical User Interface which will then be validated.
-
-    This is recommended to run if you want to buy a license so that you can see the current state of the application
-    before maybe buying something that doesn't work anymore.""")
-    parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
-
-    args = parser.parse_args()
-    test_mode = False
-
-    if args.version:
-        print_runtime_version_info()
-        sys.exit(0)
-
-    if args.test:
-        test_mode = True
-
-
-    sys.unraisablehook = custom_unraisable_hook
-    local_url = sni_proxy_manager.start()
-    if local_url:
-        print(f"SNI proxy route: {local_url}")
-
-    main(test_mode)
+    main()
