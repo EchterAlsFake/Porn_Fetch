@@ -1,11 +1,9 @@
-import asyncio
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
 from base_api.modules.static_functions import normalize_quality
 from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Qt
 
-from backend.database import DatabaseBridge
 from src.backend.config import app_settings
 
 

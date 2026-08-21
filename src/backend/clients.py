@@ -369,7 +369,7 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     This function check the URL and generates the corresponding video object with the correct client.
     If the url is already a video object, the function will simply return it.
     """
-    if isinstance(url, ScrapeResult):
+    if isinstance(url, ScrapeResult): # When the video comes from an iterator
         if not url.succeeded:
             if url.error is not None:
                 raise url.error
@@ -378,7 +378,7 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
         video = url.item
         if video is None:
-            raise RuntimeError(f"Succesful scrpa does not contain a video (how tf did you do that? {url.url}")
+            raise RuntimeError(f"Successful scrape does not contain a video (how tf did you do that? {url.url}")
 
         return video
 
@@ -386,7 +386,6 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
         return url
 
     if not isinstance(url, str):
-        print(f"Video Type: {url}")
         print(type(url))
 
         raise SomethingStupidHappened

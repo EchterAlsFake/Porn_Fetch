@@ -1,17 +1,15 @@
 import os
-import multiprocessing as mp
-import shutil
 import sys
+import shutil
 import tempfile
 from pathlib import Path
+import multiprocessing as mp
 
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
-from src.backend.config import app_settings
-from src.backend.theme_manager import ThemeManager
+from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtCore import Qt
+from src.backend.theme_manager import ThemeManager
 from src.backend.splashscreen import SplashController
 
 
@@ -71,17 +69,12 @@ def disable_nuitka_splash():
             os.unlink(splash_filename)
 
 
-
 update_splash("Importing (General).")
 import re
-import time
 import uuid
-import logging
 import asyncio
 import argparse
-import markdown
 import traceback
-import webbrowser
 from string import Template
 from datetime import datetime
 from asyncstdlib import chain
@@ -95,20 +88,15 @@ from importlib.metadata import metadata, packages_distributions, version
 
 update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
-from PySide6.QtQuickWidgets import QQuickWidget
-from PySide6.QtQml import QQmlEngine
-from PySide6.QtGui import QIcon, QFontDatabase, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QLocale, QSize, QUrl, Signal, QFile, Slot, Property,
-                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QTimer)
-from PySide6.QtWidgets import (QButtonGroup, QFileDialog, QHeaderView, QTreeWidgetItem, QPushButton,
-                               QInputDialog, QMainWindow, QComboBox)
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
+                            QTimer)
 
 update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
-from src.backend.license_manager import LicenseManager
 from src.backend.license_bridge import LicenseBridge
-import src.backend.shared_functions as shared_functions
+from src.backend.license_manager import LicenseManager
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, Signals,
@@ -140,8 +128,8 @@ from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DO
 
 update_splash("Importing (APIs).")
 # Errors from different APIs
-from base_api.modules.errors import (ProxySSLError, InvalidProxy, AccessDeniedError, BotProtectionDetected,
-                                     SecurityAbort, RateLimitError, ChallengeMathError, DataNotLoadedError)
+from base_api.modules.errors import (AccessDeniedError, BotProtectionDetected, SecurityAbort, RateLimitError,
+                                     ChallengeMathError, DataNotLoadedError)
 from pornhub_api.modules.errors import VideoDisabled, GifPendingReview
 
 
@@ -159,11 +147,11 @@ except Exception:
 stop_flag = asyncio.Event()
 last_index = 0
 sni_proxy_manager = SNIProxyManager(app_settings)
+log_level = app_settings.log_level_map.get(app_settings.log_level)
 
 
 class DownloadStopEvent(asyncio.Event):
     """An asyncio stop flag whose identity survives API config copies."""
-
     def __deepcopy__(self, memo: dict[int, object]) -> "DownloadStopEvent":
         memo[id(self)] = self
         return self
@@ -449,7 +437,7 @@ class Backend(QObject):
         self._license_bridge: LicenseBridge | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
-        self.download_manager = DownloadManager(database_bridge=self.database_bridge)
+        self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
         self.auto_updater = AutoUpdater(self)
         self.auto_updater.updateProgress.connect(self.updateProgress)
@@ -902,11 +890,22 @@ class Backend(QObject):
 
                 self._downloads_model.set_status(job_id, "downloading")
 
+                event_loop = asyncio.get_running_loop()
+                last_reported_percentage = -1
+
                 def update_progress(position: int, total: int) -> None:
+                    nonlocal last_reported_percentage
                     if not total:
                         return
                     percentage = max(0, min(100, int(position * 100 / total)))
-                    self._downloads_model.update_progress(job_id, percentage)
+                    if percentage == last_reported_percentage:
+                        return
+                    last_reported_percentage = percentage
+                    event_loop.call_soon_threadsafe(
+                        self._downloads_model.update_progress,
+                        job_id,
+                        percentage,
+                    )
 
                 quality = video.selected_quality or "best"
                 source_video = video.source_video
