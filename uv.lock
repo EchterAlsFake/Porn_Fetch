@@ -967,7 +967,7 @@ dependencies = [
 [[package]]
 name = "unofficial-api-for-eporner"
 version = "2.4.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#5be2b73c8547c810416f26b6dae45a83c486e118" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#01429e862f09c9878796d9053ceb9544485df6f3" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1058,7 +1058,7 @@ dependencies = [
 [[package]]
 name = "unofficial-api-for-xfreehd"
 version = "1.7.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#acc331b07b43f9eaa67bb983c3ee0e93ced0775d" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#fb5e92c9799efce57a5da147ba1af9bb330a2594" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },

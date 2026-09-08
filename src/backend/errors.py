@@ -1,6 +1,7 @@
 from src.backend.download_manager import VideoObject
 from src.frontend.translations.strings import TRANSLATE_ERRORS
 from typing import Callable, Awaitable, ParamSpec, TypeVar
+from base_api import is_resource_gone
 P = ParamSpec("P") # Needed for safe_api_call function
 R = TypeVar("R")
 
@@ -67,7 +68,7 @@ async def safe_api_call(func: Callable[P, Awaitable[R]], *args: P.args, **kwargs
         name = type(e).__name__
         if "Network" in name or "Proxy" in name:
             raise AppNetworkError(str(e)) from e
-        elif "NotFound" in name:
+        elif "NotFound" in name or is_resource_gone(e):
             raise AppNotFoundError(str(e)) from e
         elif "BotProtection" in name:
             raise AppBotBlocked(str(e)) from e

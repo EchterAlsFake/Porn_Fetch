@@ -219,6 +219,8 @@ class ProcessVideos(QObject):
     def process_filter(self, filters: VideoFilters, attributes: VideoObject) -> bool:
         # 1. Duration Filters
         if filters.duration_minimum is not None or filters.duration_maximum is not None:
+            if attributes.length is None:
+                return False
             if filters.duration_minimum is not None and attributes.length < filters.duration_minimum:
                 return False
             if filters.duration_maximum is not None and attributes.length > filters.duration_maximum:
@@ -258,6 +260,8 @@ class ProcessVideos(QObject):
 
         # 4. Date Filters
         if filters.published_after:
+            if attributes.publish_date is None:
+                return False
             # .replace(tzinfo=None) safely handles timezone-aware datetimes for comparison
             after_date = datetime.fromisoformat(filters.published_after).replace(tzinfo=None)
             pub_date = attributes.publish_date.replace(tzinfo=None)
@@ -265,6 +269,8 @@ class ProcessVideos(QObject):
                 return False
 
         if filters.published_before:
+            if attributes.publish_date is None:
+                return False
             before_date = datetime.fromisoformat(filters.published_before).replace(tzinfo=None)
             pub_date = attributes.publish_date.replace(tzinfo=None)
             if pub_date > before_date:
@@ -274,10 +280,13 @@ class ProcessVideos(QObject):
         return True
 
     @staticmethod
-    def _parse_quality(quality_str: str) -> int:
+    def _parse_quality(quality_str: str | int) -> int:
         """Extracts the integer resolution from strings like '1080p', '720', '4K'."""
         if not quality_str:
             return 0
+
+        if isinstance(quality_str, int):
+            return quality_str
 
         # Simple handler for "4k" edge cases
         if quality_str.lower() == "4k":
@@ -288,7 +297,7 @@ class ProcessVideos(QObject):
         match = re.search(r'\d+', quality_str)
         return int(match.group()) if match else 0
 
-    def _get_max_quality(self, qualities: list[str]) -> int:
+    def _get_max_quality(self, qualities: list[str | int]) -> int:
         """Finds the highest resolution available in the list of qualities."""
         if not qualities:
             return 0
@@ -333,6 +342,7 @@ class ProcessVideos(QObject):
             idx = 0
             async for video in iterator:
                 print(f"Processing: {video} {idx}")
+                video_url = getattr(video, "url", str(video))
                 if self.result_limit is not None and idx >= self.result_limit:
                     break
 
@@ -368,12 +378,12 @@ class ProcessVideos(QObject):
 
                 # General Errors
                 except AppNetworkError as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     A network error happened, I'll try retrying...""")
                     continue  # Maybe it solves by itself ;)
 
                 except AppNotFoundError as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
                     the correct URL.
     
@@ -383,38 +393,38 @@ class ProcessVideos(QObject):
                     break  # If the resource is not there, it won't magically appear lmao
 
                 except (VideoDisabled, GifPendingReview) as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
                     """)
                     break
 
                 except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
                     fix this quickly!""")
                     break
 
                 except RateLimitError as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     You got rate limited by the server. I have already tried solving this, which didn't work. 
                     Please use a (different) proxy or VPN.""")
                     break
 
                 except DataNotLoadedError as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message=f"""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message=f"""
                     If you see this I fucked up developing my API packages and you should immediately open an issue on 
                     GitHub lol""")
                     break
 
                 except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     The website denied access, probably because it detected you as a bot. Please report this, as I probably
                     need to update the headers. 
                     """)
 
                 except Exception as e:
                     self.logger.error(f"UNHANDLED EXCEPTION in start_processing: {e}", exc_info=True)
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="An unexpected error occurred.")
+                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="An unexpected error occurred.")
                     break
 
                 finally:
@@ -451,6 +461,7 @@ class Backend(QObject):
         self._auto_update_task: asyncio.Task[object] | None = None
         self._download_tasks: dict[str, asyncio.Task[object]] = {}
         self._download_stop_events: dict[str, asyncio.Event] = {}
+        self._client_refresh_pending = False
         self._download_semaphore = asyncio.Semaphore(max(1, int(app_settings.parallel_downloads)))
         self._license_bridge: LicenseBridge | None = None
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
@@ -718,6 +729,12 @@ class Backend(QObject):
 
     @Slot(object)
     def load_clients(self, _locale: str | None = None) -> None:
+        if any(not task.done() for task in self._background_tasks):
+            self._client_refresh_pending = True
+            self.logger.info("Deferring client refresh until active tasks finish")
+            return
+
+        self._client_refresh_pending = False
         clients.refresh_clients()
         self.accountStateChanged.emit()
 
@@ -732,15 +749,19 @@ class Backend(QObject):
 
         if task.cancelled():
             self.logger.debug("Background task cancelled: %s", task.get_name())
-            return
+        else:
+            try:
+                task.result()
+            except Exception:
+                self.logger.exception(
+                    "Background task failed: %s",
+                    task.get_name(),
+                )
 
-        try:
-            task.result()
-        except Exception:
-            self.logger.exception(
-                "Background task failed: %s",
-                task.get_name(),
-            )
+        if self._client_refresh_pending and not any(
+            not pending_task.done() for pending_task in self._background_tasks
+        ):
+            self.load_clients()
 
     @Slot(str, bool)
     def testProxy(self, proxy_url: str, verify_ssl: bool) -> None:
@@ -852,6 +873,12 @@ class Backend(QObject):
         video = self._downloads_model.get_video(job_id)
         if video is None or video.source_video is None:
             self.logger.warning("Cannot download unknown video: %s", job_id)
+            return
+        if quality_requires_premium(video.selected_quality or "") and not self.has_premium_access():
+            self.logger.warning("Rejected new premium download because the license is not active")
+            self.showMessage.emit(
+                self.tr("Premium access is currently unavailable. Refresh your license or choose 720p or lower.")
+            )
             return
 
         is_resume = self._downloads_model.get_status(job_id) in {"cancelled", "failed"}
@@ -966,7 +993,7 @@ class Backend(QObject):
                     else:
                         result = await source_video.download(configuration)
                 else:
-                    video.is_hls = True
+                    video.is_hls = getattr(source_video, "is_hls", True) is not False
                     segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
                     segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
                     configuration = DownloadConfigHLS(
@@ -983,7 +1010,23 @@ class Backend(QObject):
                         cleanup_on_stop=cleanup_on_stop,
                         keep_segment_dir=not cleanup_on_stop,
                     )
-                    result = await source_video.download(configuration)
+                    if isinstance(source_video, clients.yp_Video):
+                        backup_configuration = DownloadConfigRAW(
+                            quality=quality,
+                            path=output_path,
+                            callback=update_progress,
+                            no_title=True,
+                            stop_event=stop_event,
+                            max_workers=app_settings.download_workers,
+                            read_timeout=float(app_settings.timeout),
+                            max_retries=app_settings.retries,
+                        )
+                        result = await source_video.download(
+                            configuration,
+                            backup_configuration=backup_configuration,
+                        )
+                    else:
+                        result = await source_video.download(configuration)
 
                 report_status = getattr(result, "status", None)
                 video.missing_segments = getattr(result, "missing", None)
@@ -1030,7 +1073,10 @@ class Backend(QObject):
         """
         print(f"Received Video / Short URL: {url}")
         filters = VideoFilters(**filters)
-        asyncio.create_task(self._process_single_url(url=url, custom_options=custom_options, filters=filters))
+        self._spawn(
+            self._process_single_url(url=url, custom_options=custom_options, filters=filters),
+            name="single-video-processing",
+        )
 
     async def _process_single_url(self, url: str, custom_options: str, filters: VideoFilters):
         self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")

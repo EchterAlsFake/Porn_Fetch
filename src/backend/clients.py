@@ -31,9 +31,7 @@ import os
 import re
 import logging
 import asyncio
-import inspect
 import tempfile
-import traceback
 
 
 try:
@@ -59,6 +57,7 @@ from porntrex_api import Client as pt_Client, Video as pt_Video
 from tube8_api import Client as tu_Client, Video as tu_Video
 from thumbzilla_api import Client as th_Client, Video as th_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
+from xhamster_api.api import Short as xh_Short
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
@@ -73,12 +72,12 @@ from curl_cffi.const import CurlOpt
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     ph_Video | xn_Video | xv_Video | yp_Video | tu_Video | ph_Short |
-    xh_Video | sp_Video | bg_Video | rt_Video | th_Video
+    xh_Video | xh_Short | sp_Video | bg_Video | rt_Video | th_Video
     # Those are all HLS streams
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    xf_Video | ep_Video | pt_Video | pt_Video
+    xf_Video | ep_Video | pt_Video
     # Those are all non HLS streams for now
 )
 
@@ -164,20 +163,19 @@ def generate_locale_headers_and_cookies(
 
 
 SITE_PATTERNS = [
-    ("pornhub", re.compile(r"(?:^|\.)pornhub(?:premium)?\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("xnxx", re.compile(r"(?:^|\.)xnxx\d*\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("xvideos", re.compile(r"(?:^|\.)xvideos\d*\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("eporner", re.compile(r"(?:^|\.)eporner\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("xhamster", re.compile(r"(?:^|\.)xhamster(?:live)?\d*\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("spankbang", re.compile(r"(?:^|\.)spankbang\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("youporn", re.compile(r"(?:^|\.)youporn\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("beeg", re.compile(r"(?:^|\.)beeg\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("redtube", re.compile(r"(?:^|\.)redtube\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("thumbzilla", re.compile(r"(?:^|\.)thumbzilla\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("tube8", re.compile(r"(?:^|\.)tube8\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("xfreehd", re.compile(r"(?:^|\.)xfreehd\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("porntrex", re.compile(r"(?:^|\.)porntrex\.[a-z.]{2,}$", re.IGNORECASE)),
-    ("xhamster_shorts", re.compile(r"(?=.*xhamster)(?=.*moments)", re.IGNORECASE))
+    ("pornhub", re.compile(r"(?:^|\.)pornhub(?:premium)?\.com$", re.IGNORECASE)),
+    ("xnxx", re.compile(r"(?:^|\.)xnxx\d*\.com$", re.IGNORECASE)),
+    ("xvideos", re.compile(r"(?:^|\.)xvideos\d*\.com$", re.IGNORECASE)),
+    ("eporner", re.compile(r"(?:^|\.)eporner\.com$", re.IGNORECASE)),
+    ("xhamster", re.compile(r"(?:^|\.)xhamster\d*\.com$", re.IGNORECASE)),
+    ("spankbang", re.compile(r"(?:^|\.)spankbang\.com$", re.IGNORECASE)),
+    ("youporn", re.compile(r"(?:^|\.)youporn\.com$", re.IGNORECASE)),
+    ("beeg", re.compile(r"(?:^|\.)beeg\.com$", re.IGNORECASE)),
+    ("redtube", re.compile(r"(?:^|\.)redtube\.com$", re.IGNORECASE)),
+    ("thumbzilla", re.compile(r"(?:^|\.)thumbzilla\.com$", re.IGNORECASE)),
+    ("tube8", re.compile(r"(?:^|\.)tube8\.com$", re.IGNORECASE)),
+    ("xfreehd", re.compile(r"(?:^|\.)xfreehd\.com$", re.IGNORECASE)),
+    ("porntrex", re.compile(r"(?:^|\.)porntrex\.com$", re.IGNORECASE)),
 ]
 
 # which is also affecting all other APIs when the refresh_clients function is called
@@ -217,9 +215,9 @@ cores = [
 ]
 
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-           rt_Video, th_Video, tu_Video, ph_Short]
+           rt_Video, th_Video, tu_Video, ph_Short, xh_Short]
 
-logger.debug("Successfully initialized all clients!")
+logger.debug("Successfully initialized all clients and!")
 
 
 def refresh_clients() -> None:
@@ -375,26 +373,28 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
         video = url.item
         if video is None:
-            raise RuntimeError(f"Successful scrape does not contain a video (how tf did you do that? {url.url}")
+            raise RuntimeError(f"Successful scrape does not contain a video: {url.url}")
 
+        if not isinstance(video, tuple(video_objects)):
+            raise InvalidInput
         return video
 
     if isinstance(url, tuple(video_objects)):
         return url
 
     if not isinstance(url, str):
-        print(type(url))
+        raise InvalidInput
 
-        raise SomethingStupidHappened
-
-    if not url.startswith("http"):
+    parsed_url = urlparse(url)
+    hostname = parsed_url.hostname
+    if parsed_url.scheme.casefold() not in {"http", "https"} or not hostname:
         raise InvalidInput
 
     final_website = None
-    hostname = urlparse(url).hostname
     for website, pattern in SITE_PATTERNS:
         if pattern.search(hostname):
             final_website = website
+            break
 
     if not final_website:
         raise InvalidInput
@@ -403,6 +403,8 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
     # 2. Call ONLY the specific client for that website
     if final_website == "pornhub":
+        if "/short/" in parsed_url.path.casefold():
+            return await ph_client.get_short(url=url, load_html=True)
         return await ph_client.get_video(url=url, load_html=True, load_api=load_api_sources)
     elif final_website == "eporner":
         return await ep_client.get_video(url=url, load_html=True, load_api=load_api_sources)
@@ -411,15 +413,16 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     elif final_website == "xvideos":
         return await xv_client.get_video(url=url, load_html=True)
     elif final_website == "xhamster":
+        if "/moments/" in parsed_url.path.casefold():
+            return await xh_client.get_short(url=url, load_html=True)
         return await xh_client.get_video(url=url, load_html=True)
-    elif final_website == "xhamter_short":
-        return await xh_client.get_short(url=url, load_html=True)
     elif final_website == "spankbang":
         return await sp_client.get_video(url=url, load_html=True)
     elif final_website == "youporn":
         return await yp_client.get_video(url=url, load_html=True)
     elif final_website == "beeg":
-        return await bg_client.get_video(url=url, load_api=load_api_sources)
+        # Beeg exposes metadata only through its API source.
+        return await bg_client.get_video(url=url, load_api=True)
     elif final_website == "porntrex":
         return await pt_client.get_video(url=url)
     elif final_website == "xfreehd":
@@ -435,16 +438,17 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
 
 async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
-    # Account iterators can legally return lazy media objects. These two
-    # providers expose every field consumed below through their HTML loader.
-    # Loading here as well as in the iterator configuration keeps this shared
-    # function safe for callers which supply an unconfigured iterator.
-    if isinstance(video, (ph_Video, xh_Video)):
-        await video.load_sources("html")
+    # Iterator results may be lazy. Load the provider's page source before
+    # reading fields; Beeg is the one supported provider with only an API source.
+    source = "api" if isinstance(video, bg_Video) else "html"
+    if source in video.loader_methods:
+        await video.load_sources(source)
 
-    title = video.title
+    title = _safe_getattr(video, "title")
+    video_source = ""
 
     if isinstance(video, ph_Video):
+        video_source = "pornhub"
         author_information = video.author_information or {}
         author = author_information.get("name") or "N/A"
 
@@ -454,7 +458,17 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         thumbnail = video.thumbnail
         video_id = video.video_id
 
+    elif isinstance(video, ph_Short):
+        video_source = "pornhub"
+        author = video.author_name or "N/A"
+        length = None
+        tags = None
+        publish_date = None
+        thumbnail = video.thumbnail
+        video_id = video.video_id
+
     elif isinstance(video, xn_Video):
+        video_source = "xnxx"
         author = video.author
         length = video.length
         tags = video.tags
@@ -463,8 +477,9 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.title
 
     elif isinstance(video, xv_Video):
-        author = await video.get_author
-        author = author.name
+        video_source = "xvideos"
+        author_object = await video.get_author
+        author = getattr(author_object, "name", None) or "N/A"
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
@@ -472,52 +487,60 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.title
 
     elif isinstance(video, ep_Video):
-        _authors = []
-        authors = video.get_authors()
-        async for author in authors:
-            _authors.append(author.name)
-            print(f"Received: {author.name}")
-
-        author = "".join(_authors)
-        print(f"Author: {author}")
-
-        if not author:
-            author = video.uploader
-
-        length = video.length_minutes
-        tags = ",".join(video.tags)
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail
+        video_source = "eporner"
+        author = video.uploader or "N/A"
+        # These fields are API-backed and intentionally remain unresolved when
+        # content-language strict mode requests HTML only.
+        length = _safe_getattr(video, "length_seconds")
+        tags = video.tags
+        publish_date = _safe_getattr(video, "publish_date")
+        thumbnail = _safe_getattr(video, "thumbnail")
         video_id = video.video_id
 
     elif isinstance(video, yp_Video):
-        stuff = await video.author(load_html=True)
-        author = stuff.name
+        video_source = "youporn"
+        if video.author_link:
+            stuff = await video.author(load_html=True)
+            author = getattr(stuff, "name", None) or video.uploader_name or "N/A"
+        else:
+            author = video.uploader_name or "N/A"
         length = video.length
-        tags = ",".join(video.categories)
+        tags = video.categories
         thumbnail = video.thumbnail
         publish_date = video.publish_date
         video_id = video.title
 
     elif isinstance(video, xh_Video):
+        video_source = "xhamster"
         author = ",".join(video.pornstars or ())
         if not author:
             author = video.uploader_name or "N/A"
         length = video.duration
         tags = video.tags
         thumbnail = video.thumbnail
-        publish_date = "Not available"
+        publish_date = video.date_ago or video.created_timestamp
         video_id = video.title
 
+    elif isinstance(video, xh_Short):
+        video_source = "xhamster"
+        author = video.author or "N/A"
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail or video.poster_url
+        publish_date = video.created_at
+        video_id = video.video_id
+
     elif isinstance(video, sp_Video):
+        video_source = "spankbang"
         author = video.author
         length = video.length
-        tags = ",".join(video.tags)
+        tags = video.tags
         thumbnail = video.thumbnail
-        publish_date = video.length
+        publish_date = None
         video_id = video.title
 
     elif isinstance(video, bg_Video):
+        video_source = "beeg"
         author = "Not available"
         length = video.duration
         tags = "Not available"
@@ -526,6 +549,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.video_id
 
     elif isinstance(video, pt_Video):
+        video_source = "porntrex"
         author = video.author
         length = video.duration
         tags = video.tags
@@ -534,6 +558,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.video_id
 
     elif isinstance(video, xf_Video):
+        video_source = "xfreehd"
         author = video.author
         length = video.length
         tags = video.tags
@@ -542,6 +567,9 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.title
 
     elif isinstance(video, (rt_Video, tu_Video, th_Video)):
+        video_source = "redtube" if isinstance(video, rt_Video) else (
+            "tube8" if isinstance(video, tu_Video) else "thumbzilla"
+        )
         author = video.author_name
         length = video.duration
         try:
@@ -556,30 +584,45 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     else:
         raise SomethingStupidHappened
 
-    length = parse_length(length)
+    length = parse_length(length, video_source=video_source)
     qualities = await get_available_qualities(video)  # [144, 240, 360, ...]
-    qualities = [normalize_quality(quality) for quality in qualities]
+    normalized_qualities = []
+    for quality in qualities:
+        try:
+            normalized_qualities.append(normalize_quality(quality))
+        except (TypeError, ValueError):
+            logger.warning("Ignoring invalid video quality: %r", quality)
+
+    if isinstance(tags, dict):
+        normalized_tags = [str(tag) for tag in tags]
+    elif isinstance(tags, str):
+        normalized_tags = [
+            tag.strip() for tag in tags.split(",")
+            if tag.strip() and not _NOT_AVAILABLE_RE.match(tag)
+        ]
+    else:
+        normalized_tags = [str(tag) for tag in (tags or ())]
 
     # Normalize publish date into UTC datetime (optional extra field)
     publish_dt_utc = parse_publish_date(publish_date)
     title = strip_title(title)
     video_object = VideoObject(
         url=video.url,
-        thumbnail_url=thumbnail,
-        video_id=video_id,
+        thumbnail_url=thumbnail or "",
+        video_id=str(video_id or video.url),
         length=length,
-        author=author,
+        author=author or "N/A",
         title=title,
         publish_date=publish_dt_utc,
         status="Pending",
-        qualities=qualities,
-        tags=tags
+        qualities=normalized_qualities,
+        tags=normalized_tags
     )
 
     return video_object
 
 
-async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
+async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int) -> str:
     """
     Since the non HLS downloads now support resuming by getting the current filesize
     and appending missing bytes, we need a way in Porn Fetch to actually see if a file is incomplete.
@@ -592,37 +635,30 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
     """
 
     if isinstance(video, xf_Video):
-        if quality > "480p" or quality > 480 or quality == "best" or quality == "half": # Bro pls don't ask :rose:
-            try:
-                return video.cdn_urls[1]
-
-            except IndexError:
-                return video.cdn_urls[0]
-
-        return video.cdn_urls[0]
+        await video.load_fields("cdn_urls")
+        available = video.video_qualities()
+        preference = {"hd": "best", "sd": "worst"}.get(
+            str(quality).strip().casefold(), quality
+        )
+        chosen_height = choose_quality_from_list(available, preference)
+        return dict(zip(available, video.cdn_urls))[chosen_height]
 
     elif isinstance(video, pt_Video):
+        await video.load_fields("video_qualities", "direct_download_urls")
         qn = normalize_quality_value(quality)
         chosen_height = choose_quality_from_list(video.video_qualities, qn)
 
-        result = video.direct_download_urls
-        if inspect.iscoroutine(result):
-            direct_urls = await result
-
-        else:
-            direct_urls = result
-
-        quality_url_map = {int(re.search(r'(\d{3,4})', q).group(1)): url for q, url in zip(await video.video_qualities, direct_urls)}
-        download_url = f"https://{quality_url_map[chosen_height]}"
-        return download_url # Uhhh
+        quality_url_map = {
+            normalize_quality(q): url
+            for q, url in zip(video.video_qualities, video.direct_download_urls)
+        }
+        return quality_url_map[chosen_height]
 
     elif isinstance(video, ep_Video):
-        # TODO
-        return video.get_direct_download_urls(quality=quality, mode="h264") # Pls don't download AV1, thank you
-        # NO I won't spend half on hour to handle this edge case where one video on this whole platform might not have
-        # A h264 stream bro
+        await video.load_fields("parsed_urls")
+        return video.get_url_by_quality(quality=quality, mode="h264")
 
-    return "MakesNoSense"
+    raise TypeError(f"Unsupported legacy video type: {type(video).__name__}")
 
 
 async def get_available_qualities(video: Any) -> List[int]:
@@ -632,6 +668,10 @@ async def get_available_qualities(video: Any) -> List[int]:
       - HLS videos: video.m3u8_base_url + video.core.list_available_qualities()
       - Legacy videos: video.video_qualities (e.g. ["360", "480", "720"])
     """
+    if isinstance(video, yp_Video) and video.is_hls is False:
+        # This provider exposes only its selected fallback MP4 URL in this case.
+        return []
+
     # ---- HLS (m3u8) ----
     m3u8_url = getattr(video, "m3u8_base_url", None)
     if m3u8_url:
@@ -644,25 +684,26 @@ async def get_available_qualities(video: Any) -> List[int]:
 
             return sorted({int(h) for h in heights if h is not None})
         except Exception:
-            error = traceback.format_exc()
-            print(error)
-            return []
+            logger.exception("Could not load HLS qualities for %s", getattr(video, "url", video))
+            raise
 
     # ---- Legacy ----
     # Your legacy wrapper already exposes `video_qualities` as list[str]
     if isinstance(video, (ep_Video, xf_Video)):
         quals = video.video_qualities()
-        print(f"Qualities: {quals}")
-        return quals
+        return sorted({normalize_quality(q) for q in quals})
 
     else:
         quals = getattr(video, "video_qualities", None)
 
     if quals:
-        try:
-            return sorted({int(q) for q in quals})
-        except Exception:
-            return []
+        normalized = set()
+        for quality in quals:
+            try:
+                normalized.add(normalize_quality(quality))
+            except (TypeError, ValueError):
+                logger.warning("Ignoring invalid video quality: %r", quality)
+        return sorted(normalized)
 
     return []
 
@@ -687,7 +728,7 @@ def resolve_path(context: Dict[str, Any], path: str) -> Any:
     return cur
 
 
-def parse_publish_date(value: str) -> Optional[datetime]:
+def parse_publish_date(value: Any) -> Optional[datetime]:
     if value is None:
         return None
 
@@ -765,13 +806,13 @@ def write_tags(path: str, data: VideoObject) -> bool:
         import av
 
     except (ModuleNotFoundError, ImportError):
-        return None # Handled in code, don't worry :)
+        return False
 
     genre = "XXX"
     title = data.title
     artist = data.author
     date = data.publish_date  # e.g. "2025-10-26" or "2025"
-    thumbnail = data.thumbnail_data
+    thumbnail = _safe_getattr(data, "thumbnail_data")
 
     logging.debug("Tags [1/3] - Preparing containers")
 
@@ -836,14 +877,22 @@ def write_tags(path: str, data: VideoObject) -> bool:
         # Replace the original file with the newly tagged file atomically
         os.replace(tmp_path, path)
         logging.debug("Tags: [3/3] ✔")
+        return True
 
     except Exception as e:
         raise MetadataWriteError(str(e))
 
+    finally:
+        if os.path.exists(tmp_path):
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                logger.warning("Could not remove temporary metadata file: %s", tmp_path)
+
 def parse_length(
     length: str | int | float | None,
     video_source: str | None = None,
-) -> int | None | str:
+) -> int | None:
     """
     Parse a video duration and return its length in rounded minutes.
 
@@ -862,21 +911,17 @@ def parse_length(
         PT42S
 
     Digits-only strings depend on `video_source`:
-        - xnxx:    value is interpreted as minutes
-        - eporner: value is interpreted as seconds
-        - phub:    value is interpreted as seconds
-        - other:   value is interpreted as minutes
+        - PornHub, Eporner, xHamster, SpankBang, Beeg, Redtube,
+          Tube8, and Thumbzilla values are interpreted as seconds.
+        - Other provider values are interpreted as minutes.
 
     Returns:
         int:
             Rounded duration in minutes.
             Positive durations below 0.5 minutes are returned as 1.
 
-        "Not available":
-            If no duration was provided.
-
         None:
-            If the duration format could not be parsed.
+            If no duration was provided or the format could not be parsed.
     """
 
     def rounded_minutes(minutes: float) -> int:
@@ -884,18 +929,25 @@ def parse_length(
         result = round(minutes)
         return max(1, result) if minutes > 0 else 0
 
-    if length is None or length == "" or length == "Not available":
-        return "Not available"
+    if length is None or length == "" or str(length).casefold() == "not available":
+        return None
 
-    # Already numeric -> assume minutes.
+    seconds_sources = {
+        "pornhub", "phub", "eporner", "xhamster", "spankbang", "beeg",
+        "redtube", "tube8", "thumbzilla",
+    }
+    source = (video_source or "").casefold()
+
+    # Numeric values from several providers are documented as seconds.
     if isinstance(length, (int, float)):
-        return rounded_minutes(float(length))
+        value = float(length)
+        return rounded_minutes(value / 60 if source in seconds_sources else value)
 
     s = str(length).strip()
     s_lower = s.lower()
 
     if not s:
-        return "Not available"
+        return None
 
     # ---------------------------------------------------------
     # ISO 8601 duration:
@@ -949,9 +1001,7 @@ def parse_length(
     # Digits only.
     if s.isdigit():
         value = int(s)
-        source = (video_source or "").lower()
-
-        if "eporner" in source or "phub" in source:
+        if source in seconds_sources:
             return rounded_minutes(value / 60)
 
         # xnxx and unknown sources are interpreted as minutes.

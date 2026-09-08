@@ -103,7 +103,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="eporner",
-        url="https://www.eporner.com/video-DwpUUJacHxs/jewelry-process-in-the-making/"
+        url="https://www.eporner.com/video-cENxynmNow9/the-best-of-miak-onlyf-4k-hdr/"
     ),
     WebsiteTest(
         name="spankbang",
@@ -131,7 +131,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="xfreehd",
-        url="https://beta.xfreehd.com/video/1060341/camilla-cream-cumsters"
+        url="https://beta.xfreehd.com/video/1073182/braless-neighbor-in-the-morning-mina-sakura"
     ),
     WebsiteTest(
         name="porntrex",

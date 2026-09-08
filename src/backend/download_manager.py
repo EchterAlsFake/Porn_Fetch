@@ -13,9 +13,13 @@ PREMIUM_QUALITY_NAMES = {"best", "half", "4k", "uhd", "2k", "qhd", "fullhd", "fh
 
 def quality_requires_premium(quality: str | int) -> bool:
     """Return whether a quality can only be used with the full unlock."""
-    normalized = normalize_quality(quality)
-    if str(normalized) in PREMIUM_QUALITY_NAMES:
+    if str(quality).strip().casefold() in PREMIUM_QUALITY_NAMES:
         return True
+
+    try:
+        normalized = normalize_quality(quality)
+    except (TypeError, ValueError):
+        return False
 
     try:
         return int(normalized) > FREE_MAXIMUM_QUALITY
@@ -76,12 +80,12 @@ class VideoObject:
     url: str
     title: str
     author: str
-    length: int
+    length: int | None
     tags: list[str] | None
     thumbnail_url: str
     video_id: str
-    publish_date: datetime
-    qualities: list[str]
+    publish_date: datetime | None
+    qualities: list[int]
     status: str
     identifier: str | None = None
     output_path: Path | None = None
@@ -187,7 +191,7 @@ class DownloadListModel(QAbstractListModel):
 
     def add_video(self, video: VideoObject, preferred_quality: str) -> str:
         """This function is called by the Backend class and adds an actual video. QML picks it up and creates the row"""
-        if video.length in (None, "Not Available"): # Not all videos have a length attribute
+        if video.length is None: # Not all videos have a length attribute
             display_duration = "N/A"
 
         else:
