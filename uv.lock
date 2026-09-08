@@ -19,14 +19,15 @@ wheels = [
 
 [[package]]
 name = "anyio"
-version = "4.14.2"
+version = "4.15.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "idna" },
+    { name = "typing-extensions", marker = "python_full_version < '3.15'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/61/cc/a381afa6efea9f496eff839d4a6a1aed3bfafc7b3ab4b0d1b243a12573dd/anyio-4.14.2.tar.gz", hash = "sha256:cfa139f3ed1a23ee8f88a145ddb5ac7605b8bbfd8592baacd7ce3d8bb4313c7f", size = 260176, upload-time = "2026-07-12T20:29:07.082Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a9/d2/f4d173e22df740bc37b1db102b386ba719b66e95b0f0d751f556b387e6d2/anyio-4.15.1.tar.gz", hash = "sha256:9f28306018cbd6d329e64a36d58256edff76dd996fe423bc957326e578b82a94", size = 276966, upload-time = "2026-09-05T10:42:39.44Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/35/f2287558c17e29fafc8ef3daf819bb9834061cfa43bff8014f7df7f63bdc/anyio-4.14.2-py3-none-any.whl", hash = "sha256:9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494", size = 125813, upload-time = "2026-07-12T20:29:05.763Z" },
+    { url = "https://files.pythonhosted.org/packages/12/b8/4bd346e22b28902df4d651910f5242c28d84e4a5c2435ca5c3f797ed7e2e/anyio-4.15.1-py3-none-any.whl", hash = "sha256:6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101", size = 132079, upload-time = "2026-09-05T10:42:37.923Z" },
 ]
 
 [[package]]
@@ -95,11 +96,11 @@ wheels = [
 
 [[package]]
 name = "cachetools"
-version = "7.1.7"
+version = "7.1.8"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/70/d2/47e8bc06fe2a06d3f5bdf20f1126ab66c4e99dc48d940e7ba873f7ac7131/cachetools-7.1.7.tar.gz", hash = "sha256:a3e2a00b14d8f8a6b70c1dae7b4685e7ad3bc965c5b42124a2d6ce895da6cf50", size = 40680, upload-time = "2026-08-01T21:20:40.434Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4b/39/9a4689914dd907915cee74733b95888fc1d8a21aad47a24a0a2deec73ac4/cachetools-7.1.8.tar.gz", hash = "sha256:1221d547a0b24b7f26fa891d40d488b5258beab9aebd8ed68c729be3af849c43", size = 40909, upload-time = "2026-08-31T19:02:53.985Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/d8/767faeda872075724b95dd675466a645f1b92aadcdcf2d1429dcfd76c176/cachetools-7.1.7-py3-none-any.whl", hash = "sha256:ef98ef375ad188819ef2f9b3645e3987f4b8c5b7550e436ad998c2de78296df0", size = 16830, upload-time = "2026-08-01T21:20:38.977Z" },
+    { url = "https://files.pythonhosted.org/packages/d7/3d/9487690d0e937854db587205c66bab3c3cf88d9f00ed380b74cb88cc94ee/cachetools-7.1.8-py3-none-any.whl", hash = "sha256:a81e3844acaa7355b6567f97bd67a94a14ec3a9bc2cbbdae45b9592cc036775b", size = 16842, upload-time = "2026-08-31T19:02:52.554Z" },
 ]
 
 [[package]]
@@ -343,63 +344,44 @@ wheels = [
 
 [[package]]
 name = "curl-cffi"
-version = "0.16.2"
+version = "0.16.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
     { name = "cffi" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/f6/347067dfacb19e44a4166d7bdb183e3a2629680beceb5e52f7cb2cc1a3b4/curl_cffi-0.16.2.tar.gz", hash = "sha256:2986a86cdcf514ab73632c2de62a01db3cc97f7ecf17798a1be16180f4474198", size = 238986, upload-time = "2026-08-25T11:51:11.604Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/82/e1/730125c43e3e331d98e17af3cb310ba526b3f1101b7635ca23d976ebfcf5/curl_cffi-0.16.3.tar.gz", hash = "sha256:d15d0c2a35f2d75bec430c28946c2a833f421c85773bdb0795182cc5c515665b", size = 239020, upload-time = "2026-09-02T11:58:23.266Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/29/ac/3772115da1b6b9b6064e8c128dfeb6c9e708dd4603a17eb52f658558c5e1/curl_cffi-0.16.2-cp310-abi3-macosx_10_9_x86_64.whl", hash = "sha256:afe05fc1022039c2853177ef13f67b7a9915bff62e35eb4fa1a295166bc55a34", size = 3024444, upload-time = "2026-08-25T11:50:32.215Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/21/57a757acb1b43ef944735835b50cfdf00150113164d755a99f8d21d875f3/curl_cffi-0.16.2-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:e6f238ddfef41a5d074bcc2f6b8fc21e653a1e7d4d9a2163839030d9de24b2ca", size = 2781420, upload-time = "2026-08-25T11:50:33.851Z" },
-    { url = "https://files.pythonhosted.org/packages/f1/8c/755116d4f57fbad64947f47141ccc342a30bf5998ca6a33a2bcc33f34ab9/curl_cffi-0.16.2-cp310-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:5382ca2a67a459dd6f64203555fd248b71abe4ca6cd40669902916dc5f558a33", size = 12827642, upload-time = "2026-08-25T11:50:35.388Z" },
-    { url = "https://files.pythonhosted.org/packages/8c/31/aedc88071ee74b9b7848e48f11ddff1c242ab52f914f47309e0d15c4982f/curl_cffi-0.16.2-cp310-abi3-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:1b0deed58ca724ffdb80e1f4029208325b2a4999f0a438f55037c591232e6c18", size = 12651309, upload-time = "2026-08-25T11:50:37.272Z" },
-    { url = "https://files.pythonhosted.org/packages/65/b0/b3dd929480f419f8aa921860afb44e15d2a22fd0be5c545296b9db865aa3/curl_cffi-0.16.2-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:b2a59707f5345491a08a3d45f6895b1c9dc192d403a1ebc42c1d1ef43a58453e", size = 13474592, upload-time = "2026-08-25T11:50:39.344Z" },
-    { url = "https://files.pythonhosted.org/packages/8c/14/fbed6244544be92659de5cad4cca8d0ef79a05c17518d1b3fd2ca84d80cc/curl_cffi-0.16.2-cp310-abi3-manylinux_2_28_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:c3645b13dc1d7dd727e90e847a767b6a2fb5a16a0cbc86a1fb8e77714775f498", size = 12833348, upload-time = "2026-08-25T11:50:41.395Z" },
-    { url = "https://files.pythonhosted.org/packages/4a/8d/ee9b29ad9e2788cce9be333caac445be3950780e2eb1bdc47b53bb1f06c6/curl_cffi-0.16.2-cp310-abi3-manylinux_2_34_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:b07b19225a979ff85f30868712d8a274e69f013489c5b40102ec0167cd0a756a", size = 12604773, upload-time = "2026-08-25T11:50:43.476Z" },
-    { url = "https://files.pythonhosted.org/packages/60/b5/373754bf9bbdac84ec0d668d9f75487ed9ca236802c3c1edb9bb34cb045f/curl_cffi-0.16.2-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:8b6877cf7a1470e357441d5fbd4a338d2372d49c352f0b8a57e565910f932f4d", size = 12580793, upload-time = "2026-08-25T11:50:45.681Z" },
-    { url = "https://files.pythonhosted.org/packages/c4/61/7f659fe76575494268af7ac622250f3841b2a43eac8207d1758e61e96d05/curl_cffi-0.16.2-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:23f490b0b11d87beb94d5d26c4661c26f0439396f839af322a1847c268971913", size = 13240951, upload-time = "2026-08-25T11:50:48.388Z" },
-    { url = "https://files.pythonhosted.org/packages/4f/ac/21e1241211aa53102417c6952bb2929b1d7fee7806c9f1745b2d9f93ccdf/curl_cffi-0.16.2-cp310-abi3-win_amd64.whl", hash = "sha256:3614728ce7f15507b1e72761639c0524a434c3c8b141eb1aae7e8e037dcb292b", size = 1977254, upload-time = "2026-08-25T11:50:50.452Z" },
-    { url = "https://files.pythonhosted.org/packages/dd/d8/178f229cd6169df842e52aa54b9b523b9642f7e09ca4f7a646a9b096a3ec/curl_cffi-0.16.2-cp310-abi3-win_arm64.whl", hash = "sha256:cbf7d2d14057bc62ae1da9e03f18f08ca18dbb43c7fca1eaa827f5d703b32f5c", size = 1711623, upload-time = "2026-08-25T11:50:52.034Z" },
-    { url = "https://files.pythonhosted.org/packages/f8/e8/66da94f9183849f901402ebe3c7365bb2541e7109779774ff17741fea1c5/curl_cffi-0.16.2-cp314-cp314-android_24_arm64_v8a.whl", hash = "sha256:16f30cf2f08f33a74ade44770cb6efc0eaacfbdb2a36e18a7817f9ff2c2025a1", size = 8605614, upload-time = "2026-08-25T11:50:55.593Z" },
-    { url = "https://files.pythonhosted.org/packages/df/7e/a63ae4b566f9cd186d609662f03d8599bf0001808dba2059e1e780534f2e/curl_cffi-0.16.2-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:ec5944bf5e4cc5dd1de35e86ffe419db59df7335aa868e278d7f0e848f4cc253", size = 3025009, upload-time = "2026-08-25T11:50:57.607Z" },
-    { url = "https://files.pythonhosted.org/packages/c3/49/f8f5f0713e2a06242cffce2ef2dacc2084c01c7cde05a31600c737e439ed/curl_cffi-0.16.2-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:9a45612bfe50d6d5f7825a9a806b044969281bef8928e42ffae503d58cfe6b65", size = 2781587, upload-time = "2026-08-25T11:50:59.039Z" },
-    { url = "https://files.pythonhosted.org/packages/22/b9/efdd5c44d36474a811fe4304fe7daa7612804bc69daf050a223720926a33/curl_cffi-0.16.2-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:e5ef2ce4044f432e188d4338d1826d1d70f9f38f5a07e78a88592c9d133c4c3a", size = 12832014, upload-time = "2026-08-25T11:51:00.598Z" },
-    { url = "https://files.pythonhosted.org/packages/83/86/9b92aac7365a5894fa4ee253c52ff0a5924b233341c70181cb926a071057/curl_cffi-0.16.2-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:e34b4158fcd0192e38bb8420377ad4be91e62d5ea52848f7a5e9e07579ad29ac", size = 13483396, upload-time = "2026-08-25T11:51:02.678Z" },
-    { url = "https://files.pythonhosted.org/packages/1c/31/cdb7e2899e1a6ec62a1f920f1550cf99f9c929b36d800e1502199cd2fd12/curl_cffi-0.16.2-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:58f346db1a203c709d99619322f6c084d30a47ac2495941f2c04785a5441e1ad", size = 12587394, upload-time = "2026-08-25T11:51:04.831Z" },
-    { url = "https://files.pythonhosted.org/packages/0a/c2/b1358b61ee061ea413a014465d5437d00a9d59b654684857dc2b88391d6e/curl_cffi-0.16.2-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:7314f25d2840cba696ecebe8a36be8d62e9f2106cb4e8aa380e6f6f0a9fc1ef2", size = 13249643, upload-time = "2026-08-25T11:51:06.82Z" },
-    { url = "https://files.pythonhosted.org/packages/8c/bb/7209914870ac5e97b1a19ecca492ac7632a61ffee039284039f7b97c2599/curl_cffi-0.16.2-cp314-cp314t-win_amd64.whl", hash = "sha256:d7effcc9dfd3aee1d8871efc8fb397041b5546d0af1653a5af26e845dd194ff3", size = 2030216, upload-time = "2026-08-25T11:51:08.909Z" },
-    { url = "https://files.pythonhosted.org/packages/5e/0c/77b89a0efe4a23a9b370f049ad4988a57232c2eb82b3577a6e1d8fe0e597/curl_cffi-0.16.2-cp314-cp314t-win_arm64.whl", hash = "sha256:6bc754ad2dcb5287a157f34d615dde442e80e688289caedc953be8d92fe3f50b", size = 1779425, upload-time = "2026-08-25T11:51:10.4Z" },
+    { url = "https://files.pythonhosted.org/packages/79/7a/ec08ef0665c4ef4ea76b47042eb1c043e4afb374d8b9218e00272c9e73a2/curl_cffi-0.16.3-cp310-abi3-macosx_10_9_x86_64.whl", hash = "sha256:0f1f6878863fba393801e4d59b2f2766d1983b5c9d9dfa11d4becfd6a74cc937", size = 3025646, upload-time = "2026-09-02T11:57:39.326Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/86/e21b8ed384db26401a4438f20f01c7bcd9c3a6f8ceede458344e2d62775c/curl_cffi-0.16.3-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:f3b63da797912bc82911e34dfe449725514e4281527fb516931fc457087cfb44", size = 2784023, upload-time = "2026-09-02T11:57:40.986Z" },
+    { url = "https://files.pythonhosted.org/packages/97/2d/25b106e64178829be1ce171b6cd45ba354ab7a2a5169001866b38d4c440f/curl_cffi-0.16.3-cp310-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d5a4103f2baa1fcf619ec3101b419827d367044ba106b206228137cc71a5a9c5", size = 12834219, upload-time = "2026-09-02T11:57:42.711Z" },
+    { url = "https://files.pythonhosted.org/packages/e7/dd/db27a521777d0cf00f9a1554453ae730539dd134bca108d8df256a85c91e/curl_cffi-0.16.3-cp310-abi3-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:f2795f0ef2e8cc0e6d702e52367af6600f5bcf10e44d683e256254adc7e3589f", size = 12655304, upload-time = "2026-09-02T11:57:45.334Z" },
+    { url = "https://files.pythonhosted.org/packages/72/01/2bbf141baa0fc3921d31a90de5465b7a94188845a8fe84dee86bf7bd90f1/curl_cffi-0.16.3-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:a875a661e2f9a949be29454880bbb9553307a487c4c08819738298cf5c1622e2", size = 13484311, upload-time = "2026-09-02T11:57:47.58Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/d4/745ca299a2a223ee18574ec7cff75de620a92ce69b3cb09490db8fba614b/curl_cffi-0.16.3-cp310-abi3-manylinux_2_28_armv7l.manylinux_2_31_armv7l.whl", hash = "sha256:0851e710608122a2716bdee35788bbd7e9d4a0fd42899b2bca9181277095af8e", size = 12840616, upload-time = "2026-09-02T11:57:50.016Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/bf/98d72d7a081cc155a71ab66bde6a18640d4ac5d4f6766f729a92cb4257c0/curl_cffi-0.16.3-cp310-abi3-manylinux_2_34_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:1d7e553442cefec100dfd1fca4ae7035ab6c094457244bf60a38670b8ac8185d", size = 12612602, upload-time = "2026-09-02T11:57:52.584Z" },
+    { url = "https://files.pythonhosted.org/packages/36/cf/2fdaff71fd6f39c5994495af8378e6e26bca8e447d94d2f75a76337908c8/curl_cffi-0.16.3-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:60621b3f561346046dd62be33abfb50c8b88a8007699d6b11d39ad4755312c4a", size = 12588697, upload-time = "2026-09-02T11:57:55.138Z" },
+    { url = "https://files.pythonhosted.org/packages/74/55/68c399019bc24ea6ac783c98139a2555f88589631f3d127fe6b9073f019b/curl_cffi-0.16.3-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:20a7b1b473371cfaf2118958034977e457c6fa279fbd11543c9e0ab58be9eedd", size = 13253555, upload-time = "2026-09-02T11:57:57.524Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/72/1732a24ef4a2aeba994b80ec163debe8deda403c07e4abbc0443bca078b8/curl_cffi-0.16.3-cp310-abi3-win_amd64.whl", hash = "sha256:fe87b66e324ed7318166698e02169f3208dbda32b872a27d2bc61a9c19b335eb", size = 1978602, upload-time = "2026-09-02T11:58:00.033Z" },
+    { url = "https://files.pythonhosted.org/packages/45/bb/67bec3132aeabac99dfe2f299a9b43dcb5de23ad96219ee98516d177fc9c/curl_cffi-0.16.3-cp310-abi3-win_arm64.whl", hash = "sha256:5a2ba880019f9e5a9e8f38ae22de6e4ea4c8d34a51ae4f1a2fce962c7b632006", size = 1713140, upload-time = "2026-09-02T11:58:01.558Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/f4/3dedff1a31c93a9b18acaa346e23832c29bc18075138e90e9af795188e5e/curl_cffi-0.16.3-cp314-cp314-android_24_arm64_v8a.whl", hash = "sha256:0c8b70191dc88ea770a5c39d7e213bff1606e248c13566777e6527f0d8cf96ec", size = 8607323, upload-time = "2026-09-02T11:58:05.099Z" },
+    { url = "https://files.pythonhosted.org/packages/73/b7/99708ed83c11132ec0311a28ed46fe1cd10e8cb6ecd3c82f01f1f80c3c2c/curl_cffi-0.16.3-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:8055ec9d7c15237747be254739c40057e3684f56854e95c12aaf3c95838ba2d6", size = 3026149, upload-time = "2026-09-02T11:58:06.973Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/d5/6c0400fb64097c4662da4e5d2d1e7daa8027d1431b1c8880c0f8f2051ae1/curl_cffi-0.16.3-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:391096e903ec98b909bb355e008ec7c211d710b6a23663a7f1f10aa54a027538", size = 2784153, upload-time = "2026-09-02T11:58:08.726Z" },
+    { url = "https://files.pythonhosted.org/packages/87/a4/3c8702d25e21f420e88707701af15006e72a2a2b9f3fa419c7c80ce7451c/curl_cffi-0.16.3-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:6cef43f248b3635de9b82337e0ed2c7403aa1506e51587144d552702eb9d0775", size = 12839612, upload-time = "2026-09-02T11:58:10.745Z" },
+    { url = "https://files.pythonhosted.org/packages/be/bf/44a7e7a1e309136a1b086332feb03c7718169af550bdbf7eab52ae0497e0/curl_cffi-0.16.3-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:e1fffac4b5a02c5ec74d184d668c5b882f80fa1d961e7adba6e1755877af41e1", size = 13488945, upload-time = "2026-09-02T11:58:13.15Z" },
+    { url = "https://files.pythonhosted.org/packages/52/83/5321d5fb67ff16195fb0c3bd5434be4532c85967c80546092a1cf3654cc9/curl_cffi-0.16.3-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:849026be5b36cf7b95d5fce63a84aa7b17248e83b4374e67715e7387ca2be50c", size = 12592235, upload-time = "2026-09-02T11:58:15.58Z" },
+    { url = "https://files.pythonhosted.org/packages/12/aa/0b4e110729a86b434196d15e2e2839d992a9b8f3003f0569c77e27a9faca/curl_cffi-0.16.3-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:82cc688349c8e8955d346cc5cc7759b68742edc587ae47ba5783a096502a7a92", size = 13259593, upload-time = "2026-09-02T11:58:17.971Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/3a/e4f199cfc9f131411543aacdf6811d8b72b81ce6ac6e9f6ddffecfc31e54/curl_cffi-0.16.3-cp314-cp314t-win_amd64.whl", hash = "sha256:72376595490c4822ad1a5360adb568660ca66dff4ba2c2de2912778c15f43edb", size = 2031033, upload-time = "2026-09-02T11:58:19.949Z" },
+    { url = "https://files.pythonhosted.org/packages/18/8f/9354e5552982d38abd3ce2db859f049fee6bff0eee4e25aacaaa2b29f0b4/curl_cffi-0.16.3-cp314-cp314t-win_arm64.whl", hash = "sha256:b450fad876aa9f9ed3edfb6e3a48a8c28eafa66aae634eff17800a8b5006568d", size = 1782234, upload-time = "2026-09-02T11:58:21.629Z" },
 ]
 
 [[package]]
 name = "eaf-base-api"
-version = "4.1.0"
-source = { editable = "../eaf_base_api" }
+version = "4.1.1"
+source = { git = "https://github.com/EchterAlsFake/eaf_base_api#c4af5f78c28edbfeb42e8b4d9869bee8caa7381b" }
 dependencies = [
     { name = "cachetools" },
     { name = "curl-cffi" },
     { name = "tenacity" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "python_full_version >= '3.12' and extra == 'hls'" },
-    { name = "cachetools", specifier = ">=7.0.0" },
-    { name = "curl-cffi" },
-    { name = "m3u8", marker = "extra == 'hls'" },
-    { name = "tenacity", specifier = ">=9.1.2" },
-]
-provides-extras = ["hls"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy" },
-    { name = "pylint" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "types-m3u8" },
 ]
 
 [[package]]
@@ -624,7 +606,7 @@ requires-dist = [
     { name = "colorama" },
     { name = "cryptography", marker = "extra == 'dev'" },
     { name = "cryptography", marker = "extra == 'gui'" },
-    { name = "eaf-base-api", editable = "../eaf_base_api" },
+    { name = "eaf-base-api", git = "https://github.com/EchterAlsFake/eaf_base_api" },
     { name = "fake-useragent" },
     { name = "hue-shift", marker = "extra == 'cli'" },
     { name = "hue-shift", marker = "extra == 'dev'" },
@@ -649,20 +631,20 @@ requires-dist = [
     { name = "soupsieve" },
     { name = "truststore", marker = "extra == 'dev'" },
     { name = "typing-extensions" },
-    { name = "unofficial-api-for-beeg" },
-    { name = "unofficial-api-for-eporner" },
+    { name = "unofficial-api-for-beeg", git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg" },
+    { name = "unofficial-api-for-eporner", git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner" },
     { name = "unofficial-api-for-hqporner" },
-    { name = "unofficial-api-for-pornhub" },
-    { name = "unofficial-api-for-porntrex" },
-    { name = "unofficial-api-for-redtube" },
-    { name = "unofficial-api-for-spankbang" },
-    { name = "unofficial-api-for-thumbzilla" },
-    { name = "unofficial-api-for-tube8" },
-    { name = "unofficial-api-for-xfreehd" },
-    { name = "unofficial-api-for-xhamster" },
-    { name = "unofficial-api-for-xnxx" },
-    { name = "unofficial-api-for-xvideos" },
-    { name = "unofficial-api-for-youporn" },
+    { name = "unofficial-api-for-pornhub", git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub" },
+    { name = "unofficial-api-for-porntrex", git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex" },
+    { name = "unofficial-api-for-redtube", git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube" },
+    { name = "unofficial-api-for-spankbang", git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang" },
+    { name = "unofficial-api-for-thumbzilla", git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla" },
+    { name = "unofficial-api-for-tube8", git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8" },
+    { name = "unofficial-api-for-xfreehd", git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd" },
+    { name = "unofficial-api-for-xhamster", git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster" },
+    { name = "unofficial-api-for-xnxx", git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx" },
+    { name = "unofficial-api-for-xvideos", git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos" },
+    { name = "unofficial-api-for-youporn", git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn" },
     { name = "urllib3" },
 ]
 provides-extras = ["gui", "cli", "dev", "av"]
@@ -976,28 +958,20 @@ wheels = [
 [[package]]
 name = "unofficial-api-for-beeg"
 version = "1.7"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#c5abdb0704e125bd7b6d2f17d538d8f0278f8b05" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d9/0d/a11542d615530266b2e427627dcf73e8f8e98239b4f3c06477dfb10d3175/unofficial_api_for_beeg-1.7.tar.gz", hash = "sha256:97f5b7325083eafc166e32095ee388673d44005bc570daba1f38eb0d887d9bc6", size = 13156, upload-time = "2026-08-11T16:07:10.341Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ac/10/fdefcb13cb04b51195a33dc5fbf7d26cbc0932aeef3a96249a1f35e87048/unofficial_api_for_beeg-1.7-py3-none-any.whl", hash = "sha256:716f2a5e785e90912ba45e8a5ba9038a623246e01aa82f042a662f3314eaa421", size = 15184, upload-time = "2026-08-11T16:07:11.416Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-eporner"
 version = "2.4.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#5be2b73c8547c810416f26b6dae45a83c486e118" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/45/25/26f2a9718aefa7db3e022c190feb9f79ca535510d4af3e387bd805574f63/unofficial_api_for_eporner-2.4.1.tar.gz", hash = "sha256:69304f9ca19df683806a95ec53b77ed9e6c0c718962164d3b8b6a1e45313a636", size = 25626, upload-time = "2026-08-14T16:50:50.987Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/48/570e4a82e06d2eb1ff29f5038189897d21e58d05bec6ec7782e5e6f8f6a1/unofficial_api_for_eporner-2.4.1-py3-none-any.whl", hash = "sha256:46d32be92fb1a85e13dc30d7af7c59e4878ea75545df8de0330252c0e6a70921", size = 27590, upload-time = "2026-08-14T16:50:49.936Z" },
 ]
 
 [[package]]
@@ -1016,112 +990,84 @@ wheels = [
 
 [[package]]
 name = "unofficial-api-for-pornhub"
-version = "5.4.1"
-source = { registry = "https://pypi.org/simple" }
+version = "5.4.3"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#8da6fa5a99b507179cc1d4cad4aaeec199c6da4c" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/45/73/e671dc649021499e26b7171355ee300504c68b41a6f89a2ad4c6adbfdca3/unofficial_api_for_pornhub-5.4.1.tar.gz", hash = "sha256:b8d00ed27cdbbe5e3bee45d237876fdf57db3be6bb145112a9623c8c3c9de614", size = 28053, upload-time = "2026-08-13T15:35:48.039Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a7/71/1d568fe27289d8a2ed80828e91f9f6aebc49baa978f5c625f263c45d1f71/unofficial_api_for_pornhub-5.4.1-py3-none-any.whl", hash = "sha256:7fc33236dd10eb1b5cfc77a9762470b90330d86ffb0e0f681ab0a032867339e9", size = 33539, upload-time = "2026-08-13T15:35:49.112Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-porntrex"
 version = "1.8"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#7c38faf9565f1479bef617b82b19b79bce907793" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "json5" },
     { name = "selectolax" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/80/6f/895346e3f39cff92ea0ee62f94baa8f24db6e242fe7f3f2ada38099dd561/unofficial_api_for_porntrex-1.8.tar.gz", hash = "sha256:aa46a27ac33595a3d4a00d936ecd807c49b9205daa1346c27c82566b04382386", size = 21123, upload-time = "2026-08-11T16:11:24.215Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/09/6a/46d8064e342db1874f07a4696174b226cd7a1b0f1248a183b1948c893a6f/unofficial_api_for_porntrex-1.8-py3-none-any.whl", hash = "sha256:bab59e4159fa5d2156ab0e4c5a77588700507892ac975cf86fe8f2217d0bb1b7", size = 22368, upload-time = "2026-08-11T16:11:23.055Z" },
-]
 
 [[package]]
 name = "unofficial-api-for-redtube"
 version = "1.4.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#c03dda39d222a171f61451f7a5bebd30d585f06a" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/87/1f439227f15d32e057341b56585f2406eae2049b36241b1b0b8c44c73d39/unofficial_api_for_redtube-1.4.1.tar.gz", hash = "sha256:c7be320c52ae21d1379fb6b941c5cbfb91ebaa11bb55da2062f81a18b5cef7ce", size = 19008, upload-time = "2026-08-14T16:54:31.491Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/06/589c529c830b581accf05856b5fd87aa2f92ce660d03ffaf3ba9b09cd83a/unofficial_api_for_redtube-1.4.1-py3-none-any.whl", hash = "sha256:30601f6a62f7a2054fc94f38e0469965dc309a41713b149e9e412e9f241b4bac", size = 23570, upload-time = "2026-08-14T16:54:30.497Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-spankbang"
 version = "2.4.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#21109928240ea160bb02a1dfa27375ad38806a7f" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/08/74/ca16213d66b89f5aee2ffdaf7448d1769e66c731b8e1b33d53a706289b59/unofficial_api_for_spankbang-2.4.1.tar.gz", hash = "sha256:b31209abf0ac8b2e9e196c76c46f332b0588825aded7831a6cae73014da8b775", size = 22160, upload-time = "2026-08-14T16:25:00.031Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/45/d451dabf16d80191534ee6d9aa7c0e8879169af547ffee4d6071d281e5a5/unofficial_api_for_spankbang-2.4.1-py3-none-any.whl", hash = "sha256:41134a7192a56ee0be4aff2f325451aaa52c9b7f2a626a94c60698574dd39986", size = 23342, upload-time = "2026-08-14T16:24:58.994Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-thumbzilla"
 version = "1.4"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#0da910df4b3156ecc2ca56dbd21a4a73cc04a19a" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/be/55/43e5422c131968490853e0b6970063eba7c953ede31d03274ce054f3fd2d/unofficial_api_for_thumbzilla-1.4.tar.gz", hash = "sha256:2576637279c7e183241df051889d14834542e326c42da9d9fa12311460ab4443", size = 17070, upload-time = "2026-08-11T16:13:49.751Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c3/7d/b950b107184c963a6caee755820bd6bb5534392fe3747f0b456af874623e/unofficial_api_for_thumbzilla-1.4-py3-none-any.whl", hash = "sha256:87b3647c0a7b7cf4f574564da392468bed0dd6a9a10e9000205cb97042f557e2", size = 21173, upload-time = "2026-08-11T16:13:50.935Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-tube8"
 version = "1.3"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#d65c41fc578c6ba7f37673816f5464afde155e28" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/4a/f64b72486b407f7dbf45155549ee1701bc6d4a11fd0c9fb6446a6414ab9f/unofficial_api_for_tube8-1.3.tar.gz", hash = "sha256:8c7846724892abd459a2d5af56b98c748a11b45b8571b6a62b42f56a632decf4", size = 16862, upload-time = "2026-08-11T16:14:14.229Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/99/3a1f3b73b0fb3dbf70b4dd8a5114e4f4ad1f2f917db2e290cd40eafcecda/unofficial_api_for_tube8-1.3-py3-none-any.whl", hash = "sha256:abc113f3b621d5fc04fb0b3712ef5d198436e3c0d58d20c01a353811b5a3fc5c", size = 20709, upload-time = "2026-08-11T16:14:13.029Z" },
-]
 
 [[package]]
 name = "unofficial-api-for-xfreehd"
 version = "1.7.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#acc331b07b43f9eaa67bb983c3ee0e93ced0775d" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/14/c6/d7d7b56287eba254f480dc33af972f22b487b976da3d80b6c3f0880d7f90/unofficial_api_for_xfreehd-1.7.1.tar.gz", hash = "sha256:58867ae292628e64072b098b14737b9037e59975b3d583ddfa0a5f10465179b1", size = 19991, upload-time = "2026-08-14T16:33:26.863Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/49/6ffe19ab049f1aa9f979cdae7f934106d19ce49829eec31de78b6e5484a0/unofficial_api_for_xfreehd-1.7.1-py3-none-any.whl", hash = "sha256:c4ccc9315583d71b8d5c7466a9cfe2428e0dc68d7cc3bdaec328a0b1cf1299c4", size = 20680, upload-time = "2026-08-14T16:33:25.821Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-xhamster"
 version = "2.6"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#63b6a14419ef67cd968c88b8bc9c7cdc638036b4" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1129,54 +1075,38 @@ dependencies = [
     { name = "m3u8" },
     { name = "selectolax" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7b/7c/756d8c69283d5661784d05264cff4a55e5e5fa773ed9cfdf1e5be2b570cb/unofficial_api_for_xhamster-2.6.tar.gz", hash = "sha256:56f3dce1e562e14221aa8d096f0731a66ea6296120196464a9c694967c1178f2", size = 24461, upload-time = "2026-08-14T16:39:57.979Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ad/96/ed5bfccb92b098fb0dbb9c8412511f0c5fae85c2fa69cf82111a3ee2727b/unofficial_api_for_xhamster-2.6-py3-none-any.whl", hash = "sha256:858980c917e7378c37a81793f3e4c35c400cb50649b622cc1fb06b72ca51389e", size = 26697, upload-time = "2026-08-14T16:39:58.978Z" },
-]
 
 [[package]]
 name = "unofficial-api-for-xnxx"
 version = "2.4.1"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#982cb48bf861902554f45492084741cceb164adb" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/6c/db/4765f962a88525255578eef38c36aa9cd7cdac7851cc1cc7c366156fcb31/unofficial_api_for_xnxx-2.4.1.tar.gz", hash = "sha256:725a58542e6464e0dd949cfd5f522cd2d67295fd1d623af81ced5d41508396fc", size = 21407, upload-time = "2026-08-14T16:56:10.496Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/16/fa/590173e6f815375a8d13bd9acfc2646426466ef1c117278bb4e775a109c6/unofficial_api_for_xnxx-2.4.1-py3-none-any.whl", hash = "sha256:13f6343dc9c12d696571d50b403fae743a6c1ccccb46471e2a1f409d32f562be", size = 22778, upload-time = "2026-08-14T16:56:09.242Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-xvideos"
 version = "2.5"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#9a82e554223988bb98aebfff9f589d41513abad3" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/08/ea/15b2930c0bf01378ef4f43aeb71480132349e37a89ba27661bdacd24bdd5/unofficial_api_for_xvideos-2.5.tar.gz", hash = "sha256:e60042aaac1436d6f97abf6adf00422990aa98ffe8e002ed2c02e9881395bc7f", size = 24972, upload-time = "2026-08-11T16:15:31.671Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/0d/6c5e4dfbc8f1f185b9604b92df924af7c7a240196ad6c92405fb8acb96e6/unofficial_api_for_xvideos-2.5-py3-none-any.whl", hash = "sha256:9c8388f400e32d39e0dd0d938c3a0e509da1997f45e59330d9e72a71b87114e2", size = 27753, upload-time = "2026-08-11T16:15:30.424Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-youporn"
 version = "1.8"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#dd6f05065a7ae61b9981afcc8091b3bcff7a6030" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d9/17/e8d9bee641939d3a045dc2a6be1830fc563be98ba934e68ee8dfc1fb4ccd/unofficial_api_for_youporn-1.8.tar.gz", hash = "sha256:8d1e2f6394231ba28db9679cb9f03266114c0f7767dddfbcb0d7c09fd25529ec", size = 23383, upload-time = "2026-08-11T16:15:52.569Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/cb/3da3a9fc57fab124e5d039ef142e0dd378d2e02f193e64c171375cbd4717/unofficial_api_for_youporn-1.8-py3-none-any.whl", hash = "sha256:deb31c86974a96be2fad713e580b36d93f0892ac546b6071b1f92a0756fc9594", size = 24587, upload-time = "2026-08-11T16:15:53.789Z" },
 ]
 
 [[package]]

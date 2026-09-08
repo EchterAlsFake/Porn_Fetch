@@ -219,10 +219,7 @@ cores = [
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
            rt_Video, th_Video, tu_Video, ph_Short]
 
-for _core in cores:
-    _core.initialize_session()
-
-logger.debug("Successfully initialized all clients and!")
+logger.debug("Successfully initialized all clients!")
 
 
 def refresh_clients() -> None:
