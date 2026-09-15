@@ -161,8 +161,18 @@ This index covers every project `.py` file currently present (including generate
 
 ### `Porn_Fetch_CLI.py`
 
-- **`CLI`** — Implements the interactive command-line application, including setup, persisted user settings, licensing, site/model/playlist discovery, searches, downloads, progress, and error handling.
-- **`Batch`** — Extends `CLI` with a non-interactive test mode and the CLI program entry point.
+- Thin launcher for the Qt-free `src.cli` package. With no action flags it starts the interactive terminal wizard; action flags select headless asynchronous batch mode.
+
+### `src/cli/`
+
+- **`wizard.py`** — Interactive, scrollback-preserving terminal wizard using `questionary` and `rich` for downloads, scrapers, queues, accounts, settings, and licensing.
+- **`batch.py`** — Repeatable batch arguments, compatibility aliases, dual-mode launcher, and deterministic offline packaged-build self-test.
+- **`providers.py`** — Host/path capability routing, isolated provider client cores, common profile/collection streams, scrape-result unwrapping, and cleanup.
+- **`downloads.py`** — Async RAW/HLS/gallery dispatch, cancellation, resume paths, licensing enforcement, and progress conversion.
+- **`settings.py`** — Validated runtime configuration plus versioned atomic JSON persistence and legacy INI import.
+- **`model_store.py`** — Atomic tracked-profile state with ordered downloaded and pending URL lists.
+- **`accounts.py`** — Memory-only PornHub, XHamster, and XVideos login and account-collection workflows.
+- **`licensing.py`** — Shared schema-2 `license_client` service and platform application-data path.
 
 ### `main.py`
 

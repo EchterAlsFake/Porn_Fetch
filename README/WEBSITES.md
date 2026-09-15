@@ -1,33 +1,13 @@
 # Porn Fetch supported websites
-- PornHub.com
-- HQporner.com (2.8) 
-- Eporner.com (3.0)
-- xnxx.com (3.0)
-- xvideos.com (3.0)
-- xhamster.com (3.5)
-- missav.ws (3.5) supports all other top level domains too
-- spankbang.com (3.6)
-- youporn.com (3.7)
-- xfreehd.com (3.8)
-- beeg.com (3.8)
 
+The terminal application detects the provider and content type from the URL. Search is intentionally not available.
 
-> Porn Fetch was built for PornHub in the first place, but I decided to support as many websites as possible
+| Capability | Providers |
+|:--|:--|
+| Direct videos and shorts | PornHub, Eporner, XNXX, XVideos, XHamster, SpankBang, YouPorn, Beeg, Porntrex, XFreeHD, RedTube, Thumbzilla, Tube8 |
+| Profiles and channels | PornHub, Eporner, XNXX, XVideos, XHamster, SpankBang, YouPorn, Porntrex, RedTube, Thumbzilla, Tube8 |
+| Video collections | PornHub playlists, XVideos playlists, YouPorn collections, RedTube playlists, Thumbzilla playlists |
+| Image galleries | XFreeHD albums |
+| Accounts | PornHub, XHamster, XVideos |
 
-### Here's a list of all features and if the website (API) supports it
-
-| Category            | Websites                                                                        |
-|:--------------------|:--------------------------------------------------------------------------------|
-| Videos              | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn |
-| Searching           | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn |
-| Models              | PornHub, HQporner, xnxx                                                         |
-| Pornstars           | PornHub, Eporner, xvideos, Xhamster, Spankbang, YouPorn                         |
-| Channels            | PornHub, Xhamster, Spankbang, YouPorn                                           |
-| Creator / Users     | Xhamster (Creator), Spankbang (Creator), xnxx (Users)                           |
-| Playlists           | PornHub, xvideos, YouPorn                                                       | |
-| Shorts              | Xhamster                                                                        |
-| Account Login       | PornHub                                                                         |
-| Videos by Category  | HQporner, Eporner                                                               |
-| Random              | HQporner                                                                        |
-| Brazzers only       | HQporner                                                                        |
-| Top Porn            | HQporner                                                                        |
+Provider libraries expose different metadata and resolutions, so not every row in the results screen contains every field.

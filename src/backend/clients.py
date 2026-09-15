@@ -31,7 +31,6 @@ import os
 import re
 import logging
 import asyncio
-import tempfile
 
 
 try:
@@ -62,9 +61,10 @@ from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore, ScrapeResult, Cache
-from src.backend.errors import SomethingStupidHappened, MetadataWriteError
+from src.backend.errors import SomethingStupidHappened
+from src.backend.metadata import write_tags
 from base_api.modules.logger import configure_app_logging
-from src.backend.download_manager import VideoObject
+from src.backend.media import VideoObject
 from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, strip_title, \
     normalize_quality_value
 from curl_cffi.const import CurlOpt
@@ -797,97 +797,6 @@ def parse_publish_date(value: Any) -> Optional[datetime]:
 
     return None
 
-
-def write_tags(path: str, data: VideoObject) -> bool:
-    """
-    Writes the tags of the video into the file using PyAV.
-    """
-    try:
-        import av
-
-    except (ModuleNotFoundError, ImportError):
-        return False
-
-    genre = "XXX"
-    title = data.title
-    artist = data.author
-    date = data.publish_date  # e.g. "2025-10-26" or "2025"
-    thumbnail = _safe_getattr(data, "thumbnail_data")
-
-    logging.debug("Tags [1/3] - Preparing containers")
-
-    # FFmpeg/PyAV cannot update headers safely in-place.
-    # We write to a temporary file in the same directory and perform an atomic swap.
-    temp_dir = os.path.dirname(path)
-    with tempfile.NamedTemporaryFile(dir=temp_dir, delete=False, suffix=".mp4") as tmp:
-        tmp_path = tmp.name
-
-    try:
-        with av.open(path) as in_container, av.open(tmp_path, mode='w', format='mp4') as out_container:
-
-            # 1. Setup stream mapping (remux existing video/audio without re-encoding)
-            stream_mapping = {}
-            for stream in in_container.streams:
-                # Skip any existing thumbnail streams so we don't duplicate them
-                if stream.type == 'video' and getattr(stream.disposition, 'attached_pic', False):
-                    continue
-
-                # Clone the stream configuration exactly
-                out_stream = out_container.add_stream(template=stream)
-                stream_mapping[stream] = out_stream
-
-            # 2. Write basic text tags
-            # FFmpeg automatically maps these standard keys to the correct MP4 boxes (\xa9nam, \xa9ART, etc.)
-            meta = {}
-            if title is not None:    meta['title'] = str(title)
-            if artist is not None:   meta['artist'] = str(artist)
-            if genre is not None:    meta['genre'] = str(genre)
-            if date is not None:     meta['date'] = str(date)
-            out_container.metadata.update(meta)
-
-            # 3. Setup Thumbnail Stream (MP4 stores cover art as an attached picture video stream)
-            logging.debug("Tags: [2/3] - Processing Thumbnail")
-            thumb_stream = None
-            if thumbnail:
-                # Heuristically choose cover codec format
-                codec_name = 'png' if thumbnail.startswith(b"\x89PNG\r\n\x1a\n") else 'mjpeg'
-                try:
-                    thumb_stream = out_container.add_stream(codec_name, rate=1)
-                    thumb_stream.disposition.attached_pic = True
-                except Exception as e:
-                    logging.error("Could not initialize thumbnail stream: %s", e)
-                    thumb_stream = None
-
-            # 4. Remux packets (Read from original file, write to temp file)
-            for packet in in_container.demux():
-                if packet.stream not in stream_mapping:
-                    continue
-                packet.stream = stream_mapping[packet.stream]
-                out_container.mux(packet)
-
-            # 5. Inject the thumbnail packet at the end
-            if thumbnail and thumb_stream:
-                try:
-                    thumb_packet = av.Packet(thumbnail)
-                    thumb_packet.stream = thumb_stream
-                    out_container.mux(thumb_packet)
-                except Exception as e:
-                    logging.error("Could not embed thumbnail data: %s", e)
-
-        # Replace the original file with the newly tagged file atomically
-        os.replace(tmp_path, path)
-        logging.debug("Tags: [3/3] ✔")
-        return True
-
-    except Exception as e:
-        raise MetadataWriteError(str(e))
-
-    finally:
-        if os.path.exists(tmp_path):
-            try:
-                os.unlink(tmp_path)
-            except OSError:
-                logger.warning("Could not remove temporary metadata file: %s", tmp_path)
 
 def parse_length(
     length: str | int | float | None,

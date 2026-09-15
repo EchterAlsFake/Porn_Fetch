@@ -22,7 +22,7 @@ from urllib.request import Request, urlopen
 from PySide6.QtCore import QObject, QTimer, Signal, Slot
 
 from src.backend.config import app_settings
-from src.backend.download_manager import VideoObject
+from src.backend.media import VideoObject
 from src.backend.helper_functions import get_original_executable_path
 
 logger = logging.getLogger(__name__)

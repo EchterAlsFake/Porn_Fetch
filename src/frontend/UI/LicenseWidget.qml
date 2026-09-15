@@ -167,12 +167,28 @@ Item {
 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: bridge ? bridge.reason : ""
+                    text: bridge ? bridge.reason + (bridge.expiresAt ? "\nExpires: " + bridge.expiresAt : "") : ""
                     font.pixelSize: 13
                     color: textSec
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
                     Layout.maximumWidth: card.width - 80
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Button {
+                    Layout.fillWidth: true
+                    text: "Refresh"
+                    enabled: bridge && !bridge.busy
+                    onClicked: bridge.refresh()
+                }
+                Button {
+                    Layout.fillWidth: true
+                    text: "Deactivate"
+                    enabled: bridge && bridge.isValid && !bridge.busy
+                    onClicked: bridge.deactivate()
                 }
             }
 
@@ -294,6 +310,7 @@ Item {
                     anchors.fill: parent
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
+                    enabled: bridge && !bridge.busy
                     onClicked: fileDialog.open()
                 }
 

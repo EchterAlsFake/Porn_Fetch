@@ -30,6 +30,12 @@ I am putting serious work here, although my commit history doesn't reflect this.
 
 PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 
+# About the License
+#### License is FREE OF CHARGE!
+
+- For activating Porn Fetch v3.8 ->  https://drive.google.com/file/d/11EVYsHmkMKm121TeuWrcSYkIpITIhZlT/view?usp=sharing
+- For activating Porn Fetch v3.9 -> https://echteralsfake.me/buy_license (Crypto Checkout)
+
 ### #FreeHongKong
 
 > [!WARNING]
@@ -115,21 +121,22 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
-- [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
-- [missav.ws](https://github.com/EchterAlsFake/missav_api)
 - [xhamster.com](https://github.com/EchterAlsFake/xhamster_api)
 - [spankbang.com](https://spankbang.com)
 - [youporn.com](https://youporn.com)
 - [beeg.com](https://github.com/echteralsfake/beeg_api)
 - [porntrex.com](https://github.com/echteralsfake/porntrex_api)
 - [xfreehd.com](https://github.com/echteralsfake/xfreehd_api)
+- [redtube.com](https://redtube.com)
+- [thumbzilla.com](https://thumbzilla.com)
+- [tube8.com](https://tube8.com)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
-> Some might only support downloading, while others support searching
+> Some providers support only direct videos while others also support profiles or collections. Search is intentionally not available.
 
 ### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
 

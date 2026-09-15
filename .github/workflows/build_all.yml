@@ -186,8 +186,7 @@ jobs:
         shell: bash
         run: |
           uv sync --extra cli
-          uv pip install pyinstaller
-          uv run pyinstaller -F Porn_Fetch_CLI.py
+          uv run pyinstaller --clean src/build/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
@@ -236,7 +235,7 @@ jobs:
           source .venv/bin/activate
           CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
           uv sync --extra cli
-          python -m PyInstaller -F Porn_Fetch_CLI.py
+          python -m PyInstaller --clean src/build/pyinstaller_cli.spec
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
           echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> $GITHUB_ENV
@@ -277,12 +276,11 @@ jobs:
             python3 -m venv /opt/venv
             export PATH="/opt/venv/bin:$PATH"
             
-            # 3. Install your specific CLI dependencies directly
-            # (Matches your pyproject.toml 'cli' array)
-            pip install rich hue_shift pyinstaller
+            # 3. Install the actual project CLI extra.
+            pip install '.[cli]'
             
             # 4. Build the binary
-            pyinstaller -F Porn_Fetch_CLI.py
+            pyinstaller --clean src/build/pyinstaller_cli.spec
             
             # 5. Rename output so the host runner can easily grab it
             mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_${{ matrix.arch }}

@@ -1,15 +1,15 @@
-apt-get update
-apt-get full-upgrade -y
-apt-get install python3 python-pip git wget ldd binutils libxslt libxml2 -y
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+
+pkg update -y
+pkg install -y python git binutils libxml2 libxslt
+
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
-python3 -m venv venv
+python -m venv venv
 source venv/bin/activate
-pip install -r requirements_cli.txt
-pip install pyinstaller
-pyinstaller -F Porn_Fetch_CLI.py
-cd dist
-mv Porn_Fetch_CLI Porn_Fetch
+python -m pip install '.[cli]'
+python -m PyInstaller --clean src/build/pyinstaller_cli.spec
+mv dist/Porn_Fetch_CLI Porn_Fetch
 chmod +x Porn_Fetch
-echo "Porn Fetch is now installed to $(pwd)/"
-
+echo "Porn Fetch is now installed to $(pwd)/Porn_Fetch"

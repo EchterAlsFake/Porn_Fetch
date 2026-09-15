@@ -96,7 +96,7 @@ update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
 from src.backend.license_bridge import LicenseBridge
-from src.backend.license_manager import LicenseManager
+from src.cli.licensing import create_license_service
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, Signals,
@@ -125,6 +125,7 @@ from src.backend.download_manager import (
     VideoFilters,
     VideoObject,
     quality_requires_premium,
+    select_allowed_quality,
 )
 from src.backend.database import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
@@ -874,12 +875,18 @@ class Backend(QObject):
         if video is None or video.source_video is None:
             self.logger.warning("Cannot download unknown video: %s", job_id)
             return
-        if quality_requires_premium(video.selected_quality or "") and not self.has_premium_access():
-            self.logger.warning("Rejected new premium download because the license is not active")
-            self.showMessage.emit(
-                self.tr("Premium access is currently unavailable. Refresh your license or choose 720p or lower.")
-            )
+        allowed_quality = select_allowed_quality(
+            video.selected_quality or "best",
+            video.qualities or [],
+            self.has_premium_access(),
+        )
+        if not allowed_quality:
+            self.logger.warning("No permitted quality is available for this download")
+            self.showMessage.emit(self.tr("No permitted quality is available for this video."))
             return
+        if allowed_quality != str(video.selected_quality or ""):
+            video.selected_quality = allowed_quality
+            self._downloads_model.set_video_quality(job_id, allowed_quality)
 
         is_resume = self._downloads_model.get_status(job_id) in {"cancelled", "failed"}
         stop_event = DownloadStopEvent()
@@ -1430,6 +1437,8 @@ class Backend(QObject):
             self.logger.info("All background tasks stopped successfully.")
 
         await clients.close_all_clients()
+        if self._license_bridge is not None:
+            await self._license_bridge.close()
         sni_proxy_manager.stop()
         if self.database_bridge is not None:
             await self.database_bridge.close()
@@ -1522,11 +1531,11 @@ def main() -> None:
     download_manager.video_added.connect(database_bridge.on_video_updated) # Writes to database (optional)
     download_manager.video_updated.connect(database_bridge.on_video_updated) # Updates existing entry (optional)
 
-    storage_path = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "license.lic"
-    lic_manager = LicenseManager(public_key_b64=config.PUBLIC_KEY_B64, storage_path=storage_path)
-    # Loads the license, if you have imported it before. Stores in APPDATA / .local/share
-
-    bridge_instance = LicenseBridge(lic_manager) # License bridge connects QML code to Python
+    license_service = create_license_service(
+        clients.config,
+        Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)),
+    )
+    bridge_instance = LicenseBridge(license_service) # License bridge connects QML code to Python
     backend_instance.set_license_bridge(bridge_instance)
     # Gives some context to QML so that QML can directly access certain things
     engine.rootContext().setContextProperty("bridge", bridge_instance)

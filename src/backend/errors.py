@@ -1,7 +1,19 @@
-from src.backend.download_manager import VideoObject
-from src.frontend.translations.strings import TRANSLATE_ERRORS
+from src.backend.media import VideoObject
 from typing import Callable, Awaitable, ParamSpec, TypeVar
 from base_api import is_resource_gone
+
+
+class _Messages:
+    invalid_input = "The URL or input is invalid or unsupported."
+    cookies_not_found = "No matching browser cookies were found."
+    installation_unsupported = "This installation operation is not supported on this platform."
+    something_stupid_happened = "An unexpected internal state was reached."
+    metadata_write_error = "Could not write metadata into the downloaded file."
+    update_failed = "The update check failed."
+    sni_leak = "SNI privacy verification failed and the request was stopped."
+
+
+TRANSLATE_ERRORS = _Messages()
 P = ParamSpec("P") # Needed for safe_api_call function
 R = TypeVar("R")
 

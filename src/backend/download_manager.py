@@ -1,103 +1,12 @@
-from pathlib import Path
-from datetime import datetime
-from dataclasses import dataclass
-from base_api.modules.static_functions import normalize_quality
 from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Qt
 
 from src.backend.config import app_settings
-
-
-FREE_MAXIMUM_QUALITY = 720
-PREMIUM_QUALITY_NAMES = {"best", "half", "4k", "uhd", "2k", "qhd", "fullhd", "fhd"}
-
-
-def quality_requires_premium(quality: str | int) -> bool:
-    """Return whether a quality can only be used with the full unlock."""
-    if str(quality).strip().casefold() in PREMIUM_QUALITY_NAMES:
-        return True
-
-    try:
-        normalized = normalize_quality(quality)
-    except (TypeError, ValueError):
-        return False
-
-    try:
-        return int(normalized) > FREE_MAXIMUM_QUALITY
-        # If the quality is bigger than 720p (defines as maximum free) user needs a license
-    except (ValueError, TypeError):
-        return False # If my check fails for whatever reason we are kind and assume it doesn't require a license.
-        # Otherwise a bug in production could break the app and I don't want that to happen lol
-
-
-def select_allowed_quality(
-    preferred_quality: str | int, # The quality user chose in settings
-    available_qualities: list[str | int], # The actual available qualities, depends on per video / page
-    has_premium: bool, # For license enforcing
-) -> str:
-    """Choose the preferred stream or the highest stream the user may access."""
-    available = [str(quality) for quality in available_qualities] # Consistent string comprehension
-    preferred = str(preferred_quality or "") # fallback just in case I fucked up in my code
-
-    if preferred in available and (has_premium or not quality_requires_premium(preferred)):
-        return preferred # Checks if the preferred quality exists  + licensing enforcement
-
-    allowed = available if has_premium else [
-        quality for quality in available if not quality_requires_premium(quality)
-    ] # Licensing enforcement, either all qualities are available, or only those in the free section
-
-    if not allowed:
-        return "" # Rejects the selected quality, because user does not have premium
-
-    def quality_rank(quality: str) -> tuple[int, int]:
-        normalized = normalize_quality(quality)
-        try:
-            return 1, int(normalized)
-        except ValueError:
-            # Keep named fallbacks such as "worst" below concrete streams.
-            return 0, 0
-
-    return max(allowed, key=quality_rank)
-    # (1, 1080) wins over (1, 720)
-    # (1, 144) wins over (0, 0)
-    # (0, 0) is used for a string representation
-
-
-@dataclass(slots=True)
-class VideoFilters:
-    duration_minimum: int | None = None
-    duration_maximum: int | None = None
-    author_regex: str | None = None
-    tags_regex: str | None = None
-    title_regex: str | None = None
-    quality_minimum: str | None = None
-    quality_maximum: str | None = None
-    published_before: str | None = None
-    published_after: str | None = None
-
-
-@dataclass(slots=True)
-class VideoObject:
-    url: str
-    title: str
-    author: str
-    length: int | None
-    tags: list[str] | None
-    thumbnail_url: str
-    video_id: str
-    publish_date: datetime | None
-    qualities: list[int]
-    status: str
-    identifier: str | None = None
-    output_path: Path | None = None
-    index: int | None = None
-    selected_quality: str | None = None
-    source_video: object | None = None
-
-    # These will be dynamically written to
-    origin_iterator_url: str | None = None
-    origin_iterator_name: str | None = None
-    is_hls: bool | None = None
-    missing_segments: list[int] | None = None
+from src.backend.media import (
+    VideoFilters,
+    VideoObject,
+    quality_requires_premium,
+    select_allowed_quality,
+)
 
 
 class DownloadListModel(QAbstractListModel):
@@ -211,7 +120,7 @@ class DownloadListModel(QAbstractListModel):
             "title": f"{video.index}) {video.title}" if video.index else video.title,
             "author": video.author,
             "duration": display_duration,
-            "availableQualities": video.qualities,
+            "availableQualities": [str(quality) for quality in video.qualities],
             "selectedQuality": selected_quality,
             "progress": 0,  # Starts at 0%
             "selected": False,

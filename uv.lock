@@ -284,15 +284,6 @@ wheels = [
 ]
 
 [[package]]
-name = "colorama"
-version = "0.4.6"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
-]
-
-[[package]]
 name = "cryptography"
 version = "50.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -391,15 +382,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/41/43/948d10bf42735709edb5ae51e23297d034086f17fc7279fef385a7acb473/fake_useragent-2.2.0.tar.gz", hash = "sha256:4e6ab6571e40cc086d788523cf9e018f618d07f9050f822ff409a4dfe17c16b2", size = 158898, upload-time = "2025-04-14T15:32:19.238Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/37/b3ea9cd5558ff4cb51957caca2193981c6b0ff30bd0d2630ac62505d99d0/fake_useragent-2.2.0-py3-none-any.whl", hash = "sha256:67f35ca4d847b0d298187443aaf020413746e56acd985a611908c73dba2daa24", size = 161695, upload-time = "2025-04-14T15:32:17.732Z" },
-]
-
-[[package]]
-name = "hue-shift"
-version = "1.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/13/76/c01f182d64fc5c1fe35c8aae4bfbf074d274d080ff78ada203bbad757495/hue_shift-1.1.tar.gz", hash = "sha256:ebcc8dba4dd3cbe4e8a236bc9393a6838dd83437bd411673349eda56d1a1562c", size = 1895, upload-time = "2023-10-03T12:38:06.578Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/b9/eddac2ed3636ebbe77710c055e0889ca848ef36a546f5ede0acee2f2c11e/hue_shift-1.1-py3-none-any.whl", hash = "sha256:b6eaffca3752d11d97921f30692a052e1d24ea716b1abc9ca686ccd3badc69f6", size = 2142, upload-time = "2023-10-03T12:38:05.462Z" },
 ]
 
 [[package]]
@@ -524,6 +506,15 @@ wheels = [
 ]
 
 [[package]]
+name = "platformdirs"
+version = "4.11.8"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/18/f3bb8ef0d3b930692343da8aa4d3cbcd6749477c053959395ac81965a6e9/platformdirs-4.11.8.tar.gz", hash = "sha256:f23abafea7dd4276d1f29104b83598d7dcc567cafd07c9c951e66665645437fc", size = 37182, upload-time = "2026-09-08T22:20:42.866Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f4/e1/5b7b8bbb55084d1425bcb9bc823ff519e1b2be05f6ebb0089e2eacc38413/platformdirs-4.11.8-py3-none-any.whl", hash = "sha256:52f2f181bbfde907966932cc8312d967d02976422d66d537ea16092b8e291081", size = 24027, upload-time = "2026-09-08T22:20:41.537Z" },
+]
+
+[[package]]
 name = "porn-fetch"
 version = "3.9"
 source = { virtual = "." }
@@ -535,15 +526,16 @@ dependencies = [
     { name = "certifi" },
     { name = "cffi" },
     { name = "charset-normalizer" },
-    { name = "colorama" },
     { name = "eaf-base-api" },
     { name = "fake-useragent" },
     { name = "idna" },
     { name = "json5" },
     { name = "m3u8" },
     { name = "markdown" },
+    { name = "platformdirs" },
     { name = "pycparser" },
     { name = "python-dateutil" },
+    { name = "questionary" },
     { name = "rich-argparse" },
     { name = "sniffio" },
     { name = "socksio" },
@@ -551,7 +543,6 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "unofficial-api-for-beeg" },
     { name = "unofficial-api-for-eporner" },
-    { name = "unofficial-api-for-hqporner" },
     { name = "unofficial-api-for-pornhub" },
     { name = "unofficial-api-for-porntrex" },
     { name = "unofficial-api-for-redtube" },
@@ -571,24 +562,25 @@ av = [
     { name = "av", marker = "(platform_machine == 'arm64' and sys_platform == 'darwin') or (platform_machine == 'x86_64' and sys_platform == 'darwin') or (platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux') or (platform_machine == 'AMD64' and sys_platform == 'win32')" },
 ]
 cli = [
-    { name = "hue-shift" },
+    { name = "cryptography" },
     { name = "pyinstaller" },
-    { name = "rich" },
+    { name = "questionary" },
 ]
 dev = [
     { name = "cryptography" },
-    { name = "hue-shift" },
     { name = "pip" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
-    { name = "rich" },
+    { name = "questionary" },
     { name = "truststore" },
+    { name = "unofficial-api-for-hqporner" },
 ]
 gui = [
     { name = "cryptography" },
     { name = "pip" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
+    { name = "unofficial-api-for-hqporner" },
 ]
 
 [package.metadata]
@@ -603,19 +595,18 @@ requires-dist = [
     { name = "certifi" },
     { name = "cffi" },
     { name = "charset-normalizer" },
-    { name = "colorama" },
+    { name = "cryptography", marker = "extra == 'cli'" },
     { name = "cryptography", marker = "extra == 'dev'" },
     { name = "cryptography", marker = "extra == 'gui'" },
     { name = "eaf-base-api", git = "https://github.com/EchterAlsFake/eaf_base_api" },
     { name = "fake-useragent" },
-    { name = "hue-shift", marker = "extra == 'cli'" },
-    { name = "hue-shift", marker = "extra == 'dev'" },
     { name = "idna" },
     { name = "json5" },
     { name = "m3u8" },
     { name = "markdown" },
     { name = "pip", marker = "extra == 'dev'" },
     { name = "pip", marker = "extra == 'gui'" },
+    { name = "platformdirs", specifier = ">=4.3" },
     { name = "pycparser" },
     { name = "pyinstaller", marker = "extra == 'cli'" },
     { name = "pyside6", marker = "extra == 'dev'" },
@@ -623,8 +614,9 @@ requires-dist = [
     { name = "python-dateutil" },
     { name = "pywin32", marker = "sys_platform == 'win32' and extra == 'dev'" },
     { name = "pywin32", marker = "sys_platform == 'win32' and extra == 'gui'" },
-    { name = "rich", marker = "extra == 'cli'" },
-    { name = "rich", marker = "extra == 'dev'" },
+    { name = "questionary", specifier = ">=2.1.1" },
+    { name = "questionary", marker = "extra == 'cli'", specifier = ">=2.1.1" },
+    { name = "questionary", marker = "extra == 'dev'", specifier = ">=2.1.1" },
     { name = "rich-argparse", specifier = ">=1.8.0" },
     { name = "sniffio" },
     { name = "socksio" },
@@ -633,7 +625,8 @@ requires-dist = [
     { name = "typing-extensions" },
     { name = "unofficial-api-for-beeg", git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg" },
     { name = "unofficial-api-for-eporner", git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner" },
-    { name = "unofficial-api-for-hqporner" },
+    { name = "unofficial-api-for-hqporner", marker = "extra == 'dev'" },
+    { name = "unofficial-api-for-hqporner", marker = "extra == 'gui'" },
     { name = "unofficial-api-for-pornhub", git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub" },
     { name = "unofficial-api-for-porntrex", git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex" },
     { name = "unofficial-api-for-redtube", git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube" },
@@ -648,6 +641,18 @@ requires-dist = [
     { name = "urllib3" },
 ]
 provides-extras = ["gui", "cli", "dev", "av"]
+
+[[package]]
+name = "prompt-toolkit"
+version = "3.0.53"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "wcwidth" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7d/ea/39b988c938f75cb75d7045b5c69f8bfed47ee2152c8837fb403de29d6fb8/prompt_toolkit-3.0.53.tar.gz", hash = "sha256:9ec8a0ad96d5c56148b3f914aa79c1564c3fde5d2e6b876e7bc327e353cf8fa6", size = 435492, upload-time = "2026-07-26T20:56:14.758Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/6f/84908cad2d6aa5144abcf7b42709fe4fdb459bc640ec7ac5786e7693dabc/prompt_toolkit-3.0.53-py3-none-any.whl", hash = "sha256:01c0891d7f9237d5e339f7d3e42cdae80b7534abb1c7c0e3352efba6231492f2", size = 392288, upload-time = "2026-07-26T20:56:12.512Z" },
+]
 
 [[package]]
 name = "pycparser"
@@ -806,6 +811,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/85/9f/01a1a99704853cb63f253eea009390c88e7131c67e66a0a02099a8c917cb/pywin32-ctypes-0.2.3.tar.gz", hash = "sha256:d162dc04946d704503b2edc4d55f3dba5c1d539ead017afa00142c38b9885755", size = 29471, upload-time = "2024-08-14T10:15:34.626Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/de/3d/8161f7711c017e01ac9f008dfddd9410dff3674334c233bde66e7ba65bbf/pywin32_ctypes-0.2.3-py3-none-any.whl", hash = "sha256:8a1513379d709975552d202d942d9837758905c8d01eb82b8bcc30918929e7b8", size = 30756, upload-time = "2024-08-14T10:15:33.187Z" },
+]
+
+[[package]]
+name = "questionary"
+version = "2.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "prompt-toolkit" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f6/45/eafb0bba0f9988f6a2520f9ca2df2c82ddfa8d67c95d6625452e97b204a5/questionary-2.1.1.tar.gz", hash = "sha256:3d7e980292bb0107abaa79c68dd3eee3c561b83a0f89ae482860b181c8bd412d", size = 25845, upload-time = "2025-08-28T19:00:20.851Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3c/26/1062c7ec1b053db9e499b4d2d5bc231743201b74051c973dadeac80a8f43/questionary-2.1.1-py3-none-any.whl", hash = "sha256:a51af13f345f1cdea62347589fbb6df3b290306ab8930713bfae4d475a7d4a59", size = 36753, upload-time = "2025-08-28T19:00:19.56Z" },
 ]
 
 [[package]]
@@ -1116,6 +1133,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
+]
+
+[[package]]
+name = "wcwidth"
+version = "0.8.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/36/57/ed58088fafdf4c55a0ad6bde846502567645424d7ebf325230b9237f4085/wcwidth-0.8.3.tar.gz", hash = "sha256:d128512515fbf4612e0ff21fd6380399210318b7b54a9af59dff8454cf9730eb", size = 1458450, upload-time = "2026-08-28T18:10:06.875Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/0e/57f6bb3024a597b2e8ec4aee710ffe62ddc95af2e2bb1ee7a7abdc22c68c/wcwidth-0.8.3-py3-none-any.whl", hash = "sha256:d5b73dba6158a595ec9370350e7f2637bcac8d6c5e4fde34f30fcffb6103a5e4", size = 331669, upload-time = "2026-08-28T18:10:04.909Z" },
 ]
 
 [[package]]
