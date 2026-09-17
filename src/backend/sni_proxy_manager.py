@@ -19,6 +19,8 @@ from src.backend.sni_fragment_proxy_strict import (
     StrictFragmentingProxyConfig,
     StrictFragmentingProxyProcess,
     StrictDesyncConfig,
+    StrictBackendUnavailable,
+    StrictProxyStartError,
 )
 
 
@@ -143,6 +145,27 @@ class SNIProxyManager:
                     )
                 )
             local_url = process.start()
+        except (StrictBackendUnavailable, StrictProxyStartError) as exc:
+            if strict:
+                LOG.warning("Strict SNI backend unavailable (%s); falling back to Lite mode", exc)
+                try:
+                    lite_process = FragmentingProxyProcess(
+                        FragmentingProxyConfig(
+                            listen_host="127.0.0.1",
+                            listen_port=0,
+                            upstream_proxy=self.settings.proxy or None,
+                            source_address=source_address,
+                        )
+                    )
+                    local_url = lite_process.start()
+                    self._process = lite_process
+                    self.settings.active_sni_proxy_url = local_url
+                    self.last_error = f"Strict mode unavailable ({exc}). Using Lite mode."
+                    LOG.info("SNI fragmentation proxy (Lite fallback) ready at %s", local_url)
+                    return local_url
+                except Exception as lite_exc:
+                    return self._fail_closed(f"Could not start SNI obfuscation: {lite_exc}")
+            return self._fail_closed(f"Could not start SNI obfuscation: {exc}")
         except Exception as exc:
             LOG.exception("Could not start the SNI fragmentation proxy")
             return self._fail_closed(f"Could not start SNI obfuscation: {exc}")

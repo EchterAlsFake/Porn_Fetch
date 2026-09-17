@@ -56,6 +56,16 @@ class LicenseIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(self.bridge.isPremium)
         self.assertEqual(self.bridge.state, "valid")
 
+    async def test_start_schedules_initial_check_on_the_running_loop(self) -> None:
+        self.client.status = LicenseStatus("valid", True, time.time() + 3600)
+
+        task = self.bridge.start()
+
+        self.assertIsNotNone(task)
+        await task
+        self.assertTrue(self.bridge.isPremium)
+        self.assertFalse(self.bridge.busy)
+
     async def test_download_model_uses_license_status_allowed(self) -> None:
         model = DownloadListModel(premium_access=lambda: self.bridge.isPremium)
         video = SimpleNamespace(selected_quality="720")

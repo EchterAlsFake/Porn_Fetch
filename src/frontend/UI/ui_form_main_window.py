@@ -1436,7 +1436,7 @@ class Ui_PornFetch_UI(object):
         self.disclaimer_button_accept.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button accept disclaimer message", None))
 #endif // QT_CONFIG(accessibility)
         self.disclaimer_button_accept.setText(QCoreApplication.translate("PornFetch_UI", u"Accept", None))
-        self.one_time_setup_button_info_enable_all.setText(QCoreApplication.translate("PornFetch_UI", u"Enable Update + Error reports (100% anonymous)", None))
+        self.one_time_setup_button_info_enable_all.setText(QCoreApplication.translate("PornFetch_UI", u"Enable updates + redacted error reports", None))
         self.one_time_setup_button_info_enable_update.setText(QCoreApplication.translate("PornFetch_UI", u"Enable Update checking only", None))
         self.one_time_setup_button_info_disable_all.setText(QCoreApplication.translate("PornFetch_UI", u"Disable everything", None))
 #if QT_CONFIG(accessibility)
@@ -1449,4 +1449,3 @@ class Ui_PornFetch_UI(object):
         self.update_available_button_automatic_update.setText(QCoreApplication.translate("PornFetch_UI", u"Automatic Update", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("PornFetch_UI", u"Total (HLS):", None))
     # retranslateUi
-

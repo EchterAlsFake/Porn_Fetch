@@ -169,7 +169,10 @@ class StrictDesyncTests(unittest.IsolatedAsyncioTestCase):
 
     @staticmethod
     def packet(payload: bytes):
-        from pydivert import Packet
+        try:
+            from pydivert import Packet
+        except (ImportError, ModuleNotFoundError) as exc:
+            raise unittest.SkipTest("pydivert is not installed") from exc
 
         total_length = 20 + 20 + len(payload)
         ipv4 = (
@@ -246,6 +249,35 @@ class StrictDesyncTests(unittest.IsolatedAsyncioTestCase):
             StrictFragmentingProxyConfig(
                 desync_config=StrictDesyncConfig(mode="wrong_checksum")
             ).validated()
+
+
+class ElevationHelperTests(unittest.TestCase):
+    def test_build_cli_args_for_config(self) -> None:
+        from src.backend.sni_fragment_proxy_strict import (
+            StrictDesyncConfig,
+            StrictFragmentingProxyConfig,
+            _build_cli_args_for_config,
+            _get_elevation_command,
+        )
+
+        config = StrictFragmentingProxyConfig(
+            listen_host="127.0.0.1",
+            listen_port=0,
+            reverse_fragments=True,
+            desync_config=StrictDesyncConfig(fake_sni="test.example.com"),
+            upstream_proxy="socks5://127.0.0.1:9050",
+        )
+        args = _build_cli_args_for_config(config)
+
+        self.assertIn("--reverse", args)
+        self.assertIn("--desync", args)
+        self.assertIn("test.example.com", args)
+        self.assertIn("socks5://127.0.0.1:9050", args)
+
+        cmd = _get_elevation_command(args)
+        self.assertGreater(len(cmd), len(args))
+        self.assertIn(cmd[0], ("pkexec", "sudo", "powershell.exe"))
+
 
 
 if __name__ == "__main__":

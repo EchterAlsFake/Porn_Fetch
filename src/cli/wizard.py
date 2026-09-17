@@ -28,6 +28,7 @@ from rich.table import Table
 from rich.text import Text
 
 from src.backend.media import VideoObject, quality_requires_premium, select_allowed_quality
+from src.backend.error_reporting import report_exception
 from .accounts import AccountService
 from .downloads import DownloadOutcome, download_gallery, download_video
 from .licensing import LicenseService, create_license_service
@@ -35,7 +36,7 @@ from .media import prepare_video
 from .model_store import ModelStore
 from .output import output_path_for
 from .providers import ClientPool, ContentKind, Route, route_url, unwrap_scrape_result
-from .settings import CliSettings, SettingsStore
+from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
 
 
 # Custom prompt style matching the pink (#ff2a85) & cyan (#00e5ff) aesthetic of Porn Fetch QML
@@ -174,6 +175,17 @@ class WizardContext:
         except Exception:
             return self.license_service.status
 
+    async def report(
+        self, error: BaseException, operation: str, location: str, **context: Any,
+    ) -> str:
+        return await report_exception(
+            error,
+            operation=operation,
+            location=location,
+            context=context,
+            enabled=self.settings.error_reporting,
+        )
+
     async def refresh_pool(self) -> None:
         """Rebuild client pool and license service when settings change."""
         old_pool = self.pool
@@ -224,7 +236,11 @@ async def handle_download_single(ctx: WizardContext) -> None:
                 title = media.title
                 qualities = media.qualities
     except Exception as error:
-        print_error(ctx.console, "Metadata Fetch Failed", f"Could not retrieve details for {url}:\n{error}")
+        report_id = await ctx.report(
+            error, "fetch video metadata", "src.cli.wizard.handle_download_single",
+            video_url=url,
+        )
+        print_error(ctx.console, "Metadata Fetch Failed", f"Could not retrieve details for {url}:\n{error}\nError ID: {report_id}")
         return
 
     # Display clean metadata summary table
@@ -328,7 +344,11 @@ async def handle_download_single(ctx: WizardContext) -> None:
                     available_qualities=media.qualities,
                 )
         except Exception as error:
-            print_error(ctx.console, "Download Failed", str(error))
+            report_id = await ctx.report(
+                error, "download selected media", "src.cli.wizard.handle_download_single",
+                video_url=url, provider=route.provider,
+            )
+            print_error(ctx.console, "Download Failed", f"{error}\nError ID: {report_id}")
             return
 
     if outcome.status == "completed":
@@ -337,6 +357,11 @@ async def handle_download_single(ctx: WizardContext) -> None:
                 from src.backend.metadata import write_tags
                 write_tags(str(outcome.path), media)
             except Exception as error:
+                await ctx.report(
+                    error, "write downloaded video metadata",
+                    "src.cli.wizard.handle_download_single",
+                    video_url=getattr(media, "url", url), provider=route.provider,
+                )
                 ctx.console.print(f"[yellow]Metadata write warning: {error}[/]")
         print_success(
             ctx.console,
@@ -346,7 +371,15 @@ async def handle_download_single(ctx: WizardContext) -> None:
     elif outcome.status == "cancelled":
         ctx.console.print("[yellow]Download was cancelled.[/]")
     else:
-        print_error(ctx.console, "Download Incomplete", f"Status: {outcome.status}")
+        report_id = await ctx.report(
+            RuntimeError(f"Downloader returned status {outcome.status}"),
+            "download selected media", "src.cli.wizard.handle_download_single",
+            video_url=url, provider=route.provider, quality=selected_quality,
+        )
+        print_error(
+            ctx.console, "Download Incomplete",
+            f"Status: {outcome.status}\nError ID: {report_id}",
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -419,7 +452,11 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
                 if len(items) >= ctx.settings.result_limit:
                     break
         except Exception as error:
-            print_error(ctx.console, "Scraping Failed", str(error))
+            report_id = await ctx.report(
+                error, "scrape profile or playlist", "src.cli.wizard.handle_scrape_profile",
+                source_url=url, provider=route.provider,
+            )
+            print_error(ctx.console, "Scraping Failed", f"{error}\nError ID: {report_id}")
             return
 
     if not items:
@@ -661,6 +698,10 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                         added = ctx.model_store.update_pending(model_url, found_urls)
                         scan_table.add_row(model_url, str(added))
                     except Exception as error:
+                        await ctx.report(
+                            error, "scan tracked model", "src.cli.wizard.handle_batch_management",
+                            model_url=model_url,
+                        )
                         scan_table.add_row(model_url, f"[red]Error: {error}[/]")
             ctx.console.print(scan_table)
 
@@ -787,6 +828,10 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                         else:
                             print_error(ctx.console, "Authentication Failed", "XVideos session tokens were rejected.")
                     except Exception as error:
+                        await ctx.report(
+                            error, "authenticate with session tokens",
+                            "src.cli.wizard.handle_account_auth", provider=provider,
+                        )
                         print_error(ctx.console, "Authentication Error", str(error))
             else:
                 user = await questionary.text(f"Enter {provider} username or email:", style=WIZARD_STYLE).ask_async()
@@ -801,6 +846,10 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                         else:
                             print_error(ctx.console, "Authentication Failed", f"Credentials rejected by {provider}.")
                     except Exception as error:
+                        await ctx.report(
+                            error, "authenticate with username", "src.cli.wizard.handle_account_auth",
+                            provider=provider,
+                        )
                         print_error(ctx.console, "Authentication Error", str(error))
 
         elif action == "cookies":
@@ -819,6 +868,10 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                     else:
                         print_error(ctx.console, "Cookie Import Failed", f"No valid session cookies found for {provider}.")
                 except Exception as error:
+                    await ctx.report(
+                        error, "import browser authentication", "src.cli.wizard.handle_account_auth",
+                        provider=provider,
+                    )
                     print_error(ctx.console, "Cookie Import Error", str(error))
 
         elif action == "collections":
@@ -855,6 +908,10 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                         if len(items) >= ctx.settings.result_limit:
                             break
                 except Exception as error:
+                    await ctx.report(
+                        error, "fetch account collection", "src.cli.wizard.handle_account_auth",
+                        provider=prov, collection=selected_col, playlist_url=playlist_url,
+                    )
                     print_error(ctx.console, "Collection Fetch Failed", str(error))
                     continue
 
@@ -1152,6 +1209,18 @@ async def run_wizard(args: Any = None) -> int:
     store = SettingsStore()
     settings = store.load()
 
+    explicit_reporting_choice = (
+        getattr(args, "error_reporting", None) if args is not None else None
+    )
+    if explicit_reporting_choice is not None:
+        settings = settings.overridden(
+            error_reporting=explicit_reporting_choice,
+            error_reporting_decided=True,
+        )
+        store.save(settings)
+    elif not settings.error_reporting_decided:
+        settings = await prompt_error_reporting_consent(settings, store, console=console)
+
     # Apply overrides from command-line arguments if provided
     overrides: dict[str, Any] = {}
     if args is not None:
@@ -1204,7 +1273,11 @@ async def run_wizard(args: Any = None) -> int:
             except asyncio.CancelledError:
                 console.print("\n[yellow]Operation cancelled.[/]")
             except Exception as error:
-                print_error(console, "Unexpected Error", str(error))
+                report_id = await ctx.report(
+                    error, "run interactive CLI action", "src.cli.wizard.run_wizard",
+                    action=action,
+                )
+                print_error(console, "Unexpected Error", f"{error}\nError ID: {report_id}")
     finally:
         await ctx.close()
         console.print()

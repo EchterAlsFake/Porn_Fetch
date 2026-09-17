@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QFile, QIODevice, QObject, Property, QTimer, QUrl, Signal, Slot
+from PySide6.QtCore import QFile, QIODevice, QObject, Property, QUrl, Signal, Slot
 
 from src.cli.licensing import LicenseService
 
@@ -40,11 +40,11 @@ class LicenseBridge(QObject):
     importFinished = Signal(bool, str)
     statusChanged = Signal()
 
-    def __init__(self, service):
-        super().__init__()
+    def __init__(self, service, parent: QObject | None = None):
+        super().__init__(parent)
         self._service = service if isinstance(service, LicenseService) else LicenseService(service)
         self._busy = False
-        QTimer.singleShot(0, self._startup_check)
+        self._task: asyncio.Task[None] | None = None
 
     @Property(bool, notify=statusChanged)
     def isValid(self) -> bool:
@@ -104,9 +104,14 @@ class LicenseBridge(QObject):
             self.importFinished.emit(False, str(error))
             return previous
 
-    def _start(self, operation_factory, *, imported: bool = False) -> None:
+    def _start(self, operation_factory, *, imported: bool = False) -> asyncio.Task[None] | None:
         if self._busy:
-            return
+            return None
+
+        # Resolve the loop before changing state or constructing a coroutine.
+        # Qt timers may run while QML is loading, before QtAsyncio.run() has
+        # installed a running asyncio loop.
+        loop = asyncio.get_running_loop()
         self._busy = True
         self.statusChanged.emit()
 
@@ -125,16 +130,24 @@ class LicenseBridge(QObject):
                 if imported:
                     self.importFinished.emit(success, message)
 
-        asyncio.create_task(run())
+        task = loop.create_task(run(), name="license-operation")
+        self._task = task
+
+        def clear_task(completed: asyncio.Task[None]) -> None:
+            if self._task is completed:
+                self._task = None
+
+        task.add_done_callback(clear_task)
+        return task
+
+    def start(self) -> asyncio.Task[None] | None:
+        """Start the initial license check from the running QtAsyncio loop."""
+        return self._start(lambda: self._run_check(force=False))
 
     @Slot(str)
     def installFromPath(self, file_url: str) -> None:
         local = Path(QUrl(file_url).toLocalFile())
         self._start(lambda: self._import_from_path(local))
-
-    @Slot()
-    def _startup_check(self) -> None:
-        self._start(lambda: self._run_check(force=False))
 
     @Slot()
     def refresh(self) -> None:
@@ -150,6 +163,10 @@ class LicenseBridge(QObject):
         return status
 
     async def close(self) -> None:
+        if self._task is not None and not self._task.done():
+            self._task.cancel()
+            await asyncio.gather(self._task, return_exceptions=True)
+        self._task = None
         await self._service.close()
 
     async def shutdown(self) -> None:

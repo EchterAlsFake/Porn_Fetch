@@ -3,15 +3,12 @@ This file contains functions which are needed for the Graphical User Interface, 
 If you know what you do, you can change a few things here :)
 """
 
-import sys
 import logging
-import datetime
 import platform
-import traceback
 
-from curl_cffi import post
 from base_api.base import configure_app_logging
 from src.backend.config import __version__
+from src.backend.error_reporting import report_exception, report_public_error
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -26,22 +23,11 @@ async def aenumerate(async_iterable, start=0):
         n += 1
 
 
-def send_to_server(message: dict):
-    try:
-        response = post(
-            url="https://echteralsfake.me/report",
-            json=message,
-            timeout=20)
-
-        if response.status_code == 200:
-            return(f"The error / feedback was successfully reported! Thanks :)")
-
-        elif response.status_code == 500:
-            return("An internal server error occurred. I am probably already fixing this.")
-
-    except Exception:
-        error = traceback.format_exc()
-        return(f"Couldn't report to server due to error -->: {error}")
+async def send_to_server(message: str | dict) -> bool:
+    """Compatibility wrapper for the narrow public error relay."""
+    if isinstance(message, dict):
+        message = str(message.get("message", ""))
+    return await report_public_error(message)
 
 
 def build_quality_options(heights: list[int], include_auto=True):
@@ -58,27 +44,30 @@ def build_quality_options(heights: list[int], include_auto=True):
     return opts
 
 
-def handle_error_gracefully(self, data: dict, error_message: str | dict, needs_network_log: bool= False, is_feedback=False):
+async def handle_error_gracefully(
+    self, data: dict, error_message: str | Exception,
+    needs_network_log: bool = False, is_feedback: bool = False,
+):
     if is_feedback:
-        send_to_server(message=error_message)
+        logger.warning("Feedback is not accepted by the error-log relay")
         return
 
-    self.logger.error(error_message)
+    display_message = str(error_message)
+    self.logger.error(display_message)
     if not data.get("supress_errors") is True:
-        self.signals.error_signal.emit(error_message)
+        self.signals.error_signal.emit(display_message)
 
     if needs_network_log:
-        if data.get("activate_logging"):
-            self.logger.info(f"Logging Error: {error_message} to network server...")
-            message = f"""
-            An error occurred in Porn Fetch!
-            Time: {datetime.datetime.now()}
-            Version: {__version__}
-            System: {sys.platform}
-            Error message: {error_message}
-            """
-            payload = {"message": message}
-            send_to_server(message=payload)
+        if data.get("enable_logging", data.get("activate_logging", False)):
+            error = error_message if isinstance(error_message, Exception) else RuntimeError(str(error_message))
+            await report_exception(
+                error,
+                operation="handle application error",
+                location=f"{type(self).__name__}.handle_error_gracefully",
+                context=data.get("error_context"),
+                enabled=True,
+                version=__version__,
+            )
 
         else:
             self.logger.info("Logging is disabled. Error will NOT be reported!")

@@ -16,10 +16,21 @@ ApplicationWindow {
     visible: true
     title: qsTr("Video Downloader")
     property bool safeToClose: false
+    property bool startupContinued: false
 
-    Component.onCompleted: {
+    function continueStartup() {
+        if (startupContinued)
+            return
+        startupContinued = true
         if (appSettings.update_checks)
             backend.check_for_updates()
+    }
+
+    Component.onCompleted: {
+        if (appSettings.error_reporting_decided)
+            continueStartup()
+        else
+            Qt.callLater(function() { errorReportingDialog.open() })
     }
 
     onClosing: (closeEvent) => {
@@ -61,6 +72,123 @@ ApplicationWindow {
         function onShutdown_complete() {
             window.safeToClose = true
             window.close()
+        }
+    }
+
+    Dialog {
+        id: errorReportingDialog
+
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(window.width - 48, 900)
+        height: Math.min(window.height - 48, 680)
+        modal: true
+        padding: 20
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle {
+            radius: 12
+            color: "#1e1e24"
+            border.color: "#383b48"
+            border.width: 1
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 14
+
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Help improve Porn Fetch after errors?")
+                color: "#4da6ff"
+                font.pixelSize: 24
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.")
+                color: "#f1f5f9"
+                font.bold: true
+                wrapMode: Text.Wrap
+            }
+
+            SmoothScrollView {
+                id: consentScroll
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+                ColumnLayout {
+                    width: consentScroll.availableWidth
+                    spacing: 12
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: backend.errorReportDisclosure
+                        color: "#d7dce5"
+                        wrapMode: Text.Wrap
+                    }
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Synthetic example of a stored report:")
+                        color: "#5dade2"
+                        font.bold: true
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        implicitHeight: exampleText.contentHeight + 24
+                        radius: 6
+                        color: "#111318"
+                        border.color: "#383b48"
+
+                        TextEdit {
+                            id: exampleText
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            anchors.margins: 12
+                            height: contentHeight
+                            text: backend.errorReportExample
+                            color: "#d7dce5"
+                            font.family: "monospace"
+                            font.pixelSize: 12
+                            readOnly: true
+                            selectByMouse: true
+                            wrapMode: TextEdit.Wrap
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 10
+
+                Item { Layout.fillWidth: true }
+
+                Button {
+                    text: qsTr("No, keep disabled")
+                    onClicked: {
+                        appSettings.set_error_reporting_consent(false)
+                        errorReportingDialog.close()
+                        window.continueStartup()
+                    }
+                }
+
+                Button {
+                    text: qsTr("Yes, enable reports")
+                    onClicked: {
+                        appSettings.set_error_reporting_consent(true)
+                        errorReportingDialog.close()
+                        window.continueStartup()
+                    }
+                }
+            }
         }
     }
 

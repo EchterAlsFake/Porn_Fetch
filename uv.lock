@@ -96,11 +96,11 @@ wheels = [
 
 [[package]]
 name = "cachetools"
-version = "7.1.8"
+version = "7.2.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4b/39/9a4689914dd907915cee74733b95888fc1d8a21aad47a24a0a2deec73ac4/cachetools-7.1.8.tar.gz", hash = "sha256:1221d547a0b24b7f26fa891d40d488b5258beab9aebd8ed68c729be3af849c43", size = 40909, upload-time = "2026-08-31T19:02:53.985Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/29/2c/3f18755527b03ca9ff6be724bd5370cb777c76a87f17301377cf04a4729b/cachetools-7.2.0.tar.gz", hash = "sha256:bcac1a1b8da6909994a2957238a57b8140dab7c5c5c69a43669654fe87a33c1d", size = 41129, upload-time = "2026-09-16T20:48:27.209Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/3d/9487690d0e937854db587205c66bab3c3cf88d9f00ed380b74cb88cc94ee/cachetools-7.1.8-py3-none-any.whl", hash = "sha256:a81e3844acaa7355b6567f97bd67a94a14ec3a9bc2cbbdae45b9592cc036775b", size = 16842, upload-time = "2026-08-31T19:02:52.554Z" },
+    { url = "https://files.pythonhosted.org/packages/cc/bb/1c6e7a89b11da19f137e4ef5a5c5fe47a5bb686449ba343944ccf8fb34b2/cachetools-7.2.0-py3-none-any.whl", hash = "sha256:3045213f186b89fdd95d94441354c4bd87c570b7a38d8c3fd1d9dd37f6dc90d8", size = 16918, upload-time = "2026-09-16T20:48:25.575Z" },
 ]
 
 [[package]]
@@ -367,8 +367,8 @@ wheels = [
 
 [[package]]
 name = "eaf-base-api"
-version = "4.1.1"
-source = { git = "https://github.com/EchterAlsFake/eaf_base_api#c4af5f78c28edbfeb42e8b4d9869bee8caa7381b" }
+version = "4.2.0"
+source = { git = "https://github.com/EchterAlsFake/eaf_base_api#8397f881fbe670572193ec1ae32cee76e7f82533" }
 dependencies = [
     { name = "cachetools" },
     { name = "curl-cffi" },
@@ -507,11 +507,11 @@ wheels = [
 
 [[package]]
 name = "platformdirs"
-version = "4.11.8"
+version = "4.11.9"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/53/18/f3bb8ef0d3b930692343da8aa4d3cbcd6749477c053959395ac81965a6e9/platformdirs-4.11.8.tar.gz", hash = "sha256:f23abafea7dd4276d1f29104b83598d7dcc567cafd07c9c951e66665645437fc", size = 37182, upload-time = "2026-09-08T22:20:42.866Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/b9/8adc4e1b422b27fd88540ec7bf1f406f77ef393ec070e26fc430e914cde8/platformdirs-4.11.9.tar.gz", hash = "sha256:e2c66a8d384596cd98e3c4aea2d761df7bac95d9d8a2cc3946daa8cdafdaebc1", size = 38345, upload-time = "2026-09-16T13:31:45.259Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/e1/5b7b8bbb55084d1425bcb9bc823ff519e1b2be05f6ebb0089e2eacc38413/platformdirs-4.11.8-py3-none-any.whl", hash = "sha256:52f2f181bbfde907966932cc8312d967d02976422d66d537ea16092b8e291081", size = 24027, upload-time = "2026-09-08T22:20:41.537Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/94/803ba86705257d7eedddac4b02eb88a7483b1600e9200c1fefc6f1a9a3ff/platformdirs-4.11.9-py3-none-any.whl", hash = "sha256:0a3958f58a9e30321eaef0a424dd0b77cce242886b36b8aa992f9731ef2d59c1", size = 24472, upload-time = "2026-09-16T13:31:44.049Z" },
 ]
 
 [[package]]
@@ -534,6 +534,7 @@ dependencies = [
     { name = "markdown" },
     { name = "platformdirs" },
     { name = "pycparser" },
+    { name = "pydivert" },
     { name = "python-dateutil" },
     { name = "questionary" },
     { name = "rich-argparse" },
@@ -608,6 +609,7 @@ requires-dist = [
     { name = "pip", marker = "extra == 'gui'" },
     { name = "platformdirs", specifier = ">=4.3" },
     { name = "pycparser" },
+    { name = "pydivert", extras = ["linux"], specifier = ">=3.1.3" },
     { name = "pyinstaller", marker = "extra == 'cli'" },
     { name = "pyside6", marker = "extra == 'dev'" },
     { name = "pyside6", marker = "extra == 'gui'" },
@@ -683,6 +685,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pydivert"
+version = "3.1.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5f/19/dada7b2efd40eaaa7d5fc4d14f85c9e8aaf4eeacb23fc9294768fe6e44e2/pydivert-3.1.3.tar.gz", hash = "sha256:e5cba087f3f17eb66cf50965cf9670c55691c580f81dcad20549a0ef49af8e06", size = 124381, upload-time = "2026-05-15T04:19:09.069Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/da/66/323e91ceb1aeef828d7b39860637c8d2723ac4020ccb6cfbc7fdfa474249/pydivert-3.1.3-py3-none-any.whl", hash = "sha256:74ae83a5d1b4a31db8f84a55c1cf875eb4e7a0d2bc2e4730ef171819bc5e9008", size = 149112, upload-time = "2026-05-15T04:19:07.178Z" },
+]
+
+[[package]]
 name = "pygments"
 version = "2.21.0"
 source = { registry = "https://pypi.org/simple" }
@@ -693,7 +704,7 @@ wheels = [
 
 [[package]]
 name = "pyinstaller"
-version = "6.22.2"
+version = "6.22.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "altgraph" },
@@ -704,19 +715,19 @@ dependencies = [
     { name = "pywin32-ctypes", marker = "sys_platform == 'win32'" },
     { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cc/2b/836d9def811c02522e0921d8b8cdf0c16b0545a216e97e71041758057859/pyinstaller-6.22.2.tar.gz", hash = "sha256:89b65a3ad07d9dd5832253e37bc45f31872d10d7f9d5c9fd0fdd6088a83829dd", size = 4092631, upload-time = "2026-08-17T20:53:22.231Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/63/41/f90302845945abd4ed647933ff5ee7c6ac93983187be67f897b6cb613331/pyinstaller-6.22.3.tar.gz", hash = "sha256:05eb2f5615503e72939a7224d68b4aff572c6b0438ee4a17d0a4b481f399362d", size = 4437180, upload-time = "2026-09-12T21:54:09.669Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/39/08cd53632276de70426e7c273820277a48253fee397b4048301ec03c3566/pyinstaller-6.22.2-py3-none-macosx_10_13_universal2.whl", hash = "sha256:ebd1b1ca932d7cf25d7366ce691aaf79a5ff9425811ed7328b5116e4471b6d6d", size = 1062734, upload-time = "2026-08-17T20:52:17.635Z" },
-    { url = "https://files.pythonhosted.org/packages/74/22/2d865896782cbb41e2388c7314207c17a98acdcc1b8e5eef668873505c9f/pyinstaller-6.22.2-py3-none-manylinux2014_aarch64.whl", hash = "sha256:f5ccb847451df4207bce18bf53a57b124c9bb4e7e4bad08c5ecc627bcf00b28c", size = 755697, upload-time = "2026-08-17T20:52:21.676Z" },
-    { url = "https://files.pythonhosted.org/packages/91/2b/6c11e4d5a76e716ea68da1946ab706a4bdf6d8e68b0e1dea314366d046a0/pyinstaller-6.22.2-py3-none-manylinux2014_i686.whl", hash = "sha256:becb47ad78272bede87acf2ed830d7545a8f65ab11d06a68fe2b99ba1afaac6d", size = 768870, upload-time = "2026-08-17T20:52:25.511Z" },
-    { url = "https://files.pythonhosted.org/packages/cf/e2/dbfea6a58b68acf644f7193b11d570476d6ffaed57381b6d1dd9e898a971/pyinstaller-6.22.2-py3-none-manylinux2014_ppc64le.whl", hash = "sha256:06d7b3827a8049db4a2d47e3ec4ae2f69a1041577d8833b8f169745cde573ab4", size = 767445, upload-time = "2026-08-17T20:52:29.629Z" },
-    { url = "https://files.pythonhosted.org/packages/5e/db/f24a21af2f87ce1df4e07fdad95eec65ef9f284267a7c1e5eeea40f49aa4/pyinstaller-6.22.2-py3-none-manylinux2014_s390x.whl", hash = "sha256:7bee432404eca5dc3ef37c36811c266561b03988f6d3e70ab0fa5352dd5de9e4", size = 762113, upload-time = "2026-08-17T20:52:34.025Z" },
-    { url = "https://files.pythonhosted.org/packages/2b/07/b304ff3f5f8333778065e3658b604b0e108cd934b920f3fbab825a0dd5b7/pyinstaller-6.22.2-py3-none-manylinux2014_x86_64.whl", hash = "sha256:9622686ecc5d5fa492fe6cde29d47df9dd41138cff8177be9f901ca3260f2096", size = 762173, upload-time = "2026-08-17T20:52:38.477Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/9b/0af69d93dfad2e3d590a5de5828d5bcd903747c0224bd9560ab476904dfe/pyinstaller-6.22.2-py3-none-musllinux_1_1_aarch64.whl", hash = "sha256:0260eaad6be3f6fbc1affffe6dc7b8e5b636dbca51b463224daba971610b6fc1", size = 761674, upload-time = "2026-08-17T20:52:42.646Z" },
-    { url = "https://files.pythonhosted.org/packages/d3/4e/28b6094dcbd1e1bbb868daf4f8752999a20c1020ab64569232be42af2be8/pyinstaller-6.22.2-py3-none-musllinux_1_1_x86_64.whl", hash = "sha256:8c2c4b14caad38c1f3df8e9bf5276fc265e27fe8b4180cab4a37864288427bc0", size = 761053, upload-time = "2026-08-17T20:52:46.594Z" },
-    { url = "https://files.pythonhosted.org/packages/ba/2c/f91b63fd01422111ac04e3b9bf61c039da5a3292acb4fe5248905f0be688/pyinstaller-6.22.2-py3-none-win32.whl", hash = "sha256:9a078877caa3920558a3242d0a7019fe5b825cff4b65ed380c7d1e1bd200ddd9", size = 1344474, upload-time = "2026-08-17T20:52:53.108Z" },
-    { url = "https://files.pythonhosted.org/packages/3f/53/8ba1d0f6159b490f700eac6161a4be5f0d4672608a6dae9fd73679f183ee/pyinstaller-6.22.2-py3-none-win_amd64.whl", hash = "sha256:9b990fa6bbe143572f06644a984ad0d7aa2e2ccc6929d4916031343a5888e9a7", size = 1405725, upload-time = "2026-08-17T20:52:59.667Z" },
-    { url = "https://files.pythonhosted.org/packages/fb/1b/9a3062cc34c939f694d4262c4754681f6ffe853c21c124209ad2d08b8e84/pyinstaller-6.22.2-py3-none-win_arm64.whl", hash = "sha256:afb6f9a95d19b6dcd3a7decc40d9adb6ba9c4f8802ddd6c972dfb552953f384e", size = 1353806, upload-time = "2026-08-17T20:53:06.222Z" },
+    { url = "https://files.pythonhosted.org/packages/ec/af/898f70947e27f8e65d55183c780e77112e023c0b4a6fba6255d4d563a27d/pyinstaller-6.22.3-py3-none-macosx_10_13_universal2.whl", hash = "sha256:052f4a1cd4f81092ccb7a18fe8ebc9ecf832a5917317e39fb3775af4e959b253", size = 1071847, upload-time = "2026-09-12T21:53:01.711Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/96/99f5184985141c2b024bfa61335e9142ae444555224f303186e59b7bb438/pyinstaller-6.22.3-py3-none-manylinux2014_aarch64.whl", hash = "sha256:312da84b4b31ab9750066a823734c11b7c68757fdd67c9f038bf19c330a954e4", size = 758172, upload-time = "2026-09-12T21:53:06.171Z" },
+    { url = "https://files.pythonhosted.org/packages/69/9f/9ccb12cc1e6617042cb028fe79f0a756f5f03305bd14b584a4e043fe3844/pyinstaller-6.22.3-py3-none-manylinux2014_i686.whl", hash = "sha256:020d4fe0627f5c73dfbcfad1a6578ef354d5fe4bdccd9d8e5a615528f5a45d2b", size = 772135, upload-time = "2026-09-12T21:53:10.291Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/43/4b1d5193a88628c052db89f064433681076959a9f41d0d9f660001b49079/pyinstaller-6.22.3-py3-none-manylinux2014_ppc64le.whl", hash = "sha256:9e4f7bd64b2103f14b4a6240fb9155e9fe7bc61391b4043bbddb7d3ebc8ab0fa", size = 770461, upload-time = "2026-09-12T21:53:14.592Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/83/f173f8757c618d83e116fa2b8e57c5cd796e5ad09792e664eabd6ac5edae/pyinstaller-6.22.3-py3-none-manylinux2014_s390x.whl", hash = "sha256:f82d0fb89f21c3ed6f482ee16f341bc59e8a31dbabb9bae9ef04e53ade4dc0d9", size = 764997, upload-time = "2026-09-12T21:53:19.079Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/b6/dd21d61fc5e25377be24eabf13e99e4e46548a5abe2bf7b15d8b3d9cc74a/pyinstaller-6.22.3-py3-none-manylinux2014_x86_64.whl", hash = "sha256:451a4ae14b719365bf1a2f0a99dae7b3463060061c3a394c70d5264cfb439528", size = 764974, upload-time = "2026-09-12T21:53:23.176Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/fd/d9590942972b1fc205519f7ccffb0d5cd8eb1d6fa61edad319c71d25baed/pyinstaller-6.22.3-py3-none-musllinux_1_1_aarch64.whl", hash = "sha256:ea240b5dfa831ff673c97505eee0ec24670bccf71396c83109440348944c83d0", size = 764450, upload-time = "2026-09-12T21:53:27.419Z" },
+    { url = "https://files.pythonhosted.org/packages/72/d6/f22c55d1768433b65c460b19a3136dd9769b6c74b786149b829344654c7d/pyinstaller-6.22.3-py3-none-musllinux_1_1_x86_64.whl", hash = "sha256:a2b6fc26601e8c2596c3d54981566934a3382e85d05d0fe91b55b6a8dcc6b282", size = 763863, upload-time = "2026-09-12T21:53:31.609Z" },
+    { url = "https://files.pythonhosted.org/packages/c5/87/cf28cfd42ceca889171e6dd5e7f1553d4372db83d047049ffb7cf95fcbd4/pyinstaller-6.22.3-py3-none-win32.whl", hash = "sha256:46a3e30a118341a1ec20667a5a95aa7e0aa8c4fa129893c0151b3eb3f801a722", size = 1390905, upload-time = "2026-09-12T21:53:38.133Z" },
+    { url = "https://files.pythonhosted.org/packages/24/83/c5422204772a27aef643280fdc887b7ef55679989096b21dceb1b9625fc4/pyinstaller-6.22.3-py3-none-win_amd64.whl", hash = "sha256:500bd58c7bf7e584a8435adccbd763a0b918d5c12b08d74ff50fd79b2915458b", size = 1454907, upload-time = "2026-09-12T21:53:44.812Z" },
+    { url = "https://files.pythonhosted.org/packages/67/2e/ebc93968bf63f81b122e205da116b16036b653b7ce2cc8ad86e3ddd19586/pyinstaller-6.22.3-py3-none-win_arm64.whl", hash = "sha256:31df3cc4261e804a53d358b7897c293ec8b88b167a7cca06c78018085c855f97", size = 1402956, upload-time = "2026-09-12T21:53:51.369Z" },
 ]
 
 [[package]]
@@ -974,8 +985,8 @@ wheels = [
 
 [[package]]
 name = "unofficial-api-for-beeg"
-version = "1.7"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#c5abdb0704e125bd7b6d2f17d538d8f0278f8b05" }
+version = "1.7.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#433e0e5791e917d2ab3e6cae13748f58da8f561e" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -983,8 +994,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-eporner"
-version = "2.4.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#01429e862f09c9878796d9053ceb9544485df6f3" }
+version = "2.4.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#771f3ed060e65d22d6566f25577ef9e6dee7765a" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -993,22 +1004,22 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-hqporner"
-version = "2.5"
+version = "2.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
     { name = "selectolax" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ae/da/a3691c952463bc3eaf86e8dd28f571268e01182690806746ffe3bdd93bfb/unofficial_api_for_hqporner-2.5.tar.gz", hash = "sha256:44fe1edf6ad7e1dbec946ca8cf4c3336bed76a5087e7b92822e6ab9fcb5f2658", size = 24181, upload-time = "2026-08-11T16:07:56.298Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c3/fa/6b7580a13e8c8a5336122c18070d2276233479087700ac2d6b5b1b154af9/unofficial_api_for_hqporner-2.5.1.tar.gz", hash = "sha256:ffc028b5b4d5f24256fded77cf12a5b03f7716201f07a99b782697fe6a89be4b", size = 27116, upload-time = "2026-09-15T13:38:23.044Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/65/7b4659ed0c51a3cda17809b65492def99fbff957765a4760e2f2dc23713d/unofficial_api_for_hqporner-2.5-py3-none-any.whl", hash = "sha256:0aa28ab552426c1da0076ddaec43247d3150520a4754ee34181cb2c114ecb304", size = 25171, upload-time = "2026-08-11T16:07:54.637Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/c2/aa76743e9eb7f56bf1d6db9331f20ecdbbeaf2d31d6e72f997ab94755db6/unofficial_api_for_hqporner-2.5.1-py3-none-any.whl", hash = "sha256:15fb7b01a8ce3e201359391e62c241caf2166a1143601f103c98c7d27d12bbaa", size = 28730, upload-time = "2026-09-15T13:38:23.967Z" },
 ]
 
 [[package]]
 name = "unofficial-api-for-pornhub"
-version = "5.4.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#8da6fa5a99b507179cc1d4cad4aaeec199c6da4c" }
+version = "5.4.4"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#35f1685d7439c51e38e77f176fd2f8fab56e3696" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1019,8 +1030,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-porntrex"
-version = "1.8"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#7c38faf9565f1479bef617b82b19b79bce907793" }
+version = "1.8.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#cb3c7db783563294edd18bc66b7253a0b2f1a467" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "json5" },
@@ -1029,8 +1040,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-redtube"
-version = "1.4.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#c03dda39d222a171f61451f7a5bebd30d585f06a" }
+version = "1.4.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#9601fdb5b128dc339c66877a2673192daa67c6bc" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1041,8 +1052,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-spankbang"
-version = "2.4.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#21109928240ea160bb02a1dfa27375ad38806a7f" }
+version = "2.4.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#ce933899edba2807375331840a586dd6450f9a31" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1052,8 +1063,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-thumbzilla"
-version = "1.4"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#0da910df4b3156ecc2ca56dbd21a4a73cc04a19a" }
+version = "1.4.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#165a8d389c4174b639a89343f9538057d8a308c7" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1063,8 +1074,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-tube8"
-version = "1.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#d65c41fc578c6ba7f37673816f5464afde155e28" }
+version = "1.3.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#e042ad746a3662c0182d4c2868b9e0800e712635" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1074,8 +1085,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xfreehd"
-version = "1.7.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#fb5e92c9799efce57a5da147ba1af9bb330a2594" }
+version = "1.7.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#51384674cad8b82e657e97b5f550ca304a78b5bc" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },
@@ -1083,8 +1094,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xhamster"
-version = "2.6"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#63b6a14419ef67cd968c88b8bc9c7cdc638036b4" }
+version = "2.6.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#e452f99c587df06d3d17e56543fc480e99cb0b49" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -1095,8 +1106,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xnxx"
-version = "2.4.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#982cb48bf861902554f45492084741cceb164adb" }
+version = "2.4.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#468da86a1011f6047e9d9436ffe4f4f97286979f" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1106,8 +1117,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xvideos"
-version = "2.5"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#9a82e554223988bb98aebfff9f589d41513abad3" }
+version = "2.5.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#fb8e8b985404fd414c6a26daccd1c26fef2a62fc" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1117,8 +1128,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-youporn"
-version = "1.8"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#dd6f05065a7ae61b9981afcc8091b3bcff7a6030" }
+version = "1.8.1"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#be714a80692ea90f38367d19a5e52cd595dc0dde" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
@@ -1128,11 +1139,11 @@ dependencies = [
 
 [[package]]
 name = "urllib3"
-version = "2.7.0"
+version = "2.8.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz", hash = "sha256:63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63", size = 458972, upload-time = "2026-09-15T19:29:36.253Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
+    { url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl", hash = "sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3", size = 135717, upload-time = "2026-09-15T19:29:34.577Z" },
 ]
 
 [[package]]

@@ -16,14 +16,14 @@ from src.backend.splashscreen import SplashController
 # --- MULTIPROCESSING SAFE SPLASH SCREEN ---
 # We check if this is the main process. If so, we initialize the GUI.
 # If it's a child process, we skip GUI initialization and set them to None.
-is_main_process = mp.current_process().name == 'MainProcess'
+is_main_process = mp.current_process().name == 'MainProcess' and "unittest" not in sys.modules and not os.environ.get("PORN_FETCH_TEST_ENV")
 
 app = None
 engine = None
 splash = None
 
 if is_main_process:
-    app = QGuiApplication(sys.argv)
+    app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
     
     splash_qml_path = Path(__file__).resolve().parent / "src" / "frontend" / "UI" / "SplashScreen.qml"
@@ -102,6 +102,7 @@ from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
 from src.backend.shared_gui import (ui_popup, Signals,
                                     available_title_formatting_options)
 from src.backend.helper_functions import (safe_rmtree, make_debug_log)
+from src.backend.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
 from src.backend.login_manager import (
     LoginPornhub,
     LoginXVideos,
@@ -348,6 +349,7 @@ class ProcessVideos(QObject):
                     break
 
                 last_error = None  # Keeps track of the
+                last_exception = None
 
                 if self.stop_flag.is_set():
                     return  # User hit the abort button
@@ -379,11 +381,13 @@ class ProcessVideos(QObject):
 
                 # General Errors
                 except AppNetworkError as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     A network error happened, I'll try retrying...""")
                     continue  # Maybe it solves by itself ;)
 
                 except AppNotFoundError as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
                     the correct URL.
@@ -394,41 +398,62 @@ class ProcessVideos(QObject):
                     break  # If the resource is not there, it won't magically appear lmao
 
                 except (VideoDisabled, GifPendingReview) as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
                     """)
                     break
 
                 except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
                     fix this quickly!""")
                     break
 
                 except RateLimitError as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     You got rate limited by the server. I have already tried solving this, which didn't work. 
                     Please use a (different) proxy or VPN.""")
                     break
 
                 except DataNotLoadedError as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message=f"""
                     If you see this I fucked up developing my API packages and you should immediately open an issue on 
                     GitHub lol""")
                     break
 
                 except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
+                    last_exception = e
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
                     The website denied access, probably because it detected you as a bot. Please report this, as I probably
                     need to update the headers. 
                     """)
 
                 except Exception as e:
+                    last_exception = e
                     self.logger.error(f"UNHANDLED EXCEPTION in start_processing: {e}", exc_info=True)
                     last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="An unexpected error occurred.")
                     break
 
                 finally:
+                    if last_exception is not None:
+                        report_id = await report_exception(
+                            last_exception,
+                            operation="prepare scraped video",
+                            location="ProcessVideos.start_processing",
+                            context={
+                                "video_url": video_url,
+                                "origin_url": self.origin_iterator_url,
+                                "video_index": idx,
+                            },
+                            enabled=app_settings.enable_logging,
+                            version=__version__,
+                        )
+                        if last_error is not None:
+                            last_error = f"{last_error.rstrip()}\n\nError ID: {report_id}"
                     if last_error is not None:
                         self.error_signal.emit(last_error)
 
@@ -450,8 +475,8 @@ class Backend(QObject):
     proxyApplied = Signal(bool)
     shutdown_complete = Signal()
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent: QObject | None = None):
+        super().__init__(parent)
         self._background_tasks: set[asyncio.Task[object]] = set()
         self._login_task: asyncio.Task[object] | None = None
         self._login_in_progress = False
@@ -459,12 +484,15 @@ class Backend(QObject):
         self._account_fetch_in_progress = False
         self._proxy_test_task: asyncio.Task[object] | None = None
         self._update_check_task: asyncio.Task[object] | None = None
+        self._update_check_requested = False
         self._auto_update_task: asyncio.Task[object] | None = None
+        self._shutdown_task: asyncio.Task[None] | None = None
         self._download_tasks: dict[str, asyncio.Task[object]] = {}
         self._download_stop_events: dict[str, asyncio.Event] = {}
         self._client_refresh_pending = False
         self._download_semaphore = asyncio.Semaphore(max(1, int(app_settings.parallel_downloads)))
         self._license_bridge: LicenseBridge | None = None
+        self._restart_warning_shown = False
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
@@ -485,7 +513,6 @@ class Backend(QObject):
         # refresh them immediately when the content locale changes.
         self.load_clients()
         app_settings.reloadClients.connect(self.load_clients)
-        QTimer.singleShot(0, clients.schedule_retired_session_cleanup)
         if sni_proxy_manager.last_error:
             QTimer.singleShot(
                 0,
@@ -497,6 +524,14 @@ class Backend(QObject):
 
     def has_premium_access(self) -> bool:
         return bool(self._license_bridge and self._license_bridge.isPremium)
+
+    @Property(str, constant=True)
+    def errorReportDisclosure(self) -> str:
+        return ERROR_REPORT_DISCLOSURE
+
+    @Property(str, constant=True)
+    def errorReportExample(self) -> str:
+        return ERROR_REPORT_EXAMPLE
 
     @Property(bool, notify=loginStateChanged)
     def loginInProgress(self) -> bool:
@@ -548,10 +583,22 @@ class Backend(QObject):
 
     @Slot()
     def check_for_updates(self) -> None:
-        """Schedule a platform-appropriate check after Qt's event loop starts."""
-        QTimer.singleShot(0, self._start_update_check)
+        """Request an update check, deferring it until QtAsyncio is running."""
+        self._update_check_requested = True
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            return
+        self._start_update_check()
+
+    def start_async_services(self) -> None:
+        """Start deferred services from inside the running QtAsyncio loop."""
+        clients.schedule_retired_session_cleanup()
+        if self._update_check_requested:
+            self._start_update_check()
 
     def _start_update_check(self) -> None:
+        self._update_check_requested = False
         if sys.platform == "darwin":
             try:
                 if not hasattr(self, "sparkle"):
@@ -608,7 +655,9 @@ class Backend(QObject):
 
     @Slot()
     def setting_requires_restart(self) -> None:
-        ui_popup("You have triggered an action that requires a restart before taking effect!")
+        if not self._restart_warning_shown:
+            self._restart_warning_shown = True
+            ui_popup("You have triggered an action that requires a restart before taking effect!")
 
     @Slot(str)
     def handle_message(self, message: str) -> None:
@@ -685,6 +734,13 @@ class Backend(QObject):
 
             except Exception as e:
                 error = traceback.format_exc()
+                await report_exception(
+                    e,
+                    operation="install Porn Fetch",
+                    location="Backend.install_pornfetch.run_installation",
+                    enabled=app_settings.enable_logging,
+                    version=__version__,
+                )
                 ui_popup(f"""
             During installation an unknown error happened, please report this!
             ERROR: {error}""")
@@ -753,10 +809,21 @@ class Backend(QObject):
         else:
             try:
                 task.result()
-            except Exception:
+            except Exception as error:
                 self.logger.exception(
                     "Background task failed: %s",
                     task.get_name(),
+                )
+                asyncio.create_task(
+                    report_exception(
+                        error,
+                        operation="run GUI background task",
+                        location="Backend._background_task_done",
+                        context={"task_name": task.get_name()},
+                        enabled=app_settings.enable_logging,
+                        version=__version__,
+                    ),
+                    name=f"report-{task.get_name()}",
                 )
 
         if self._client_refresh_pending and not any(
@@ -1046,6 +1113,25 @@ class Backend(QObject):
 
                 video.status = status
                 self._downloads_model.set_status(job_id, status)
+                if status == "failed":
+                    report_id = await report_exception(
+                        RuntimeError(f"Downloader returned failure status: {report_status or 'false result'}"),
+                        operation="download video",
+                        location="Backend._download_video",
+                        context={
+                            "video_url": getattr(video, "url", None),
+                            "provider": type(getattr(video, "source_video", None)).__module__,
+                            "quality": getattr(video, "selected_quality", None),
+                            "job_id": job_id,
+                        },
+                        enabled=app_settings.enable_logging,
+                        version=__version__,
+                    )
+                    self.logger.error("Download %s failed [error %s]", job_id, report_id)
+                    if not app_settings.supress_errors:
+                        self.showMessage.emit(
+                            self.tr("The video download failed. Error ID: %s") % report_id
+                        )
                 if status == "completed":
                     self._downloads_model.update_progress(job_id, 100)
                 self.download_manager.update_status(job_id, status)
@@ -1054,12 +1140,28 @@ class Backend(QObject):
             self._downloads_model.set_status(job_id, "cancelled")
             self.download_manager.update_status(job_id, "cancelled")
             raise
-        except Exception:
+        except Exception as error:
             video.status = "failed"
             self._downloads_model.set_status(job_id, "failed")
             self.download_manager.update_status(job_id, "failed")
             self.logger.exception("Download failed for %s", job_id)
-            self.showMessage.emit(self.tr("The video download failed. Please check the log for details."))
+            report_id = await report_exception(
+                error,
+                operation="download video",
+                location="Backend._download_video",
+                context={
+                    "video_url": getattr(video, "url", None),
+                    "provider": type(getattr(video, "source_video", None)).__module__,
+                    "quality": getattr(video, "selected_quality", None),
+                    "job_id": job_id,
+                },
+                enabled=app_settings.enable_logging,
+                version=__version__,
+            )
+            if not app_settings.supress_errors:
+                self.showMessage.emit(
+                    self.tr("The video download failed. Error ID: %s") % report_id
+                )
 
     @Property(QObject, notify=downloadsChanged)
     def downloads(self):
@@ -1109,6 +1211,7 @@ class Backend(QObject):
                                        video_filters=filters, download_manager=self.download_manager, reverse_videos=False,
                                        stop_flag=stop_flag, origin_iterator_url=origin_iterator_url,
                                        origin_iterator_name=origin_iterator_name)
+        process_videos.error_signal.connect(self.showMessage.emit)
         await process_videos.start_processing()
 
         self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
@@ -1286,11 +1389,19 @@ class Backend(QObject):
             self.showMessage.emit(
                 self.tr("Your %s login is no longer valid. Please log in again.") % provider
             )
-        except Exception:
+        except Exception as error:
             self.logger.exception(
                 "Could not fetch %s account collection %s",
                 provider,
                 collection,
+            )
+            await report_exception(
+                error,
+                operation="fetch account collection",
+                location="Backend._run_fetch_account_videos",
+                context={"provider": provider, "collection": collection, "playlist_url": playlist_url},
+                enabled=app_settings.enable_logging,
+                version=__version__,
             )
             self.showMessage.emit(
                 self.tr("Could not fetch the account videos. Please check the log for details.")
@@ -1374,8 +1485,16 @@ class Backend(QObject):
             self.showMessage.emit(self.tr("You are already logged in."))
         except LoginError as error:
             self.showMessage.emit(str(error))
-        except Exception:
+        except Exception as error:
             self.logger.exception("Unexpected %s login failure", provider)
+            await report_exception(
+                error,
+                operation="log in to provider",
+                location="Backend._run_login_account",
+                context={"provider": provider},
+                enabled=app_settings.enable_logging,
+                version=__version__,
+            )
             self.showMessage.emit(
                 self.tr("An unexpected login error occurred. Please check the log for details.")
             )
@@ -1414,43 +1533,52 @@ class Backend(QObject):
 
         self._is_shutting_down = True
         self.logger.info("Application closing. Initiating async teardown...")
-        # Spawn the cleanup routine as one final task
-        asyncio.create_task(self._teardown_routine())
+        self._shutdown_task = asyncio.create_task(
+            self._teardown_routine(),
+            name="application-teardown",
+        )
 
     async def _teardown_routine(self):
         """Safely cancel all tracked tasks and wait for them to close."""
-        tasks_to_await = list(self._background_tasks)
+        try:
+            tasks_to_await = set(self._background_tasks)
+            if self._proxy_test_task and not self._proxy_test_task.done():
+                tasks_to_await.add(self._proxy_test_task)
 
-        if self._proxy_test_task and not self._proxy_test_task.done():
-            tasks_to_await.append(self._proxy_test_task)
+            if tasks_to_await:
+                self.logger.info("Cancelling %d background tasks...", len(tasks_to_await))
+                for task in tasks_to_await:
+                    task.cancel()
+                await asyncio.gather(*tasks_to_await, return_exceptions=True)
+                self.logger.info("All background tasks stopped successfully.")
 
-        if tasks_to_await:
-            self.logger.info(f"Cancelling {len(tasks_to_await)} background tasks...")
+            async def close_component(name: str, cleanup) -> None:
+                try:
+                    await cleanup()
+                except Exception:
+                    self.logger.exception("Could not close %s", name)
 
-            # Send cancellation requests to all tasks
-            for task in tasks_to_await:
-                task.cancel()
-
-            # Wait for all tasks to acknowledge cancellation and finish
-            # return_exceptions=True prevents CancelledError from bubbling up and crashing this routine
-            await asyncio.gather(*tasks_to_await, return_exceptions=True)
-            self.logger.info("All background tasks stopped successfully.")
-
-        await clients.close_all_clients()
-        if self._license_bridge is not None:
-            await self._license_bridge.close()
-        sni_proxy_manager.stop()
-        if self.database_bridge is not None:
-            await self.database_bridge.close()
-        if self._pending_pocketbase_move is not None:
-            await asyncio.to_thread(self._move_pocketbase_data, *self._pending_pocketbase_move)
-
-        # If DownloadManager handles downloads in separate C++ threads or
-        # distinct processes, tell it to stop here too.
-        # self.download_manager.stop_all()
-
-        # Tell the Qt Event Loop to exit
-        self.shutdown_complete.emit()
+            await close_component("network clients", clients.close_all_clients)
+            if self._license_bridge is not None:
+                await close_component("license service", self._license_bridge.close)
+            try:
+                sni_proxy_manager.stop()
+            except Exception:
+                self.logger.exception("Could not stop the SNI proxy")
+            if self.database_bridge is not None:
+                await close_component("database service", self.database_bridge.close)
+            if self._pending_pocketbase_move is not None:
+                await close_component(
+                    "pending database move",
+                    lambda: asyncio.to_thread(
+                        self._move_pocketbase_data,
+                        *self._pending_pocketbase_move,
+                    ),
+                )
+        finally:
+            self.logger.info("Application teardown finished. Exiting...")
+            self.shutdown_complete.emit()
+            asyncio.get_running_loop().stop()
 
     @staticmethod
     def ensure_temp():
@@ -1498,6 +1626,9 @@ def main() -> None:
     app.setApplicationName(config.__app_name__)
     app.setApplicationVersion(config.__version__)
     app.setWindowIcon(QIcon("qrc:/images/graphics/logo.png"))
+    # The asyncio teardown decides when the process may exit. A compositor can
+    # still destroy the native window without prematurely stopping QtAsyncio.
+    app.setQuitOnLastWindowClosed(False)
 
     app.styleHints().setColorScheme(Qt.ColorScheme.Dark if app_settings.dark_mode else Qt.ColorScheme.Light)
 
@@ -1510,10 +1641,10 @@ def main() -> None:
     # Loads the theme e.g., Material UI / Fusion + dark / light theme
     saved_style = app_settings.core_style
     QQuickStyle.setStyle(saved_style)
-    theme_manager = ThemeManager()
+    theme_manager = ThemeManager(parent=engine)
 
     # The backend instance handles the main logic, see class above
-    backend_instance = Backend()
+    backend_instance = Backend(parent=engine)
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:
@@ -1536,7 +1667,7 @@ def main() -> None:
         Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)),
         production_config=load_production_config(),
     )
-    bridge_instance = LicenseBridge(license_service) # License bridge connects QML code to Python
+    bridge_instance = LicenseBridge(license_service, parent=engine) # License bridge connects QML code to Python
     backend_instance.set_license_bridge(bridge_instance)
     # Gives some context to QML so that QML can directly access certain things
     engine.rootContext().setContextProperty("bridge", bridge_instance)
@@ -1559,7 +1690,24 @@ def main() -> None:
         sys.exit(-1)
 
     splash.finish()
-    QtAsyncio.run(handle_sigint=True) # sigint means that when someone presses CTRL+C it gets a clean exit
+
+    async def start_async_services() -> None:
+        # This coroutine is first advanced by QtAsyncio after its loop is
+        # running. QML loading alone is not a safe asyncio startup boundary.
+        bridge_instance.start()
+        database_bridge.start()
+        backend_instance.start_async_services()
+
+    # handle_sigint enables a clean shutdown when CTRL+C is pressed.
+    QtAsyncio.run(
+        start_async_services(),
+        handle_sigint=True,
+    )
+
+    # SplashController also retains the engine. Release it first, then destroy
+    # the QML object tree while all context properties are still alive.
+    splash = None
+    engine = None
 
 
 

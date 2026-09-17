@@ -54,6 +54,7 @@ dependencies = [
     "rich-argparse>=1.8.0",
     "platformdirs>=4.3",
     "questionary>=2.1.1",
+    "pydivert[linux]>=3.1.3",
 ]
 
 

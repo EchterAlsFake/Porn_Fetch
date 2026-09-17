@@ -13,7 +13,7 @@ from typing import Any
 from .paths import config_dir
 
 
-SETTINGS_VERSION = 1
+SETTINGS_VERSION = 2
 
 
 @dataclass(slots=True)
@@ -62,6 +62,8 @@ class CliSettings:
     # Logging / appearance
     log_level: str = "INFO"
     debug: bool = False
+    error_reporting: bool = False
+    error_reporting_decided: bool = False
     theme: str = "textual-dark"
 
     def validate(self) -> None:
@@ -168,6 +170,8 @@ class SettingsStore:
             values = raw.get("settings", raw)
             known = {field.name for field in fields(CliSettings)}
             settings = CliSettings(**{k: v for k, v in values.items() if k in known})
+            if not settings.error_reporting_decided:
+                settings = replace(settings, error_reporting=False)
             settings.validate()
             return settings
 
@@ -198,6 +202,61 @@ class SettingsStore:
         finally:
             if os.path.exists(temporary):
                 os.unlink(temporary)
+
+
+async def prompt_error_reporting_consent(
+    settings: CliSettings,
+    store: SettingsStore,
+    *,
+    console: Any | None = None,
+) -> CliSettings:
+    """Show the one-time CLI disclosure and persist only an explicit choice."""
+    if settings.error_reporting_decided:
+        return settings
+
+    import questionary
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.text import Text
+
+    from src.backend.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE
+
+    output = console or Console()
+    output.print(Panel(
+        Text(ERROR_REPORT_DISCLOSURE),
+        title="[bold cyan]Optional automatic error reports[/]",
+        border_style="cyan",
+        padding=(1, 2),
+    ))
+    output.print(Panel(
+        Text(ERROR_REPORT_EXAMPLE, style="dim"),
+        title="Synthetic example of a stored report",
+        border_style="bright_black",
+        padding=(1, 2),
+    ))
+    choice = await questionary.select(
+        "Enable automatic redacted error reports?",
+        choices=[
+            questionary.Choice("No, keep error reporting disabled", value=False),
+            questionary.Choice("Yes, enable automatic error reports", value=True),
+        ],
+    ).ask_async()
+    if choice is None:
+        output.print("[yellow]No choice was saved; error reporting remains disabled.[/]")
+        return settings
+
+    updated = replace(
+        settings,
+        error_reporting=bool(choice),
+        error_reporting_decided=True,
+    )
+    updated.validate()
+    store.save(updated)
+    output.print(
+        "[green]Error reporting enabled.[/]" if choice
+        else "[dim]Error reporting remains disabled.[/]"
+    )
+    return updated
 
 
 def _legacy_candidates() -> list[Path]:

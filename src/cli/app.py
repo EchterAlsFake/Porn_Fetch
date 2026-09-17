@@ -2,17 +2,18 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import fields
+from dataclasses import fields, replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
-from textual.screen import Screen
+from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, Markdown, Static, Switch
 
 from src.backend.media import VideoObject, select_allowed_quality
+from src.backend.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
 from .accounts import AccountService
 from .downloads import DownloadOutcome, download_gallery, download_video
 from .licensing import LicenseService, create_license_service
@@ -28,6 +29,26 @@ SCREENS = (
     ("tracked", "Tracked Models"), ("accounts", "Accounts"),
     ("settings", "Settings"), ("license", "License"), ("about", "About"),
 )
+
+
+class ErrorReportingConsentScreen(ModalScreen[bool]):
+    """One-time, non-dismissible Textual consent choice."""
+
+    def compose(self) -> ComposeResult:
+        with VerticalScroll(id="error-consent"):
+            yield Label("Optional automatic error reports", classes="section-title")
+            yield Static(ERROR_REPORT_DISCLOSURE)
+            yield Label("Synthetic example of a stored report", classes="section-title")
+            yield Static(ERROR_REPORT_EXAMPLE, id="error-consent-example")
+            with Horizontal():
+                yield Button("No, keep disabled", id="error-consent-no")
+                yield Button("Yes, enable reports", id="error-consent-yes")
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "error-consent-no":
+            self.dismiss(False)
+        elif event.button.id == "error-consent-yes":
+            self.dismiss(True)
 
 
 class Nav(Static):
@@ -187,8 +208,8 @@ SETTING_GROUPS = {
     "Video": list(range(0, 9)),
     "Performance": list(range(9, 25)),
     "Network / Privacy": list(range(25, 38)),
-    "Logging": list(range(38, 40)),
-    "Appearance": [40],
+    "Logging": list(range(38, 41)),
+    "Appearance": [42],
 }
 
 
@@ -214,6 +235,9 @@ class SettingsScreen(BaseScreen):
     def save(self) -> None:
         values: dict[str, Any] = {}
         for field in fields(CliSettings):
+            if field.name == "error_reporting_decided":
+                values[field.name] = True
+                continue
             current = getattr(self.app.settings, field.name)
             widget = self.query_one(f"#setting-{field.name}")
             if isinstance(widget, Switch):
@@ -262,6 +286,7 @@ class AboutScreen(BaseScreen):
 class PornFetchApp(App):
     TITLE = "Porn Fetch"
     CSS = """
+    ErrorReportingConsentScreen { align: center middle; }
     .nav { height: 3; overflow-x: auto; }
     .nav Button { min-width: 14; margin-right: 1; }
     #add-content, #account-form { padding: 2 4; }
@@ -269,6 +294,8 @@ class PornFetchApp(App):
     #settings-form { padding: 1 4; }
     .section-title { margin-top: 1; text-style: bold; color: $accent; }
     Input { margin-bottom: 1; }
+    #error-consent { width: 90%; height: 90%; padding: 1 2; background: $surface; border: round $accent; }
+    #error-consent-example { padding: 1; background: $panel; }
     """
     BINDINGS = [("ctrl+q", "quit", "Quit")]
 
@@ -304,13 +331,36 @@ class PornFetchApp(App):
         self.install_screen(LicenseScreen(), "license")
         self.install_screen(AboutScreen(), "about")
         self.push_screen("add")
+        if not self.settings.error_reporting_decided:
+            self.push_screen(ErrorReportingConsentScreen(), self._save_error_reporting_consent)
         self.run_worker(self._check_license(), group="license", exclusive=True)
+
+    def _save_error_reporting_consent(self, enabled: bool | None) -> None:
+        if enabled is None:
+            return
+        self.settings = replace(
+            self.settings,
+            error_reporting=enabled,
+            error_reporting_decided=True,
+        )
+        self.settings_store.save(self.settings)
 
     async def on_unmount(self) -> None:
         if self.licenses:
             await self.licenses.close()
         if self.pool:
             await self.pool.close()
+
+    async def _report(
+        self, error: BaseException, operation: str, location: str, **context: Any,
+    ) -> str:
+        return await report_exception(
+            error,
+            operation=operation,
+            location=location,
+            context=context,
+            enabled=self.settings.error_reporting,
+        )
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         button = event.button.id or ""
@@ -361,7 +411,11 @@ class PornFetchApp(App):
             self.get_screen("results").replace_items(items)
             status.update(f"Loaded {len(items)} item(s) from {route.provider}.")
         except Exception as error:
-            status.update(f"Could not load URL: {error}")
+            report_id = await self._report(
+                error, "load media URL", "src.cli.app.PornFetchApp._load_url",
+                source_url=url,
+            )
+            status.update(f"Could not load URL: {error} [error {report_id}]")
 
     async def _queue_selected(self) -> None:
         screen: ResultsScreen = self.get_screen("results")
@@ -412,6 +466,15 @@ class PornFetchApp(App):
                     outcome = await download_video(job["source"], target, job["quality"], self.settings, has_premium=self.licenses.status.allowed, stop_event=job["event"], progress=lambda value: self._progress(index, value), available_qualities=media.qualities)
                 job["outcome"] = outcome
                 job["status"] = outcome.status
+                if outcome.status not in {"completed", "cancelled"}:
+                    job["error_id"] = await self._report(
+                        RuntimeError(f"Downloader returned status {outcome.status}"),
+                        "download queued media",
+                        "src.cli.app.PornFetchApp._run_job",
+                        video_url=getattr(media, "url", None) or getattr(job["source"], "url", None),
+                        provider=getattr(job.get("route"), "provider", None),
+                        quality=job.get("quality"),
+                    )
                 if (
                     media is not None and outcome.status == "completed"
                     and not outcome.skipped and outcome.path.suffix.casefold() == ".mp4"
@@ -422,6 +485,12 @@ class PornFetchApp(App):
                         write_tags(str(outcome.path), media)
                     except Exception as error:
                         job["metadata_warning"] = str(error)
+                        await self._report(
+                            error, "write downloaded video metadata",
+                            "src.cli.app.PornFetchApp._run_job",
+                            video_url=getattr(media, "url", None),
+                            provider=getattr(job.get("route"), "provider", None),
+                        )
                 if outcome.status == "completed" and job["tracking_origin"] and media is not None:
                     self.model_store.mark_downloaded(job["tracking_origin"], media.url)
         except asyncio.CancelledError:
@@ -430,6 +499,14 @@ class PornFetchApp(App):
         except Exception as error:
             job["status"] = "failed"
             job["error"] = str(error)
+            source = job.get("source")
+            media = job.get("media")
+            job["error_id"] = await self._report(
+                error, "download queued media", "src.cli.app.PornFetchApp._run_job",
+                video_url=getattr(media, "url", None) or getattr(source, "url", None),
+                provider=getattr(job.get("route"), "provider", None),
+                quality=job.get("quality"),
+            )
         finally:
             self._update_job(index)
             self._update_overall()
@@ -504,6 +581,10 @@ class PornFetchApp(App):
             ok = await self.accounts.login(provider, username=user, password=secret, tokens=tokens, browser=browser)
             screen.query_one("#account-status", Static).update("Logged in." if ok else "Login failed.")
         except Exception as error:
+            await self._report(
+                error, "authenticate account", "src.cli.app.PornFetchApp._account_login",
+                provider=provider,
+            )
             screen.query_one("#account-status", Static).update(str(error))
 
     async def _account_collection(self) -> None:
@@ -529,6 +610,10 @@ class PornFetchApp(App):
             await asyncio.sleep(0)
             self.get_screen("results").replace_items(items)
         except Exception as error:
+            await self._report(
+                error, "fetch account collection", "src.cli.app.PornFetchApp._account_collection",
+                provider=provider, collection=collection, playlist_url=playlist,
+            )
             screen.query_one("#account-status", Static).update(str(error))
 
     async def _check_license(self) -> None:
@@ -548,6 +633,10 @@ class PornFetchApp(App):
             elif action == "deactivate":
                 await self.licenses.deactivate()
         except Exception as error:
+            await self._report(
+                error, "manage license", "src.cli.app.PornFetchApp._license_action",
+                action=action,
+            )
             self.get_screen("license").query_one("#license-status", Static).update(str(error))
             return
         self._show_license()

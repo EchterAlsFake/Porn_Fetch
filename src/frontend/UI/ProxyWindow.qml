@@ -234,6 +234,7 @@ Window {
                 Label { text: qsTr("Protocol") }
                 ComboBox {
                     id: schemeBox
+                    Accessible.name: qsTr("Proxy Protocol")
                     Layout.fillWidth: true
                     model: ["http", "https", "socks4", "socks4a", "socks5", "socks5h"]
                     onActivated: root.fieldsChanged()
@@ -242,6 +243,8 @@ Window {
                 Label { text: qsTr("Host") }
                 TextField {
                     id: hostField
+                    Accessible.name: qsTr("Proxy Host")
+                    Accessible.description: qsTr("Enter the proxy hostname or IP address")
                     Layout.fillWidth: true
                     placeholderText: qsTr("proxy.example.com or 127.0.0.1")
                     onTextEdited: root.fieldsChanged()
@@ -250,6 +253,8 @@ Window {
                 Label { text: qsTr("Port") }
                 TextField {
                     id: portField
+                    Accessible.name: qsTr("Proxy Port")
+                    Accessible.description: qsTr("Enter the proxy port number from 1 to 65535")
                     Layout.fillWidth: true
                     placeholderText: qsTr("8080")
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -260,6 +265,7 @@ Window {
 
             CheckBox {
                 id: authenticationCheck
+                Accessible.name: qsTr("Proxy requires authentication")
                 text: qsTr("Proxy requires authentication")
                 onToggled: root.fieldsChanged()
             }
@@ -274,6 +280,7 @@ Window {
                 Label { text: qsTr("Username") }
                 TextField {
                     id: usernameField
+                    Accessible.name: qsTr("Proxy Username")
                     Layout.fillWidth: true
                     onTextEdited: root.fieldsChanged()
                 }
@@ -281,6 +288,7 @@ Window {
                 Label { text: qsTr("Password") }
                 TextField {
                     id: passwordField
+                    Accessible.name: qsTr("Proxy Password")
                     Layout.fillWidth: true
                     echoMode: showPasswordCheck.checked ? TextInput.Normal : TextInput.Password
                     onTextEdited: root.fieldsChanged()
@@ -289,6 +297,7 @@ Window {
                 Item { Layout.preferredWidth: 1; Layout.preferredHeight: 1 }
                 CheckBox {
                     id: showPasswordCheck
+                    Accessible.name: qsTr("Show password")
                     text: qsTr("Show password")
                 }
             }
@@ -353,6 +362,7 @@ Window {
                 Layout.fillWidth: true
 
                 Button {
+                    Accessible.name: qsTr("Disable proxy")
                     text: qsTr("Disable proxy")
                     onClicked: {
                         root.proxyDisabled()
@@ -363,18 +373,21 @@ Window {
                 Item { Layout.fillWidth: true }
 
                 Button {
+                    Accessible.name: qsTr("Ignore SSL and retry")
                     visible: root.testState === "sslWarning"
                     text: qsTr("Ignore SSL and retry")
                     onClicked: root.startTest(false)
                 }
 
                 Button {
+                    Accessible.name: qsTr("Test again")
                     text: qsTr("Test again")
                     enabled: root.inputValid && root.testState !== "testing"
                     onClicked: root.startTest(true)
                 }
 
                 Button {
+                    Accessible.name: qsTr("Use proxy")
                     text: qsTr("Use proxy")
                     enabled: root.testState === "success"
                     highlighted: true

@@ -7,6 +7,9 @@ Button {
     id: control
     property string helpText: ""
 
+    Accessible.name: qsTr("Help")
+    Accessible.description: helpText
+
     clip: true
     icon.source: "qrc:/images/graphics/information.svg"
     palette.buttonText: "white"

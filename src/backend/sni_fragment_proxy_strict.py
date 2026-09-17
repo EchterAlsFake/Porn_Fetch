@@ -59,11 +59,30 @@ import multiprocessing as mp
 import os
 import platform
 import queue
+import re
+import shutil
 import signal
 import socket
 import ssl
 import struct
+import subprocess
 import sys
+from pathlib import Path
+
+_project_root = Path(__file__).resolve().parents[2]
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
+_venv_dir = _project_root / ".venv"
+if _venv_dir.exists():
+    for _sp in _venv_dir.glob("lib/python*/site-packages"):
+        if str(_sp) not in sys.path:
+            sys.path.insert(0, str(_sp))
+    _win_sp = _venv_dir / "Lib" / "site-packages"
+    if _win_sp.exists() and str(_win_sp) not in sys.path:
+        sys.path.insert(0, str(_win_sp))
+
+import time
 import traceback
 from dataclasses import dataclass
 from typing import Final, Iterable, Optional, Protocol
@@ -274,6 +293,77 @@ class _AsyncWriter(Protocol):
     async def drain(self) -> object: ...
 
 
+def _is_elevated() -> bool:
+    system = platform.system().lower()
+    if system == "linux":
+        return hasattr(os, "geteuid") and os.geteuid() == 0
+    elif system == "windows":
+        try:
+            import ctypes
+            return bool(ctypes.windll.shell32.IsUserAnAdmin())
+        except Exception:
+            return False
+    return False
+
+
+def _build_cli_args_for_config(config: StrictFragmentingProxyConfig) -> list[str]:
+    python_exe = str(Path(sys.executable).resolve())
+    script_path = str(Path(__file__).resolve())
+    args = [
+        python_exe,
+        script_path,
+        "--host",
+        config.listen_host,
+        "--port",
+        str(config.listen_port),
+        "--split-at",
+        str(config.split_at),
+        "--split-delay-ms",
+        str(config.split_delay * 1000.0),
+        "--max-segment-payload",
+        str(config.max_segment_payload),
+        "--backend-priority",
+        str(config.backend_priority),
+        "--connect-timeout",
+        str(config.connect_timeout),
+        "--idle-timeout",
+        str(config.idle_timeout),
+    ]
+    if config.reverse_fragments:
+        args.append("--reverse")
+    if config.desync_config:
+        args.extend(["--desync", "--fake-sni", config.desync_config.fake_sni])
+    if config.linux_interfaces:
+        for iface in config.linux_interfaces:
+            args.extend(["--linux-interface", iface])
+    if config.allow_unsupported_windows_arm64:
+        args.append("--allow-unsupported-windows-arm64")
+    if config.plaintext_http_ports:
+        args.extend(["--http-ports", ",".join(str(p) for p in config.plaintext_http_ports)])
+    if config.upstream_proxy:
+        args.extend(["--upstream-proxy", config.upstream_proxy])
+    if config.upstream_proxy_auth:
+        args.extend(["--upstream-user", config.upstream_proxy_auth[0], "--upstream-password", config.upstream_proxy_auth[1]])
+    if config.source_address:
+        args.extend(["--source-address", config.source_address])
+    if config.allow_non_loopback:
+        args.append("--allow-non-loopback")
+    return args
+
+
+def _get_elevation_command(args: list[str]) -> list[str]:
+    system = platform.system().lower()
+    if system == "linux":
+        if shutil.which("pkexec"):
+            return ["pkexec"] + args
+        elif shutil.which("sudo"):
+            return ["sudo", "-E"] + args
+    elif system == "windows":
+        quoted = " ".join(f"'{a}'" for a in args[1:])
+        return ["powershell.exe", "-Command", f"Start-Process -FilePath '{args[0]}' -ArgumentList \"{quoted}\" -Verb RunAs"]
+    return args
+
+
 class StrictFragmentingProxyProcess:
     """Lifecycle manager for a proxy running in a spawned child process.
 
@@ -281,17 +371,16 @@ class StrictFragmentingProxyProcess:
     before creating/refreshing curl-cffi sessions and stop it after those
     sessions have been closed or replaced.
 
-    The helper uses ``spawn`` to avoid directly forking a multithreaded Qt
-    process. Call ``start`` from code protected by
-    ``if __name__ == "__main__":`` and keep GUI creation out of imported code.
+    If the current process is unprivileged, it automatically launches an elevated
+    helper sub-process (via pkexec/sudo on Linux or RunAs on Windows).
     """
 
     def __init__(self, config: StrictFragmentingProxyConfig | None = None) -> None:
         self.config = (config or StrictFragmentingProxyConfig()).validated()
-        # Spawn avoids an unsafe direct fork of Qt threads. It imports __main__,
-        # so the application also guards GUI creation in multiprocessing children.
+        # Spawn avoids an unsafe direct fork of Qt threads.
         self._ctx = mp.get_context("spawn")
         self._process: mp.Process | None = None
+        self._subprocess: subprocess.Popen[str] | None = None
         self._stop_event: object | None = None
         self._status_queue: object | None = None
         self._host: str | None = None
@@ -299,7 +388,11 @@ class StrictFragmentingProxyProcess:
 
     @property
     def is_running(self) -> bool:
-        return self._process is not None and self._process.is_alive()
+        if self._process is not None and self._process.is_alive():
+            return True
+        if self._subprocess is not None and self._subprocess.poll() is None:
+            return True
+        return False
 
     @property
     def host(self) -> str:
@@ -340,14 +433,19 @@ class StrictFragmentingProxyProcess:
 
         if self.is_running:
             return self.proxy_url
-        if mp.current_process().name != "MainProcess":
-            raise StrictProxyStartError(
-                "StrictFragmentingProxyProcess.start() must be called from the main process"
-            )
         if timeout <= 0:
             raise ValueError("timeout must be greater than zero")
 
         self._clear_dead_process()
+
+        if not _is_elevated():
+            return self._start_elevated_subprocess(timeout=timeout)
+
+        if mp.current_process().name != "MainProcess":
+            raise StrictProxyStartError(
+                "StrictFragmentingProxyProcess.start() must be called from the main process"
+            )
+
         stop_event = self._ctx.Event()
         status_queue = self._ctx.Queue(maxsize=2)
         process = self._ctx.Process(
@@ -381,8 +479,76 @@ class StrictFragmentingProxyProcess:
         self.stop(timeout=1.0)
         raise StrictProxyStartError(str(message))
 
+    def _start_elevated_subprocess(self, timeout: float = 15.0) -> str:
+        base_args = _build_cli_args_for_config(self.config)
+        cmd = _get_elevation_command(base_args)
+
+        LOG.info("Spawning elevated SNI proxy helper: %s", " ".join(cmd))
+        try:
+            proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
+            )
+        except Exception as exc:
+            raise StrictProxyStartError(f"Failed to execute elevation command {cmd[0]!r}: {exc}") from exc
+
+        self._subprocess = proc
+        start_time = time.monotonic()
+        url_pattern = re.compile(r"SOCKS5:\s+socks5://(\S+)")
+
+        parsed_host = None
+        parsed_port = None
+
+        while time.monotonic() - start_time < timeout:
+            if proc.poll() is not None:
+                stderr_out = proc.stderr.read() if proc.stderr else ""
+                raise StrictProxyStartError(
+                    f"Elevated proxy helper exited with code {proc.returncode}: {stderr_out.strip()}"
+                )
+            line = proc.stdout.readline() if proc.stdout else ""
+            if line:
+                LOG.debug("Elevated proxy helper output: %s", line.strip())
+                match = url_pattern.search(line)
+                if match:
+                    endpoint = match.group(1)
+                    if ":" in endpoint:
+                        host_part, port_part = endpoint.rsplit(":", 1)
+                        parsed_host = host_part.strip("[]")
+                        parsed_port = int(port_part)
+                        break
+            else:
+                time.sleep(0.05)
+
+        if parsed_host is None or parsed_port is None:
+            if proc.poll() is None:
+                proc.terminate()
+            stderr_out = proc.stderr.read() if proc.stderr else ""
+            raise StrictProxyStartError(
+                f"Elevated proxy helper did not become ready within {timeout:.1f}s. {stderr_out.strip()}"
+            )
+
+        self._host = parsed_host
+        self._port = parsed_port
+        return self.proxy_url
+
     def stop(self, timeout: float = 5.0) -> None:
         """Request a graceful shutdown and terminate as a last resort."""
+
+        proc = self._subprocess
+        if proc is not None:
+            self._subprocess = None
+            if proc.poll() is None:
+                with contextlib.suppress(Exception):
+                    proc.terminate()
+                try:
+                    proc.wait(timeout=max(1.0, timeout))
+                except Exception:
+                    proc.kill()
+                    with contextlib.suppress(Exception):
+                        proc.wait(1.0)
 
         process = self._process
         if process is None:
@@ -423,6 +589,9 @@ class StrictFragmentingProxyProcess:
         self.stop()
 
     def _clear_dead_process(self) -> None:
+        if self._subprocess is not None and self._subprocess.poll() is not None:
+            self._subprocess = None
+            self._reset_runtime_state()
         if self._process is not None and not self._process.is_alive():
             with contextlib.suppress(Exception):
                 self._process.join(timeout=0)
@@ -435,6 +604,7 @@ class StrictFragmentingProxyProcess:
                 status_queue.close()  # type: ignore[attr-defined]
             with contextlib.suppress(Exception):
                 status_queue.join_thread()  # type: ignore[attr-defined]
+        self._subprocess = None
         self._process = None
         self._stop_event = None
         self._status_queue = None
@@ -626,24 +796,14 @@ class _StrictPacketBackend:
                 "on Linux use the PyDivert 4 Linux/eBPF build and libbpf."
             ) from exc
 
-        if platform.system().lower() == "linux":
-            version = str(getattr(pydivert, "__version__", "0"))
-            try:
-                major = int(version.split(".", 1)[0])
-            except ValueError:
-                major = 0
-            if major < 4:
-                raise StrictBackendUnavailable(
-                    f"Linux strict mode requires PyDivert 4.x; found {version!r}."
-                )
-
-        divert_class = getattr(pydivert, "Divert", None)
-        if divert_class is None and platform.system().lower() == "windows":
-            divert_class = getattr(pydivert, "WinDivert", None)
+        divert_class = (
+            getattr(pydivert, "Divert", None)
+            or getattr(pydivert, "LinuxDivert", None)
+            or getattr(pydivert, "WinDivert", None)
+        )
         if divert_class is None:
             raise StrictBackendUnavailable(
-                "Installed PyDivert has no cross-platform Divert class. Linux "
-                "requires PyDivert 4; Windows may use WinDivert from PyDivert 3.1+."
+                "Installed PyDivert has no supported Divert or WinDivert class."
             )
         self._pydivert = pydivert
         self._divert_class = divert_class
@@ -876,11 +1036,12 @@ async def _inject_desync_decoy(
     packet is never mutated here, so injection failure cannot damage the flow.
     """
 
-    decoy = copy.copy(packet)
+    raw_data = bytes(getattr(packet, "raw", packet))
+    decoy = type(packet)(raw_data)
+    decoy.payload = _generate_decoy_client_hello(config.fake_sni)
     tcp = getattr(decoy, "tcp", None)
     if tcp is None:
         raise TypeError("captured packet has no TCP header")
-    decoy.payload = _generate_decoy_client_hello(config.fake_sni)
     tcp.seq_num = (int(tcp.seq_num) - config.sequence_offset) & 0xFFFFFFFF
     tcp.ack_num = (
         int(tcp.ack_num) - config.acknowledgement_offset
@@ -889,7 +1050,8 @@ async def _inject_desync_decoy(
     tcp.fin = False
     tcp.syn = False
     if hasattr(decoy, "recalculate_checksums"):
-        decoy.recalculate_checksums()
+        with contextlib.suppress(Exception):
+            decoy.recalculate_checksums()
     await diverter.send_async(decoy)  # type: ignore[attr-defined]
 
 
@@ -1006,7 +1168,8 @@ async def _process_strict_packet(
             packet.tcp.fin = original_fin if is_final_bytes else False
             packet.tcp.syn = original_syn if start == 0 else False
             if hasattr(packet, "recalculate_checksums"):
-                packet.recalculate_checksums()
+                with contextlib.suppress(Exception):
+                    packet.recalculate_checksums()
             await diverter.send_async(packet)  # type: ignore[attr-defined]
             sent = True
     except BaseException:
@@ -1020,7 +1183,8 @@ async def _process_strict_packet(
             packet.tcp.fin = original_fin
             packet.tcp.syn = original_syn
             if hasattr(packet, "recalculate_checksums"):
-                packet.recalculate_checksums()
+                with contextlib.suppress(Exception):
+                    packet.recalculate_checksums()
             with contextlib.suppress(Exception):
                 await diverter.send_async(packet)  # type: ignore[attr-defined]
         raise
@@ -1860,6 +2024,7 @@ async def _run_foreground(config: StrictFragmentingProxyConfig) -> None:
     print(f"SOCKS5:  socks5://{_format_url_host(host)}:{port}")
     print(f"SOCKS5H: socks5h://{_format_url_host(host)}:{port}")
     print(f"CONNECT: http://{_format_url_host(host)}:{port}")
+    sys.stdout.flush()
 
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()

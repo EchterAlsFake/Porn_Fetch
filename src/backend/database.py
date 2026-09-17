@@ -19,7 +19,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from PySide6.QtCore import QObject, QTimer, Signal, Slot
+from PySide6.QtCore import QObject, Signal, Slot
 
 from src.backend.config import app_settings
 from src.backend.media import VideoObject
@@ -357,8 +357,11 @@ class DatabaseBridge(QObject):
         self._save_lock = asyncio.Lock()
         self._iterators: dict[str, dict[str, Any]] = {}
         self._videos: dict[str, dict[str, Any]] = {}
+
+    def start(self) -> None:
+        """Start PocketBase after the QtAsyncio event loop is running."""
         if self._enabled:
-            QTimer.singleShot(0, self._schedule_startup)
+            self._schedule_startup()
 
     def _schedule_startup(self) -> None:
         if self._startup_task is None:

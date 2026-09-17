@@ -40,12 +40,14 @@ Pane {
 
     Dialogs.FolderDialog {
         id: outputFolderDialog
+        objectName: "outputFolderDialog"
 
         title: qsTr("Choose video output folder")
         currentFolder: appSettings.path_to_file_url(appSettings.output_path)
 
         onAccepted: {
-            var selectedPath = appSettings.local_path_from_url(selectedFolder)
+            var chosen = (selectedFolder && selectedFolder.toString() !== "") ? selectedFolder : currentFolder
+            var selectedPath = appSettings.local_path_from_url(chosen)
             if (selectedPath !== "")
                 appSettings.output_path = selectedPath
         }
@@ -53,13 +55,15 @@ Pane {
 
     Dialogs.FolderDialog {
         id: pocketbaseFolderDialog
+        objectName: "pocketbaseFolderDialog"
 
         title: qsTr("Choose a PocketBase data folder")
         acceptLabel: qsTr("Use Folder")
         currentFolder: appSettings.parent_directory_url(appSettings.pocketbase_data_path)
 
         onAccepted: {
-            var selectedPath = appSettings.local_path_from_url(selectedFolder)
+            var chosen = (selectedFolder && selectedFolder.toString() !== "") ? selectedFolder : currentFolder
+            var selectedPath = appSettings.local_path_from_url(chosen)
             if (selectedPath !== "")
                 appSettings.pocketbase_data_path = selectedPath
         }
@@ -73,6 +77,7 @@ Pane {
 
     ProxyWindow {
         id: proxyWindow
+        objectName: "proxyWindow"
 
         onProxyTestRequested: function(proxyUrl, verifySsl) {
             backend.testProxy(proxyUrl, verifySsl)
@@ -127,6 +132,8 @@ Pane {
                 // ListView displays a scrollable list of items based on a model
                 ListView {
                     id: navList
+                    Accessible.role: Accessible.List
+                    Accessible.name: qsTr("Settings sections")
 
                     anchors.fill: parent // Fill the frame
 
@@ -149,6 +156,8 @@ Pane {
 
                     // 'delegate' defines how each individual item in the list looks
                     delegate: ItemDelegate {
+                        Accessible.role: Accessible.ListItem
+                        Accessible.name: qsTr(modelData + " settings")
                         font.pixelSize: 15
                         // Make font bold if this item is currently selected
                         font.weight: ListView.isCurrentItem ? Font.Bold : Font.Normal
@@ -216,6 +225,9 @@ Pane {
                                 }
                                 ComboBox {
                                     id: defaultQualityCombo
+                                    objectName: "defaultQualityCombo"
+                                    Accessible.name: qsTr("Quality")
+                                    Accessible.description: AppStrings.videoQualityHelp
                                     Layout.fillWidth: true
                                     model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "250p", "240p", "144p"]
                                     currentIndex: appSettings.quality
@@ -278,6 +290,9 @@ Pane {
                                     text: "Model Videos"
                                 }
                                 ComboBox {
+                                    objectName: "modelVideosCombo"
+                                    Accessible.name: qsTr("Model Videos")
+                                    Accessible.description: AppStrings.modelVideosHelp
                                     Layout.fillWidth: true
                                     model: ["Both", "Uploaded Videos", "Featured Videos"]
                                     currentIndex: appSettings.model_videos
@@ -295,6 +310,9 @@ Pane {
                                 }
                                 ComboBox {
                                     id: contentLanguageComboBox
+                                    objectName: "contentLanguageComboBox"
+                                    Accessible.name: qsTr("Content Language")
+                                    Accessible.description: AppStrings.contentLanguageHelp
                                     Layout.fillWidth: true
                                     textRole: "label"
                                     valueRole: "locale"
@@ -327,6 +345,9 @@ Pane {
                                     helpText: AppStrings.strictEnforcementHelp
                                 }
                                 CheckBox {
+                                    objectName: "strictEnforcementCheckBox"
+                                    Accessible.name: qsTr("Strict Enforcement for content language")
+                                    Accessible.description: AppStrings.strictEnforcementHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Strict Enforcement for content language"
@@ -344,6 +365,9 @@ Pane {
                                     text: "Max Result Limit"
                                 }
                                 SpinBox {
+                                    objectName: "resultLimitSpinBox"
+                                    Accessible.name: qsTr("Max Result Limit")
+                                    Accessible.description: AppStrings.resultLimitHelp
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 5000
@@ -363,12 +387,22 @@ Pane {
 
                                     TextField {
                                         id: outputPathInput
+                                        objectName: "outputPathInput"
+                                        Accessible.name: qsTr("Output Path")
+                                        Accessible.description: qsTr("Directory where downloaded videos are saved")
                                         placeholderText: "Enter the output path for the videos..."
                                         Layout.fillWidth: true
                                         text: appSettings.output_path
-                                        onEditingFinished: appSettings.output_path = text
+                                        onEditingFinished: {
+                                            var trimmed = text.trim()
+                                            if (trimmed.length > 0)
+                                                appSettings.output_path = trimmed
+                                            else
+                                                text = appSettings.output_path
+                                        }
                                     }
                                     Button {
+                                        Accessible.name: qsTr("Choose video output folder")
                                         Layout.fillWidth: false
                                         text: qsTr("Choose Folder…")
                                         onClicked: outputFolderDialog.open()
@@ -381,6 +415,9 @@ Pane {
                                     helpText: AppStrings.writeMetadataHelp
                                 }
                                 CheckBox {
+                                    objectName: "writeMetadataCheckBox"
+                                    Accessible.name: qsTr("Write metadata")
+                                    Accessible.description: AppStrings.writeMetadataHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Write metadata"
@@ -394,6 +431,9 @@ Pane {
                                     helpText: AppStrings.skipExistingFilesHelp
                                 }
                                 CheckBox {
+                                    objectName: "skipExistingFilesCheckBox"
+                                    Accessible.name: qsTr("Skip existing files")
+                                    Accessible.description: AppStrings.skipExistingFilesHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Skip existing files"
@@ -406,6 +446,9 @@ Pane {
                                     helpText: AppStrings.trackVideosHelp
                                 }
                                 CheckBox {
+                                    objectName: "trackVideosCheckBox"
+                                    Accessible.name: qsTr("Track Videos in PocketBase")
+                                    Accessible.description: AppStrings.trackVideosHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
                                     text: "Track Videos (PocketBase)"
@@ -424,12 +467,22 @@ Pane {
 
                                     TextField {
                                         id: databasePathInput
+                                        objectName: "databasePathInput"
+                                        Accessible.name: qsTr("PocketBase Data Folder")
+                                        Accessible.description: qsTr("Directory where PocketBase data files are stored")
                                         placeholderText: "Enter the PocketBase data directory"
                                         Layout.fillWidth: true
                                         text: appSettings.pocketbase_data_path
-                                        onEditingFinished: appSettings.pocketbase_data_path = text
+                                        onEditingFinished: {
+                                            var trimmed = text.trim()
+                                            if (trimmed.length > 0)
+                                                appSettings.pocketbase_data_path = trimmed
+                                            else
+                                                text = appSettings.pocketbase_data_path
+                                        }
                                     }
                                     Button {
+                                        Accessible.name: qsTr("Choose PocketBase data folder")
                                         Layout.fillWidth: false
                                         text: qsTr("Choose Folder…")
                                         onClicked: pocketbaseFolderDialog.open()
@@ -460,6 +513,9 @@ Pane {
                                 text: "Download workers:"
                             }
                             SpinBox {
+                                objectName: "downloadWorkersSpinBox"
+                                Accessible.name: qsTr("Download workers")
+                                Accessible.description: AppStrings.downloadWorkersHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -471,6 +527,9 @@ Pane {
                                 text: "Network delay (requests/sec):"
                             }
                             SpinBox {
+                                objectName: "networkDelaySpinBox"
+                                Accessible.name: qsTr("Network delay")
+                                Accessible.description: AppStrings.networkDelayHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -485,6 +544,9 @@ Pane {
                                 text: "Parallel Downloads:"
                             }
                             SpinBox {
+                                objectName: "parallelDownloadsSpinBox"
+                                Accessible.name: qsTr("Parallel Downloads")
+                                Accessible.description: AppStrings.parallelDownloadsHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -499,6 +561,9 @@ Pane {
                                 text: "Maximum retries:"
                             }
                             SpinBox {
+                                objectName: "retriesSpinBox"
+                                Accessible.name: qsTr("Maximum retries")
+                                Accessible.description: AppStrings.retriesHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -513,6 +578,9 @@ Pane {
                                 text: "Maximum timeout:"
                             }
                             SpinBox {
+                                objectName: "timeoutSpinBox"
+                                Accessible.name: qsTr("Maximum timeout")
+                                Accessible.description: AppStrings.timeoutHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -527,6 +595,9 @@ Pane {
                                 text: "Processing Delay (videos/sec):"
                             }
                             SpinBox {
+                                objectName: "processingDelaySpinBox"
+                                Accessible.name: qsTr("Processing Delay")
+                                Accessible.description: AppStrings.processingDelay
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -541,6 +612,9 @@ Pane {
                                 text: "Speed Limit (MB/s):"
                             }
                             DecimalSpinBox {
+                                objectName: "speedLimitSpinBox"
+                                Accessible.name: qsTr("Speed Limit")
+                                Accessible.description: AppStrings.speedLimitHelp
                                 Layout.fillWidth: true
                                 realTo: 100
                                 realStepSize: 0.25
@@ -555,6 +629,9 @@ Pane {
                                 text: "Videos Concurrency:"
                             }
                             SpinBox {
+                                objectName: "videosConcurrencySpinBox"
+                                Accessible.name: qsTr("Videos Concurrency")
+                                Accessible.description: AppStrings.videosConcurrencyHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -569,6 +646,9 @@ Pane {
                                 text: "Pages concurrency:"
                             }
                             SpinBox {
+                                objectName: "pagesConcurrencySpinBox"
+                                Accessible.name: qsTr("Pages Concurrency")
+                                Accessible.description: AppStrings.pagesConcurrencyHelp
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
@@ -588,6 +668,8 @@ Pane {
                                     text: "Response Cache Size (MB/s)"
                                 }
                                 SpinBox {
+                                    objectName: "responseCacheSizeSpinBox"
+                                    Accessible.name: qsTr("Response Cache Size (MB/s)")
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 2000
@@ -599,6 +681,8 @@ Pane {
                                     text: "Response Cache TTL (Seconds)"
                                 }
                                 SpinBox {
+                                    objectName: "responseCacheTTLSpinBox"
+                                    Accessible.name: qsTr("Response Cache TTL (Seconds)")
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 20000
@@ -610,6 +694,8 @@ Pane {
                                     text: "Segment Cache Size (MB/s)"
                                 }
                                 SpinBox {
+                                    objectName: "segmentCacheSizeSpinBox"
+                                    Accessible.name: qsTr("Segment Cache Size (MB/s)")
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 2000
@@ -621,6 +707,8 @@ Pane {
                                     text: "Segment Cache TTL (Seconds)"
                                 }
                                 SpinBox {
+                                    objectName: "segmentCacheTTLSpinBox"
+                                    Accessible.name: qsTr("Segment Cache TTL (Seconds)")
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 20000
@@ -632,6 +720,8 @@ Pane {
                                     text: "Request Initial Retry Delay"
                                 }
                                 DecimalSpinBox {
+                                    objectName: "requestInitialRetryDelaySpinBox"
+                                    Accessible.name: qsTr("Request Initial Retry Delay")
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_initial_retry_delay
@@ -642,6 +732,8 @@ Pane {
                                     text: "Request Retry Max Delay"
                                 }
                                 DecimalSpinBox {
+                                    objectName: "requestRetryMaxDelaySpinBox"
+                                    Accessible.name: qsTr("Request Retry Max Delay")
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_max_delay
@@ -652,6 +744,8 @@ Pane {
                                     text: "Request Retry Multiplier"
                                 }
                                 DecimalSpinBox {
+                                    objectName: "requestRetryMultiplierSpinBox"
+                                    Accessible.name: qsTr("Request Retry Multiplier")
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_multiplier
@@ -662,6 +756,8 @@ Pane {
                                     text: "Request Retry Jitter"
                                 }
                                 DecimalSpinBox {
+                                    objectName: "requestRetryJitterSpinBox"
+                                    Accessible.name: qsTr("Request Retry Jitter")
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_jitter
@@ -698,6 +794,9 @@ Pane {
                                 helpText: AppStrings.updateChecks
                             }
                             CheckBox {
+                                objectName: "updateChecksCheckBox"
+                                Accessible.name: qsTr("Search for Updates")
+                                Accessible.description: AppStrings.updateChecks
                                 text: "Search for Updates"
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
@@ -708,6 +807,9 @@ Pane {
                                 helpText: AppStrings.supressErrors
                             }
                             CheckBox {
+                                objectName: "supressErrorsCheckBox"
+                                Accessible.name: qsTr("Ignore Errors")
+                                Accessible.description: AppStrings.supressErrors
                                 text: "Ignore Errors"
                                 Layout.fillWidth: true
                                 checked: appSettings.supress_errors
@@ -715,11 +817,14 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
-                                helpText: AppStrings.enableLoggingHelp
+                                helpText: backend.errorReportDisclosure
                             }
                             CheckBox {
+                                objectName: "enableLoggingCheckBox"
+                                Accessible.name: qsTr("Allow redacted error reports")
+                                Accessible.description: backend.errorReportDisclosure
                                 // Use \n for multi-line text
-                                text: "Allow error reports (100% anonymous)"
+                                text: "Allow redacted error reports"
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_logging
                                 onToggled: appSettings.enable_logging  = checked
@@ -729,6 +834,9 @@ Pane {
                                 helpText: AppStrings.trustEnvironmentHelp
                             }
                             CheckBox {
+                                objectName: "trustEnvironmentCheckBox"
+                                Accessible.name: qsTr("Trust Environment")
+                                Accessible.description: AppStrings.trustEnvironmentHelp
                                 // Use \n for multi-line text
                                 text: "Trust Environment (Advanced)"
                                 Layout.fillWidth: true
@@ -740,6 +848,9 @@ Pane {
                                 helpText: AppStrings.debugModeHelp
                             }
                             CheckBox {
+                                objectName: "debugModeCheckBox"
+                                Accessible.name: qsTr("Enable Debug Mode")
+                                Accessible.description: AppStrings.debugModeHelp
                                 text: "Enable Debug Mode (Not recommended)"
                                 Layout.fillWidth: true
                                 checked: appSettings.debug_mode
@@ -751,6 +862,9 @@ Pane {
                                 helpText: AppStrings.logLevel
                             }
                             ComboBox {
+                                objectName: "logLevelComboBox"
+                                Accessible.name: qsTr("Log Level")
+                                Accessible.description: AppStrings.logLevel
                                 Layout.fillWidth: true
                                 model: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
                                 currentIndex: appSettings.log_level
@@ -763,10 +877,22 @@ Pane {
                             }
                             TextField {
                                 id: "httpVersion"
+                                objectName: "httpVersionInput"
+                                Accessible.name: qsTr("HTTP Version")
+                                Accessible.description: AppStrings.httpVersionHelp
                                 placeholderText: "HTTP Version may be: v1; v2; v3"
                                 Layout.fillWidth: true
                                 text: appSettings.http_version
-                                onEditingFinished: appSettings.http_version = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^(v[1-3])?$/i
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.http_version = text
+                                    else
+                                        text = appSettings.http_version
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -774,10 +900,22 @@ Pane {
                             }
                             TextField {
                                 id: "impersonation"
+                                objectName: "impersonationInput"
+                                Accessible.name: qsTr("Browser Impersonation Target")
+                                Accessible.description: AppStrings.impersonationHelp
                                 placeholderText: "e.g., 'chrome', 'safari', 'edge'"
                                 Layout.fillWidth: true
                                 text: appSettings.impersonation
-                                onEditingFinished: appSettings.impersonation = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^[a-zA-Z0-9_\-]*$/
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.impersonation = text
+                                    else
+                                        text = appSettings.impersonation
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -785,10 +923,22 @@ Pane {
                             }
                             TextField {
                                 id: "customJA3"
+                                objectName: "customJA3Input"
+                                Accessible.name: qsTr("Custom JA3 String")
+                                Accessible.description: AppStrings.customJA3Help
                                 placeholderText: "Custom JA3 String"
                                 Layout.fillWidth: true
                                 text: appSettings.custom_ja3
-                                onEditingFinished: appSettings.custom_ja3 = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^[0-9,\-]*$/
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.custom_ja3 = text
+                                    else
+                                        text = appSettings.custom_ja3
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -796,10 +946,22 @@ Pane {
                             }
                             TextField {
                                 id: "interface"
+                                objectName: "interfaceInput"
+                                Accessible.name: qsTr("Network Interface or IP")
+                                Accessible.description: AppStrings.interfaceHelp
                                 placeholderText: "e.g., eth0, wlan0, tun0, 10.6.3.20"
                                 Layout.fillWidth: true
                                 text: appSettings.interface
-                                onEditingFinished: appSettings.interface = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^[^\s]*$/
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.interface = text
+                                    else
+                                        text = appSettings.interface
+                                }
                             }
                         }
                     }
@@ -824,6 +986,9 @@ Pane {
                                 helpText: AppStrings.anonymousModeHelp
                             }
                             CheckBox {
+                                objectName: "anonymousModeCheckBox"
+                                Accessible.name: qsTr("Anonymous Mode")
+                                Accessible.description: AppStrings.anonymousModeHelp
                                 text: "Anonymous Mode"
                                 Layout.fillWidth: true
                                 checked: appSettings.anonymous_mode
@@ -834,6 +999,9 @@ Pane {
                                 helpText: AppStrings.encryptedCHHelp
                             }
                             CheckBox {
+                                objectName: "encryptedCHCheckBox"
+                                Accessible.name: qsTr("Encrypted Client Hello")
+                                Accessible.description: AppStrings.encryptedCHHelp
                                 text: "Encrypted Client Hello"
                                 Layout.fillWidth: true
                                 checked: appSettings.encrypted_ch
@@ -844,6 +1012,9 @@ Pane {
                                 helpText: AppStrings.dnsOverHTTPSHelp
                             }
                             CheckBox {
+                                objectName: "dnsOverHTTPSCheckBox"
+                                Accessible.name: qsTr("DNS over HTTPS")
+                                Accessible.description: AppStrings.dnsOverHTTPSHelp
                                 text: "DNS over HTTPS"
                                 Layout.fillWidth: true
                                 checked: appSettings.dns_over_https
@@ -855,6 +1026,9 @@ Pane {
                                 helpText: AppStrings.torIntegrationHelp
                             }
                             CheckBox {
+                                objectName: "enableTorCheckBox"
+                                Accessible.name: qsTr("Enable Tor Integration")
+                                Accessible.description: AppStrings.torIntegrationHelp
                                 text: "Enable Tor Integration"
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_tor
@@ -866,6 +1040,9 @@ Pane {
                                 helpText: AppStrings.onionRoutingHelp
                             }
                             CheckBox {
+                                objectName: "enableTorServerRoutingCheckBox"
+                                Accessible.name: qsTr("Route License / Update checking through .onion domain")
+                                Accessible.description: AppStrings.onionRoutingHelp
                                 text: "Route License / Update checking through .onion domain"
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_tor_server_routing
@@ -878,10 +1055,22 @@ Pane {
                             }
                             TextField {
                                 id: "dnsPrimaryInput"
+                                objectName: "dnsPrimaryInput"
+                                Accessible.name: qsTr("Primary DNS over HTTPS Server")
+                                Accessible.description: AppStrings.dnsPrimaryHelp
                                 placeholderText: "Enter Primary DNS (Must support DNS over HTTPS)"
                                 Layout.fillWidth: true
                                 text: appSettings.dns_server
-                                onEditingFinished: appSettings.dns_server = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^(https?:\/\/\S+|(\d{1,3}\.){3}\d{1,3}(:\d+)?|[a-zA-Z0-9.\-_]+|\[[0-9a-fA-F:]+\](:\d+)?)$/
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.dns_server = text
+                                    else
+                                        text = appSettings.dns_server
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -889,16 +1078,31 @@ Pane {
                             }
                             TextField {
                                 id: "dnsFallbackInput"
+                                objectName: "dnsFallbackInput"
+                                Accessible.name: qsTr("Fallback DNS over HTTPS Server")
+                                Accessible.description: AppStrings.fallbackDNSHelp
                                 placeholderText: "Enter Fallback DNS (Must support DNS over HTTPS)"
                                 Layout.fillWidth: true
                                 text: appSettings.fallback_dns
-                                onEditingFinished: appSettings.fallback_dns = text
+                                validator: RegularExpressionValidator {
+                                    regularExpression: /^(https?:\/\/\S+|(\d{1,3}\.){3}\d{1,3}(:\d+)?|[a-zA-Z0-9.\-_]+|\[[0-9a-fA-F:]+\](:\d+)?)$/
+                                }
+                                color: acceptableInput ? (window.materialStyle ? Material.foreground : palette.text) : "#ef4444"
+                                onEditingFinished: {
+                                    if (acceptableInput)
+                                        appSettings.fallback_dns = text
+                                    else
+                                        text = appSettings.fallback_dns
+                                }
                             }
                             HelpButton {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.sniObfuscationHelp
                             }
                             CheckBox {
+                                    objectName: "sniObfuscationCheckBox"
+                                    Accessible.name: qsTr("SNI Obfuscation")
+                                    Accessible.description: AppStrings.sniObfuscationHelp
                                     text: "SNI Obfuscation"
                                     Layout.fillWidth: true
                                     checked: appSettings.sni_obfuscation
@@ -917,6 +1121,8 @@ Pane {
                                 }
 
                                 RadioButton {
+                                    objectName: "sniLiteRadio"
+                                    Accessible.name: qsTr("Lite SNI Obfuscation")
                                     text: "Lite SNI Obfuscation"
                                     Layout.fillWidth: false
                                     enabled: appSettings.sni_obfuscation
@@ -925,6 +1131,8 @@ Pane {
                                     onClicked: appSettings.set_sni_obfuscation_mode("lite")
                                 }
                                 RadioButton {
+                                    objectName: "sniStrictRadio"
+                                    Accessible.name: qsTr("Strict SNI Obfuscation")
                                     text: "Strict SNI Obfuscation (Requires Admin / root rights)"
                                     Layout.fillWidth: false
                                     enabled: appSettings.sni_obfuscation
@@ -934,6 +1142,8 @@ Pane {
                                 }
                                 ComboBox {
                                     id: strictProfileCombo
+                                    objectName: "strictProfileCombo"
+                                    Accessible.name: qsTr("Strict SNI Obfuscation Profile")
                                     Layout.fillWidth: true
                                     visible: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
                                     enabled: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
@@ -949,6 +1159,8 @@ Pane {
                                 helpText: AppStrings.proxySetupHelp
                             }
                             Button {
+                                Accessible.name: qsTr("Proxy Configuration")
+                                Accessible.description: AppStrings.proxySetupHelp
                                 Layout.fillWidth: true
                                 text: appSettings.proxy.length > 0
                                       ? qsTr("Configure or test proxy…")
@@ -981,6 +1193,9 @@ Pane {
                                 text: "Graphical User Interface language:"
                             }
                             ComboBox {
+                                objectName: "guiLanguageComboBox"
+                                Accessible.name: qsTr("Graphical User Interface Language")
+                                Accessible.description: AppStrings.guiLanguageHelp
                                 Layout.fillWidth: true
                                 model: ["System", "English", "German", "Chinese", "French"]
                                 currentIndex: appSettings.language
@@ -994,6 +1209,9 @@ Pane {
                                 text: "Font Size:"
                             }
                             SpinBox {
+                                objectName: "fontSizeSpinBox"
+                                Accessible.name: qsTr("Font Size")
+                                Accessible.description: AppStrings.fontSizeHelp
                                 Layout.fillWidth: true
                                 from: 5
                                 to: 72
@@ -1003,6 +1221,9 @@ Pane {
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.appStyleHelp }
                             Label { text: "Application Style (Requires Restart):" }
                             ComboBox {
+                                objectName: "coreStyleComboBox"
+                                Accessible.name: qsTr("Application Style")
+                                Accessible.description: AppStrings.appStyleHelp
                                 Layout.fillWidth: true
                                 model: ["Material", "Fusion", "Universal", "Windows"]
                                 currentIndex: Math.max(0, find(appSettings.core_style))
@@ -1013,6 +1234,9 @@ Pane {
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.darkModeHelp }
                             Label { text: "Dark Mode:" }
                             Switch {
+                                objectName: "darkModeSwitch"
+                                Accessible.name: qsTr("Dark Mode")
+                                Accessible.description: AppStrings.darkModeHelp
                                 Layout.fillWidth: true
                                 checked: appSettings.dark_mode
                                 onToggled: appSettings.dark_mode = checked
@@ -1022,6 +1246,9 @@ Pane {
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.accentColorHelp }
                             Label { text: "Accent Color:" }
                             ComboBox {
+                                objectName: "accentColorComboBox"
+                                Accessible.name: qsTr("Application Accent Color")
+                                Accessible.description: AppStrings.accentColorHelp
                                 Layout.fillWidth: true
                                 textRole: "text"
                                 valueRole: "value"
@@ -1065,6 +1292,7 @@ Pane {
                 spacing: 10
 
                 Button {
+                    Accessible.name: qsTr("Buy License (19.99€)")
                     Layout.fillWidth: true
                     // Material styling overrides for specific buttons to make them stand out
                     Material.background: "#6366f1" // Premium Indigo color
@@ -1078,6 +1306,7 @@ Pane {
 
                 }
                 Button {
+                    Accessible.name: qsTr("Import License File")
                     Layout.fillWidth: true
                     text: "Import License File"
                     // No custom colors here, defaults to normal Material dark button
@@ -1101,6 +1330,9 @@ Pane {
                 spacing: 10
 
                 Button {
+                    objectName: "resetSettingsButton"
+                    Accessible.name: qsTr("Reset Porn Fetch to default settings")
+                    Accessible.description: qsTr("Restores all application settings to their default values")
                     Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"
@@ -1108,6 +1340,7 @@ Pane {
                     onClicked: {backend.reset_pornfetch()}
                 }
                 Button {
+                    Accessible.name: qsTr("Clear Temporary Files")
                     Layout.fillWidth: true
                     text: "Clear Temporary Files"
                     onClicked: {backend.clear_temporary_files()}
@@ -1125,6 +1358,7 @@ Pane {
                 }
 
                 Button {
+                    Accessible.name: qsTr("Install Porn Fetch")
                     Layout.fillWidth: true
                     Material.background: "#10b981" // Success Green color
                     Material.foreground: "white"
@@ -1137,6 +1371,7 @@ Pane {
                 }
 
                 Button {
+                    Accessible.name: qsTr("Uninstall Porn Fetch")
                     Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"

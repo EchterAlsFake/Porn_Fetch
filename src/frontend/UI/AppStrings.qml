@@ -83,19 +83,6 @@ QtObject {
         qsTr("This will basically skip all errors, you will not be notified about anything and if nothing works you will not know why.
         Why did I make this setting? I absolutely don't remember. I think it was from a GitHub issue where someone requested it lol")
 
-    readonly property string enableLoggingHelp:
-        qsTr("
-Please read extensively before enabling this!
-
-The integrated logging will log all of your errors to my offshore server in Sweden. I have configured this so that most sensitive
-data should be stripped.
-
-If that happens I will instantly delete your data.
-
-For Proof:
-The Server is fully Open-Source. See: https://github.com/EchterAlsFake/Server
-")
-
     readonly property string trustEnvironmentHelp:
         qsTr("
 If you enable ths, Porn Fetch will trust your local Proxy options and other advanced configuration

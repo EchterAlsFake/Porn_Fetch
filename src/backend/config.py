@@ -48,6 +48,7 @@ class SettingsManager(QObject):
 
     # Missing Signals
     networkLoggingChanged = Signal(bool)
+    errorReportingDecisionChanged = Signal(bool)
 
     # These Signals are not needed yet, but who knows
     logLevelChanged = Signal(int)
@@ -96,9 +97,10 @@ class SettingsManager(QObject):
     proxyChanged = Signal(str)
     proxySSLVerificationChanged = Signal(bool)
 
-    def __init__(self):
+    def __init__(self, settings: QSettings | None = None):
         super().__init__()
-        self._settings = QSettings(__org_name__, __app_name__)
+        self._custom_settings = settings
+        self._settings = settings if settings is not None else QSettings(__org_name__, __app_name__)
         self._normalize_sni_obfuscation_mode()
         # Runtime-only URL owned by SNIProxyManager; never persist ephemeral ports.
         self.active_sni_proxy_url: str | None = None
@@ -132,14 +134,23 @@ class SettingsManager(QObject):
             4: "french"
         }
 
+    def set_settings_storage(self, settings: QSettings) -> None:
+        self._custom_settings = settings
+        self._settings = settings
+        self._normalize_sni_obfuscation_mode()
+
     def refresh(self):
-        self._settings = QSettings(__org_name__, __app_name__)
+        if self._custom_settings is not None:
+            self._settings = self._custom_settings
+        else:
+            self._settings = QSettings(__org_name__, __app_name__)
 
     def sync(self):
         self._settings.sync()
 
     def reset(self):
         self._settings.clear() # Resets settings back to default
+        self._settings.sync()
 
     def get_bool(self, key: str, default: bool = False) -> bool:
         val = self._settings.value(key, defaultValue=default)
@@ -563,13 +574,37 @@ class SettingsManager(QObject):
 
     @Property(bool, notify=networkLoggingChanged)
     def enable_logging(self) -> bool:
-        return self.get_bool("Misc/network_logging", False)
+        return self.error_reporting_decided and self.get_bool("Misc/network_logging", False)
 
     @enable_logging.setter
     def enable_logging(self, val):
-        if val != self.enable_logging:
-            self._settings.setValue("Misc/network_logging", val)
-            self.networkLoggingChanged.emit(val)
+        enabled = bool(val)
+        decision_changed = not self.error_reporting_decided
+        logging_changed = enabled != self.enable_logging
+        self._settings.setValue("Misc/error_reporting_decided", True)
+        self._settings.setValue("Misc/network_logging", enabled)
+        self._settings.sync()
+        if decision_changed:
+            self.errorReportingDecisionChanged.emit(True)
+        if logging_changed:
+            self.networkLoggingChanged.emit(enabled)
+
+    @Property(bool, notify=errorReportingDecisionChanged)
+    def error_reporting_decided(self) -> bool:
+        return self.get_bool("Misc/error_reporting_decided", False)
+
+    @Slot(bool)
+    def set_error_reporting_consent(self, enabled: bool) -> None:
+        """Persist an explicit first-run choice and the resulting setting atomically."""
+        old_decided = self.error_reporting_decided
+        old_enabled = self.enable_logging
+        self._settings.setValue("Misc/error_reporting_decided", True)
+        self._settings.setValue("Misc/network_logging", bool(enabled))
+        self._settings.sync()
+        if not old_decided:
+            self.errorReportingDecisionChanged.emit(True)
+        if old_enabled != bool(enabled):
+            self.networkLoggingChanged.emit(bool(enabled))
 
     @Property(bool, notify=trustEnvironmentChanged)
     def trust_environment(self) -> bool:
@@ -812,6 +847,7 @@ class SettingsManager(QObject):
             return
         self._settings.setValue("Privacy/proxy", proxy_url)
         self._settings.setValue("Privacy/proxy_ssl_verification", verify_ssl)
+        self._settings.sync()
         if proxy_changed:
             # SNIProxyManager receives this before reloadClients and rebuilds its
             # upstream chain so the new local URL is ready for fresh sessions.
@@ -861,6 +897,7 @@ class SettingsManager(QObject):
         if val != self.core_style:
             self._settings.setValue("UI/core_style", val)
             self.coreStyleChanged.emit(val)
+            self.restartRequired.emit()
 
     @Property(bool, notify=darkModeChanged)
     def dark_mode(self) -> bool:

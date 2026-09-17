@@ -12,12 +12,13 @@ logger = configure_app_logging(logger_name="Helper Functions")
 
 
 def make_debug_log(e: Exception, video_url: str, user_message: str, function: str) -> str:
+    rendered_traceback = "".join(traceback.TracebackException.from_exception(e).format(chain=True))
     return f"""
     {user_message}
 
     Debug for GitHub
     --{type(e).__name__}: [{function}] -> {video_url}
-    DEBUG: {traceback.format_exc()}
+    DEBUG: {rendered_traceback}
     System: {sys.platform}
     """
 

@@ -251,6 +251,15 @@ This index covers every project `.py` file currently present (including generate
 - **`AppDownloadFailed`** — Application-level normalized download failure.
 - **`safe_api_call()`** — Awaits a provider call and translates provider/library exceptions into the application’s normalized error types.
 
+### `src/backend/error_reporting.py`
+
+- **`safe_url()`** — Preserves a reproducible URL scheme, host, and path while removing credentials, queries, and fragments.
+- **`redact_log_text()`** — Removes authorization data, cookies, named secrets, emails, IP addresses, user-home names, and control characters.
+- **`build_error_report()`** — Formats bounded diagnostic context, correlation metadata, and an exception traceback for the public relay.
+- **`report_public_error()`** — Delivers one redacted report asynchronously without allowing telemetry failures to affect application behavior.
+- **`report_exception()`** — Shared opt-in GUI/CLI exception-reporting entry point.
+- **`ERROR_REPORT_DISCLOSURE` / `ERROR_REPORT_EXAMPLE`** — Shared first-run explanation and synthetic report preview used by GUI and CLI consent flows.
+
 ### `src/backend/handle_ssl.py`
 
 - **`build_ssl_context()`** — Builds a hardened TLS client context using system trust where possible and safe certificate defaults otherwise.
