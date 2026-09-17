@@ -95,7 +95,7 @@ from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreAppl
 update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
-from src.backend.license_bridge import LicenseBridge
+from src.backend.license_bridge import LicenseBridge, load_production_config
 from src.cli.licensing import create_license_service
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
@@ -1534,6 +1534,7 @@ def main() -> None:
     license_service = create_license_service(
         clients.config,
         Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)),
+        production_config=load_production_config(),
     )
     bridge_instance = LicenseBridge(license_service) # License bridge connects QML code to Python
     backend_instance.set_license_bridge(bridge_instance)

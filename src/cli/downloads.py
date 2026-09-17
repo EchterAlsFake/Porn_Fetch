@@ -19,7 +19,12 @@ ProgressCallback = Callable[..., None]
 KNOWN_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
 
 
-def _dispatch_progress(cb: Callable[..., None] | None, position: int, total: int) -> None:
+def _dispatch_progress(
+    cb: Callable[..., None] | None,
+    position: int,
+    total: int,
+    unit: str = "items",
+) -> None:
     if not cb:
         return
     try:
@@ -27,7 +32,9 @@ def _dispatch_progress(cb: Callable[..., None] | None, position: int, total: int
         params = len(sig.parameters)
     except (ValueError, TypeError):
         params = 1
-    if params >= 2:
+    if params >= 3:
+        cb(position, total, unit)
+    elif params >= 2:
         cb(position, total)
     else:
         cb(progress_percentage(position, total))
@@ -95,14 +102,17 @@ async def download_video(
 
     event = stop_event or asyncio.Event()
     loop = asyncio.get_running_loop()
-
-    def callback(position: int, total: int) -> None:
-        if progress:
-            loop.call_soon_threadsafe(_dispatch_progress, progress, position, total)
-
     raw = module in {"eporner_api", "porntrex_api", "xfreehd_api"}
+
+    def make_callback(unit: str) -> Callable[[int, int], None]:
+        def callback(position: int, total: int) -> None:
+            if progress:
+                loop.call_soon_threadsafe(_dispatch_progress, progress, position, total, unit)
+
+        return callback
+
     raw_config = DownloadConfigRAW(
-        quality=configuration_quality, path=target, callback=callback, no_title=True,
+        quality=configuration_quality, path=target, callback=make_callback("bytes"), no_title=True,
         stop_event=event, max_workers=settings.download_workers,
         read_timeout=float(settings.timeout), max_retries=settings.request_attempts,
     )
@@ -114,7 +124,8 @@ async def download_video(
         (resume / "states").mkdir(parents=True, exist_ok=True)
         (resume / "segments").mkdir(parents=True, exist_ok=True)
         hls_config = DownloadConfigHLS(
-            quality=configuration_quality, path=target, callback=callback, callback_remux=callback,
+            quality=configuration_quality, path=target, callback=make_callback("segments"),
+            callback_remux=make_callback("segments"),
             no_title=True, stop_event=event, remux=_has_av(),
             segment_state_path=str(resume / "states" / key),
             segment_dir=str(resume / "segments" / key), return_report=True,

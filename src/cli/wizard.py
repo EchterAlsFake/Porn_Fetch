@@ -54,26 +54,48 @@ WIZARD_STYLE = questionary.Style([
 
 
 class SmartUnitsColumn(ProgressColumn):
-    """Render transfer units as MB if total > 50,000 bytes, otherwise as item/segment count."""
+    """Render download totals according to their explicit progress unit."""
 
     def render(self, task: Task) -> Text:
         if task.total is None:
             return Text("...", style="dim")
-        if task.total > 50_000:
+        unit = getattr(task, "fields", {}).get("unit")
+        if unit == "bytes" or (unit is None and task.total > 50_000):
             completed_mb = task.completed / (1024 * 1024)
             total_mb = task.total / (1024 * 1024)
             return Text(f"{completed_mb:.1f} / {total_mb:.1f} MB", style="cyan")
+        if unit == "segments":
+            return Text(f"{int(task.completed)} / {int(task.total)} segments", style="cyan")
         return Text(f"{int(task.completed)} / {int(task.total)} items", style="cyan")
 
 
+class DownloadSpeedColumn(ProgressColumn):
+    """Render byte rates for RAW downloads and segment rates for HLS downloads."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._transfer_speed = TransferSpeedColumn()
+
+    def render(self, task: Task) -> Text:
+        unit = getattr(task, "fields", {}).get("unit")
+        if unit in {None, "bytes"}:
+            return self._transfer_speed.render(task)
+
+        label = "segments" if unit == "segments" else "items"
+        speed = task.finished_speed or task.speed
+        if speed is None:
+            return Text(f"? {label}/sec", style="dim")
+        return Text(f"{speed:.1f} {label}/sec", style="green")
+
+
 def make_download_progress(console: Console) -> Progress:
-    """Build a rich progress bar with percentage, transfer speed, and ETA."""
+    """Build a rich progress bar with a unit-aware rate and ETA."""
     return Progress(
         TextColumn("[bold cyan]{task.description}[/]"),
         BarColumn(bar_width=None, complete_style="#ff2a85", finished_style="bold green"),
         TaskProgressColumn(),
         SmartUnitsColumn(),
-        TransferSpeedColumn(),
+        DownloadSpeedColumn(),
         TimeRemainingColumn(),
         console=console,
     )
@@ -281,8 +303,8 @@ async def handle_download_single(ctx: WizardContext) -> None:
     with make_download_progress(ctx.console) as progress:
         task_id = progress.add_task(f"Downloading {title[:35]}...", total=None)
 
-        def on_progress(completed: int, total: int) -> None:
-            progress.update(task_id, completed=completed, total=total if total > 0 else None)
+        def on_progress(completed: int, total: int, unit: str = "items") -> None:
+            progress.update(task_id, completed=completed, total=total if total > 0 else None, unit=unit)
 
         try:
             if media is None:
@@ -512,8 +534,8 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
             item_title = med.title if med else getattr(src, "title", "Album")
             current_task = progress.add_task(f"Downloading {item_title[:30]}...", total=None)
 
-            def on_item_progress(completed: int, total: int) -> None:
-                progress.update(current_task, completed=completed, total=total if total > 0 else None)
+            def on_item_progress(completed: int, total: int, unit: str = "items") -> None:
+                progress.update(current_task, completed=completed, total=total if total > 0 else None, unit=unit)
 
             try:
                 if med is None:
@@ -666,8 +688,8 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                     for pending_url in list(state["pending"]):
                         task_id = progress.add_task(f"Downloading {pending_url[:30]}...", total=None)
 
-                        def on_pending_progress(completed: int, total: int) -> None:
-                            progress.update(task_id, completed=completed, total=total if total > 0 else None)
+                        def on_pending_progress(completed: int, total: int, unit: str = "items") -> None:
+                            progress.update(task_id, completed=completed, total=total if total > 0 else None, unit=unit)
 
                         try:
                             route, source = await ctx.pool.resolve(pending_url)

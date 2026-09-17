@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -55,11 +56,19 @@ class LicenseService:
             await self.core.close()
 
 
-def create_license_service(runtime_config: Any, state_path: str | Path | None = None) -> LicenseService:
+def create_license_service(
+    runtime_config: Any,
+    state_path: str | Path | None = None,
+    *,
+    production_config: Mapping[str, str] | None = None,
+) -> LicenseService:
     from base_api import BaseCore
 
-    production_path = Path(__file__).resolve().parents[2] / "license_client" / "production.json"
-    production = json.loads(production_path.read_text(encoding="utf-8"))
+    if production_config is None:
+        production_path = Path(__file__).resolve().parents[2] / "license_client" / "production.json"
+        production = json.loads(production_path.read_text(encoding="utf-8"))
+    else:
+        production = dict(production_config)
     core = BaseCore(configuration=runtime_config)
     client = LicenseClient(
         state_path or shared_data_dir(), core=core,

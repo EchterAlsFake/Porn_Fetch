@@ -18,6 +18,7 @@ from src.cli.model_store import ModelStore
 from src.cli.providers import ContentKind, Route
 from src.cli.settings import CliSettings, SettingsStore
 from src.cli.wizard import (
+    DownloadSpeedColumn,
     SmartUnitsColumn,
     WizardContext,
     handle_account_auth,
@@ -91,13 +92,24 @@ class WizardRenderingTests(unittest.TestCase):
 
     def test_smart_units_column(self):
         col = SmartUnitsColumn()
-        task_bytes = type("Task", (), {"completed": 10 * 1024 * 1024, "total": 50 * 1024 * 1024})()
+        task_bytes = type("Task", (), {
+            "completed": 10 * 1024 * 1024, "total": 50 * 1024 * 1024, "fields": {"unit": "bytes"},
+        })()
         rendered_bytes = col.render(task_bytes)
         self.assertIn("MB", str(rendered_bytes))
 
-        task_items = type("Task", (), {"completed": 5, "total": 20})()
+        task_items = type("Task", (), {"completed": 5, "total": 20, "fields": {"unit": "items"}})()
         rendered_items = col.render(task_items)
         self.assertIn("5 / 20 items", str(rendered_items))
+
+        task_segments = type("Task", (), {"completed": 5, "total": 20, "fields": {"unit": "segments"}})()
+        rendered_segments = col.render(task_segments)
+        self.assertIn("5 / 20 segments", str(rendered_segments))
+
+    def test_download_speed_column_uses_segment_rate_for_hls(self):
+        column = DownloadSpeedColumn()
+        task = type("Task", (), {"fields": {"unit": "segments"}, "speed": 12.5, "finished_speed": None})()
+        self.assertIn("12.5 segments/sec", str(column.render(task)))
 
 
 class WizardFlowTests(unittest.IsolatedAsyncioTestCase):

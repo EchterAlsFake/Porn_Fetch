@@ -13,6 +13,9 @@
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>
     </qresource>
+    <qresource prefix="/licensing">
+        <file alias="production.json">../../license_client/production.json</file>
+    </qresource>
     <qresource prefix="/translations">
         <file>translations/qm/de_DE.qm</file>
         <file>translations/qm/zh_CN.qm</file>

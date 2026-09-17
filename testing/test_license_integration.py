@@ -5,7 +5,7 @@ import tempfile
 import time
 import unittest
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, QFile
 
 from license_client import LicenseError, LicenseStatus
 from src.backend.download_manager import DownloadListModel
@@ -106,6 +106,15 @@ class LicenseIntegrationTests(unittest.IsolatedAsyncioTestCase):
             {"public_key", "account_id", "product_id", "policy_id"},
         )
         self.assertFalse(any("token" in key or "private" in key for key in config))
+
+    def test_production_configuration_is_embedded_in_qt_resources(self) -> None:
+        import src.frontend.UI.resources  # noqa: F401
+
+        self.assertTrue(QFile.exists(":/licensing/production.json"))
+        self.assertEqual(
+            set(load_production_config()),
+            {"public_key", "account_id", "product_id", "policy_id"},
+        )
 
 
 if __name__ == "__main__":

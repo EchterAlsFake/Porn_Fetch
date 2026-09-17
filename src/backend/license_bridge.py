@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Property, QTimer, QUrl, Signal, Slot
+from PySide6.QtCore import QFile, QIODevice, QObject, Property, QTimer, QUrl, Signal, Slot
 
 from src.cli.licensing import LicenseService
 
@@ -15,10 +15,23 @@ MAX_LICENSE_BYTES = 32 * 1024
 
 
 def load_production_config() -> dict[str, str]:
-    path = Path(__file__).resolve().parents[2] / "license_client" / "production.json"
-    data = json.loads(path.read_text(encoding="utf-8"))
+    resource = QFile(":/licensing/production.json")
+    if resource.exists():
+        if not resource.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
+            raise OSError("Could not open the bundled license configuration")
+        try:
+            raw = bytes(resource.readAll()).decode("utf-8")
+        finally:
+            resource.close()
+    else:
+        path = Path(__file__).resolve().parents[2] / "license_client" / "production.json"
+        raw = path.read_text(encoding="utf-8")
+
+    data = json.loads(raw)
     allowed = {"public_key", "account_id", "product_id", "policy_id"}
-    if set(data) != allowed:
+    if not isinstance(data, dict) or set(data) != allowed or not all(
+        isinstance(value, str) and value for value in data.values()
+    ):
         raise ValueError("The bundled license configuration contains unexpected fields")
     return data
 

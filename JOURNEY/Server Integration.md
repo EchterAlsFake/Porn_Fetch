@@ -47,3 +47,18 @@ Porn Fetch can (v3.9+) connect to my server completely anonymous over the Darkne
 
 Is this Illegal?
 No!
+
+
+# Update 16th of September
+I am using a Privex VPS in Sweden as a reverse Proxy which is connected to my Acer Swift 3
+laptop over a wireguard tunnel. Your IP address is not logged on neither the VPS nor my Acer
+Swift 3, however, I need to process it temporarily under legal obligations regarding Tax and the
+German "Außenwirtschaftsgesetz" to prevent people from restricted countries to buy my product.
+
+Any information  saved such as your country is not identifiable. 
+For licensing enforcement I have self-hosted my own instance of Keygen.sh using the Community Edition.
+Keygen is configured with the most privacy respect possible. A random machine ID will be associated once you
+activate your license. 10 machines can use the license at the same time, meaning you can use it on 10
+devices at the same time and also share it with friends and family which is pretty fair I think.
+
+The licensing server is of course also Open-Source.

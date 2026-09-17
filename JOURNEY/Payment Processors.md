@@ -131,3 +131,12 @@ it absolutely is.
 
 Visa and Mastercard hold a monopoly and if we'd talk about Google / Apple here they
 would have long been sued by the government for this, but they aren't. 
+
+
+### Update: 16th of September 
+I will now use Patreon for payment processing. Technically they don't
+strictly disallow my specific product, so it should be fine, unless
+I am doing really stupid shit which I don't intend.
+
+So yeah you'll be able to pay with Crypto and Patreon and later on I'll
+try to get Pay by Bank working.

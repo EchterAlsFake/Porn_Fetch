@@ -125,25 +125,42 @@ class DownloadTests(unittest.IsolatedAsyncioTestCase):
 
             raw_type = type("RawVideo", (), {"__module__": "eporner_api.api"})
             raw = raw_type()
+            raw_progress = []
             async def raw_download(configuration, mode=None):
                 raw.configuration = configuration
                 raw.mode = mode
+                configuration.callback(1024, 2048)
                 return True
             raw.download = raw_download
-            result = await download_video(raw, Path(directory) / "raw.mp4", "best", settings, has_premium=False, available_qualities=[720, 1080])
+            result = await download_video(
+                raw, Path(directory) / "raw.mp4", "best", settings,
+                has_premium=False, available_qualities=[720, 1080],
+                progress=lambda completed, total, unit: raw_progress.append((completed, total, unit)),
+            )
+            await asyncio.sleep(0)
             self.assertEqual(result.status, "completed")
             self.assertEqual(str(raw.configuration.quality), "720")
             self.assertEqual(raw.mode, "h264")
+            self.assertIn((1024, 2048, "bytes"), raw_progress)
 
             hls_type = type("HlsVideo", (), {"__module__": "pornhub_api.api"})
             hls = hls_type()
+            hls_progress = []
             async def hls_download(configuration):
                 hls.configuration = configuration
+                configuration.callback(4, 10)
                 return type("Report", (), {"status": "missing", "missing": [2, 3]})()
             hls.download = hls_download
-            result = await download_video(hls, Path(directory) / "hls.mp4", 720, settings, has_premium=False, available_qualities=[720])
+            with patch("src.cli.downloads.data_dir", return_value=Path(directory) / "state"):
+                result = await download_video(
+                    hls, Path(directory) / "hls.mp4", 720, settings,
+                    has_premium=False, available_qualities=[720],
+                    progress=lambda completed, total, unit: hls_progress.append((completed, total, unit)),
+                )
+            await asyncio.sleep(0)
             self.assertEqual(result.status, "failed")
             self.assertEqual(result.missing_segments, (2, 3))
+            self.assertIn((4, 10, "segments"), hls_progress)
 
     async def test_gallery_names_and_progress(self):
         class Core:
