@@ -65,6 +65,11 @@ class CliSettings:
     error_reporting: bool = False
     error_reporting_decided: bool = False
     theme: str = "textual-dark"
+    # Database / PocketBase tracking
+    track_videos: bool = False
+    pocketbase_data_path: str = "./pocketbase_data"
+    pocketbase_binary: str = ""
+    legacy_database_path: str = "./downloads.db"
 
     def validate(self) -> None:
         positive = (
@@ -95,6 +100,8 @@ class CliSettings:
             raise ValueError("log level must be DEBUG, INFO, WARNING, ERROR or CRITICAL")
         if not self.output_path.strip():
             raise ValueError("output path cannot be blank")
+        if not self.pocketbase_data_path.strip():
+            raise ValueError("pocketbase data path cannot be blank")
 
     def overridden(self, **values: Any) -> "CliSettings":
         valid = {key: value for key, value in values.items() if value is not None}
@@ -274,6 +281,9 @@ def _migrate_ini(path: Path, defaults: CliSettings) -> CliSettings:
         ("Video", "result_limit"): ("result_limit", int),
         ("Video", "write_metadata"): ("write_metadata", parser.getboolean),
         ("Video", "skip_existing_files"): ("skip_existing", parser.getboolean),
+        ("Video", "track_videos"): ("track_videos", parser.getboolean),
+        ("Video", "pocketbase_data_path"): ("pocketbase_data_path", str),
+        ("Video", "database_path"): ("legacy_database_path", str),
         ("Performance", "network_delay"): ("request_delay", int),
         ("Performance", "download_workers"): ("download_workers", int),
         ("Performance", "timeout"): ("timeout", int),

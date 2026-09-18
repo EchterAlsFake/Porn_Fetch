@@ -14,16 +14,27 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from PySide6.QtCore import QObject, Signal, Slot
-
-from src.backend.config import app_settings
 from src.backend.media import VideoObject
-from src.backend.helper_functions import get_original_executable_path
+
+try:
+    from PySide6.QtCore import QObject, Signal, Slot
+    _HAS_PYSIDE = True
+except ImportError:  # Pragma: no cover
+    _HAS_PYSIDE = False
+    class QObject:  # type: ignore
+        def __init__(self, parent: Any = None): pass
+    def Signal(*args: Any, **kwargs: Any) -> Any:  # type: ignore
+        class _Signal:
+            def emit(self, *a: Any, **k: Any) -> None: pass
+            def connect(self, *a: Any, **k: Any) -> None: pass
+        return _Signal()
+    def Slot(*args: Any, **kwargs: Any) -> Any:  # type: ignore
+        return lambda fn: fn
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +103,23 @@ migrate((app) => {
     app.delete(app.findCollectionByNameOrId("origin_iterators"))
 })
 '''.lstrip()
+
+
+def _find_original_executable() -> Path | None:
+    """Returns the true executable path without pulling in GUI widgets."""
+    try:
+        import __compiled__
+        orig = getattr(__compiled__, "original_argv0", None)
+        if orig and Path(orig).exists():
+            return Path(orig).resolve()
+    except (ImportError, Exception):
+        pass
+    if appimage := os.environ.get("APPIMAGE"):
+        if Path(appimage).exists():
+            return Path(appimage).resolve()
+    if sys.argv and Path(sys.argv[0]).exists():
+        return Path(sys.argv[0]).resolve()
+    return None
 
 
 class PocketBaseError(RuntimeError):
@@ -203,22 +231,26 @@ class PocketBaseClient:
 class PocketBaseService:
     """Owns the bundled PocketBase child process and its authenticated client."""
 
-    def __init__(self, data_directory: str | Path):
+    def __init__(self, data_directory: str | Path, binary_path: str | Path | None = None):
         self.data_directory = Path(data_directory).expanduser().resolve()
+        self.binary_path = Path(binary_path).expanduser().resolve() if binary_path else None
         self.migrations_directory = self.data_directory / "_porn_fetch_migrations"
         self.process: subprocess.Popen[bytes] | None = None
         self.client: PocketBaseClient | None = None
 
-    @staticmethod
-    def find_binary() -> Path:
+    def find_binary(self, custom_path: str | Path | None = None) -> Path:
+        target_path = custom_path or self.binary_path
+        if target_path:
+            p = Path(target_path).expanduser()
+            if p.is_file() and (sys.platform == "win32" or os.access(p, os.X_OK)):
+                return p.resolve()
         name = "pocketbase.exe" if sys.platform == "win32" else "pocketbase"
         candidates: list[Path] = []
         if configured := os.environ.get("PORN_FETCH_POCKETBASE_BINARY"):
             candidates.append(Path(configured).expanduser())
-        try:
-            candidates.append(get_original_executable_path().parent / name)
-        except FileNotFoundError:
-            pass
+        orig = _find_original_executable()
+        if orig is not None:
+            candidates.append(orig.parent / name)
         project_root = Path(__file__).resolve().parents[2]
         candidates.extend([
             project_root / name,
@@ -339,18 +371,27 @@ class PocketBaseService:
             await asyncio.to_thread(process.wait)
 
 
-class DatabaseBridge(QObject):
-    """QML bridge for asynchronously persisted PocketBase tracking data."""
+class PocketBaseTracker:
+    """Pure-Python asynchronous tracker for PocketBase download records and statistics.
 
-    iteratorsChanged = Signal()
-    statisticsChanged = Signal()
-    downloadSaved = Signal(str)
-    initializationFailed = Signal(str)
+    Shared between the PySide6 GUI and Qt-free CLI frontends.
+    """
 
-    def __init__(self, parent: QObject | None = None):
-        super().__init__(parent)
-        self._enabled = bool(app_settings.track_videos)
-        self._service = PocketBaseService(app_settings.pocketbase_data_path) if self._enabled else None
+    def __init__(
+        self,
+        data_path: str | Path = "./pocketbase_data",
+        *,
+        enabled: bool = True,
+        binary_path: str | Path | None = None,
+        legacy_sqlite_path: str | Path | None = None,
+    ):
+        self.data_path = Path(data_path).expanduser().resolve()
+        self.enabled = bool(enabled)
+        self.binary_path = Path(binary_path).expanduser().resolve() if binary_path else None
+        self.legacy_sqlite_path = Path(legacy_sqlite_path).expanduser().resolve() if legacy_sqlite_path else None
+        self._service: PocketBaseService | None = (
+            PocketBaseService(self.data_path, binary_path=self.binary_path) if self.enabled else None
+        )
         self._client: PocketBaseClient | None = None
         self._startup_task: asyncio.Task[None] | None = None
         self._tasks: set[asyncio.Task[Any]] = set()
@@ -358,68 +399,123 @@ class DatabaseBridge(QObject):
         self._iterators: dict[str, dict[str, Any]] = {}
         self._videos: dict[str, dict[str, Any]] = {}
 
-    def start(self) -> None:
-        """Start PocketBase after the QtAsyncio event loop is running."""
-        if self._enabled:
-            self._schedule_startup()
+        # Callbacks for GUI / external listeners
+        self.on_download_saved: Callable[[str], None] | None = None
+        self.on_iterators_changed: Callable[[], None] | None = None
+        self.on_statistics_changed: Callable[[], None] | None = None
+        self.on_initialization_failed: Callable[[str], None] | None = None
 
-    def _schedule_startup(self) -> None:
+    @property
+    def is_running(self) -> bool:
+        return self._service is not None and self._service.process is not None and self._service.process.poll() is None
+
+    def schedule_startup(self) -> asyncio.Task[None]:
         if self._startup_task is None:
             self._startup_task = self._spawn(self._initialize(), "pocketbase-startup")
+        return self._startup_task
 
-    def _spawn(self, coroutine, name: str):
+    def _spawn(self, coroutine: Any, name: str) -> asyncio.Task[Any]:
         task = asyncio.create_task(coroutine, name=name)
         self._tasks.add(task)
         task.add_done_callback(self._tasks.discard)
         return task
+
+    async def start(self) -> PocketBaseClient | None:
+        if not self.enabled:
+            return None
+        return await self._ensure_client()
 
     async def _initialize(self) -> None:
         assert self._service is not None
         try:
             self._client = await self._service.start()
             await self._import_legacy_sqlite()
-            await self._refresh_cache()
+            await self.refresh_cache()
         except asyncio.CancelledError:
             raise
         except Exception as error:
-            logger.exception("Could not initialize PocketBase download tracking")
-            self.initializationFailed.emit(str(error))
+            logger.warning("Could not initialize PocketBase download tracking: %s", error)
+            self._initialization_error = str(error)
+            if self.on_initialization_failed:
+                self.on_initialization_failed(str(error))
 
     async def _ensure_client(self) -> PocketBaseClient:
         if self._client is not None:
             return self._client
-        self._schedule_startup()
+        self.schedule_startup()
         assert self._startup_task is not None
         await self._startup_task
         if self._client is None:
-            raise PocketBaseError("PocketBase could not be initialized")
+            err = getattr(self, "_initialization_error", None) or "PocketBase could not be initialized"
+            raise PocketBaseError(err)
         return self._client
 
-    @Slot(object)
-    def on_video_updated(self, video: VideoObject) -> None:
-        if self._enabled:
-            self._spawn(self._async_save_video(video), f"pocketbase-save-{video.identifier}")
+    def spawn_save_video(self, video: VideoObject) -> asyncio.Task[Any]:
+        return self._spawn(self.save_video(video), f"pocketbase-save-{video.identifier or video.video_id}")
 
-    async def _async_save_video(self, video: VideoObject) -> None:
-        try:
-            async with self._save_lock:
-                client = await self._ensure_client()
-                iterator_record = await self._upsert_iterator(client, video)
-                payload = self._video_payload(video, iterator_record)
-                existing = await client.find_by_url(VIDEO_COLLECTION, video.url)
-                if existing:
-                    record = await client.update_record(VIDEO_COLLECTION, existing["id"], payload)
-                else:
-                    record = await client.create_record(VIDEO_COLLECTION, payload)
-                self._videos[video.url] = record
-        except asyncio.CancelledError:
-            raise
-        except Exception:
-            logger.exception("Could not save video %s to PocketBase", video.url)
-            return
-        self.downloadSaved.emit(str(record.get("video_id", video.video_id)))
-        self.iteratorsChanged.emit()
-        self.statisticsChanged.emit()
+    async def save_video(self, video: VideoObject) -> dict[str, Any]:
+        async with self._save_lock:
+            client = await self._ensure_client()
+            iterator_record = await self._upsert_iterator(client, video)
+            payload = self.create_video_payload(video, iterator_record)
+            existing = await client.find_by_url(VIDEO_COLLECTION, video.url)
+            if existing:
+                record = await client.update_record(VIDEO_COLLECTION, existing["id"], payload)
+            else:
+                record = await client.create_record(VIDEO_COLLECTION, payload)
+            self._videos[video.url] = record
+
+        if self.on_download_saved:
+            self.on_download_saved(str(record.get("video_id", video.video_id)))
+        if self.on_iterators_changed:
+            self.on_iterators_changed()
+        if self.on_statistics_changed:
+            self.on_statistics_changed()
+        return record
+
+    async def record_download(
+        self,
+        url: str,
+        title: str = "",
+        *,
+        video_id: str = "",
+        author: str = "",
+        length: int | None = None,
+        thumbnail_url: str = "",
+        status: str = "completed",
+        output_path: str | Path | None = None,
+        selected_quality: str = "",
+        is_hls: bool = False,
+        missing_segments: list[int] | None = None,
+        origin_iterator_url: str = "",
+        origin_iterator_name: str = "",
+        tags: list[str] | None = None,
+        qualities: list[int] | None = None,
+        publish_date: datetime | str | None = None,
+        is_from_account: bool = False,
+    ) -> dict[str, Any]:
+        """Convenience method to save a download record from primitives."""
+        date_val = publish_date if isinstance(publish_date, datetime) else None
+        video = VideoObject(
+            url=url,
+            title=title,
+            author=author,
+            length=length,
+            tags=tags or [],
+            thumbnail_url=thumbnail_url,
+            video_id=video_id or title or url,
+            publish_date=date_val,
+            qualities=qualities or [],
+            status=status,
+            output_path=Path(output_path) if output_path else None,
+            selected_quality=selected_quality,
+            origin_iterator_url=origin_iterator_url or None,
+            origin_iterator_name=origin_iterator_name or None,
+            is_hls=is_hls,
+            missing_segments=missing_segments,
+            is_from_account=is_from_account,
+        )
+        return await self.save_video(video)
 
     async def _upsert_iterator(
         self, client: PocketBaseClient, video: VideoObject
@@ -442,13 +538,17 @@ class DatabaseBridge(QObject):
         return record
 
     @staticmethod
-    def _video_payload(
-        video: VideoObject, iterator_record: dict[str, Any] | None
+    def create_video_payload(
+        video: VideoObject, iterator_record: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         file_size_mb = 0.0
         if video.output_path:
             try:
-                file_size_mb = video.output_path.stat().st_size / (1024 * 1024)
+                p = Path(video.output_path)
+                if p.is_file():
+                    file_size_mb = p.stat().st_size / (1024 * 1024)
+                elif p.is_dir():
+                    file_size_mb = sum(f.stat().st_size for f in p.rglob("*") if f.is_file()) / (1024 * 1024)
             except OSError:
                 pass
         return {
@@ -465,7 +565,7 @@ class DatabaseBridge(QObject):
             "identifier": video.identifier or "",
             "output_path": str(video.output_path) if video.output_path else "",
             "selected_quality": str(video.selected_quality) if video.selected_quality is not None else "",
-            "file_size_mb": file_size_mb,
+            "file_size_mb": round(file_size_mb, 2),
             "downloaded_at": _format_date(datetime.now().astimezone()),
             "is_hls": bool(video.is_hls),
             "missing_segments": video.missing_segments or [],
@@ -474,7 +574,7 @@ class DatabaseBridge(QObject):
             "origin_iterator": iterator_record["id"] if iterator_record else "",
         }
 
-    async def _refresh_cache(self) -> None:
+    async def refresh_cache(self) -> None:
         client = await self._ensure_client()
         iterators, videos = await asyncio.gather(
             client.list_records(ORIGIN_COLLECTION, sort="name"),
@@ -482,37 +582,41 @@ class DatabaseBridge(QObject):
         )
         self._iterators = {record["url"]: record for record in iterators}
         self._videos = {record["url"]: record for record in videos}
-        self.iteratorsChanged.emit()
-        self.statisticsChanged.emit()
+        if self.on_iterators_changed:
+            self.on_iterators_changed()
+        if self.on_statistics_changed:
+            self.on_statistics_changed()
 
-    @Slot(result=list)
-    def getAvailableIterators(self) -> list[dict[str, Any]]:
+    def get_available_iterators(self) -> list[dict[str, Any]]:
         return [
             {"id": record.get("id", ""), "name": record.get("name", ""), "url": record["url"]}
             for record in sorted(self._iterators.values(), key=lambda item: item.get("name", ""))
         ]
 
-    @Slot(str, result=list)
-    def getFailedVideosForIterator(self, iterator_url: str) -> list[dict[str, Any]]:
+    def get_failed_videos(self, iterator_url: str | None = None) -> list[dict[str, Any]]:
         return [
-            {"title": video.get("title", ""), "url": video.get("url", ""),
-             "video_id": video.get("video_id", ""), "status": video.get("status", "")}
+            {
+                "title": video.get("title", ""),
+                "url": video.get("url", ""),
+                "video_id": video.get("video_id", ""),
+                "status": video.get("status", ""),
+                "origin_iterator_url": video.get("origin_iterator_url", ""),
+            }
             for video in self._videos.values()
-            if video.get("origin_iterator_url") == iterator_url
-            and self._status_bucket(video.get("status")) == "failed"
+            if (iterator_url is None or video.get("origin_iterator_url") == iterator_url)
+            and self.status_bucket(video.get("status")) == "failed"
         ]
 
     @staticmethod
-    def _status_bucket(status: str | None) -> str:
+    def status_bucket(status: str | None) -> str:
         normalized = (status or "").strip().lower()
         if normalized in {"complete", "completed", "downloaded", "finished", "success", "successful"}:
             return "successful"
-        if normalized in {"error", "failed", "failure"} or "fail" in normalized:
+        if normalized in {"error", "failed", "failure"} or "fail" in normalized or "error" in normalized:
             return "failed"
         return "other"
 
-    @Slot(result="QVariantMap")
-    def getDashboardStats(self) -> dict[str, Any]:
+    def get_dashboard_stats(self) -> dict[str, Any]:
         totals = {"successful": 0, "failed": 0, "other": 0}
         sources: dict[str, dict[str, Any]] = {}
         total_size = 0.0
@@ -522,7 +626,7 @@ class DatabaseBridge(QObject):
             for record in self._iterators.values()
         }
         for video in self._videos.values():
-            bucket = self._status_bucket(video.get("status"))
+            bucket = self.status_bucket(video.get("status"))
             totals[bucket] += 1
             total_size += float(video.get("file_size_mb") or 0)
             last_downloaded = max(last_downloaded, str(video.get("downloaded_at") or ""))
@@ -535,15 +639,19 @@ class DatabaseBridge(QObject):
         total = sum(totals.values())
         downloaded = totals["successful"] + totals["failed"]
         return {
-            "enabled": self._enabled, "total": total, **totals,
+            "enabled": self.enabled,
+            "total": total,
+            **totals,
             "successRate": round((totals["successful"] / downloaded) * 100) if downloaded else 0,
-            "totalSizeMb": round(total_size, 1), "lastDownloaded": last_downloaded,
+            "totalSizeMb": round(total_size, 1),
+            "lastDownloaded": last_downloaded,
             "sources": sorted(sources.values(), key=lambda source: source["total"], reverse=True),
         }
 
     async def _import_legacy_sqlite(self) -> None:
-        assert self._service is not None
-        legacy_path = Path(app_settings.legacy_database_path).expanduser().resolve()
+        if self._service is None or self.legacy_sqlite_path is None:
+            return
+        legacy_path = self.legacy_sqlite_path
         marker = self._service.data_directory / ".sqlite_import_complete"
         if marker.exists() or not legacy_path.is_file():
             return
@@ -579,6 +687,97 @@ class DatabaseBridge(QObject):
             await asyncio.gather(*tasks, return_exceptions=True)
         if self._service is not None:
             await self._service.stop()
+
+
+class DatabaseBridge(QObject):
+    """QML bridge for asynchronously persisted PocketBase tracking data."""
+
+    iteratorsChanged = Signal()
+    statisticsChanged = Signal()
+    downloadSaved = Signal(str)
+    initializationFailed = Signal(str)
+
+    def __init__(self, parent: QObject | None = None, tracker: PocketBaseTracker | None = None):
+        super().__init__(parent)
+        if tracker is not None:
+            self._tracker = tracker
+        else:
+            try:
+                from src.backend.config import app_settings
+                enabled = bool(app_settings.track_videos)
+                data_path = app_settings.pocketbase_data_path
+                legacy_path = app_settings.legacy_database_path
+            except ImportError:
+                enabled = False
+                data_path = "./pocketbase_data"
+                legacy_path = "./downloads.db"
+            self._tracker = PocketBaseTracker(
+                data_path=data_path,
+                enabled=enabled,
+                legacy_sqlite_path=legacy_path,
+            )
+
+        self._tracker.on_download_saved = self.downloadSaved.emit
+        self._tracker.on_iterators_changed = self.iteratorsChanged.emit
+        self._tracker.on_statistics_changed = self.statisticsChanged.emit
+        self._tracker.on_initialization_failed = self.initializationFailed.emit
+
+    @property
+    def tracker(self) -> PocketBaseTracker:
+        return self._tracker
+
+    @property
+    def _enabled(self) -> bool:
+        return self._tracker.enabled
+
+    @property
+    def _service(self) -> PocketBaseService | None:
+        return self._tracker._service
+
+    @property
+    def _client(self) -> PocketBaseClient | None:
+        return self._tracker._client
+
+    @property
+    def _iterators(self) -> dict[str, dict[str, Any]]:
+        return self._tracker._iterators
+
+    @property
+    def _videos(self) -> dict[str, dict[str, Any]]:
+        return self._tracker._videos
+
+    def start(self) -> None:
+        """Start PocketBase after the QtAsyncio event loop is running."""
+        if self._tracker.enabled:
+            self._tracker.schedule_startup()
+
+    @Slot(object)
+    def on_video_updated(self, video: VideoObject) -> None:
+        if self._tracker.enabled:
+            self._tracker.spawn_save_video(video)
+
+    @Slot(result=list)
+    def getAvailableIterators(self) -> list[dict[str, Any]]:
+        return self._tracker.get_available_iterators()
+
+    @Slot(str, result=list)
+    def getFailedVideosForIterator(self, iterator_url: str) -> list[dict[str, Any]]:
+        return self._tracker.get_failed_videos(iterator_url)
+
+    @staticmethod
+    def _status_bucket(status: str | None) -> str:
+        return PocketBaseTracker.status_bucket(status)
+
+    @staticmethod
+    def _video_payload(video: VideoObject, iterator_record: dict[str, Any] | None) -> dict[str, Any]:
+        return PocketBaseTracker.create_video_payload(video, iterator_record)
+
+    @Slot(result="QVariantMap")
+    def getDashboardStats(self) -> dict[str, Any]:
+        return self._tracker.get_dashboard_stats()
+
+    async def close(self) -> None:
+        await self._tracker.close()
 
 
 def _format_date(value: Any) -> str:
@@ -618,13 +817,18 @@ def _read_legacy_sqlite(path: Path) -> tuple[list[dict[str, Any]], list[dict[str
     videos = []
     for record in raw_videos:
         videos.append({
-            "url": record.get("url") or "", "title": record.get("title") or "",
-            "video_id": record.get("video_id") or "", "author": record.get("author") or "",
-            "length": record.get("length") or "", "thumbnail_url": record.get("thumbnail_url") or "",
-            "publish_date": record.get("publish_date") or "", "status": record.get("status") or "",
+            "url": record.get("url") or "",
+            "title": record.get("title") or "",
+            "video_id": record.get("video_id") or "",
+            "author": record.get("author") or "",
+            "length": record.get("length") or "",
+            "thumbnail_url": record.get("thumbnail_url") or "",
+            "publish_date": record.get("publish_date") or "",
+            "status": record.get("status") or "",
             "tags": _load_json(record.get("tags_json")),
             "qualities": _load_json(record.get("qualities_json")),
-            "identifier": record.get("identifier") or "", "output_path": record.get("output_path") or "",
+            "identifier": record.get("identifier") or "",
+            "output_path": record.get("output_path") or "",
             "selected_quality": record.get("selected_quality") or "",
             "file_size_mb": float(record.get("file_size_mb") or 0),
             "downloaded_at": record.get("downloaded_at") or "",

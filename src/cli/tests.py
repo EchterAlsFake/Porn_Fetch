@@ -18,6 +18,12 @@ from rich.text import Text
 
 from src.backend.media import VideoObject, select_allowed_quality
 from src.backend.metadata import write_tags
+from src.backend.database import (
+    PocketBaseError,
+    PocketBaseService,
+    PocketBaseTracker,
+    _read_legacy_sqlite,
+)
 from .downloads import (
     DownloadController,
     DownloadOutcome,
@@ -219,6 +225,105 @@ async def run_offline_tests() -> list[TestResult]:
         results.append(TestResult("Offline", "SettingsStore Persistence", "Atomic JSON load/save", True, "Persistence verified", time.perf_counter() - t0))
     except Exception as exc:
         results.append(TestResult("Offline", "SettingsStore Persistence", "Atomic JSON load/save", False, "", time.perf_counter() - t0, str(exc)))
+
+    # 6. PocketBase Status Bucketing
+    t0 = time.perf_counter()
+    try:
+        assert PocketBaseTracker.status_bucket("completed") == "successful"
+        assert PocketBaseTracker.status_bucket("SUCCESS") == "successful"
+        assert PocketBaseTracker.status_bucket("failed") == "failed"
+        assert PocketBaseTracker.status_bucket("Error: Network reset") == "failed"
+        assert PocketBaseTracker.status_bucket("paused") == "other"
+        assert PocketBaseTracker.status_bucket("cancelled") == "other"
+        assert PocketBaseTracker.status_bucket(None) == "other"
+        results.append(TestResult("Offline", "PocketBase Status Bucketing", "Status normalization", True, "All status categories bucketed", time.perf_counter() - t0))
+    except Exception as exc:
+        results.append(TestResult("Offline", "PocketBase Status Bucketing", "Status normalization", False, "", time.perf_counter() - t0, str(exc)))
+
+    # 7. PocketBase Video Payload Formatting
+    t0 = time.perf_counter()
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".mp4") as tmp_file:
+            tmp_file.write(b"0" * 1048576)  # 1 MB
+            tmp_file.flush()
+            test_vid = VideoObject(
+                url="https://www.example.com/video/999",
+                title="PocketBase Integration Video",
+                author="Test Producer",
+                length=15,
+                tags=["hd", "exclusive"],
+                thumbnail_url="https://www.example.com/thumb.jpg",
+                video_id="vid-999",
+                publish_date=datetime(2026, 1, 15, 12, 0, 0),
+                qualities=[720, 1080],
+                status="completed",
+                output_path=Path(tmp_file.name),
+                selected_quality="1080",
+                origin_iterator_url="https://www.example.com/model/producer",
+                origin_iterator_name="Test Producer Profile",
+                is_hls=True,
+                missing_segments=[3, 4],
+            )
+            payload = PocketBaseTracker.create_video_payload(test_vid, {"id": "orig-123"})
+            assert payload["url"] == "https://www.example.com/video/999"
+            assert payload["title"] == "PocketBase Integration Video"
+            assert payload["origin_iterator"] == "orig-123"
+            assert payload["is_hls"] is True
+            assert payload["missing_segments"] == [3, 4]
+            assert payload["file_size_mb"] == 1.0
+            assert "2026-01-15" in payload["publish_date"]
+        results.append(TestResult("Offline", "PocketBase Video Payload", "Payload mapping & file size", True, "Serialized payload verified", time.perf_counter() - t0))
+    except Exception as exc:
+        results.append(TestResult("Offline", "PocketBase Video Payload", "Payload mapping & file size", False, "", time.perf_counter() - t0, str(exc)))
+
+    # 8. PocketBase Dashboard Statistics Calculation
+    t0 = time.perf_counter()
+    try:
+        mock_tracker = PocketBaseTracker(enabled=False)
+        mock_tracker._iterators = {
+            "https://origin1.com": {"id": "orig_1", "name": "Model Alpha", "url": "https://origin1.com"},
+            "https://origin2.com": {"id": "orig_2", "name": "Studio Beta", "url": "https://origin2.com"},
+        }
+        mock_tracker._videos = {
+            "v1": {"url": "v1", "status": "completed", "file_size_mb": 500.0, "downloaded_at": "2026-09-01T10:00:00", "origin_iterator": "orig_1"},
+            "v2": {"url": "v2", "status": "finished", "file_size_mb": 600.0, "downloaded_at": "2026-09-02T10:00:00", "origin_iterator": "orig_1"},
+            "v3": {"url": "v3", "status": "failed", "file_size_mb": 0.0, "downloaded_at": "2026-09-03T10:00:00", "origin_iterator": "orig_1"},
+            "v4": {"url": "v4", "status": "completed", "file_size_mb": 400.0, "downloaded_at": "2026-09-04T10:00:00", "origin_iterator": "orig_2"},
+            "v5": {"url": "v5", "status": "paused", "file_size_mb": 50.0, "downloaded_at": "2026-09-05T10:00:00", "origin_iterator": ""},
+        }
+        stats = mock_tracker.get_dashboard_stats()
+        assert stats["total"] == 5
+        assert stats["successful"] == 3
+        assert stats["failed"] == 1
+        assert stats["other"] == 1
+        assert stats["successRate"] == 75  # 3 / (3 + 1) = 75%
+        assert stats["totalSizeMb"] == 1550.0
+        assert stats["lastDownloaded"] == "2026-09-05T10:00:00"
+        assert len(stats["sources"]) == 3  # Model Alpha, Studio Beta, Direct downloads
+        results.append(TestResult("Offline", "PocketBase Statistics Aggregation", "Metric calculation & groups", True, "Totals, rates, and sizes verified", time.perf_counter() - t0))
+    except Exception as exc:
+        results.append(TestResult("Offline", "PocketBase Statistics Aggregation", "Metric calculation & groups", False, "", time.perf_counter() - t0, str(exc)))
+
+    # 9. PocketBase Legacy SQLite Migration Parser
+    t0 = time.perf_counter()
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".db") as tmp_db:
+            import sqlite3
+            with sqlite3.connect(tmp_db.name) as conn:
+                conn.execute("CREATE TABLE originiterator (url TEXT PRIMARY KEY, name TEXT)")
+                conn.execute("CREATE TABLE videorecord (url TEXT PRIMARY KEY, title TEXT, video_id TEXT, author TEXT, length TEXT, thumbnail_url TEXT, publish_date TEXT, status TEXT, tags_json TEXT, qualities_json TEXT, identifier TEXT, output_path TEXT, selected_quality TEXT, file_size_mb REAL, downloaded_at TEXT, is_hls INTEGER, missing_segments TEXT, is_from_account INTEGER, origin_iterator_url TEXT)")
+                conn.execute("INSERT INTO originiterator VALUES ('https://origin.com/profile', 'Test Artist')")
+                conn.execute("INSERT INTO videorecord VALUES ('https://video.com/1', 'Legacy Video', '101', 'Test Artist', '10', '', '', 'completed', '[\"tag1\", \"tag2\"]', '[720, 1080]', 'id1', '/path/1.mp4', '1080', 250.5, '2026-01-01', 1, '[1]', 0, 'https://origin.com/profile')")
+                conn.commit()
+            origins, videos = _read_legacy_sqlite(Path(tmp_db.name))
+            assert len(origins) == 1 and origins[0]["name"] == "Test Artist"
+            assert len(videos) == 1 and videos[0]["title"] == "Legacy Video"
+            assert videos[0]["tags"] == ["tag1", "tag2"]
+            assert videos[0]["qualities"] == [720, 1080]
+            assert videos[0]["file_size_mb"] == 250.5
+        results.append(TestResult("Offline", "PocketBase Legacy SQLite Reader", "One-time schema extraction", True, "Origins and video records extracted", time.perf_counter() - t0))
+    except Exception as exc:
+        results.append(TestResult("Offline", "PocketBase Legacy SQLite Reader", "One-time schema extraction", False, "", time.perf_counter() - t0, str(exc)))
 
     return results
 

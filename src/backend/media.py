@@ -91,4 +91,5 @@ class VideoObject:
     origin_iterator_name: str | None = None
     is_hls: bool | None = None
     missing_segments: list[int] | None = None
+    is_from_account: bool = False
 

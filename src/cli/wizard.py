@@ -46,6 +46,15 @@ from .model_store import ModelStore
 from .output import output_path_for
 from .providers import ClientPool, ContentKind, Route, route_url, unwrap_scrape_result
 from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
+from .tracker import (
+    close_cli_tracker,
+    ensure_cli_tracker,
+    get_cli_tracker,
+    print_dashboard_stats,
+    print_failed_downloads,
+    print_origin_iterators,
+    record_cli_download,
+)
 
 
 # Custom prompt style matching the pink (#ff2a85) & cyan (#00e5ff) aesthetic of Porn Fetch QML
@@ -214,6 +223,10 @@ class WizardContext:
             pass
         try:
             await self.pool.close()
+        except Exception:
+            pass
+        try:
+            await close_cli_tracker()
         except Exception:
             pass
 
@@ -424,6 +437,16 @@ async def handle_download_single(ctx: WizardContext) -> None:
             ctx.console, "Download Incomplete",
             f"Status: {outcome.status}\nError ID: {report_id}",
         )
+
+    await record_cli_download(
+        ctx.settings,
+        video=media if media is not None else source,
+        outcome=outcome,
+        target=outcome.path,
+        quality=selected_quality,
+        origin_url=url,
+        origin_name=getattr(media, "author", "") or "Direct download",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -648,8 +671,25 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
                             pass
                 else:
                     failed_count += 1
+                await record_cli_download(
+                    ctx.settings,
+                    video=med if med is not None else src,
+                    outcome=outcome,
+                    target=target if med is not None else ctx.settings.output_path,
+                    quality=eff_q if med is not None else None,
+                    origin_url=url,
+                    origin_name=display_name,
+                )
             except Exception:
                 failed_count += 1
+                if med is not None:
+                    await record_cli_download(
+                        ctx.settings,
+                        video=med,
+                        outcome="failed",
+                        origin_url=url,
+                        origin_name=display_name,
+                    )
             finally:
                 progress.remove_task(current_task)
                 progress.advance(overall_task)
@@ -801,8 +841,25 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                                         pass
                             else:
                                 fail_count += 1
+                            await record_cli_download(
+                                ctx.settings,
+                                video=media,
+                                outcome=outcome,
+                                target=target,
+                                quality=eff_q,
+                                origin_url=model_url,
+                                origin_name=model_url,
+                            )
                         except Exception:
                             fail_count += 1
+                            if "media" in locals() and media is not None:
+                                await record_cli_download(
+                                    ctx.settings,
+                                    video=media,
+                                    outcome="failed",
+                                    origin_url=model_url,
+                                    origin_name=model_url,
+                                )
                         finally:
                             progress.remove_task(task_id)
                             progress.advance(overall_task)
@@ -1004,6 +1061,10 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     # Logging
     "log_level": ("Logging", "Logging verbosity (DEBUG, INFO, WARNING, ERROR)"),
     "debug": ("Logging", "Enable detailed diagnostic logs"),
+    # Database / Tracking
+    "track_videos": ("Database", "Enable PocketBase download tracking & statistics"),
+    "pocketbase_data_path": ("Database", "Directory for PocketBase database files"),
+    "pocketbase_binary": ("Database", "Custom PocketBase executable path (leave empty for auto-detect)"),
 }
 
 
@@ -1400,6 +1461,109 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
         elif outcome.status == "paused":
             ctx.console.print("[yellow]Paused and saved to resume list.[/]")
 
+        await record_cli_download(
+            ctx.settings,
+            video=media if "media" in locals() and media is not None else source,
+            outcome=outcome,
+            target=target_path,
+            quality=quality,
+            origin_url=url,
+            origin_name=title,
+        )
+
+
+# ---------------------------------------------------------------------------
+# Sub-Flow 8: Download Statistics & PocketBase Dashboard
+# ---------------------------------------------------------------------------
+
+async def handle_statistics_dashboard(ctx: WizardContext) -> None:
+    """Display PocketBase download statistics, history, and tracked origins."""
+    while True:
+        status_badge = "[bold green]Active[/]" if ctx.settings.track_videos else "[dim yellow]Disabled[/]"
+        action = await questionary.select(
+            f"PocketBase Statistics & History (Tracking: {status_badge}):",
+            choices=[
+                questionary.Choice("📊 View Overview Statistics & Source Breakdown", value="overview"),
+                questionary.Choice("⚠️  View Failed Downloads", value="failed"),
+                questionary.Choice("📁 View Tracked Sources / Collections", value="origins"),
+                questionary.Choice(
+                    f"{'🛑 Disable' if ctx.settings.track_videos else '✅ Enable'} Download Tracking",
+                    value="toggle",
+                ),
+                questionary.Choice("⚙️  Configure Database Paths", value="config"),
+                questionary.Choice("🔙 Back to Main Menu", value="back"),
+            ],
+            style=WIZARD_STYLE,
+        ).ask_async()
+
+        if not action or action == "back":
+            break
+
+        if action == "toggle":
+            new_state = not ctx.settings.track_videos
+            ctx.settings = ctx.settings.overridden(track_videos=new_state)
+            ctx.settings_store.save(ctx.settings)
+            ctx.console.print(
+                f"[bold green]Download tracking {'enabled' if new_state else 'disabled'}.[/]"
+            )
+            continue
+
+        if action == "config":
+            new_path = await questionary.text(
+                "PocketBase data directory path:",
+                default=ctx.settings.pocketbase_data_path,
+                style=WIZARD_STYLE,
+            ).ask_async()
+            if new_path and new_path.strip():
+                ctx.settings = ctx.settings.overridden(pocketbase_data_path=new_path.strip())
+                ctx.settings_store.save(ctx.settings)
+                print_success(ctx.console, "Configuration Saved", f"Data path set to: {new_path.strip()}")
+            continue
+
+        if not ctx.settings.track_videos:
+            ctx.console.print("[yellow]Tracking is currently disabled in settings.[/]")
+            ask_start = await questionary.confirm(
+                "Would you like to start PocketBase anyway to inspect existing stored data?",
+                default=True,
+                style=WIZARD_STYLE,
+            ).ask_async()
+            if not ask_start:
+                continue
+
+        with ctx.console.status("[bold cyan]Connecting to PocketBase service...[/]"):
+            try:
+                from src.backend.database import PocketBaseError, PocketBaseTracker
+                temp_tracker = PocketBaseTracker(
+                    data_path=ctx.settings.pocketbase_data_path,
+                    enabled=True,
+                    binary_path=ctx.settings.pocketbase_binary or None,
+                    legacy_sqlite_path=ctx.settings.legacy_database_path,
+                )
+                await temp_tracker.start()
+            except PocketBaseError as exc:
+                print_error(
+                    ctx.console,
+                    "PocketBase Unavailable",
+                    f"{exc}\n\nPlease ensure PocketBase binary is installed on PATH or set PORN_FETCH_POCKETBASE_BINARY.",
+                )
+                continue
+            except Exception as exc:
+                print_error(ctx.console, "Database Error", str(exc))
+                continue
+
+        try:
+            if action == "overview":
+                stats = temp_tracker.get_dashboard_stats()
+                print_dashboard_stats(stats, ctx.console)
+            elif action == "failed":
+                failed = temp_tracker.get_failed_videos()
+                print_failed_downloads(failed, ctx.console)
+            elif action == "origins":
+                iterators = temp_tracker.get_available_iterators()
+                print_origin_iterators(iterators, ctx.console)
+        finally:
+            await temp_tracker.close()
+
 
 async def run_wizard(args: argparse.Namespace | None = None) -> int:
     """Main interactive terminal loop using questionary and rich."""
@@ -1451,6 +1615,7 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
             main_choices.extend([
                 questionary.Choice("👤 Scrape Profile / Playlist (Fetch model or playlist content)", value="scrape"),
                 questionary.Choice("📋 Batch / Queue Management (Review tracked models or queued links)", value="batch"),
+                questionary.Choice("📊 Download Statistics & History (PocketBase dashboard & tracking)", value="stats"),
                 questionary.Choice("🔑 Account & Authentication (Login credentials, browser cookie import)", value="auth"),
                 questionary.Choice("⚙️  Settings & Configuration (Output path, naming templates, preferred quality)", value="settings"),
                 questionary.Choice("📜 License Management (Check status, import key/file, deactivate)", value="license"),
@@ -1476,6 +1641,8 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
                     await handle_scrape_profile(ctx)
                 elif action == "batch":
                     await handle_batch_management(ctx)
+                elif action == "stats":
+                    await handle_statistics_dashboard(ctx)
                 elif action == "auth":
                     await handle_account_auth(ctx)
                 elif action == "settings":

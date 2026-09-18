@@ -173,6 +173,7 @@ This index covers every project `.py` file currently present (including generate
 - **`model_store.py`** — Atomic tracked-profile state with ordered downloaded and pending URL lists.
 - **`accounts.py`** — Memory-only PornHub, XHamster, and XVideos login and account-collection workflows.
 - **`licensing.py`** — Shared schema-2 `license_client` service and platform application-data path.
+- **`tracker.py`** — Pure-Python PocketBase tracking, dashboard statistics calculation, and Rich summary rendering.
 
 ### `main.py`
 
@@ -217,14 +218,11 @@ This index covers every project `.py` file currently present (including generate
 
 ### `src/backend/database.py`
 
-- **`DatabaseBridge`** — QObject persistence/dashboard bridge that asynchronously saves added or updated `VideoObject` state and exposes iterator, failure, and aggregate statistics queries to QML.
-- **`ListField`** — Peewee text field that transparently converts Python lists to and from JSON.
-- **`BaseModel`** — Common Peewee model base bound to the module-level database proxy.
-- **`OriginIterator`** — Stores a unique source iterator URL and its display name for grouping tracked videos.
-- **`VideoRecord`** — Stores the latest tracked metadata, status, output details, and source association for a unique video URL.
-- **`initialize_database()`** — Opens/configures SQLite and creates tracking tables when video tracking is enabled; otherwise returns `None`.
-- **`get_available_iterators()`** — Returns all stored iterator names and URLs as dictionaries.
-- **`get_failed_videos_for_iterator()`** — Queries failed records belonging to one iterator directly in SQLite.
+- **`PocketBaseError`** — Raised when embedded PocketBase operations or HTTP requests fail.
+- **`PocketBaseClient`** — Async HTTP client for authenticated PocketBase superuser collection queries and mutations.
+- **`PocketBaseService`** — Spawns, monitors, and stops the local PocketBase child process with automatic schema migrations.
+- **`PocketBaseTracker`** — Pure-Python async tracker for download lifecycle records, legacy SQLite imports, and dashboard aggregate statistics.
+- **`DatabaseBridge`** — QObject persistence adapter exposing `PocketBaseTracker` state, signals, and dashboard statistics queries to QML.
 
 ### `src/backend/download_manager.py`
 

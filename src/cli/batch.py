@@ -14,12 +14,13 @@ from .model_store import ModelStore
 from .providers import ContentKind, ClientPool, PROVIDER_MODULES, route_url
 from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
 from .output import output_path_for
+from .tracker import close_cli_tracker, record_cli_download
 
 
 ACTION_DESTINATIONS = {
     "url", "model", "playlist", "add_model_to_database", "remove_model_from_database",
     "update_pending_urls", "update_models", "test_mode", "test_downloads", "resume",
-    "info", "quality", "output",
+    "info", "quality", "output", "stats",
 }
 
 
@@ -34,6 +35,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--test-mode", action="store_true", help="run comprehensive CLI self-test with every URL across all supported sites")
     parser.add_argument("--test-downloads", action="store_true", help="opt-in to live download, pause/resume, and PyAV metadata tagging tests during test mode")
     parser.add_argument("--resume", action="store_true", help="resume all paused downloads from previous sessions")
+    parser.add_argument("--stats", action="store_true", help="display PocketBase download statistics and exit")
+    parser.add_argument(
+        "--track-downloads", "--track-videos",
+        dest="track_videos",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="enable or disable PocketBase download tracking",
+    )
+    parser.add_argument("--pocketbase-data", dest="pocketbase_data", help="custom PocketBase data directory path")
+    parser.add_argument("--pocketbase-binary", dest="pocketbase_binary", help="custom PocketBase binary path")
     parser.add_argument("--filter", help="filter specific test names or URLs when running in test mode")
     parser.add_argument("--url", action="append", default=[], help="video or album URL (repeatable)")
     parser.add_argument("--model", "--profile", dest="model", action="append", default=[], help="profile URL (repeatable)")
@@ -71,6 +82,8 @@ def main(argv: list[str] | None = None) -> int:
             filter_pattern=getattr(args, "filter", None),
             include_downloads=getattr(args, "test_downloads", False),
         ))
+    if getattr(args, "stats", False):
+        return asyncio.run(run_stats(args))
 
     raw_args = sys.argv[1:] if argv is None else argv
     is_interactive = getattr(args, "interactive", False) or len(raw_args) == 0
@@ -80,6 +93,38 @@ def main(argv: list[str] | None = None) -> int:
         return asyncio.run(run_wizard(args))
 
     return asyncio.run(run_batch(args))
+
+
+async def run_stats(args: argparse.Namespace) -> int:
+    """Display PocketBase download statistics and exit."""
+    store = SettingsStore()
+    persisted = store.load()
+    overrides: dict[str, Any] = {}
+    if getattr(args, "pocketbase_data", None):
+        overrides["pocketbase_data_path"] = args.pocketbase_data
+    if getattr(args, "pocketbase_binary", None):
+        overrides["pocketbase_binary"] = args.pocketbase_binary
+    if overrides:
+        persisted = persisted.overridden(**overrides)
+
+    from src.backend.database import PocketBaseError, PocketBaseTracker
+    from .tracker import print_dashboard_stats
+    tracker = PocketBaseTracker(
+        data_path=persisted.pocketbase_data_path,
+        enabled=True,
+        binary_path=persisted.pocketbase_binary or None,
+        legacy_sqlite_path=persisted.legacy_database_path,
+    )
+    try:
+        await tracker.start()
+        stats = tracker.get_dashboard_stats()
+        print_dashboard_stats(stats)
+        return 0
+    except PocketBaseError as exc:
+        print(f"PocketBase error: {exc}", file=sys.stderr)
+        return 1
+    finally:
+        await tracker.close()
 
 
 def offline_self_test() -> int:
@@ -129,10 +174,17 @@ async def run_batch(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
 
-    settings = persisted.overridden(
-        quality=args.quality,
-        output_path=args.output,
-    )
+    overrides: dict[str, Any] = {
+        "quality": args.quality,
+        "output_path": args.output,
+    }
+    if getattr(args, "track_videos", None) is not None:
+        overrides["track_videos"] = args.track_videos
+    if getattr(args, "pocketbase_data", None):
+        overrides["pocketbase_data_path"] = args.pocketbase_data
+    if getattr(args, "pocketbase_binary", None):
+        overrides["pocketbase_binary"] = args.pocketbase_binary
+    settings = persisted.overridden(**{k: v for k, v in overrides.items() if v is not None})
     models = ModelStore()
     for url in args.add_model_to_database:
         models.add(url)
@@ -216,6 +268,7 @@ async def run_batch(args: argparse.Namespace) -> int:
     finally:
         await license_service.close()
         await pool.close()
+        await close_cli_tracker()
     return 1 if failures else 0
 
 
@@ -296,6 +349,13 @@ async def _download_url(
                     context={"source_url": url, "provider": route.provider},
                     enabled=settings.error_reporting,
                 )
+            await record_cli_download(
+                settings,
+                video=source,
+                outcome=result,
+                target=target_override or settings.output_path,
+                origin_url=url,
+            )
             return result.status == "completed"
         media = await prepare_video(source, route.provider)
         return await _download_prepared(
@@ -370,6 +430,14 @@ async def _download_prepared(
             )
             print(f"Metadata warning for {media.title}: {error} [error {report_id}]", file=sys.stderr)
     print(f"\n{result.status}: {media.title}")
+    await record_cli_download(
+        settings,
+        video=media,
+        outcome=result,
+        target=target,
+        quality=quality,
+        origin_url=getattr(media, "origin_iterator_url", None) or getattr(media, "url", None),
+    )
     if result.status not in {"completed", "cancelled", "paused"}:
         await report_exception(
             RuntimeError(f"Downloader returned status {result.status}"),
