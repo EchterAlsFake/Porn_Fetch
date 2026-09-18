@@ -51,19 +51,19 @@ HOST_PATTERNS = {
 PROFILE_SEGMENTS = {
     "pornhub": {"pornstar", "model", "users", "user", "channels", "channel"},
     "eporner": {"pornstar", "profile", "channel"},
-    "xnxx": {"profile", "user", "users"},
+    "xnxx": {"profile", "user", "users", "pornstar"},
     "xvideos": {"pornstar", "pornstars", "model", "profiles", "channels", "channel"},
     "xhamster": {"pornstars", "pornstar", "creators", "creator", "users", "channels", "channel"},
     "spankbang": {"pornstar", "profile", "creator", "channel"},
     "youporn": {"pornstar", "channel"},
-    "porntrex": {"model", "channel"},
+    "porntrex": {"model", "models", "channel", "channels"},
     "redtube": {"pornstar", "channel", "amateur", "users", "user"},
     "thumbzilla": {"pornstar", "channel", "amateur"},
     "tube8": {"pornstar", "channel", "amateur", "user", "users"},
 }
 
 COLLECTION_SEGMENTS = {
-    "pornhub": {"playlist"}, "xvideos": {"playlist"},
+    "pornhub": {"playlist"}, "xvideos": {"playlist", "favorite"},
     "youporn": {"collections", "collection"}, "redtube": {"playlist"},
     "thumbzilla": {"playlist"},
 }
@@ -83,7 +83,10 @@ def route_url(url: str) -> Route:
     segments = {segment for segment in parsed.path.casefold().split("/") if segment}
     if provider == "xfreehd" and "album" in segments:
         kind = ContentKind.GALLERY
-    elif segments & COLLECTION_SEGMENTS.get(provider, set()):
+    elif (
+        segments & COLLECTION_SEGMENTS.get(provider, set())
+        or any(s.startswith("playlist") for s in segments)
+    ):
         kind = ContentKind.COLLECTION
     elif segments & PROFILE_SEGMENTS.get(provider, set()):
         kind = ContentKind.PROFILE
@@ -190,9 +193,9 @@ async def _get_video(client: Any, route: Route) -> Any:
     path = urlparse(route.url).path.casefold()
     configuration = getattr(getattr(client, "core", None), "configuration", None)
     load_api = not getattr(configuration, "strict_language", False)
-    if route.provider == "pornhub" and "/short/" in path:
+    if route.provider == "pornhub" and ("/short/" in path or "/shorties/" in path):
         return await _await_if_needed(client.get_short(route.url, load_html=True))
-    if route.provider == "xhamster" and "/moments/" in path:
+    if route.provider == "xhamster" and ("/moments/" in path or "/shorts/" in path):
         return await _await_if_needed(client.get_short(route.url, load_html=True))
     if route.provider == "eporner":
         return await _await_if_needed(client.get_video(

@@ -7,7 +7,7 @@ import sys
 
 from src.backend.media import select_allowed_quality
 from src.backend.error_reporting import report_exception
-from .downloads import download_gallery, download_video
+from .downloads import DownloadController, DownloadOutcome, PausedStore, download_gallery, download_video
 from .licensing import create_license_service
 from .media import prepare_video
 from .model_store import ModelStore
@@ -18,7 +18,8 @@ from .output import output_path_for
 
 ACTION_DESTINATIONS = {
     "url", "model", "playlist", "add_model_to_database", "remove_model_from_database",
-    "update_pending_urls", "update_models", "test_mode", "info", "quality", "output",
+    "update_pending_urls", "update_models", "test_mode", "test_downloads", "resume",
+    "info", "quality", "output",
 }
 
 
@@ -30,7 +31,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch", action="store_true", help="force headless compatibility mode")
     parser.add_argument("--interactive", "-i", action="store_true", help="launch interactive terminal wizard")
     parser.add_argument("--info", action="store_true", help="show CLI usage and supported content types")
-    parser.add_argument("--test-mode", action="store_true", help="run deterministic offline self-test")
+    parser.add_argument("--test-mode", action="store_true", help="run comprehensive CLI self-test with every URL across all supported sites")
+    parser.add_argument("--test-downloads", action="store_true", help="opt-in to live download, pause/resume, and PyAV metadata tagging tests during test mode")
+    parser.add_argument("--resume", action="store_true", help="resume all paused downloads from previous sessions")
+    parser.add_argument("--filter", help="filter specific test names or URLs when running in test mode")
     parser.add_argument("--url", action="append", default=[], help="video or album URL (repeatable)")
     parser.add_argument("--model", "--profile", dest="model", action="append", default=[], help="profile URL (repeatable)")
     parser.add_argument("--playlist", "--collection", dest="playlist", action="append", default=[], help="collection URL (repeatable)")
@@ -62,7 +66,11 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     if args.test_mode:
-        return offline_self_test()
+        from .tests import run_cli_self_test
+        return asyncio.run(run_cli_self_test(
+            filter_pattern=getattr(args, "filter", None),
+            include_downloads=getattr(args, "test_downloads", False),
+        ))
 
     raw_args = sys.argv[1:] if argv is None else argv
     is_interactive = getattr(args, "interactive", False) or len(raw_args) == 0
@@ -136,6 +144,25 @@ async def run_batch(args: argparse.Namespace) -> int:
     failures = 0
     try:
         license_status = await license_service.check()
+
+        if getattr(args, "resume", False):
+            paused_items = PausedStore().load()
+            if paused_items:
+                print(f"Found {len(paused_items)} paused download(s). Resuming...")
+                for item in paused_items:
+                    url = item.get("url")
+                    target = item.get("target")
+                    quality = item.get("quality", settings.quality)
+                    if url:
+                        ok = await _download_url(
+                            pool, url, settings, license_status.allowed,
+                            target_override=target, quality_override=quality,
+                        )
+                        if not ok:
+                            failures += 1
+            else:
+                print("No paused downloads found to resume.")
+
         if args.update_pending_urls:
             for model_url, _ in models.models():
                 failures += await _scan_model(pool, models, model_url, settings, args.ignore_errors)
@@ -234,15 +261,34 @@ async def _scan_model(
         return 1
 
 
-async def _download_url(pool: ClientPool, url: str, settings: CliSettings, premium: bool) -> bool:
+async def _download_url(
+    pool: ClientPool,
+    url: str,
+    settings: CliSettings,
+    premium: bool,
+    *,
+    target_override: Path | str | None = None,
+    quality_override: str | int | None = None,
+    controller: DownloadController | None = None,
+) -> bool:
     try:
         route, source = await pool.resolve(url)
         if route.kind == ContentKind.GALLERY:
-            result = await download_gallery(
-                source, settings.output_path, concurrency=settings.videos_concurrency,
-                progress=lambda value: _print_progress(url, value),
+            ctrl = controller or DownloadController(
+                url=url, target=target_override or settings.output_path, kind="gallery", provider=route.provider,
             )
-            if result.status not in {"completed", "cancelled"}:
+            try:
+                result = await download_gallery(
+                    source, target_override or settings.output_path, concurrency=settings.videos_concurrency,
+                    controller=ctrl,
+                    progress=lambda value: _print_progress(url, value),
+                )
+            except (KeyboardInterrupt, asyncio.CancelledError):
+                ctrl.pause()
+                print(f"\nPaused gallery: {url} (resume later with --resume)")
+                return False
+
+            if result.status not in {"completed", "cancelled", "paused"}:
                 await report_exception(
                     RuntimeError(f"Gallery downloader returned status {result.status}"),
                     operation="download gallery",
@@ -252,7 +298,12 @@ async def _download_url(pool: ClientPool, url: str, settings: CliSettings, premi
                 )
             return result.status == "completed"
         media = await prepare_video(source, route.provider)
-        return await _download_prepared(media, settings, premium)
+        return await _download_prepared(
+            media, settings, premium,
+            target_override=target_override,
+            quality_override=quality_override,
+            controller=controller,
+        )
     except Exception as error:
         report_id = await report_exception(
             error,
@@ -265,17 +316,43 @@ async def _download_url(pool: ClientPool, url: str, settings: CliSettings, premi
         return False
 
 
-async def _download_prepared(media, settings: CliSettings, premium: bool) -> bool:
-    quality = select_allowed_quality(settings.quality, media.qualities, premium)
+async def _download_prepared(
+    media,
+    settings: CliSettings,
+    premium: bool,
+    *,
+    target_override: Path | str | None = None,
+    quality_override: str | int | None = None,
+    controller: DownloadController | None = None,
+) -> bool:
+    pref_quality = quality_override or settings.quality
+    quality = select_allowed_quality(pref_quality, media.qualities, premium)
+    if not quality:
+        quality = pref_quality if premium else select_allowed_quality("720", media.qualities, False)
     if not quality:
         print(f"No permitted quality is available for {media.title}", file=sys.stderr)
         return False
-    target = output_path_for(media, settings)
-    result = await download_video(
-        media.source_video, target, quality, settings, has_premium=premium,
-        available_qualities=media.qualities,
-        progress=lambda value: _print_progress(media.title, value),
+    target = Path(target_override) if target_override else output_path_for(media, settings)
+
+    ctrl = controller or DownloadController(
+        url=getattr(media, "url", None),
+        target=target,
+        title=media.title,
+        quality=quality,
+        kind="video",
     )
+    try:
+        result = await download_video(
+            media.source_video, target, quality, settings, has_premium=premium,
+            available_qualities=media.qualities,
+            controller=ctrl,
+            progress=lambda value: _print_progress(media.title, value),
+        )
+    except (KeyboardInterrupt, asyncio.CancelledError):
+        ctrl.pause()
+        print(f"\nPaused: {media.title} (resume later with --resume)")
+        return False
+
     if result.status == "completed" and settings.write_metadata and not result.skipped:
         try:
             from src.backend.metadata import write_tags
@@ -292,8 +369,8 @@ async def _download_prepared(media, settings: CliSettings, premium: bool) -> boo
                 enabled=settings.error_reporting,
             )
             print(f"Metadata warning for {media.title}: {error} [error {report_id}]", file=sys.stderr)
-    print(f"{result.status}: {media.title}")
-    if result.status not in {"completed", "cancelled"}:
+    print(f"\n{result.status}: {media.title}")
+    if result.status not in {"completed", "cancelled", "paused"}:
         await report_exception(
             RuntimeError(f"Downloader returned status {result.status}"),
             operation="download prepared video",

@@ -10,6 +10,19 @@ from .errors import MetadataWriteError
 from .media import VideoObject
 
 
+def _is_attached_pic(stream: Any) -> bool:
+    disposition = getattr(stream, "disposition", None)
+    if disposition is None:
+        return False
+    attached = getattr(disposition, "attached_pic", None)
+    if attached is not None:
+        try:
+            return attached in disposition
+        except TypeError:
+            return bool(attached)
+    return False
+
+
 def write_tags(path: str, data: VideoObject) -> bool:
     try:
         import av
@@ -24,9 +37,12 @@ def write_tags(path: str, data: VideoObject) -> bool:
         with av.open(path) as source, av.open(temporary_path, mode="w", format="mp4") as target:
             mapping = {}
             for stream in source.streams:
-                if stream.type == "video" and getattr(stream.disposition, "attached_pic", False):
+                if stream.type == "video" and _is_attached_pic(stream):
                     continue
-                mapping[stream] = target.add_stream(template=stream)
+                if hasattr(target, "add_stream_from_template"):
+                    mapping[stream] = target.add_stream_from_template(template=stream)
+                else:
+                    mapping[stream] = target.add_stream(template=stream)
             target.metadata.update({
                 key: str(value) for key, value in {
                     "title": data.title, "artist": data.author,
@@ -40,6 +56,8 @@ def write_tags(path: str, data: VideoObject) -> bool:
                 thumbnail_stream.disposition.attached_pic = True
             for packet in source.demux():
                 if packet.stream in mapping:
+                    if packet.dts is None:
+                        continue
                     packet.stream = mapping[packet.stream]
                     target.mux(packet)
             if thumbnail and thumbnail_stream:
