@@ -409,13 +409,13 @@ jobs:
 
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: PornFetch_macos_GUI_x64
           path: dmg_x64
 
       - name: Download macOS arm64 DMG
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: PornFetch_macos_GUI_arm64
           path: dmg_arm64
@@ -501,7 +501,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: all_artifacts
 
