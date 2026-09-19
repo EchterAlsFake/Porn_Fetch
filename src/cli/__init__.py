@@ -1,4 +1,5 @@
 """Qt-free terminal frontend for Porn Fetch."""
 
-__version__ = "1"
+from src.shared.version import __version__
 
+__all__ = ["__version__"]

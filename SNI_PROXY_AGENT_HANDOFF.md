@@ -4,7 +4,7 @@ Last updated: 2026-08-15 (Europe/Berlin)
 
 This is the primary handoff for another AI agent continuing work on Porn
 Fetch's application-local SNI obfuscation proxy. Read this file first, then read
-[`testing/SNI_PROXY_LAB.md`](testing/SNI_PROXY_LAB.md) before changing the
+[`src/tests/manual/SNI_PROXY_LAB.md`](src/tests/manual/SNI_PROXY_LAB.md) before changing the
 native Linux backend or the Geneva harness.
 
 ## Current status
@@ -196,7 +196,7 @@ Lite or Strict helper for the whole application. It:
 - restarts the proxy when the configured network interface or upstream proxy
   changes.
 
-[`test.py`](main.py) creates this singleton, starts it before entering the main
+[`src/backend/application.py`](src/backend/application.py) creates this singleton, starts it before entering the main
 GUI, refreshes the client sessions, displays a fail-closed startup error, and
 stops the proxy during shutdown. Multiprocessing uses `spawn`; the GUI startup
 is guarded so a Strict helper child does not create another Qt application.
@@ -300,7 +300,7 @@ byte was `0x65`, so outbound filters did not match.
 
 The source patch is:
 
-[`testing/pydivert_linux/ebpfdivert-v0.0.2-ethernet.patch`](testing/pydivert_linux/ebpfdivert-v0.0.2-ethernet.patch)
+[`src/tests/manual/pydivert_linux/ebpfdivert-v0.0.2-ethernet.patch`](src/tests/manual/pydivert_linux/ebpfdivert-v0.0.2-ethernet.patch)
 
 It checks Ethernet ethertype at bytes 12-13 before raw-IP offsets. The patched
 object is installed at PyDivert's package-local `bpf/ebpfdivert.bpf.o`.
@@ -329,7 +329,7 @@ Packaging/pinning this backend and applying or eliminating the object patch is
 important release work.
 
 Full clean Linux and Windows instructions are in
-[`testing/SNI_PROXY_LAB.md`](testing/SNI_PROXY_LAB.md).
+[`src/tests/manual/SNI_PROXY_LAB.md`](src/tests/manual/SNI_PROXY_LAB.md).
 
 ## GoodbyeDPI work
 
@@ -353,10 +353,10 @@ copied into Porn Fetch.
 Files:
 
 ```text
-testing/geneva_isolated/run.sh
-testing/geneva_isolated/geneva_runner.py
-testing/geneva_isolated/README.md
-testing/geneva_runs/                 # ignored, private run artifacts
+src/tests/manual/geneva_isolated/run.sh
+src/tests/manual/geneva_isolated/geneva_runner.py
+src/tests/manual/geneva_isolated/README.md
+src/tests/manual/geneva_runs/                 # ignored, private run artifacts
 ```
 
 The harness uses rootless `pasta` to create a fresh user/network namespace.
@@ -373,8 +373,8 @@ checkout files were modified.
 Run the repeatable Lite baseline with:
 
 ```bash
-./testing/geneva_isolated/run.sh \
-  .venv/bin/python3 testing/sni_proxy_smoke.py https://example.com/
+./src/tests/manual/geneva_isolated/run.sh \
+  .venv/bin/python3 src/tests/smoke/sni_proxy_smoke.py https://example.com/
 ```
 
 Each run produces a mode-0700 directory and `namespace-wire.pcap`. Captures can
@@ -396,13 +396,13 @@ Current regression command:
 
 ```bash
 .venv/bin/python3 -m unittest \
-  testing.test_sni_settings \
-  testing.test_sni_fragmentation \
-  testing.test_sni_proxy_manager \
-  testing.test_client_refresh
+  src.tests.unit.test_sni_settings \
+  src.tests.unit.test_sni_fragmentation \
+  src.tests.unit.test_sni_proxy_manager \
+  src.tests.integration.test_client_refresh
 
 qmllint src/frontend/UI/SettingsPage.qml src/frontend/UI/AppStrings.qml
-.venv/bin/python3 -m compileall -q src testing main.py
+.venv/bin/python3 -m compileall -q src main.py
 git diff --check
 ```
 
@@ -467,15 +467,14 @@ src/backend/clients.py                       curl-cffi routing/session integrati
 src/backend/config.py                        QSettings properties and atomic mode API
 src/frontend/UI/SettingsPage.qml             Lite/Strict/profile controls
 src/frontend/UI/AppStrings.qml               user-facing technical explanation
-test.py                                      startup, refresh, error and shutdown wiring
-testing/sni_proxy_smoke.py                   repeatable Lite/Strict HTTP smoke client
-testing/test_sni_fragmentation.py            TLS/packet/backend regression tests
-testing/test_sni_proxy_manager.py            manager/profile tests
-testing/test_sni_settings.py                 persistence/migration tests
-testing/test_client_refresh.py               live client-route refresh test
-testing/SNI_PROXY_LAB.md                     clean install and lab operations
-testing/pydivert_linux/                      Linux eBPF patch and rebuild notes
-testing/geneva_isolated/                     rootless app-only Geneva harness
+src/tests/smoke/sni_proxy_smoke.py            repeatable Lite/Strict HTTP smoke client
+src/tests/unit/test_sni_fragmentation.py      TLS/packet/backend regression tests
+src/tests/unit/test_sni_proxy_manager.py      manager/profile tests
+src/tests/unit/test_sni_settings.py           persistence/migration tests
+src/tests/integration/test_client_refresh.py  live client-route refresh test
+src/tests/manual/SNI_PROXY_LAB.md             clean install and lab operations
+src/tests/manual/pydivert_linux/              Linux eBPF patch and rebuild notes
+src/tests/manual/geneva_isolated/             rootless app-only Geneva harness
 ```
 
 ## Known limitations and recommended next work

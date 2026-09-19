@@ -7,10 +7,9 @@ os.environ.setdefault("QT_QUICK_CONTROLS_MATERIAL_THEME", "Dark")
 from PySide6.QtGui import  QGuiApplication
 from PySide6.QtQml import QQmlEngine, QQmlComponent
 from PySide6.QtWidgets import QMessageBox, QApplication
-from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop, QThread, Qt, QMetaObject, Slot
+from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop
 
 _qml_engine = None
-_dispatcher = None
 
 
 def _get_qml_engine():
@@ -18,22 +17,6 @@ def _get_qml_engine():
     if _qml_engine is None:
         _qml_engine = QQmlEngine()
     return _qml_engine
-
-
-class _PopupDispatcher(QObject):
-    @Slot(str, str)
-    def show_popup_slot(self, text: str, title: str):
-        _show_qml_popup_impl(text, title)
-
-
-def _get_dispatcher():
-    global _dispatcher
-    if _dispatcher is None:
-        _dispatcher = _PopupDispatcher()
-        app = QCoreApplication.instance()
-        if app:
-            _dispatcher.moveToThread(app.thread())
-    return _dispatcher
 
 
 def _fallback_popup(text: str, title: str):
@@ -120,17 +103,7 @@ def ui_popup(text, title="Notice"):
         print(f"[{title}] {text}")
         return
 
-    if QThread.currentThread() == app.thread():
-        _show_qml_popup_impl(text, title)
-    else:
-        dispatcher = _get_dispatcher()
-        QMetaObject.invokeMethod(
-            dispatcher,
-            "show_popup_slot",
-            Qt.ConnectionType.BlockingQueuedConnection,
-            text,
-            title
-        )
+    _show_qml_popup_impl(text, title)
 
 
 def reset_pornfetch():

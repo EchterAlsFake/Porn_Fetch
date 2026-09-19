@@ -3,12 +3,12 @@ from __future__ import annotations
 
 import json
 import os
-from pathlib import Path
 import shutil
 import tempfile
+from pathlib import Path
 from typing import Iterable
 
-from .paths import data_dir
+from src.shared.paths import data_dir
 
 
 class ModelStore:

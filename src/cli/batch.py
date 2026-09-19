@@ -4,18 +4,20 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
+from pathlib import Path
+from typing import Any
 
-from src.backend.media import select_allowed_quality
-from src.backend.error_reporting import report_exception
-from .downloads import DownloadController, DownloadOutcome, PausedStore, download_gallery, download_video
-from .licensing import create_license_service
+from src.licensing.service import create_license_service
+from src.shared.error_reporting import report_exception
+from src.shared.media import select_allowed_quality
+
+from .downloads import DownloadController, PausedStore, download_gallery, download_video
 from .media import prepare_video
 from .model_store import ModelStore
-from .providers import ContentKind, ClientPool, PROVIDER_MODULES, route_url
-from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
 from .output import output_path_for
+from .providers import PROVIDER_MODULES, ClientPool, ContentKind, route_url
+from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
 from .tracker import close_cli_tracker, record_cli_download
-
 
 ACTION_DESTINATIONS = {
     "url", "model", "playlist", "add_model_to_database", "remove_model_from_database",
@@ -77,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
     if args.test_mode:
-        from .tests import run_cli_self_test
+        from .selftest import run_cli_self_test
         return asyncio.run(run_cli_self_test(
             filter_pattern=getattr(args, "filter", None),
             include_downloads=getattr(args, "test_downloads", False),
@@ -107,7 +109,8 @@ async def run_stats(args: argparse.Namespace) -> int:
     if overrides:
         persisted = persisted.overridden(**overrides)
 
-    from src.backend.database import PocketBaseError, PocketBaseTracker
+    from src.database import PocketBaseError, PocketBaseTracker
+
     from .tracker import print_dashboard_stats
     tracker = PocketBaseTracker(
         data_path=persisted.pocketbase_data_path,
@@ -415,7 +418,7 @@ async def _download_prepared(
 
     if result.status == "completed" and settings.write_metadata and not result.skipped:
         try:
-            from src.backend.metadata import write_tags
+            from src.shared.metadata import write_tags
             write_tags(str(result.path), media)
         except Exception as error:
             report_id = await report_exception(

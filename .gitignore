@@ -1,0 +1,61 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments and Python tooling
+.venv/
+venv/
+env/
+.tox/
+.nox/
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+*.spec.bak
+*.bin
+*.exe
+*.dmg
+*.app/
+.temp/
+
+# IDE and editor state
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Runtime logs and local diagnostics
+*.log
+*.log.*
+crash-*.txt
+
+# Runtime databases and application state
+downloads.db
+downloads.db-*
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+pocketbase_data/
+model_database.json
+
+# Generated media and local test artifacts
+brag-output/
+src/tests/manual/geneva_runs/
+*.pcap
+*.pcapng
+
+# Platform noise
+.DS_Store
+Thumbs.db
+desktop.ini

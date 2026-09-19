@@ -1,0 +1,36 @@
+diff --git a/src/ebpfdivert.bpf.c b/src/ebpfdivert.bpf.c
+index 00c7889..37836a1 100644
+--- a/src/ebpfdivert.bpf.c
++++ b/src/ebpfdivert.bpf.c
+@@ -102,8 +102,15 @@ static __always_inline int matches_rule(struct __sk_buff *skb, struct filter_rul
+     __u16 l2_len = 0;
+     int found = 0;
+ 
+-    // Detect L3 offset: try 0, 4, 14
+-    if (data + 20 <= data_end) {
++    // Prefer a real Ethernet ethertype before heuristic raw-IP offsets. A MAC
++    // byte at offset 0 or 4 can otherwise look like an IPv4/IPv6 version nibble.
++    if (data + 14 + 20 <= data_end) {
++        __u16 ethertype = bpf_ntohs(*(__u16 *)((char *)data + 12));
++        if (ethertype == 0x0800 || ethertype == 0x86DD) {
++            l2_len = 14; found = 1;
++        }
++    }
++    if (!found && data + 20 <= data_end) {
+         __u8 b0 = *(__u8 *)data;
+         if ((b0 & 0xF0) == 0x40 || (b0 & 0xF0) == 0x60) {
+             l2_len = 0; found = 1;
+@@ -115,13 +122,6 @@ static __always_inline int matches_rule(struct __sk_buff *skb, struct filter_rul
+             l2_len = 4; found = 1;
+         }
+     }
+-    if (!found && (char *)data + 14 + 20 <= (char *)data_end) {
+-        __u8 b14 = *((__u8 *)data + 14);
+-        if ((b14 & 0xF0) == 0x40 || (b14 & 0xF0) == 0x60) {
+-            l2_len = 14; found = 1;
+-        }
+-    }
+-
+     if (!found) {
+         if (rule->match_mask == MATCH_ENABLED) return 1;
+         return 0;

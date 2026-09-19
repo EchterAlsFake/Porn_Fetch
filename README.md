@@ -1,3 +1,14 @@
+> [!CAUTION]
+> # THE LATEST BINARY RELEASE IS MASSIVELY OUTDATED
+>
+> The current source tree is undergoing a major 3.9 rewrite. Its features,
+> screenshots, documentation, licensing behavior, supported platforms, and
+> build instructions may differ substantially from the last published release
+> (3.8). Do not use the current README as an exact description of the old
+> downloadable application, and do not assume the old release represents the
+> current source. Build from a tagged release when you need matching code and
+> documentation.
+
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
@@ -15,20 +26,21 @@
 ---
 
 **[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.8)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.8)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/SCREENSHOTS.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FAQ.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;Changelog&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;Development Status&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FAQ.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Changelog&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CHANGELOG.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Development Status&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/STATUS.md)** 
 
 ---
 </div>
 
 # Project Rewrite
-Please note, that this project is currently ongoing a massive re-write and switching to a commercial project.
-I am putting serious work here, although my commit history doesn't reflect this. Please be patient the next weeks.
 
-PS: Commercial does NOT mean proprietary! (Just let me cook lol)
+Version 3.9 is a major rewrite. Development documentation describes the current
+source tree unless a page explicitly names a released version. See the
+[development status](docs/STATUS.md) before installing, building, or reporting a
+bug.
 
 # About the License
 #### License is FREE OF CHARGE!
@@ -42,7 +54,7 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
 > [!IMPORTANT]
-> Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ANTIVIRUS_FLAGS.md) for an explanation why this is.
+> Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) for an explanation why this is.
 > For downloading and running Porn Fetch you NEED to disable Real-Time protection in Windows defender!
 
 ## 🚀 Quick Links
@@ -88,7 +100,7 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 > [!IMPORTANT]
 > If you aren't tech savy, please read through this guide.
 
-**A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/INSTALLATION.md)
+**A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/INSTALLATION.md)
 
 ## Licensing / Paid Features
 > [!CAUTION]
@@ -117,7 +129,7 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
 > [!NOTE]
-> For more Information on iOS Support See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/iOS.md
+> For more Information on iOS Support See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/iOS.md
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -138,20 +150,20 @@ PS: Commercial does NOT mean proprietary! (Just let me cook lol)
 > Not all websites support every feature. 
 > Some providers support only direct videos while others also support profiles or collections. Search is intentionally not available.
 
-### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
+### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)
 
 ### For Developers
 If you want to develop on Porn Fetch and do local changes, contribute code or do whatever, please
 have a look at the internal code documentation which explains the core structure of the project,
 as well as the different concepts used here.
 
-See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FOR_DEVELOPERS.md
+See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS.md
 
 
 ## 🔨 Building from Source
 > [!CAUTION]
 > A Python library that I use needs specific Asynchronous features which Qt doesn't support yet. I have custom vibe-coded 
-> these patches into Qt's AsyncIo library. Please run the src/scripts/patch_qtasyncio.py script on your .venv directory
+> these patches into Qt's AsyncIo library. Please run the scripts/patch_qtasyncio.py script on your .venv directory
 > to patch the module on the fly. The installer script will do this automatically. 
 
 
@@ -159,7 +171,7 @@ Building will be done through a fully automated script, that lets you select the
 build from and will install all dependencies automatically for you, including Python.
 
 > [!NOTE]
-> Building will be done using Python3.13.11 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
+> Building is done using Python 3.14 and [Nuitka](https://github.com/Nuitka/Nuitka) through Qt's `pyside6-deploy` tool.
 
 Hardware requirements:
 - Electricity
@@ -180,7 +192,7 @@ Hardware requirements:
 > If using macOS, you need to install XCode developer tools and Homebrew.
 
 ```bash
-curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -o install.sh
+curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install.sh" -o install.sh
 bash install.sh
 ```
 
@@ -189,7 +201,7 @@ bash install.sh
 > You do **NOT** need a rooted Android device to compile and run Porn Fetch on Android
 
 ```bash
-apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
+apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_termux.sh" | bash
 ```
 
 ### Windows (PowerShell as Admin)
@@ -197,13 +209,13 @@ apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFak
 > You absolutely **NEED** to disable Microsoft Defender (Realtime protection). Otherwise, Windows will just randomly delete
 > files during build which makes it completely impossible to do anything.
 
-You can read through the full rage letter [here](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/why_windows_sucks.md)
+See the [antivirus notice](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) before building on Windows.
 
 ```
 # Enable script execution
 Set-ExecutionPolicy RemoteSigned 
 Set-ExecutionPolicy Bypass -Scope Process
-Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
+Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
 
 
@@ -219,7 +231,7 @@ Currently available in:
 - French (3.0) `[*]` Thanks to: [Egsagon](https://github.com/Egsagon)
 - Italian (3.8) Thanks to: [FatalPuppet](https://github.com/FatalPuppet)
 
-<br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
+<br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/TRANSLATING.md).
 
 > If a language is marked with a `*` it means, you can contribute something, and it needs an update!
 
@@ -229,7 +241,7 @@ Currently available in:
 - GUI: [Qt](https://qt.io) for Python
 - FFmpeg: [FFmpeg](https://ffmpeg.org/) GPL
 
-### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
+### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md)
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).

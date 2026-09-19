@@ -1,69 +1,135 @@
-# Needed for UV Project management.
-# Porn Fetch is NOT published on PyPi!
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
 
 [project]
-requires-python = ">=3.14"
-# 3.15+ is not supported, due to Qt limitations.
-# This is ONLY for the GUI, CLI is different
-
 name = "Porn_Fetch"
-version = "3.9"
+dynamic = ["version"]
+requires-python = ">=3.14,<3.15"
 authors = [
-    {name = "Johannes Habel", email = "EchterAlsFake@proton.me"}
+    { name = "Johannes Habel", email = "EchterAlsFake@proton.me" },
 ]
-
-description = "a downloader for pornographic content"
-readme = {file = "README.md", content-type = "text/markdown"}
+description = "A downloader for adult media content"
+readme = { file = "README.md", content-type = "text/markdown" }
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE"]
-
 dependencies = [
-    "anyio",
-    "brotli",
-    "certifi",
-    "cffi",
-    "charset-normalizer",
-    "fake-useragent",
-    "idna",
-    "json5",
-    "m3u8",
-    "markdown",
-    "pycparser",
-    "sniffio",
-    "socksio",
-    "soupsieve",
-    "typing_extensions",
-    "python-dateutil",
-    "urllib3",
-    "unofficial-api-for-beeg@git+https://github.com/EchterAlsFake/unofficial-api-for-beeg",
-    "unofficial-api-for-eporner@git+https://github.com/EchterAlsFake/unofficial-api-for-eporner",
-    "unofficial-api-for-pornhub@git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub",
-    "unofficial-api-for-porntrex@git+https://github.com/EchterAlsFake/unofficial-api-for-porntrex",
-    "unofficial-api-for-spankbang@git+https://github.com/EchterAlsFake/unofficial-api-for-spankbang",
-    "unofficial-api-for-xfreehd@git+https://github.com/EchterAlsFake/unofficial-api-for-xfreehd",
-    "unofficial-api-for-xhamster@git+https://github.com/EchterAlsFake/unofficial-api-for-xhamster",
-    "unofficial-api-for-xnxx@git+https://github.com/EchterAlsFake/unofficial-api-for-xnxx",
-    "unofficial-api-for-xvideos@git+https://github.com/EchterAlsFake/unofficial-api-for-xvideos",
-    "unofficial-api-for-youporn@git+https://github.com/EchterAlsFake/unofficial-api-for-youporn",
-    "unofficial-api-for-redtube@git+https://github.com/EchterAlsFake/unofficial-api-for-redtube",
-    "unofficial-api-for-tube8@git+https://github.com/EchterAlsFake/unofficial-api-for-tube8",
-    "unofficial-api-for-thumbzilla@git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla",
-    "eaf_base_api@git+https://github.com/EchterAlsFake/eaf_base_api",
     "browser-cookie3>=0.20.1",
-    "asyncstdlib>=3.14.0",
-    "rich-argparse>=1.8.0",
+    "cryptography",
+    "curl-cffi",
+    "eaf_base_api @ git+https://github.com/EchterAlsFake/eaf_base_api@8397f881fbe670572193ec1ae32cee76e7f82533",
     "platformdirs>=4.3",
+    "python-dateutil",
     "questionary>=2.1.1",
-    "pydivert[linux]>=3.1.3",
+    "rich",
+    "unofficial-api-for-beeg @ git+https://github.com/EchterAlsFake/unofficial-api-for-beeg@433e0e5791e917d2ab3e6cae13748f58da8f561e",
+    "unofficial-api-for-eporner @ git+https://github.com/EchterAlsFake/unofficial-api-for-eporner@771f3ed060e65d22d6566f25577ef9e6dee7765a",
+    "unofficial-api-for-pornhub @ git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub@35f1685d7439c51e38e77f176fd2f8fab56e3696",
+    "unofficial-api-for-porntrex @ git+https://github.com/EchterAlsFake/unofficial-api-for-porntrex@cb3c7db783563294edd18bc66b7253a0b2f1a467",
+    "unofficial-api-for-redtube @ git+https://github.com/EchterAlsFake/unofficial-api-for-redtube@9601fdb5b128dc339c66877a2673192daa67c6bc",
+    "unofficial-api-for-spankbang @ git+https://github.com/EchterAlsFake/unofficial-api-for-spankbang@ce933899edba2807375331840a586dd6450f9a31",
+    "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla@165a8d389c4174b639a89343f9538057d8a308c7",
+    "unofficial-api-for-tube8 @ git+https://github.com/EchterAlsFake/unofficial-api-for-tube8@e042ad746a3662c0182d4c2868b9e0800e712635",
+    "unofficial-api-for-xfreehd @ git+https://github.com/EchterAlsFake/unofficial-api-for-xfreehd@51384674cad8b82e657e97b5f550ca304a78b5bc",
+    "unofficial-api-for-xhamster @ git+https://github.com/EchterAlsFake/unofficial-api-for-xhamster@e452f99c587df06d3d17e56543fc480e99cb0b49",
+    "unofficial-api-for-xnxx @ git+https://github.com/EchterAlsFake/unofficial-api-for-xnxx@468da86a1011f6047e9d9436ffe4f4f97286979f",
+    "unofficial-api-for-xvideos @ git+https://github.com/EchterAlsFake/unofficial-api-for-xvideos@fb8e8b985404fd414c6a26daccd1c26fef2a62fc",
+    "unofficial-api-for-youporn @ git+https://github.com/EchterAlsFake/unofficial-api-for-youporn@be714a80692ea90f38367d19a5e52cd595dc0dde",
 ]
 
+[project.scripts]
+porn-fetch-cli = "src.cli.batch:main"
+
+[project.gui-scripts]
+porn-fetch = "src.backend.application:main"
 
 [project.optional-dependencies]
-gui = ["PySide6", "pywin32; sys_platform == 'win32'", "pip", "cryptography", "unofficial-api-for-hqporner"]
-# pip is needed, because pyside6-deploy invokes pip when building the project with pyside6-deploy
+gui = [
+    "PySide6",
+    "asyncstdlib>=3.14.0",
+    "certifi",
+    "pydivert>=3.1.3",
+    "pywin32; sys_platform == 'win32'",
+    "rich-argparse>=1.8.0",
+    "truststore",
+]
+build = [
+    "pip",
+    "pyinstaller",
+]
+av = [
+    "av>=16.1.0; platform_system == 'Windows' and platform_machine == 'AMD64'",
+    "av>=16.1.0; platform_system == 'Darwin' and (platform_machine == 'x86_64' or platform_machine == 'arm64')",
+    "av>=16.1.0; platform_system == 'Linux' and (platform_machine == 'x86_64' or platform_machine == 'aarch64')",
+]
 
-cli = ["questionary>=2.1.1", "cryptography", "pyinstaller"]
-dev = ["questionary>=2.1.1", "PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip", "cryptography", "unofficial-api-for-hqporner"]
-av = ['av>=16.1.0; python_version >= "3.10" and platform_system == "Windows" and platform_machine == "AMD64"',
-    'av>=16.1.0; python_version >= "3.10" and platform_system == "Darwin"  and (platform_machine == "x86_64" or platform_machine == "arm64")',
-    'av>=16.1.0; python_version >= "3.10" and platform_system == "Linux"   and (platform_machine == "x86_64" or platform_machine == "aarch64")']
+[dependency-groups]
+dev = [
+    "coverage[toml]",
+    "pip-audit",
+    "pyright",
+    "ruff",
+]
+
+[tool.hatch.version]
+path = "src/shared/version.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+exclude = ["src/tests/**"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = [
+    "src/frontend/UI/resources.py",
+    "vendor",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]
+"src/tests/**" = ["E402"]
+
+[tool.pyright]
+pythonVersion = "3.14"
+typeCheckingMode = "basic"
+include = [
+    "src/shared",
+    "src/database",
+    "src/licensing/service.py",
+    "src/cli/providers.py",
+    "src/cli/settings.py",
+]
+exclude = [
+    "src/frontend/UI/resources.py",
+    "src/database/bridge.py",
+    "src/shared/metadata.py",
+]
+reportMissingTypeStubs = false
+reportMissingImports = false
+reportMissingModuleSource = false
+reportAttributeAccessIssue = false
+reportArgumentType = false
+reportCallIssue = false
+
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = [
+    "src/frontend/UI/resources.py",
+    "src/tests/*",
+    "src/cli/selftest/*",
+    "src/backend/diagnostics.py",
+    "src/backend/sni_fragment_proxy_lite.py",
+    "src/backend/sni_fragment_proxy_strict.py",
+]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true

@@ -1,0 +1,83 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master, main ]
+    tags: [ "*" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PORN_FETCH_TEST_ENV: "1"
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint GitHub Actions workflows
+        shell: bash
+        run: |
+          curl -LsSf https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp
+          /tmp/actionlint -color
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install development dependencies
+        run: uv sync --locked --extra gui --extra av --group dev
+
+      - name: Check lockfile
+        run: uv lock --check
+
+      - name: Lint maintained Python modules
+        run: uv run --locked ruff check main.py Porn_Fetch_CLI.py src/shared src/database src/licensing src/cli src/tests scripts
+
+      - name: Check focused type boundaries
+        run: uv run --locked pyright
+
+      - name: Compile Python sources
+        run: uv run --locked python -m compileall -q main.py Porn_Fetch_CLI.py src
+
+      - name: Run offline unit tests
+        run: uv run --locked coverage run -m unittest discover -s src/tests/unit -p "test_*.py"
+
+      - name: Run integration tests
+        run: uv run --locked coverage run --append -m unittest discover -s src/tests/integration -p "test_*.py"
+
+      - name: Report coverage
+        run: uv run --locked coverage report
+
+      - name: Run the Qt-free CLI checks
+        run: uv run --locked porn-fetch-cli --test-mode --filter offline
+
+      - name: Verify packaged version metadata
+        run: uv run --locked python -c "from importlib.metadata import version; from src.shared.version import __version__; assert version('Porn_Fetch') == __version__"
+
+      - name: Build wheel and source archive
+        run: uv build
+
+      - name: Upload Python Package Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*
+
+      - name: Audit installed dependencies
+        continue-on-error: true
+        run: uv run --locked pip-audit --local --skip-editable

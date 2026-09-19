@@ -8,7 +8,7 @@ import platform
 
 from base_api.base import configure_app_logging
 from src.backend.config import __version__
-from src.backend.error_reporting import report_exception, report_public_error
+from src.shared.error_reporting import report_exception, report_public_error
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed

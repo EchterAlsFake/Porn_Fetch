@@ -1,12 +1,15 @@
 """Provider-neutral media preparation for terminal and batch consumers."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import inspect
+import logging
 import re
+from datetime import datetime, timezone
 from typing import Any
 
-from src.backend.media import VideoObject
+from src.shared.media import VideoObject
+
+logger = logging.getLogger(__name__)
 
 
 async def prepare_video(video: Any, provider: str) -> VideoObject:
@@ -99,8 +102,8 @@ async def _author(video: Any, provider: str) -> str:
             name = getattr(val, "name", None)
             if name and isinstance(name, str) and name.strip():
                 return name.strip()
-        except Exception:
-            pass
+        except Exception as error:
+            logger.debug("Provider author property failed: %s", type(error).__name__)
 
     # 5. Check video.get_author (e.g. XVideos)
     getter = getattr(video, "get_author", None)
@@ -114,8 +117,8 @@ async def _author(video: Any, provider: str) -> str:
             name = getattr(val, "name", None)
             if name and isinstance(name, str) and name.strip():
                 return name.strip()
-        except Exception:
-            pass
+        except Exception as error:
+            logger.debug("Provider get_author failed: %s", type(error).__name__)
 
     return "N/A"
 
@@ -123,7 +126,8 @@ async def _author(video: Any, provider: str) -> str:
 def _value(value: Any, name: str) -> Any:
     try:
         return getattr(value, name, None)
-    except Exception:
+    except Exception as error:
+        logger.debug("Provider attribute %s failed: %s", name, type(error).__name__)
         return None
 
 

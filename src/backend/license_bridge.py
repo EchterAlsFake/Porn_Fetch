@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QFile, QIODevice, QObject, Property, QUrl, Signal, Slot
 
-from src.cli.licensing import LicenseService
+from src.licensing.service import LicenseService
 
 
 MAX_LICENSE_BYTES = 32 * 1024
@@ -24,7 +24,7 @@ def load_production_config() -> dict[str, str]:
         finally:
             resource.close()
     else:
-        path = Path(__file__).resolve().parents[2] / "license_client" / "production.json"
+        path = Path(__file__).resolve().parents[1] / "licensing" / "production.json"
         raw = path.read_text(encoding="utf-8")
 
     data = json.loads(raw)
@@ -70,15 +70,6 @@ class LicenseBridge(QObject):
     @Property(bool, notify=statusChanged)
     def busy(self) -> bool:
         return self._busy
-
-    # Compatibility properties retained while the QML migrates from schema 1.
-    @Property(str, notify=statusChanged)
-    def licenseKey(self) -> str:
-        return ""
-
-    @Property(list, notify=statusChanged)
-    def features(self) -> list[str]:
-        return ["full_unlock"] if self.isPremium else []
 
     def _set_status(self, status) -> None:
         self._service.status = status

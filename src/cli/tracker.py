@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from pathlib import Path
 from typing import Any
@@ -10,10 +9,10 @@ from typing import Any
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
-from src.backend.database import PocketBaseError, PocketBaseTracker
-from src.backend.media import VideoObject
+from src.database import PocketBaseError, PocketBaseTracker
+from src.shared.media import VideoObject
+
 from .downloads import DownloadOutcome
 from .settings import CliSettings
 
@@ -120,8 +119,11 @@ async def record_cli_download(
 
     try:
         return await tracker.save_video(v)
-    except Exception as exc:
-        logger.warning("Failed to record video %s to PocketBase: %s", v.url, exc)
+    except PocketBaseError as exc:
+        logger.warning("PocketBase rejected a download record: %s", exc)
+        return None
+    except Exception:
+        logger.exception("Unexpected error while recording a download in PocketBase")
         return None
 
 

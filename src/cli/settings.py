@@ -2,16 +2,15 @@
 from __future__ import annotations
 
 import configparser
-from dataclasses import asdict, dataclass, fields, replace
 import json
 import os
-from pathlib import Path
 import sys
 import tempfile
+from dataclasses import asdict, dataclass, fields, replace
+from pathlib import Path
 from typing import Any
 
-from .paths import config_dir
-
+from src.shared.paths import config_dir
 
 SETTINGS_VERSION = 2
 
@@ -64,7 +63,6 @@ class CliSettings:
     debug: bool = False
     error_reporting: bool = False
     error_reporting_decided: bool = False
-    theme: str = "textual-dark"
     # Database / PocketBase tracking
     track_videos: bool = False
     pocketbase_data_path: str = "./pocketbase_data"
@@ -226,7 +224,7 @@ async def prompt_error_reporting_consent(
     from rich.panel import Panel
     from rich.text import Text
 
-    from src.backend.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE
+    from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE
 
     output = console or Console()
     output.print(Panel(

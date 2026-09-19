@@ -1,10 +1,24 @@
 name: Cross-Platform Build Pipeline
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: "Publish artifacts as a GitHub Release"
+        type: boolean
+        default: false
+  push:
+    tags:
+      - "v*"
+      - "[0-9]+.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
   contents: read
+
+concurrency:
+  group: builds-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -16,6 +30,7 @@ jobs:
   build-gui:
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
@@ -45,8 +60,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
-          architecture: ${{ (matrix.platform == 'windows' && matrix.arch == 'x86') && 'x86' || (matrix.platform == 'macos' && matrix.arch == 'x64') && 'x64' || (matrix.arch) }}
+          python-version: "3.14"
+          architecture: ${{ (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -72,7 +87,7 @@ jobs:
 
       # --- Build Process ---
       - name: Sync Dependencies
-        run: uv sync --extra dev --extra av
+        run: uv sync --locked --no-dev --extra gui --extra build --extra av
 
       - name: Fix Cryptography DLLs (Windows ARM64)
         if: matrix.platform == 'windows' && matrix.arch == 'arm64'
@@ -90,16 +105,31 @@ jobs:
           Write-Host "Injecting OpenSSL DLLs into $dllTarget so PyInstaller bundles them..."
           Copy-Item -Path $dllSource -Destination $dllTarget -Force
 
+      - name: Fetch PocketBase
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" == "macos" ]; then
+            mkdir -p "dist_pb"
+            uv run python scripts/fetch_pocketbase.py --platform macos --arch ${{ matrix.arch }} --dest dist_pb
+          else
+            uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
+            if [ -f pocketbase ]; then
+              uv run --no-sync python scripts/write_checksum.py pocketbase
+            elif [ -f pocketbase.exe ]; then
+              uv run --no-sync python scripts/write_checksum.py pocketbase.exe
+            fi
+          fi
+
       - name: Frontend Update
         shell: bash
         run: |
-          cd src/frontend && (bash update.sh || pwsh update.ps1 || true)
-          cd ../scripts && uv run patch.py
+          bash src/frontend/update.sh
+          uv run --no-sync scripts/patch.py
 
       - name: Build with pyside6-deploy
         shell: bash
         run: |
-          SPEC_FILE="src/build/pysidedeploy_${{ matrix.platform }}.spec"
+          SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
           uv run -- pyside6-deploy -c $SPEC_FILE -f -v
           
           # Universal Rename Logic
@@ -117,6 +147,12 @@ jobs:
       - name: macOS DMG Packaging
         if: matrix.platform == 'macos'
         run: |
+          if [ -f dist_pb/pocketbase ]; then
+            cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
+            chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
+          fi
+          uv run python scripts/patch_macos_bundle.py "Porn Fetch.app"
+          codesign --force --deep --sign - "Porn Fetch.app"
           mkdir dist_dmg
           cp -pR "Porn Fetch.app" dist_dmg/
           ln -s /Applications dist_dmg/Applications
@@ -127,16 +163,16 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.platform }}" == "linux" ]; then
-            xvfb-run ./"$BIN_OUTPUT" -t
+            xvfb-run ./"$BIN_OUTPUT" --version
           else
-            ./"$BIN_OUTPUT" -t
+            ./"$BIN_OUTPUT" --version
           fi
 
       - name: Checksum & Summary
         shell: bash
         run: |
           FILE="${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}"
-          sha256sum "$FILE" > "$FILE.sha256"
+          uv run --no-sync python scripts/write_checksum.py "$FILE"
           echo "### SHA256 Checksum ($FILE)" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`$(cat $FILE.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
 
@@ -144,78 +180,115 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
-          path: ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}
+          path: |
+            ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}
+            ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}.sha256
+            pocketbase*
 
   # ==========================================
-  # 2. CLI BUILDS (Standard x64/x86)
+  # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
   build-cli:
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
     strategy:
+      fail-fast: false
       matrix:
         include:
           - platform: linux
             arch: x64
             os: ubuntu-latest
+          - platform: linux
+            arch: arm64
+            os: ubuntu-24.04-arm
           - platform: windows
             arch: x64
             os: windows-latest
+          - platform: windows
+            arch: arm64
+            os: windows-11-arm
           - platform: windows
             arch: x86
             os: windows-latest
           - platform: macos
             arch: x64
-            os: macos-15-intel  # The dedicated Intel runner we used earlier
+            os: macos-15-intel
           - platform: macos
             arch: arm64
-            os: macos-latest    # The native Apple Silicon runner
+            os: macos-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
-          architecture: ${{ matrix.arch }}
+          python-version: "3.14"
+          architecture: ${{ (matrix.arch == 'x86') && 'x86' || (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Sync Dependencies
+        run: uv sync --locked --no-dev --extra build
+
+      - name: Fetch PocketBase
+        shell: bash
+        run: |
+          uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
+          if [ -f pocketbase ]; then
+            uv run --no-sync python scripts/write_checksum.py pocketbase
+          elif [ -f pocketbase.exe ]; then
+            uv run --no-sync python scripts/write_checksum.py pocketbase.exe
+          fi
 
       - name: Build
         shell: bash
         run: |
-          uv sync --extra cli
-          uv run pyinstaller --clean src/build/pyinstaller_cli.spec
+          uv run pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
           mv dist/Porn_Fetch_CLI$EXT "$OUT"
           echo "CLI_OUTPUT=$OUT" >> $GITHUB_ENV
-          sha256sum "$OUT" > "$OUT.sha256"
+          uv run --no-sync python scripts/write_checksum.py "$OUT"
 
       - name: Test CLI
         shell: bash
         run: |
-          ./${{ env.CLI_OUTPUT }} --test-mode
+          ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
+
+      - name: Checksum & Summary
+        shell: bash
+        run: |
+          echo "### SHA256 Checksum (${{ env.CLI_OUTPUT }})" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`$(cat ${{ env.CLI_OUTPUT }}.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CLI_${{ matrix.platform }}_${{ matrix.arch }}
-          path: PornFetch_*
+          name: PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}
+          path: |
+            PornFetch_*
+            pocketbase*
 
   # ==========================================
   # 3. CLI BUILD (Linux 32-bit - The Special Case)
   # ==========================================
   build-cli-linux-x32:
-    name: CLI (linux-x32)
+    name: CLI experimental (linux-x32)
     runs-on: ubuntu-latest
+    timeout-minutes: 90
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
+
       - name: Build 32-bit Python & Binary
         env:
-          PY_VER: "3.13.5"
+          PY_VER: "3.14.0"
           PREFIX: "/opt/python-32"
         run: |
           sudo dpkg --add-architecture i386
@@ -231,30 +304,37 @@ jobs:
           export PATH="$PREFIX/bin:$PATH"
           export LD_LIBRARY_PATH="$PREFIX/lib"
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv venv .venv --python $PREFIX/bin/python3.13
+          uv venv .venv --python $PREFIX/bin/python3.14
           source .venv/bin/activate
           CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
-          uv sync --extra cli
-          python -m PyInstaller --clean src/build/pyinstaller_cli.spec
+          uv sync --locked --no-dev --extra build
+          python -m PyInstaller --clean packaging/pyinstaller_cli.spec
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
           echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> $GITHUB_ENV
-          sha256sum PornFetch_Linux_CLI_x32 > checksum.txt
+          python scripts/write_checksum.py PornFetch_Linux_CLI_x32
 
       - name: Test CLI
         shell: bash
         run: |
-          ./${{ env.CLI_OUTPUT }} --test-mode
+          ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CLI_linux_x32
-          path: PornFetch_Linux_CLI_x32
+          name: PornFetch_Linux_CLI_x32
+          path: |
+            PornFetch_Linux_CLI_x32
+            PornFetch_Linux_CLI_x32.sha256
 
+  # ==========================================
+  # 4. EXOTIC ARCHITECTURE CLI BUILDS (QEMU)
+  # ==========================================
   build-exotic-cli:
-    name: CLI (linux-${{ matrix.arch }})
+    name: CLI experimental (linux-${{ matrix.arch }})
     runs-on: ubuntu-latest
+    timeout-minutes: 90
+    continue-on-error: true
     strategy:
       fail-fast: false  # Prevent one failing architecture from killing the others
       matrix:
@@ -268,7 +348,7 @@ jobs:
           arch: ${{ matrix.arch }}
           distro: ubuntu24.04
           run: |
-            # 1. Update and install standard Python tools (No uv needed)
+            # 1. Update and install standard Python tools
             apt-get update
             apt-get install -y python3-venv python3-pip python3-dev build-essential
             
@@ -276,18 +356,19 @@ jobs:
             python3 -m venv /opt/venv
             export PATH="/opt/venv/bin:$PATH"
             
-            # 3. Install the actual project CLI extra.
-            pip install '.[cli]'
+            # 3. Install dependencies ignoring python-version bounds for runner distro python
+            pip install --ignore-requires-python '.[build]'
             
             # 4. Build the binary
-            pyinstaller --clean src/build/pyinstaller_cli.spec
+            pyinstaller --clean packaging/pyinstaller_cli.spec
             
-            # 5. Rename output so the host runner can easily grab it
+            # 5. Rename output and test
             mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_${{ matrix.arch }}
+            ./PornFetch_Linux_CLI_${{ matrix.arch }} --test-mode --filter offline
 
       - name: Checksum & Upload
         run: |
-          sha256sum PornFetch_Linux_CLI_${{ matrix.arch }} > PornFetch_Linux_CLI_${{ matrix.arch }}.sha256
+          python3 scripts/write_checksum.py PornFetch_Linux_CLI_${{ matrix.arch }}
           
           echo "### SHA256 Checksum (${{ matrix.arch }})" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
@@ -297,75 +378,26 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CLI_linux_${{ matrix.arch }}
-          path: PornFetch_Linux_CLI_${{ matrix.arch }}
+          name: PornFetch_Linux_CLI_${{ matrix.arch }}
+          path: |
+            PornFetch_Linux_CLI_${{ matrix.arch }}
+            PornFetch_Linux_CLI_${{ matrix.arch }}.sha256
 
-  build-android:
-    name: Android (APK)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      # 1. Setup Java 17 (Required by modern Android Gradle Plugin, even if target is 11)
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # 2. Setup Python 3.13 (Required by Chaquopy)
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-
-      # 3. Fix the hardcoded local path in your build.gradle.kts
-      - name: Patch Chaquopy Python Path
-        shell: bash
-        run: |
-          sed -i 's|buildPython("/home/asuna/.local/bin/python3.13")|buildPython("python")|g' Android/app/build.gradle.kts
-
-      # 4. Setup Gradle Caching to speed up future builds
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      # 5. Build the APK
-      - name: Build APK (Debug)
-        working-directory: Android
-        # We build 'assembleDebug' so you get an APK signed with a default key
-        # that can be immediately installed on any Android phone.
-        run: gradle assembleDebug
-
-      # 6. Rename and generate checksum
-      - name: Prepare Output
-        run: |
-          mv Android/app/build/outputs/apk/debug/app-debug.apk PornFetch_Android.apk
-          sha256sum PornFetch_Android.apk > PornFetch_Android.apk.sha256
-
-      - name: Publish Summary
-        run: |
-          echo "### SHA256 Checksum (Android)" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat PornFetch_Android.apk.sha256 >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: PornFetch_Android
-          path: PornFetch_Android.apk
-
+  # ==========================================
+  # 5. MACOS UNIVERSAL BINARY (FUSION)
+  # ==========================================
   build-macos-universal:
     name: GUI (macos-universal)
     needs: build-gui  # Wait for the x64 and arm64 builds to finish
     runs-on: macos-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -373,7 +405,7 @@ jobs:
           enable-cache: true
 
       - name: Sync Dependencies
-        run: uv sync --extra dev --extra av
+        run: uv sync --locked --no-dev --extra gui --extra build --extra av
 
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
@@ -424,13 +456,13 @@ jobs:
               fi
           done
           
-          # Re-sign the app (lipo modifies binaries, which instantly breaks existing code signatures)
-          echo "Signing Universal App..."
-          codesign --force --deep --sign - "PornFetch_Universal.app"
-          
           # Patch the bundle to correctly integrate the Sparkle framework for updates
           echo "Patching macOS bundle for Sparkle framework..."
-          uv run python src/scripts/patch_macos_bundle.py --short-version=3.8
+          uv run python scripts/patch_macos_bundle.py "PornFetch_Universal.app"
+
+          # Re-sign after changing binaries and Info.plist
+          echo "Signing Universal App..."
+          codesign --force --deep --sign - "PornFetch_Universal.app"
           
           # Package back into a final Universal DMG
           mkdir dist_dmg
@@ -441,7 +473,7 @@ jobs:
       # 3. Standard QA and Upload
       - name: Checksum & Summary
         run: |
-          sha256sum PornFetch_macOS_GUI_Universal.dmg > PornFetch_macOS_GUI_Universal.dmg.sha256
+          uv run --no-sync python scripts/write_checksum.py PornFetch_macOS_GUI_Universal.dmg
           echo "### SHA256 Checksum (macOS Universal)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat PornFetch_macOS_GUI_Universal.dmg.sha256 >> $GITHUB_STEP_SUMMARY
@@ -451,4 +483,49 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PornFetch_macOS_GUI_Universal
-          path: PornFetch_macOS_GUI_Universal.dmg
+          path: |
+            PornFetch_macOS_GUI_Universal.dmg
+            PornFetch_macOS_GUI_Universal.dmg.sha256
+
+  # ==========================================
+  # 6. PUBLISH RELEASE (TAGS & DISPATCH)
+  # ==========================================
+  publish-release:
+    name: Publish GitHub Release
+    needs: [build-gui, build-cli, build-macos-universal]
+    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all_artifacts
+
+      - name: Prepare Release Assets
+        run: |
+          mkdir -p dist_release
+          find all_artifacts -type f -exec cp {} dist_release/ \;
+          echo "### Collected Release Assets:"
+          ls -lh dist_release/
+
+      - name: Create or Update GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            gh release create "$TAG_NAME" dist_release/* \
+              --title "Porn Fetch $TAG_NAME" \
+              --generate-notes \
+              --verify-tag
+          else
+            RELEASE_TAG="build-${{ github.sha }}"
+            gh release create "$RELEASE_TAG" dist_release/* \
+              --title "Porn Fetch Build (${{ github.sha }})" \
+              --notes "Automated build release triggered via workflow dispatch." \
+              --draft=false
+          fi

@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Qt
 
 from src.backend.config import app_settings
-from src.backend.media import (
+from src.shared.media import (
     VideoFilters,
     VideoObject,
     quality_requires_premium,

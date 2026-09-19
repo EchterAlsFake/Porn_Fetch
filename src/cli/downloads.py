@@ -2,21 +2,25 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from enum import StrEnum
 import hashlib
 import inspect
 import json
-from pathlib import Path
+import logging
 import re
 import shutil
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from enum import StrEnum
+from pathlib import Path
 from typing import Any, Callable
 from urllib.parse import urlparse
 
-from src.backend.media import select_allowed_quality
-from .paths import data_dir
+from src.shared.media import select_allowed_quality
+from src.shared.paths import data_dir
+
 from .settings import CliSettings
+
+logger = logging.getLogger(__name__)
 
 
 ProgressCallback = Callable[..., None]
@@ -116,10 +120,7 @@ class PausedStore:
     def remove(self, url_or_target: str | Path) -> None:
         items = self.load()
         val = str(url_or_target)
-        try:
-            resolved = str(Path(url_or_target).resolve())
-        except Exception:
-            resolved = val
+        resolved = str(Path(url_or_target).resolve())
         new_items = [
             i for i in items
             if i.get("url") != val and i.get("target") != val and str(Path(i.get("target", "")).resolve()) != resolved
@@ -131,8 +132,8 @@ class PausedStore:
         if self.path.exists():
             try:
                 self.path.unlink()
-            except OSError:
-                pass
+            except OSError as error:
+                logger.debug("Could not remove paused-download state %s: %s", self.path, error)
 
 
 class DownloadController:

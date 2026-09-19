@@ -8,9 +8,9 @@ each other.
 from pathlib import Path
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Property, QSettings, QUrl, Signal, Slot
+from src.shared.version import __version__
 
 __license__ = "GPL 3"
-__version__ = "3.9"
 __author__ = "Johannes Habel"
 __next_release__ = "4.0"
 __type__ = "release"

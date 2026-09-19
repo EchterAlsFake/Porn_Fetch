@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.backend.media import VideoObject
+from src.shared.media import VideoObject
+
 from .settings import CliSettings
 
 

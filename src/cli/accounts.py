@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncIterator, Mapping
 import http.cookiejar
+import logging
+from collections.abc import AsyncIterator, Mapping
 from typing import Any
 from urllib.parse import urlparse
 
 from .providers import ClientPool
+
+logger = logging.getLogger(__name__)
 
 
 class AccountService:
@@ -104,6 +107,12 @@ def _read_browser_cookies(provider: str) -> http.cookiejar.CookieJar:
             for cookie in loader(domain_name=provider):
                 if provider in (cookie.domain or "").casefold():
                     merged.set_cookie(cookie)
-        except Exception:
+        except Exception as error:
+            logger.debug(
+                "Could not read %s cookies for provider %s: %s",
+                name,
+                provider,
+                type(error).__name__,
+            )
             continue
     return merged

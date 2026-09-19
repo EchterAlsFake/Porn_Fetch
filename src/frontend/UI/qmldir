@@ -4,6 +4,5 @@ module Style
 singleton AppStrings 1.0 AppStrings.qml
 singleton Theme 1.0 Theme.qml
 # Component registration
-PrimaryButton 1.0 PrimaryButton.qml
 SmoothScrollView 1.0 SmoothScrollView.qml
 SmoothWheelHandler 1.0 SmoothWheelHandler.qml

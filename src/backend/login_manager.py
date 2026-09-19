@@ -12,7 +12,7 @@ import browser_cookie3
 from src.backend import clients
 from base_api.modules.config import IteratorConfig
 from base_api.modules.logger import configure_app_logging
-from src.backend.errors import CookiesNotFound, LoginError
+from src.shared.errors import CookiesNotFound, LoginError
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
 from pornhub_api.modules.errors import LoginFailed, ClientAlreadyLogged
 
