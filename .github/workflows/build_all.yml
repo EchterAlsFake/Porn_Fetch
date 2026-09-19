@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
@@ -222,7 +222,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'x86') && 'x86' || (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
@@ -395,7 +395,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
 
