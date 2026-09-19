@@ -177,7 +177,7 @@ jobs:
           echo "\`\`\`$(cat $FILE.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
           path: |
@@ -268,7 +268,7 @@ jobs:
           echo "\`\`\`$(cat ${{ env.CLI_OUTPUT }}.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}
           path: |
@@ -320,7 +320,7 @@ jobs:
           ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_Linux_CLI_x32
           path: |
@@ -376,7 +376,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_Linux_CLI_${{ matrix.arch }}
           path: |
@@ -480,7 +480,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Universal Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_macOS_GUI_Universal
           path: |
