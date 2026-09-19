@@ -21,7 +21,7 @@ jobs:
       PORN_FETCH_TEST_ENV: "1"
       QT_QPA_PLATFORM: offscreen
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Lint GitHub Actions workflows
         shell: bash
