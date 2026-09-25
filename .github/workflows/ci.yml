@@ -21,7 +21,7 @@ jobs:
       PORN_FETCH_TEST_ENV: "1"
       QT_QPA_PLATFORM: offscreen
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Lint GitHub Actions workflows
         shell: bash
@@ -31,7 +31,7 @@ jobs:
           tar -xzf /tmp/actionlint.tar.gz -C /tmp
           /tmp/actionlint -color
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
 
@@ -73,7 +73,7 @@ jobs:
         run: uv build
 
       - name: Upload Python Package Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/*

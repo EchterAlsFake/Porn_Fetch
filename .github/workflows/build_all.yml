@@ -55,10 +55,10 @@ jobs:
             os: macos-latest # Apple Silicon
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
@@ -130,17 +130,17 @@ jobs:
         shell: bash
         run: |
           SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
-          uv run -- pyside6-deploy -c $SPEC_FILE -f -v
+          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v
           
           # Universal Rename Logic
           EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"
           OUTPUT_NAME="PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}$EXT"
           
-          if [ "${{ matrix.platform }}" == "macos" ]; then
-             echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> $GITHUB_ENV
+          if [ "${{ matrix.platform }}" = "macos" ]; then
+             echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> "$GITHUB_ENV"
           else
              mv "Porn Fetch$EXT" "$OUTPUT_NAME"
-             echo "BIN_OUTPUT=$OUTPUT_NAME" >> $GITHUB_ENV
+             echo "BIN_OUTPUT=$OUTPUT_NAME" >> "$GITHUB_ENV"
           fi
 
       # --- Packaging & QA ---
@@ -173,11 +173,11 @@ jobs:
         run: |
           FILE="${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}"
           uv run --no-sync python scripts/write_checksum.py "$FILE"
-          echo "### SHA256 Checksum ($FILE)" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`$(cat $FILE.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "### SHA256 Checksum ($FILE)" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`$(cat "$FILE.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
           path: |
@@ -219,10 +219,10 @@ jobs:
             os: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'x86') && 'x86' || (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
@@ -252,8 +252,8 @@ jobs:
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
-          mv dist/Porn_Fetch_CLI$EXT "$OUT"
-          echo "CLI_OUTPUT=$OUT" >> $GITHUB_ENV
+          mv "dist/Porn_Fetch_CLI$EXT" "$OUT"
+          echo "CLI_OUTPUT=$OUT" >> "$GITHUB_ENV"
           uv run --no-sync python scripts/write_checksum.py "$OUT"
 
       - name: Test CLI
@@ -264,11 +264,11 @@ jobs:
       - name: Checksum & Summary
         shell: bash
         run: |
-          echo "### SHA256 Checksum (${{ env.CLI_OUTPUT }})" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`$(cat ${{ env.CLI_OUTPUT }}.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "### SHA256 Checksum (${{ env.CLI_OUTPUT }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`\`\`$(cat "${{ env.CLI_OUTPUT }}.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}
           path: |
@@ -284,7 +284,7 @@ jobs:
     timeout-minutes: 90
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build 32-bit Python & Binary
         env:
@@ -295,23 +295,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-multilib libffi-dev:i386 zlib1g-dev:i386 libssl-dev:i386
 
-          wget https://www.python.org/ftp/python/$PY_VER/Python-$PY_VER.tgz
-          tar -xzf Python-$PY_VER.tgz && cd Python-$PY_VER
-          CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix=$PREFIX --enable-shared
-          make -j$(nproc) && sudo make altinstall
+          wget "https://www.python.org/ftp/python/$PY_VER/Python-$PY_VER.tgz"
+          tar -xzf "Python-$PY_VER.tgz" && cd "Python-$PY_VER"
+          CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix="$PREFIX" --enable-shared
+          make -j"$(nproc)" && sudo make altinstall
           cd ..
 
           export PATH="$PREFIX/bin:$PATH"
           export LD_LIBRARY_PATH="$PREFIX/lib"
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv venv .venv --python $PREFIX/bin/python3.14
+          uv venv .venv --python "$PREFIX/bin/python3.14"
           source .venv/bin/activate
           CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
           uv sync --locked --no-dev --extra build
           python -m PyInstaller --clean packaging/pyinstaller_cli.spec
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
-          echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> $GITHUB_ENV
+          echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> "$GITHUB_ENV"
           python scripts/write_checksum.py PornFetch_Linux_CLI_x32
 
       - name: Test CLI
@@ -320,7 +320,7 @@ jobs:
           ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_Linux_CLI_x32
           path: |
@@ -340,7 +340,7 @@ jobs:
       matrix:
         arch: [riscv64, s390x, ppc64le]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build via QEMU
         uses: uraimo/run-on-arch-action@v3
@@ -368,15 +368,17 @@ jobs:
 
       - name: Checksum & Upload
         run: |
-          python3 scripts/write_checksum.py PornFetch_Linux_CLI_${{ matrix.arch }}
+          python3 scripts/write_checksum.py "PornFetch_Linux_CLI_${{ matrix.arch }}"
           
-          echo "### SHA256 Checksum (${{ matrix.arch }})" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat PornFetch_Linux_CLI_${{ matrix.arch }}.sha256 >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### SHA256 Checksum (${{ matrix.arch }})"
+            echo "\`\`\`"
+            cat "PornFetch_Linux_CLI_${{ matrix.arch }}.sha256"
+            echo "\`\`\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_Linux_CLI_${{ matrix.arch }}
           path: |
@@ -392,10 +394,10 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
 
@@ -409,13 +411,13 @@ jobs:
 
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: PornFetch_macos_GUI_x64
           path: dmg_x64
 
       - name: Download macOS arm64 DMG
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: PornFetch_macos_GUI_arm64
           path: dmg_arm64
@@ -474,13 +476,15 @@ jobs:
       - name: Checksum & Summary
         run: |
           uv run --no-sync python scripts/write_checksum.py PornFetch_macOS_GUI_Universal.dmg
-          echo "### SHA256 Checksum (macOS Universal)" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat PornFetch_macOS_GUI_Universal.dmg.sha256 >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### SHA256 Checksum (macOS Universal)"
+            echo '```'
+            cat PornFetch_macOS_GUI_Universal.dmg.sha256
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Universal Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PornFetch_macOS_GUI_Universal
           path: |
@@ -498,10 +502,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: all_artifacts
 
@@ -516,8 +520,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.ref_name }}
+          GITHUB_REF: ${{ github.ref }}
         run: |
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             gh release create "$TAG_NAME" dist_release/* \
               --title "Porn Fetch $TAG_NAME" \
               --generate-notes \
