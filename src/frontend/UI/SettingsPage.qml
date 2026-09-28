@@ -7,10 +7,12 @@ import QtQuick.Controls.impl
 import QtQuick.Controls.Material
 
 Pane {
-    font.pointSize: Qt.platform.os === "android" ? Math.max(12, appSettings.font_size) : appSettings.font_size
+    font.pointSize: androidLayoutMode ? Math.max(12, appSettings.font_size) : appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
     readonly property bool materialStyle: appSettings.core_style === "Material"
     readonly property bool compact: width < 700
+    readonly property bool androidLayoutMode: Qt.platform.os === "android"
+                                              || (typeof androidLayout !== "undefined" && androidLayout)
 
     component DecimalSpinBox: SpinBox {
         property int decimals: 2
@@ -200,7 +202,7 @@ Pane {
                         highlighted: ListView.isCurrentItem // Visual highlight
 
                         text: modelData // 'modelData' refers to the string ("Video", etc.)
-                        width: parent.width // Span full width of sidebar
+                        width: navList.width // Span full width of sidebar
 
                         // When clicked, switch both the list highlight and the content view
                         onClicked: {
@@ -427,7 +429,7 @@ Pane {
                                         Accessible.description: qsTr("Directory where downloaded videos are saved")
                                         placeholderText: "Enter the output path for the videos..."
                                         Layout.fillWidth: true
-                                        readOnly: Qt.platform.os === "android"
+                                        readOnly: window.androidLayoutMode
                                         text: appSettings.output_path
                                         onEditingFinished: {
                                             var trimmed = text.trim()
@@ -440,7 +442,7 @@ Pane {
                                     Button {
                                         Accessible.name: qsTr("Choose video output folder")
                                         Layout.fillWidth: false
-                                        visible: Qt.platform.os !== "android"
+                                        visible: !window.androidLayoutMode
                                         text: qsTr("Choose Folder…")
                                         onClicked: outputFolderDialog.open()
                                     }
@@ -484,11 +486,11 @@ Pane {
                                 }
                                 CheckBox {
                                     objectName: "trackVideosCheckBox"
-                                    Accessible.name: Qt.platform.os === "android" ? qsTr("Track Videos") : qsTr("Track Videos in PocketBase")
+                                    Accessible.name: window.androidLayoutMode ? qsTr("Track Videos") : qsTr("Track Videos in PocketBase")
                                     Accessible.description: AppStrings.trackVideosHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: Qt.platform.os === "android" ? qsTr("Track Videos") : qsTr("Track Videos (PocketBase)")
+                                    text: window.androidLayoutMode ? qsTr("Track Videos") : qsTr("Track Videos (PocketBase)")
                                     checked: appSettings.track_videos
                                     onToggled: appSettings.track_videos = checked
                                 }
@@ -496,7 +498,7 @@ Pane {
                                 Item { Layout.fillWidth: false } // Empty spacer for 1st column alignment
                                 Label {
                                     Layout.fillWidth: false
-                                    text: Qt.platform.os === "android" ? qsTr("History Data Folder") : qsTr("PocketBase Data Folder")
+                                    text: window.androidLayoutMode ? qsTr("History Data Folder") : qsTr("PocketBase Data Folder")
                                 }
                                 RowLayout {
                                     Layout.fillWidth: true
@@ -509,7 +511,7 @@ Pane {
                                         Accessible.description: qsTr("Directory where PocketBase data files are stored")
                                         placeholderText: "Enter the PocketBase data directory"
                                         Layout.fillWidth: true
-                                        readOnly: Qt.platform.os === "android"
+                                        readOnly: window.androidLayoutMode
                                         text: appSettings.pocketbase_data_path
                                         onEditingFinished: {
                                             var trimmed = text.trim()
@@ -522,7 +524,7 @@ Pane {
                                     Button {
                                         Accessible.name: qsTr("Choose PocketBase data folder")
                                         Layout.fillWidth: false
-                                        visible: Qt.platform.os !== "android"
+                                        visible: !window.androidLayoutMode
                                         text: qsTr("Choose Folder…")
                                         onClicked: pocketbaseFolderDialog.open()
                                     }
@@ -1174,7 +1176,7 @@ Pane {
                                     Accessible.name: qsTr("Strict SNI Obfuscation")
                                     text: "Strict SNI Obfuscation (Requires Admin / root rights)"
                                     Layout.fillWidth: false
-                                    visible: Qt.platform.os !== "android"
+                                    visible: !window.androidLayoutMode
                                     enabled: appSettings.sni_obfuscation
                                     ButtonGroup.group: sniModeGroup
                                     checked: appSettings.sni_obfuscation_strict
@@ -1185,7 +1187,7 @@ Pane {
                                     objectName: "strictProfileCombo"
                                     Accessible.name: qsTr("Strict SNI Obfuscation Profile")
                                     Layout.fillWidth: true
-                                    visible: Qt.platform.os !== "android" && appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
+                                    visible: !window.androidLayoutMode && appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
                                     enabled: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
                                     model: ["Strict Fragmentation", "Strict Reverse", "Strict Desync"]
                                     currentIndex: Math.max(0, model.indexOf(appSettings.sni_obfuscation_strict_profile))

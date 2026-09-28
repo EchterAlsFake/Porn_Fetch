@@ -8,6 +8,8 @@ Pane {
     id: root
 
     required property var backendController
+    readonly property bool androidLayoutMode: Qt.platform.os === "android"
+                                              || (typeof androidLayout !== "undefined" && androidLayout)
     readonly property string selectedProvider: {
         if (providerTabs.currentIndex === 1)
             return "XHamster"
@@ -186,7 +188,7 @@ Pane {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Login with Browser Cookies")
-                visible: Qt.platform.os !== "android"
+                visible: !root.androidLayoutMode
                 enabled: !root.accountBusy
 
                 onClicked: {

@@ -5,11 +5,13 @@ import QtQuick.Window
 
 Window {
     id: root
+    readonly property bool androidLayoutMode: Qt.platform.os === "android"
+                                              || (typeof androidLayout !== "undefined" && androidLayout)
 
-    width: Qt.platform.os === "android" ? Screen.width : 580
-    height: Qt.platform.os === "android" ? Screen.height : 700
-    minimumWidth: Qt.platform.os === "android" ? 0 : 480
-    minimumHeight: Qt.platform.os === "android" ? 0 : 620
+    width: Qt.platform.os === "android" ? Screen.width : (androidLayoutMode ? 400 : 580)
+    height: Qt.platform.os === "android" ? Screen.height : (androidLayoutMode ? 800 : 700)
+    minimumWidth: androidLayoutMode ? 0 : 480
+    minimumHeight: androidLayoutMode ? 0 : 620
     modality: Qt.ApplicationModal
     flags: Qt.Dialog
     title: qsTr("Proxy connection")
@@ -205,7 +207,7 @@ Window {
 
     Pane {
         anchors.fill: parent
-        padding: Qt.platform.os === "android" ? 8 : 22
+        padding: root.androidLayoutMode ? 8 : 22
 
         ScrollView {
             anchors.fill: parent

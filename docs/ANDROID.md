@@ -7,6 +7,14 @@ app's private data directory. A completed card's **Save to device** action uses
 the native document picker to copy it to a user-chosen location. The history
 database uses in-process SQLite on Android, while desktop keeps PocketBase.
 
+## Preview the layout on desktop
+
+Run `uv run main.py --android` from the repository root. The window opens at
+phone size; resize it to at least 700 logical pixels wide to see the tablet
+navigation rail. This is a layout preview: Python services, paths, and file
+pickers still run on the desktop operating system. Use an APK on a device to
+check Android platform behavior.
+
 ## Build inputs
 
 The Android deployment configuration is

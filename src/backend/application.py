@@ -188,7 +188,7 @@ class Backend(QObject):
     proxyApplied = Signal(bool)
     shutdown_complete = Signal()
 
-    def __init__(self, parent: QObject | None = None):
+    def __init__(self, parent: QObject | None = None, *, mobile_layout: bool = False):
         super().__init__(parent)
         self._background_tasks: set[asyncio.Task[object]] = set()
         self._login_task: asyncio.Task[object] | None = None
@@ -214,7 +214,7 @@ class Backend(QObject):
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.showMessage.connect(self.handle_message)
-        if is_android:
+        if is_android or mobile_layout:
             set_mobile_notice_handler(self.mobileNotice.emit)
         app_settings.restartRequired.connect(self.setting_requires_restart)
         self.database_bridge: DatabaseBridge | None = None
@@ -1357,6 +1357,7 @@ def main() -> None:
         This is recommended to run if you want to buy a license so that you can see the current state of the application
         before maybe buying something that doesn't work anymore.""")
     parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
+    parser.add_argument("--android", action="store_true", help="Preview the Android QML layout on desktop")
 
     args = parser.parse_args()
     test_mode = False
@@ -1399,7 +1400,7 @@ def main() -> None:
     theme_manager = ThemeManager(parent=engine)
 
     # The backend instance handles the main logic, see class above
-    backend_instance = Backend(parent=engine)
+    backend_instance = Backend(parent=engine, mobile_layout=args.android)
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:
@@ -1430,6 +1431,7 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
+    engine.rootContext().setContextProperty("androidLayout", is_android or args.android)
     for context_name, resource_path in (
         ("applicationLicenseText", ":/legal/LICENSE"),
         ("thirdPartyNoticesText", ":/legal/THIRD_PARTY_NOTICES.md"),
@@ -1442,8 +1444,10 @@ def main() -> None:
 
     update_splash("Loading Window...")
 
-    # 3. Resolve path to Main.qml relative to this script
-    qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / ("AndroidMain.qml" if is_android else "Main.qml")
+    # 3. Choose the native layout, or open the Android layout as a desktop preview.
+    qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / (
+        "AndroidMain.qml" if is_android or args.android else "Main.qml"
+    )
 
 
     engine.load(QUrl.fromLocalFile(str(qml_file)))
