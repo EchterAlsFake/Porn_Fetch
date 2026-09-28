@@ -293,6 +293,9 @@ jobs:
           - platform: windows
             arch: arm64
             os: windows-11-arm
+          - platform: windows
+            arch: x86
+            os: windows-latest
           - platform: macos
             arch: x64
             os: macos-15-intel
@@ -325,7 +328,17 @@ jobs:
           echo "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
 
       - name: Sync Dependencies
+        if: matrix.platform != 'windows' || matrix.arch != 'x86'
         run: uv sync --locked --no-dev --extra build
+
+      - name: Sync Windows x86 dependencies
+        if: matrix.platform == 'windows' && matrix.arch == 'x86'
+        shell: bash
+        run: |
+          # 48.0.1 is the last release with a Windows x86 wheel.
+          uv sync --locked --no-dev --extra build --no-install-package cryptography
+          uv pip install --python .venv/Scripts/python.exe --no-deps --only-binary cryptography 'cryptography==48.0.1'
+          uv run --no-sync python -c 'import cryptography; assert cryptography.__version__ == "48.0.1"'
 
       - name: Include OpenSSL DLLs (Windows ARM64)
         if: matrix.platform == 'windows' && matrix.arch == 'arm64'

@@ -34,7 +34,7 @@ def target_name(system: str | None = None, machine: str | None = None) -> str:
         machine = "x32"
     allowed = {
         "linux": {"amd64", "arm64", "x32", "riscv64", "s390x", "ppc64le"},
-        "windows": {"amd64", "arm64"},
+        "windows": {"amd64", "arm64", "x86"},
         "darwin": {"amd64", "arm64"},
     }
     if machine not in allowed[system]:

@@ -40,6 +40,7 @@ class CliUpdateTests(unittest.TestCase):
     def test_platform_names_and_versions(self):
         self.assertEqual(target_name("Linux", "riscv64"), "linux/riscv64.zip")
         self.assertEqual(target_name("Windows", "AMD64"), "windows/amd64.zip")
+        self.assertEqual(target_name("Windows", "x86"), "windows/x86.zip")
         self.assertEqual(target_name("Darwin", "aarch64"), "darwin/arm64.zip")
         self.assertGreater(version_parts("3.9.42"), version_parts("3.9.41"))
 

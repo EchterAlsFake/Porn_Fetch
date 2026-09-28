@@ -128,7 +128,7 @@ the file there. The [installation guide](docs/INSTALLATION.md) has the steps.
 | Platform                   | App              | Architectures                                   |
 |----------------------------|------------------|-------------------------------------------------|
 | **Windows**                | GUI              | x64, ARM64                                      |
-| **Windows**                | CLI              | x64, ARM64                                      |
+| **Windows**                | CLI              | x64, ARM64, x86 (beta compatibility build)     |
 | **Linux (X11 / Wayland)**  | GUI              | x64, ARM64                                      |
 | **Linux (X11 / Wayland)**  | CLI              | x64, x86 (x32), riscv64, s390x, ppc64le         |
 | **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
