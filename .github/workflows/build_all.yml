@@ -333,7 +333,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }}
+          uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} ${{ matrix.platform }} ${{ matrix.arch }}
           uv run pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
@@ -399,7 +399,7 @@ jobs:
           source .venv/bin/activate
           CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
           uv sync --locked --no-dev --extra build
-          python packaging/write_cli_build_version.py ${{ github.run_number }}
+          python packaging/write_cli_build_version.py ${{ github.run_number }} linux x32
           python -m PyInstaller --clean packaging/pyinstaller_cli.spec
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
@@ -455,7 +455,7 @@ jobs:
             # 3. Install dependencies ignoring python-version bounds for runner distro python
             pip install --ignore-requires-python '.[build]'
 
-            python3 packaging/write_cli_build_version.py ${{ github.run_number }}
+            python3 packaging/write_cli_build_version.py ${{ github.run_number }} linux ${{ matrix.arch }}
             
             # 4. Build the binary
             pyinstaller --clean packaging/pyinstaller_cli.spec

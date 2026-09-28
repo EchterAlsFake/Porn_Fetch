@@ -156,8 +156,9 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
 
 def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
     try:
-        current = json.loads(BUILD_FILE.read_text(encoding="utf-8"))["version"]
-        name = target_name()
+        build = json.loads(BUILD_FILE.read_text(encoding="utf-8"))
+        current = build["version"]
+        name = build.get("target") or target_name()
         cache = Path(user_cache_dir("PornFetch")) / "cli-update"
         metadata_dir = cache / "metadata"
         target_dir = cache / "targets"
