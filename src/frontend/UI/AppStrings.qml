@@ -76,7 +76,7 @@ QtObject {
         Tor: If you enable Tor in Porn Fetch, the .onion domain of my server will be used (also hosted in Sweden).
         See: https://github.com/EchterAlsFake/Server for the full source code.
 
-        For macOS Users the Sparkle Framework will be used for update checking. Sparkle does not support the Tor domain.
+        Installed Qt Installer Framework builds can use the maintenance tool for updates. Standalone builds can check for a newer version, but you need to download and install it yourself.
         ")
 
     readonly property string supressErrors:

@@ -20,7 +20,7 @@ Before publishing a source-available release:
    contributors other than Johannes Habel.
 2. Build each supported artifact and inspect its actual dependency set. Bundle
    the exact applicable notices, license texts, and source/relinking information
-   required for Qt, PocketBase, Sparkle, FFmpeg, and Python dependencies.
+   required for Qt, PocketBase, FFmpeg, and Python dependencies.
 3. Confirm the delivered source and builds display the same application license
    and make the license and third-party notices easy to find in the GUI and CLI.
 4. Obtain German/EU legal review of the custom license, the separate tutorial

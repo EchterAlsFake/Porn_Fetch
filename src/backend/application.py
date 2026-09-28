@@ -108,7 +108,7 @@ from src.backend.login_manager import (
 from pornhub_api.modules.errors import LoginFailed as phLoginFailed
 from pornhub_api.modules.errors import ClientAlreadyLogged
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
-from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater, find_maintenance_tool
+from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_proxy_manager import SNIProxyManager
@@ -310,15 +310,6 @@ class Backend(QObject):
 
     def _start_update_check(self) -> None:
         self._update_check_requested = False
-        if sys.platform == "darwin" and find_maintenance_tool() is None:
-            try:
-                if not hasattr(self, "sparkle"):
-                    self.sparkle = SparkleUpdater()
-                self.sparkle.check_for_updates()
-            except Exception:
-                self.logger.exception("Could not start the Sparkle updater")
-            return
-
         if self._update_check_task is not None and not self._update_check_task.done():
             return
 

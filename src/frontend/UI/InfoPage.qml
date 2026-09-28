@@ -138,7 +138,7 @@ Rectangle {
             CreditCard {
                 title: "Third-party components"
                 icon: "📚"
-                content: "Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, Sparkle on macOS, and Python packages. Use the third-party notices button for the current inventory and license information."
+                content: "Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, and Python packages. Use the third-party notices button for the current inventory and license information."
             }
 
             // Other Tech

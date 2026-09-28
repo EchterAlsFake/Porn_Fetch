@@ -20,10 +20,6 @@ def collect_legal(output: Path, *, offline: bool = False) -> Path:
     for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copy2(PROJECT_ROOT / name, output / name)
     shutil.copytree(PROJECT_ROOT / "LICENSES", output / "LICENSES", dirs_exist_ok=True)
-    sparkle = output / "vendor" / "Sparkle-LICENSE"
-    sparkle.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(PROJECT_ROOT / "vendor" / "macos" / "sparkle" / "LICENSE", sparkle)
-
     inventory = [
         "# Python distributions in the build environment",
         "",
@@ -72,7 +68,7 @@ def collect_legal(output: Path, *, offline: bool = False) -> Path:
     (output / "PYTHON_INVENTORY.md").write_text("\n".join(inventory) + "\n", encoding="utf-8")
     (output / "REVIEW_REQUIRED.md").write_text(
         "# Checks before publication\n\n" + "\n".join(review) + "\n"
-        + "\nCheck FFmpeg linkage, PocketBase, Sparkle, assets, and rights to other contributors' code.\n",
+        + "\nCheck FFmpeg linkage, PocketBase, assets, and rights to other contributors' code.\n",
         encoding="utf-8",
     )
     archive = output.with_suffix(".zip")

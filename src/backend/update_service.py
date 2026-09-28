@@ -1,6 +1,4 @@
 import asyncio
-import ctypes
-import logging
 import os
 import re
 import subprocess
@@ -9,7 +7,7 @@ import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 
-from PySide6.QtCore import QCoreApplication, QObject, Signal, Slot
+from PySide6.QtCore import QCoreApplication, QObject, Signal
 from curl_cffi import Response
 
 from src.backend import clients
@@ -50,33 +48,6 @@ def find_maintenance_tool() -> Path | None:
         if candidate.is_file() and (sys.platform == "win32" or os.access(candidate, os.X_OK)):
             return candidate.resolve()
     return None
-
-
-class SparkleUpdater(QObject):
-    def __init__(self):
-        super().__init__()
-
-        macos_dir = os.path.dirname(os.path.realpath(sys.executable))
-        frameworks_dir = os.path.realpath(os.path.join(macos_dir, "..", "Frameworks"))
-        dylib_path = os.path.join(frameworks_dir, "sparkle_bridge.dylib")
-
-        logger.info("Loading Sparkle bridge: %s", dylib_path)
-        self._lib = ctypes.CDLL(dylib_path)
-        self._lib.sparkle_start_updater.argtypes = []
-        self._lib.sparkle_start_updater.restype = None
-        self._lib.sparkle_check_for_updates.argtypes = []
-        self._lib.sparkle_check_for_updates.restype = None
-        self._lib.sparkle_can_check_for_updates.argtypes = []
-        self._lib.sparkle_can_check_for_updates.restype = ctypes.c_int
-        self._lib.sparkle_start_updater()
-
-    @Slot()
-    def check_for_updates(self):
-        logger.info("Checking for updates...")
-        self._lib.sparkle_check_for_updates()
-
-    def can_check_for_updates(self) -> bool:
-        return bool(self._lib.sparkle_can_check_for_updates())
 
 
 class CheckUpdates:

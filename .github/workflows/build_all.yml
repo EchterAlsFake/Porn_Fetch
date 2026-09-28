@@ -159,7 +159,6 @@ jobs:
             cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
             chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
           fi
-          uv run python scripts/patch_macos_bundle.py "Porn Fetch.app"
           codesign --force --deep --sign - "Porn Fetch.app"
           mkdir dist_dmg
           cp -pR "Porn Fetch.app" dist_dmg/
@@ -549,11 +548,7 @@ jobs:
               fi
           done
           
-          # Patch the bundle to correctly integrate the Sparkle framework for updates
-          echo "Patching macOS bundle for Sparkle framework..."
-          uv run python scripts/patch_macos_bundle.py "PornFetch_Universal.app"
-
-          # Re-sign after changing binaries and Info.plist
+          # Re-sign after changing Mach-O binaries
           echo "Signing Universal App..."
           codesign --force --deep --sign - "PornFetch_Universal.app"
           

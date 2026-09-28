@@ -94,7 +94,6 @@ Schema-2 license client, shared service, and production public configuration. It
 - `docs/`: user/developer docs, release history, and project history.
 - `packaging/`: PyInstaller and PySide/Nuitka build specifications.
 - `scripts/`: install, maintenance, QtAsyncio, and macOS bundle scripts.
-- `vendor/`: vendored platform components; currently the macOS Sparkle framework.
 - `.github/workflows/`: offline CI and platform build pipelines.
 
 ## Common commands

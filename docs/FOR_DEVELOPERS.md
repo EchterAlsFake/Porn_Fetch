@@ -44,7 +44,6 @@ The CLI must remain usable without PySide6 or a display server. Never import `sr
 - `src/tests/`: unit, integration, smoke, and manual test groups.
 - `packaging/`: PyInstaller and PySide/Nuitka build specifications.
 - `scripts/`: installation and build-maintenance scripts.
-- `vendor/`: vendored platform components such as Sparkle.
 - `docs/`: maintained documentation and historical release notes.
 
 The root `main.py` and `Porn_Fetch_CLI.py` files are intentionally small launchers. GUI composition lives in `src/backend/application.py`.
@@ -88,8 +87,6 @@ reads it into package metadata, so releases only update that one file.
 ## Build files
 
 Desktop builds use the platform specification in `packaging/pysidedeploy_*.spec`. The headless binary uses `packaging/pyinstaller_cli.spec`. The cross-platform build workflow is `.github/workflows/build_all.yml`.
-
-The macOS Sparkle framework is stored in `vendor/macos/sparkle/`; `scripts/patch_macos_bundle.py` performs the final bundle patching.
 
 ## Implementation notes
 
