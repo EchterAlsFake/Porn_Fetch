@@ -86,7 +86,7 @@ update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
-                            QTimer, QFile, QIODevice)
+                            QTimer, QFile, QDir, QIODevice)
 
 update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
@@ -146,7 +146,7 @@ except Exception:
 
 
 stop_flag = asyncio.Event()
-sni_proxy_manager = SNIProxyManager(app_settings)
+sni_proxy_manager = None if is_android or "--android" in sys.argv else SNIProxyManager(app_settings)
 log_level = app_settings.log_level_map.get(app_settings.log_level)
 
 
@@ -228,7 +228,7 @@ class Backend(QObject):
         # refresh them immediately when the content locale changes.
         self.load_clients()
         app_settings.reloadClients.connect(self.load_clients)
-        if sni_proxy_manager.last_error:
+        if sni_proxy_manager and sni_proxy_manager.last_error:
             QTimer.singleShot(
                 0,
                 lambda: ui_popup(
@@ -371,26 +371,52 @@ class Backend(QObject):
             self.handle_message("The selected save location is not supported.")
             return
 
-        def copy_file() -> None:
-            target = QFile(destination.toString() if destination.scheme() == "content" else destination.toLocalFile())
-            if not target.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Truncate):
-                raise OSError(target.errorString())
-            try:
-                with source.open("rb") as downloaded:
-                    while chunk := downloaded.read(1024 * 1024):
-                        if target.write(chunk) != len(chunk):
-                            raise OSError(target.errorString())
-            finally:
-                target.close()
-
         async def export() -> None:
             try:
-                await asyncio.to_thread(copy_file)
+                await asyncio.to_thread(self._copy_download_file, source,
+                    destination.toString() if destination.scheme() == "content" else destination.toLocalFile())
                 self.handle_message("Download exported successfully.")
             except Exception as error:
                 self.handle_message(f"Could not export download: {error}")
 
         self._spawn(export(), name=f"export-{job_id}")
+
+    @staticmethod
+    def _copy_download_file(source: Path, target_path: str) -> None:
+        target = QFile(target_path)
+        if not target.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Truncate):
+            raise OSError(target.errorString())
+        try:
+            with source.open("rb") as downloaded:
+                while chunk := downloaded.read(1024 * 1024):
+                    if target.write(chunk) != len(chunk):
+                        raise OSError(target.errorString())
+        finally:
+            target.close()
+
+    @Slot(str)
+    def set_android_output_folder(self, folder_url: str) -> None:
+        folder = QUrl(folder_url)
+        if folder.scheme() not in ("content", "file"):
+            self.handle_message("Choose a folder from the system picker.")
+            return
+        app_settings.android_output_folder = folder.toString()
+
+    async def _auto_export_android_download(self, source: Path) -> None:
+        folder_url = QUrl(app_settings.android_output_folder)
+        if not folder_url.isValid() or folder_url.scheme() not in ("content", "file"):
+            return
+        folder = folder_url.toString() if folder_url.scheme() == "content" else folder_url.toLocalFile()
+        target_path = QDir(folder).filePath(source.name)
+        try:
+            def copy_to_folder() -> None:
+                if app_settings.skip_existing_files and QFile.exists(target_path):
+                    return
+                self._copy_download_file(source, target_path)
+
+            await asyncio.to_thread(copy_to_folder)
+        except Exception as error:
+            self.handle_message(f"Could not save to the selected folder: {error}. Choose the folder again in Settings.")
 
     async def _prepare_for_update(self) -> None:
         """Gracefully stop PocketBase and close sessions before the installer runs."""
@@ -889,6 +915,8 @@ class Backend(QObject):
                         )
                 if status == "completed":
                     self._downloads_model.update_progress(job_id, 100)
+                    if is_android or "--android" in sys.argv:
+                        await self._auto_export_android_download(output_path)
                 self.download_manager.update_status(job_id, status)
         except asyncio.CancelledError:
             video.status = "cancelled"
@@ -1316,10 +1344,11 @@ class Backend(QObject):
             await close_component("network clients", clients.close_all_clients)
             if self._license_bridge is not None:
                 await close_component("license service", self._license_bridge.close)
-            try:
-                sni_proxy_manager.stop()
-            except Exception:
-                self.logger.exception("Could not stop the SNI proxy")
+            if sni_proxy_manager:
+                try:
+                    sni_proxy_manager.stop()
+                except Exception:
+                    self.logger.exception("Could not stop the SNI proxy")
             if self.database_bridge is not None:
                 await close_component("database service", self.database_bridge.close)
             if self._pending_pocketbase_move is not None:
@@ -1370,7 +1399,7 @@ def main() -> None:
         test_mode = True
 
     sys.unraisablehook = custom_unraisable_hook
-    local_url = sni_proxy_manager.start()
+    local_url = sni_proxy_manager.start() if sni_proxy_manager else None
     if local_url:
         print(f"SNI proxy route: {local_url}")
 

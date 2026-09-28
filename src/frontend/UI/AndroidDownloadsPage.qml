@@ -14,6 +14,18 @@ Pane {
     readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
+    function outputFolderName() {
+        if (!appSettings.android_output_folder) return qsTr("App storage")
+        var path = decodeURIComponent(appSettings.android_output_folder.split("/").pop())
+        return path.split(":").pop() || qsTr("Selected folder")
+    }
+
+    Dialogs.FolderDialog {
+        id: outputFolderDialog
+        title: qsTr("Choose where to save videos")
+        onAccepted: backend.set_android_output_folder(selectedFolder.toString())
+    }
+
     function filterValue(field) {
         return field.text.trim() === "" ? null : field.text.trim()
     }
@@ -92,6 +104,20 @@ Pane {
                         else
                             backend.process_playlist_url(url, customOptions.text, root.filters())
                         urlField.clear()
+                    }
+                }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Save to: %1").arg(root.outputFolderName())
+                        color: root.mutedColor
+                        elide: Text.ElideRight
+                    }
+                    Button {
+                        text: qsTr("Choose folder")
+                        flat: true
+                        onClicked: outputFolderDialog.open()
                     }
                 }
             }
@@ -237,7 +263,7 @@ Pane {
                         }
                         Button {
                             Layout.fillWidth: true
-                            text: qsTr("Save to device")
+                            text: qsTr("Save elsewhere")
                             visible: card.status === "completed"
                             onClicked: exportDialog.open()
                         }

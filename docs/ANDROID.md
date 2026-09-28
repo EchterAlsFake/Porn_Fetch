@@ -2,18 +2,21 @@
 
 The Android GUI uses `AndroidMain.qml` and shares the existing Python download and
 account backend with desktop. The phone layout has bottom navigation and download
-cards; tablet widths use a navigation rail. Android downloads are written to the
-app's private data directory. A completed card's **Save to device** action uses
-the native document picker to copy it to a user-chosen location. The history
+cards; wide tablet layouts use a navigation rail. Android downloads are staged in
+the app's private data directory. The user can choose a destination folder from
+Downloads or Settings; completed videos are then copied there automatically.
+**Save elsewhere** on a completed card remains available for an individual copy.
+The history
 database uses in-process SQLite on Android, while desktop keeps PocketBase.
 
 ## Preview the layout on desktop
 
 Run `uv run main.py --android` from the repository root. The window opens at
-phone size; resize it to at least 700 logical pixels wide to see the tablet
+phone size; resize it to at least 960 logical pixels wide to see the tablet
 navigation rail. This is a layout preview: Python services, paths, and file
 pickers still run on the desktop operating system. Use an APK on a device to
-check Android platform behavior.
+check Android platform behavior. SNI proxy features are disabled in the Android
+layout, including the desktop preview.
 
 ## Build inputs
 
@@ -41,7 +44,8 @@ the legal and licensing resources.
 
 Use at least one narrow phone and one tablet in portrait and landscape. Check
 navigation, software keyboard and Back behavior, single and model URL fetching,
-quality licensing, pause/resume, save through the Android document picker,
+quality licensing, pause/resume, automatic copies to a selected Android folder,
+folder access after an app restart, save elsewhere through the document picker,
 license import through the picker, account login, and history after relaunch.
 Automatic desktop installation and desktop update flows are not exposed in the
 Android layout. CI setup is intentionally deferred.

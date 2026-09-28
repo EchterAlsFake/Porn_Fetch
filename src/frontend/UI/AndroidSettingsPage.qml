@@ -190,6 +190,18 @@ Pane {
         onAccepted: bridge.installFromPath(selectedFile.toString())
     }
 
+    Dialogs.FolderDialog {
+        id: outputFolderDialog
+        title: qsTr("Choose where to save videos")
+        onAccepted: backend.set_android_output_folder(selectedFolder.toString())
+    }
+
+    function outputFolderName() {
+        if (!appSettings.android_output_folder) return qsTr("App storage")
+        var path = decodeURIComponent(appSettings.android_output_folder.split("/").pop())
+        return path.split(":").pop() || qsTr("Selected folder")
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: root.tablet ? 18 : 12
@@ -228,16 +240,22 @@ Pane {
                 Repeater {
                     model: root.titles
                     delegate: ItemDelegate {
+                        id: categoryDelegate
                         required property int index
                         required property string modelData
                         Layout.fillWidth: true
                         Layout.preferredHeight: 72
                         onClicked: root.section = index
+                        scale: pressed ? 0.98 : hovered ? 1.015 : 1
+                        Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutCubic } }
                         background: Rectangle {
                             radius: 18
                             color: root.activeSection === index && root.tablet
                                    ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.18)
+                                   : categoryDelegate.hovered
+                                     ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.10)
                                    : root.cardColor
+                            Behavior on color { ColorAnimation { duration: 150 } }
                         }
                         contentItem: RowLayout {
                             spacing: 12
@@ -271,6 +289,12 @@ Pane {
                                     elide: Text.ElideRight
                                 }
                             }
+                            Label {
+                                visible: !root.tablet
+                                text: "›"
+                                color: root.mutedColor
+                                font.pixelSize: 26
+                            }
                         }
                     }
                 }
@@ -285,14 +309,9 @@ Pane {
             spacing: 8
 
             RowLayout {
+                visible: root.tablet
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
-                Button {
-                    visible: !root.tablet
-                    text: qsTr("Back")
-                    flat: true
-                    onClicked: root.goBack()
-                }
+                Layout.preferredHeight: visible ? 52 : 0
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 0
@@ -385,14 +404,33 @@ Pane {
                     value: appSettings.track_videos
                     onChanged: function(selected) { appSettings.track_videos = selected }
                 }
-                TextRow {
-                    label: qsTr("Download location")
-                    value: appSettings.output_path
-                    locked: true
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Save completed videos to")
+                    color: root.textColor
+                    font.bold: true
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: qsTr("On Android, save a completed video to another folder from its download card.")
+                    text: root.outputFolderName()
+                    color: root.mutedColor
+                    wrapMode: Text.Wrap
+                }
+                Button {
+                    Layout.fillWidth: true
+                    text: qsTr("Choose folder")
+                    onClicked: outputFolderDialog.open()
+                }
+                Button {
+                    Layout.fillWidth: true
+                    visible: appSettings.android_output_folder !== ""
+                    text: qsTr("Use app storage")
+                    flat: true
+                    onClicked: appSettings.android_output_folder = ""
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Completed videos are saved to this folder automatically.")
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                     font.pixelSize: 12
@@ -458,15 +496,6 @@ Pane {
                 ToggleRow { label: qsTr("Encrypted Client Hello"); value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
                 ToggleRow { label: qsTr("Use Tor"); value: appSettings.enable_tor; onChanged: function(v) { appSettings.enable_tor = v } }
                 ToggleRow { label: qsTr("Route license requests through Tor"); value: appSettings.enable_tor_server_routing; onChanged: function(v) { appSettings.enable_tor_server_routing = v } }
-                ToggleRow {
-                    label: qsTr("SNI obfuscation")
-                    detail: qsTr("Uses the Lite mode on Android. Restart required.")
-                    value: appSettings.sni_obfuscation
-                    onChanged: function(v) {
-                        if (v) appSettings.set_sni_obfuscation_mode("lite")
-                        appSettings.sni_obfuscation = v
-                    }
-                }
                 Button {
                     Layout.fillWidth: true
                     text: appSettings.proxy ? qsTr("Configure proxy") : qsTr("Set up proxy")

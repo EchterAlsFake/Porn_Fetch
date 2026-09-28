@@ -64,6 +64,7 @@ class SettingsManager(QObject):
     networkDelayChanged = Signal(int)
     downloadWorkersChanged = Signal(int)
     outputPathChanged = Signal(str)
+    androidOutputFolderChanged = Signal(str)
     skipExistingFilesChanged = Signal(bool)
     writeMetadataChanged = Signal(bool)
     resultLimitChanged = Signal(int)
@@ -318,6 +319,17 @@ class SettingsManager(QObject):
         if val != self.output_path:
             self._settings.setValue("Video/output_path", val)
             self.outputPathChanged.emit(val)
+
+    @Property(str, notify=androidOutputFolderChanged)
+    def android_output_folder(self) -> str:
+        return self.get_str("Video/android_output_folder", "")
+
+    @android_output_folder.setter
+    def android_output_folder(self, folder: str) -> None:
+        if folder != self.android_output_folder:
+            self._settings.setValue("Video/android_output_folder", folder)
+            self._settings.sync()
+            self.androidOutputFolderChanged.emit(folder)
 
     @Property(bool, notify=writeMetadataChanged)
     def write_metadata(self) -> bool:

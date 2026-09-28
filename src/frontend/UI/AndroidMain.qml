@@ -25,14 +25,23 @@ ApplicationWindow {
     property bool safeToClose: false
     property int pageIndex: 0
     readonly property bool tablet: contentItem.width >= 960
+    readonly property bool settingsDetail: pageIndex === 3 && !settingsPage.tablet && settingsPage.section >= 0
+    readonly property bool moreDetail: !tablet && (pageIndex === 4 || pageIndex === 5)
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Statistics"),
-                                      qsTr("Settings"), qsTr("Info"), qsTr("Supported websites")]
+                                      qsTr("Settings"), qsTr("Info"), qsTr("Supported websites"), qsTr("More")]
     readonly property var pageDescriptions: [qsTr("Collect and save videos"), qsTr("Your connected accounts"),
                                              qsTr("Your download activity"), qsTr("Make it yours"),
-                                             qsTr("About this app"), qsTr("Available sources")]
+                                             qsTr("About this app"), qsTr("Available sources"), qsTr("Explore the app")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.svg", "qrc:/images/graphics/account.svg",
                                       "qrc:/images/graphics/database.svg", "qrc:/images/graphics/settings.svg",
-                                      "qrc:/images/graphics/information.svg", "qrc:/images/graphics/information.svg"]
+                                      "qrc:/images/graphics/information.svg", "qrc:/images/graphics/information.svg",
+                                      "qrc:/images/graphics/information.svg"]
+
+    function goBack() {
+        if (settingsDetail) settingsPage.goBack()
+        else if (moreDetail) pageIndex = 6
+        else if (pageIndex !== 0) pageIndex = 0
+    }
 
     onClosing: function(event) {
         if (!safeToClose) {
@@ -134,10 +143,8 @@ ApplicationWindow {
         focus: true
         Keys.onReleased: function(event) {
             if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-                if (window.pageIndex === 3 && settingsPage.goBack()) {
-                    event.accepted = true
-                } else if (window.pageIndex !== 0) {
-                    window.pageIndex = 0
+                if (window.pageIndex !== 0 || window.settingsDetail) {
+                    window.goBack()
                     event.accepted = true
                 }
             }
@@ -162,18 +169,11 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 76
                         spacing: 10
-                        Rectangle {
+                        Image {
                             Layout.preferredWidth: 38
                             Layout.preferredHeight: 38
-                            radius: 13
-                            color: window.accentColor
-                            Label {
-                                anchors.centerIn: parent
-                                text: "P"
-                                color: "white"
-                                font.pixelSize: 22
-                                font.bold: true
-                            }
+                            source: "qrc:/images/graphics/logo.png"
+                            fillMode: Image.PreserveAspectFit
                         }
                         Label {
                             text: qsTr("Porn Fetch")
@@ -184,7 +184,7 @@ ApplicationWindow {
                     }
 
                     Repeater {
-                        model: window.pageNames
+                        model: window.pageNames.slice(0, 6)
                         delegate: ItemDelegate {
                             required property int index
                             required property string modelData
@@ -232,28 +232,60 @@ ApplicationWindow {
                     Layout.preferredHeight: window.tablet ? 92 : 82
                     color: window.backgroundColor
 
-                    ColumnLayout {
+                    RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: window.tablet ? 28 : 20
                         anchors.rightMargin: 16
-                        spacing: 1
-                        Item { Layout.fillHeight: true }
-                        Label {
-                            text: window.pageNames[window.pageIndex]
-                            color: window.primaryTextColor
-                            font.pixelSize: window.tablet ? 29 : 25
-                            font.bold: true
-                            elide: Text.ElideRight
-                            Layout.fillWidth: true
+                        spacing: 12
+                        Button {
+                            visible: window.settingsDetail || window.moreDetail
+                            Layout.preferredWidth: visible ? 48 : 0
+                            Layout.preferredHeight: 48
+                            text: "←"
+                            font.pixelSize: 25
+                            Accessible.name: qsTr("Back")
+                            onClicked: window.goBack()
+                            contentItem: Label {
+                                text: "←"
+                                color: window.accentColor
+                                font.pixelSize: 28
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            background: Rectangle {
+                                radius: 24
+                                color: Qt.rgba(window.accentColor.r, window.accentColor.g,
+                                               window.accentColor.b, 0.18)
+                            }
                         }
-                        Label {
-                            text: window.pageDescriptions[window.pageIndex]
-                            color: window.secondaryTextColor
-                            font.pixelSize: 13
-                            Layout.fillWidth: true
-                            elide: Text.ElideRight
+                        Image {
+                            visible: !window.tablet && window.pageIndex === 0
+                            Layout.preferredWidth: visible ? 36 : 0
+                            Layout.preferredHeight: 36
+                            source: "qrc:/images/graphics/logo.png"
+                            fillMode: Image.PreserveAspectFit
                         }
-                        Item { Layout.fillHeight: true }
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 1
+                            Label {
+                                text: window.settingsDetail ? settingsPage.titles[settingsPage.section]
+                                      : window.pageNames[window.pageIndex]
+                                color: window.primaryTextColor
+                                font.pixelSize: window.tablet ? 29 : 25
+                                font.bold: true
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
+                            Label {
+                                text: window.settingsDetail ? settingsPage.subtitles[settingsPage.section]
+                                      : window.pageDescriptions[window.pageIndex]
+                                color: window.secondaryTextColor
+                                font.pixelSize: 13
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                            }
+                        }
                     }
                 }
 
@@ -268,6 +300,10 @@ ApplicationWindow {
                     AndroidSettingsPage { id: settingsPage; objectName: "androidSettingsPage" }
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
                     AndroidSupportedWebsitesPage { visible: !appSettings.anonymous_mode }
+                    AndroidMorePage {
+                        visible: !appSettings.anonymous_mode
+                        onOpenPage: function(index) { window.pageIndex = index }
+                    }
                 }
 
                 Rectangle {
@@ -289,8 +325,9 @@ ApplicationWindow {
                                 required property string modelData
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+                                enabled: index !== 4 || !appSettings.anonymous_mode
                                 onClicked: {
-                                    if (index === 4) moreMenu.open()
+                                    if (index === 4) window.pageIndex = 6
                                     else window.pageIndex = index
                                 }
                                 background: Rectangle {
@@ -300,7 +337,7 @@ ApplicationWindow {
                                     width: 56
                                     height: 34
                                     radius: 17
-                                    color: (window.pageIndex === index || (index === 4 && window.pageIndex > 3))
+                                    color: (window.pageIndex === index || (index === 4 && window.pageIndex >= 4))
                                            ? Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                      window.accentColor.b, 0.22) : "transparent"
                                 }
@@ -316,7 +353,7 @@ ApplicationWindow {
                                     Label {
                                         Layout.alignment: Qt.AlignHCenter
                                         text: modelData
-                                        color: (window.pageIndex === index || (index === 4 && window.pageIndex > 3))
+                                        color: (window.pageIndex === index || (index === 4 && window.pageIndex >= 4))
                                                ? window.accentColor : window.secondaryTextColor
                                         font.pixelSize: 11
                                         font.bold: window.pageIndex === index
@@ -326,20 +363,6 @@ ApplicationWindow {
                         }
                     }
 
-                    Menu {
-                        id: moreMenu
-                        y: -height
-                        MenuItem {
-                            text: qsTr("Info")
-                            enabled: !appSettings.anonymous_mode
-                            onTriggered: window.pageIndex = 4
-                        }
-                        MenuItem {
-                            text: qsTr("Supported websites")
-                            enabled: !appSettings.anonymous_mode
-                            onTriggered: window.pageIndex = 5
-                        }
-                    }
                 }
             }
         }
