@@ -31,6 +31,8 @@ analysis = Analysis(
         (os.path.join(project_root, "LICENSE"), "."),
         (os.path.join(project_root, "THIRD_PARTY_NOTICES.md"), "."),
         (os.path.join(project_root, "LICENSES", "Provider-permission.txt"), "LICENSES"),
+        (os.path.join(project_root, "src", "cli", "update_root.json"), "src/cli"),
+        (os.path.join(project_root, "src", "cli", "update_build.json"), "src/cli"),
     ],
     hiddenimports=hiddenimports,
     hookspath=[],

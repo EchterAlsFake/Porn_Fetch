@@ -32,6 +32,9 @@ def build_parser() -> argparse.ArgumentParser:
         prog="Porn_Fetch_CLI.py",
         description="Porn Fetch terminal application and batch downloader (search is not supported).",
     )
+    parser.add_argument("command", nargs="?", choices=["self-update"], help="update a standalone CLI build")
+    parser.add_argument("--check", action="store_true", help="check for a signed CLI update without installing it")
+    parser.add_argument("--yes", action="store_true", help="install a CLI update without a confirmation prompt")
     parser.add_argument("--batch", action="store_true", help="force headless compatibility mode")
     parser.add_argument("--interactive", "-i", action="store_true", help="launch interactive terminal wizard")
     parser.add_argument("--info", action="store_true", help="show CLI usage and supported content types")
@@ -81,8 +84,19 @@ def has_action(args: argparse.Namespace) -> bool:
 
 
 def main(argv: list[str] | None = None) -> int:
+    raw_args = sys.argv[1:] if argv is None else argv
+    if raw_args[:1] == ["--apply-update"]:
+        if len(raw_args) != 3:
+            return 2
+        from .self_update import apply_from_helper
+        return apply_from_helper(raw_args[1], raw_args[2])
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(raw_args)
+    if args.command == "self-update":
+        from .self_update import run_self_update
+        return run_self_update(check_only=args.check, assume_yes=args.yes)
+    if args.check or args.yes:
+        parser.error("--check and --yes require self-update")
     if args.info:
         parser.print_help()
         return 0
@@ -101,7 +115,6 @@ def main(argv: list[str] | None = None) -> int:
     if getattr(args, "stats", False):
         return asyncio.run(run_stats(args))
 
-    raw_args = sys.argv[1:] if argv is None else argv
     is_interactive = getattr(args, "interactive", False) or len(raw_args) == 0
 
     if is_interactive:

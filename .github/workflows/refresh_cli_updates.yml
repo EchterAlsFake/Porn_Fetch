@@ -1,0 +1,71 @@
+name: Refresh CLI Update Metadata
+
+on:
+  schedule:
+    - cron: "19 3 */3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    environment: beta
+    concurrency:
+      group: cli-update-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install publishing dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Configure online signing key
+        shell: bash
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/cli_online.pem"
+          chmod 600 "$RUNNER_TEMP/cli_online.pem"
+
+      - name: Refresh signed metadata
+        shell: bash
+        run: |
+          uv run --no-sync python packaging/publish_cli_updates.py \
+            --remote-url https://api.echteralsfake.me/repo/cli/ \
+            --output cli_update_repository \
+            --private-key "$RUNNER_TEMP/cli_online.pem" \
+            --allow-empty
+
+      - name: Publish refreshed metadata
+        shell: bash
+        env:
+          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
+          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
+          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
+          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
+          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          if [ ! -f cli_update_repository/metadata/timestamp.json ]; then exit 0; fi
+          sudo apt-get update
+          sudo apt-get install -y rsync openssh-client
+          test -n "$IFW_SSH_KEY"
+          test -n "$IFW_KNOWN_HOSTS"
+          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
+          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
+          chmod 600 "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
+          IFW_SSH_KEY_FILE="$RUNNER_TEMP/ifw_deploy_key" \
+          IFW_KNOWN_HOSTS_FILE="$RUNNER_TEMP/ifw_known_hosts" \
+            bash scripts/deploy_cli_updates.sh cli_update_repository

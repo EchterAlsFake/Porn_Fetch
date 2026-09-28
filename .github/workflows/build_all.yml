@@ -15,6 +15,10 @@ on:
         description: "Upload Qt IFW repositories to the configured beta server"
         type: boolean
         default: false
+      deploy_cli_updates:
+        description: "Publish signed CLI update bundles to the beta server"
+        type: boolean
+        default: false
   push:
     tags:
       - "v*"
@@ -329,6 +333,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
+          uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }}
           uv run pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
@@ -394,6 +399,7 @@ jobs:
           source .venv/bin/activate
           CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
           uv sync --locked --no-dev --extra build
+          python packaging/write_cli_build_version.py ${{ github.run_number }}
           python -m PyInstaller --clean packaging/pyinstaller_cli.spec
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
@@ -448,6 +454,8 @@ jobs:
             
             # 3. Install dependencies ignoring python-version bounds for runner distro python
             pip install --ignore-requires-python '.[build]'
+
+            python3 packaging/write_cli_build_version.py ${{ github.run_number }}
             
             # 4. Build the binary
             pyinstaller --clean packaging/pyinstaller_cli.spec
@@ -629,17 +637,88 @@ jobs:
           IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
         run: bash scripts/deploy_ifw_repositories.sh ifw_repositories
 
+  deploy-cli-updates:
+    name: Deploy Signed CLI Updates
+    needs: [build-cli, build-cli-linux-x32, build-exotic-cli]
+    if: >-
+      always() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
+      (inputs.deploy_cli_updates || inputs.create_release) && needs.build-cli.result == 'success'
+    runs-on: ubuntu-24.04
+    environment: beta
+    concurrency:
+      group: cli-update-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: PornFetch_*_CLI_*
+          path: cli_artifacts
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install publishing dependencies and SSH tools
+        run: |
+          uv sync --locked --no-dev
+          sudo apt-get update
+          sudo apt-get install -y rsync openssh-client
+
+      - name: Configure signing and SSH keys
+        shell: bash
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
+          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          test -n "$IFW_SSH_KEY"
+          test -n "$IFW_KNOWN_HOSTS"
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/cli_online.pem"
+          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
+          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
+          chmod 600 "$RUNNER_TEMP/cli_online.pem" "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
+
+      - name: Build signed CLI update repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
+          uv run --no-sync python packaging/publish_cli_updates.py \
+            --artifacts cli_artifacts \
+            --remote-url https://api.echteralsfake.me/repo/cli/ \
+            --output cli_update_repository \
+            --private-key "$RUNNER_TEMP/cli_online.pem" \
+            --version "$APP_VERSION.${{ github.run_number }}"
+
+      - name: Publish signed CLI updates
+        shell: bash
+        env:
+          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
+          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
+          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
+          IFW_SSH_KEY_FILE: ${{ runner.temp }}/ifw_deploy_key
+          IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
+        run: bash scripts/deploy_cli_updates.sh cli_update_repository
+
   # ==========================================
-  # 7. PUBLISH RELEASE (TAGS & DISPATCH)
+  # 8. PUBLISH RELEASE (TAGS & DISPATCH)
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [build-gui, build-cli, build-macos-universal, deploy-repositories]
+    needs: [build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates]
     if: >-
       always() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
       needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
       needs.build-macos-universal.result == 'success' &&
-      needs.deploy-repositories.result == 'success'
+      needs.deploy-repositories.result == 'success' && needs.deploy-cli-updates.result == 'success'
     runs-on: ubuntu-24.04
     permissions:
       contents: write

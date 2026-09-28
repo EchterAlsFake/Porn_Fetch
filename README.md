@@ -80,7 +80,7 @@ reaches the app. Please tell me if any step is confusing or fails.
 - Downloading whole model / channel accounts
 - Multithreaded downloading
 - Automatic resuming
-- Update checks; automatic installation needs a Qt Installer Framework build
+- Installer updates for desktop builds and signed self-updates for standalone CLI builds
 - Custom template for filenames based on video metadata
 - Dark mode and CLI support
 - No ads or mandatory logins
@@ -97,6 +97,11 @@ reaches the app. Please tell me if any step is confusing or fails.
 - Source-available application, made with ❤️ in 🇩🇪
 
 ## Installation
+Standalone 3.9 CLI builds can check for signed updates with `self-update --check`
+and install one with `self-update`. The desktop installers use Qt Installer
+Framework instead. See the [CLI update guide](docs/CLI_UPDATES.md) for
+supported builds and publishing details.
+
 > [!IMPORTANT]
 > Please read the 3.9 guide before installing a beta. It does not describe the
 > older 3.8 download.

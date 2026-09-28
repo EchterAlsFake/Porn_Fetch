@@ -54,12 +54,22 @@ configured in the installer. CI now builds installers for Windows x64, Linux
 x64, and macOS x64/ARM64, but they still need manual install and update testing
 and a deployed repository before beta distribution. See
 [the maintainer guide](QT_INSTALLER_FRAMEWORK.md) for the current status. Do
-not expect automatic updates from a standalone binary or DMG.
+not expect automatic updates from a standalone GUI binary or DMG.
 
 On Linux, make a downloaded `*_Setup.run` installer executable with `chmod +x`
 before running it. On macOS, the standalone app DMG and the `*_Setup.dmg`
 installer are different release assets; choose the one named in the beta
 release notes.
+
+### Standalone CLI updates
+
+The current 3.9 standalone CLI can check the signed update repository with
+`self-update --check` and install a newer build with `self-update` (add `--yes`
+to skip the confirmation prompt). Run the command from the CLI executable you
+want to update and close other copies before installing. If the CLI came from
+a source checkout or package manager, update it with that method instead.
+See the [CLI update guide](CLI_UPDATES.md) for supported architectures and
+what to do if an update fails.
 
 ## Get and import the beta license
 

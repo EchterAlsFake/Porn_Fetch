@@ -22,6 +22,7 @@ dependencies = [
     "python-dateutil",
     "questionary>=2.1.1",
     "rich",
+    "tuf>=7,<8",
     "unofficial-api-for-beeg @ git+https://github.com/EchterAlsFake/unofficial-api-for-beeg@433e0e5791e917d2ab3e6cae13748f58da8f561e",
     "unofficial-api-for-eporner @ git+https://github.com/EchterAlsFake/unofficial-api-for-eporner@771f3ed060e65d22d6566f25577ef9e6dee7765a",
     "unofficial-api-for-pornhub @ git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub@35f1685d7439c51e38e77f176fd2f8fab56e3696",
