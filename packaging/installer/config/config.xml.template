@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Porn Fetch</Name>
+    <Version>3.9.0</Version>
+    <Title>Porn Fetch Setup</Title>
+    <Publisher>EchterAlsFake (Johannes Habel)</Publisher>
+    <ProductUrl>https://echteralsfake.me</ProductUrl>
+    <InstallerApplicationIcon>logo_transparent</InstallerApplicationIcon>
+    <InstallerWindowIcon>logo_transparent.png</InstallerWindowIcon>
+    <StartMenuDir>Porn Fetch</StartMenuDir>
+    <TargetDir>@HomeDir@/Porn Fetch</TargetDir>
+    <RemoteRepositories>
+        <Repository>
+            <Url>https://api.echteralsfake.me/repo/@TARGET_REPO@</Url>
+            <Enabled>1</Enabled>
+        </Repository>
+    </RemoteRepositories>
+</Installer>

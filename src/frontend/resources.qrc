@@ -13,6 +13,11 @@
     <qresource prefix="/credits">
         <file>../../docs/CREDITS.md</file>
     </qresource>
+    <qresource prefix="/legal">
+        <file alias="LICENSE">../../LICENSE</file>
+        <file alias="THIRD_PARTY_NOTICES.md">../../THIRD_PARTY_NOTICES.md</file>
+        <file alias="Provider-permission.txt">../../LICENSES/Provider-permission.txt</file>
+    </qresource>
     <qresource prefix="/licensing">
         <file alias="production.json">../licensing/production.json</file>
     </qresource>

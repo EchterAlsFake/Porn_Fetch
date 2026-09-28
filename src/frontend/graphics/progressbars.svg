@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="Progressbar"><path fill="#595bd4" d="M0 5v6h16V5H0zm15 5H1V6h14v4z" class="color444444 svgShape"></path><path fill="#595bd4" d="M2 7h7v2H2V7z" class="color444444 svgShape"></path></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Progress">
+  <rect x="4" y="4" width="56" height="56" rx="15" fill="#182440" stroke="#44c7e8" stroke-width="3"/>
+  <path d="M17 20h30M17 32h30M17 44h30" stroke="#48617c" stroke-linecap="round" stroke-width="6"/>
+  <path d="M17 20h20M17 32h13M17 44h25" stroke="#d4f5ff" stroke-linecap="round" stroke-width="6"/>
+</svg>

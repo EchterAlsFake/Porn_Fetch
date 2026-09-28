@@ -1,205 +1,105 @@
-# Porn Fetch — Simple Install Guide
+# Installing the current 3.9 source and first beta
 
-**Download the latest release:** https://github.com/EchterAlsFake/Porn_Fetch/releases/
+> [!CAUTION]
+> **This guide is for the 3.9 source tree and its planned first beta.** The
+> latest published 3.8 binary is an older GPL release with a different app and
+> install process. These instructions do not describe it. I am still working
+> through the 3.9 rewrite, and beta builds can have errors. Please report what
+> happened, your OS, the artifact name, and the beta version or commit ID.
 
-> [!NOTE]
-> **Read this first (1 minute):**
-> 1. Choose **GUI** (app window) unless you specifically want the **CLI** (terminal-only).
-> 2. Pick the right **file/architecture** (see below).
-> 3. Decide between **Install** (adds an app shortcut) or **Portable** (runs from the download folder).
+## Get the right file
 
----
+When the first beta is published, get its files from the
+[GitHub Releases page](https://github.com/EchterAlsFake/Porn_Fetch/releases/).
+Read the beta release notes and use only a file listed there. The current build
+workflow targets Windows, Linux, and macOS GUI and CLI artifacts. Availability
+of a target in that workflow does not mean that I have manually verified it or
+that it will be included in the first beta.
 
-## Table of contents
-- [Quick download picker](#quick-download-picker)
-- [GUI vs CLI](#gui-vs-cli)
-- [Which file do I need? (x64 / x86 / ARM)](#which-file-do-i-need-x64--x86--arm)
-- [Install vs Portable](#install-vs-portable)
-- [Updating Porn Fetch](#updating-porn-fetch)
-- [Windows](#windows)
-- [Linux](#linux)
-- [macOS](#macos)
-- [Android](#android)
-- [Verifying the download (GPG signature)](#verifying-the-download-gpg-signature)
-- [Torrent download](#torrent-download)
-- [FAQ](#faq)
-- [Need help?](#need-help)
+The GUI opens an app window. The CLI runs in a terminal and does not need Qt.
+Choose the file matching your operating system and CPU architecture (`x64` or
+`arm64`). Windows CLI also has an `x86` target. The current workflow has no
+Android GUI APK or iOS artifact. The CLI can also be run from source on Termux.
 
----
+### Standalone beta build
 
-## Quick download picker
+If the release asset is a standalone `.exe` or `.bin`, download its matching
+`PornFetch_<platform>_GUI_<architecture>.zip` bundle and extract it into a
+folder you can write to. The bundle keeps the matching `pocketbase` or
+`pocketbase.exe` beside the app; download tracking needs it. Keep the matching
+legal notices archive from the same release as well. On Linux, make the `.bin`
+and `pocketbase` executable first:
 
-| Platform | File to download | Then do this |
-|---|---|---|
-| **Windows (64‑bit)** | `PornFetch_Windows_GUI_x64.exe` | Double‑click → choose **Install** or **Portable**. |
-| **Linux (64‑bit)** | `PornFetch_Linux_GUI_x64.bin` | Make executable → run → choose **Install** or **Portable**. |
-| **macOS** | `PornFetch_macOS_x86-64.dmg` | Open DMG → drag **Porn Fetch** to **Applications** → run (may need Rosetta). |
-| **Android** | `pornfetch-…-arm64-v8a-debug.apk` (start with this) | Install APK (allow unknown apps). If incompatible, try `armeabi-v7a`, then `x86_64`. |
-
-> [!TIP]
-> If you're unsure which one to pick, choose **GUI** and **x64** for desktop. On phones, try **arm64‑v8a (aarch64)** first.
-
----
-
-## GUI vs CLI
-
-- **GUI (Graphical User Interface):** The full app with windows/buttons. This is what most people want.  
-- **CLI (Command Line Interface):** Runs in a terminal. For advanced users, scripting, servers, or tools like Termux/iSH.
-
----
-
-## Which file do I need? (x64 / x86 / ARM)
-
-- **x64 (aka 64‑bit):** Almost every modern Windows/Linux/macOS computer.  
-- **x86 / x32 (aka 32‑bit):** Only very old PCs or 32‑bit OS installs.  
-- **ARM / aarch64:** Most phones/tablets; Apple Silicon Macs (M1/M2/M3) are ARM **but** this app currently ships as **Intel (x64)** and runs via **Rosetta** on macOS.
-
-**How to check quickly**  
-- **Windows:** *Settings → System → About → System type*. If it says **64‑bit**, pick **x64**.  
-- **macOS:**  → *About This Mac* → *Chip*. If you see **Apple M‑series**, you’re on Apple Silicon. Install Rosetta when prompted.  
-- **Linux:** Run `uname -m` in a terminal. `x86_64` = x64; `i686`/`i386` = x86; `aarch64` = ARM.  
-- **Android:** Almost always **arm64‑v8a (aarch64)**.
-
-> [!IMPORTANT]
-> **macOS (Apple Silicon)**
-> Porn Fetch is built as **x86_64 (Intel)**. On M‑series Macs it should run under **Rosetta** (Apple’s translator). If it doesn’t start or you see issues, please open a GitHub issue with details. The macOS build is tested via virtualization.
-
----
-
-## Install vs Portable
-
-When you first launch Porn Fetch, you'll choose one of two modes:
-
-- **Install:** Adds a proper app entry/shortcut so you can search for “Porn Fetch” (or a custom app name you choose).  
-- **Portable:** Keeps everything in the download folder. Double‑click the executable to run. Great for USB sticks, separate folders, or keeping multiple versions.
-
-Both modes work the same. Pick whatever you prefer.
-
----
-
-## Updating Porn Fetch
-
-Porn Fetch checks for updates on startup and shows a link if a new version is available.
-
-- **Installed mode:** Installing a new version **overwrites the app and your `config.ini`** (settings reset to defaults).  
-- **Portable mode:** Your `config.ini` is next to the executable. Replacing the old executable keeps your config file as long as you don’t delete it.
-
-**Tip:** Back up your `config.ini` before updating if you want to keep your settings.
-
----
-
-## Windows
-
-1. Download **`PornFetch_Windows_GUI_x64.exe`** from the [Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases/).  
-2. Double‑click it and choose **Install** (or **Portable**).
-
-> [!NOTE]
-> **SmartScreen / “unknown publisher” prompts:** Click **More info → Run anyway** if you downloaded the file from the official releases page.
-
----
-
-## Linux
-
-1. Download **`PornFetch_Linux_GUI_x64.bin`**.  
-2. Make it executable:  
-   - File manager: Right‑click → **Properties** → **Permissions** → “Allow executing file as program”  
-   - **Or** in a terminal in the download folder:  
-     ```bash
-     chmod +x PornFetch_Linux_GUI_x64.bin
-     ```
-3. Run it (double‑click or):  
-   ```bash
-   ./PornFetch_Linux_GUI_x64.bin
-   ```
-4. Choose **Install** or **Portable**.  
-
-> [!NOTE]
-> Porn Fetch uses **Qt**. Most distros have the needed runtimes. If it fails to start, your package manager may need to install Qt runtime packages. If it prints errors and exits, please open a GitHub issue and include the terminal output and your distro/version.
-
----
-
-## macOS
-
-1. Download **`PornFetch_macOS_x86-64.dmg`**.  
-2. Open the DMG and drag **Porn Fetch** into **Applications**.  
-3. Launch from Launchpad (search “Porn Fetch”).  
-4. If asked to install **Rosetta**, click **Install** (this lets Intel apps run on Apple Silicon).
-
-> [!TIP]
-> If macOS blocks the app: Right‑click the app in **Applications** → **Open** → **Open** (bypasses Gatekeeper once).
-
----
-
-## Android
-
-There are three APK builds for different CPU types:
-- **arm64‑v8a (aarch64):** `pornfetch-*-arm64-v8a-debug.apk` *(try this one first)*  
-- **armeabi‑v7a (armv7‑a):** `pornfetch-*-armeabi-v7a-debug.apk`  
-- **x86_64:** `pornfetch-*-x86_64-debug.apk`
-
-1. Download an APK (start with **arm64‑v8a**).  
-2. Install it (allow “Install unknown apps” if prompted).  
-3. If you get “not compatible”, try the other two builds.
-
-**Output folder (important):** Videos are saved to  
-```
-/storage/emulated/0/Download
-```
-—that’s your **Download** directory. If you don’t see videos there, the download failed.
-
-> [!NOTE]
-> Advanced users can run the **CLI** in **Termux** on Android.
-
----
-
-## Verifying the download (GPG signature)
-
-If you’re in a censored environment or want to be extra safe, verify the release files with GPG.
-
-Every release asset has a matching `.sig` file, e.g.  
-- `PornFetch_Windows_GUI_x64.exe` **and** `PornFetch_Windows_GUI_x64.exe.sig`
-
-**Example (Linux GUI file):**
 ```bash
-gpg --verify PornFetch_Linux_GUI_x64.bin.sig PornFetch_Linux_GUI_x64.bin
+chmod +x PornFetch_linux_GUI_x64.bin
+chmod +x pocketbase
+./PornFetch_linux_GUI_x64.bin
 ```
 
-It should report a **good signature**. If it says it can’t verify the signer, import and trust the public key:
+Use the exact filename from the release page if yours differs. A standalone
+build does not include the Qt Maintenance Tool, so update it by downloading
+the next beta build. Follow its release notes before replacing any files.
 
-- Public key: https://github.com/EchterAlsFake/EchterAlsFake/blob/main/public-key.asc
+On macOS, the current workflow creates architecture specific DMGs and a
+universal DMG. Open the DMG and drag the app to Applications. The macOS build
+is currently ad hoc signed; if the operating system blocks it, report the
+message you see. Do not assume it has been notarized.
 
-> [!NOTE]
-> You need `gpg` installed on your system to verify signatures.
+### Qt Installer Framework build
 
----
+If the release asset is explicitly named as an installer, run it and follow
+its prompts. A Qt Installer Framework installation places a maintenance tool
+beside the app. That tool can install later updates from the repository
+configured in the installer. CI now builds installers for Windows x64, Linux
+x64, and macOS x64/ARM64, but they still need manual install and update testing
+and a deployed repository before beta distribution. See
+[the maintainer guide](QT_INSTALLER_FRAMEWORK.md) for the current status. Do
+not expect automatic updates from a standalone binary or DMG.
 
-## Torrent download
+On Linux, make a downloaded `*_Setup.run` installer executable with `chmod +x`
+before running it. On macOS, the standalone app DMG and the `*_Setup.dmg`
+installer are different release assets; choose the one named in the beta
+release notes.
 
-A torrent is a peer‑to‑peer (P2P) way of distributing files. If you prefer it:
-1. Install a torrent client such as **qBittorrent**.  
-2. Open the `.torrent` file or paste the magnet link from the release.  
-3. Wait for **seeds** (people who already have 100% of the file). The project maintainer seeds most days for several hours; sometimes other seeds will appear too.
+## Get and import the beta license
 
----
+The beta uses the actual license import and validation flow. To get a test
+license, visit [echteralsfake.me](https://echteralsfake.me/) and press the
+**sandbox purchase** button. Follow the site's instructions to obtain the
+license file. **This is not a real transaction. No money is processed. You do
+not need to send cryptocurrency or pay a fee; pressing the button is the test.**
+The purpose is to exercise the license checkout and activation flow before a
+real product exists.
 
-## FAQ
+In the desktop app, open Settings, choose **Import License File**, and select
+the file you received. In the CLI, open **License Management**, choose
+**Import License Key / File**, and enter the file path. The app verifies the
+license against the licensing service, so an initial connection is needed.
+If the site does not give you a file or activation fails, include the error
+message in a bug report. Do not post your license file publicly.
 
-**What’s the difference between x64 and ARM?**  
-- **x64** is the standard for modern desktops/laptops.  
-- **ARM** is common in phones/tablets and Apple Silicon Macs. On macOS, Porn Fetch runs as an **Intel (x64)** app via **Rosetta** on Apple Silicon.
+The license unlocks the beta's gated features, including quality above 720p
+and parallel downloads. It is a test credential, not evidence of a purchase.
 
-**Where are Android downloads saved?**  
-- `~/Download` on your device, i.e. `/storage/emulated/0/Download`.
+## Verify a download
 
-**Do I have to install Porn Fetch?**  
-- No. **Portable** mode runs directly from the file you downloaded.
+The build workflow produces a `.sha256` file for each main artifact. Download
+it alongside the artifact and compare the recorded hash with your local file.
+For example, on Linux:
 
-**Will updating erase my settings?**  
-Yes, always.
+```bash
+sha256sum PornFetch_linux_GUI_x64.bin
+cat PornFetch_linux_GUI_x64.bin.sha256
+```
 
----
+The values must match. A checksum catches accidental corruption; it does not
+by itself prove who published a file. The current workflow does not generate
+the `.sig` files described in older guides.
 
-## Need help?
+## Getting help
 
-- **Releases & downloads:** https://github.com/EchterAlsFake/Porn_Fetch/releases/  
-- **Open an issue (include OS, version, and any terminal output):** https://github.com/EchterAlsFake/Porn_Fetch/issues
+Open a [GitHub issue](https://github.com/EchterAlsFake/Porn_Fetch/issues) with
+the OS and version, artifact filename, steps you took, and the full error
+message. Please mention whether you used a standalone build, a Qt installer,
+or a source run. I am actively working on the rewrite and beta feedback is
+especially useful while the install and update process is being finished.

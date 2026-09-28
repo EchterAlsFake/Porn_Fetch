@@ -1,4 +1,4 @@
-# Porn Fetch V3.8
+# Porn Fetch historical credits
 
 Copyright (C) 2023-2026 Johannes Habel (EchterAlsFake)
 
@@ -20,11 +20,14 @@ him. He's the best that I know!
 - Platform: [GitHub](https://github.com)
 - Graphical User Interface: [PySide6](https://doc.qt.io/qtforpython-6/)
 
-**HUGE Thanks to Qt for giving us, Open-Source devs, a way to work with such a beautiful high
-level frontend AND backend development toolkit for free.**
+**Thanks to Qt for the Python GUI toolkit. Qt components retain their own
+license terms; see the current third-party notices.**
 
 
 # Graphics
+The IconScout entries below acknowledge graphics used in earlier versions.
+The current six SVG navigation icons were redrawn for this application and are
+documented in [ASSET_PROVENANCE.md](ASSET_PROVENANCE.md).
 - <a href="https://iconscout.com/icons/serveranalyse" class="text-underline font-size-sm" target="_blank">Serveranalyse</a> by <a href="https://iconscout.com/de/contributors/khulqi-dsgn/:assets" class="text-underline font-size-sm" target="_blank">Khulqi Design</a>
 - <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a> [*]
 - <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a> [*]
@@ -63,6 +66,9 @@ This font is licensed under SIL Open Font License, Version 1.1
 - [HeathenSkwerl](https://github.com/HeathenSkwerl) Enhancement [#97](https://github.com/EchterAlsFake/Porn_Fetch/issues/97)
 
 # Libraries
+The following list is historical. For components in the current build and
+their license obligations, use [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)
+and the actual artifact inventory.
 - [PHUB](https://github.com/EchterAlsFake/PHUB) (GPLv3)
 - [requests](https://github.com/psf/requests) (Apache 2.0)
 - [hqporner_api](https://github.com/EchterAlsFake/hqporner_api) (LGPLv3)
@@ -118,6 +124,4 @@ Thanks to:
 
 - [palera1n](https://palera.in/)  (Jailbreaking)
 - Kitty-XZ for pre-compiled Python 3.12.5 
-
-
 

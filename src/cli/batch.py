@@ -9,6 +9,7 @@ from typing import Any
 
 from src.licensing.service import create_license_service
 from src.shared.error_reporting import report_exception
+from src.shared.legal import legal_document
 from src.shared.media import select_allowed_quality
 
 from .downloads import DownloadController, PausedStore, download_gallery, download_video
@@ -34,6 +35,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch", action="store_true", help="force headless compatibility mode")
     parser.add_argument("--interactive", "-i", action="store_true", help="launch interactive terminal wizard")
     parser.add_argument("--info", action="store_true", help="show CLI usage and supported content types")
+    parser.add_argument("--license", action="store_true", help="show the application source license")
+    parser.add_argument("--third-party-notices", action="store_true", help="show the bundled third-party notice inventory")
     parser.add_argument("--test-mode", action="store_true", help="run comprehensive CLI self-test with every URL across all supported sites")
     parser.add_argument("--test-downloads", action="store_true", help="opt-in to live download, pause/resume, and PyAV metadata tagging tests during test mode")
     parser.add_argument("--resume", action="store_true", help="resume all paused downloads from previous sessions")
@@ -47,6 +50,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--pocketbase-data", dest="pocketbase_data", help="custom PocketBase data directory path")
     parser.add_argument("--pocketbase-binary", dest="pocketbase_binary", help="custom PocketBase binary path")
+    parser.add_argument(
+        "--install-pocketbase",
+        action="store_true",
+        help="auto-detect PATH or download and install PocketBase binary",
+    )
     parser.add_argument("--filter", help="filter specific test names or URLs when running in test mode")
     parser.add_argument("--url", action="append", default=[], help="video or album URL (repeatable)")
     parser.add_argument("--model", "--profile", dest="model", action="append", default=[], help="profile URL (repeatable)")
@@ -77,6 +85,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.info:
         parser.print_help()
+        return 0
+    if args.license:
+        print(legal_document("LICENSE"))
+        return 0
+    if args.third_party_notices:
+        print(legal_document("THIRD_PARTY_NOTICES.md"))
         return 0
     if args.test_mode:
         from .selftest import run_cli_self_test
@@ -125,6 +139,8 @@ async def run_stats(args: argparse.Namespace) -> int:
         return 0
     except PocketBaseError as exc:
         print(f"PocketBase error: {exc}", file=sys.stderr)
+        if "binary was not found" in str(exc).lower():
+            print("Tip: Run with --install-pocketbase to automatically install PocketBase.", file=sys.stderr)
         return 1
     finally:
         await tracker.close()
@@ -176,6 +192,28 @@ async def run_batch(args: argparse.Namespace) -> int:
                 "Use --error-reporting or --no-error-reporting to save a choice.",
                 file=sys.stderr,
             )
+
+    if getattr(args, "install_pocketbase", False):
+        from src.database.installer import install_pocketbase, verify_pocketbase_binary
+        try:
+            print("Checking and installing PocketBase...")
+            binary_path, source = install_pocketbase()
+            version = verify_pocketbase_binary(binary_path)
+            print(f"PocketBase ready ({source}): {binary_path} ({version})")
+            persisted = persisted.overridden(pocketbase_binary=str(binary_path))
+            store.save(persisted)
+            has_other_actions = bool(
+                getattr(args, "url", None)
+                or getattr(args, "model", None)
+                or getattr(args, "playlist", None)
+                or getattr(args, "resume", False)
+                or getattr(args, "stats", False)
+            )
+            if not has_other_actions:
+                return 0
+        except Exception as exc:
+            print(f"Failed to install PocketBase: {exc}", file=sys.stderr)
+            return 1
 
     overrides: dict[str, Any] = {
         "quality": args.quality,

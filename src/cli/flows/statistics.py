@@ -22,6 +22,7 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
                     f"{'🛑 Disable' if ctx.settings.track_videos else '✅ Enable'} Download Tracking",
                     value="toggle",
                 ),
+                questionary.Choice("📦 Auto-Install / Verify PocketBase Binary", value="install_pb"),
                 questionary.Choice("⚙️  Configure Database Paths", value="config"),
                 questionary.Choice("🔙 Back to Main Menu", value="back"),
             ],
@@ -30,6 +31,11 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
 
         if not action or action == "back":
             break
+
+        if action == "install_pb":
+            from .settings import handle_pocketbase_install_flow
+            await handle_pocketbase_install_flow(ctx)
+            continue
 
         if action == "toggle":
             new_state = not ctx.settings.track_videos
@@ -76,8 +82,19 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
                 print_error(
                     ctx.console,
                     "PocketBase Unavailable",
-                    f"{exc}\n\nPlease ensure PocketBase binary is installed on PATH or set PORN_FETCH_POCKETBASE_BINARY.",
+                    str(exc),
                 )
+                if "binary was not found" in str(exc).lower():
+                    should_install = await questionary.confirm(
+                        "PocketBase executable was not found. Would you like to auto-install it now?",
+                        default=True,
+                        style=WIZARD_STYLE,
+                    ).ask_async()
+                    if should_install:
+                        from .settings import handle_pocketbase_install_flow
+                        installed = await handle_pocketbase_install_flow(ctx)
+                        if installed:
+                            continue
                 continue
             except Exception as exc:
                 print_error(ctx.console, "Database Error", str(exc))

@@ -74,7 +74,7 @@ Rectangle {
                     }
                     
                     Text {
-                        text: "Version 3.8"
+                        text: "Version " + Qt.application.version
                         font.pixelSize: 18
                         font.family: "Inter, sans-serif"
                         color: "#00f2fe"
@@ -98,11 +98,33 @@ Rectangle {
                 content: "This project was only possible because Egsagon made the PHUB API that interacts with PornHub and which Porn Fetch uses. Although I now have ownership, without him, this project wouldn't be possible in the first place."
             }
 
+            CreditCard {
+                title: "Application License"
+                icon: "📄"
+                content: "Porn Fetch Source-Available License 1.0. You may inspect and modify the code and share builds privately. Public forks must keep premium licensing operational. Older GPL copies keep their GPL rights. See the full license below."
+            }
+
+            Button {
+                text: "Show application license"
+                onClicked: {
+                    legalDialog.showNotices = false
+                    legalDialog.open()
+                }
+            }
+
+            Button {
+                text: "Show third-party notices"
+                onClicked: {
+                    legalDialog.showNotices = true
+                    legalDialog.open()
+                }
+            }
+
             // Development Card
             CreditCard {
                 title: "Development Stack"
                 icon: "💻"
-                content: "Language: Python\nIDE: JetBrains PyCharm Professional\nPlatform: GitHub\nGUI: PySide6\n\nHUGE Thanks to Qt for giving us, Open-Source devs, a way to work with such a beautiful high-level frontend AND backend development toolkit for free."
+                content: "Language: Python\nIDE: JetBrains PyCharm Professional\nPlatform: GitHub\nGUI: PySide6\n\nThanks to Qt for the Python GUI toolkit used by this project. Qt components have their own license terms."
             }
 
             // Contributors Card
@@ -112,11 +134,11 @@ Rectangle {
                 content: "Egsagon (PHUB API & French)\nRSDCFGVHBJNKML\nJoshua-auhsoj (Chinese 3.0)\nRonLar1132\nxxIndirect\nefraxs\nomar-st\nSShattered\njourneym\nJoly0\nFatalPuppet (Italian)\nHeathenSkwerl"
             }
 
-            // Open Source Libraries
+            // Third-party components
             CreditCard {
-                title: "Open Source Libraries"
+                title: "Third-party components"
                 icon: "📚"
-                content: "PHUB, requests, hqporner_api, hue_shift, PySide6, colorama, markdown, rich, tqdm, EPorner API, XNXX API, XVideos_API, eaf_base_api, pypresence, spankbang_api, ffmpeg-progress-yield, Mutagen, xhamster_api, missav_api, httpx, pywin32, pyav, porntrex_api, porngo_api, python-dateutil."
+                content: "Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, Sparkle on macOS, and Python packages. Use the third-party notices button for the current inventory and license information."
             }
 
             // Other Tech
@@ -156,6 +178,26 @@ Rectangle {
                     icon: "📱"
                     content: "palera1n\nKitty-XZ\n\nJailbreak testing."
                 }
+            }
+        }
+    }
+
+    Dialog {
+        id: legalDialog
+        property bool showNotices: false
+        title: showNotices ? "Third-party notices" : "Porn Fetch application license"
+        modal: true
+        anchors.centerIn: parent
+        width: Math.min(root.width - 40, 720)
+        height: Math.min(root.height - 40, 520)
+        standardButtons: Dialog.Close
+
+        contentItem: ScrollView {
+            TextArea {
+                readOnly: true
+                selectByMouse: true
+                wrapMode: TextArea.Wrap
+                text: legalDialog.showNotices ? thirdPartyNoticesText : applicationLicenseText
             }
         }
     }

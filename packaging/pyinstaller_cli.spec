@@ -28,6 +28,9 @@ analysis = Analysis(
     datas=questionary_datas + rich_datas + [
         (os.path.join(project_root, "src", "licensing", "production.json"), "src/licensing"),
         (os.path.join(project_root, "docs", "CREDITS.md"), "docs"),
+        (os.path.join(project_root, "LICENSE"), "."),
+        (os.path.join(project_root, "THIRD_PARTY_NOTICES.md"), "."),
+        (os.path.join(project_root, "LICENSES", "Provider-permission.txt"), "LICENSES"),
     ],
     hiddenimports=hiddenimports,
     hookspath=[],

@@ -85,7 +85,7 @@ update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
-                            QTimer)
+                            QTimer, QFile, QIODevice)
 
 update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
@@ -108,7 +108,7 @@ from src.backend.login_manager import (
 from pornhub_api.modules.errors import LoginFailed as phLoginFailed
 from pornhub_api.modules.errors import ClientAlreadyLogged
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
-from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater
+from src.backend.update_service import AutoUpdater, CheckUpdates, SparkleUpdater, find_maintenance_tool
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_proxy_manager import SNIProxyManager
@@ -208,7 +208,7 @@ class Backend(QObject):
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
-        self.auto_updater = AutoUpdater(self)
+        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.showMessage.connect(self.handle_message)
@@ -310,7 +310,7 @@ class Backend(QObject):
 
     def _start_update_check(self) -> None:
         self._update_check_requested = False
-        if sys.platform == "darwin":
+        if sys.platform == "darwin" and find_maintenance_tool() is None:
             try:
                 if not hasattr(self, "sparkle"):
                     self.sparkle = SparkleUpdater()
@@ -359,6 +359,18 @@ class Backend(QObject):
             self.auto_updater.run(),
             name="auto-update",
         )
+
+    async def _prepare_for_update(self) -> None:
+        """Gracefully stop PocketBase and close sessions before the installer runs."""
+        if self.database_bridge is not None:
+            try:
+                await self.database_bridge.close()
+            except Exception as exc:
+                self.logger.warning("Error closing database bridge before update: %s", exc)
+        try:
+            await clients.close_all_clients()
+        except Exception as exc:
+            self.logger.warning("Error closing network clients before update: %s", exc)
 
     @Slot(int)
     def toggle_user_interface_language(self, value: int) -> None:
@@ -1386,6 +1398,15 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
+    for context_name, resource_path in (
+        ("applicationLicenseText", ":/legal/LICENSE"),
+        ("thirdPartyNoticesText", ":/legal/THIRD_PARTY_NOTICES.md"),
+    ):
+        resource = QFile(resource_path)
+        if not resource.open(QIODevice.OpenModeFlag.ReadOnly):
+            raise RuntimeError(f"Bundled legal notice is missing: {resource_path}")
+        engine.rootContext().setContextProperty(context_name, bytes(resource.readAll()).decode("utf-8"))
+        resource.close()
 
     splash.showMessage("Loading Window...")
 
@@ -1443,7 +1464,7 @@ def get_imported_licenses():
           meta = metadata(dist)
           ver = version(dist)
           # Some packages store full license text or short names
-          lic = meta.get('License', 'Unknown')
+          lic = meta.get('License-Expression') or meta.get('License') or 'Unknown'
           # Clean up line breaks if the metadata contains text blobs
           lic = ' '.join(lic.splitlines()) or 'Unknown'
 

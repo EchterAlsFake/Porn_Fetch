@@ -61,6 +61,11 @@ class PocketBaseService:
             project_root / "packaging" / "pocketbase" / name,
             project_root / "packaging" / "pocketbase" / sys.platform / name,
         ])
+        from .installer import get_default_bin_dir
+        try:
+            candidates.append(get_default_bin_dir() / name)
+        except Exception:
+            pass
         if installed := shutil.which("pocketbase"):
             candidates.append(Path(installed))
         for candidate in candidates:

@@ -1,0 +1,21 @@
+Additional permission for Porn Fetch application distributions
+Copyright (c) 2026 Johannes Habel
+
+For the portions of eaf_base_api and the following packages in which I hold the
+necessary copyright, I grant recipients of a Porn Fetch application release
+under the Porn Fetch Source-Available License 1.0 permission to combine those
+portions with that application and distribute the combination under the Porn
+Fetch Source-Available License 1.0:
+
+unofficial-api-for-beeg, unofficial-api-for-eporner,
+unofficial-api-for-pornhub, unofficial-api-for-porntrex,
+unofficial-api-for-redtube, unofficial-api-for-spankbang,
+unofficial-api-for-thumbzilla, unofficial-api-for-tube8,
+unofficial-api-for-xfreehd, unofficial-api-for-xhamster,
+unofficial-api-for-xnxx, unofficial-api-for-xvideos,
+unofficial-api-for-youporn.
+
+This permission does not change the AGPL terms of copies obtained separately,
+does not cover another person's copyrighted contributions, and does not reduce
+rights in any other component. Verify ownership of every included contribution
+before relying on this permission for a release.

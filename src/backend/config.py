@@ -10,7 +10,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Property, QSettings, QUrl, Signal, Slot
 from src.shared.version import __version__
 
-__license__ = "GPL 3"
+__license__ = "Porn Fetch Source-Available License 1.0"
 __author__ = "Johannes Habel"
 __next_release__ = "4.0"
 __type__ = "release"

@@ -1,27 +1,27 @@
-import os
-import re
-import sys
 import asyncio
 import ctypes
-import shutil
-import tempfile
+import logging
+import os
+import re
 import subprocess
-
+import sys
+import xml.etree.ElementTree as ET
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from base_api.modules.config import DownloadConfigRAW
-from src.backend.helper_functions import get_original_executable_path
-from src.backend import clients as clients
 
-from src.backend.config import __version__
+from PySide6.QtCore import QCoreApplication, QObject, Signal, Slot
 from curl_cffi import Response
-from PySide6.QtCore import Slot, QObject, QCoreApplication, Signal
-from src.backend.shared_functions import configure_app_logging, get_os_and_arch
 
+from src.backend import clients
+from src.backend.config import __version__
+from src.backend.helper_functions import get_original_executable_path
+from src.backend.shared_functions import configure_app_logging, get_os_and_arch
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
 
-DEFAULT_UPDATE_URL = "https://echteralsfake.me/update"
+DEFAULT_UPDATE_URL = "https://api.echteralsfake.me/update"
 UPDATE_URL_ENVIRONMENT_VARIABLE = "PORNFETCH_UPDATE_URL"
+DEFAULT_REPO_BASE_URL = "https://api.echteralsfake.me/repo"
 
 
 def get_update_url() -> str:
@@ -29,36 +29,45 @@ def get_update_url() -> str:
     return os.environ.get(UPDATE_URL_ENVIRONMENT_VARIABLE, DEFAULT_UPDATE_URL)
 
 
+def find_maintenance_tool() -> Path | None:
+    """Locate the Qt Installer Framework maintenancetool binary in the installed application directory."""
+    if env_path := os.environ.get("PORNFETCH_MAINTENANCETOOL_PATH"):
+        p = Path(env_path).expanduser().resolve()
+        if p.is_file() and (sys.platform == "win32" or os.access(p, os.X_OK)):
+            return p
+
+    orig = get_original_executable_path()
+    if orig is None:
+        return None
+
+    name = "maintenancetool.exe" if sys.platform == "win32" else "maintenancetool"
+    candidates = [
+        orig.parent / name,
+        orig.parent.parent / name,
+        orig.parent.parent.parent.parent / "maintenancetool.app" / "Contents" / "MacOS" / "maintenancetool",
+    ]
+    for candidate in candidates:
+        if candidate.is_file() and (sys.platform == "win32" or os.access(candidate, os.X_OK)):
+            return candidate.resolve()
+    return None
+
+
 class SparkleUpdater(QObject):
     def __init__(self):
         super().__init__()
 
-        macos_dir = os.path.dirname(
-            os.path.realpath(sys.executable)
-        )
-
-        frameworks_dir = os.path.realpath(
-            os.path.join(macos_dir, "..", "Frameworks")
-        )
-
-        dylib_path = os.path.join(
-            frameworks_dir,
-            "sparkle_bridge.dylib",
-        )
+        macos_dir = os.path.dirname(os.path.realpath(sys.executable))
+        frameworks_dir = os.path.realpath(os.path.join(macos_dir, "..", "Frameworks"))
+        dylib_path = os.path.join(frameworks_dir, "sparkle_bridge.dylib")
 
         logger.info("Loading Sparkle bridge: %s", dylib_path)
-
         self._lib = ctypes.CDLL(dylib_path)
-
         self._lib.sparkle_start_updater.argtypes = []
         self._lib.sparkle_start_updater.restype = None
-
         self._lib.sparkle_check_for_updates.argtypes = []
         self._lib.sparkle_check_for_updates.restype = None
-
         self._lib.sparkle_can_check_for_updates.argtypes = []
         self._lib.sparkle_can_check_for_updates.restype = ctypes.c_int
-
         self._lib.sparkle_start_updater()
 
     @Slot()
@@ -67,54 +76,77 @@ class SparkleUpdater(QObject):
         self._lib.sparkle_check_for_updates()
 
     def can_check_for_updates(self) -> bool:
-        return bool(
-            self._lib.sparkle_can_check_for_updates()
-        )
+        return bool(self._lib.sparkle_can_check_for_updates())
 
 
 class CheckUpdates:
-    """
-    This function checks for updates using my own server:
-    https://echteralsfake.me/update
-    (No data is transmitted while checking for updates, your IP is not logged.)
-    See: https://echteralsfake.me/privacy_policy for more information
-    """
+    """Checks for available updates via Qt IFW maintenancetool or the remote update server."""
 
     @staticmethod
     async def check() -> dict | None:
+        # Check via installed Qt IFW maintenance tool first if present
+        if tool_update := await CheckUpdates.check_via_maintenancetool():
+            return tool_update
+
+        # Fallback to HTTP update check endpoint
+        return await CheckUpdates.check_via_http()
+
+    @staticmethod
+    async def check_via_maintenancetool() -> dict | None:
+        tool = find_maintenance_tool()
+        if not tool:
+            return None
+
+        logger.info("Checking for updates via Qt maintenancetool: %s", tool)
+        try:
+            creationflags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
+            proc = await asyncio.create_subprocess_exec(
+                str(tool),
+                "check-updates",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=str(tool.parent),
+                creationflags=creationflags,
+            )
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
+            output = stdout.decode("utf-8", errors="replace").strip()
+
+            if "<updates>" in output and "<update " in output:
+                root = ET.fromstring(output)
+                update_el = root.find("update")
+                if update_el is not None:
+                    version = update_el.get("version", "latest")
+                    name = update_el.get("name", "Porn Fetch")
+                    logger.info("maintenancetool reports update available: %s v%s", name, version)
+                    return {
+                        "version": version,
+                        "name": name,
+                        "size": update_el.get("size", "0"),
+                        "source": "maintenancetool",
+                    }
+        except (asyncio.TimeoutError, Exception) as exc:
+            logger.warning("maintenancetool update check failed or timed out: %s", exc)
+
+        return None
+
+    @staticmethod
+    async def check_via_http() -> dict | None:
         url = get_update_url()
         try:
             response: Response = await clients.core.request(url=url)
             if response.status_code == 200:
                 update = response.json()
-                version = str(update["version"]).removeprefix("latest - ").strip()
-
+                version = str(update.get("version", "")).removeprefix("latest - ").strip()
                 if CheckUpdates._version_parts(version) > CheckUpdates._version_parts(__version__):
-                    logger.info(f"A new update is available -->: {version}")
+                    logger.info("A new update is available: %s", version)
                     return update
-
-                else:
-                    logger.info(f"Checked for updates... You are on the latest version :)")
-
+                logger.info("Application is up to date (%s)", __version__)
             elif response.status_code == 404:
-                logger.error("Temporary error reaching the server")
-                return
-
-            elif response.status_code == 500:
-                logger.error("Internal Server error, probably already fixing it :) ")
-                return
-
-            elif response.status_code == 530 or response.status_code == 502:
-                logger.error("Server is currently offline. Probably already fixing it :)")
-
-        except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError) as error:
-            logger.warning("Could not check for updates: %s", error)
-        except (KeyError, TypeError, ValueError) as error:
-            logger.error("The update server returned invalid data: %s", error)
+                logger.error("Update endpoint returned 404")
+            elif response.status_code in {500, 502, 530}:
+                logger.error("Update server is temporarily unavailable (status %s)", response.status_code)
         except Exception as error:
-            # Update checks are deliberately silent: a temporary outage should
-            # never prevent the application from starting.
-            logger.warning("Could not check for updates: %s", error)
+            logger.warning("Could not check for updates via HTTP: %s", error)
 
         return None
 
@@ -128,12 +160,18 @@ class CheckUpdates:
 
 
 class AutoUpdater(QObject):
+    """Orchestrates Qt Installer Framework maintenancetool to update the installed application."""
+
     statusReport = Signal(str)
     updateProgress = Signal(int, int)
 
-    def __init__(self, parent: QObject | None = None) -> None:
+    def __init__(
+        self,
+        parent: QObject | None = None,
+        before_update: Callable[[], Awaitable[None]] | None = None,
+    ) -> None:
         super().__init__(parent)
-        self.assets: dict = {}
+        self.before_update = before_update
 
     async def run(self) -> None:
         try:
@@ -141,89 +179,39 @@ class AutoUpdater(QObject):
         except asyncio.CancelledError:
             raise
         except Exception as error:
-            logger.exception("Update failed")
+            logger.exception("Update launch failed")
             self.statusReport.emit(f"Update failed: {error}")
 
     async def _run(self) -> None:
-        logger.info("Fetching release information...")
-        url = get_update_url()
-        self.statusReport.emit("Fetching release information...")
-        response: Response = await clients.core.request(url=url)
-
-        if response.status_code == 200:
-            self.assets = response.json()
-            logger.info(f"Got Update Information for: {self.assets["version"]}")
-
-        else:
-            logger.error("Update server returned HTTP %s", response.status_code)
+        tool = find_maintenance_tool()
+        if not tool:
             self.statusReport.emit(
-                "Update failed: The server is currently unable to return update information. "
-                "Please try again later."
+                "Automatic updates require an installation managed by the Qt Maintenance Tool.\n"
+                "Please download the latest beta build from "
+                "https://github.com/EchterAlsFake/Porn_Fetch/releases/"
             )
             return
 
-        logger.info("Starting auto-update process...")
-        os_arch = get_os_and_arch()
-        download_url = self.assets.get(f"download_{os_arch}")
+        self.statusReport.emit("Preparing update: stopping background services...")
 
-        if not download_url:
-            logger.error(f"No download URL found for {os_arch}")
-            self.statusReport.emit(f"Update failed: No download available for your system ({os_arch}).")
-            return
+        # Gracefully stop PocketBase and close sessions so binaries are not locked on Windows
+        if self.before_update:
+            try:
+                await self.before_update()
+            except Exception as exc:
+                logger.warning("Error during pre-update cleanup: %s", exc)
 
-        logger.info(f"Downloading update from: {download_url}")
-        self.statusReport.emit("Downloading update...")
+        self.statusReport.emit("Launching Qt Maintenance Tool...")
+        logger.info("Launching maintenancetool: %s --updater", tool)
 
-        temp_dir = tempfile.gettempdir()
-        filename = download_url.split("/")[-1]
-        download_path = Path(temp_dir).joinpath(filename)
-
-        configuration = DownloadConfigRAW(
-            quality="best",
-            path=download_path,
-            callback=self.update_progress,
+        creationflags = subprocess.DETACHED_PROCESS if sys.platform == "win32" else 0
+        subprocess.Popen(
+            [str(tool), "--updater"],
+            cwd=str(tool.parent),
+            creationflags=creationflags,
+            start_new_session=(sys.platform != "win32"),
         )
-        await clients.core.legacy_download(
-            url=download_url,
-            configuration=configuration,
-        )
-        logger.info("Download complete. Replacing binary.")
-        self.statusReport.emit("Download complete. Installing update...")
-        self.replace_binary(download_path)
-        logger.info("Update successful. Please restart the application.")
-        self.statusReport.emit("Update successful! Please restart the application.")
 
-    def update_progress(self, current: int, total: int) -> None:
-        self.updateProgress.emit(current, total)
-
-    def replace_binary(self, new_binary_path: Path) -> None:
-        current_binary_path = get_original_executable_path()
-        if not current_binary_path:
-            raise RuntimeError("Could not determine the path of the current executable.")
-
-        # On Windows, you can't replace a running executable.
-        # A common strategy is to use a helper script.
-        if sys.platform == "win32":
-            self.create_windows_updater(current_binary_path, new_binary_path)
-        else:
-            # On Linux/macOS, you can often replace the binary directly.
-            os.chmod(new_binary_path, 0o755)
-            shutil.move(new_binary_path, current_binary_path)
-
-    @staticmethod
-    def create_windows_updater(current_path: Path, new_path: Path) -> None:
-        updater_script_path = os.path.join(tempfile.gettempdir(), "updater.bat")
-        with open(updater_script_path, "w") as f:
-            f.write(f"""
-@echo off
-echo Waiting for application to close...
-taskkill /F /IM {os.path.basename(current_path)}
-timeout /t 2 /nobreak
-echo Replacing application file...
-move /Y "{new_path}" "{current_path}"
-echo Starting new version...
-start "" "{current_path}"
-del "%~f0"
-            """)
-        subprocess.Popen([updater_script_path], creationflags=subprocess.CREATE_NO_WINDOW)
+        self.statusReport.emit("Updater launched. Closing Porn Fetch...")
+        await asyncio.sleep(0.5)
         QCoreApplication.quit()

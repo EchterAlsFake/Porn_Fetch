@@ -13,3 +13,10 @@ bugs; bugs reproduced from the default branch should include the commit ID.
 
 Current development targets Python 3.14, a QML/PySide6 desktop application, and
 a Qt-free Questionary CLI suitable for headless platforms.
+
+The planned first 3.9 beta uses the actual license import and validation flow
+with a crypto checkout sandbox. The website's sandbox purchase button is a test:
+no real transaction takes place and no money is processed. Installation and
+update artifacts are still being prepared and may have errors. The maintainer
+is actively working on the rewrite; see the [3.9 installation guide](INSTALLATION.md)
+and [Qt Installer Framework handoff](QT_INSTALLER_FRAMEWORK.md).

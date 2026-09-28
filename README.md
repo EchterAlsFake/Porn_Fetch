@@ -1,18 +1,15 @@
 > [!CAUTION]
-> # THE LATEST BINARY RELEASE IS MASSIVELY OUTDATED
->
-> The current source tree is undergoing a major 3.9 rewrite. Its features,
-> screenshots, documentation, licensing behavior, supported platforms, and
-> build instructions may differ substantially from the last published release
-> (3.8). Do not use the current README as an exact description of the old
-> downloadable application, and do not assume the old release represents the
-> current source. Build from a tagged release when you need matching code and
-> documentation.
+> **This README describes the current 3.9 source code and the planned first beta.**
+> The downloadable 3.8 release is an older GPL release. Its app, license,
+> screenshots, install process, and supported platforms may be different. If
+> you need information about 3.8, use the documentation from its release tag.
+> I'm actively working on this rewrite. Some features and builds can still fail;
+> please report problems with the commit ID or beta version you used.
 
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
-<h1 align="center">Porn Fetch - The Ultimate Open-Source Porn Downloader</h1>
+<h1 align="center">Porn Fetch - Source-Available Adult Media Downloader</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
@@ -35,18 +32,26 @@
 ---
 </div>
 
-# Project Rewrite
+# The 3.9 rewrite
 
-Version 3.9 is a major rewrite. Development documentation describes the current
-source tree unless a page explicitly names a released version. See the
-[development status](docs/STATUS.md) before installing, building, or reporting a
-bug.
+This branch is where I am building the next version of Porn Fetch. It has a
+PySide6 desktop app, a Qt-free CLI, and a different licensing system from 3.8.
+The first beta is for finding problems, and I will keep working on them as
+quickly as I can. See the [development status](docs/STATUS.md) and the
+[installation guide](docs/INSTALLATION.md) before trying it.
 
 # About the License
-#### License is FREE OF CHARGE!
 
-- For activating Porn Fetch v3.8 ->  https://drive.google.com/file/d/11EVYsHmkMKm121TeuWrcSYkIpITIhZlT/view?usp=sharing
-- For activating Porn Fetch v3.9 -> https://echteralsfake.me/buy_license (Crypto Checkout)
+The 3.9 source is under the [Porn Fetch Source-Available License 1.0](LICENSE).
+Earlier GPL releases keep their GPL rights. The source license and a premium
+feature credential are separate things.
+
+**The first 3.9 beta uses the real license import and validation flow with a
+sandbox checkout.** Go to [echteralsfake.me](https://echteralsfake.me/), press
+the sandbox purchase button, and import the license file you receive in the
+app. **This is not a real transaction. No money is processed, and you do not
+need to send cryptocurrency.** The checkout is there to test how a license
+reaches the app. Please tell me if any step is confusing or fails.
 
 ### #FreeHongKong
 
@@ -55,7 +60,8 @@ bug.
 
 > [!IMPORTANT]
 > Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) for an explanation why this is.
-> For downloading and running Porn Fetch you NEED to disable Real-Time protection in Windows defender!
+> If your antivirus flags a beta build, check the download source and report the
+> detection before making changes to your security settings.
 
 ## 🚀 Quick Links
 - [Features](#-features)
@@ -63,9 +69,7 @@ bug.
 - [Donations](#sponsoring--donations)
 - [Supported Websites](#-supported-websites)
 - [Building from Source](#-building-from-source)
-  - [Linux](#for-ubuntu-windows-arch-linux-termux-fedora-opensuse)
-  - [Termux](#for-termux)
-  - [Windows](#for-windows-powershell-as-admin)
+- [Qt installer work](docs/QT_INSTALLER_FRAMEWORK.md)
 - [Credits](#-credits)
 - [License](#-license)
 
@@ -74,62 +78,63 @@ bug.
 - Downloading Videos
 - Downloading Playlists
 - Downloading whole model / channel accounts
-- Searching for videos (and downloading them directly)
 - Multithreaded downloading
-- Native Android Application
 - Automatic resuming
-- Fully automatic updating
+- Update checks; automatic installation needs a Qt Installer Framework build
 - Custom template for filenames based on video metadata
 - Dark mode and CLI support
 - No ads or mandatory logins
 - Multiple supported websites 
 - modern looking user interface
-- Supports over 115 MB/s download speed thanks to well optimized HLS downloading
 - Proxy support
 - Model Batch download with database updating (CLI only)
 - A lot of available settings
 - In-App speed limit
-- Installation AND portable mode selectable
 - Automatic file tagging (metadata)
 - Automatic conversion from MPEG-TS to mp4 (within seconds)
-- Fully automatic build scripts
+- Build scripts for supported desktop and CLI targets
 - Independent Open-Source [Server](https://github.com/EchterAlsFake/Server)
-- 100% Open-Source, made with ❤️ in 🇩🇪
+- Source-available application, made with ❤️ in 🇩🇪
 
 ## Installation
 > [!IMPORTANT]
-> If you aren't tech savy, please read through this guide.
+> Please read the 3.9 guide before installing a beta. It does not describe the
+> older 3.8 download.
 
 **A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/INSTALLATION.md)
 
-## Licensing / Paid Features
-> [!CAUTION]
-> Porn Fetch is entirely free to use by anyone who uses / compiles Porn Fetch from source. Those who use the release
-> assets from GitHub have the following locked behind a 5€ fee:
+## Beta license
+
+The beta still checks licenses for these features:
 
 - 1080+ downloads
 - parallel downloads
 
+The sandbox checkout described above provides a test license. There is no beta
+price and no real purchase. In the GUI, use **Get beta test license**, then
+**Import License File**. In the CLI, choose **License Management** and import
+the file there. The [installation guide](docs/INSTALLATION.md) has the steps.
+
 ## General Information
 > [!NOTE]
-> **Supported platforms & architectures (based on current release files)**
+> **Targets in the current build workflow.** A target in the workflow does not
+> mean its first beta artifact has passed manual testing.
 
 | Platform                   | App              | Architectures                                   |
 |----------------------------|------------------|-------------------------------------------------|
 | **Windows**                | GUI              | x64, ARM64                                      |
-| **Windows**                | CLI              | x64, x86 (x32)                                  |
+| **Windows**                | CLI              | x64, ARM64, x86 (x32)                           |
 | **Linux (X11 / Wayland)**  | GUI              | x64, ARM64                                      |
 | **Linux (X11 / Wayland)**  | CLI              | x64, x86 (x32), riscv64, s390x, ppc64le         |
 | **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
-| **Android**                | CLI (via Termux) | All                                             |
-| **Android**                | GUI              | x86_64, aarch64  (Android 8+ -> 16)             |
-| **iOS**                    | CLI              | iOS 15.8+, rootless<br>Jailbroken with palera1n |
+| **Android**                | CLI from source  | Termux; no beta APK in the desktop build workflow |
 
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
 > [!NOTE]
-> For more Information on iOS Support See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/iOS.md
+> Older Android and iOS information is in the project history. I have not
+> included mobile GUI artifacts in the current desktop build workflow.
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -161,68 +166,28 @@ See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS
 
 
 ## 🔨 Building from Source
-> [!CAUTION]
-> A Python library that I use needs specific Asynchronous features which Qt doesn't support yet. I have custom vibe-coded 
-> these patches into Qt's AsyncIo library. Please run the scripts/patch_qtasyncio.py script on your .venv directory
-> to patch the module on the fly. The installer script will do this automatically. 
-
-
-Building will be done through a fully automated script, that lets you select the version / commit to 
-build from and will install all dependencies automatically for you, including Python.
-
-> [!NOTE]
-> Building is done using Python 3.14 and [Nuitka](https://github.com/Nuitka/Nuitka) through Qt's `pyside6-deploy` tool.
-
-Hardware requirements:
-- Electricity
-- CPU
-- RAM 
-- GPU (optional)
-- SSD (optional)
-- Red Star OS 4.0 or similar (although with x64 🥀)
-
-> Compilation takes around 20-60 minutes depending on your system and hardware.
-
-### Linux / macOS
-> [!NOTE]
-> There is no official list of tested Linux distributions. I develop Porn Fetch only on Arch Linux. If you come across
-> an issue, you can always report it and I will distro-hop to solve it.
-
-> [!IMPORTANT]
-> If using macOS, you need to install XCode developer tools and Homebrew.
+The source tree targets Python 3.14 and uses `uv`. From a checkout of the
+current branch:
 
 ```bash
-curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install.sh" -o install.sh
-bash install.sh
+uv sync --extra gui --group dev
+uv run python scripts/patch_qtasyncio.py .venv
+uv run Porn_Fetch_CLI.py
+uv run main.py
 ```
 
-### Termux
-> [!NOTE]
-> You do **NOT** need a rooted Android device to compile and run Porn Fetch on Android
-
-```bash
-apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_termux.sh" | bash
-```
-
-### Windows (PowerShell as Admin)
-> [!CAUTION]
-> You absolutely **NEED** to disable Microsoft Defender (Realtime protection). Otherwise, Windows will just randomly delete
-> files during build which makes it completely impossible to do anything.
-
-See the [antivirus notice](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) before building on Windows.
-
-```
-# Enable script execution
-Set-ExecutionPolicy RemoteSigned 
-Set-ExecutionPolicy Bypass -Scope Process
-Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 -UseBasicParsing).Content
-```
+The GUI uses the repository's QtAsyncio patch. The packaging workflow runs it
+before building. For build details, start with
+[FOR_DEVELOPERS.md](docs/FOR_DEVELOPERS.md) and
+[the build workflow](.github/workflows/build_all.yml). A source run is useful
+for development; it is not proof that a packaged beta works on your platform.
 
 
 ## 🌍 Translating
 
 > [!CAUTION]
-> Translating is currently broken and I need to find a different method and completely refactor this. DO NOT translate anything, everything is outdated and you will waste your time!
+> Translations are still being brought up to date for 3.9. Please check with me
+> before starting a large translation update.
 
 Currently available in:
 - German (3.0)
@@ -239,17 +204,17 @@ Currently available in:
 ## 👏 Credits
 - API: [PHUB](https://github.com/EchterAlsFake/PHUB)
 - GUI: [Qt](https://qt.io) for Python
-- FFmpeg: [FFmpeg](https://ffmpeg.org/) GPL
+- Media processing: [PyAV / FFmpeg](https://pyav.org/) (license depends on the bundled FFmpeg build; see third-party notices)
 
-### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md)
+### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
 ## 📚 License
-Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+Current development snapshots marked with the [Porn Fetch Source-Available License 1.0](LICENSE) use that license for application-owned material. Earlier GPL-3.0-or-later copies retain their GPL rights; the historical license text is in [LICENSES](LICENSES/GPL-3.0-or-later.txt). Third-party components retain their own terms. See the [licensing guide](docs/LICENSING.md).
 <br>Copyright (C) 2023–2026 Johannes Habel 
 
 # Sponsoring / Donations
-Porn Fetch is developed entirely Open-Source and will always be free, because I like what
-I am doing here. I will never ever charge money for this software.
+The beta license checkout is a sandbox and does not take payment. The donation
+links below are separate and optional; they are not needed to use the beta.
 
 However, I kindly ask every one of you to donate a small amount of money. If you have Monero (crypto)
 or PayPal, you can donate me here:

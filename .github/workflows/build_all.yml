@@ -7,6 +7,14 @@ on:
         description: "Publish artifacts as a GitHub Release"
         type: boolean
         default: false
+      legal_review_complete:
+        description: "Confirm application license, dependency, asset, and EU terms review is complete"
+        type: boolean
+        default: false
+      deploy_repositories:
+        description: "Upload Qt IFW repositories to the configured beta server"
+        type: boolean
+        default: false
   push:
     tags:
       - "v*"
@@ -30,7 +38,7 @@ jobs:
   build-gui:
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
@@ -73,7 +81,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libgl1-mesa-dev xvfb
+          sudo apt-get install -y 7zip libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libgl1-mesa-dev xvfb
 
       - name: Windows ARM64 OpenSSL (vcpkg)
         if: matrix.platform == 'windows' && matrix.arch == 'arm64'
@@ -176,6 +184,9 @@ jobs:
           echo "### SHA256 Checksum ($FILE)" >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`$(cat "$FILE.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Collect legal notices
+        run: uv run --no-sync python packaging/collect_legal.py PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
@@ -184,6 +195,77 @@ jobs:
             ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}
             ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}.sha256
             pocketbase*
+            PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL.zip
+
+      - name: Install 7-Zip on macOS for IFW
+        if: matrix.platform == 'macos'
+        shell: bash
+        run: command -v 7z || command -v 7zz || brew install sevenzip
+
+      - name: Install Qt Installer Framework 4.11
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFW_BIN=$(uv run --no-sync python packaging/install_ifw.py \
+            --platform ${{ matrix.platform }} --dest "$RUNNER_TEMP/qt-ifw" | tail -n 1)
+          echo "$IFW_BIN" >> "$GITHUB_PATH"
+
+      - name: Build IFW installer and repository
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ifw_payload ifw_output/installers
+          IFW_OS="${{ matrix.platform }}"
+          IFW_ARCH="${{ matrix.arch }}"
+          if [ "$IFW_OS" = "macos" ]; then
+            IFW_OS="darwin"
+            cp -R "Porn Fetch.app" ifw_payload/
+            POCKETBASE_BINARY="dist_pb/pocketbase"
+            INSTALLER_EXT=".dmg"
+          elif [ "$IFW_OS" = "windows" ]; then
+            IFW_ARCH="amd64"
+            cp "$BIN_OUTPUT" "ifw_payload/Porn Fetch.exe"
+            POCKETBASE_BINARY="pocketbase.exe"
+            INSTALLER_EXT=".exe"
+          else
+            IFW_ARCH="amd64"
+            cp "$BIN_OUTPUT" "ifw_payload/Porn Fetch"
+            cp src/frontend/graphics/logo_transparent.png ifw_payload/
+            POCKETBASE_BINARY="pocketbase"
+            INSTALLER_EXT=".run"
+          fi
+          if [ "$IFW_ARCH" = "x64" ]; then IFW_ARCH="amd64"; fi
+          if [ "$IFW_ARCH" = "arm64" ]; then IFW_ARCH="arm64"; fi
+          REPO_TAG="${IFW_OS}_${IFW_ARCH}"
+          INSTALLER="ifw_output/installers/PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_Setup${INSTALLER_EXT}"
+          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
+          uv run --no-sync python packaging/generate_repository.py \
+            --dist-dir ifw_payload \
+            --platform "$IFW_OS" --arch "$IFW_ARCH" \
+            --pocketbase-binary "$POCKETBASE_BINARY" \
+            --staging-dir "ifw_output/staging/$REPO_TAG" \
+            --output-repo "ifw_output/repository/$REPO_TAG" \
+            --output-installer "$INSTALLER" \
+            --version "$APP_VERSION.${{ github.run_number }}"
+          uv run --no-sync python scripts/write_checksum.py "$INSTALLER"
+
+      - name: Upload IFW installer
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        uses: actions/upload-artifact@v7
+        with:
+          name: IFW_installer_${{ matrix.platform }}_${{ matrix.arch }}
+          path: ifw_output/installers/*
+          if-no-files-found: error
+
+      - name: Upload IFW repository
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        uses: actions/upload-artifact@v7
+        with:
+          name: IFW_repo_${{ matrix.platform }}_${{ matrix.arch }}
+          path: ifw_output/repository/
+          if-no-files-found: error
 
   # ==========================================
   # 2. CLI BUILDS (Standard Cross-Platform)
@@ -261,6 +343,9 @@ jobs:
         run: |
           ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
 
+      - name: Collect legal notices
+        run: uv run --no-sync python packaging/collect_legal.py PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}_LEGAL
+
       - name: Checksum & Summary
         shell: bash
         run: |
@@ -272,8 +357,10 @@ jobs:
         with:
           name: PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}
           path: |
-            PornFetch_*
+            ${{ env.CLI_OUTPUT }}
+            ${{ env.CLI_OUTPUT }}.sha256
             pocketbase*
+            PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}_LEGAL.zip
 
   # ==========================================
   # 3. CLI BUILD (Linux 32-bit - The Special Case)
@@ -319,6 +406,9 @@ jobs:
         run: |
           ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
 
+      - name: Collect legal notices
+        run: python packaging/collect_legal.py PornFetch_Linux_CLI_x32_LEGAL
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
@@ -326,6 +416,7 @@ jobs:
           path: |
             PornFetch_Linux_CLI_x32
             PornFetch_Linux_CLI_x32.sha256
+            PornFetch_Linux_CLI_x32_LEGAL.zip
 
   # ==========================================
   # 4. EXOTIC ARCHITECTURE CLI BUILDS (QEMU)
@@ -483,6 +574,9 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Collect legal notices
+        run: uv run --no-sync python packaging/collect_legal.py PornFetch_macOS_GUI_Universal_LEGAL
+
       - name: Upload Universal Artifact
         uses: actions/upload-artifact@v7
         with:
@@ -490,14 +584,67 @@ jobs:
           path: |
             PornFetch_macOS_GUI_Universal.dmg
             PornFetch_macOS_GUI_Universal.dmg.sha256
+            PornFetch_macOS_GUI_Universal_LEGAL.zip
 
   # ==========================================
-  # 6. PUBLISH RELEASE (TAGS & DISPATCH)
+  # 6. DEPLOY QT INSTALLER FRAMEWORK REPOSITORIES
+  # ==========================================
+  deploy-repositories:
+    name: Deploy IFW Repositories
+    needs: build-gui
+    if: >-
+      github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
+      (inputs.deploy_repositories || inputs.create_release)
+    runs-on: ubuntu-24.04
+    environment: beta
+    concurrency:
+      group: ifw-repository-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: IFW_repo_*
+          path: ifw_repositories
+
+      - name: Install deployment tools
+        run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
+
+      - name: Configure SSH
+        shell: bash
+        env:
+          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
+          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$IFW_SSH_KEY"
+          test -n "$IFW_KNOWN_HOSTS"
+          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
+          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
+          chmod 600 "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
+
+      - name: Publish repository files
+        shell: bash
+        env:
+          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
+          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
+          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
+          IFW_SSH_KEY_FILE: ${{ runner.temp }}/ifw_deploy_key
+          IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
+        run: bash scripts/deploy_ifw_repositories.sh ifw_repositories
+
+  # ==========================================
+  # 7. PUBLISH RELEASE (TAGS & DISPATCH)
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [build-gui, build-cli, build-macos-universal]
-    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
+    needs: [build-gui, build-cli, build-macos-universal, deploy-repositories]
+    if: >-
+      always() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
+      needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
+      needs.build-macos-universal.result == 'success' &&
+      needs.deploy-repositories.result == 'success'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -510,9 +657,26 @@ jobs:
           path: all_artifacts
 
       - name: Prepare Release Assets
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p dist_release
-          find all_artifacts -type f -exec cp {} dist_release/ \;
+          shopt -s nullglob
+          for artifact_dir in all_artifacts/*; do
+            artifact_name="${artifact_dir##*/}"
+            [[ "$artifact_name" == IFW_repo_* ]] && continue
+            (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
+            for file in "$artifact_dir"/*; do
+              [[ -f "$file" ]] || continue
+              name="${file##*/}"
+              [[ "$name" == pocketbase* ]] && continue
+              if [[ -e "dist_release/$name" ]]; then
+                echo "Duplicate release asset: $name" >&2
+                exit 1
+              fi
+              cp "$file" "dist_release/$name"
+            done
+          done
           echo "### Collected Release Assets:"
           ls -lh dist_release/
 
@@ -525,12 +689,14 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             gh release create "$TAG_NAME" dist_release/* \
               --title "Porn Fetch $TAG_NAME" \
-              --generate-notes \
+              --prerelease \
+              --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
               --verify-tag
           else
             RELEASE_TAG="build-${{ github.sha }}"
             gh release create "$RELEASE_TAG" dist_release/* \
               --title "Porn Fetch Build (${{ github.sha }})" \
-              --notes "Automated build release triggered via workflow dispatch." \
+              --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
+              --prerelease \
               --draft=false
           fi

@@ -1292,16 +1292,16 @@ Pane {
                 spacing: 10
 
                 Button {
-                    Accessible.name: qsTr("Buy License (19.99€)")
+                    Accessible.name: qsTr("Get beta test license")
                     Layout.fillWidth: true
                     // Material styling overrides for specific buttons to make them stand out
                     Material.background: "#6366f1" // Premium Indigo color
                     Material.foreground: "white"   // White text
                     font.bold: true // Make text bold
-                    text: "Buy License (19.99€)"
+                    text: qsTr("Get beta test license")
 
                     onClicked: {
-                        Qt.openUrlExternally("https://echteralsfake.me/buy_license")
+                        Qt.openUrlExternally("https://echteralsfake.me/")
                     }
 
                 }
@@ -1322,6 +1322,12 @@ Pane {
                     }
 
                 }
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Beta checkout is a test: no real transaction takes place and no money is processed. On the website, press the sandbox purchase button to get a license file, then import it here.")
+                wrapMode: Text.WordWrap
             }
 
             // Row 2

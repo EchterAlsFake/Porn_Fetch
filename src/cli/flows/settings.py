@@ -1,6 +1,7 @@
 """Interactive application settings and schema-2 licensing flows."""
 from __future__ import annotations
 
+import asyncio
 import re
 from dataclasses import replace
 from datetime import datetime, timezone
@@ -11,6 +12,13 @@ import questionary
 from rich.panel import Panel
 from rich.table import Table
 
+from src.database.installer import (
+    DEFAULT_POCKETBASE_VERSION,
+    check_system_path,
+    download_and_extract_pocketbase,
+    resolve_platform,
+    verify_pocketbase_binary,
+)
 from src.shared.media import quality_requires_premium
 
 from ..settings import CliSettings
@@ -52,6 +60,73 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
 }
 
 
+async def handle_pocketbase_install_flow(ctx: WizardContext) -> Path | None:
+    """Check PATH or auto-download PocketBase and update settings."""
+    path_binary = check_system_path()
+    if path_binary:
+        choice = await questionary.select(
+            f"PocketBase was detected on PATH:\n  [bold cyan]{path_binary}[/]\nWhat would you like to do?",
+            choices=[
+                questionary.Choice("✅ Use detected system PATH binary", value="use_path"),
+                questionary.Choice("📥 Download & install dedicated binary", value="download"),
+                questionary.Choice("🔙 Cancel", value="cancel"),
+            ],
+            style=WIZARD_STYLE,
+        ).ask_async()
+
+        if choice in {None, "cancel"}:
+            return None
+
+        if choice == "use_path":
+            try:
+                version_info = verify_pocketbase_binary(path_binary)
+                ctx.settings = ctx.settings.overridden(pocketbase_binary=str(path_binary))
+                ctx.settings_store.save(ctx.settings)
+                print_success(
+                    ctx.console,
+                    "PocketBase Configured",
+                    f"Configured system binary: {path_binary}\nVersion: {version_info}",
+                )
+                return path_binary
+            except Exception as exc:
+                print_error(ctx.console, "Verification Failed", f"Binary on PATH failed check: {exc}")
+
+    try:
+        os_label, arch_label, _ = resolve_platform()
+    except Exception as exc:
+        print_error(ctx.console, "Platform Error", str(exc))
+        return None
+
+    confirm = await questionary.confirm(
+        f"Download PocketBase v{DEFAULT_POCKETBASE_VERSION} for your system ({os_label}_{arch_label})?",
+        default=True,
+        style=WIZARD_STYLE,
+    ).ask_async()
+
+    if not confirm:
+        return None
+
+    with ctx.console.status("[bold cyan]Downloading and installing PocketBase...[/]"):
+        try:
+            binary_path = await asyncio.to_thread(
+                download_and_extract_pocketbase,
+                version=DEFAULT_POCKETBASE_VERSION,
+            )
+            version_info = verify_pocketbase_binary(binary_path)
+        except Exception as exc:
+            print_error(ctx.console, "Installation Failed", str(exc))
+            return None
+
+    ctx.settings = ctx.settings.overridden(pocketbase_binary=str(binary_path))
+    ctx.settings_store.save(ctx.settings)
+    print_success(
+        ctx.console,
+        "PocketBase Installed",
+        f"Successfully installed at: [bold cyan]{binary_path}[/]\nVersion: [bold green]{version_info}[/]",
+    )
+    return binary_path
+
+
 async def handle_settings(ctx: WizardContext) -> None:
     """Display configuration table, allow inline editing, and persist changes."""
     while True:
@@ -60,6 +135,7 @@ async def handle_settings(ctx: WizardContext) -> None:
             choices=[
                 questionary.Choice("📄 View All Settings", value="view"),
                 questionary.Choice("✏️  Modify a Setting", value="edit"),
+                questionary.Choice("📦 Auto-Install / Detect PocketBase", value="install_pb"),
                 questionary.Choice("🔄 Reset to Default Settings", value="reset"),
                 questionary.Choice("🔙 Back to Main Menu", value="back"),
             ],
@@ -68,6 +144,10 @@ async def handle_settings(ctx: WizardContext) -> None:
 
         if not action or action == "back":
             break
+
+        if action == "install_pb":
+            await handle_pocketbase_install_flow(ctx)
+            continue
 
         if action == "view":
             table = Table(title="Configuration Settings", border_style="#00e5ff", header_style="bold #ff2a85")
@@ -181,6 +261,32 @@ async def handle_settings(ctx: WizardContext) -> None:
                 ).ask_async()
                 if raw is not None:
                     new_val = float(raw.strip())
+            elif target_setting == "pocketbase_binary":
+                pb_action = await questionary.select(
+                    "PocketBase binary configuration:",
+                    choices=[
+                        questionary.Choice("🚀 Auto-detect or Auto-install", value="auto"),
+                        questionary.Choice("✏️  Enter custom path manually", value="manual"),
+                        questionary.Choice("🔄 Clear (use auto-detect)", value="clear"),
+                        questionary.Choice("🔙 Cancel", value="cancel"),
+                    ],
+                    style=WIZARD_STYLE,
+                ).ask_async()
+                if pb_action == "auto":
+                    await handle_pocketbase_install_flow(ctx)
+                    continue
+                elif pb_action == "clear":
+                    new_val = ""
+                elif pb_action == "manual":
+                    raw = await questionary.text(
+                        "Enter path to PocketBase executable:",
+                        default=str(current_val),
+                        style=WIZARD_STYLE,
+                    ).ask_async()
+                    if raw is not None:
+                        new_val = raw.strip()
+                else:
+                    continue
             else:
                 raw = await questionary.text(
                     f"Enter new value for {target_setting}:",
@@ -215,6 +321,11 @@ async def handle_settings(ctx: WizardContext) -> None:
 
 async def handle_license_management(ctx: WizardContext) -> None:
     """Check license validity, import schema-2 keys/files, and deactivate."""
+    ctx.console.print(
+        "[cyan]Beta test license:[/] Visit https://echteralsfake.me/ and press the "
+        "crypto sandbox purchase button. No real transaction takes place and no money is processed. "
+        "Import the license file here."
+    )
     while True:
         action = await questionary.select(
             "License Management:",

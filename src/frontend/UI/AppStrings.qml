@@ -71,7 +71,7 @@ QtObject {
 
     readonly property string updateChecks:
         qsTr("Whether to enable automated update checks. It is HIGHLY recommended to TURN THIS ON. Update checking uses my own server
-        which is hosted offshore in Sweden. The entire source code is open-source. Your IP address is NOT logged nor stored.
+        which is hosted offshore in Sweden. The application source is available under its published license. Your IP address is NOT logged nor stored.
 
         Tor: If you enable Tor in Porn Fetch, the .onion domain of my server will be used (also hosted in Sweden).
         See: https://github.com/EchterAlsFake/Server for the full source code.
