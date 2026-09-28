@@ -6,10 +6,10 @@ import QtQuick.Window
 Window {
     id: root
 
-    width: 580
-    height: 700
-    minimumWidth: 480
-    minimumHeight: 620
+    width: Qt.platform.os === "android" ? Screen.width : 580
+    height: Qt.platform.os === "android" ? Screen.height : 700
+    minimumWidth: Qt.platform.os === "android" ? 0 : 480
+    minimumHeight: Qt.platform.os === "android" ? 0 : 620
     modality: Qt.ApplicationModal
     flags: Qt.Dialog
     title: qsTr("Proxy connection")
@@ -205,10 +205,14 @@ Window {
 
     Pane {
         anchors.fill: parent
-        padding: 22
+        padding: Qt.platform.os === "android" ? 8 : 22
 
-        ColumnLayout {
+        ScrollView {
             anchors.fill: parent
+            clip: true
+            contentWidth: availableWidth
+        ColumnLayout {
+            width: parent.width
             spacing: 14
 
             Label {
@@ -227,7 +231,7 @@ Window {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: 2
+                columns: root.width < 700 ? 1 : 2
                 columnSpacing: 12
                 rowSpacing: 10
 
@@ -272,7 +276,7 @@ Window {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: 2
+                columns: root.width < 700 ? 1 : 2
                 columnSpacing: 12
                 rowSpacing: 10
                 visible: authenticationCheck.checked
@@ -306,8 +310,7 @@ Window {
                 Layout.fillWidth: true
                 padding: 14
 
-                ColumnLayout {
-                    anchors.fill: parent
+                contentItem: ColumnLayout {
                     spacing: 10
 
                     RowLayout {
@@ -335,7 +338,7 @@ Window {
 
                     GridLayout {
                         Layout.fillWidth: true
-                        columns: 2
+                        columns: root.width < 700 ? 1 : 2
                         columnSpacing: 24
                         rowSpacing: 7
                         visible: root.testState === "success"
@@ -358,8 +361,9 @@ Window {
 
             Item { Layout.fillHeight: true }
 
-            RowLayout {
+            GridLayout {
                 Layout.fillWidth: true
+                columns: root.width < 700 ? 2 : 4
 
                 Button {
                     Accessible.name: qsTr("Disable proxy")
@@ -397,6 +401,7 @@ Window {
                     }
                 }
             }
+        }
         }
     }
 }

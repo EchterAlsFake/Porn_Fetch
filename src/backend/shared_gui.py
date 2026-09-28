@@ -1,5 +1,7 @@
 import os
+import sys
 from pathlib import Path
+from collections.abc import Callable
 
 os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Material")
 os.environ.setdefault("QT_QUICK_CONTROLS_MATERIAL_THEME", "Dark")
@@ -10,6 +12,12 @@ from PySide6.QtWidgets import QMessageBox, QApplication
 from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop
 
 _qml_engine = None
+_mobile_notice_handler: Callable[[str, str], None] | None = None
+
+
+def set_mobile_notice_handler(handler: Callable[[str, str], None] | None) -> None:
+    global _mobile_notice_handler
+    _mobile_notice_handler = handler
 
 
 def _get_qml_engine():
@@ -97,6 +105,10 @@ def ui_popup(text, title="Notice"):
 
     if title is None or not isinstance(title, str):
         title = "Notice"
+
+    if sys.platform == "android" and _mobile_notice_handler is not None:
+        _mobile_notice_handler(title, text)
+        return
 
     app = QApplication.instance()
     if not app:

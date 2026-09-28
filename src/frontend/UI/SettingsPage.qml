@@ -7,9 +7,10 @@ import QtQuick.Controls.impl
 import QtQuick.Controls.Material
 
 Pane {
-    font.pointSize: appSettings.font_size
+    font.pointSize: Qt.platform.os === "android" ? Math.max(12, appSettings.font_size) : appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
     readonly property bool materialStyle: appSettings.core_style === "Material"
+    readonly property bool compact: width < 700
 
     component DecimalSpinBox: SpinBox {
         property int decimals: 2
@@ -110,8 +111,41 @@ Pane {
     // This is the main structure: Main Content Area on top, Action Buttons on the bottom.
     ColumnLayout {
         anchors.fill: parent // Make the layout fill the entire window
-        anchors.margins: 20 // Add some breathing room (padding) around the edges
-        spacing: 20 // Space between the top area and the bottom buttons
+        anchors.margins: window.compact ? 8 : 20
+        spacing: window.compact ? 8 : 20
+
+        RowLayout {
+            visible: window.compact
+            Layout.fillWidth: true
+            ComboBox {
+                Layout.fillWidth: true
+                model: [qsTr("Video"), qsTr("Performance"), qsTr("System"), qsTr("Privacy"), qsTr("UI")]
+                currentIndex: stackLayout.currentIndex
+                onActivated: stackLayout.currentIndex = currentIndex
+            }
+            Button {
+                text: qsTr("Actions")
+                onClicked: mobileActions.open()
+                Menu {
+                    id: mobileActions
+                    MenuItem { text: qsTr("Get beta test license"); onTriggered: Qt.openUrlExternally("https://echteralsfake.me/") }
+                    MenuItem { text: qsTr("Import License File"); onTriggered: mobileLicenseDialog.open() }
+                    MenuItem { text: qsTr("Reset settings"); onTriggered: backend.reset_pornfetch() }
+                    MenuItem { text: qsTr("Clear temporary files"); onTriggered: backend.clear_temporary_files() }
+                }
+            }
+        }
+
+        Dialog {
+            id: mobileLicenseDialog
+            parent: Overlay.overlay
+            anchors.centerIn: parent
+            width: Math.min(window.width - 24, 520)
+            height: Math.min(window.height - 24, 650)
+            modal: true
+            title: qsTr("Import License File")
+            contentItem: LicenseWidget { anchors.fill: parent }
+        }
 
         // RowLayout arranges its children horizontally.
         // This splits the upper part into Left (Sidebar) and Right (Settings Content)
@@ -125,8 +159,9 @@ Pane {
             // ---------------------------------------------------------
             // Frame provides a modern, elevated background panel for the sidebar
             Frame {
+                visible: !window.compact
                 Layout.fillHeight: true
-                Layout.preferredWidth: 200 // Fixed width for the sidebar
+                Layout.preferredWidth: visible ? 200 : 0
                 padding: 0 // Remove internal padding so items go edge-to-edge
 
                 // ListView displays a scrollable list of items based on a model
@@ -182,7 +217,7 @@ Pane {
             Frame {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                padding: 20
+                padding: window.compact ? 8 : 20
 
                 // StackLayout allows having multiple children, but only ONE is visible at a time.
                 // It acts exactly like QStackedWidget from Qt Widgets.
@@ -209,7 +244,7 @@ Pane {
                             Layout.fillWidth: true
 
                             GridLayout {
-                                columns: 3
+                                columns: window.compact ? 1 : 3
                                 columnSpacing: 15
                                 rowSpacing: 15
                                 Layout.fillWidth: true
@@ -392,6 +427,7 @@ Pane {
                                         Accessible.description: qsTr("Directory where downloaded videos are saved")
                                         placeholderText: "Enter the output path for the videos..."
                                         Layout.fillWidth: true
+                                        readOnly: Qt.platform.os === "android"
                                         text: appSettings.output_path
                                         onEditingFinished: {
                                             var trimmed = text.trim()
@@ -404,6 +440,7 @@ Pane {
                                     Button {
                                         Accessible.name: qsTr("Choose video output folder")
                                         Layout.fillWidth: false
+                                        visible: Qt.platform.os !== "android"
                                         text: qsTr("Choose Folder…")
                                         onClicked: outputFolderDialog.open()
                                     }
@@ -447,11 +484,11 @@ Pane {
                                 }
                                 CheckBox {
                                     objectName: "trackVideosCheckBox"
-                                    Accessible.name: qsTr("Track Videos in PocketBase")
+                                    Accessible.name: Qt.platform.os === "android" ? qsTr("Track Videos") : qsTr("Track Videos in PocketBase")
                                     Accessible.description: AppStrings.trackVideosHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: "Track Videos (PocketBase)"
+                                    text: Qt.platform.os === "android" ? qsTr("Track Videos") : qsTr("Track Videos (PocketBase)")
                                     checked: appSettings.track_videos
                                     onToggled: appSettings.track_videos = checked
                                 }
@@ -459,7 +496,7 @@ Pane {
                                 Item { Layout.fillWidth: false } // Empty spacer for 1st column alignment
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "PocketBase Data Folder"
+                                    text: Qt.platform.os === "android" ? qsTr("History Data Folder") : qsTr("PocketBase Data Folder")
                                 }
                                 RowLayout {
                                     Layout.fillWidth: true
@@ -472,6 +509,7 @@ Pane {
                                         Accessible.description: qsTr("Directory where PocketBase data files are stored")
                                         placeholderText: "Enter the PocketBase data directory"
                                         Layout.fillWidth: true
+                                        readOnly: Qt.platform.os === "android"
                                         text: appSettings.pocketbase_data_path
                                         onEditingFinished: {
                                             var trimmed = text.trim()
@@ -484,6 +522,7 @@ Pane {
                                     Button {
                                         Accessible.name: qsTr("Choose PocketBase data folder")
                                         Layout.fillWidth: false
+                                        visible: Qt.platform.os !== "android"
                                         text: qsTr("Choose Folder…")
                                         onClicked: pocketbaseFolderDialog.open()
                                     }
@@ -501,7 +540,7 @@ Pane {
 
                         GridLayout {
                             columnSpacing: 15
-                            columns: 3 // We use 6 columns to create two pairs of (Label, Spinbox)
+                            columns: window.compact ? 1 : 3
                             width: scrollviewPerformance.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
@@ -659,7 +698,7 @@ Pane {
                             GridLayout {
                                 columnSpacing: 15
                                 Layout.columnSpan: 3
-                                columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
+                                columns: window.compact ? 1 : 2
                                 width: scrollviewPerformance.availableWidth
                                 Layout.fillWidth: true
                                 rowSpacing: 15
@@ -784,7 +823,7 @@ Pane {
 
                         GridLayout {
                             columnSpacing: 15
-                            columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
+                            columns: window.compact ? 1 : 2
                             width: scrollviewSettings.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
@@ -976,7 +1015,7 @@ Pane {
 
                         GridLayout {
                             columnSpacing: 15
-                            columns: 2 // We use 6 columns to create two pairs of (Label, Spinbox)
+                            columns: window.compact ? 1 : 2
                             width: scrollviewPrivacy.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
@@ -1112,7 +1151,7 @@ Pane {
                             GridLayout {
                                 Layout.columnSpan: 2          // <--- Fixes the layout breakage
                                 Layout.fillWidth: true
-                                columns: 2
+                                columns: window.compact ? 1 : 2
                                 columnSpacing: 15
                                 rowSpacing: 15
 
@@ -1135,6 +1174,7 @@ Pane {
                                     Accessible.name: qsTr("Strict SNI Obfuscation")
                                     text: "Strict SNI Obfuscation (Requires Admin / root rights)"
                                     Layout.fillWidth: false
+                                    visible: Qt.platform.os !== "android"
                                     enabled: appSettings.sni_obfuscation
                                     ButtonGroup.group: sniModeGroup
                                     checked: appSettings.sni_obfuscation_strict
@@ -1145,7 +1185,7 @@ Pane {
                                     objectName: "strictProfileCombo"
                                     Accessible.name: qsTr("Strict SNI Obfuscation Profile")
                                     Layout.fillWidth: true
-                                    visible: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
+                                    visible: Qt.platform.os !== "android" && appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
                                     enabled: appSettings.sni_obfuscation && appSettings.sni_obfuscation_strict
                                     model: ["Strict Fragmentation", "Strict Reverse", "Strict Desync"]
                                     currentIndex: Math.max(0, model.indexOf(appSettings.sni_obfuscation_strict_profile))
@@ -1181,7 +1221,7 @@ Pane {
                         GridLayout {
                             width: scrollviewUI.availableWidth
                             columnSpacing: 15
-                            columns: 3
+                            columns: window.compact ? 1 : 3
                             rowSpacing: 15
                             Layout.fillWidth: true
 
@@ -1274,6 +1314,7 @@ Pane {
         // ---------------------------------------------------------
         // A simple Rectangle acts as a line to visually separate content from bottom buttons
         Rectangle {
+            visible: !window.compact
             Layout.fillWidth: true
             height: 1
         }
@@ -1283,6 +1324,7 @@ Pane {
         // ---------------------------------------------------------
         // A ColumnLayout containing 3 RowLayouts to perfectly align the buttons in a grid structure
         ColumnLayout {
+            visible: !window.compact
             Layout.fillWidth: true
             spacing: 10 // Space between rows of buttons
 

@@ -95,6 +95,28 @@ class LicenseBridge(QObject):
             self.importFinished.emit(False, str(error))
             return previous
 
+    async def _import_from_content_uri(self, file_url: str):
+        previous = self._service.status
+        try:
+            source = QFile(file_url)
+            if not source.open(QIODevice.OpenModeFlag.ReadOnly):
+                raise OSError(source.errorString())
+            try:
+                blob = bytes(source.read(MAX_LICENSE_BYTES + 1))
+            finally:
+                source.close()
+            if len(blob) > MAX_LICENSE_BYTES:
+                raise ValueError("License files may not exceed 32 KiB")
+            status = await self._service.client.import_license(blob)
+            self._set_status(status)
+            self.importFinished.emit(status.allowed, self.reason)
+            return status
+        except Exception as error:
+            self._service.status = previous
+            self.statusChanged.emit()
+            self.importFinished.emit(False, str(error))
+            return previous
+
     def _start(self, operation_factory, *, imported: bool = False) -> asyncio.Task[None] | None:
         if self._busy:
             return None
@@ -137,8 +159,12 @@ class LicenseBridge(QObject):
 
     @Slot(str)
     def installFromPath(self, file_url: str) -> None:
-        local = Path(QUrl(file_url).toLocalFile())
-        self._start(lambda: self._import_from_path(local))
+        url = QUrl(file_url)
+        if url.scheme() == "content":
+            self._start(lambda: self._import_from_content_uri(file_url))
+        else:
+            local = Path(url.toLocalFile())
+            self._start(lambda: self._import_from_path(local))
 
     @Slot()
     def refresh(self) -> None:

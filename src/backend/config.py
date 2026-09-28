@@ -5,9 +5,10 @@ overwriting when different classes hold their own instances and overwrite
 each other.
 """
 # config.py
+import sys
 from pathlib import Path
 from PySide6.QtGui import QGuiApplication
-from PySide6.QtCore import QObject, Property, QSettings, QUrl, Signal, Slot
+from PySide6.QtCore import QObject, Property, QSettings, QStandardPaths, QUrl, Signal, Slot
 from src.shared.version import __version__
 
 __license__ = "Porn Fetch Source-Available License 1.0"
@@ -23,7 +24,8 @@ __org_name__ = "EchterAlsFake"
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
 IS_SOURCE_RUN = True
 
-TEMP_DIRECTORY = ".temp"
+TEMP_DIRECTORY = (Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation))
+                  / "PornFetch" if sys.platform == "android" else Path(".temp"))
 TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
 TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 
@@ -307,7 +309,9 @@ class SettingsManager(QObject):
 
     @Property(str, notify=outputPathChanged)
     def output_path(self) -> str:
-        return self.get_str("Video/output_path", "./")
+        default = str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "downloads") \
+            if sys.platform == "android" else "./"
+        return self.get_str("Video/output_path", default)
 
     @output_path.setter
     def output_path(self, val):
@@ -348,7 +352,9 @@ class SettingsManager(QObject):
 
     @Property(str, notify=pocketbaseDataPathChanged)
     def pocketbase_data_path(self) -> str:
-        return self.get_str("Video/pocketbase_data_path", "./pocketbase_data")
+        default = str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation))
+                      / "pocketbase_data") if sys.platform == "android" else "./pocketbase_data"
+        return self.get_str("Video/pocketbase_data_path", default)
 
     @pocketbase_data_path.setter
     def pocketbase_data_path(self, val):

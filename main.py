@@ -1,4 +1,4 @@
-"""Compatibility launcher for the QML desktop application."""
+"""Launcher for the QML desktop and Android applications."""
 
 from src.backend.application import Backend, ProcessVideos, main
 

@@ -29,8 +29,13 @@ Pane {
         radius: 10
     }
 
-    ColumnLayout {
+    ScrollView {
         anchors.fill: parent
+        clip: true
+        contentWidth: availableWidth
+
+        ColumnLayout {
+        width: parent.width
         spacing: 6
 
         TabBar {
@@ -70,7 +75,7 @@ Pane {
 
         GridLayout {
             Layout.fillWidth: true
-            columns: 2
+            columns: root.width < 700 ? 1 : 2
             visible: root.usesAccountCredentials
 
             Label {
@@ -114,7 +119,7 @@ Pane {
 
         GridLayout {
             Layout.fillWidth: true
-            columns: 2
+            columns: root.width < 700 ? 1 : 2
             visible: !root.usesAccountCredentials
 
             Label {
@@ -147,8 +152,9 @@ Pane {
             }
         }
 
-        RowLayout {
+        GridLayout {
             Layout.fillWidth: true
+            columns: root.width < 700 ? 1 : 2
 
             Button {
                 id: loginButton
@@ -180,6 +186,7 @@ Pane {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Login with Browser Cookies")
+                visible: Qt.platform.os !== "android"
                 enabled: !root.accountBusy
 
                 onClicked: {
@@ -188,8 +195,9 @@ Pane {
             }
         }
 
-        RowLayout {
+        GridLayout {
             Layout.fillWidth: true
+            columns: root.width < 700 ? 1 : 3
 
             Button {
                 Layout.fillWidth: true
@@ -240,7 +248,7 @@ Pane {
 
         GridLayout {
             Layout.fillWidth: true
-            columns: 3
+            columns: root.width < 700 ? 1 : 3
             visible: root.selectedProvider === "XHamster"
 
             Label {
@@ -278,7 +286,7 @@ Pane {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            implicitHeight: 56
             color: "transparent"
 
             Label {
@@ -288,6 +296,7 @@ Pane {
                       ? qsTr("Loading account videos...")
                       : qsTr("Retrieved videos are added to the Downloads page")
             }
+        }
         }
     }
 }

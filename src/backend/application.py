@@ -16,6 +16,7 @@ from src.backend.splashscreen import SplashController
 # --- MULTIPROCESSING SAFE SPLASH SCREEN ---
 # We check if this is the main process. If so, we initialize the GUI.
 # If it's a child process, we skip GUI initialization and set them to None.
+is_android = sys.platform == "android"
 is_main_process = mp.current_process().name == 'MainProcess' and "unittest" not in sys.modules and not os.environ.get("PORN_FETCH_TEST_ENV")
 
 app = None
@@ -25,11 +26,11 @@ splash = None
 if is_main_process:
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
-    
-    splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
-    splash = SplashController(engine, str(splash_qml_path))
-    splash.splash_window.show()
-    app.processEvents()
+    if not is_android:
+        splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
+        splash = SplashController(engine, str(splash_qml_path))
+        splash.splash_window.show()
+        app.processEvents()
 
 def update_splash(msg: str):
     """Safely updates the splash screen only if we are in the main GUI process."""
@@ -94,7 +95,7 @@ from src.backend.license_bridge import LicenseBridge, load_production_config
 from src.licensing.service import create_license_service
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
-from src.backend.shared_gui import (ui_popup, Signals,
+from src.backend.shared_gui import (ui_popup, set_mobile_notice_handler, Signals,
                                     available_title_formatting_options)
 from src.backend.helper_functions import safe_rmtree
 from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
@@ -173,6 +174,7 @@ You need to run this script, otherwise this application will NOT work!""")
 
 class Backend(QObject):
     showMessage = Signal(str)
+    mobileNotice = Signal(str, str)
     loginStateChanged = Signal()
     accountStateChanged = Signal()
     accountFetchStateChanged = Signal()
@@ -212,6 +214,8 @@ class Backend(QObject):
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.showMessage.connect(self.handle_message)
+        if is_android:
+            set_mobile_notice_handler(self.mobileNotice.emit)
         app_settings.restartRequired.connect(self.setting_requires_restart)
         self.database_bridge: DatabaseBridge | None = None
         self._pending_pocketbase_move: tuple[Path, Path] | None = None
@@ -350,6 +354,43 @@ class Backend(QObject):
             self.auto_updater.run(),
             name="auto-update",
         )
+
+    @Slot(str, str)
+    def export_download(self, job_id: str, destination_url: str) -> None:
+        """Copy a completed private download to a user-selected Android document."""
+        video = self._downloads_model.get_video(job_id)
+        if video is None or self._downloads_model.get_status(job_id) != "completed":
+            self.handle_message("Only completed downloads can be exported.")
+            return
+        source = Path(video.output_path)
+        if not source.is_file():
+            self.handle_message("The downloaded file could not be found.")
+            return
+        destination = QUrl(destination_url)
+        if destination.scheme() not in ("content", "file"):
+            self.handle_message("The selected save location is not supported.")
+            return
+
+        def copy_file() -> None:
+            target = QFile(destination.toString() if destination.scheme() == "content" else destination.toLocalFile())
+            if not target.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Truncate):
+                raise OSError(target.errorString())
+            try:
+                with source.open("rb") as downloaded:
+                    while chunk := downloaded.read(1024 * 1024):
+                        if target.write(chunk) != len(chunk):
+                            raise OSError(target.errorString())
+            finally:
+                target.close()
+
+        async def export() -> None:
+            try:
+                await asyncio.to_thread(copy_file)
+                self.handle_message("Download exported successfully.")
+            except Exception as error:
+                self.handle_message(f"Could not export download: {error}")
+
+        self._spawn(export(), name=f"export-{job_id}")
 
     async def _prepare_for_update(self) -> None:
         """Gracefully stop PocketBase and close sessions before the installer runs."""
@@ -1399,10 +1440,10 @@ def main() -> None:
         engine.rootContext().setContextProperty(context_name, bytes(resource.readAll()).decode("utf-8"))
         resource.close()
 
-    splash.showMessage("Loading Window...")
+    update_splash("Loading Window...")
 
     # 3. Resolve path to Main.qml relative to this script
-    qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "Main.qml"
+    qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / ("AndroidMain.qml" if is_android else "Main.qml")
 
 
     engine.load(QUrl.fromLocalFile(str(qml_file)))
@@ -1412,7 +1453,8 @@ def main() -> None:
         print("Failed to load QML file.")
         sys.exit(-1)
 
-    splash.finish()
+    if splash:
+        splash.finish()
 
     async def start_async_services() -> None:
         # This coroutine is first advanced by QtAsyncio after its loop is
