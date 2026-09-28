@@ -12,7 +12,7 @@ packages =
 android_packages = buildozer,cython
 
 [qt]
-qml_files = src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidStatisticsPage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/AndroidSupportedWebsitesPage.qml,src/frontend/UI/AccountPage.qml,src/frontend/UI/SettingsPage.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/Theme.qml
+qml_files = src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidStatisticsPage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/AndroidSupportedWebsitesPage.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/Theme.qml
 excluded_qml_plugins =
 modules = Core,Gui,Qml,Quick,QuickControls2,QuickLayouts,Network,Widgets
 plugins =

@@ -1,12 +1,18 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Dialogs as Dialogs
 import QtQuick.Layouts
 
 Pane {
     id: root
-    padding: 8
+    padding: 12
     property bool showFilters: false
+    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    background: Rectangle { color: root.pageColor }
 
     function filterValue(field) {
         return field.text.trim() === "" ? null : field.text.trim()
@@ -38,15 +44,27 @@ Pane {
         anchors.fill: parent
         spacing: 8
 
-        ScrollView {
+        Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: Math.min(220, contentItem.contentHeight)
-            clip: true
-            contentWidth: availableWidth
+            implicitHeight: fetchContent.implicitHeight + 28
+            radius: 22
+            color: root.cardColor
 
             ColumnLayout {
-                width: parent.width
-                spacing: 4
+                id: fetchContent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 14
+                spacing: 8
+
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Add videos")
+                    color: root.textColor
+                    font.pixelSize: 18
+                    font.bold: true
+                }
 
                 ComboBox {
                     id: sourceType
@@ -132,6 +150,8 @@ Pane {
                     readonly property bool active: status === "queued" || status === "downloading" || status === "stopping"
                     readonly property bool resumable: status === "cancelled" || status === "failed"
                     width: ListView.view.width
+                    padding: 14
+                    background: Rectangle { color: root.cardColor; radius: 18 }
 
                     Dialogs.FileDialog {
                         id: exportDialog
@@ -148,6 +168,7 @@ Pane {
                             Layout.fillWidth: true
                             text: appSettings.anonymous_mode ? qsTr("[redacted]") : card.title
                             font.bold: true
+                            color: root.textColor
                             wrapMode: Text.Wrap
                             maximumLineCount: 2
                             elide: Text.ElideRight
@@ -157,6 +178,7 @@ Pane {
                             text: (appSettings.anonymous_mode ? qsTr("[redacted]") : card.author)
                                   + " · " + card.duration + " · " + card.status
                             elide: Text.ElideRight
+                            color: root.mutedColor
                         }
                         ProgressBar {
                             Layout.fillWidth: true
@@ -225,7 +247,9 @@ Pane {
                 Label {
                     anchors.centerIn: parent
                     visible: downloadList.count === 0
-                    text: qsTr("No downloads")
+                    text: qsTr("No downloads yet\nAdd a video URL to get started")
+                    horizontalAlignment: Text.AlignHCenter
+                    color: root.mutedColor
                 }
             }
         }

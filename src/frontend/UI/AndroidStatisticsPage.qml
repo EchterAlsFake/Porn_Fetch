@@ -4,7 +4,12 @@ import QtQuick.Layouts
 
 Pane {
     id: root
-    padding: 8
+    padding: 12
+    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    background: Rectangle { color: root.pageColor }
     property var statistics: ({})
 
     function refresh() { statistics = databaseBridge.getDashboardStats() }
@@ -28,6 +33,7 @@ Pane {
                       ? qsTr("Local download history")
                       : qsTr("Download tracking is disabled. Enable it in Settings and restart the app.")
                 font.bold: true
+                color: root.textColor
                 wrapMode: Text.Wrap
             }
             Button { text: qsTr("Refresh"); onClicked: root.refresh() }
@@ -44,14 +50,16 @@ Pane {
                 delegate: Frame {
                     required property var modelData
                     Layout.fillWidth: true
+                    padding: 16
+                    background: Rectangle { color: root.cardColor; radius: 18 }
                     contentItem: ColumnLayout {
-                        Label { text: modelData.title; font.bold: true }
-                        Label { Layout.fillWidth: true; text: String(modelData.value); wrapMode: Text.Wrap }
+                        Label { text: modelData.title; color: root.mutedColor }
+                        Label { Layout.fillWidth: true; text: String(modelData.value); color: root.textColor; font.pixelSize: 22; font.bold: true; wrapMode: Text.Wrap }
                     }
                 }
             }
 
-            Label { text: qsTr("Sources"); font.bold: true }
+            Label { text: qsTr("Sources"); color: root.textColor; font.bold: true; font.pixelSize: 18 }
             Repeater {
                 model: root.statistics.sources || []
                 delegate: Label {

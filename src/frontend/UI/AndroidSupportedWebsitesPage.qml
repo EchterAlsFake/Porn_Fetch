@@ -3,7 +3,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Pane {
-    padding: 8
+    id: root
+    padding: 12
+    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    background: Rectangle { color: root.pageColor }
     ScrollView {
         anchors.fill: parent
         contentWidth: availableWidth
@@ -24,9 +30,11 @@ Pane {
                 delegate: Frame {
                     required property var modelData
                     Layout.fillWidth: true
+                    padding: 16
+                    background: Rectangle { color: root.cardColor; radius: 18 }
                     contentItem: ColumnLayout {
-                        Label { text: modelData.category; font.bold: true }
-                        Label { Layout.fillWidth: true; text: modelData.sites; wrapMode: Text.Wrap }
+                        Label { text: modelData.category; color: root.textColor; font.bold: true; font.pixelSize: 17 }
+                        Label { Layout.fillWidth: true; text: modelData.sites; color: root.mutedColor; wrapMode: Text.Wrap }
                     }
                 }
             }

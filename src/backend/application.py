@@ -26,7 +26,7 @@ splash = None
 if is_main_process:
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
-    if not is_android:
+    if not is_android and "--android" not in sys.argv:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
         splash = SplashController(engine, str(splash_qml_path))
         splash.splash_window.show()
@@ -1396,7 +1396,7 @@ def main() -> None:
 
     # Loads the theme e.g., Material UI / Fusion + dark / light theme
     saved_style = app_settings.core_style
-    QQuickStyle.setStyle(saved_style)
+    QQuickStyle.setStyle("Material" if is_android or args.android else saved_style)
     theme_manager = ThemeManager(parent=engine)
 
     # The backend instance handles the main logic, see class above
