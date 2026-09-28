@@ -22,7 +22,6 @@ ARTIFACT_TARGETS = {
     "PornFetch_linux_CLI_arm64": "linux/arm64.zip",
     "PornFetch_windows_CLI_x64": "windows/amd64.zip",
     "PornFetch_windows_CLI_arm64": "windows/arm64.zip",
-    "PornFetch_windows_CLI_x86": "windows/x86.zip",
     "PornFetch_macos_CLI_x64": "darwin/amd64.zip",
     "PornFetch_macos_CLI_arm64": "darwin/arm64.zip",
     "PornFetch_Linux_CLI_x32": "linux/x32.zip",

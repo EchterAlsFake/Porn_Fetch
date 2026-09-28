@@ -125,10 +125,10 @@ jobs:
             uv run python scripts/fetch_pocketbase.py --platform macos --arch ${{ matrix.arch }} --dest dist_pb
           else
             uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
-            if [ -f pocketbase ]; then
-              uv run --no-sync python scripts/write_checksum.py pocketbase
-            elif [ -f pocketbase.exe ]; then
+            if [ "${{ matrix.platform }}" = "windows" ] && [ -f pocketbase.exe ]; then
               uv run --no-sync python scripts/write_checksum.py pocketbase.exe
+            elif [ -f pocketbase ]; then
+              uv run --no-sync python scripts/write_checksum.py pocketbase
             fi
           fi
 
@@ -293,9 +293,6 @@ jobs:
           - platform: windows
             arch: arm64
             os: windows-11-arm
-          - platform: windows
-            arch: x86
-            os: windows-latest
           - platform: macos
             arch: x64
             os: macos-15-intel
@@ -317,24 +314,42 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Windows ARM64 OpenSSL (vcpkg)
+        if: matrix.platform == 'windows' && matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
+          git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
+          & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
+          & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
+          echo "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
+
       - name: Sync Dependencies
         run: uv sync --locked --no-dev --extra build
+
+      - name: Include OpenSSL DLLs (Windows ARM64)
+        if: matrix.platform == 'windows' && matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          $cryptoPath = uv run --no-sync python -c "import cryptography, os; print(os.path.dirname(cryptography.__file__))"
+          $dllTarget = Join-Path $cryptoPath "hazmat\bindings"
+          Copy-Item -Path (Join-Path $env:OPENSSL_DIR "bin\*.dll") -Destination $dllTarget -Force
 
       - name: Fetch PocketBase
         shell: bash
         run: |
-          uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
-          if [ -f pocketbase ]; then
-            uv run --no-sync python scripts/write_checksum.py pocketbase
-          elif [ -f pocketbase.exe ]; then
+          uv run --no-sync python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
+          if [ "${{ matrix.platform }}" = "windows" ] && [ -f pocketbase.exe ]; then
             uv run --no-sync python scripts/write_checksum.py pocketbase.exe
+          elif [ -f pocketbase ]; then
+            uv run --no-sync python scripts/write_checksum.py pocketbase
           fi
 
       - name: Build
         shell: bash
         run: |
           uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} ${{ matrix.platform }} ${{ matrix.arch }}
-          uv run pyinstaller --clean packaging/pyinstaller_cli.spec
+          uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
@@ -382,9 +397,10 @@ jobs:
           PY_VER: "3.14.0"
           PREFIX: "/opt/python-32"
         run: |
+          set -euo pipefail
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib libffi-dev:i386 zlib1g-dev:i386 libssl-dev:i386
+          sudo apt-get install -y build-essential gcc-multilib libffi-dev:i386 zlib1g-dev:i386 libssl-dev:i386 libzstd-dev:i386
 
           wget "https://www.python.org/ftp/python/$PY_VER/Python-$PY_VER.tgz"
           tar -xzf "Python-$PY_VER.tgz" && cd "Python-$PY_VER"
@@ -444,23 +460,15 @@ jobs:
           arch: ${{ matrix.arch }}
           distro: ubuntu24.04
           run: |
-            # 1. Update and install standard Python tools
+            set -eu
             apt-get update
-            apt-get install -y python3-venv python3-pip python3-dev build-essential
-            
-            # 2. Create and activate a Virtual Environment to bypass PEP 668
-            python3 -m venv /opt/venv
-            export PATH="/opt/venv/bin:$PATH"
-            
-            # 3. Install dependencies ignoring python-version bounds for runner distro python
-            pip install --ignore-requires-python '.[build]'
-
-            python3 packaging/write_cli_build_version.py ${{ github.run_number }} linux ${{ matrix.arch }}
-            
-            # 4. Build the binary
-            pyinstaller --clean packaging/pyinstaller_cli.spec
-            
-            # 5. Rename output and test
+            apt-get install -y git python3-venv python3-pip build-essential
+            python3 -m venv /opt/uv-bootstrap
+            /opt/uv-bootstrap/bin/pip install uv
+            /opt/uv-bootstrap/bin/uv python install 3.14
+            /opt/uv-bootstrap/bin/uv sync --locked --no-dev --extra build --python 3.14
+            /opt/uv-bootstrap/bin/uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} linux ${{ matrix.arch }}
+            /opt/uv-bootstrap/bin/uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
             mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_${{ matrix.arch }}
             ./PornFetch_Linux_CLI_${{ matrix.arch }} --test-mode --filter offline
 
@@ -489,6 +497,7 @@ jobs:
   build-macos-universal:
     name: GUI (macos-universal)
     needs: build-gui  # Wait for the x64 and arm64 builds to finish
+    if: ${{ !cancelled() }}
     runs-on: macos-latest
     timeout-minutes: 60
     steps:

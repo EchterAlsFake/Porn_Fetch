@@ -7,7 +7,7 @@ Standalone CLI builds use [The Update Framework (TUF)](https://theupdateframewor
 
 The update helper replaces the executable and bundled PocketBase binary, writes its result in the printed staging directory, and keeps the previous files there for recovery. If an update fails, please include the error and staging result in an issue. Source checkouts, package manager installations, and files in system managed directories must be updated through their original installation method.
 
-The repository can carry Windows x64, ARM64, and x86; macOS x64 and ARM64; and Linux x64, ARM64, x32, riscv64, s390x, and ppc64le. The last four Linux targets are experimental. A target appears only after its build artifact succeeds.
+The repository can carry Windows x64 and ARM64; macOS x64 and ARM64; and Linux x64, ARM64, x32, riscv64, s390x, and ppc64le. The last four Linux targets are experimental. A target appears only after its build artifact succeeds. Windows x86 is currently unavailable because a required cryptography dependency no longer supports it.
 
 ## Publishing and server layout
 
