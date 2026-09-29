@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import re
 import shutil
+import time
 from importlib.metadata import distributions
 from pathlib import Path
 from urllib.request import urlopen
@@ -13,6 +14,20 @@ from zipfile import ZIP_DEFLATED, ZipFile
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LGPL_URL = "https://www.gnu.org/licenses/lgpl-3.0.txt"
 NOTICE_NAMES = ("license", "licence", "copying", "notice", "copyright")
+
+
+def download_lgpl_text() -> bytes:
+    for attempt in range(3):
+        try:
+            with urlopen(LGPL_URL, timeout=20) as response:
+                return response.read()
+        except OSError as error:
+            if attempt == 2:
+                raise
+            delay = 2 ** attempt
+            print(f"LGPL download failed ({error}); retrying in {delay}s", flush=True)
+            time.sleep(delay)
+    raise RuntimeError("LGPL download retry loop ended unexpectedly")
 
 
 def collect_legal(output: Path, *, offline: bool = False) -> Path:
@@ -56,8 +71,7 @@ def collect_legal(output: Path, *, offline: bool = False) -> Path:
     if has_qt:
         qt_text = output / "LICENSES" / "LGPL-3.0-only.txt"
         if not offline:
-            with urlopen(LGPL_URL, timeout=20) as response:
-                data = response.read()
+            data = download_lgpl_text()
             if b"GNU LESSER GENERAL PUBLIC LICENSE" not in data[:500]:
                 raise ValueError("Downloaded LGPL text is not recognized")
             qt_text.write_bytes(data)

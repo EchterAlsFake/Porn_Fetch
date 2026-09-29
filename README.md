@@ -134,7 +134,7 @@ the file there. The [installation guide](docs/INSTALLATION.md) has the steps.
 | **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
 | **Android**                | CLI from source  | Termux; no beta APK in the desktop build workflow |
 
-Linux x32, riscv64, s390x, and ppc64le CLI builds are optional experiments in manual workflow runs. Windows ARM64 GUI and Windows x86 CLI builds are paused after build and runtime failures in pipeline #43.
+Linux 32-bit (x32 artifact) and riscv64 CLI builds are available as experimental workflow-dispatch targets. They use native target toolchains and must pass a CI build and smoke test before their artifacts are published. Linux s390x and ppc64le CLI builds are paused because `curl-cffi` does not support those architectures. Windows ARM64 GUI and Windows x86 CLI builds are paused after build and runtime failures in pipeline #43.
 
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 

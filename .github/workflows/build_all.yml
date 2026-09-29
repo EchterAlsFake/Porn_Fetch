@@ -20,7 +20,7 @@ on:
         type: boolean
         default: false
       experimental_builds:
-        description: "Try unsupported Linux x32 and QEMU CLI builds"
+        description: "Also build Linux 32-bit and RISC-V CLI artifacts"
         type: boolean
         default: false
   push:
@@ -357,54 +357,23 @@ jobs:
             PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}_LEGAL.zip
 
   # ==========================================
-  # 3. CLI BUILD (Linux 32-bit - The Special Case)
+  # 3. LINUX 32-BIT CLI BUILD
   # ==========================================
   build-cli-linux-x32:
     name: CLI experimental (linux-x32)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-    continue-on-error: true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
 
-      - name: Build 32-bit Python & Binary
-        env:
-          PY_VER: "3.14.0"
-          PREFIX: "/opt/python-32"
+      - name: Build and smoke test in 32-bit Linux
         run: |
-          set -euo pipefail
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib libffi-dev:i386 zlib1g-dev:i386 libssl-dev:i386 libzstd-dev:i386
-
-          wget "https://www.python.org/ftp/python/$PY_VER/Python-$PY_VER.tgz"
-          tar -xzf "Python-$PY_VER.tgz" && cd "Python-$PY_VER"
-          CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix="$PREFIX" --enable-shared
-          make -j"$(nproc)" && sudo make altinstall
-          cd ..
-
-          export PATH="$PREFIX/bin:$PATH"
-          export LD_LIBRARY_PATH="$PREFIX/lib"
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv venv .venv --python "$PREFIX/bin/python3.14"
-          source .venv/bin/activate
-          CC="gcc -m32" LDFLAGS="-m32" uv pip install --no-binary=:all: pyinstaller
-          uv sync --locked --no-dev --extra build
-          python packaging/write_cli_build_version.py ${{ github.run_number }} linux x32
-          python -m PyInstaller --clean packaging/pyinstaller_cli.spec
-
-          mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
-          echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> "$GITHUB_ENV"
-          python scripts/write_checksum.py PornFetch_Linux_CLI_x32
-
-      - name: Test CLI
-        shell: bash
-        run: |
-          ./${{ env.CLI_OUTPUT }} --test-mode --filter offline
-
-      - name: Collect legal notices
-        run: python packaging/collect_legal.py PornFetch_Linux_CLI_x32_LEGAL
+          docker run --rm --platform linux/386 \
+            --mount type=bind,source="$GITHUB_WORKSPACE",target=/workspace \
+            --workdir /workspace \
+            --env BUILD_RUN_NUMBER="${{ github.run_number }}" \
+            debian:bookworm bash packaging/build_linux_x86.sh
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
@@ -414,59 +383,50 @@ jobs:
             PornFetch_Linux_CLI_x32
             PornFetch_Linux_CLI_x32.sha256
             PornFetch_Linux_CLI_x32_LEGAL.zip
+          if-no-files-found: error
 
   # ==========================================
-  # 4. EXOTIC ARCHITECTURE CLI BUILDS (QEMU)
+  # 4. RISC-V CLI BUILD (QEMU)
   # ==========================================
-  build-exotic-cli:
-    name: CLI experimental (linux-${{ matrix.arch }})
+  build-cli-linux-riscv64:
+    name: CLI experimental (linux-riscv64)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-    continue-on-error: true
-    strategy:
-      fail-fast: false  # Prevent one failing architecture from killing the others
-      matrix:
-        arch: [riscv64, s390x, ppc64le]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
 
-      - name: Build via QEMU
+      - name: Build and smoke test via QEMU
         uses: uraimo/run-on-arch-action@v3
         with:
-          arch: ${{ matrix.arch }}
+          arch: riscv64
           distro: ubuntu24.04
           run: |
             set -eu
             apt-get update
-            apt-get install -y git python3-venv python3-pip build-essential
-            python3 -m venv /opt/uv-bootstrap
-            /opt/uv-bootstrap/bin/pip install uv
-            /opt/uv-bootstrap/bin/uv python install 3.14
-            /opt/uv-bootstrap/bin/uv sync --locked --no-dev --extra build --python 3.14
-            /opt/uv-bootstrap/bin/uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} linux ${{ matrix.arch }}
-            /opt/uv-bootstrap/bin/uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
-            mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_${{ matrix.arch }}
-            ./PornFetch_Linux_CLI_${{ matrix.arch }} --test-mode --filter offline
-
-      - name: Checksum & Upload
-        run: |
-          python3 scripts/write_checksum.py "PornFetch_Linux_CLI_${{ matrix.arch }}"
-          
-          {
-            echo "### SHA256 Checksum (${{ matrix.arch }})"
-            echo "\`\`\`"
-            cat "PornFetch_Linux_CLI_${{ matrix.arch }}.sha256"
-            echo "\`\`\`"
-          } >> "$GITHUB_STEP_SUMMARY"
+            apt-get install -y build-essential ca-certificates curl git libffi-dev libssl-dev pkg-config zlib1g-dev
+            curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal
+            curl -fsSL https://astral.sh/uv/install.sh | sh
+            export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+            uv python install 3.14
+            uv sync --locked --no-dev --extra build --python 3.14
+            uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} linux riscv64
+            uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
+            readelf -h dist/Porn_Fetch_CLI | grep -q 'Machine:.*RISC-V'
+            mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_riscv64
+            ./PornFetch_Linux_CLI_riscv64 --test-mode --filter offline
+            uv run --no-sync python scripts/write_checksum.py PornFetch_Linux_CLI_riscv64
+            uv run --no-sync python packaging/collect_legal.py PornFetch_Linux_CLI_riscv64_LEGAL
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: PornFetch_Linux_CLI_${{ matrix.arch }}
+          name: PornFetch_Linux_CLI_riscv64
           path: |
-            PornFetch_Linux_CLI_${{ matrix.arch }}
-            PornFetch_Linux_CLI_${{ matrix.arch }}.sha256
+            PornFetch_Linux_CLI_riscv64
+            PornFetch_Linux_CLI_riscv64.sha256
+            PornFetch_Linux_CLI_riscv64_LEGAL.zip
+          if-no-files-found: error
 
   # ==========================================
   # 5. MACOS UNIVERSAL BINARY (FUSION)
@@ -623,9 +583,12 @@ jobs:
           IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
         run: bash scripts/deploy_ifw_repositories.sh ifw_repositories
 
+  # ==========================================
+  # 7. DEPLOY SIGNED CLI UPDATES
+  # ==========================================
   deploy-cli-updates:
     name: Deploy Signed CLI Updates
-    needs: [build-cli, build-cli-linux-x32, build-exotic-cli]
+    needs: [build-cli, build-cli-linux-x32, build-cli-linux-riscv64]
     if: >-
       always() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.build-cli.result == 'success'
