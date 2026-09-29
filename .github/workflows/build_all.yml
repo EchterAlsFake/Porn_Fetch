@@ -408,6 +408,7 @@ jobs:
             curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal
             curl -fsSL https://astral.sh/uv/install.sh | sh
             export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+            export UV_NO_PROGRESS=1
             uv python install 3.14
             uv sync --locked --no-dev --extra build --python 3.14
             uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} linux riscv64
