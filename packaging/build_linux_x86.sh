@@ -21,7 +21,8 @@ python3.14 -c 'import struct; assert struct.calcsize("P") == 4'
 curl -fsSLo /tmp/rustup-init https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init
 chmod +x /tmp/rustup-init
 /tmp/rustup-init -y --profile minimal --default-host i686-unknown-linux-gnu
-rustc -vV | grep -q 'host: i686-unknown-linux-gnu'
+rustc -vV > /tmp/rust-version.txt
+grep -q 'host: i686-unknown-linux-gnu' /tmp/rust-version.txt
 curl -fsSLo /tmp/uv.tar.gz https://github.com/astral-sh/uv/releases/latest/download/uv-i686-unknown-linux-gnu.tar.gz
 tar -xzf /tmp/uv.tar.gz -C /tmp
 install -m 755 /tmp/uv-i686-unknown-linux-gnu/uv /usr/local/bin/uv
@@ -31,7 +32,8 @@ uv sync --locked --no-dev --extra build --python /opt/python-3.14/bin/python3.14
 uv run --no-sync python -c 'import struct; assert struct.calcsize("P") == 4'
 uv run --no-sync python packaging/write_cli_build_version.py "$BUILD_RUN_NUMBER" linux x32
 uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
-readelf -h dist/Porn_Fetch_CLI | grep -q 'Machine:.*Intel 80386'
+readelf -h dist/Porn_Fetch_CLI > /tmp/cli-elf-header.txt
+grep -q 'Machine:.*Intel 80386' /tmp/cli-elf-header.txt
 
 mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
 uv run --no-sync python scripts/write_checksum.py PornFetch_Linux_CLI_x32
