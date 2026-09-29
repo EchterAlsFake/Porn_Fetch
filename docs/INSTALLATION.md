@@ -18,7 +18,7 @@ that it will be included in the first beta.
 
 The GUI opens an app window. The CLI runs in a terminal and does not need Qt.
 Choose the file matching your operating system and CPU architecture (`x64` or
-`arm64`). Windows CLI also has an experimental `x86` target. The current workflow has no
+`arm64`, where offered). Windows GUI currently targets x64; Windows CLI targets x64 and ARM64. The current workflow has no
 Android GUI APK or iOS artifact. The CLI can also be run from source on Termux.
 
 ### Standalone beta build

@@ -127,12 +127,14 @@ the file there. The [installation guide](docs/INSTALLATION.md) has the steps.
 
 | Platform                   | App              | Architectures                                   |
 |----------------------------|------------------|-------------------------------------------------|
-| **Windows**                | GUI              | x64, ARM64                                      |
-| **Windows**                | CLI              | x64, ARM64, x86 (beta compatibility build)     |
+| **Windows**                | GUI              | x64                                             |
+| **Windows**                | CLI              | x64, ARM64                                      |
 | **Linux (X11 / Wayland)**  | GUI              | x64, ARM64                                      |
-| **Linux (X11 / Wayland)**  | CLI              | x64, x86 (x32), riscv64, s390x, ppc64le         |
+| **Linux (X11 / Wayland)**  | CLI              | x64, ARM64                                      |
 | **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
 | **Android**                | CLI from source  | Termux; no beta APK in the desktop build workflow |
+
+Linux x32, riscv64, s390x, and ppc64le CLI builds are optional experiments in manual workflow runs. Windows ARM64 GUI and Windows x86 CLI builds are paused after build and runtime failures in pipeline #43.
 
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
