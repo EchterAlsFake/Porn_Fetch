@@ -1,3 +1,5 @@
+# DO NOT USE THIS PROJECT RIGHT NOW, WAIT UNTIL MONDAY PLEASE!!!!!!!!!!! (seriously) 
+
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
