@@ -1,5 +1,10 @@
 # DO NOT USE THIS PROJECT RIGHT NOW, WAIT UNTIL MONDAY PLEASE!!!!!!!!!!! (seriously) 
 
+
+<img width="4096" height="1844" alt="IMG_20261003_222305" src="https://github.com/user-attachments/assets/17540384-d0bd-4f82-b6b5-11ebbea65edb" />
+
+# If I don't remove this image tomorrow, you know I died because of a heart attack
+
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
