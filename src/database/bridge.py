@@ -9,10 +9,10 @@ from PySide6.QtCore import QObject, Signal, Slot
 from src.backend.config import app_settings
 from src.shared.media import VideoObject
 
+from .android_tracker import AndroidTracker
 from .client import PocketBaseClient
 from .service import PocketBaseService
 from .tracker import PocketBaseTracker
-from .android_tracker import AndroidTracker
 
 
 class DatabaseBridge(QObject):

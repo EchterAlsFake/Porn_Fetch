@@ -70,13 +70,14 @@ def collect_legal(output: Path, *, offline: bool = False) -> Path:
 
     if has_qt:
         qt_text = output / "LICENSES" / "LGPL-3.0-only.txt"
-        if not offline:
-            data = download_lgpl_text()
-            if b"GNU LESSER GENERAL PUBLIC LICENSE" not in data[:500]:
-                raise ValueError("Downloaded LGPL text is not recognized")
-            qt_text.write_bytes(data)
-        elif not qt_text.exists():
-            review.append("- Qt: LGPL-3.0 text must be included; rerun without --offline")
+        if not qt_text.exists():
+            if not offline:
+                data = download_lgpl_text()
+                if b"GNU LESSER GENERAL PUBLIC LICENSE" not in data[:500]:
+                    raise ValueError("Downloaded LGPL text is not recognized")
+                qt_text.write_bytes(data)
+            else:
+                review.append("- Qt: LGPL-3.0 text must be included; rerun without --offline")
         review.append("- Qt: verify shipped modules, replacement of LGPL libraries, and source availability")
 
     (output / "PYTHON_INVENTORY.md").write_text("\n".join(inventory) + "\n", encoding="utf-8")
