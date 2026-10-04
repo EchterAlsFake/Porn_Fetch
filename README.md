@@ -7,6 +7,8 @@
 
 Edit: 23:47 (I am still alive and going to touch some grass now cuz I am out of quota for Gemini and Codex, need to wait 2 hours) 
 
+Edit: 2:27 I am 60% done. I go to sleep now and hopefully in ~13-15 hours this is all working again xD 
+
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
