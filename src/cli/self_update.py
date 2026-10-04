@@ -16,7 +16,7 @@ from pathlib import Path
 from platformdirs import user_cache_dir
 from tuf.ngclient import Updater
 
-REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", "https://api.echteralsfake.me/repo/cli/").rstrip("/") + "/"
+REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", "https://api.pornfetch.to/repo/cli/").rstrip("/") + "/"
 ROOT_FILE = Path(__file__).with_name("update_root.json")
 BUILD_FILE = Path(__file__).with_name("update_build.json")
 

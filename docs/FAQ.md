@@ -8,7 +8,7 @@ published 3.8 binaries are substantially older. See [STATUS.md](STATUS.md).
 ## Is the 3.9 beta license a real purchase?
 
 No. The beta uses the normal license import and validation path, but its crypto
-checkout is a sandbox. Visit [echteralsfake.me](https://echteralsfake.me/),
+checkout is a sandbox. Visit [pornfetch.to](https://pornfetch.to/),
 press the sandbox purchase button, and import the resulting license file.
 There is no real transaction and no money is processed. See the
 [3.9 installation guide](INSTALLATION.md).

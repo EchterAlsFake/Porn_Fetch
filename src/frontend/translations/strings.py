@@ -32,7 +32,7 @@ The URL / Input you provided seems to be invalid. You either did a mistake while
 https://, or the website is not yet supported. 
 
 You can create a GitHub Issue to ask for a site to be added, but specific conditions apply to that:
-https://echteralsfake.me/add_site_conditions"""
+https://pornfetch.to/add_site_conditions"""
     cookies_not_found = """
 I could not extract the cookies for your requested page. This can happen to multiple reasons:
 1) You are not authenticated in your OS

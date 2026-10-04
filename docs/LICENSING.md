@@ -34,7 +34,7 @@ Policy must describe the code and actual deployment at the time a service is
 offered. The payment and licensing flows in this development environment are
 test-only; this document does not represent that money is processed.
 
-For the first 3.9 beta, users go to https://echteralsfake.me/ and press the
+For the first 3.9 beta, users go to https://pornfetch.to/ and press the
 crypto sandbox purchase button to obtain a license file. The application then
 uses its normal import and validation flow. This is not a real transaction:
 no money is processed and users do not need to send cryptocurrency.

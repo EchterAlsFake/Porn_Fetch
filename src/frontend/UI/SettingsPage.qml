@@ -130,7 +130,7 @@ Pane {
                 onClicked: mobileActions.open()
                 Menu {
                     id: mobileActions
-                    MenuItem { text: qsTr("Get beta test license"); onTriggered: Qt.openUrlExternally("https://echteralsfake.me/") }
+                    MenuItem { text: qsTr("Get beta test license"); onTriggered: Qt.openUrlExternally("https://pornfetch.to/") }
                     MenuItem { text: qsTr("Import License File"); onTriggered: mobileLicenseDialog.open() }
                     MenuItem { text: qsTr("Reset settings"); onTriggered: backend.reset_pornfetch() }
                     MenuItem { text: qsTr("Clear temporary files"); onTriggered: backend.clear_temporary_files() }
@@ -1345,7 +1345,7 @@ Pane {
                     text: qsTr("Get beta test license")
 
                     onClicked: {
-                        Qt.openUrlExternally("https://echteralsfake.me/")
+                        Qt.openUrlExternally("https://pornfetch.to/")
                     }
 
                 }

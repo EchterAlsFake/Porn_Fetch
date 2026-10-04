@@ -643,7 +643,7 @@ jobs:
           APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
           uv run --no-sync python packaging/publish_cli_updates.py \
             --artifacts cli_artifacts \
-            --remote-url https://api.echteralsfake.me/repo/cli/ \
+            --remote-url https://api.pornfetch.to/repo/cli/ \
             --output cli_update_repository \
             --private-key "$RUNNER_TEMP/cli_online.pem" \
             --version "$APP_VERSION.${{ github.run_number }}"

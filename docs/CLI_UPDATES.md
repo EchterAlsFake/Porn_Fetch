@@ -11,7 +11,7 @@ The build produces Windows x64 and ARM64, macOS x64 and ARM64, and Linux x64 and
 
 ## Publishing and server layout
 
-The public repository is `https://api.echteralsfake.me/repo/cli/`, mapped on the server to `/srv/pornfetch-downloads/public/repo/cli/`. Caddy must serve all files under `metadata/` and `targets/` as static files over HTTPS. Metadata should not be cached for long; archives can be cached. The deployment script uses the existing `pornfetch-deploy` SSH account and `IFW_DEPLOY_*` beta environment configuration. It uploads targets and metadata first, then makes the new `timestamp.json` visible last.
+The public repository is `https://api.pornfetch.to/repo/cli/`, mapped on the server to `/srv/pornfetch-downloads/public/repo/cli/`. Caddy must serve all files under `metadata/` and `targets/` as static files over HTTPS. Metadata should not be cached for long; archives can be cached. The deployment script uses the existing `pornfetch-deploy` SSH account and `IFW_DEPLOY_*` beta environment configuration. It uploads targets and metadata first, then makes the new `timestamp.json` visible last.
 
 In **Build All**, set `Legal review complete` and `Deploy signed CLI updates`. Creating a release also publishes CLI updates. CI appends the GitHub run number to the app version for each build. Publishing rejects a target whose version does not increase. **Refresh CLI Update Metadata** renews signed metadata every three days between releases and can also be run manually. A failed refresh needs attention before the timestamp expires after seven days.
 

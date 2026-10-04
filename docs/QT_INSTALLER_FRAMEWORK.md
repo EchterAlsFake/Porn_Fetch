@@ -31,7 +31,7 @@ The template at `packaging/installer/config/config.xml.template` currently
 embeds this URL in new installers:
 
 ```text
-https://api.echteralsfake.me/repo/<os>_<architecture>
+https://api.pornfetch.to/repo/<os>_<architecture>
 ```
 
 The CI job currently generates `windows_amd64`, `linux_amd64`,
@@ -44,7 +44,7 @@ separate generated repository at each URL you actually ship. For example,
 `linux_amd64/Updates.xml` must be available at:
 
 ```text
-https://api.echteralsfake.me/repo/linux_amd64/Updates.xml
+https://api.pornfetch.to/repo/linux_amd64/Updates.xml
 ```
 
 Server tasks:
@@ -81,10 +81,10 @@ Configure the GitHub `beta` environment before enabling deployment:
 | `IFW_DEPLOY_KNOWN_HOSTS` | Secret | Verified `ssh-ed25519` host key line, using the exact configured SSH host |
 
 The server agent reports that Caddy serves this tree at both
-`https://api.echteralsfake.me/repo/` and
-`https://downloads.echteralsfake.me/repo/`. The installers use the API hostname.
+`https://api.pornfetch.to/repo/` and
+`https://downloads.pornfetch.to/repo/`. The installers use the API hostname.
 The canonical deployment root is `/srv/pornfetch-downloads/public/repo`, so
-`https://api.echteralsfake.me/repo/linux_amd64/Updates.xml` maps to
+`https://api.pornfetch.to/repo/linux_amd64/Updates.xml` maps to
 `/srv/pornfetch-downloads/public/repo/linux_amd64/Updates.xml`. The server
 needs `rsync` and `ssh`. The current deploy job uploads archives and metadata
 without deleting old files, then replaces each `Updates.xml` last. This is

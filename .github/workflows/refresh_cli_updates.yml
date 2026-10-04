@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           uv run --no-sync python packaging/publish_cli_updates.py \
-            --remote-url https://api.echteralsfake.me/repo/cli/ \
+            --remote-url https://api.pornfetch.to/repo/cli/ \
             --output cli_update_repository \
             --private-key "$RUNNER_TEMP/cli_online.pem" \
             --allow-empty

@@ -70,7 +70,7 @@ class LicenseClient:
         account_id: str,
         product_id: str,
         policy_id: str,
-        base_url: str = "https://licenses.echteralsfake.me",
+        base_url: str = "https://licenses.pornfetch.to",
         clock: Callable[[], float] = time.time,
         monotonic: Callable[[], float] = time.monotonic,
     ) -> None:

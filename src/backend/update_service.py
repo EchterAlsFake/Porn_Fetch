@@ -17,9 +17,9 @@ from src.backend.shared_functions import configure_app_logging, get_os_and_arch
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
 
-DEFAULT_UPDATE_URL = "https://api.echteralsfake.me/update"
+DEFAULT_UPDATE_URL = "https://api.pornfetch.to/update"
 UPDATE_URL_ENVIRONMENT_VARIABLE = "PORNFETCH_UPDATE_URL"
-DEFAULT_REPO_BASE_URL = "https://api.echteralsfake.me/repo"
+DEFAULT_REPO_BASE_URL = "https://api.pornfetch.to/repo"
 
 
 def get_update_url() -> str:

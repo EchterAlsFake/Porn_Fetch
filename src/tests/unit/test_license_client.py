@@ -227,7 +227,7 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
         await self.import_file()
         self.assertTrue(self.core.requests)
         for request in self.core.requests:
-            self.assertTrue(request["url"].startswith("https://licenses.echteralsfake.me/v1/"))
+            self.assertTrue(request["url"].startswith("https://licenses.pornfetch.to/v1/"))
             self.assertFalse(request["allow_redirects"])
             self.assertTrue(request["headers"]["Authorization"].startswith("License key/"))
 

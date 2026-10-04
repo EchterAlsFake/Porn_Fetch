@@ -602,7 +602,7 @@ Pane {
                 Button {
                     Layout.fillWidth: true
                     text: qsTr("Get beta test license")
-                    onClicked: Qt.openUrlExternally("https://echteralsfake.me/")
+                    onClicked: Qt.openUrlExternally("https://pornfetch.to/")
                 }
             }
             Item { Layout.preferredHeight: 14 }

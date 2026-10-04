@@ -27,8 +27,8 @@ Edit: 2:27 I am 60% done. I go to sleep now and hopefully in ~13-15 hours this i
 
 <br>
 
-<a href="https://echteralsfake.me/checklist">
-  <img src="https://echteralsfake.me/checklist/progress.svg" alt="Version 3.9 Development Progress" width="400"/>
+<a href="https://pornfetch.to/checklist">
+  <img src="https://pornfetch.to/checklist/progress.svg" alt="Version 3.9 Development Progress" width="400"/>
 </a>
 
 ---
@@ -58,7 +58,7 @@ Earlier GPL releases keep their GPL rights. The source license and a premium
 feature credential are separate things.
 
 **The first 3.9 beta uses the real license import and validation flow with a
-sandbox checkout.** Go to [echteralsfake.me](https://echteralsfake.me/), press
+sandbox checkout.** Go to [pornfetch.to](https://pornfetch.to/), press
 the sandbox purchase button, and import the license file you receive in the
 app. **This is not a real transaction. No money is processed, and you do not
 need to send cryptocurrency.** The checkout is there to test how a license

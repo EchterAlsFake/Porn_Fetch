@@ -16,7 +16,7 @@ from curl_cffi.requests import AsyncSession
 
 from .version import __version__
 
-ERROR_REPORT_URL = "https://api.echteralsfake.me/error_log"
+ERROR_REPORT_URL = "https://api.pornfetch.to/error_log"
 MAX_MESSAGE_CHARS = 2_000
 MAX_BODY_BYTES = 4_096
 _LOGGER = logging.getLogger(__name__)

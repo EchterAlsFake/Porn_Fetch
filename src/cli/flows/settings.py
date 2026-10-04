@@ -322,7 +322,7 @@ async def handle_settings(ctx: WizardContext) -> None:
 async def handle_license_management(ctx: WizardContext) -> None:
     """Check license validity, import schema-2 keys/files, and deactivate."""
     ctx.console.print(
-        "[cyan]Beta test license:[/] Visit https://echteralsfake.me/ and press the "
+        "[cyan]Beta test license:[/] Visit https://pornfetch.to/ and press the "
         "crypto sandbox purchase button. No real transaction takes place and no money is processed. "
         "Import the license file here."
     )

