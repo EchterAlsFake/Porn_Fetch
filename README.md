@@ -1,13 +1,6 @@
-# DO NOT USE THIS PROJECT RIGHT NOW, WAIT UNTIL MONDAY PLEASE!!!!!!!!!!! (seriously) 
+# This project is currently not in a functional state. Please wait a few more days, I am actively working on it 🙏
 
-
-<img width="4096" height="1844" alt="IMG_20261003_222305" src="https://github.com/user-attachments/assets/17540384-d0bd-4f82-b6b5-11ebbea65edb" />
-
-# If I don't remove this image tomorrow, you know I died because of a heart attack
-
-Edit: 23:47 (I am still alive and going to touch some grass now cuz I am out of quota for Gemini and Codex, need to wait 2 hours) 
-
-Edit: 2:27 I am 60% done. I go to sleep now and hopefully in ~13-15 hours this is all working again xD 
+PS: I am writing an exam on Monday, Tuesday and Wednesday. Life ain't easy rn. 
 
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
