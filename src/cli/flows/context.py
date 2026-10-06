@@ -6,7 +6,7 @@ from typing import Any
 
 from rich.console import Console
 
-from src.licensing.service import LicenseService, create_license_service
+from src.licensing.service import LicenseService, create_license_service, rejection_notice
 from src.shared.error_reporting import report_exception
 
 from ..accounts import AccountService
@@ -42,7 +42,10 @@ class WizardContext:
 
     async def check_license(self, force: bool = False) -> Any:
         try:
-            return await self.license_service.check(force=force)
+            status = await self.license_service.check(force=force)
+            if getattr(status, "server_rejected", False):
+                self.console.print(f"[bold red]License rejected:[/] {rejection_notice(status.state)}")
+            return status
         except Exception as error:
             logger.debug("License status refresh failed: %s", type(error).__name__)
             return self.license_service.status

@@ -13,6 +13,8 @@ from src.backend.update_service import (
     CheckUpdates,
     find_maintenance_tool,
 )
+from src.licensing.client import LicenseStatus
+from src.shared.version import RELEASE_TIMESTAMP
 
 
 class UpdateServiceTests(unittest.TestCase):
@@ -93,14 +95,16 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                 nonlocal cleanup_called
                 cleanup_called = True
 
-            updater = AutoUpdater(before_update=mock_cleanup)
+            updater = AutoUpdater(before_update=mock_cleanup, license_status=AsyncMock(return_value=LicenseStatus("valid", True, license_expires_at=RELEASE_TIMESTAMP)))
 
             with patch("src.backend.update_service.find_maintenance_tool", return_value=tmp_path):
                 with patch("subprocess.Popen") as mock_popen:
                     with patch("PySide6.QtCore.QCoreApplication.quit") as mock_quit:
-                        await updater._run()
+                        with patch.object(CheckUpdates, "check_signed_repository", AsyncMock(return_value={"release_timestamp": RELEASE_TIMESTAMP})), patch.object(updater, "_stage_repository", AsyncMock(return_value=tmp_path.parent)):
+                            await updater._run()
                         self.assertTrue(cleanup_called, "Pre-update cleanup hook was not invoked")
                         mock_popen.assert_called_once()
+                        self.assertIn("--set-temp-repository", mock_popen.call_args.args[0])
                         mock_quit.assert_called_once()
         finally:
             tmp_path.unlink(missing_ok=True)

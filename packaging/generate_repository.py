@@ -4,9 +4,11 @@ from __future__ import annotations
 import argparse
 import logging
 import platform
+import re
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.database.installer import resolve_platform  # noqa: E402
-from src.shared.version import __version__  # noqa: E402
+from src.shared.version import RELEASE_TIMESTAMP, __version__  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("qt_ifw_builder")
@@ -60,6 +62,8 @@ def prepare_staging_directory(
             content = f.read_text(encoding="utf-8")
             if f.name == "package.xml":
                 content = content.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
+                release_date = datetime.fromtimestamp(RELEASE_TIMESTAMP, timezone.utc).strftime("%Y-%m-%d")
+                content = re.sub(r"<ReleaseDate>.*?</ReleaseDate>", f"<ReleaseDate>{release_date}</ReleaseDate>", content)
             (meta_dest / f.name).write_text(content, encoding="utf-8")
 
     # 3. Copy application distribution files into data/

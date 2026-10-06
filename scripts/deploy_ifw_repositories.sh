@@ -27,17 +27,20 @@ repositories=("$artifacts_dir"/IFW_repo_*/*)
 ((${#repositories[@]} > 0)) || { echo "No IFW repositories were downloaded" >&2; exit 1; }
 
 for repository in "${repositories[@]}"; do
-  [[ -d $repository && -f $repository/Updates.xml ]] || { echo "Invalid IFW repository: $repository" >&2; exit 1; }
+  [[ -d $repository && -f $repository/Updates.xml && -f $repository/release.json ]] || { echo "Invalid IFW repository: $repository" >&2; exit 1; }
   tag=${repository##*/}
   [[ $tag =~ ^(linux|windows|darwin)_(amd64|arm64)$ ]] || { echo "Unexpected IFW repository: $tag" >&2; exit 1; }
   destination="$IFW_DEPLOY_ROOT/$tag"
 
   ssh "${ssh_options[@]}" "$remote" "mkdir -p '$destination'"
-  rsync -a --delay-updates --exclude='/Updates.xml' \
+  rsync -a --delay-updates --exclude='/Updates.xml' --exclude='/release.json' \
     -e "ssh -i $IFW_SSH_KEY_FILE -o UserKnownHostsFile=$IFW_KNOWN_HOSTS_FILE -o StrictHostKeyChecking=yes -o BatchMode=yes" \
     "$repository/" "$remote:$destination/"
   scp "${ssh_options[@]}" "$repository/Updates.xml" "$remote:$destination/Updates.xml.next-$run_id"
   ssh "${ssh_options[@]}" "$remote" \
     "mv -f '$destination/Updates.xml.next-$run_id' '$destination/Updates.xml'"
+  scp "${ssh_options[@]}" "$repository/release.json" "$remote:$destination/release.json.next-$run_id"
+  ssh "${ssh_options[@]}" "$remote" \
+    "mv -f '$destination/release.json.next-$run_id' '$destination/release.json'"
   echo "Published IFW repository: $tag"
 done

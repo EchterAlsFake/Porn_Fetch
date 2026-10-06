@@ -3,7 +3,7 @@
     <DisplayName>Porn Fetch Core Application</DisplayName>
     <Description>Core standalone application, multimedia dependencies, and embedded PocketBase persistence service.</Description>
     <Version>3.9.0</Version>
-    <ReleaseDate>2026-09-24</ReleaseDate>
+    <ReleaseDate>2026-10-06</ReleaseDate>
     <Default>true</Default>
     <ForcedInstallation>true</ForcedInstallation>
     <Script>installscript.qs</Script>

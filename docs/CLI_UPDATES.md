@@ -22,3 +22,12 @@ In **Build All**, set `Legal review complete` and `Deploy signed CLI updates`. C
 The online signing key is `.private/cli-updates/online.pem`. GitHub Actions reads it from the beta environment secret `CLI_UPDATE_SIGNING_KEY`; set the entire PEM file as the secret value and restrict access to the beta environment. If this key is exposed, stop publishing, rotate the delegated signing keys with the offline root key, and publish a new signed root before resuming.
 
 `python packaging/init_cli_updates.py` initializes keys for a new repository. Do not run it against this repository: the trust root has already been generated.
+
+## Update entitlement
+
+Signed target custom metadata and the hashed bundle manifest both contain
+`release_timestamp`, taken from `src/shared/version.py` in the release commit.
+`--check` reports whether the release is entitled. Installation refreshes licensing
+and blocks before downloading when renewal is required or the signed date is missing.
+Renewal keeps the same key; repeat the update check after refreshing. The date must
+be fixed for each release and must never be generated from the installing device clock.

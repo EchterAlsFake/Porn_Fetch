@@ -31,10 +31,8 @@ Before publishing a source-available release:
 
 The related Server repository remains a separate project. Its Terms and Privacy
 Policy must describe the code and actual deployment at the time a service is
-offered. The payment and licensing flows in this development environment are
-test-only; this document does not represent that money is processed.
-
-For the first 3.9 beta, users go to https://pornfetch.to/ and press the
-crypto sandbox purchase button to obtain a license file. The application then
-uses its normal import and validation flow. This is not a real transaction:
-no money is processed and users do not need to send cryptocurrency.
+offered. The payment deployment remains sandboxed as of the 6 October 2026 server handoff;
+this client change does not enable payments. The production client targets the new
+commercial policy and explicitly rejects older beta credentials. See
+[LICENSING_ARCHITECTURE.md](LICENSING_ARCHITECTURE.md) for protocol, privacy, update
+entitlement, installation paths, validation evidence, and release requirements.

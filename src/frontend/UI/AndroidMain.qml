@@ -32,10 +32,10 @@ ApplicationWindow {
     readonly property var pageDescriptions: [qsTr("Collect and save videos"), qsTr("Your connected accounts"),
                                              qsTr("Your download activity"), qsTr("Make it yours"),
                                              qsTr("About this app"), qsTr("Available sources"), qsTr("Explore the app")]
-    readonly property var pageIcons: ["qrc:/images/graphics/download.svg", "qrc:/images/graphics/account.svg",
-                                      "qrc:/images/graphics/database.svg", "qrc:/images/graphics/settings.svg",
-                                      "qrc:/images/graphics/information.svg", "qrc:/images/graphics/information.svg",
-                                      "qrc:/images/graphics/information.svg"]
+    readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
+                                      "qrc:/images/graphics/database.png", "qrc:/images/graphics/settings.png",
+                                      "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
+                                      "qrc:/images/graphics/information.png"]
 
     function goBack() {
         if (settingsDetail) settingsPage.goBack()
@@ -60,6 +60,15 @@ ApplicationWindow {
         function onShutdown_complete() {
             window.safeToClose = true
             window.close()
+        }
+    }
+
+    Connections {
+        target: bridge
+        function onLicenseRejected(message) {
+            noticeDialog.title = qsTr("License rejected")
+            noticeText.text = message
+            noticeDialog.open()
         }
     }
 

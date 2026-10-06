@@ -121,7 +121,7 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.fake_pool.runtime_config = MagicMock()
 
         self.fake_license = MagicMock()
-        self.fake_license.status = type("Status", (), {"state": "valid", "allowed": True, "expires_at": None})()
+        self.fake_license.status = type("Status", (), {"state": "valid", "allowed": True, "expires_at": None, "license_expires_at": None, "next_check_at": None})()
         self.fake_license.reason = "License active."
         self.fake_license.check = AsyncMock(return_value=self.fake_license.status)
         self.fake_license.close = AsyncMock()

@@ -19,6 +19,7 @@ from src.database.installer import (
     resolve_platform,
     verify_pocketbase_binary,
 )
+from src.licensing.service import rejection_notice
 from src.shared.media import quality_requires_premium
 
 from ..settings import CliSettings
@@ -322,9 +323,10 @@ async def handle_settings(ctx: WizardContext) -> None:
 async def handle_license_management(ctx: WizardContext) -> None:
     """Check license validity, import schema-2 keys/files, and deactivate."""
     ctx.console.print(
-        "[cyan]Beta test license:[/] Visit https://pornfetch.to/ and press the "
-        "crypto sandbox purchase button. No real transaction takes place and no money is processed. "
-        "Import the license file here."
+        "[cyan]Production license:[/] Visit https://pornfetch.to/ to purchase or renew. "
+        "Import the license file here.\n"
+        "[dim]Note: Each license allows up to 10 machines. Permanent licenses provide lifetime access "
+        "to the current release and include updates for 1 year after first activation.[/dim]"
     )
     while True:
         action = await questionary.select(
@@ -332,7 +334,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
             choices=[
                 questionary.Choice("🔍 Check / Refresh License Status", value="check"),
                 questionary.Choice("📥 Import License Key / File", value="import"),
-                questionary.Choice("⚠️  Deactivate Current License", value="deactivate"),
+                questionary.Choice("⚠️  Deactivate Current License (frees 1 of 10 machine seats)", value="deactivate"),
                 questionary.Choice("🔙 Back to Main Menu", value="back"),
             ],
             style=WIZARD_STYLE,
@@ -345,22 +347,40 @@ async def handle_license_management(ctx: WizardContext) -> None:
             with ctx.console.status("[bold green]Checking license status with server...[/]", spinner="dots"):
                 status = await ctx.check_license(force=True)
 
-            expiry = "—"
-            if status.expires_at is not None:
-                expiry = datetime.fromtimestamp(status.expires_at, tz=timezone.utc).astimezone().isoformat(timespec="minutes")
+            license_expiry_str = "—"
+            lic_exp = getattr(status, "license_expires_at", None)
+            if status.allowed:
+                if lic_exp is None:
+                    license_expiry_str = "Lifetime / Never"
+                else:
+                    license_expiry_str = datetime.fromtimestamp(lic_exp, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
+            elif lic_exp is not None:
+                license_expiry_str = datetime.fromtimestamp(lic_exp, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
+
+            next_check_str = "—"
+            check_time = getattr(status, "next_check_at", None) or getattr(status, "expires_at", None)
+            if check_time is not None:
+                next_check_str = datetime.fromtimestamp(check_time, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
 
             table = Table(show_header=False, box=None, padding=(0, 1))
             table.add_row("[bold cyan]State:[/]", f"[bold green]{status.state}[/]" if status.allowed else f"[bold yellow]{status.state}[/]")
             table.add_row("[bold cyan]Description:[/]", ctx.license_service.reason)
             table.add_row("[bold cyan]Features:[/]", "[bold green]Premium unlocked (1080p+, fast downloads)[/]" if status.allowed else "[dim]Standard free tier (<=720p)[/]")
-            table.add_row("[bold cyan]Expires:[/]", expiry)
+            expiry_display = (
+                f"{license_expiry_str} [dim](valid for current release, 1 yr updates included)[/dim]"
+                if license_expiry_str == "Lifetime / Never"
+                else license_expiry_str
+            )
+            table.add_row("[bold cyan]Update entitlement ends:[/]", expiry_display)
+            table.add_row("[bold cyan]Machine Limit:[/]", "10 machines (use Deactivate to unlink seats)")
+            table.add_row("[bold cyan]Offline Permit Expires:[/]", next_check_str)
 
             border = "green" if status.allowed else "yellow"
             ctx.console.print(Panel(table, title="[bold #00e5ff]License Information[/]", border_style=border))
 
         elif action == "import":
             path_or_key = await questionary.text(
-                "Enter path to schema-2 license file (or paste JSON license):",
+                "Enter license file path, signed key, or JSON license:",
                 style=WIZARD_STYLE,
             ).ask_async()
             if not path_or_key or not path_or_key.strip():
@@ -369,22 +389,27 @@ async def handle_license_management(ctx: WizardContext) -> None:
 
             with ctx.console.status("[bold green]Importing and verifying license...[/]", spinner="dots"):
                 try:
-                    if Path(path_or_key).is_file():
+                    if len(path_or_key) < 240 and not path_or_key.startswith(("key/", "{")) and Path(path_or_key).is_file():
                         status = await ctx.license_service.import_file(path_or_key)
                     else:
                         status = await ctx.license_service.client.import_license(path_or_key)
                         ctx.license_service.status = status
-                    print_success(
-                        ctx.console,
-                        "License Imported",
-                        f"Status: [bold white]{status.state}[/]\n{ctx.license_service.reason}",
-                    )
+                    if status.server_rejected:
+                        print_error(ctx.console, "License Rejected", rejection_notice(status.state))
+                    elif not status.allowed:
+                        print_error(ctx.console, "Activation incomplete", ctx.license_service.reason)
+                    else:
+                        print_success(
+                            ctx.console,
+                            "License Imported",
+                            f"Status: [bold white]{status.state}[/]\n{ctx.license_service.reason}",
+                        )
                 except Exception as error:
                     print_error(ctx.console, "License Import Failed", str(error))
 
         elif action == "deactivate":
             confirm = await questionary.confirm(
-                "Are you sure you want to deactivate the license on this device?",
+                "Are you sure you want to deactivate the license on this device? (This unlinks the machine to free up 1 of your 10 machine seats)",
                 default=False,
                 style=WIZARD_STYLE,
             ).ask_async()

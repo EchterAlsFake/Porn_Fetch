@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import platform
@@ -15,6 +16,8 @@ from pathlib import Path
 
 from platformdirs import user_cache_dir
 from tuf.ngclient import Updater
+
+from src.shared.release import release_time, update_eligibility
 
 REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", "https://api.pornfetch.to/repo/cli/").rstrip("/") + "/"
 ROOT_FILE = Path(__file__).with_name("update_root.json")
@@ -71,12 +74,14 @@ def _safe_name(name: str) -> str:
     return name
 
 
-def _stage_bundle(archive: Path, destination: Path, expected_target: str, expected_version: str, executable: Path) -> Path:
+def _stage_bundle(archive: Path, destination: Path, expected_target: str, expected_version: str, executable: Path, expected_release: int | None = None) -> Path:
     with zipfile.ZipFile(archive) as bundle:
         names = bundle.namelist()
         if len(names) != len(set(names)) or "manifest.json" not in names:
             raise ValueError("Invalid CLI update archive")
         manifest = json.loads(bundle.read("manifest.json"))
+        if expected_release is not None and manifest.get("release_timestamp") != expected_release:
+            raise ValueError("CLI archive release date does not match signed metadata")
         files = manifest.get("files")
         if (manifest.get("target") != expected_target or manifest.get("version") != expected_version
                 or not isinstance(files, list) or set(names) != set(files) | {"manifest.json"}
@@ -154,6 +159,15 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
     return _apply_update(stage, executable)
 
 
+async def _license_status():
+    from src.licensing.service import create_license_service
+    service = create_license_service(None)
+    try:
+        return await service.check(force=True)
+    finally:
+        await service.close()
+
+
 def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
     try:
         build = json.loads(BUILD_FILE.read_text(encoding="utf-8"))
@@ -182,6 +196,13 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
             print(f"Porn Fetch CLI is up to date ({current}).")
             return 0
         print(f"Porn Fetch CLI {latest} is available for {name} (installed: {current}).")
+        released = release_time(target.custom.get("release_timestamp"))
+        status = asyncio.run(_license_status())
+        entitled, reason = update_eligibility(status, released)
+        print(reason)
+        if not entitled:
+            print("Purchase / renew: https://pornfetch.to/ — then refresh your license.")
+            return 0 if check_only else 1
         if check_only:
             return 0
         executable = _installation_path()
@@ -191,7 +212,7 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
                 return 0
         archive = Path(updater.download_target(target))
         stage = Path(tempfile.mkdtemp(prefix=".pornfetch-update-", dir=executable.parent))
-        _stage_bundle(archive, stage, name, latest, executable)
+        _stage_bundle(archive, stage, name, latest, executable, released)
         helper = stage / ("pornfetch-update-helper.exe" if sys.platform == "win32" else "pornfetch-update-helper")
         shutil.copy2(executable, helper)
         if sys.platform != "win32":

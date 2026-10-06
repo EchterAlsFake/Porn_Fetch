@@ -5,13 +5,18 @@
 No. The default branch documents the in-development 3.9 rewrite. The latest
 published 3.8 binaries are substantially older. See [STATUS.md](STATUS.md).
 
-## Is the 3.9 beta license a real purchase?
+## Is payment live, and do older beta licenses work?
 
-No. The beta uses the normal license import and validation path, but its crypto
-checkout is a sandbox. Visit [pornfetch.to](https://pornfetch.to/),
-press the sandbox purchase button, and import the resulting license file.
-There is no real transaction and no money is processed. See the
-[3.9 installation guide](INSTALLATION.md).
+The backend handoff dated 6 October 2026 reports that NOWPayments is still sandboxed
+and Patreon is disabled. This client targets the new commercial policy; it rejects
+old beta credentials locally. Use a commercial-policy TEST credential for testing.
+See [licensing architecture](LICENSING_ARCHITECTURE.md) for the release boundary.
+
+## What happens after the update year?
+
+Versions released on or before your update entitlement end remain licensed.
+Newer versions require renewal. The separate seven-day offline grace still applies.
+Renewal keeps the same key and installation UUID; refresh the license afterward.
 
 ## Can the CLI run without Qt?
 

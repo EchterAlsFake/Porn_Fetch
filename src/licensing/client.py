@@ -14,10 +14,13 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Protocol
+from urllib.parse import urlsplit
 
 from base_api.modules.errors import AccessDeniedError, HTTPStatusError
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
+from src.shared.version import RELEASE_TIMESTAMP
 
 WEEK = 604800
 DAY = 86400
@@ -32,7 +35,17 @@ class LicenseError(ValueError):
 
 
 class TemporaryFailure(Exception):
-    pass
+    def __init__(self, state: str = "network_unavailable"):
+        self.state = state
+
+
+class BetaLicenseError(LicenseError):
+    """An old credential must never be sent to the production endpoint."""
+
+
+BETA_MESSAGE = "This beta license belongs to an older licensing system and is no longer valid for the production release."
+BETA_POLICY = "564897fa-b8d9-4871-82a4-0b49fd50bc1e"
+BETA_ACCOUNT = "2779db33-8e9b-4c5f-b1b5-ee5957939c20"
 
 
 class Rejected(Exception):
@@ -45,6 +58,13 @@ class LicenseStatus:
     state: str
     allowed: bool
     expires_at: float | None = None
+    license_expires_at: float | None = None
+    next_check_at: float | None = None
+    server_rejected: bool = False
+    failure: str | None = None
+
+    def entitled_to(self, release_timestamp: float) -> bool:
+        return self.allowed and self.license_expires_at is not None and release_timestamp <= self.license_expires_at
 
 
 def decode(value: str, *, url: bool = False) -> bytes:
@@ -73,8 +93,10 @@ class LicenseClient:
         base_url: str = "https://licenses.pornfetch.to",
         clock: Callable[[], float] = time.time,
         monotonic: Callable[[], float] = time.monotonic,
+        release_timestamp: float = RELEASE_TIMESTAMP,
     ) -> None:
-        if not base_url.startswith("https://"):
+        endpoint = urlsplit(base_url)
+        if endpoint.scheme != "https" or not endpoint.netloc or endpoint.username or endpoint.password or endpoint.query or endpoint.fragment or endpoint.path not in ("", "/"):
             raise LicenseError("The licensing endpoint must use HTTPS")
         try:
             self.public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(public_key))
@@ -84,7 +106,8 @@ class LicenseClient:
         self.product_id = product_id
         self.policy_id = policy_id
         self.core = core
-        self.base_url = base_url.rstrip("/") + "/v1/"
+        self.base_url = base_url.rstrip("/") + "/v1/accounts/" + str(uuid.UUID(account_id)) + "/"
+        self.release_timestamp = release_timestamp
         self.clock = clock
         self.monotonic = monotonic
         self.anchor_wall = clock()
@@ -92,6 +115,7 @@ class LicenseClient:
         self.directory = Path(state_dir)
         self.path = self.directory / "licensing.sqlite3"
         self._closed = False
+        self._startup_pending = True
 
     @staticmethod
     def _validate_state(state: Any) -> dict[str, Any]:
@@ -110,7 +134,7 @@ class LicenseClient:
             installation_id = uuid.UUID(state.get("installation_id", ""))
         except (AttributeError, TypeError, ValueError):
             installation_id = None
-        if installation_id is None or installation_id.version != 4:
+        if installation_id is None or installation_id.version != 4 or str(installation_id) != state["installation_id"]:
             raise LicenseError(
                 "Local license state is unreadable; do not reset it automatically"
             )
@@ -131,7 +155,7 @@ class LicenseClient:
                 raise LicenseError(
                     "Local license state is unreadable; do not reset it automatically"
                 )
-            optional_numbers = ("retry_at", "renewed")
+            optional_numbers = ("retry_at", "renewed", "last_successful_validation")
             if any(
                 name in record and not finite_number(record[name])
                 for name in optional_numbers
@@ -153,6 +177,10 @@ class LicenseClient:
             if "blocked" in record and record["blocked"] is not None and not isinstance(
                 record["blocked"], str
             ):
+                raise LicenseError(
+                    "Local license state is unreadable; do not reset it automatically"
+                )
+            if "license_expiry" in record and record["license_expiry"] is not None and not finite_number(record["license_expiry"]):
                 raise LicenseError(
                     "Local license state is unreadable; do not reset it automatically"
                 )
@@ -243,20 +271,27 @@ class LicenseClient:
             if not isinstance(key, str) or len(key) > 16384 or not key.startswith("key/"):
                 raise ValueError
             message, signature = key.rsplit(".", 1)
+            # Untrusted inspection is used ONLY to reject known beta material, never to grant access.
+            candidate = json.loads(decode(message[4:], url=True))
+            if isinstance(candidate, dict) and (candidate.get("account", {}).get("id") == BETA_ACCOUNT or candidate.get("policy", {}).get("id") == BETA_POLICY):
+                raise BetaLicenseError(BETA_MESSAGE)
             self.public_key.verify(decode(signature, url=True), message.encode("ascii"))
             payload = json.loads(decode(message[4:], url=True))
             if (
                 payload["account"]["id"] != self.account_id
                 or payload["product"]["id"] != self.product_id
                 or payload["policy"]["id"] != self.policy_id
-                or payload["policy"]["duration"] is not None
-                or payload["license"]["expiry"] is not None
             ):
                 raise ValueError
             uuid.UUID(payload["license"]["id"])
             timestamp(payload["license"]["created"])
+            lic_exp = payload["license"].get("expiry")
+            if lic_exp is not None:
+                timestamp(lic_exp)
             return payload
-        except (ValueError, KeyError, TypeError, UnicodeError, InvalidSignature):
+        except BetaLicenseError:
+            raise
+        except (ValueError, KeyError, TypeError, AttributeError, UnicodeError, InvalidSignature):
             raise LicenseError("License signature or signed claims are invalid") from None
 
     def verify_permit(
@@ -307,12 +342,20 @@ class LicenseClient:
             if len(licenses) != 1:
                 raise ValueError
             attributes = licenses[0]["attributes"]
-            if attributes["suspended"] or attributes["expiry"] is not None:
+            if attributes["suspended"] is not False:
                 raise ValueError
+            lic_expiry = None
+            if attributes.get("expiry") is not None:
+                lic_expiry = timestamp(attributes["expiry"])
             if licenses[0]["relationships"]["policy"]["data"]["id"] != self.policy_id:
                 raise ValueError
-            return {"issued": issued, "expiry": expiry, "machine_id": machine["id"]}
-        except (ValueError, KeyError, TypeError, UnicodeError, InvalidSignature):
+            return {
+                "issued": issued,
+                "expiry": expiry,
+                "machine_id": machine["id"],
+                "license_expiry": lic_expiry,
+            }
+        except (ValueError, KeyError, TypeError, AttributeError, UnicodeError, InvalidSignature):
             raise LicenseError("Machine permit signature or signed claims are invalid") from None
 
     async def _request(
@@ -323,38 +366,68 @@ class LicenseClient:
         *,
         json_data: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        request = self.core.request(
-            url=self.base_url + path,
-            method=method,
-            headers={
-                "Authorization": "License " + key,
-                "Accept": "application/vnd.api+json",
-                "Content-Type": "application/vnd.api+json",
-                "User-Agent": "license-client",
-            },
-            json_data=json_data,
-            allow_redirects=False,
-        )
-        try:
-            response = await request
-        except AccessDeniedError:
-            raise Rejected("rejected") from None
-        except HTTPStatusError as error:
-            if error.status_code in (408, 425, 429) or error.status_code >= 500:
-                raise TemporaryFailure from None
-            if error.status_code == 404:
-                raise Rejected("not_found") from None
-            if error.status_code in (409, 422) and method == "POST" and path == "machines":
-                raise Rejected("machine_conflict_or_limit") from None
-            raise Rejected("rejected") from None
-        except Exception:
-            raise TemporaryFailure from None
-        if response.status_code == 204:
-            return {}
-        try:
-            return response.json()
-        except (ValueError, TypeError, AttributeError):
-            raise TemporaryFailure from None
+        # Validation is safe to repeat. Machine creation and checkout are never retried here.
+        attempts = 2 if method == "GET" or path == "licenses/actions/validate-key" else 1
+        for attempt in range(attempts):
+            try:
+                async with asyncio.timeout(25):
+                    response = await self.core.request(
+                        url=self.base_url + path, method=method,
+                        headers={"Authorization": "License " + key,
+                                 "Accept": "application/vnd.api+json",
+                                 "Content-Type": "application/vnd.api+json",
+                                 "User-Agent": "PornFetch-license-client"},
+                        json_data=json_data, allow_redirects=False,
+                        timeout=(5, 20), retry_non_idempotent=False,
+                    )
+                status = response.status_code
+                if status == 204:
+                    return {}
+                if status in (408, 425, 429) or status >= 500:
+                    raise TemporaryFailure("server_unavailable")
+                try:
+                    body = response.json()
+                    if not isinstance(body, dict):
+                        raise ValueError
+                except (ValueError, TypeError, AttributeError):
+                    if status in (401, 403):
+                        raise Rejected("suspended_or_denied" if status == 403 else "rejected") from None
+                    if status == 404:
+                        raise Rejected("not_found") from None
+                    raise TemporaryFailure("malformed_response") from None
+                if not 200 <= status < 300:
+                    errors = body.get("errors", [])
+                    codes = {item.get("code") for item in errors if isinstance(item, dict)} if isinstance(errors, list) else set()
+                    if codes & {"MACHINE_LIMIT_EXCEEDED", "MACHINE_LIMIT_EXCEEDED_FOR_LICENSE", "TOO_MANY_MACHINES"}:
+                        raise Rejected("installation_limit")
+                    if codes & {"LICENSE_SUSPENDED"}:
+                        raise Rejected("suspended")
+                    if status == 403:
+                        raise Rejected("suspended_or_denied")
+                    if codes & {"FINGERPRINT_TAKEN"} and path == "machines":
+                        raise Rejected("machine_conflict")
+                    if status == 404:
+                        raise Rejected("not_found")
+                    raise Rejected("activation_failed" if path == "machines" else "rejected")
+                return body
+            except Rejected:
+                raise
+            except AccessDeniedError:
+                raise Rejected("rejected") from None
+            except HTTPStatusError as error:
+                if error.status_code == 404:
+                    raise Rejected("not_found") from None
+                if error.status_code not in (408, 425, 429) and error.status_code < 500:
+                    raise Rejected("activation_failed" if path == "machines" else "rejected") from None
+                failure = TemporaryFailure("server_unavailable")
+            except TemporaryFailure as error:
+                failure = error
+            except Exception:
+                failure = TemporaryFailure("network_unavailable")
+            if attempt + 1 == attempts:
+                raise failure from None
+            await asyncio.sleep(0.1)
+        raise TemporaryFailure
 
     async def import_license(self, blob: bytes | str) -> LicenseStatus:
         if self._closed:
@@ -362,22 +435,38 @@ class LicenseClient:
         try:
             if len(blob) > 32768:
                 raise ValueError
-            envelope = json.loads(blob)
-            if envelope["schema"] != 2:
-                raise ValueError
-            key = envelope["license_key"]
+            text = blob.decode("utf-8") if isinstance(blob, bytes) else blob
+            if text.startswith("key/"):
+                key = text
+            else:
+                envelope = json.loads(text)
+                if envelope["schema"] != 2:
+                    raise BetaLicenseError(BETA_MESSAGE)
+                key = envelope["license_key"]
             claims = self.verify_key(key)
+        except BetaLicenseError:
+            raise
         except (ValueError, KeyError, TypeError):
-            raise LicenseError("Import a valid schema-2 license file") from None
+            raise LicenseError("Import a valid production license file or signed key") from None
         license_id = claims["license"]["id"]
+        lic_expiry = None
+        if claims["license"].get("expiry") is not None:
+            lic_expiry = timestamp(claims["license"]["expiry"])
         async with self._state() as state:
             state["active"] = license_id
             record = state["licenses"].setdefault(
                 license_id,
-                {"key": key, "first_import": self.clock(), "activated": False},
+                {
+                    "key": key,
+                    "first_import": self.clock(),
+                    "activated": False,
+                    "license_expiry": lic_expiry,
+                },
             )
             if record["key"] != key:
                 raise LicenseError("A different credential already exists for this license")
+            if "license_expiry" not in record or record.get("license_expiry") != lic_expiry:
+                record["license_expiry"] = lic_expiry
         return await self.check(force=True)
 
     async def _refresh(
@@ -389,56 +478,68 @@ class LicenseClient:
     ) -> dict[str, Any]:
         key = record["key"]
         fingerprint = state["installation_id"]
-        response = await self._request(
-            "POST",
-            "licenses/actions/validate-key",
-            key,
-            json_data={"meta": {"key": key, "scope": {
-                "fingerprint": fingerprint,
-                "product": self.product_id,
-                "policy": self.policy_id,
-            }}},
-        )
-        meta = response["meta"]
-        code = meta.get("code")
-        if not meta.get("valid") and code not in (
-            "NO_MACHINE", "NO_MACHINES", "FINGERPRINT_SCOPE_MISMATCH"
-        ):
-            raise Rejected(
-                "revoked" if code in ("SUSPENDED", "EXPIRED")
-                else "installation_limit" if code in (
-                    "TOO_MANY_MACHINES", "MACHINE_LIMIT_EXCEEDED"
-                )
-                else "rejected"
+        async def validate() -> dict[str, Any]:
+            response = await self._request(
+                "POST", "licenses/actions/validate-key", key,
+                json_data={"meta": {"key": key, "scope": {
+                    "fingerprint": fingerprint, "product": self.product_id, "policy": self.policy_id,
+                }}},
             )
-        ambiguous_machine_error = False
-        if not meta.get("valid"):
+            meta = response.get("meta")
+            data = response.get("data")
+            if (not isinstance(meta, dict) or type(meta.get("valid")) is not bool
+                    or not isinstance(meta.get("code"), str)):
+                raise TemporaryFailure("malformed_response")
+            if not meta["valid"] and meta["code"] not in ("NO_MACHINE", "NO_MACHINES", "FINGERPRINT_SCOPE_MISMATCH"):
+                require_valid(meta)
+            if not isinstance(data, dict):
+                raise TemporaryFailure("malformed_response")
+            if (data.get("type") != "licenses" or data.get("id") != license_id
+                    or data["relationships"]["account"]["data"]["id"] != self.account_id
+                    or data["relationships"]["product"]["data"]["id"] != self.product_id
+                    or data["relationships"]["policy"]["data"]["id"] != self.policy_id):
+                raise Rejected("rejected")
+            # EXPIRED can be valid with MAINTAIN_ACCESS. Never override valid=false.
+            if meta["valid"] and meta["code"] not in ("VALID", "EXPIRED"):
+                raise Rejected("rejected")
+            return meta
+
+        def require_valid(meta: dict[str, Any]) -> None:
+            if not meta["valid"]:
+                raise Rejected({
+                    "SUSPENDED": "suspended", "BANNED": "revoked",
+                    "EXPIRED": "entitlement_server_denied", "NOT_FOUND": "not_found",
+                    "TOO_MANY_MACHINES": "installation_limit",
+                    "MACHINE_LIMIT_EXCEEDED": "installation_limit",
+                }.get(meta["code"], "rejected"))
+
+        meta = await validate()
+        if not meta["valid"] and meta["code"] in ("NO_MACHINE", "NO_MACHINES", "FINGERPRINT_SCOPE_MISMATCH"):
             try:
-                await self._request(
-                    "POST",
-                    "machines",
-                    key,
-                    json_data={"data": {
-                        "type": "machines",
-                        "attributes": {"fingerprint": fingerprint},
-                        "relationships": {"license": {"data": {
-                            "type": "licenses", "id": license_id,
-                        }}},
-                    }},
-                )
+                await self._request("POST", "machines", key, json_data={"data": {
+                    "type": "machines", "attributes": {"fingerprint": fingerprint},
+                    "relationships": {"license": {"data": {"type": "licenses", "id": license_id}}},
+                }})
             except Rejected as error:
-                if error.state != "machine_conflict_or_limit":
+                if error.state != "machine_conflict":
                     raise
-                ambiguous_machine_error = True
+            except TemporaryFailure:
+                # The server may have committed creation before the connection timed out.
+                reconciled = await validate()
+                if not reconciled["valid"]:
+                    raise TemporaryFailure("network_unavailable") from None
+            # A successful create (or duplicate fingerprint race) is not validation.
+            meta = await validate()
+        require_valid(meta)
+        validated_at = self.clock()
+        machine = (await self._request("GET", "machines/" + fingerprint, key))["data"]
         try:
-            machine = (await self._request("GET", "machines/" + fingerprint, key))["data"]
-        except Rejected as error:
-            if ambiguous_machine_error and error.state == "not_found":
-                raise Rejected("installation_limit") from None
-            raise
+            machine_id = str(uuid.UUID(machine["id"]))
+        except (ValueError, TypeError, AttributeError):
+            raise TemporaryFailure("malformed_response") from None
         certificate = (await self._request(
             "POST",
-            "machines/" + machine["id"] + "/actions/check-out",
+            "machines/" + machine_id + "/actions/check-out",
             key,
             json_data={"meta": {
                 "ttl": WEEK,
@@ -452,8 +553,11 @@ class LicenseClient:
             installation_id=fingerprint,
             now=now,
         )
+        if permit["license_expiry"] is None:
+            raise LicenseError("The commercial entitlement deadline is missing")
         if permit["expiry"] <= now:
             raise LicenseError("The renewed permit has already expired")
+        license_expiry = permit["license_expiry"]
         record.update(
             permit=certificate,
             activated=True,
@@ -462,6 +566,9 @@ class LicenseClient:
             retry_at=0,
             failures=0,
             renewed=permit["issued"],
+            last_successful_validation=validated_at,
+            cache_version=2,
+            license_expiry=license_expiry,
         )
         return permit
 
@@ -475,55 +582,73 @@ class LicenseClient:
                 return LicenseStatus("unlicensed", False)
             record = state["licenses"][license_id]
             try:
-                self.verify_key(record["key"])
+                if self.verify_key(record["key"])["license"]["id"] != license_id:
+                    raise LicenseError("Cached license identity mismatch")
+            except BetaLicenseError:
+                return LicenseStatus("beta_license", False)
             except LicenseError:
                 return LicenseStatus("invalid_signature", False)
             expected = self.anchor_wall + (self.monotonic() - self.anchor_mono)
             rollback = now < max(state.get("last_seen", now), expected) - 300
             state["last_seen"] = max(now, state.get("last_seen", now))
-            due = force or rollback or now - record.get("renewed", 0) >= DAY
-            if due and (force or now >= record.get("retry_at", 0)):
+            due = force or self._startup_pending or rollback or record.get("cache_version") != 2 or now - record.get("renewed", 0) >= DAY
+            startup = self._startup_pending
+            self._startup_pending = False
+            server_rejected = False
+            if due and (force or startup or now >= record.get("retry_at", 0)):
                 try:
                     await self._refresh(state, record, license_id, now)
-                except TemporaryFailure:
+                except (TemporaryFailure, AttributeError, KeyError, TypeError) as error:
                     failures = min(record.get("failures", 0) + 1, 7)
                     record.update(
                         offline=True,
+                        failure=error.state if isinstance(error, TemporaryFailure) else "malformed_response",
                         failures=failures,
                         retry_at=now + min(60 * 2 ** (failures - 1), 3600),
                     )
                 except Rejected as error:
                     record.update(blocked=error.state, retry_at=now + 60)
-                except (LicenseError, KeyError, TypeError):
+                    server_rejected = True
+                except LicenseError:
                     record.update(blocked="invalid_signature", retry_at=now + 60)
+            now = self.clock()
+            state["last_seen"] = max(now, state.get("last_seen", now))
+            license_expiry = record.get("license_expiry")
             if rollback:
-                return LicenseStatus("clock_invalid", False)
+                return LicenseStatus("clock_invalid", False, license_expires_at=license_expiry)
             if record.get("blocked"):
-                return LicenseStatus(record["blocked"], False)
-            if record["activated"]:
+                return LicenseStatus(
+                    record["blocked"], False,
+                    license_expires_at=license_expiry,
+                    server_rejected=server_rejected,
+                )
+            if record["activated"] and record.get("cache_version") == 2:
                 try:
                     permit = self.verify_permit(
-                        record["permit"],
-                        license_id=license_id,
-                        installation_id=state["installation_id"],
-                        now=now,
+                        record["permit"], license_id=license_id,
+                        installation_id=state["installation_id"], now=now,
                     )
+                    if permit["license_expiry"] is None:
+                        raise LicenseError("Missing entitlement deadline")
+                    last_success = record["last_successful_validation"]
+                    if not permit["issued"] - 300 <= last_success <= permit["issued"] + 300:
+                        raise LicenseError("Invalid cached validation time")
                 except (LicenseError, KeyError):
                     return LicenseStatus("invalid_signature", False)
-                expiry = permit["expiry"]
+                expiry = min(permit["expiry"], last_success + WEEK)
+                lic_exp = permit["license_expiry"]
+                if lic_exp is not None and self.release_timestamp > lic_exp:
+                    return LicenseStatus("renewal_required", False, expiry, lic_exp, expiry)
                 return LicenseStatus(
                     "expired_grace" if now >= expiry
                     else "offline_grace" if record.get("offline")
+                    else "update_entitlement_expired" if lic_exp is not None and now > lic_exp
                     else "valid",
-                    now < expiry,
-                    expiry,
+                    now < expiry, expires_at=expiry, license_expires_at=lic_exp,
+                    next_check_at=expiry, failure=record.get("failure") if record.get("offline") else None,
                 )
-            expiry = record["first_import"] + WEEK
-            return LicenseStatus(
-                "provisional" if now < expiry else "expired_grace",
-                now < expiry,
-                expiry,
-            )
+            # No successful production validation: no offline access, including beta caches.
+            return LicenseStatus(record.get("failure", "activation_required"), False)
 
     async def deactivate(self) -> LicenseStatus:
         if self._closed:
@@ -533,6 +658,7 @@ class LicenseClient:
             if not license_id:
                 return LicenseStatus("unlicensed", False)
             record = state["licenses"][license_id]
+            self.verify_key(record["key"])
             try:
                 machine = (await self._request(
                     "GET", "machines/" + state["installation_id"], record["key"]

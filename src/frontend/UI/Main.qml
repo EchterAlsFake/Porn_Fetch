@@ -45,6 +45,8 @@ ApplicationWindow {
 
         function onUpdateAvailable(details) {
             updateDialog.version = details.version || ""
+            updateDialog.installAllowed = details.install_allowed === true
+            updateDialog.entitlementMessage = details.entitlement_message || ""
             updateDialog.authenticatedUrl = details.url || ""
             updateDialog.anonymousUrl = details.anonymous_download || ""
             updateDialog.importantInfo = details.important_info || ""
@@ -72,6 +74,35 @@ ApplicationWindow {
         function onShutdown_complete() {
             window.safeToClose = true
             window.close()
+        }
+    }
+
+    Connections {
+        target: bridge
+        function onLicenseRejected(message) {
+            licenseRejectedText.text = message
+            licenseRejectedDialog.open()
+        }
+    }
+
+    Dialog {
+        id: licenseRejectedDialog
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(window.width - 48, 560)
+        modal: true
+        title: qsTr("License rejected")
+        standardButtons: Dialog.Ok
+
+        contentItem: Label {
+            id: licenseRejectedText
+            wrapMode: Text.Wrap
+            color: "#f1f5f9"
+        }
+        background: Rectangle {
+            radius: 12
+            color: "#1e1e24"
+            border.color: "#ef4444"
         }
     }
 
@@ -195,6 +226,8 @@ ApplicationWindow {
     Dialog {
         id: updateDialog
 
+        property bool installAllowed: false
+        property string entitlementMessage: ""
         property string version: ""
         property string authenticatedUrl: ""
         property string anonymousUrl: ""
@@ -238,6 +271,18 @@ ApplicationWindow {
                 font.pixelSize: 26
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: updateDialog.entitlementMessage
+                wrapMode: Text.WordWrap
+                color: "#EAEAEA"
+            }
+            Button {
+                text: qsTr("Purchase / renew license")
+                visible: !updateDialog.installAllowed
+                onClicked: Qt.openUrlExternally("https://pornfetch.to/")
             }
 
             SmoothScrollView {
@@ -379,7 +424,7 @@ ApplicationWindow {
 
                 Button {
                     text: updateDialog.updateInProgress ? qsTr("Updating…") : qsTr("Auto Update")
-                    enabled: !updateDialog.updateInProgress
+                    enabled: !updateDialog.updateInProgress && updateDialog.installAllowed
                     highlighted: true
                     onClicked: {
                         updateDialog.updateInProgress = true

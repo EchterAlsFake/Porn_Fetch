@@ -93,6 +93,7 @@ from src.backend import clients # Singleton instance for the client objects (rea
 import src.backend.config as config
 from src.backend.license_bridge import LicenseBridge, load_production_config
 from src.licensing.service import create_license_service
+from src.shared.paths import shared_data_dir
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, set_mobile_notice_handler, Signals,
@@ -210,7 +211,7 @@ class Backend(QObject):
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
-        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update)
+        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update, license_status=self._update_license_status)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.showMessage.connect(self.handle_message)
@@ -266,6 +267,7 @@ class Backend(QObject):
     def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
         self._license_bridge = license_bridge
         license_bridge.statusChanged.connect(self._enforce_quality_access)
+        license_bridge.entitlementChanged.connect(self.check_for_updates)
         self._enforce_quality_access()
 
     def _enforce_quality_access(self) -> None:
@@ -322,12 +324,26 @@ class Backend(QObject):
             name="update-check",
         )
 
+    async def _update_license_status(self):
+        from src.licensing.client import LicenseStatus
+        if self._license_bridge is None:
+            return LicenseStatus("unlicensed", False)
+        return await self._license_bridge._run_check(force=True)
+
     async def _check_for_updates(self) -> None:
         update = await CheckUpdates.check()
         if update is None:
             return
 
+        from src.shared.release import update_eligibility
+        install_allowed = False
+        message = update.get("entitlement_message", "Release metadata could not be authenticated.")
+        if update.get("source") == "signed_repository":
+            status = await self._update_license_status()
+            install_allowed, message = update_eligibility(status, update["release_timestamp"])
         details = {
+            "install_allowed": install_allowed,
+            "entitlement_message": message,
             "version": str(update.get("version", "")),
             "url": str(update.get("url", "")),
             "anonymous_download": str(update.get("anonymous_download", "")),
@@ -1449,7 +1465,7 @@ def main() -> None:
 
     license_service = create_license_service(
         clients.config,
-        Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)),
+        Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_android else shared_data_dir(),
         production_config=load_production_config(),
     )
     bridge_instance = LicenseBridge(license_service, parent=engine) # License bridge connects QML code to Python

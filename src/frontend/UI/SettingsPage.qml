@@ -130,7 +130,7 @@ Pane {
                 onClicked: mobileActions.open()
                 Menu {
                     id: mobileActions
-                    MenuItem { text: qsTr("Get beta test license"); onTriggered: Qt.openUrlExternally("https://pornfetch.to/") }
+                    MenuItem { text: qsTr("Purchase / renew license"); onTriggered: Qt.openUrlExternally("https://pornfetch.to/") }
                     MenuItem { text: qsTr("Import License File"); onTriggered: mobileLicenseDialog.open() }
                     MenuItem { text: qsTr("Reset settings"); onTriggered: backend.reset_pornfetch() }
                     MenuItem { text: qsTr("Clear temporary files"); onTriggered: backend.clear_temporary_files() }
@@ -1336,13 +1336,13 @@ Pane {
                 spacing: 10
 
                 Button {
-                    Accessible.name: qsTr("Get beta test license")
+                    Accessible.name: qsTr("Purchase / renew license")
                     Layout.fillWidth: true
                     // Material styling overrides for specific buttons to make them stand out
                     Material.background: "#6366f1" // Premium Indigo color
                     Material.foreground: "white"   // White text
                     font.bold: true // Make text bold
-                    text: qsTr("Get beta test license")
+                    text: qsTr("Purchase / renew license")
 
                     onClicked: {
                         Qt.openUrlExternally("https://pornfetch.to/")
@@ -1370,7 +1370,7 @@ Pane {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("Beta checkout is a test: no real transaction takes place and no money is processed. On the website, press the sandbox purchase button to get a license file, then import it here.")
+                text: qsTr("Purchase a license on the website, then paste the signed key or import your license file. Includes one year of updates and permanent use of entitled versions.")
                 wrapMode: Text.WordWrap
             }
 

@@ -1,0 +1,5 @@
+{
+  "description": "Synthetic Keygen ED25519_SIGN format vector, independently signed with OpenSSL pkeyutl. Not a production or server-issued credential. Exact key/<base64url JSON> bytes; fixture private seed is bytes(range(32)).",
+  "public_key": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+  "license_key": "key/eyJhY2NvdW50IjogeyJpZCI6ICIxMTExMTExMS0xMTExLTQxMTEtODExMS0xMTExMTExMTExMTEifSwgInByb2R1Y3QiOiB7ImlkIjogIjIyMjIyMjIyLTIyMjItNDIyMi04MjIyLTIyMjIyMjIyMjIyMiJ9LCAicG9saWN5IjogeyJpZCI6ICIzMzMzMzMzMy0zMzMzLTQzMzMtODMzMy0zMzMzMzMzMzMzMzMiLCAiZHVyYXRpb24iOiAzMTU1Njk1Mn0sICJ1c2VyIjogbnVsbCwgImxpY2Vuc2UiOiB7ImlkIjogIjQ0NDQ0NDQ0LTQ0NDQtNDQ0NC04NDQ0LTQ0NDQ0NDQ0NDQ0NCIsICJjcmVhdGVkIjogIjIwMjYtMDktMDZUMTI6MDA6MDArMDA6MDAiLCAiZXhwaXJ5IjogbnVsbH19.PsFCX6HGDoytCL2fC99Z_rRPxDd2fqaXoJXNkHjPrH_2jR7t3TvROO_EKffP8V8pjAhvtb_5XCRiE4l_da-uDw=="
+}

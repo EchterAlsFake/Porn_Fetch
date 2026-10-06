@@ -19,13 +19,13 @@ def iso(value: float) -> str:
     return datetime.fromtimestamp(value, timezone.utc).isoformat()
 
 
-def signed_key(license_id: str = LICENSE) -> str:
+def signed_key(license_id: str = LICENSE, expiry: str | None = None) -> str:
     claims = {
         "account": {"id": ACCOUNT},
         "product": {"id": PRODUCT},
-        "policy": {"id": POLICY, "duration": None},
+        "policy": {"id": POLICY, "duration": 31556952},
         "user": None,
-        "license": {"id": license_id, "created": iso(NOW), "expiry": None},
+        "license": {"id": license_id, "created": iso(NOW), "expiry": expiry},
     }
     encoded = base64.urlsafe_b64encode(json.dumps(claims).encode()).decode()
     message = "key/" + encoded
@@ -40,10 +40,10 @@ def issuance(license_id: str) -> dict:
     }
 
 
-def permit(fingerprint: str, now: float = NOW, ttl: int = 604800, **changes) -> str:
+def permit(fingerprint: str, now: float = NOW, ttl: int = 604800, license_expiry: str | None = None, **changes) -> str:
     license_data = issuance(LICENSE)
     license_data.update(type="licenses")
-    license_data["attributes"].update(suspended=False, expiry=None)
+    license_data["attributes"].update(suspended=False, expiry=license_expiry)
     data = {
         "meta": {"issued": iso(now), "expiry": iso(now + ttl), "ttl": ttl},
         "data": {

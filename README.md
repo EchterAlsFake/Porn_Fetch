@@ -50,12 +50,15 @@ The 3.9 source is under the [Porn Fetch Source-Available License 1.0](LICENSE).
 Earlier GPL releases keep their GPL rights. The source license and a premium
 feature credential are separate things.
 
-**The first 3.9 beta uses the real license import and validation flow with a
-sandbox checkout.** Go to [pornfetch.to](https://pornfetch.to/), press
-the sandbox purchase button, and import the license file you receive in the
-app. **This is not a real transaction. No money is processed, and you do not
-need to send cryptocurrency.** The checkout is there to test how a license
-reaches the app. Please tell me if any step is confusing or fails.
+The 3.9 client now requires a signed license on the commercial policy. It includes
+one calendar year of updates from first activation and permanent use of builds
+released within that entitlement, on up to ten installations. First activation
+requires a connection; subsequent offline use is limited to seven days after
+successful validation. Older beta credentials are rejected explicitly.
+
+**Payment deployment is still sandboxed as of 6 October 2026; Patreon is disabled.**
+Do not assume this client change enables real payments. See the
+[licensing architecture and release requirements](docs/LICENSING_ARCHITECTURE.md).
 
 ### #FreeHongKong
 
@@ -112,17 +115,18 @@ supported builds and publishing details.
 
 **A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/INSTALLATION.md)
 
-## Beta license
+## Premium license
 
-The beta still checks licenses for these features:
+A valid entitlement enables these features:
 
 - 1080+ downloads
 - parallel downloads
 
-The sandbox checkout described above provides a test license. There is no beta
-price and no real purchase. In the GUI, use **Get beta test license**, then
-**Import License File**. In the CLI, choose **License Management** and import
-the file there. The [installation guide](docs/INSTALLATION.md) has the steps.
+In the GUI, use **Purchase / renew license**, then paste the signed key or use
+**Import License File**. In the CLI, choose **License Management** and enter the
+key, JSON envelope, or file path. Only commercial-policy test credentials work
+with the current client; old beta credentials are not upgraded automatically.
+See the [installation guide](docs/INSTALLATION.md).
 
 ## General Information
 > [!NOTE]
@@ -224,7 +228,7 @@ Current development snapshots marked with the [Porn Fetch Source-Available Licen
 <br>Copyright (C) 2023–2026 Johannes Habel 
 
 # Sponsoring / Donations
-The beta license checkout is a sandbox and does not take payment. The donation
+The payment deployment remains in sandbox mode as of 6 October 2026. The donation
 links below are separate and optional; they are not needed to use the beta.
 
 However, I kindly ask every one of you to donate a small amount of money. If you have Monero (crypto)

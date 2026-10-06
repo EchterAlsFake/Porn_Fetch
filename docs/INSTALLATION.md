@@ -71,25 +71,22 @@ a source checkout or package manager, update it with that method instead.
 See the [CLI update guide](CLI_UPDATES.md) for supported architectures and
 what to do if an update fails.
 
-## Get and import the beta license
+## Import and activate a license
 
-The beta uses the actual license import and validation flow. To get a test
-license, visit [pornfetch.to](https://pornfetch.to/) and press the
-**sandbox purchase** button. Follow the site's instructions to obtain the
-license file. **This is not a real transaction. No money is processed. You do
-not need to send cryptocurrency or pay a fee; pressing the button is the test.**
-The purpose is to exercise the license checkout and activation flow before a
-real product exists.
+The current client accepts commercial-policy licenses from [pornfetch.to](https://pornfetch.to/).
+As of the 6 October 2026 backend handoff, payment remains sandboxed and Patreon is
+disabled. Development testing needs a commercial-policy TEST credential. Old beta
+licenses are rejected with a migration message; do not delete your app data to fix this.
 
-In the desktop app, open Settings, choose **Import License File**, and select
-the file you received. In the CLI, open **License Management**, choose
-**Import License Key / File**, and enter the file path. The app verifies the
-license against the licensing service, so an initial connection is needed.
-If the site does not give you a file or activation fails, include the error
-message in a bug report. Do not post your license file publicly.
+In the desktop/Android license panel, paste the signed key or choose **Import License
+File**. In CLI **License Management**, enter the file path, signed key, or JSON envelope.
+Activation creates a random installation UUID and needs a successful online check.
+Keep the application data directory when reinstalling to preserve the installation.
 
-The license unlocks the beta's gated features, including quality above 720p
-and parallel downloads. It is a test credential, not evidence of a purchase.
+A license enables quality above 720p and parallel downloads. Its year of updates
+starts at first activation. Entitled versions remain usable afterward, subject to
+validation at least every seven days. Renew on the website and press **Refresh**;
+the license key and installation UUID stay the same. See [architecture and paths](LICENSING_ARCHITECTURE.md).
 
 ## Verify a download
 

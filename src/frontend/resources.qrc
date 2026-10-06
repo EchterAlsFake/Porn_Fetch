@@ -1,12 +1,17 @@
 <RCC>
     <qresource prefix="/images">
         <file>graphics/download.svg</file>
+        <file>graphics/download.png</file>
         <file>graphics/information.svg</file>
+        <file>graphics/information.png</file>
         <file>graphics/settings.svg</file>
+        <file>graphics/settings.png</file>
         <file>graphics/logo_transparent.png</file>
         <file>graphics/account.svg</file>
+        <file>graphics/account.png</file>
         <file>graphics/progressbars.svg</file>
         <file>graphics/database.svg</file>
+        <file>graphics/database.png</file>
         <file>graphics/logo.png</file>
         <file>graphics/splashscreen.png</file>
     </qresource>
@@ -17,6 +22,9 @@
         <file alias="LICENSE">../../LICENSE</file>
         <file alias="THIRD_PARTY_NOTICES.md">../../THIRD_PARTY_NOTICES.md</file>
         <file alias="Provider-permission.txt">../../LICENSES/Provider-permission.txt</file>
+    </qresource>
+    <qresource prefix="/updates">
+        <file alias="root.json">../cli/update_root.json</file>
     </qresource>
     <qresource prefix="/licensing">
         <file alias="production.json">../licensing/production.json</file>

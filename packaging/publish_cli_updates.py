@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 import tempfile
 import urllib.error
 import urllib.request
@@ -15,6 +16,9 @@ from pathlib import Path
 from securesystemslib.signer import Signer
 from tuf.api.metadata import Metadata, MetaFile, Root, Snapshot, TargetFile, Targets, Timestamp
 from tuf.ngclient import Updater
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.shared.version import RELEASE_TIMESTAMP
 
 ROOT_FILE = Path(__file__).resolve().parents[1] / "src/cli/update_root.json"
 ARTIFACT_TARGETS = {
@@ -63,7 +67,7 @@ def create_bundle(artifact: Path, target_name: str, version: str, destination: P
     if not binary.is_file():
         raise FileNotFoundError(f"CLI executable missing: {binary}")
     files = sorted(path for path in artifact.iterdir() if path.is_file() and not path.name.endswith(".sha256"))
-    manifest = {"version": version, "target": target_name, "executable": binary.name, "files": [path.name for path in files]}
+    manifest = {"release_timestamp": RELEASE_TIMESTAMP, "version": version, "target": target_name, "executable": binary.name, "files": [path.name for path in files]}
     destination.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
         bundle.writestr("manifest.json", json.dumps(manifest, separators=(",", ":")))
@@ -74,7 +78,7 @@ def create_bundle(artifact: Path, target_name: str, version: str, destination: P
             with path.open("rb") as source, bundle.open(info, "w") as output:
                 shutil.copyfileobj(source, output)
     target = TargetFile.from_file(target_name, str(destination))
-    target.unrecognized_fields["custom"] = {"version": version}
+    target.unrecognized_fields["custom"] = {"version": version, "release_timestamp": RELEASE_TIMESTAMP}
     return target
 
 

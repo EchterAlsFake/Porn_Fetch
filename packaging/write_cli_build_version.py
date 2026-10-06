@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src.shared.version import __version__
+from src.shared.version import RELEASE_TIMESTAMP, __version__
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -20,6 +20,7 @@ if __name__ == "__main__":
     system = "darwin" if args.platform == "macos" else args.platform
     architecture = "amd64" if args.architecture == "x64" else args.architecture
     output.write_text(json.dumps({
+        "release_timestamp": RELEASE_TIMESTAMP,
         "version": f"{__version__}.{args.build_number}",
         "target": f"{system}/{architecture}.zip",
     }), encoding="utf-8")

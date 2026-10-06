@@ -1,19 +1,25 @@
 import asyncio
 import os
+import platform
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
+from datetime import datetime, timezone
 from pathlib import Path
 
-from PySide6.QtCore import QCoreApplication, QObject, Signal
 from curl_cffi import Response
+from PySide6.QtCore import QCoreApplication, QFile, QIODevice, QObject, Signal
 
 from src.backend import clients
-from src.backend.config import __version__
 from src.backend.helper_functions import get_original_executable_path
-from src.backend.shared_functions import configure_app_logging, get_os_and_arch
+from src.backend.shared_functions import configure_app_logging
+from src.shared.paths import shared_data_dir
+from src.shared.release import ROOT_FILE, update_eligibility, verify_repository_manifest
+from src.shared.version import BUILD_VERSION as __version__
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
 
@@ -55,12 +61,34 @@ class CheckUpdates:
 
     @staticmethod
     async def check() -> dict | None:
-        # Check via installed Qt IFW maintenance tool first if present
-        if tool_update := await CheckUpdates.check_via_maintenancetool():
-            return tool_update
+        try:
+            return await CheckUpdates.check_signed_repository()
+        except Exception:
+            # Legacy discovery is informational only; installation requires a signed repository.
+            update = await CheckUpdates.check_via_http()
+            if update:
+                update.update(install_allowed=False, entitlement_message="Release metadata could not be authenticated. Automatic installation is unavailable.")
+            return update
 
-        # Fallback to HTTP update check endpoint
-        return await CheckUpdates.check_via_http()
+    @staticmethod
+    async def check_signed_repository() -> dict | None:
+        tag = platform.system().lower() + "_" + {"x86_64": "amd64", "x64": "amd64", "aarch64": "arm64"}.get(platform.machine().lower(), platform.machine().lower())
+        url = DEFAULT_REPO_BASE_URL + "/" + tag + "/"
+        response = await clients.core.request(url=url + "release.json", allow_redirects=False, timeout=20)
+        resource = QFile(":/updates/root.json")
+        if resource.exists():
+            if not resource.open(QIODevice.OpenModeFlag.ReadOnly):
+                raise ValueError("Cannot load update trust root")
+            try:
+                root_bytes = bytes(resource.readAll())
+            finally:
+                resource.close()
+        else:
+            root_bytes = ROOT_FILE.read_bytes()
+        metadata, release = verify_repository_manifest(response.content, root_bytes, tag)
+        if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
+            return None
+        return {**release, "metadata": metadata, "repository_url": url, "source": "signed_repository"}
 
     @staticmethod
     async def check_via_maintenancetool() -> dict | None:
@@ -140,9 +168,11 @@ class AutoUpdater(QObject):
         self,
         parent: QObject | None = None,
         before_update: Callable[[], Awaitable[None]] | None = None,
+        license_status: Callable[[], Awaitable] | None = None,
     ) -> None:
         super().__init__(parent)
         self.before_update = before_update
+        self.license_status = license_status
 
     async def run(self) -> None:
         try:
@@ -163,6 +193,20 @@ class AutoUpdater(QObject):
             )
             return
 
+        if self.license_status is None:
+            self.statusReport.emit("Validate your production license before updating.")
+            return
+        update = await CheckUpdates.check_signed_repository()
+        if update is None:
+            self.statusReport.emit("No update available.")
+            return
+        status = await self.license_status()
+        entitled, reason = update_eligibility(status, update["release_timestamp"])
+        self.statusReport.emit(reason)
+        if not entitled:
+            return
+        repository = await self._stage_repository(update)
+
         self.statusReport.emit("Preparing update: stopping background services...")
 
         # Gracefully stop PocketBase and close sessions so binaries are not locked on Windows
@@ -177,7 +221,7 @@ class AutoUpdater(QObject):
 
         creationflags = subprocess.DETACHED_PROCESS if sys.platform == "win32" else 0
         subprocess.Popen(
-            [str(tool), "--updater"],
+            [str(tool), "--updater", "--set-temp-repository", repository.as_uri()],
             cwd=str(tool.parent),
             creationflags=creationflags,
             start_new_session=(sys.platform != "win32"),
@@ -186,3 +230,33 @@ class AutoUpdater(QObject):
         self.statusReport.emit("Updater launched. Closing Porn Fetch...")
         await asyncio.sleep(0.5)
         QCoreApplication.quit()
+
+    async def _stage_repository(self, update):
+        """Pin ALL IFW metadata and payload bytes before handing control to IFW."""
+        cache = shared_data_dir() / "verified-updates"
+        cache.mkdir(parents=True, exist_ok=True, mode=0o700)
+        stage = Path(tempfile.mkdtemp(prefix="repository-", dir=cache))
+        try:
+            metadata = update["metadata"]
+            for name, target in metadata.signed.targets.items():
+                response = await clients.core.request(
+                    url=update["repository_url"] + name, allow_redirects=False, timeout=120,
+                )
+                target.verify_length_and_hashes(response.content)
+                path = stage / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(response.content)
+            xml = ET.parse(stage / "Updates.xml")
+            packages = xml.findall("PackageUpdate")
+            release_date = datetime.fromtimestamp(update["release_timestamp"], timezone.utc).strftime("%Y-%m-%d")
+            if (len(packages) != 1 or packages[0].findtext("Version") != update["version"]
+                    or packages[0].findtext("ReleaseDate") != release_date
+                    or xml.find("RepositoryUpdate") is not None):
+                raise ValueError("Qt repository does not match the authenticated release")
+            # All content is local and hash checked; remote repository substitutions are forbidden.
+            if any(el.tag in {"DownloadableArchives", "UpdateFile"} and "://" in (el.text or "") for el in xml.iter()):
+                raise ValueError("External update content is not permitted")
+            return stage
+        except BaseException:
+            shutil.rmtree(stage)
+            raise

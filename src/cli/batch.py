@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from src.licensing.service import create_license_service
+from src.licensing.service import create_license_service, rejection_notice
 from src.shared.error_reporting import report_exception
 from src.shared.legal import legal_document
 from src.shared.media import select_allowed_quality
@@ -249,7 +249,9 @@ async def run_batch(args: argparse.Namespace) -> int:
     license_service = create_license_service(settings.to_runtime_config())
     failures = 0
     try:
-        license_status = await license_service.check()
+        license_status = await license_service.check(force=True)
+        if license_status.server_rejected:
+            print(f"License rejected: {rejection_notice(license_status.state)}", file=sys.stderr)
 
         if getattr(args, "resume", False):
             paused_items = PausedStore().load()

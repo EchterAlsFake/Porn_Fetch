@@ -572,8 +572,22 @@ Pane {
                 description: bridge.reason
                 Label {
                     Layout.fillWidth: true
-                    visible: bridge.expiresAt !== ""
-                    text: qsTr("Expires %1").arg(bridge.expiresAt)
+                    visible: Boolean(bridge.isValid && bridge.licenseExpiresAt !== "")
+                    text: qsTr("Update entitlement ends: %1 (%2)").arg(bridge.licenseExpiresAt).arg(qsTr("valid for current release, includes 1 year of updates"))
+                    color: root.mutedColor
+                    wrapMode: Text.Wrap
+                }
+                Label {
+                    Layout.fillWidth: true
+                    visible: Boolean(bridge.isValid)
+                    text: qsTr("Machine Limit: 10 devices")
+                    color: root.mutedColor
+                    wrapMode: Text.Wrap
+                }
+                Label {
+                    Layout.fillWidth: true
+                    visible: Boolean(bridge.isValid && bridge.nextCheckAt !== "")
+                    text: qsTr("Next Online Check: %1").arg(bridge.nextCheckAt)
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }
@@ -584,24 +598,32 @@ Pane {
                 }
                 Button {
                     Layout.fillWidth: true
-                    text: qsTr("Refresh license")
+                    text: qsTr("Refresh license (renews 7-day check-in)")
                     enabled: !bridge.busy
                     onClicked: bridge.refresh()
                 }
                 Button {
                     Layout.fillWidth: true
                     visible: bridge.isValid
-                    text: qsTr("Deactivate license")
+                    text: qsTr("Deactivate license (frees 1 of 10 machine seats)")
                     enabled: !bridge.busy
                     onClicked: bridge.deactivate()
                 }
+                Label {
+                    Layout.fillWidth: true
+                    visible: bridge.isValid
+                    text: qsTr("Each license supports up to 10 machines. Permanent licenses are valid for the current release and include 1 year of updates. Deactivating unlinks this device to free up a machine seat.")
+                    color: root.mutedColor
+                    font.pixelSize: 11
+                    wrapMode: Text.Wrap
+                }
             }
             SettingCard {
-                heading: qsTr("Beta test license")
+                heading: qsTr("Production license")
                 description: qsTr("The beta checkout is a test. No real transaction takes place.")
                 Button {
                     Layout.fillWidth: true
-                    text: qsTr("Get beta test license")
+                    text: qsTr("Purchase / renew license")
                     onClicked: Qt.openUrlExternally("https://pornfetch.to/")
                 }
             }

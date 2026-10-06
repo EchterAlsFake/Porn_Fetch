@@ -79,7 +79,7 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
         settings = settings.overridden(**overrides)
 
     ctx = WizardContext(settings, store, console)
-    await ctx.check_license()
+    await ctx.check_license(force=True)
 
     try:
         while True:

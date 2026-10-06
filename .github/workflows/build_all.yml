@@ -113,6 +113,9 @@ jobs:
           bash src/frontend/update.sh
           uv run --no-sync scripts/patch.py
 
+      - name: Embed immutable release and artifact version
+        run: uv run --no-sync python packaging/write_build_version.py ${{ github.run_number }}
+
       - name: Build with pyside6-deploy
         shell: bash
         run: |
@@ -573,6 +576,31 @@ jobs:
           printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
           printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
           chmod 600 "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Sign desktop release repositories
+        shell: bash
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          uv sync --locked --no-dev
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          umask 077
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/desktop_online.pem"
+          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
+          for repository in ifw_repositories/IFW_repo_*/*; do
+            uv run --no-sync python packaging/sign_desktop_release.py \
+              --repository "$repository" --platform "${repository##*/}" \
+              --version "$APP_VERSION.${{ github.run_number }}" \
+              --private-key "$RUNNER_TEMP/desktop_online.pem"
+          done
+          rm "$RUNNER_TEMP/desktop_online.pem"
 
       - name: Publish repository files
         shell: bash

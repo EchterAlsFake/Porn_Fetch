@@ -39,5 +39,16 @@ def data_dir() -> Path:
 
 def shared_data_dir() -> Path:
     """Data shared by the GUI and CLI, notably the licensing database."""
-    return _platform_path("data")
+    preferred = _platform_path("data")
+    # Older GUI builds used QStandardPaths (author/app and Roaming on Windows).
+    # Reuse that database in place so upgrading never consumes another machine.
+    if os.name == "nt":
+        legacy = Path(os.environ.get("APPDATA", Path.home() / "AppData/Roaming")) / APP_AUTHOR / APP_NAME
+    elif sys_platform() == "darwin":
+        legacy = Path.home() / "Library/Application Support" / APP_AUTHOR / APP_NAME
+    else:
+        legacy = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / APP_AUTHOR / APP_NAME
+    if not (preferred / "licensing.sqlite3").exists() and (legacy / "licensing.sqlite3").exists():
+        return legacy
+    return preferred
 

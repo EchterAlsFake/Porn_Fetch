@@ -5,9 +5,9 @@ import QtQuick.Window
 Window {
     id: licenseWin
     width: 500
-    height: 480
+    height: 560
     minimumWidth: 460
-    minimumHeight: 450
+    minimumHeight: 520
     title: qsTr("Manage License")
 
     // Use the dark background to match the widget

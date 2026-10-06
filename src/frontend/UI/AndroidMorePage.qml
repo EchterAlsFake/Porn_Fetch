@@ -47,7 +47,7 @@ Pane {
             contentItem: RowLayout {
                 spacing: 16
                 Image {
-                    source: "qrc:/images/graphics/information.svg"
+                    source: "qrc:/images/graphics/information.png"
                     Layout.preferredWidth: 40
                     Layout.preferredHeight: 40
                     fillMode: Image.PreserveAspectFit

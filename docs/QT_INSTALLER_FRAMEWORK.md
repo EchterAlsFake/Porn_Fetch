@@ -153,3 +153,16 @@ Qt's documentation: [offline and hybrid installers](https://doc.qt.io/qtinstalle
 [online repositories](https://doc.qt.io/qtinstallerframework/ifw-online-installers.html),
 [promoting updates](https://doc.qt.io/qtinstallerframework/ifw-updates.html), and
 [maintenance tool commands](https://doc.qt.io/qtinstallerframework/ifw-use-cases-cli.html).
+
+## Commercial entitlement integration
+
+The application discovers `release.json` in each platform repository. This is TUF
+Targets metadata signed by the existing release targets key, binding the version,
+immutable release timestamp, platform, and every repository file hash. The deployment
+workflow signs it with `packaging/sign_desktop_release.py` and publishes it last.
+
+Before launching IFW, Porn Fetch validates the license, checks the signed release
+date, downloads and verifies the complete repository, and uses
+`--set-temp-repository file:///...` so IFW sees only the verified release. Legacy
+unsigned discovery is informational and cannot enable automatic installation.
+See [licensing architecture](LICENSING_ARCHITECTURE.md) for release requirements.
