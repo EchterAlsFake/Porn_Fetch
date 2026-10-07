@@ -285,179 +285,179 @@
 <context>
     <name>AndroidDownloadsPage</name>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="18"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="19"/>
         <source>App storage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="20"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="29"/>
         <source>Selected folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="25"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="38"/>
         <source>Choose where to save videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="75"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="88"/>
         <source>Add videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="84"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="97"/>
         <source>Video URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="84"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="97"/>
         <source>Model URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="84"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="97"/>
         <source>Playlist URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="89"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="102"/>
         <source>Paste a video, model or playlist URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="96"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="109"/>
         <source>Get Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="96"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="109"/>
         <source>Get Videos</source>
         <translation type="unfinished">Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="113"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="126"/>
         <source>Save to: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="118"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="131"/>
         <source>Choose folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="130"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="143"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="130"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="143"/>
         <source>Filters and options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="134"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="147"/>
         <source>Cancel fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="147"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="160"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="148"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="161"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="151"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="164"/>
         <source>Download selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="184"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="197"/>
         <source>Save downloaded video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="195"/>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="204"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="208"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="217"/>
         <source>[redacted]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="220"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="233"/>
         <source>Select download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="250"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="280"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="256"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="286"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="256"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="286"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="266"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="296"/>
         <source>Save elsewhere</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="276"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="306"/>
         <source>No downloads yet
 Add a video URL to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="294"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="324"/>
         <source>Cleanup on stop (disables HLS resume)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="295"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="325"/>
         <source>Duration in minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="302"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="332"/>
         <source>Title regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="303"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="333"/>
         <source>Author regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="304"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="334"/>
         <source>Tags regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="305"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="335"/>
         <source>Quality range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="311"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="341"/>
         <source>Published after (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="312"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="342"/>
         <source>Published before (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="313"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="343"/>
         <source>Custom options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -520,19 +520,19 @@ Add a video URL to get started</source>
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="11"/>
-        <location filename="../../UI/AndroidMain.qml" line="188"/>
+        <location filename="../../UI/AndroidMain.qml" line="202"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="30"/>
-        <location filename="../../UI/AndroidMain.qml" line="330"/>
+        <location filename="../../UI/AndroidMain.qml" line="344"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="30"/>
-        <location filename="../../UI/AndroidMain.qml" line="330"/>
+        <location filename="../../UI/AndroidMain.qml" line="344"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
@@ -543,7 +543,7 @@ Add a video URL to get started</source>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="31"/>
-        <location filename="../../UI/AndroidMain.qml" line="331"/>
+        <location filename="../../UI/AndroidMain.qml" line="345"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -559,7 +559,7 @@ Add a video URL to get started</source>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="31"/>
-        <location filename="../../UI/AndroidMain.qml" line="331"/>
+        <location filename="../../UI/AndroidMain.qml" line="345"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
@@ -604,32 +604,52 @@ Add a video URL to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="113"/>
+        <location filename="../../UI/AndroidMain.qml" line="74"/>
+        <source>License imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="74"/>
+        <source>License import failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="75"/>
+        <source>License imported successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="75"/>
+        <source>Failed to import license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="118"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="119"/>
+        <location filename="../../UI/AndroidMain.qml" line="126"/>
         <source>Automatic error reporting is disabled until you choose to enable it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="133"/>
+        <location filename="../../UI/AndroidMain.qml" line="147"/>
         <source>No, keep disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="141"/>
+        <location filename="../../UI/AndroidMain.qml" line="155"/>
         <source>Yes, enable reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="255"/>
+        <location filename="../../UI/AndroidMain.qml" line="269"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="330"/>
+        <location filename="../../UI/AndroidMain.qml" line="344"/>
         <source>Stats</source>
         <translation type="unfinished"></translation>
     </message>
@@ -720,433 +740,448 @@ Add a video URL to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="188"/>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="596"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="213"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="647"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="189"/>
-        <source>License files (*.license)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="189"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="214"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="195"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="214"/>
+        <source>License files (*.license *.lic *.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="220"/>
         <source>Choose where to save videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="200"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="226"/>
         <source>App storage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="202"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="236"/>
         <source>Selected folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="224"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="262"/>
         <source>PREFERENCES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="232"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="270"/>
         <source>Choose what matters to you</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="358"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="396"/>
         <source>Video preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="359"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="397"/>
         <source>Choose how links and model pages are processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="361"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="399"/>
         <source>Default quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="371"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="409"/>
         <source>Model videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="372"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="410"/>
         <source>Both</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="372"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="410"/>
         <source>Uploaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="372"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="410"/>
         <source>Featured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="377"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="415"/>
         <source>Maximum results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="383"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="421"/>
         <source>Strict quality selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="384"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="422"/>
         <source>Use only the quality you selected when available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="390"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="428"/>
         <source>Files &amp; history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="392"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="430"/>
         <source>Write metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="397"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="435"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="402"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="440"/>
         <source>Track downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="403"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="441"/>
         <source>Build a private history on this device. Restart required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="409"/>
-        <source>Save completed videos to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="421"/>
-        <source>Choose folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="427"/>
-        <source>Use app storage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="433"/>
-        <source>Completed videos are saved to this folder automatically.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="449"/>
-        <source>Download speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="450"/>
-        <source>Parallel downloads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="451"/>
-        <source>Download workers</source>
+        <source>Storage permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="453"/>
+        <source>Granted ✓</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="453"/>
+        <source>Grant access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="460"/>
+        <source>Save completed videos to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="472"/>
+        <source>Choose folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="478"/>
+        <source>Use app storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="484"/>
+        <source>Completed videos are saved to this folder automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="500"/>
+        <source>Download speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="501"/>
+        <source>Parallel downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="502"/>
+        <source>Download workers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="504"/>
         <source>Speed limit (MB/s, 0 for unlimited)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="462"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="513"/>
         <source>Requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="463"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="514"/>
         <source>Retries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="464"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="515"/>
         <source>Timeout in seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="465"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="516"/>
         <source>Delay between requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="466"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="517"/>
         <source>Processing delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="467"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="518"/>
         <source>Video requests at once</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="468"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="519"/>
         <source>Page requests at once</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="480"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="531"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="482"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="533"/>
         <source>Anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="483"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="534"/>
         <source>Hide titles and private information in the app.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="488"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="539"/>
         <source>Automatic error reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="494"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="545"/>
         <source>Connection protection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="495"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="546"/>
         <source>DNS over HTTPS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="496"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="547"/>
         <source>Encrypted Client Hello</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="497"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="548"/>
         <source>Use Tor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="498"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="549"/>
         <source>Route license requests through Tor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="501"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="552"/>
         <source>Configure proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="501"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="552"/>
         <source>Set up proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="515"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="566"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="516"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="567"/>
         <source>A Material look designed for your phone and tablet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="517"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="568"/>
         <source>Dark mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="518"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="569"/>
         <source>Text size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="520"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="571"/>
         <source>Accent color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="521"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="572"/>
         <source>Indigo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="521"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="572"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="521"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="572"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="521"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="572"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="521"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="572"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="527"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="578"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="529"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="580"/>
         <source>Interface language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="530"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="581"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="530"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="581"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="530"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="581"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="530"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="581"/>
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="530"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="581"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="535"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="586"/>
         <source>Content language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="551"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="602"/>
         <source>App behavior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="552"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="603"/>
         <source>Suppress error dialogs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="553"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="604"/>
         <source>Use system proxy settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="554"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="605"/>
         <source>Debug mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="557"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="608"/>
         <source>Maintenance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="558"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="609"/>
         <source>Clear temporary files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="559"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="610"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="571"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="622"/>
         <source>Premium active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="571"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="622"/>
         <source>No active license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="576"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="627"/>
         <source>Update entitlement ends: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="576"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="627"/>
         <source>valid for current release, includes 1 year of updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="583"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="634"/>
         <source>Machine Limit: 10 devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="590"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="641"/>
         <source>Next Online Check: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="601"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="652"/>
         <source>Refresh license (renews 7-day check-in)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="608"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="659"/>
         <source>Deactivate license (frees 1 of 10 machine seats)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="615"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="666"/>
         <source>Each license supports up to 10 machines. Permanent licenses are valid for the current release and include 1 year of updates. Deactivating unlinks this device to free up a machine seat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="622"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="673"/>
         <source>Production license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="623"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="674"/>
         <source>The beta checkout is a test. No real transaction takes place.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="626"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="677"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1599,15 +1634,15 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="549"/>
+        <location filename="../../../backend/application.py" line="593"/>
         <source>
-        Important:&#32;
+        Important: 
 
         Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
         and the main file.
 
         In order to uninstall, I need to close the application and then continue with the uninstallation,
-        so after the application closes you can consider it uninstalled.&#32;
+        so after the application closes you can consider it uninstalled. 
 
         If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
         Thank you for using Porn Fetch ^^
@@ -1615,73 +1650,73 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="665"/>
+        <location filename="../../../backend/application.py" line="709"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="673"/>
+        <location filename="../../../backend/application.py" line="717"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="684"/>
+        <location filename="../../../backend/application.py" line="728"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="749"/>
+        <location filename="../../../backend/application.py" line="793"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="930"/>
-        <location filename="../../../backend/application.py" line="962"/>
+        <location filename="../../../backend/application.py" line="974"/>
+        <location filename="../../../backend/application.py" line="1006"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1092"/>
+        <location filename="../../../backend/application.py" line="1136"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1189"/>
+        <location filename="../../../backend/application.py" line="1233"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1206"/>
+        <location filename="../../../backend/application.py" line="1250"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1269"/>
+        <location filename="../../../backend/application.py" line="1313"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1274"/>
+        <location filename="../../../backend/application.py" line="1318"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1276"/>
+        <location filename="../../../backend/application.py" line="1320"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1281"/>
+        <location filename="../../../backend/application.py" line="1325"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1284"/>
+        <location filename="../../../backend/application.py" line="1328"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1298"/>
+        <location filename="../../../backend/application.py" line="1342"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1805,140 +1840,140 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="500"/>
+        <location filename="../../UI/DownloadsPage.qml" line="503"/>
         <source>Stop download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="501"/>
+        <location filename="../../UI/DownloadsPage.qml" line="504"/>
         <source>Resume download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="548"/>
+        <location filename="../../UI/DownloadsPage.qml" line="551"/>
         <source>No downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="574"/>
+        <location filename="../../UI/DownloadsPage.qml" line="577"/>
         <source>General Operations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="585"/>
+        <location filename="../../UI/DownloadsPage.qml" line="588"/>
         <source>Do not clear videos</source>
         <translation type="unfinished">Videos nicht aus der
 Liste löschen</translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="591"/>
+        <location filename="../../UI/DownloadsPage.qml" line="594"/>
         <source>Cleanup on stop (disables resume for HLS)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="597"/>
+        <location filename="../../UI/DownloadsPage.qml" line="600"/>
         <source>Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="608"/>
+        <location filename="../../UI/DownloadsPage.qml" line="611"/>
         <source>End:</source>
         <translation type="unfinished">Ende:</translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="621"/>
+        <location filename="../../UI/DownloadsPage.qml" line="624"/>
         <source>Video Filters (Applied during fetch)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="631"/>
+        <location filename="../../UI/DownloadsPage.qml" line="634"/>
         <source>Duration (Minutes):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="643"/>
-        <location filename="../../UI/DownloadsPage.qml" line="652"/>
+        <location filename="../../UI/DownloadsPage.qml" line="646"/>
+        <location filename="../../UI/DownloadsPage.qml" line="655"/>
         <source>Any</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="643"/>
-        <location filename="../../UI/DownloadsPage.qml" line="652"/>
+        <location filename="../../UI/DownloadsPage.qml" line="646"/>
+        <location filename="../../UI/DownloadsPage.qml" line="655"/>
         <source> min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="657"/>
+        <location filename="../../UI/DownloadsPage.qml" line="660"/>
         <source>Title Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="661"/>
+        <location filename="../../UI/DownloadsPage.qml" line="664"/>
         <source>e.g., ^Step.*</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="664"/>
+        <location filename="../../UI/DownloadsPage.qml" line="667"/>
         <source>Author Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="668"/>
+        <location filename="../../UI/DownloadsPage.qml" line="671"/>
         <source>e.g., .*Studio$</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="671"/>
+        <location filename="../../UI/DownloadsPage.qml" line="674"/>
         <source>Tags Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="675"/>
+        <location filename="../../UI/DownloadsPage.qml" line="678"/>
         <source>e.g., pov|amateur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="679"/>
+        <location filename="../../UI/DownloadsPage.qml" line="682"/>
         <source>Quality Range:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="689"/>
+        <location filename="../../UI/DownloadsPage.qml" line="692"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="698"/>
+        <location filename="../../UI/DownloadsPage.qml" line="701"/>
         <source>Publish Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="706"/>
+        <location filename="../../UI/DownloadsPage.qml" line="709"/>
         <source>After (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="714"/>
+        <location filename="../../UI/DownloadsPage.qml" line="717"/>
         <source>Before (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="723"/>
+        <location filename="../../UI/DownloadsPage.qml" line="726"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="731"/>
+        <location filename="../../UI/DownloadsPage.qml" line="734"/>
         <source>Custom Title formatting:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="740"/>
+        <location filename="../../UI/DownloadsPage.qml" line="743"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="747"/>
+        <location filename="../../UI/DownloadsPage.qml" line="750"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished">Tastenkombinationen</translation>
     </message>
@@ -2301,7 +2336,7 @@ Liste löschen</translation>
     <name>SettingsPage</name>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="48"/>
-        <location filename="../../UI/SettingsPage.qml" line="443"/>
+        <location filename="../../UI/SettingsPage.qml" line="446"/>
         <source>Choose video output folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2347,15 +2382,15 @@ Liste löschen</translation>
     </message>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="133"/>
-        <location filename="../../UI/SettingsPage.qml" line="1339"/>
-        <location filename="../../UI/SettingsPage.qml" line="1345"/>
+        <location filename="../../UI/SettingsPage.qml" line="1342"/>
+        <location filename="../../UI/SettingsPage.qml" line="1348"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="134"/>
         <location filename="../../UI/SettingsPage.qml" line="148"/>
-        <location filename="../../UI/SettingsPage.qml" line="1353"/>
+        <location filename="../../UI/SettingsPage.qml" line="1356"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2380,345 +2415,345 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="331"/>
+        <location filename="../../UI/SettingsPage.qml" line="334"/>
         <source>Model Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="351"/>
+        <location filename="../../UI/SettingsPage.qml" line="354"/>
         <source>Content Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="386"/>
+        <location filename="../../UI/SettingsPage.qml" line="389"/>
         <source>Strict Enforcement for content language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="406"/>
+        <location filename="../../UI/SettingsPage.qml" line="409"/>
         <source>Max Result Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="428"/>
+        <location filename="../../UI/SettingsPage.qml" line="431"/>
         <source>Output Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="429"/>
+        <location filename="../../UI/SettingsPage.qml" line="432"/>
         <source>Directory where downloaded videos are saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="446"/>
-        <location filename="../../UI/SettingsPage.qml" line="528"/>
+        <location filename="../../UI/SettingsPage.qml" line="449"/>
+        <location filename="../../UI/SettingsPage.qml" line="531"/>
         <source>Choose Folder…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="458"/>
+        <location filename="../../UI/SettingsPage.qml" line="461"/>
         <source>Write metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="474"/>
+        <location filename="../../UI/SettingsPage.qml" line="477"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="489"/>
-        <location filename="../../UI/SettingsPage.qml" line="493"/>
+        <location filename="../../UI/SettingsPage.qml" line="492"/>
+        <location filename="../../UI/SettingsPage.qml" line="496"/>
         <source>Track Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="489"/>
+        <location filename="../../UI/SettingsPage.qml" line="492"/>
         <source>Track Videos in PocketBase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="493"/>
+        <location filename="../../UI/SettingsPage.qml" line="496"/>
         <source>Track Videos (PocketBase)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="501"/>
+        <location filename="../../UI/SettingsPage.qml" line="504"/>
         <source>History Data Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="501"/>
-        <location filename="../../UI/SettingsPage.qml" line="510"/>
+        <location filename="../../UI/SettingsPage.qml" line="504"/>
+        <location filename="../../UI/SettingsPage.qml" line="513"/>
         <source>PocketBase Data Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="511"/>
+        <location filename="../../UI/SettingsPage.qml" line="514"/>
         <source>Directory where PocketBase data files are stored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="525"/>
+        <location filename="../../UI/SettingsPage.qml" line="528"/>
         <source>Choose PocketBase data folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="558"/>
+        <location filename="../../UI/SettingsPage.qml" line="561"/>
         <source>Download workers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="572"/>
+        <location filename="../../UI/SettingsPage.qml" line="575"/>
         <source>Network delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="589"/>
+        <location filename="../../UI/SettingsPage.qml" line="592"/>
         <source>Parallel Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="606"/>
+        <location filename="../../UI/SettingsPage.qml" line="609"/>
         <source>Maximum retries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="623"/>
+        <location filename="../../UI/SettingsPage.qml" line="626"/>
         <source>Maximum timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="640"/>
+        <location filename="../../UI/SettingsPage.qml" line="643"/>
         <source>Processing Delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="657"/>
+        <location filename="../../UI/SettingsPage.qml" line="660"/>
         <source>Speed Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="674"/>
+        <location filename="../../UI/SettingsPage.qml" line="677"/>
         <source>Videos Concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="691"/>
+        <location filename="../../UI/SettingsPage.qml" line="694"/>
         <source>Pages Concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="713"/>
+        <location filename="../../UI/SettingsPage.qml" line="716"/>
         <source>Response Cache Size (MB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="726"/>
+        <location filename="../../UI/SettingsPage.qml" line="729"/>
         <source>Response Cache TTL (Seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="739"/>
+        <location filename="../../UI/SettingsPage.qml" line="742"/>
         <source>Segment Cache Size (MB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="752"/>
+        <location filename="../../UI/SettingsPage.qml" line="755"/>
         <source>Segment Cache TTL (Seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="765"/>
+        <location filename="../../UI/SettingsPage.qml" line="768"/>
         <source>Request Initial Retry Delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="777"/>
+        <location filename="../../UI/SettingsPage.qml" line="780"/>
         <source>Request Retry Max Delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="789"/>
+        <location filename="../../UI/SettingsPage.qml" line="792"/>
         <source>Request Retry Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="801"/>
+        <location filename="../../UI/SettingsPage.qml" line="804"/>
         <source>Request Retry Jitter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="839"/>
+        <location filename="../../UI/SettingsPage.qml" line="842"/>
         <source>Search for Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="852"/>
+        <location filename="../../UI/SettingsPage.qml" line="855"/>
         <source>Ignore Errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="865"/>
+        <location filename="../../UI/SettingsPage.qml" line="868"/>
         <source>Allow redacted error reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="879"/>
+        <location filename="../../UI/SettingsPage.qml" line="882"/>
         <source>Trust Environment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="893"/>
+        <location filename="../../UI/SettingsPage.qml" line="896"/>
         <source>Enable Debug Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="907"/>
+        <location filename="../../UI/SettingsPage.qml" line="910"/>
         <source>Log Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="922"/>
+        <location filename="../../UI/SettingsPage.qml" line="925"/>
         <source>HTTP Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="945"/>
+        <location filename="../../UI/SettingsPage.qml" line="948"/>
         <source>Browser Impersonation Target</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="968"/>
+        <location filename="../../UI/SettingsPage.qml" line="971"/>
         <source>Custom JA3 String</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="991"/>
+        <location filename="../../UI/SettingsPage.qml" line="994"/>
         <source>Network Interface or IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1031"/>
+        <location filename="../../UI/SettingsPage.qml" line="1034"/>
         <source>Anonymous Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1044"/>
+        <location filename="../../UI/SettingsPage.qml" line="1047"/>
         <source>Encrypted Client Hello</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1057"/>
+        <location filename="../../UI/SettingsPage.qml" line="1060"/>
         <source>DNS over HTTPS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1071"/>
+        <location filename="../../UI/SettingsPage.qml" line="1074"/>
         <source>Enable Tor Integration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1085"/>
+        <location filename="../../UI/SettingsPage.qml" line="1088"/>
         <source>Route License / Update checking through .onion domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1100"/>
+        <location filename="../../UI/SettingsPage.qml" line="1103"/>
         <source>Primary DNS over HTTPS Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1123"/>
+        <location filename="../../UI/SettingsPage.qml" line="1126"/>
         <source>Fallback DNS over HTTPS Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1145"/>
+        <location filename="../../UI/SettingsPage.qml" line="1148"/>
         <source>SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1166"/>
+        <location filename="../../UI/SettingsPage.qml" line="1169"/>
         <source>Lite SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1176"/>
+        <location filename="../../UI/SettingsPage.qml" line="1179"/>
         <source>Strict SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1188"/>
+        <location filename="../../UI/SettingsPage.qml" line="1191"/>
         <source>Strict SNI Obfuscation Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1204"/>
+        <location filename="../../UI/SettingsPage.qml" line="1207"/>
         <source>Proxy Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1208"/>
+        <location filename="../../UI/SettingsPage.qml" line="1211"/>
         <source>Configure or test proxy…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1209"/>
+        <location filename="../../UI/SettingsPage.qml" line="1212"/>
         <source>Set up proxy…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1239"/>
+        <location filename="../../UI/SettingsPage.qml" line="1242"/>
         <source>Graphical User Interface Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1255"/>
+        <location filename="../../UI/SettingsPage.qml" line="1258"/>
         <source>Font Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1267"/>
+        <location filename="../../UI/SettingsPage.qml" line="1270"/>
         <source>Application Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1280"/>
+        <location filename="../../UI/SettingsPage.qml" line="1283"/>
         <source>Dark Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1292"/>
+        <location filename="../../UI/SettingsPage.qml" line="1295"/>
         <source>Application Accent Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1373"/>
+        <location filename="../../UI/SettingsPage.qml" line="1376"/>
         <source>Purchase a license on the website, then paste the signed key or import your license file. Includes one year of updates and permanent use of entitled versions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1384"/>
+        <location filename="../../UI/SettingsPage.qml" line="1387"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1385"/>
+        <location filename="../../UI/SettingsPage.qml" line="1388"/>
         <source>Restores all application settings to their default values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1393"/>
+        <location filename="../../UI/SettingsPage.qml" line="1396"/>
         <source>Clear Temporary Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1411"/>
+        <location filename="../../UI/SettingsPage.qml" line="1414"/>
         <source>Install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1424"/>
+        <location filename="../../UI/SettingsPage.qml" line="1427"/>
         <source>Uninstall Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>

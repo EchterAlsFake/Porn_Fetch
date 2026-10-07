@@ -47,12 +47,12 @@ Item {
     FileDialog {
         id: fileDialog
         title: "Select license file"
-        nameFilters: ["License files (*.license)", "All files (*)"]
+        nameFilters: ["All files (*)", "License files (*.license *.lic *.json)"]
         onAccepted: {
             console.log("[LicenseWidget] FileDialog accepted, selectedFile:", fileDialog.selectedFile)
             console.log("[LicenseWidget] bridge:", bridge)
             if (typeof bridge !== "undefined" && bridge) {
-                bridge.installFromPath(fileDialog.selectedFile)
+                bridge.installFromPath(fileDialog.selectedFile.toString())
             } else {
                 console.log("[LicenseWidget] ERROR: bridge is null!")
             }

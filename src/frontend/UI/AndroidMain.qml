@@ -70,6 +70,11 @@ ApplicationWindow {
             noticeText.text = message
             noticeDialog.open()
         }
+        function onImportFinished(success, message) {
+            noticeDialog.title = success ? qsTr("License imported") : qsTr("License import failed")
+            noticeText.text = message && message.length > 0 ? message : (success ? qsTr("License imported successfully.") : qsTr("Failed to import license."))
+            noticeDialog.open()
+        }
     }
 
     Connections {
@@ -114,18 +119,27 @@ ApplicationWindow {
 
         contentItem: ColumnLayout {
             spacing: 12
+            width: consentDialog.availableWidth
+
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Automatic error reporting is disabled until you choose to enable it.")
                 wrapMode: Text.Wrap
+                color: window.primaryTextColor
             }
             ScrollView {
+                id: disclosureScroll
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                clip: true
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
                 Label {
-                    width: parent.width
+                    width: disclosureScroll.width > 24 ? disclosureScroll.width - 16 : consentDialog.availableWidth - 16
                     text: backend.errorReportDisclosure
                     wrapMode: Text.Wrap
+                    color: window.secondaryTextColor
+                    font.pixelSize: 13
                 }
             }
             Button {
@@ -333,6 +347,7 @@ ApplicationWindow {
                                 required property int index
                                 required property string modelData
                                 Layout.fillWidth: true
+                                Layout.preferredWidth: 1
                                 Layout.fillHeight: true
                                 enabled: index !== 4 || !appSettings.anonymous_mode
                                 onClicked: {

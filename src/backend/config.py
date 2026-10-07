@@ -24,8 +24,10 @@ __org_name__ = "EchterAlsFake"
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
 IS_SOURCE_RUN = True
 
+IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
+
 TEMP_DIRECTORY = (Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation))
-                  / "PornFetch" if sys.platform == "android" else Path(".temp"))
+                  / "PornFetch" if IS_ANDROID else Path(".temp"))
 TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
 TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 
@@ -311,7 +313,7 @@ class SettingsManager(QObject):
     @Property(str, notify=outputPathChanged)
     def output_path(self) -> str:
         default = str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "downloads") \
-            if sys.platform == "android" else "./"
+            if IS_ANDROID else "./"
         return self.get_str("Video/output_path", default)
 
     @output_path.setter
@@ -365,7 +367,7 @@ class SettingsManager(QObject):
     @Property(str, notify=pocketbaseDataPathChanged)
     def pocketbase_data_path(self) -> str:
         default = str(Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation))
-                      / "pocketbase_data") if sys.platform == "android" else "./pocketbase_data"
+                      / "pocketbase_data") if IS_ANDROID else "./pocketbase_data"
         return self.get_str("Video/pocketbase_data_path", default)
 
     @pocketbase_data_path.setter

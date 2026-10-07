@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import QtQuick.Layouts
 
 ComboBox {
     id: control
@@ -39,20 +40,33 @@ ComboBox {
         highlighted: control.highlightedIndex === index
         Material.foreground: highlighted ? control.Material.accent : control.Material.foreground
 
-        contentItem: Text {
-            text: parent.text
-            font: control.font
-            color: control.materialStyle
-                   ? (qualityDelegate.enabled
-                      ? qualityDelegate.Material.foreground
-                      : qualityDelegate.Material.hintTextColor)
-                   : (qualityDelegate.enabled
-                      ? (qualityDelegate.highlighted
-                         ? control.palette.highlightedText
-                         : control.palette.text)
-                      : control.palette.placeholderText)
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
+        contentItem: RowLayout {
+            spacing: 5
+            Text {
+                Layout.fillWidth: true
+                text: qualityDelegate.text
+                font: control.font
+                color: control.materialStyle
+                       ? (qualityDelegate.enabled
+                          ? qualityDelegate.Material.foreground
+                          : qualityDelegate.Material.hintTextColor)
+                       : (qualityDelegate.enabled
+                          ? (qualityDelegate.highlighted
+                             ? control.palette.highlightedText
+                             : control.palette.text)
+                          : control.palette.placeholderText)
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
+
+            Image {
+                source: "qrc:/images/graphics/lock.png"
+                visible: !qualityDelegate.enabled
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+                fillMode: Image.PreserveAspectFit
+                Layout.alignment: Qt.AlignVCenter
+            }
         }
     }
 

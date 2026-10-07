@@ -60,3 +60,13 @@ src/tests/manual/geneva_runs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Android build and local test artifacts
+.buildozer/
+*.apk
+*.aab
+*.whl
+*.whl.orig
+*.license
+.pyside6_android_deploy_patch/
+examples/

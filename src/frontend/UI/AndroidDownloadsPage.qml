@@ -14,10 +14,23 @@ Pane {
     readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
+    readonly property string currentOutputFolderName: {
+        var folder = appSettings.android_output_folder
+        if (!folder || folder.trim() === "") return qsTr("App storage")
+        var decoded = decodeURIComponent(folder).replace(/\/+$/, "")
+        if (decoded.indexOf("/storage/emulated/0/") !== -1) {
+            return decoded.substring(decoded.indexOf("/storage/emulated/0/") + 20)
+        }
+        if (decoded.indexOf(":") !== -1) {
+            var afterColon = decoded.substring(decoded.lastIndexOf(":") + 1)
+            if (afterColon.length > 0) return afterColon
+        }
+        var parts = decoded.split("/")
+        return parts[parts.length - 1] || qsTr("Selected folder")
+    }
+
     function outputFolderName() {
-        if (!appSettings.android_output_folder) return qsTr("App storage")
-        var path = decodeURIComponent(appSettings.android_output_folder.split("/").pop())
-        return path.split(":").pop() || qsTr("Selected folder")
+        return root.currentOutputFolderName
     }
 
     Dialogs.FolderDialog {
@@ -110,7 +123,7 @@ Pane {
                     Layout.fillWidth: true
                     Label {
                         Layout.fillWidth: true
-                        text: qsTr("Save to: %1").arg(root.outputFolderName())
+                        text: qsTr("Save to: %1").arg(root.currentOutputFolderName)
                         color: root.mutedColor
                         elide: Text.ElideRight
                     }
@@ -231,10 +244,27 @@ Pane {
                                     return -1
                                 }
                                 delegate: ItemDelegate {
+                                    id: qualityDelegateItem
                                     required property var modelData
                                     width: qualityCombo.width
-                                    text: String(modelData)
                                     enabled: !root.licensedQuality(modelData) || bridge.isPremium
+                                    contentItem: RowLayout {
+                                        spacing: 8
+                                        Label {
+                                            Layout.fillWidth: true
+                                            text: String(qualityDelegateItem.modelData)
+                                            color: qualityDelegateItem.enabled ? root.textColor : root.mutedColor
+                                            verticalAlignment: Text.AlignVCenter
+                                        }
+                                        Image {
+                                            source: "qrc:/images/graphics/lock.png"
+                                            visible: root.licensedQuality(qualityDelegateItem.modelData) && !bridge.isPremium
+                                            Layout.preferredWidth: 16
+                                            Layout.preferredHeight: 16
+                                            fillMode: Image.PreserveAspectFit
+                                            Layout.alignment: Qt.AlignVCenter
+                                        }
+                                    }
                                 }
                                 onActivated: {
                                     if (!root.licensedQuality(currentValue) || bridge.isPremium)

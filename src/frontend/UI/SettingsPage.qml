@@ -308,10 +308,13 @@ Pane {
                                                 verticalAlignment: Text.AlignVCenter
                                             }
 
-                                            Text {
-                                                text: "🔒"
+                                            Image {
+                                                source: "qrc:/images/graphics/lock.png"
                                                 visible: qualityDelegate.qualityLocked
-                                                verticalAlignment: Text.AlignVCenter
+                                                Layout.preferredWidth: 16
+                                                Layout.preferredHeight: 16
+                                                fillMode: Image.PreserveAspectFit
+                                                Layout.alignment: Qt.AlignVCenter
                                             }
                                         }
                                     }

@@ -27,7 +27,7 @@ class DatabaseBridge(QObject):
         super().__init__(parent)
         self._tracker = tracker or (
             AndroidTracker(data_path=app_settings.pocketbase_data_path, enabled=bool(app_settings.track_videos))
-            if sys.platform == "android" else PocketBaseTracker(
+            if (sys.platform == "android" or hasattr(sys, "getandroidapilevel")) else PocketBaseTracker(
                 data_path=app_settings.pocketbase_data_path,
                 enabled=bool(app_settings.track_videos),
                 legacy_sqlite_path=app_settings.legacy_database_path,

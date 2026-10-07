@@ -83,6 +83,21 @@ AllowedVideoType_Legacy: TypeAlias = (
 AnyVideoClass: TypeAlias = AllowedVideoType | AllowedVideoType_Legacy
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
+DOH_BOOTSTRAP_RESOLVES: list[bytes] = [
+    b"dns.mullvad.net:443:194.242.2.2,194.242.2.3,194.242.2.4",
+    b"dns.quad9.net:443:9.9.9.9,149.112.112.112",
+    b"cloudflare-dns.com:443:1.1.1.1,1.0.0.1",
+    b"dns.google:443:8.8.8.8,8.8.4.4",
+]
+
+_orig_basecore_init_session = BaseCore.initialize_session
+
+def _bootstrap_basecore_init_session(self) -> None:
+    _orig_basecore_init_session(self)
+    if getattr(self, "session", None) is not None and hasattr(CurlOpt, "RESOLVE"):
+        self.session.curl_options[CurlOpt.RESOLVE] = list(DOH_BOOTSTRAP_RESOLVES)
+
+BaseCore.initialize_session = _bootstrap_basecore_init_session
 logger = configure_app_logging(logger_name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
 _retired_sessions: list[Any] = []
 _session_cleanup_tasks: set[asyncio.Task[None]] = set()
@@ -298,6 +313,8 @@ def refresh_clients() -> None:
                 c.session.curl_options[CurlOpt.ECH] = (
                     b"true" if app_settings.encrypted_ch else b"false"
                 )
+            if hasattr(CurlOpt, "RESOLVE"):
+                c.session.curl_options[CurlOpt.RESOLVE] = list(DOH_BOOTSTRAP_RESOLVES)
 
     logger.debug("Applied in-place clients!")
     schedule_retired_session_cleanup()

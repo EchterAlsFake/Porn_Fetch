@@ -14,6 +14,8 @@
         <file>graphics/database.png</file>
         <file>graphics/logo.png</file>
         <file>graphics/splashscreen.png</file>
+        <file>graphics/lock.svg</file>
+        <file>graphics/lock.png</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../docs/CREDITS.md</file>

@@ -8,6 +8,9 @@ The patch adds QSocketNotifier-backed implementations of:
     add_reader / remove_reader / add_writer / remove_writer
 
 and, when required, adds QAsyncioTask._make_cancelled_error() for Python 3.14.
+It makes each task capture its creation context so ContextVar values survive
+across awaits, and makes futures retain the context registered with each done
+callback, matching asyncio Task and Future semantics.
 It also defers task steps that Qt dispatches re-entrantly while another asyncio
 task is active, which can otherwise happen when application code opens a nested
 QEventLoop for a modal dialog.
@@ -58,7 +61,10 @@ EVENTS_IMPORT_MARKER = f"{PATCH_ID}:qsocketnotifier-import"
 EVENTS_INIT_MARKER = f"{PATCH_ID}:fd-state"
 EVENTS_CLOSE_MARKER = f"{PATCH_ID}:fd-close"
 EVENTS_METHODS_MARKER = f"{PATCH_ID}:fd-methods"
+FUTURES_CALLBACK_CONTEXT_MARKER = f"{PATCH_ID}:future-callback-context"
+FUTURES_CALLBACK_REMOVAL_MARKER = f"{PATCH_ID}:future-callback-removal"
 TASKS_METHOD_MARKER = f"{PATCH_ID}:cancelled-error"
+TASKS_CONTEXT_MARKER = f"{PATCH_ID}:task-context"
 TASKS_REENTRANCY_GUARD_MARKER = f"{PATCH_ID}:task-reentrancy-guard"
 TASKS_SELF_REENTRANCY_MARKER = f"{PATCH_ID}:task-self-reentrancy-drop"
 TASKS_REENTRANCY_DRAIN_MARKER = f"{PATCH_ID}:task-reentrancy-drain"
@@ -76,6 +82,7 @@ class EnvironmentInfo:
     pyside_version: str
     python_version: tuple[int, int, int]
     events_path: Path
+    futures_path: Path
     tasks_path: Path
 
 
@@ -287,6 +294,49 @@ CANCELLED_ERROR_METHOD = f'''\
 
 '''
 
+FUTURE_SCHEDULE_CALLBACKS = f'''\
+    # {FUTURES_CALLBACK_CONTEXT_MARKER}
+    def _schedule_callbacks(self):
+        """Schedule done callbacks in the contexts captured when registered."""
+        callbacks = self._callbacks
+        self._callbacks = []
+        for callback, context in callbacks:
+            self._loop.call_soon(callback, self, context=context)
+'''
+
+FUTURE_ADD_DONE_CALLBACK = '''\
+    def add_done_callback(self, cb: Callable, *,
+                          context: contextvars.Context | None = None) -> None:
+        if context is None:
+            context = contextvars.copy_context()
+        if self.done():
+            self._loop.call_soon(cb, self, context=context)
+        else:
+            self._callbacks.append((cb, context))
+'''
+
+FUTURE_REMOVE_DONE_CALLBACK = f'''\
+    # {FUTURES_CALLBACK_REMOVAL_MARKER}
+    def remove_done_callback(self, cb: Callable) -> int:
+        original_len = len(self._callbacks)
+        self._callbacks = [
+            (callback, context)
+            for callback, context in self._callbacks
+            if callback != cb
+        ]
+        return original_len - len(self._callbacks)
+'''
+
+TASK_CONTEXT_CAPTURE = f'''\
+
+        # {TASKS_CONTEXT_MARKER}
+        # asyncio.Task snapshots the current context when no explicit context
+        # is supplied. Without this, Qt callbacks can resume one coroutine in
+        # different Context objects on either side of an await.
+        if self._context is None:
+            self._context = contextvars.copy_context()
+'''
+
 REENTRANT_STEP_GUARD = f'''\
 
         # {TASKS_REENTRANCY_GUARD_MARKER}
@@ -381,6 +431,7 @@ import json
 import sys
 import PySide6
 import PySide6.QtAsyncio.events as events
+import PySide6.QtAsyncio.futures as futures
 import PySide6.QtAsyncio.tasks as tasks
 
 print(json.dumps({
@@ -388,6 +439,7 @@ print(json.dumps({
     "python_version": list(sys.version_info[:3]),
     "pyside_version": PySide6.__version__,
     "events_path": events.__file__,
+    "futures_path": futures.__file__,
     "tasks_path": tasks.__file__,
 }))
 '''
@@ -418,6 +470,7 @@ print(json.dumps({
         pyside_version=str(data["pyside_version"]),
         python_version=tuple(data["python_version"]),
         events_path=Path(data["events_path"]).resolve(),
+        futures_path=Path(data["futures_path"]).resolve(),
         tasks_path=Path(data["tasks_path"]).resolve(),
     )
 
@@ -537,6 +590,22 @@ def find_task_done_guard_line(step_method: ast.FunctionDef | ast.AsyncFunctionDe
         if isinstance(statement, ast.If) and is_self_method_call(statement.test, "done"):
             return statement.end_lineno or statement.lineno
     raise PatchError("Could not find QAsyncioTask._step() done guard")
+
+
+def find_super_init_line(init_method: ast.FunctionDef | ast.AsyncFunctionDef) -> int:
+    for statement in init_method.body:
+        if not isinstance(statement, ast.Expr) or not isinstance(statement.value, ast.Call):
+            continue
+        call = statement.value
+        if (
+            isinstance(call.func, ast.Attribute)
+            and call.func.attr == "__init__"
+            and isinstance(call.func.value, ast.Call)
+            and isinstance(call.func.value.func, ast.Name)
+            and call.func.value.func.id == "super"
+        ):
+            return statement.end_lineno or statement.lineno
+    raise PatchError("Could not find QAsyncioTask.__init__() super call")
 
 
 def find_task_step_try(step_method: ast.FunctionDef | ast.AsyncFunctionDef) -> ast.Try:
@@ -697,6 +766,19 @@ def patch_tasks_source(
     edits: list[LineEdit] = []
     descriptions: list[str] = []
 
+    if TASKS_CONTEXT_MARKER not in source:
+        init_method = class_method(task_class, "__init__")
+        if init_method is None:
+            raise PatchError("Could not find QAsyncioTask.__init__()")
+        insertion_line = find_super_init_line(init_method)
+        edits.append(LineEdit(
+            start=insertion_line,
+            end=insertion_line,
+            replacement=TASK_CONTEXT_CAPTURE,
+            description="capture each task's context",
+        ))
+        descriptions.append("made task ContextVar state persist across awaits")
+
     if target_python >= (3, 14, 0):
         existing = class_method(task_class, "_make_cancelled_error")
 
@@ -801,12 +883,84 @@ def patch_tasks_source(
     return modified, tuple(descriptions)
 
 
+def patch_futures_source(source: str, *, force: bool) -> tuple[str, tuple[str, ...]]:
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as error:
+        raise PatchError(f"futures.py does not parse: {error}") from error
+
+    context_is_patched = FUTURES_CALLBACK_CONTEXT_MARKER in source
+    removal_is_patched = FUTURES_CALLBACK_REMOVAL_MARKER in source
+    if context_is_patched and removal_is_patched:
+        return source, ()
+
+    future_class = find_class(tree, "QAsyncioFuture")
+    schedule_callbacks = class_method(future_class, "_schedule_callbacks")
+    add_done_callback = class_method(future_class, "add_done_callback")
+    remove_done_callback = class_method(future_class, "remove_done_callback")
+    if schedule_callbacks is None or add_done_callback is None or remove_done_callback is None:
+        raise PatchError("Could not find QAsyncioFuture callback methods")
+
+    edits = []
+    descriptions = []
+    if not context_is_patched:
+        schedule_source = "".join(source.splitlines(keepends=True)[
+            schedule_callbacks.lineno - 1:(schedule_callbacks.end_lineno or schedule_callbacks.lineno)
+        ])
+        add_source = "".join(source.splitlines(keepends=True)[
+            add_done_callback.lineno - 1:(add_done_callback.end_lineno or add_done_callback.lineno)
+        ])
+        legacy_callbacks = (
+            "for cb in self._callbacks" in schedule_source
+            and "self._callbacks.append(cb)" in add_source
+            and "context if context else self._context" in schedule_source + add_source
+        )
+        if not legacy_callbacks and not force:
+            raise PatchError(
+                "QAsyncioFuture contains an unfamiliar callback implementation. "
+                "Refusing to overwrite it without --force."
+            )
+        edits.extend((LineEdit(
+            start=schedule_callbacks.lineno - 1,
+            end=schedule_callbacks.end_lineno or schedule_callbacks.lineno,
+            replacement=FUTURE_SCHEDULE_CALLBACKS.rstrip("\n"),
+            description="schedule future callbacks in their registered contexts",
+        ),
+        LineEdit(
+            start=add_done_callback.lineno - 1,
+            end=add_done_callback.end_lineno or add_done_callback.lineno,
+            replacement=FUTURE_ADD_DONE_CALLBACK.rstrip("\n"),
+            description="capture each future callback's context",
+        )))
+        descriptions.append("preserved ContextVar state for future callbacks")
+
+    if not removal_is_patched:
+        edits.append(LineEdit(
+            start=remove_done_callback.lineno - 1,
+            end=remove_done_callback.end_lineno or remove_done_callback.lineno,
+            replacement=FUTURE_REMOVE_DONE_CALLBACK.rstrip("\n"),
+            description="remove context-aware future callbacks",
+        ))
+        descriptions.append("made callback removal context-aware")
+
+    modified = apply_line_edits(source, edits)
+    try:
+        compile(modified, "futures.py", "exec")
+    except SyntaxError as error:
+        raise PatchError(f"Generated futures.py does not compile: {error}") from error
+    return modified, tuple(descriptions)
+
+
 def build_changes(environment: EnvironmentInfo, *, force: bool) -> list[SourceChange]:
     events_original = environment.events_path.read_text(encoding="utf-8")
+    futures_original = environment.futures_path.read_text(encoding="utf-8")
     tasks_original = environment.tasks_path.read_text(encoding="utf-8")
 
     events_modified, events_descriptions = patch_events_source(
         events_original, force=force
+    )
+    futures_modified, futures_descriptions = patch_futures_source(
+        futures_original, force=force
     )
     tasks_modified, tasks_descriptions = patch_tasks_source(
         tasks_original,
@@ -820,6 +974,12 @@ def build_changes(environment: EnvironmentInfo, *, force: bool) -> list[SourceCh
             events_original,
             events_modified,
             events_descriptions,
+        ),
+        SourceChange(
+            environment.futures_path,
+            futures_original,
+            futures_modified,
+            futures_descriptions,
         ),
         SourceChange(
             environment.tasks_path,
@@ -958,6 +1118,7 @@ def restore_backup(backup_dir: Path, *, force: bool) -> None:
 
 def verify_sources(environment: EnvironmentInfo) -> list[str]:
     events = environment.events_path.read_text(encoding="utf-8")
+    futures = environment.futures_path.read_text(encoding="utf-8")
     tasks = environment.tasks_path.read_text(encoding="utf-8")
     problems: list[str] = []
 
@@ -965,6 +1126,10 @@ def verify_sources(environment: EnvironmentInfo) -> list[str]:
         compile(events, str(environment.events_path), "exec")
     except SyntaxError as error:
         problems.append(f"events.py does not compile: {error}")
+    try:
+        compile(futures, str(environment.futures_path), "exec")
+    except SyntaxError as error:
+        problems.append(f"futures.py does not compile: {error}")
     try:
         compile(tasks, str(environment.tasks_path), "exec")
     except SyntaxError as error:
@@ -975,6 +1140,10 @@ def verify_sources(environment: EnvironmentInfo) -> list[str]:
             problems.append(f"events.py is missing marker {marker}")
     if "QSocketNotifier" not in events:
         problems.append("events.py does not import QSocketNotifier")
+    if FUTURES_CALLBACK_CONTEXT_MARKER not in futures:
+        problems.append(f"futures.py is missing marker {FUTURES_CALLBACK_CONTEXT_MARKER}")
+    if FUTURES_CALLBACK_REMOVAL_MARKER not in futures:
+        problems.append(f"futures.py is missing marker {FUTURES_CALLBACK_REMOVAL_MARKER}")
 
     if environment.python_version >= (3, 14, 0):
         tree = ast.parse(tasks)
@@ -983,6 +1152,7 @@ def verify_sources(environment: EnvironmentInfo) -> list[str]:
             problems.append("tasks.py lacks QAsyncioTask._make_cancelled_error()")
 
     for marker in (
+        TASKS_CONTEXT_MARKER,
         TASKS_REENTRANCY_GUARD_MARKER,
         TASKS_SELF_REENTRANCY_MARKER,
         TASKS_REENTRANCY_DRAIN_MARKER,
@@ -996,8 +1166,13 @@ def verify_sources(environment: EnvironmentInfo) -> list[str]:
 def verify_imports(
         environment: EnvironmentInfo, *, require_patch: bool = True) -> None:
     probe = r'''
+import asyncio
 import sys
+from contextlib import contextmanager
+from contextvars import ContextVar
+from PySide6 import QtAsyncio
 import PySide6.QtAsyncio.events as events
+import PySide6.QtAsyncio.futures as futures
 import PySide6.QtAsyncio.tasks as tasks
 
 if REQUIRE_PATCH:
@@ -1009,6 +1184,24 @@ if REQUIRE_PATCH:
     if (sys.version_info >= (3, 14)
             and not hasattr(tasks.QAsyncioTask, "_make_cancelled_error")):
         raise RuntimeError("QAsyncioTask._make_cancelled_error is missing")
+
+    value = ContextVar("qtasyncio_patch_verify", default=None)
+
+    @contextmanager
+    def context_scope():
+        token = value.set("active")
+        try:
+            yield
+        finally:
+            value.reset(token)
+
+    async def verify_context_across_await():
+        with context_scope():
+            await asyncio.sleep(0.001)
+        if value.get() is not None:
+            raise RuntimeError("QAsyncioTask leaked ContextVar state")
+
+    QtAsyncio.run(verify_context_across_await(), keep_running=False)
 
 print("ok")
 '''.replace("REQUIRE_PATCH", repr(require_patch))
@@ -1032,6 +1225,7 @@ def print_environment(environment: EnvironmentInfo) -> None:
     print(f"Python version: {python_version}")
     print(f"PySide6       : {environment.pyside_version}")
     print(f"events.py     : {environment.events_path}")
+    print(f"futures.py    : {environment.futures_path}")
     print(f"tasks.py      : {environment.tasks_path}")
 
 

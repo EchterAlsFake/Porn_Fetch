@@ -480,10 +480,13 @@ Pane {
                                             }
 
                                             // Show a padlock icon for locked qualities
-                                            Text {
-                                                text: "🔒"
+                                            Image {
+                                                source: "qrc:/images/graphics/lock.png"
                                                 visible: isPremiumRes && !(bridge && bridge.isPremium)
-                                                verticalAlignment: Text.AlignVCenter
+                                                Layout.preferredWidth: 16
+                                                Layout.preferredHeight: 16
+                                                fillMode: Image.PreserveAspectFit
+                                                Layout.alignment: Qt.AlignVCenter
                                             }
                                         }
                                     }

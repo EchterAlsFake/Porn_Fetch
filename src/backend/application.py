@@ -16,7 +16,13 @@ from src.backend.splashscreen import SplashController
 # --- MULTIPROCESSING SAFE SPLASH SCREEN ---
 # We check if this is the main process. If so, we initialize the GUI.
 # If it's a child process, we skip GUI initialization and set them to None.
-is_android = sys.platform == "android"
+is_android = (
+    sys.platform == "android"
+    or hasattr(sys, "getandroidapilevel")
+    or "ANDROID_ARGUMENT" in os.environ
+    or "ANDROID_BOOTSTRAP" in os.environ
+    or "--android" in sys.argv
+)
 is_main_process = mp.current_process().name == 'MainProcess' and "unittest" not in sys.modules and not os.environ.get("PORN_FETCH_TEST_ENV")
 
 app = None
@@ -75,7 +81,10 @@ import asyncio
 import argparse
 import traceback
 from asyncstdlib import chain
-from rich_argparse import RichHelpFormatter
+try:
+    from rich_argparse import RichHelpFormatter
+except ImportError:
+    RichHelpFormatter = argparse.HelpFormatter  # type: ignore[assignment, misc]
 from typing import AsyncIterator
 from base_api.modules.config import IteratorConfig
 from base_api import DownloadConfigHLS, DownloadConfigRAW
@@ -188,6 +197,7 @@ class Backend(QObject):
     proxySslError = Signal(str, str)
     proxyApplied = Signal(bool)
     shutdown_complete = Signal()
+    storagePermissionChanged = Signal()
 
     def __init__(self, parent: QObject | None = None, *, mobile_layout: bool = False):
         super().__init__(parent)
@@ -412,11 +422,45 @@ class Backend(QObject):
 
     @Slot(str)
     def set_android_output_folder(self, folder_url: str) -> None:
-        folder = QUrl(folder_url)
+        self.logger.info("Setting android output folder request: %r", folder_url)
+        if not folder_url or not folder_url.strip():
+            app_settings.android_output_folder = ""
+            self.logger.info("Cleared android output folder setting")
+            return
+        cleaned = folder_url.strip()
+        folder = QUrl.fromLocalFile(cleaned) if cleaned.startswith("/") else QUrl(cleaned)
         if folder.scheme() not in ("content", "file"):
+            self.logger.warning("Invalid folder scheme: %r for URL %r", folder.scheme(), cleaned)
             self.handle_message("Choose a folder from the system picker.")
             return
         app_settings.android_output_folder = folder.toString()
+        self.logger.info("Persisted android output folder: %r", app_settings.android_output_folder)
+
+    @Slot()
+    def request_storage_permission(self) -> None:
+        """Trigger Android native permission prompt for full file access."""
+        self.logger.info("Requesting all files access permission from Android...")
+        app_dir = Path(os.environ.get("ANDROID_PRIVATE", QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)))
+        trigger = app_dir / ".request_storage"
+        try:
+            trigger.touch()
+        except Exception as err:
+            self.logger.warning("Could not create trigger file: %s", err)
+
+    @Property(bool, notify=storagePermissionChanged)
+    def has_storage_permission(self) -> bool:
+        if not is_android:
+            return True
+        try:
+            test_dir = Path("/storage/emulated/0/Download")
+            if test_dir.is_dir():
+                test_file = test_dir / ".pf_perm_check"
+                test_file.touch()
+                test_file.unlink(missing_ok=True)
+                return True
+        except Exception:
+            pass
+        return False
 
     async def _auto_export_android_download(self, source: Path) -> None:
         folder_url = QUrl(app_settings.android_output_folder)
@@ -1445,7 +1489,7 @@ def main() -> None:
     theme_manager = ThemeManager(parent=engine)
 
     # The backend instance handles the main logic, see class above
-    backend_instance = Backend(parent=engine, mobile_layout=args.android)
+    backend_instance = Backend(parent=engine, mobile_layout=is_android or args.android)
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:

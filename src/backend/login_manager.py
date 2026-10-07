@@ -7,8 +7,6 @@ import http.cookiejar
 from collections.abc import AsyncIterator, Mapping
 from urllib.parse import urlparse
 
-import browser_cookie3
-
 from src.backend import clients
 from base_api.modules.config import IteratorConfig
 from base_api.modules.logger import configure_app_logging
@@ -112,6 +110,12 @@ def get_site_cookies(website: str) -> http.cookiejar.CookieJar:
     Handles TLD variants automatically and catches platform-specific exceptions.
     """
     merged_jar = http.cookiejar.CookieJar()
+    try:
+        import browser_cookie3
+    except ImportError:
+        logger.warning("browser_cookie3 is not available on this platform.")
+        return merged_jar
+
     website = website.lower()
     # Map of loader functions available in browser_cookie3
     browser_loaders = [

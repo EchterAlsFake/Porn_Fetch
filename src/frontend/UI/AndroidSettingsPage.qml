@@ -136,10 +136,35 @@ Pane {
         spacing: 4
         Label { text: row.label; color: root.textColor }
         ComboBox {
+            id: choiceCombo
             Layout.fillWidth: true
             model: row.choices
             currentIndex: row.selected
             Accessible.name: row.label
+            delegate: ItemDelegate {
+                id: choiceDelegate
+                required property var modelData
+                required property int index
+                width: choiceCombo.width
+                enabled: !row.allowed || row.allowed(index)
+                contentItem: RowLayout {
+                    spacing: 8
+                    Label {
+                        Layout.fillWidth: true
+                        text: String(choiceDelegate.modelData)
+                        color: choiceDelegate.enabled ? root.textColor : root.mutedColor
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Image {
+                        source: "qrc:/images/graphics/lock.png"
+                        visible: row.allowed && !row.allowed(choiceDelegate.index)
+                        Layout.preferredWidth: 16
+                        Layout.preferredHeight: 16
+                        fillMode: Image.PreserveAspectFit
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                }
+            }
             onActivated: {
                 if (row.allowed && !row.allowed(currentIndex)) {
                     currentIndex = Qt.binding(function() { return row.selected })
@@ -186,7 +211,7 @@ Pane {
     Dialogs.FileDialog {
         id: licenseFileDialog
         title: qsTr("Import license file")
-        nameFilters: [qsTr("License files (*.license)"), qsTr("All files (*)")]
+        nameFilters: [qsTr("All files (*)"), qsTr("License files (*.license *.lic *.json)")]
         onAccepted: bridge.installFromPath(selectedFile.toString())
     }
 
@@ -196,10 +221,23 @@ Pane {
         onAccepted: backend.set_android_output_folder(selectedFolder.toString())
     }
 
+    readonly property string currentOutputFolderName: {
+        var folder = appSettings.android_output_folder
+        if (!folder || folder.trim() === "") return qsTr("App storage")
+        var decoded = decodeURIComponent(folder).replace(/\/+$/, "")
+        if (decoded.indexOf("/storage/emulated/0/") !== -1) {
+            return decoded.substring(decoded.indexOf("/storage/emulated/0/") + 20)
+        }
+        if (decoded.indexOf(":") !== -1) {
+            var afterColon = decoded.substring(decoded.lastIndexOf(":") + 1)
+            if (afterColon.length > 0) return afterColon
+        }
+        var parts = decoded.split("/")
+        return parts[parts.length - 1] || qsTr("Selected folder")
+    }
+
     function outputFolderName() {
-        if (!appSettings.android_output_folder) return qsTr("App storage")
-        var path = decodeURIComponent(appSettings.android_output_folder.split("/").pop())
-        return path.split(":").pop() || qsTr("Selected folder")
+        return root.currentOutputFolderName
     }
 
     RowLayout {
@@ -404,6 +442,19 @@ Pane {
                     value: appSettings.track_videos
                     onChanged: function(selected) { appSettings.track_videos = selected }
                 }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Storage permission")
+                        color: root.textColor
+                    }
+                    Button {
+                        text: backend.has_storage_permission ? qsTr("Granted ✓") : qsTr("Grant access")
+                        enabled: !backend.has_storage_permission
+                        onClicked: backend.request_storage_permission()
+                    }
+                }
                 Label {
                     Layout.fillWidth: true
                     text: qsTr("Save completed videos to")
@@ -412,7 +463,7 @@ Pane {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: root.outputFolderName()
+                    text: root.currentOutputFolderName
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }

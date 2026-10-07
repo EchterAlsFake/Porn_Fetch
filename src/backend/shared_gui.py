@@ -106,7 +106,7 @@ def ui_popup(text, title="Notice"):
     if title is None or not isinstance(title, str):
         title = "Notice"
 
-    if sys.platform == "android" and _mobile_notice_handler is not None:
+    if (sys.platform == "android" or hasattr(sys, "getandroidapilevel")) and _mobile_notice_handler is not None:
         _mobile_notice_handler(title, text)
         return
 

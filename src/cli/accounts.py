@@ -96,7 +96,11 @@ async def browser_cookies(provider: str) -> http.cookiejar.CookieJar:
 
 
 def _read_browser_cookies(provider: str) -> http.cookiejar.CookieJar:
-    import browser_cookie3
+    try:
+        import browser_cookie3
+    except ImportError:
+        logger.warning("browser_cookie3 is not available on this platform.")
+        return http.cookiejar.CookieJar()
 
     merged = http.cookiejar.CookieJar()
     for name in ("chrome", "firefox", "edge", "brave", "opera", "vivaldi", "safari", "librewolf"):
