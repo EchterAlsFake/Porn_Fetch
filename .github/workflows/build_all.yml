@@ -120,7 +120,7 @@ jobs:
         shell: bash
         run: |
           SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
-          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v
+          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files
           
           # Universal Rename Logic
           EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"
@@ -248,6 +248,17 @@ jobs:
           path: ifw_output/repository/
           if-no-files-found: error
 
+      - name: Report CI Status
+        if: always()
+        shell: bash
+        run: |
+          STATUS="${{ job.status == 'success' && 'pass' || 'fail' }}"
+          curl -f -sS -X POST \
+            -H "X-CI-TOKEN: ${{ secrets.CI_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"status\":\"$STATUS\",\"details\":\"Run #${{ github.run_number }}\"}" \
+            https://api.pornfetch.to/ci/gui_build || true
+
   # ==========================================
   # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
@@ -358,6 +369,17 @@ jobs:
             ${{ env.CLI_OUTPUT }}.sha256
             pocketbase*
             PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}_LEGAL.zip
+
+      - name: Report CI Status
+        if: always()
+        shell: bash
+        run: |
+          STATUS="${{ job.status == 'success' && 'pass' || 'fail' }}"
+          curl -f -sS -X POST \
+            -H "X-CI-TOKEN: ${{ secrets.CI_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"status\":\"$STATUS\",\"details\":\"Run #${{ github.run_number }}\"}" \
+            https://api.pornfetch.to/ci/cli_build || true
 
   # ==========================================
   # 3. LINUX 32-BIT CLI BUILD
@@ -544,147 +566,84 @@ jobs:
   # ==========================================
   deploy-repositories:
     name: Deploy IFW Repositories
-    needs: build-gui
+    needs: [build-gui]
     if: >-
       github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
-    runs-on: ubuntu-24.04
-    environment: beta
-    concurrency:
-      group: ifw-repository-deploy
-      cancel-in-progress: false
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v8
+      - name: Download Built Repositories
+        uses: actions/download-artifact@v4
         with:
           pattern: IFW_repo_*
-          path: ifw_repositories
+          path: dist/ifw_repo
+          merge-multiple: true
 
-      - name: Install deployment tools
-        run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
-
-      - name: Configure SSH
-        shell: bash
+      - name: Deploy Repositories
         env:
-          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
-          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
-          set -euo pipefail
-          test -n "$IFW_SSH_KEY"
-          test -n "$IFW_KNOWN_HOSTS"
-          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
-          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
-          chmod 600 "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
-
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.14"
-
-      - uses: astral-sh/setup-uv@v7
-
-      - name: Sign desktop release repositories
-        shell: bash
-        env:
-          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
-        run: |
-          set -euo pipefail
-          uv sync --locked --no-dev
-          test -n "$CLI_UPDATE_SIGNING_KEY"
-          umask 077
-          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/desktop_online.pem"
-          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
-          for repository in ifw_repositories/IFW_repo_*/*; do
-            uv run --no-sync python packaging/sign_desktop_release.py \
-              --repository "$repository" --platform "${repository##*/}" \
-              --version "$APP_VERSION.${{ github.run_number }}" \
-              --private-key "$RUNNER_TEMP/desktop_online.pem"
+          for target in linux_amd64 windows_amd64 darwin_amd64 darwin_arm64; do
+            if [ ! -d "dist/ifw_repo/$target" ]; then
+              nested=$(find dist/ifw_repo -maxdepth 2 -type d -name "$target" 2>/dev/null | head -n 1)
+              if [ -n "$nested" ]; then
+                mv "$nested" "dist/ifw_repo/$target"
+              fi
+            fi
+            if [ -d "dist/ifw_repo/$target" ]; then
+              bash scripts/deploy_ifw_repositories.sh "$target" "dist/ifw_repo/$target"
+            fi
           done
-          rm "$RUNNER_TEMP/desktop_online.pem"
 
-      - name: Publish repository files
-        shell: bash
+      - name: Download Installers
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: IFW_installer_*
+          path: dist/installers
+          merge-multiple: true
+
+      - name: Publish Standalone Installers
         env:
-          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
-          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
-          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
-          IFW_SSH_KEY_FILE: ${{ runner.temp }}/ifw_deploy_key
-          IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
-        run: bash scripts/deploy_ifw_repositories.sh ifw_repositories
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+        run: |
+          shopt -s nullglob
+          for file in dist/installers/*; do
+            if [ -f "$file" ]; then
+              fname=$(basename "$file")
+              curl -f -sS -X POST \
+                -H "X-CI-TOKEN: $CI_TOKEN" \
+                -H "X-CI-Filename: $fname" \
+                --data-binary @"$file" \
+                https://api.pornfetch.to/ci/deploy/download
+            fi
+          done
 
   # ==========================================
   # 7. DEPLOY SIGNED CLI UPDATES
   # ==========================================
   deploy-cli-updates:
-    name: Deploy Signed CLI Updates
-    needs: [build-cli, build-cli-linux-x32, build-cli-linux-riscv64]
+    name: Deploy CLI Updates
+    needs: [build-cli]
     if: >-
       always() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.build-cli.result == 'success'
-    runs-on: ubuntu-24.04
-    environment: beta
-    concurrency:
-      group: cli-update-deploy
-      cancel-in-progress: false
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v8
+      - name: Download CLI Artifacts
+        uses: actions/download-artifact@v4
         with:
-          pattern: PornFetch_*_CLI_*
-          path: cli_artifacts
+          path: dist/cli_tuf
 
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.14"
-
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-
-      - name: Install publishing dependencies and SSH tools
-        run: |
-          uv sync --locked --no-dev
-          sudo apt-get update
-          sudo apt-get install -y rsync openssh-client
-
-      - name: Configure signing and SSH keys
-        shell: bash
+      - name: Deploy CLI TUF Repo
         env:
-          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
-          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
-          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
-          set -euo pipefail
-          test -n "$CLI_UPDATE_SIGNING_KEY"
-          test -n "$IFW_SSH_KEY"
-          test -n "$IFW_KNOWN_HOSTS"
-          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/cli_online.pem"
-          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
-          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
-          chmod 600 "$RUNNER_TEMP/cli_online.pem" "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
-
-      - name: Build signed CLI update repository
-        shell: bash
-        run: |
-          set -euo pipefail
-          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
-          uv run --no-sync python packaging/publish_cli_updates.py \
-            --artifacts cli_artifacts \
-            --remote-url https://api.pornfetch.to/repo/cli/ \
-            --output cli_update_repository \
-            --private-key "$RUNNER_TEMP/cli_online.pem" \
-            --version "$APP_VERSION.${{ github.run_number }}"
-
-      - name: Publish signed CLI updates
-        shell: bash
-        env:
-          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
-          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
-          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
-          IFW_SSH_KEY_FILE: ${{ runner.temp }}/ifw_deploy_key
-          IFW_KNOWN_HOSTS_FILE: ${{ runner.temp }}/ifw_known_hosts
-        run: bash scripts/deploy_cli_updates.sh cli_update_repository
+          bash scripts/deploy_cli_updates.sh dist/cli_tuf
 
   # ==========================================
   # 8. PUBLISH RELEASE (TAGS & DISPATCH)

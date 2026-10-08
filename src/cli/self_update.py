@@ -19,7 +19,8 @@ from tuf.ngclient import Updater
 
 from src.shared.release import release_time, update_eligibility
 
-REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", "https://api.pornfetch.to/repo/cli/").rstrip("/") + "/"
+UPDATE_REPO_URL = "https://api.pornfetch.to/repo/cli"
+REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", UPDATE_REPO_URL).rstrip("/") + "/"
 ROOT_FILE = Path(__file__).with_name("update_root.json")
 BUILD_FILE = Path(__file__).with_name("update_build.json")
 

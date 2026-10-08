@@ -51,21 +51,8 @@ jobs:
       - name: Publish refreshed metadata
         shell: bash
         env:
-          IFW_DEPLOY_HOST: ${{ vars.IFW_DEPLOY_HOST }}
-          IFW_DEPLOY_USER: ${{ vars.IFW_DEPLOY_USER }}
-          IFW_DEPLOY_ROOT: ${{ vars.IFW_DEPLOY_ROOT }}
-          IFW_SSH_KEY: ${{ secrets.IFW_DEPLOY_SSH_KEY }}
-          IFW_KNOWN_HOSTS: ${{ secrets.IFW_DEPLOY_KNOWN_HOSTS }}
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
           set -euo pipefail
           if [ ! -f cli_update_repository/metadata/timestamp.json ]; then exit 0; fi
-          sudo apt-get update
-          sudo apt-get install -y rsync openssh-client
-          test -n "$IFW_SSH_KEY"
-          test -n "$IFW_KNOWN_HOSTS"
-          printf '%s\n' "$IFW_SSH_KEY" > "$RUNNER_TEMP/ifw_deploy_key"
-          printf '%s\n' "$IFW_KNOWN_HOSTS" > "$RUNNER_TEMP/ifw_known_hosts"
-          chmod 600 "$RUNNER_TEMP/ifw_deploy_key" "$RUNNER_TEMP/ifw_known_hosts"
-          IFW_SSH_KEY_FILE="$RUNNER_TEMP/ifw_deploy_key" \
-          IFW_KNOWN_HOSTS_FILE="$RUNNER_TEMP/ifw_known_hosts" \
-            bash scripts/deploy_cli_updates.sh cli_update_repository
+          bash scripts/deploy_cli_updates.sh cli_update_repository

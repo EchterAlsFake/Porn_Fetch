@@ -448,7 +448,7 @@ run cp -f "${DEPLOY_SPEC}" "${DEPLOY_SPEC_TMP}"
 
 info "Building with pyside6-deploy..."
 run uv --color always run -- \
-  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v
+  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files
 
 # ------------------------------------------------------------
 # Rename output (Linux .bin / macOS .app)

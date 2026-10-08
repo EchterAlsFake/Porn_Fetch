@@ -15,11 +15,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.database.installer import (
+from src.database.installer import (  # noqa: E402
     DEFAULT_POCKETBASE_VERSION,
     download_and_extract_pocketbase,
     resolve_platform,
-    verify_pocketbase_binary,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")

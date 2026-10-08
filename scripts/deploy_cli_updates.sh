@@ -1,29 +1,28 @@
 #!/usr/bin/env bash
-# Make signed targets available before publishing the new TUF timestamp.
 set -euo pipefail
 
-repository=${1:?Pass the generated CLI update repository directory}
-: "${IFW_DEPLOY_HOST:?Set IFW_DEPLOY_HOST}"
-: "${IFW_DEPLOY_USER:?Set IFW_DEPLOY_USER}"
-: "${IFW_DEPLOY_ROOT:?Set IFW_DEPLOY_ROOT}"
-: "${IFW_SSH_KEY_FILE:?Set IFW_SSH_KEY_FILE}"
-: "${IFW_KNOWN_HOSTS_FILE:?Set IFW_KNOWN_HOSTS_FILE}"
+CLI_DIR="${1:-dist/cli_tuf}"
 
-[[ $IFW_DEPLOY_HOST =~ ^[a-zA-Z0-9.-]+$ ]] || { echo "Invalid deploy host" >&2; exit 1; }
-[[ $IFW_DEPLOY_USER =~ ^[a-zA-Z0-9._-]+$ ]] || { echo "Invalid deploy user" >&2; exit 1; }
-[[ $IFW_DEPLOY_ROOT =~ ^/[a-zA-Z0-9._/-]+$ ]] || { echo "Invalid deploy root" >&2; exit 1; }
-[[ -f $repository/metadata/timestamp.json ]] || { echo "Missing signed CLI timestamp" >&2; exit 1; }
+if [[ ! -d "$CLI_DIR" ]]; then
+  echo "Usage: $0 <path_to_cli_tuf_dir>" >&2
+  exit 1
+fi
 
-remote="$IFW_DEPLOY_USER@$IFW_DEPLOY_HOST"
-destination="$IFW_DEPLOY_ROOT/cli"
-run_id=${GITHUB_RUN_ID:-manual}
-ssh_options=(-i "$IFW_SSH_KEY_FILE" -o "UserKnownHostsFile=$IFW_KNOWN_HOSTS_FILE" -o StrictHostKeyChecking=yes -o BatchMode=yes)
+if [[ -z "${CI_TOKEN:-}" ]]; then
+  echo "Error: CI_TOKEN environment variable is required." >&2
+  exit 1
+fi
 
-ssh "${ssh_options[@]}" "$remote" "mkdir -p '$destination/metadata' '$destination/targets'"
-rsync -a --delay-updates --exclude='/metadata/timestamp.json' \
-  -e "ssh -i $IFW_SSH_KEY_FILE -o UserKnownHostsFile=$IFW_KNOWN_HOSTS_FILE -o StrictHostKeyChecking=yes -o BatchMode=yes" \
-  "$repository/" "$remote:$destination/"
-scp "${ssh_options[@]}" "$repository/metadata/timestamp.json" "$remote:$destination/metadata/timestamp.json.next-$run_id"
-ssh "${ssh_options[@]}" "$remote" \
-  "mv -f '$destination/metadata/timestamp.json.next-$run_id' '$destination/metadata/timestamp.json'"
-echo "Published signed CLI update repository"
+BUNDLE_TAR="$(mktemp --suffix=.tar.gz)"
+trap 'rm -f "$BUNDLE_TAR"' EXIT
+
+echo "Packaging CLI updates..."
+tar -czf "$BUNDLE_TAR" -C "$CLI_DIR" .
+
+echo "Uploading CLI updates to https://api.pornfetch.to/ci/deploy/cli..."
+curl -f -sS -X POST \
+  -H "X-CI-TOKEN: $CI_TOKEN" \
+  --data-binary @"$BUNDLE_TAR" \
+  https://api.pornfetch.to/ci/deploy/cli
+
+echo "Successfully deployed CLI TUF updates."

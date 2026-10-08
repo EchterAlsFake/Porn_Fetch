@@ -72,10 +72,10 @@ Do not assume this client change enables real payments. See the
 
 ## 🚀 Quick Links
 - [Features](#-features)
-- [Installation](#installation)
+- [Installation & Building](#-installation--building-from-source)
 - [Donations](#sponsoring--donations)
 - [Supported Websites](#-supported-websites)
-- [Building from Source](#-building-from-source)
+- [Developer Guide](docs/FOR_DEVELOPERS.md)
 - [Qt installer work](docs/QT_INSTALLER_FRAMEWORK.md)
 - [Credits](#-credits)
 - [License](#-license)
@@ -103,17 +103,81 @@ Do not assume this client change enables real payments. See the
 - Independent Open-Source [Server](https://github.com/EchterAlsFake/Server)
 - Source-available application, made with ❤️ in 🇩🇪
 
-## Installation
-Standalone 3.9 CLI builds can check for signed updates with `self-update --check`
-and install one with `self-update`. The desktop installers use Qt Installer
-Framework instead. See the [CLI update guide](docs/CLI_UPDATES.md) for
-supported builds and publishing details.
+## 📦 Installation & Building from Source
 
-> [!IMPORTANT]
-> Please read the 3.9 guide before installing a beta. It does not describe the
-> older 3.8 download.
+There are three ways to get Porn Fetch running:
+1. **[Pre-built Binaries & Installers](#1-pre-built-binaries--installers)** (fastest)
+2. **[One-Liner Install Scripts](#2-one-liner-install-scripts)** (automatic build)
+3. **[Building from Source](#3-building--running-from-source)** (recommended for development)
 
-**A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/INSTALLATION.md)
+> [!TIP]
+> For the complete multi-platform guide with system package instructions and troubleshooting, see the [Installation & Build Guide](docs/INSTALLATION.md).
+
+### 1. Pre-built Binaries & Installers
+Grab the latest release for your platform from [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases):
+
+- **Qt Installer Framework (`*_Setup` installers):**
+  Installs the desktop application and configures the Qt `maintenancetool` for repository-based in-app updates.
+  - **Windows:** `PornFetch_windows_GUI_x64_Setup.exe`
+  - **Linux:** `PornFetch_linux_GUI_x64_Setup.run` (run `chmod +x` before launching)
+  - **macOS:** `PornFetch_macos_GUI_Universal_Setup.dmg`
+- **Standalone Portable Bundles (`.zip` / `.dmg`):**
+  Extract the ZIP to any folder. Make sure the bundled `pocketbase` (or `pocketbase.exe`) stays right next to the app binary—Porn Fetch needs it for download tracking and queue management.
+- **Standalone Headless CLI:**
+  Single portable binary (`PornFetch_linux_CLI_x64`, `PornFetch_windows_CLI_x64.exe`, etc.) with built-in cryptographically verified self-updating:
+  ```bash
+  ./PornFetch_linux_CLI_x64 self-update --check
+  ./PornFetch_linux_CLI_x64 self-update
+  ```
+
+### 2. One-Liner Install Scripts
+To automatically install dependencies, clone, and build the latest code on your machine:
+
+- **Linux & macOS:**
+  ```bash
+  curl -sSL https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install.sh | bash
+  ```
+- **Windows (PowerShell as Administrator):**
+  ```powershell
+  irm https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 | iex
+  ```
+
+### 3. Building & Running from Source
+The source tree targets Python 3.14 and uses [`uv`](https://docs.astral.sh/uv/) for dependency management.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/EchterAlsFake/Porn_Fetch.git
+cd Porn_Fetch
+
+# 2. Sync dependencies (uv automatically provisions Python 3.14)
+uv sync --extra gui --group dev
+
+# 3. Fetch PocketBase (required for database and queue persistence)
+uv run python scripts/fetch_pocketbase.py
+
+# 4. Patch QtAsyncio (required for the GUI under Python 3.14)
+uv run python scripts/patch_qtasyncio.py .venv
+
+# 5. Launch the application!
+uv run main.py              # Desktop GUI
+uv run Porn_Fetch_CLI.py    # Headless CLI
+```
+
+> **Headless / Termux note:** If you only need the CLI (e.g. on headless servers or in Android Termux), you don't need any Qt dependencies or the QtAsyncio patch. Just run `uv sync` (or `pip install -e .` on Termux) and execute `uv run Porn_Fetch_CLI.py`.
+
+### 4. Compiling Standalone Binaries from Source
+To produce distributable single binaries yourself:
+- **CLI binary:**
+  ```bash
+  uv run pyinstaller --clean packaging/pyinstaller_cli.spec
+  ```
+- **GUI executable:**
+  ```bash
+  uv run pyside6-deploy -c packaging/pysidedeploy_linux.spec    # Linux
+  uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec  # Windows
+  uv run pyside6-deploy -c packaging/pysidedeploy_macos.spec    # macOS
+  ```
 
 ## Premium license
 
@@ -179,23 +243,6 @@ as well as the different concepts used here.
 
 See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS.md
 
-
-## 🔨 Building from Source
-The source tree targets Python 3.14 and uses `uv`. From a checkout of the
-current branch:
-
-```bash
-uv sync --extra gui --group dev
-uv run python scripts/patch_qtasyncio.py .venv
-uv run Porn_Fetch_CLI.py
-uv run main.py
-```
-
-The GUI uses the repository's QtAsyncio patch. The packaging workflow runs it
-before building. For build details, start with
-[FOR_DEVELOPERS.md](docs/FOR_DEVELOPERS.md) and
-[the build workflow](.github/workflows/build_all.yml). A source run is useful
-for development; it is not proof that a packaged beta works on your platform.
 
 
 ## 🌍 Translating

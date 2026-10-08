@@ -323,9 +323,12 @@ if (Test-Path $uiUpdateScriptPath) {
 Set-Location -Path $projectDir
 
 # Deploy spec
-$deploySpec = Join-Path $projectDir "src\build\pysidedeploy_windows.spec"
+$deploySpec = Join-Path $projectDir "packaging\pysidedeploy_windows.spec"
 if (-not (Test-Path $deploySpec)) {
-    throw "Deploy spec not found: $deploySpec"
+    $deploySpec = Join-Path $projectDir "pysidedeploy.spec"
+}
+if (-not (Test-Path $deploySpec)) {
+    throw "Deploy spec not found at packaging\pysidedeploy_windows.spec or pysidedeploy.spec"
 }
 
 Ok "Using deploy spec: $deploySpec"
@@ -335,7 +338,7 @@ $deploySpecTmp = Join-Path $venvDir "pysidedeploy.spec"
 Copy-Item -Force $deploySpec $deploySpecTmp
 
 Info "Building with pyside6-deploy..."
-Run uv "--color" "always" "run" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v"
+Run uv "--color" "always" "run" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files"
 
 # Find output exe
 $finalExe = Join-Path $projectDir "Porn Fetch.exe"

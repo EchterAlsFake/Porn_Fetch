@@ -1,46 +1,31 @@
 #!/usr/bin/env bash
-# Publish Qt IFW archives before exposing their new Updates.xml metadata.
 set -euo pipefail
 
-artifacts_dir=${1:?Pass the downloaded IFW artifact directory}
-: "${IFW_DEPLOY_HOST:?Set IFW_DEPLOY_HOST}"
-: "${IFW_DEPLOY_USER:?Set IFW_DEPLOY_USER}"
-: "${IFW_DEPLOY_ROOT:?Set IFW_DEPLOY_ROOT}"
-: "${IFW_SSH_KEY_FILE:?Set IFW_SSH_KEY_FILE}"
-: "${IFW_KNOWN_HOSTS_FILE:?Set IFW_KNOWN_HOSTS_FILE}"
+TARGET="${1:-}"
+REPO_DIR="${2:-}"
 
-[[ $IFW_DEPLOY_HOST =~ ^[a-zA-Z0-9.-]+$ ]] || { echo "Invalid deploy host" >&2; exit 1; }
-[[ $IFW_DEPLOY_USER =~ ^[a-zA-Z0-9._-]+$ ]] || { echo "Invalid deploy user" >&2; exit 1; }
-[[ $IFW_DEPLOY_ROOT =~ ^/[a-zA-Z0-9._/-]+$ ]] || { echo "Deploy root must be an absolute path without spaces" >&2; exit 1; }
+if [[ -z "$TARGET" || -z "$REPO_DIR" || ! -d "$REPO_DIR" ]]; then
+  echo "Usage: $0 <target_arch> <path_to_repo_dir>" >&2
+  echo "Example: $0 linux_amd64 dist/ifw_repo/linux_amd64" >&2
+  exit 1
+fi
 
-ssh_options=(
-  -i "$IFW_SSH_KEY_FILE"
-  -o "UserKnownHostsFile=$IFW_KNOWN_HOSTS_FILE"
-  -o StrictHostKeyChecking=yes
-  -o BatchMode=yes
-)
-remote="$IFW_DEPLOY_USER@$IFW_DEPLOY_HOST"
-run_id=${GITHUB_RUN_ID:-manual}
+if [[ -z "${CI_TOKEN:-}" ]]; then
+  echo "Error: CI_TOKEN environment variable is required." >&2
+  exit 1
+fi
 
-shopt -s nullglob
-repositories=("$artifacts_dir"/IFW_repo_*/*)
-((${#repositories[@]} > 0)) || { echo "No IFW repositories were downloaded" >&2; exit 1; }
+BUNDLE_TAR="$(mktemp --suffix=.tar.gz)"
+trap 'rm -f "$BUNDLE_TAR"' EXIT
 
-for repository in "${repositories[@]}"; do
-  [[ -d $repository && -f $repository/Updates.xml && -f $repository/release.json ]] || { echo "Invalid IFW repository: $repository" >&2; exit 1; }
-  tag=${repository##*/}
-  [[ $tag =~ ^(linux|windows|darwin)_(amd64|arm64)$ ]] || { echo "Unexpected IFW repository: $tag" >&2; exit 1; }
-  destination="$IFW_DEPLOY_ROOT/$tag"
+echo "Packaging IFW repository for $TARGET..."
+tar -czf "$BUNDLE_TAR" -C "$REPO_DIR" .
 
-  ssh "${ssh_options[@]}" "$remote" "mkdir -p '$destination'"
-  rsync -a --delay-updates --exclude='/Updates.xml' --exclude='/release.json' \
-    -e "ssh -i $IFW_SSH_KEY_FILE -o UserKnownHostsFile=$IFW_KNOWN_HOSTS_FILE -o StrictHostKeyChecking=yes -o BatchMode=yes" \
-    "$repository/" "$remote:$destination/"
-  scp "${ssh_options[@]}" "$repository/Updates.xml" "$remote:$destination/Updates.xml.next-$run_id"
-  ssh "${ssh_options[@]}" "$remote" \
-    "mv -f '$destination/Updates.xml.next-$run_id' '$destination/Updates.xml'"
-  scp "${ssh_options[@]}" "$repository/release.json" "$remote:$destination/release.json.next-$run_id"
-  ssh "${ssh_options[@]}" "$remote" \
-    "mv -f '$destination/release.json.next-$run_id' '$destination/release.json'"
-  echo "Published IFW repository: $tag"
-done
+echo "Uploading IFW repository to https://api.pornfetch.to/ci/deploy/ifw..."
+curl -f -sS -X POST \
+  -H "X-CI-TOKEN: $CI_TOKEN" \
+  -H "X-CI-Target: $TARGET" \
+  --data-binary @"$BUNDLE_TAR" \
+  https://api.pornfetch.to/ci/deploy/ifw
+
+echo "Successfully deployed IFW repository for $TARGET."

@@ -27,10 +27,10 @@ python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==2.8.9
+packages = Nuitka==4.1.1,zstandard,ordered-set
 
 # buildozer = for deploying Android application
-android_packages = buildozer==1.5.0,cython==0.29.33
+android_packages = buildozer==1.6.0,cython==0.29.33
 
 [qt]
 
@@ -42,10 +42,10 @@ qml_files =
 excluded_qml_plugins =
 
 # qt modules used. comma separated
-modules = Widgets,Gui,Core,DBus
+modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
 
 # qt plugins used by the application
-plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
+plugins = qml,iconengines,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
 
 [android]
 
@@ -64,10 +64,10 @@ plugins =
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
 macos.permissions =
-mode = onefile
+mode = standalone
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 
