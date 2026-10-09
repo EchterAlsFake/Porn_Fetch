@@ -109,6 +109,8 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         script_path = PROJECT_ROOT / "scripts" / "install.sh"
         content = script_path.read_text(encoding="utf-8")
         self.assertIn("--keep-deployment-files", content)
+        self.assertIn("read -rp \"Enter choice (0-${max_choice}) [${default_choice}]: \" choice </dev/tty", content)
+        self.assertIn("Non-interactive shell detected", content)
 
     def test_ci_workflow_deploy_flags(self):
         workflow_path = PROJECT_ROOT / ".github" / "workflows" / "build_all.yml"

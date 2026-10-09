@@ -260,7 +260,16 @@ choose_build_ref() {
   fi
 
   while true; do
-    read -rp "Enter choice (0-${max_choice}) [${default_choice}]: " choice
+    if [ -t 0 ]; then
+      read -rp "Enter choice (0-${max_choice}) [${default_choice}]: " choice || true
+    elif (: < /dev/tty) 2>/dev/null; then
+      read -rp "Enter choice (0-${max_choice}) [${default_choice}]: " choice </dev/tty || true
+    else
+      warn "Non-interactive shell detected; using default choice [${default_choice}]."
+      choice="${default_choice}"
+      break
+    fi
+
     choice="${choice:-$default_choice}"
 
     if [[ "${choice}" =~ ^[0-9]+$ ]] && (( choice >= 0 && choice <= max_choice )); then
