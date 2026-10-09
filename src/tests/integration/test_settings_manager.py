@@ -22,6 +22,20 @@ class TestSettingsManagerComprehensive(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
 
+    def test_android_tracking_stays_disabled_with_old_settings(self) -> None:
+        self.qsettings.setValue("Video/track_videos", True)
+        changed = []
+        self.manager.trackVideosChanged.connect(changed.append)
+        with patch("src.backend.config.IS_ANDROID", True):
+            self.assertFalse(self.manager.track_videos)
+            self.manager.track_videos = True
+            self.assertFalse(self.manager.track_videos)
+        self.assertEqual(changed, [])
+
+        # Do not erase existing settings or history: desktop settings still work normally.
+        with patch("src.backend.config.IS_ANDROID", False):
+            self.assertTrue(self.manager.track_videos)
+
     def test_getters_with_type_fallbacks(self) -> None:
         # get_bool
         self.manager._settings.setValue("Test/bool_true", True)

@@ -25,21 +25,21 @@ ApplicationWindow {
     property bool safeToClose: false
     property int pageIndex: 0
     readonly property bool tablet: contentItem.width >= 960
-    readonly property bool settingsDetail: pageIndex === 3 && !settingsPage.tablet && settingsPage.section >= 0
-    readonly property bool moreDetail: !tablet && (pageIndex === 4 || pageIndex === 5)
-    readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Statistics"),
-                                      qsTr("Settings"), qsTr("Info"), qsTr("Supported websites"), qsTr("More")]
+    readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
+    readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4)
+    readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
+                                      qsTr("Info"), qsTr("Supported websites"), qsTr("More")]
     readonly property var pageDescriptions: [qsTr("Collect and save videos"), qsTr("Your connected accounts"),
-                                             qsTr("Your download activity"), qsTr("Make it yours"),
+                                             qsTr("Make it yours"),
                                              qsTr("About this app"), qsTr("Available sources"), qsTr("Explore the app")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
-                                      "qrc:/images/graphics/database.png", "qrc:/images/graphics/settings.png",
+                                      "qrc:/images/graphics/settings.png",
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
                                       "qrc:/images/graphics/information.png"]
 
     function goBack() {
         if (settingsDetail) settingsPage.goBack()
-        else if (moreDetail) pageIndex = 6
+        else if (moreDetail) pageIndex = 5
         else if (pageIndex !== 0) pageIndex = 0
     }
 
@@ -80,7 +80,7 @@ ApplicationWindow {
     Connections {
         target: appSettings
         function onAnonymousModeChanged() {
-            if (appSettings.anonymous_mode && window.pageIndex > 3)
+            if (appSettings.anonymous_mode && window.pageIndex > 2)
                 window.pageIndex = 0
         }
     }
@@ -207,13 +207,13 @@ ApplicationWindow {
                     }
 
                     Repeater {
-                        model: window.pageNames.slice(0, 6)
+                        model: window.pageNames.slice(0, 5)
                         delegate: ItemDelegate {
                             required property int index
                             required property string modelData
                             Layout.fillWidth: true
                             Layout.preferredHeight: 54
-                            enabled: !appSettings.anonymous_mode || index < 4
+                            enabled: !appSettings.anonymous_mode || index < 3
                             onClicked: window.pageIndex = index
                             background: Rectangle {
                                 radius: 18
@@ -319,7 +319,6 @@ ApplicationWindow {
 
                     AndroidDownloadsPage {}
                     AndroidAccountPage {}
-                    AndroidStatisticsPage {}
                     AndroidSettingsPage { id: settingsPage; objectName: "androidSettingsPage" }
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
                     AndroidSupportedWebsitesPage { visible: !appSettings.anonymous_mode }
@@ -341,17 +340,16 @@ ApplicationWindow {
                         anchors.rightMargin: 4
                         spacing: 0
                         Repeater {
-                            model: [qsTr("Downloads"), qsTr("Account"), qsTr("Stats"),
-                                    qsTr("Settings"), qsTr("More")]
+                            model: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"), qsTr("More")]
                             delegate: AbstractButton {
                                 required property int index
                                 required property string modelData
                                 Layout.fillWidth: true
                                 Layout.preferredWidth: 1
                                 Layout.fillHeight: true
-                                enabled: index !== 4 || !appSettings.anonymous_mode
+                                enabled: index !== 3 || !appSettings.anonymous_mode
                                 onClicked: {
-                                    if (index === 4) window.pageIndex = 6
+                                    if (index === 3) window.pageIndex = 5
                                     else window.pageIndex = index
                                 }
                                 background: Rectangle {
@@ -361,7 +359,7 @@ ApplicationWindow {
                                     width: 56
                                     height: 34
                                     radius: 17
-                                    color: (window.pageIndex === index || (index === 4 && window.pageIndex >= 4))
+                                    color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
                                            ? Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                      window.accentColor.b, 0.22) : "transparent"
                                 }
@@ -371,13 +369,13 @@ ApplicationWindow {
                                         Layout.alignment: Qt.AlignHCenter
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 28
-                                        source: window.pageIcons[Math.min(index, 4)]
+                                        source: window.pageIcons[index]
                                         fillMode: Image.PreserveAspectFit
                                     }
                                     Label {
                                         Layout.alignment: Qt.AlignHCenter
                                         text: modelData
-                                        color: (window.pageIndex === index || (index === 4 && window.pageIndex >= 4))
+                                        color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
                                                ? window.accentColor : window.secondaryTextColor
                                         font.pixelSize: 11
                                         font.bold: window.pageIndex === index

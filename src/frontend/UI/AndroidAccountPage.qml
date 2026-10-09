@@ -170,9 +170,16 @@ Pane {
                     Button {
                         Layout.fillWidth: true
                         visible: root.provider !== "XHamster"
-                        text: qsTr("Recommended")
+                        text: root.provider === "PornHub" ? qsTr("Recommended") : qsTr("Watch history")
                         enabled: root.loggedIn && !root.busy
-                        onClicked: backend.fetch_account_videos(root.provider, "recommended", "")
+                        onClicked: backend.fetch_account_videos(root.provider, root.provider === "PornHub" ? "recommended" : "history", "")
+                    }
+                    Button {
+                        Layout.fillWidth: true
+                        visible: root.provider === "PornHub"
+                        text: qsTr("Subscription feed")
+                        enabled: root.loggedIn && !root.busy
+                        onClicked: backend.fetch_account_videos(root.provider, "feed", "")
                     }
                     Button {
                         Layout.fillWidth: true

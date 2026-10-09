@@ -12,7 +12,7 @@ from tuf.api.metadata import Metadata, Root
 
 
 def initialize(private_dir: Path, root_file: Path) -> None:
-    private_dir.mkdir(parents=True, exist_ok=True)
+    private_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     if root_file.exists() or any(private_dir.iterdir()):
         raise FileExistsError("CLI update keys or root metadata already exist; refusing to replace trust keys")
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
+from contextlib import aclosing
 from pathlib import Path
 from typing import Any
 
@@ -30,7 +31,7 @@ ACTION_DESTINATIONS = {
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="Porn_Fetch_CLI.py",
-        description="Porn Fetch terminal application and batch downloader (search is not supported).",
+        description="Porn Fetch terminal application and batch downloader. Keyword search is unavailable for legal reasons.",
     )
     parser.add_argument("command", nargs="?", choices=["self-update"], help="update a standalone CLI build")
     parser.add_argument("--check", action="store_true", help="check for a signed CLI update without installing it")
@@ -293,11 +294,13 @@ async def run_batch(args: argparse.Namespace) -> int:
         for source_url in [*args.model, *args.playlist]:
             try:
                 prepared = []
-                async for source in pool.media_stream(source_url, pages=5):
-                    route = route_url(source_url)
-                    prepared.append(await prepare_video(source, route.provider))
-                    if len(prepared) >= settings.result_limit:
-                        break
+                provider = route_url(source_url).provider
+                stream = pool.media_stream(source_url, pages=5)
+                async with aclosing(stream):
+                    async for source in stream:
+                        prepared.append(await prepare_video(source, provider))
+                        if len(prepared) >= settings.result_limit:
+                            break
                 semaphore = asyncio.Semaphore(settings.parallel_downloads)
                 async def dispatch(media):
                     async with semaphore:

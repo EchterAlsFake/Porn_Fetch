@@ -58,6 +58,12 @@ build = [
     "pip",
     "pyinstaller",
 ]
+desktop-build = [
+    "nuitka==4.1.1",
+    "ordered-set",
+    "zstandard",
+    "patchelf; sys_platform == 'linux'",
+]
 av = [
     "av>=16.1.0; platform_system == 'Windows' and platform_machine == 'AMD64'",
     "av>=16.1.0; platform_system == 'Darwin' and (platform_machine == 'x86_64' or platform_machine == 'arm64')",

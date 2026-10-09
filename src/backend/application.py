@@ -80,7 +80,6 @@ update_splash("Importing (General).")
 import asyncio
 import argparse
 import traceback
-from asyncstdlib import chain
 try:
     from rich_argparse import RichHelpFormatter
 except ImportError:
@@ -109,6 +108,8 @@ from src.backend.shared_gui import (ui_popup, set_mobile_notice_handler, Signals
                                     available_title_formatting_options)
 from src.backend.helper_functions import safe_rmtree
 from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
+from src.shared.metadata import write_tags
+from src.shared.provider_routing import ContentKind, container_stream, resolve_container, route_url
 from src.backend.login_manager import (
     LoginPornhub,
     LoginXVideos,
@@ -788,6 +789,12 @@ class Backend(QObject):
             video.qualities or [],
             self.has_premium_access(),
         )
+        if (not allowed_quality and self.has_premium_access()
+                and isinstance(video.source_video, clients.yp_Video)
+                and video.source_video.is_hls is False):
+            # The provider exposes one MP4 without a reported resolution.
+            # Licensed users can use it; free users still need a verified <=720p stream.
+            allowed_quality = "best"
         if not allowed_quality:
             self.logger.warning("No permitted quality is available for this download")
             self.showMessage.emit(self.tr("No permitted quality is available for this video."))
@@ -889,6 +896,9 @@ class Backend(QObject):
 
                 quality = video.selected_quality or "best"
                 source_video = video.source_video
+                if isinstance(source_video, clients.xf_Video):
+                    from src.shared.media import xfreehd_quality
+                    quality = xfreehd_quality(quality)
                 raw_video_types = (clients.ep_Video, clients.pt_Video, clients.xf_Video)
 
                 if isinstance(source_video, raw_video_types):
@@ -974,6 +984,11 @@ class Backend(QObject):
                             self.tr("The video download failed. Error ID: %s") % report_id
                         )
                 if status == "completed":
+                    if app_settings.write_metadata and not FORCE_DISABLE_AV and output_path.exists():
+                        try:
+                            await asyncio.to_thread(write_tags, str(output_path), video)
+                        except Exception:
+                            self.logger.exception("Could not write metadata for download %s", job_id)
                     self._downloads_model.update_progress(job_id, 100)
                     if is_android or "--android" in sys.argv:
                         await self._auto_export_android_download(output_path)
@@ -1071,124 +1086,46 @@ class Backend(QObject):
         self._spawn(self._process_model_url(url=url, custom_options=custom_options, filters=filters), name="Deine-Mutter")
 
     async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters):
-        videos = None
-        target_obj = None
-
-        # 2. Group by platform to eliminate redundant 'in' checks
-        if "pornhub" in url:
-            if "pornstar" in url or "model" in url:
-                model_object = await clients.ph_client.get_pornstar(url)
-                target_obj = model_object
-                model_type = app_settings.model_videos
-
-                if model_type == 0:
-                    videos = chain(model_object.get_uploads(pages=30), model_object.get_videos(pages=30))
-                elif model_type == 1:
-                    videos = model_object.get_videos(pages=30)
-                elif model_type == 2:
-                    videos = model_object.get_uploads(pages=30)
-
-            elif "user" in url or "channel" in url:
-                target_obj = await clients.ph_client.get_channel(load_html=True, url=url)
-                videos = target_obj.get_videos(pages=30)
-
-        elif "eporner" in url:
-            target_obj = await clients.ep_client.get_pornstar(url=url, load_html=True)
-
-        elif "xnxx" in url:
-            target_obj = await clients.xn_client.get_user(url=url)
-
-        elif "youporn" in url:
-            if "channel" in url:
-                target_obj = await clients.yp_client.get_channel(url=url)
-            else:
-                target_obj = await clients.yp_client.get_pornstar(url=url)
-
-        elif "xvideos" in url:
-            if "model" in url or "pornstar" in url:
-                target_obj = await clients.xv_client.get_pornstar(url=url)
-            else:
-                target_obj = await clients.xv_client.get_channel(url=url)
-
-        elif "spankbang" in url:
-            if "pornstar" in url:
-                target_obj = await clients.sp_client.get_pornstar(url=url)
-            elif "creator" in url:
-                target_obj = await clients.sp_client.get_creator(url=url)
-            elif "channel" in url:
-                target_obj = await clients.sp_client.get_channel(url=url)
-
-        elif "xhamster" in url:
-            if "pornstars" in url:
-                target_obj = await clients.xh_client.get_pornstar(url=url)
-            elif "creators" in url:
-                target_obj = await clients.xh_client.get_creator(url=url)
-            elif "channels" in url:
-                target_obj = await clients.xh_client.get_channel(url=url)
-
-        elif "porntrex" in url:
-            if "channel" in url:
-                target_obj = await clients.pt_client.get_channel(url=url)
-            elif "model" in url:
-                target_obj = await clients.pt_client.get_model(url=url)
-
-        else:
-            self.showMessage.emit(self.tr("The model URL you entered seems to be invalid. Please check your input",
-                             disambiguation=None))
+        try:
+            route = route_url(url)
+            if route.kind != ContentKind.PROFILE:
+                raise ValueError("Please enter a supported profile or channel URL.")
+            target = await resolve_container(clients.client_for(route.provider), route, pages=30)
+            options = None
+            if route.provider == "eporner":
+                sources = ("html",) if app_settings.strict_enforcement else ("api", "html")
+                options = IteratorConfig(load_specific_sources=sources)
+            mode = {0: "both", 1: "uploads", 2: "videos"}.get(app_settings.model_videos, "videos")
+            videos = container_stream(target, pages=30, provider=route.provider,
+                                      profile_mode=mode, iterator_config=options)
+        except ValueError as error:
+            self.showMessage.emit(str(error))
             return
-
-        if target_obj and "pornhub" not in url:
-            if "eporner" in url and app_settings.strict_enforcement:
-                videos = target_obj.videos(
-                    pages=30,
-                    iterator_config=IteratorConfig(load_specific_sources=("html",)),
-                )
-            else:
-                videos = target_obj.videos(pages=30)
-
-        print(f"Iterator: {type(videos)}")
         await self.process_videos(
-            iterator=videos,
-            custom_options=custom_options,
-            filters=filters,
+            iterator=videos, custom_options=custom_options, filters=filters,
             origin_iterator_url=url,
-            origin_iterator_name=self._iterator_display_name(target_obj, url, "model / channel"),
+            origin_iterator_name=self._iterator_display_name(target, url, "model / channel"),
         )
 
     @Slot(str, str, dict)
     def process_playlist_url(self, url: str, custom_options: str, filters: dict):
-        """
-        This function loads a Playlist or Collection object and puts all videos again into a ListView
-        """
-        print(f"Received Playlist URL: {url}")
-        filters = VideoFilters(**filters)
-        self._spawn(self._process_playlist_url(url=url, custom_options=custom_options, filters=filters), name="Fortnite")
+        self._spawn(self._process_playlist_url(url, custom_options, VideoFilters(**filters)),
+                    name="playlist")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
-        source_obj = None
-        if "pornhub" in str(url) and "playlist" in str(url):
-            playlist = await clients.ph_client.get_playlist(url=url, load_html=True)
-            source_obj = playlist
-            videos = playlist.get_videos()
-
-        elif "xvideos" in url:
-            videos = await clients.xv_client.get_playlist(url=url, pages=400)
-
-        elif "youporn" in str(url) and "collection" in str(url):
-            source_obj = await clients.yp_client.get_collection(url)
-            videos = source_obj.videos()
-
-        else:
-            self.showMessage.emit(TRANSLATE_ERRORS.invalid_input)
-            self.logger.error(f"Unsupported Input provided: {url}")
+        try:
+            route = route_url(url)
+            if route.kind != ContentKind.COLLECTION:
+                raise ValueError("Please enter a supported public playlist or collection URL.")
+            target = await resolve_container(clients.client_for(route.provider), route, pages=30)
+            videos = container_stream(target, pages=30, provider=route.provider)
+        except ValueError as error:
+            self.showMessage.emit(str(error))
             return
-
         await self.process_videos(
-            iterator=videos,
-            custom_options=custom_options,
-            filters=filters,
+            iterator=videos, custom_options=custom_options, filters=filters,
             origin_iterator_url=url,
-            origin_iterator_name=self._iterator_display_name(source_obj, url, "playlist / collection"),
+            origin_iterator_name=self._iterator_display_name(target, url, "playlist / collection"),
         )
 
     @Slot(str, str, str)
@@ -1446,9 +1383,12 @@ def main() -> None:
         This is recommended to run if you want to buy a license so that you can see the current state of the application
         before maybe buying something that doesn't work anymore.""")
     parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
+    parser.add_argument("--smoke-test", action="store_true", help="Load bundled QML and resources offline, then exit")
     parser.add_argument("--android", action="store_true", help="Preview the Android QML layout on desktop")
 
     args = parser.parse_args()
+    if args.smoke_test and args.test:
+        parser.error("--smoke-test cannot be combined with the online --test mode")
     test_mode = False
 
     if args.version:
@@ -1459,7 +1399,7 @@ def main() -> None:
         test_mode = True
 
     sys.unraisablehook = custom_unraisable_hook
-    local_url = sni_proxy_manager.start() if sni_proxy_manager else None
+    local_url = sni_proxy_manager.start() if sni_proxy_manager and not args.smoke_test else None
     if local_url:
         print(f"SNI proxy route: {local_url}")
 
@@ -1497,7 +1437,7 @@ def main() -> None:
         raise SystemExit(exit_code)
 
 
-    database_bridge = DatabaseBridge(parent=engine)
+    database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_android)
     backend_instance.database_bridge = database_bridge
     database_bridge.initializationFailed.connect(backend_instance.handle_message)
     # Database bridge is used for tracking the downloads / creating statistics (optional feature)
@@ -1509,7 +1449,9 @@ def main() -> None:
 
     license_service = create_license_service(
         clients.config,
-        Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_android else shared_data_dir(),
+        Path.cwd() / "licensing" if args.smoke_test else (
+            Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_android else shared_data_dir()
+        ),
         production_config=load_production_config(),
     )
     bridge_instance = LicenseBridge(license_service, parent=engine) # License bridge connects QML code to Python
@@ -1539,15 +1481,49 @@ def main() -> None:
     )
 
 
+    qml_warnings = []
+    if args.smoke_test:
+        engine.warnings.connect(lambda errors: qml_warnings.extend(error.toString() for error in errors))
+        from src.shared.release import ROOT_FILE
+        from tuf.api.metadata import Metadata, Root
+
+        Metadata[Root].from_file(str(ROOT_FILE))
+        load_production_config()
+        for resource_path in (":/images/graphics/logo_transparent.png", ":/licensing/production.json"):
+            if not QFile.exists(resource_path):
+                raise RuntimeError(f"Bundled resource is missing: {resource_path}")
+
+    existing_roots = engine.rootObjects()
     engine.load(QUrl.fromLocalFile(str(qml_file)))
+    window_roots = [root for root in engine.rootObjects() if root not in existing_roots]
 
     # 4. Check if QML loaded successfully
-    if not engine.rootObjects():
+    if not window_roots:
         print("Failed to load QML file.")
         sys.exit(-1)
 
     if splash:
         splash.finish()
+
+    if args.smoke_test:
+        # Only Qt runs here; asynchronous network, licensing and database startup is deferred below.
+        for root in window_roots:
+            root.setProperty("safeToClose", True)
+        QTimer.singleShot(250, app.quit)
+        app.exec()
+
+        async def close_smoke_services():
+            await bridge_instance.close()
+            await database_bridge.close()
+            await clients.close_all_clients()
+
+        asyncio.run(close_smoke_services())
+        splash = None
+        engine = None
+        if qml_warnings:
+            raise RuntimeError("GUI smoke test reported QML errors:\n" + "\n".join(qml_warnings))
+        print("GUI smoke test passed: QML, legal notices, licensing configuration and update trust root loaded offline.")
+        return
 
     async def start_async_services() -> None:
         # This coroutine is first advanced by QtAsyncio after its loop is

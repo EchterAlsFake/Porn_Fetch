@@ -1,15 +1,21 @@
 """Unit tests for the Android build automation script (scripts/build_android.py)."""
 from __future__ import annotations
 
+import configparser
 import io
+import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.build_android import (
     PATTERN_CAN_READ,
+    build_single_arch,
     detect_arch_from_filename,
+    find_wheels_for_arch,
+    main,
     normalize_arch,
     patch_pyside_wheel_if_needed,
     update_buildozer_spec,
@@ -60,6 +66,23 @@ class TestAndroidBuildAutomation(unittest.TestCase):
         )
         self.assertIsNone(detect_arch_from_filename("unknown_package.whl"))
 
+    def test_x86_wheel_search_does_not_select_x86_64(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            for package in ("pyside6", "shiboken6"):
+                (directory / f"{package}-6.11.2-cp314-cp314-android_x86_64.whl").touch()
+            self.assertEqual(find_wheels_for_arch("i686", [directory], None, None), (None, None))
+
+    def test_dry_run_does_not_patch_host(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            args = ["build_android.py", "--dry-run", "--venv", str(directory),
+                    "--sdk-path", str(directory), "--ndk-path", str(directory)]
+            with patch.object(sys, "argv", args), patch("scripts.build_android.ensure_host_patches") as host:
+                with patch("scripts.build_android.find_wheels_for_arch", return_value=(directory, directory)):
+                    self.assertEqual(main(), 0)
+            host.assert_not_called()
+
     def test_update_buildozer_spec(self) -> None:
         """update_buildozer_spec should update target arch and file paths."""
         initial_spec = """[app]
@@ -92,6 +115,9 @@ wheel_pyside = /old/pyside.whl
 wheel_shiboken = /old/shiboken.whl
 [buildozer]
 mode = debug
+arch = aarch64
+[nuitka]
+mode = onefile
 """
         with tempfile.TemporaryDirectory() as tmpdir:
             spec_path = Path(tmpdir) / "pysidedeploy.spec"
@@ -116,6 +142,34 @@ mode = debug
             self.assertIn(f"wheel_pyside = {new_pyside.resolve()}", result)
             self.assertIn(f"wheel_shiboken = {new_shiboken.resolve()}", result)
             self.assertIn("mode = release", result)
+            config = configparser.ConfigParser()
+            config.read(spec_path)
+            self.assertEqual(config["nuitka"]["mode"], "onefile")
+            self.assertNotIn("arch", config["buildozer"])
+            self.assertEqual(config["app"]["icon"], "/project/src/frontend/graphics/logo_transparent.png")
+            self.assertEqual(config["android"]["extra_recipes_dir"], "/project/p4a-recipes")
+
+    def test_release_build_returns_new_aab_instead_of_old_apk(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "old-arm64-v8a-debug.apk").write_bytes(b"old")
+            output = root / "app-arm64-v8a-release.aab"
+
+            def deploy(*args, **kwargs):
+                output.write_bytes(b"new")
+                return type("Result", (), {"returncode": 0})()
+
+            with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \
+                 patch("scripts.build_android.update_buildozer_spec"), \
+                 patch("scripts.build_android.update_pysidedeploy_spec"), \
+                 patch("scripts.build_android.inject_android_templates"), \
+                 patch("scripts.build_android.subprocess.run", side_effect=deploy):
+                result = build_single_arch("aarch64", root / "pyside.whl", root / "shiboken.whl",
+                                           root, root / "venv", root / "sdk", root / "ndk",
+                                           build_mode="release", output_dir=root / "output")
+            self.assertIsNotNone(result)
+            self.assertEqual(result.suffix, ".aab")
+            self.assertEqual(result.read_bytes(), b"new")
 
     def test_patch_pyside_wheel_if_needed(self) -> None:
         """Mock wheel containing unpatched assets should be patched and verified."""

@@ -5,7 +5,8 @@ title = Porn Fetch
 
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
-project_dir = .
+# Infer from input_file so copied specs still resolve the application root.
+project_dir =
 
 # source file path
 input_file = main.py
@@ -67,7 +68,7 @@ macos.permissions =
 mode = onefile
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --onefile-windows-splash-screen-image=src/frontend/graphics/splashscreen.png --windows-console-mode=disable
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --onefile-windows-splash-screen-image=src/frontend/graphics/splashscreen.png --windows-console-mode=disable
 
 [buildozer]
 

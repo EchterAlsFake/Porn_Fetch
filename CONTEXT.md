@@ -19,7 +19,9 @@ This file is maintained as a concise map of the current development tree. Read i
 
 - Keep `src/cli`, `src/shared`, `src/licensing`, and `src/database/core.py` free of PySide6 imports. The CLI must run on headless systems such as Termux.
 - GUI adapters belong in `src/backend` or an explicitly named adapter module such as `src/database/bridge.py`.
+- Android GUI download tracking and statistics are disabled; do not add a second database backend. Desktop tracking uses PocketBase. Licensing storage is separate.
 - Prefer asyncio tasks and cooperative cancellation. Do not introduce QThread-based worker logic.
+- Keyword search is intentionally unavailable for legal reasons in every frontend. Do not expose upstream search APIs.
 - Schema-1 licensing, Stripe checkout/session identifiers, and their compatibility shims have been removed. Do not restore them.
 - Keep generated or runtime data out of Git: databases, logs, downloads, caches, packet captures, and temporary build output are ignored.
 - Keep implementation straightforward. Add a new abstraction only when it gives a clear boundary or removes real duplication.
@@ -65,7 +67,8 @@ Qt-free terminal interface:
 ### `src/shared/`
 
 Qt-free models and services shared by desktop and CLI: media models, metadata,
-provider value parsing, errors, error reporting, application paths, and the
+provider routing/discovery, account-session helpers, value parsing, errors,
+error reporting, application paths, and the
 shared version constant.
 
 ### `src/database/`

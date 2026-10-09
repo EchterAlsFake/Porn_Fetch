@@ -1,12 +1,36 @@
 """Unit tests validating desktop deployment specifications and build scripts."""
 import configparser
+import shutil
+import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class DesktopPackagingSpecTests(unittest.TestCase):
+    def test_project_root_survives_relocating_desktop_specs(self):
+        import PySide6
+
+        # PySide's command wrappers add this directory for project_lib imports.
+        scripts_dir = str(Path(PySide6.__file__).parent / "scripts")
+        with patch.object(sys, "path", [scripts_dir, *sys.path]):
+            from PySide6.scripts.deploy_lib.config import Config
+
+        with tempfile.TemporaryDirectory() as temporary:
+            for platform in ("linux", "windows", "macos"):
+                with self.subTest(platform=platform):
+                    source = PROJECT_ROOT / "packaging" / f"pysidedeploy_{platform}.spec"
+                    relocated = Path(temporary) / source.name
+                    shutil.copy2(source, relocated)
+                    with patch.object(Config, "_find_qml_files", return_value=[]), \
+                         patch.object(Config, "_find_excluded_qml_plugins", return_value=[]):
+                        config = Config(relocated, PROJECT_ROOT / "main.py", Path("python"),
+                                        dry_run=True, existing_config_file=True)
+                    self.assertEqual(config.project_dir, PROJECT_ROOT)
+
     def test_linux_spec_configuration(self):
         spec_path = PROJECT_ROOT / "packaging" / "pysidedeploy_linux.spec"
         self.assertTrue(spec_path.is_file(), f"Spec missing: {spec_path}")

@@ -701,7 +701,7 @@ These notes cover the changes since 3.8. The current 3.9 source is still being w
 - Added a dedicated proxy window that checks the address and tests the connection before it is used.
 - Added a first-run choice for error reporting. Reports are optional and redact common private details before sending; you can change the choice later in Settings.
 - Improved anonymous mode so the desktop app hides video details and sensitive widgets when it is enabled.
-- Started a new QML Android layout with phone and tablet navigation, download cards and a folder picker for completed files. Android history uses a local SQLite file. This is development work: there is no 3.9 APK in the current desktop build workflow.
+- Started a new QML Android layout with phone and tablet navigation, download cards and a folder picker for completed files. Download history and statistics are desktop-only; Android does not run a tracking database. This is development work: there is no 3.9 APK in the current desktop build workflow.
 
 ### CLI
 - Rebuilt the terminal app around an interactive menu with separate screens for single links, profiles and playlists, account access, settings, licenses and download history. It runs without Qt, including on headless systems such as Termux.

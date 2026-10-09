@@ -287,7 +287,7 @@ Run uv "--color" "always" "venv" $venvDir "--python" "3.14"
 $env:UV_PROJECT_ENVIRONMENT = $venvDir
 
 Info "Syncing dependencies using uv (with --extra gui)..."
-Run uv "--color" "always" "sync" "--extra" "gui" "--extra" "av"
+Run uv "--color" "always" "sync" "--locked" "--extra" "gui" "--extra" "build" "--extra" "desktop-build" "--extra" "av"
 
 # Activate the venv for update script convenience
 $activateScript = Join-Path $venvDir "Scripts\Activate.ps1"
@@ -338,7 +338,9 @@ $deploySpecTmp = Join-Path $venvDir "pysidedeploy.spec"
 Copy-Item -Force $deploySpec $deploySpecTmp
 
 Info "Building with pyside6-deploy..."
-Run uv "--color" "always" "run" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files"
+$nuitkaVersion = uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))'
+if ($LASTEXITCODE -ne 0) { throw "Could not read locked Nuitka version" }
+Run uv "--color" "always" "run" "--no-sync" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files" "--nuitka-version" $nuitkaVersion
 
 # Find output exe
 $finalExe = Join-Path $projectDir "Porn Fetch.exe"

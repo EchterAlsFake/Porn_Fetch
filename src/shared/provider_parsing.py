@@ -21,6 +21,11 @@ _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.
 def parse_publish_date(value: Any) -> Optional[datetime]:
     if value is None:
         return None
+    if isinstance(value, (int, float)):
+        try:
+            return datetime.fromtimestamp(value, timezone.utc)
+        except (ValueError, OverflowError, OSError):
+            return None
 
     s = str(value).strip()
     if _NOT_AVAILABLE_RE.match(s):
@@ -78,10 +83,10 @@ def parse_publish_date(value: Any) -> Optional[datetime]:
 
     # 4) Try common long-form date (after stripping "Published on")
     # Example: "September 17, 2024"
-    for fmt in ("%B %d, %Y", "%b %d, %Y"):
+    for fmt in ("%B %d, %Y", "%b %d, %Y", "%a, %d %b %Y %H:%M:%S %z"):
         try:
-            dt = datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
-            return dt
+            dt = datetime.strptime(s, fmt)
+            return dt.astimezone(timezone.utc) if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
         except ValueError:
             continue
 
@@ -111,7 +116,7 @@ def parse_length(
 
     Digits-only strings depend on `video_source`:
         - PornHub, Eporner, xHamster, SpankBang, Beeg, Redtube,
-          Tube8, and Thumbzilla values are interpreted as seconds.
+          Tube8, Thumbzilla, and XFreeHD values are interpreted as seconds.
         - Other provider values are interpreted as minutes.
 
     Returns:
@@ -133,7 +138,7 @@ def parse_length(
 
     seconds_sources = {
         "pornhub", "phub", "eporner", "xhamster", "spankbang", "beeg",
-        "redtube", "tube8", "thumbzilla",
+        "redtube", "tube8", "thumbzilla", "xfreehd",
     }
     source = (video_source or "").casefold()
 

@@ -6,8 +6,11 @@ cards; wide tablet layouts use a navigation rail. Android downloads are staged i
 the app's private data directory. The user can choose a destination folder from
 Downloads or Settings; completed videos are then copied there automatically.
 **Save elsewhere** on a completed card remains available for an individual copy.
-The history
-database uses in-process SQLite on Android, while desktop keeps PocketBase.
+Download history, persistent tracking, and statistics are not available on Android.
+No tracking database or PocketBase process is started, even if an older installation
+had tracking enabled. Desktop tracking continues to use PocketBase. Licensing's
+private storage is separate and unchanged; existing Android history files are left
+untouched but are no longer read or updated.
 
 ## Preview the layout on desktop
 
@@ -16,7 +19,7 @@ phone size; resize it to at least 960 logical pixels wide to see the tablet
 navigation rail. This is a layout preview: Python services, paths, and file
 pickers still run on the desktop operating system. Use an APK on a device to
 check Android platform behavior. SNI proxy features are disabled in the Android
-layout, including the desktop preview.
+layout, including the desktop preview. Download tracking is also disabled in this preview.
 
 ## Build inputs
 
@@ -46,6 +49,7 @@ Use at least one narrow phone and one tablet in portrait and landscape. Check
 navigation, software keyboard and Back behavior, single and model URL fetching,
 quality licensing, pause/resume, automatic copies to a selected Android folder,
 folder access after an app restart, save elsewhere through the document picker,
-license import through the picker, account login, and history after relaunch.
+license import through the picker, and account login. Confirm that the Android
+layout has no history/statistics tab or tracking toggle.
 Automatic desktop installation and desktop update flows are not exposed in the
 Android layout. CI setup is intentionally deferred.

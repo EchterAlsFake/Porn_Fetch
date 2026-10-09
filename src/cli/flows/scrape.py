@@ -1,6 +1,7 @@
 """Interactive profile and playlist discovery/download workflow."""
 from __future__ import annotations
 
+from contextlib import aclosing
 from typing import Any
 
 import questionary
@@ -49,6 +50,10 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
             url = f"https://www.eporner.com/pornstar/{target_input}/"
         elif provider == "spankbang":
             url = f"https://spankbang.com/pornstar/{target_input}"
+        elif provider == "porntrex":
+            url = f"https://www.porntrex.com/models/{target_input}/"
+        elif provider == "xnxx":
+            url = f"https://www.xnxx.com/profile/{target_input}"
         else:
             url = f"https://www.{provider}.com/pornstar/{target_input}"
     else:
@@ -78,11 +83,13 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     with ctx.console.status(f"[bold green]Scraping {route.provider.title()} ({url})...[/]", spinner="dots"):
         ctx.pool.runtime_config.profile_video_mode = mode
         try:
-            async for source in ctx.pool.media_stream(url, pages=5):
-                media = None if route.kind == ContentKind.GALLERY else await prepare_video(source, route.provider)
-                items.append((route, source, media))
-                if len(items) >= ctx.settings.result_limit:
-                    break
+            stream = ctx.pool.media_stream(url, pages=5)
+            async with aclosing(stream):
+                async for source in stream:
+                    media = None if route.kind == ContentKind.GALLERY else await prepare_video(source, route.provider)
+                    items.append((route, source, media))
+                    if len(items) >= ctx.settings.result_limit:
+                        break
         except Exception as error:
             report_id = await ctx.report(
                 error, "scrape profile or playlist", "src.cli.wizard.handle_scrape_profile",

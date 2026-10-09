@@ -373,6 +373,10 @@ Pane {
                                         ListElement { label: "🇨🇳 中文"; locale: "zh-CN" }
                                     }
                                     currentIndex: {
+                                        // Re-evaluate when the model becomes ready; indexOfValue alone
+                                        // does not establish a dependency on the available options.
+                                        if (count === 0)
+                                            return -1
                                         var savedIndex = indexOfValue(appSettings.locale)
                                         return savedIndex >= 0 ? savedIndex : indexOfValue("en-US")
                                     }

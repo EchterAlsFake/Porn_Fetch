@@ -33,17 +33,24 @@ permissions:
   contents: read
 
 concurrency:
-  group: builds-${{ github.ref }}
-  cancel-in-progress: true
+  # Publishing runs have their own queue and cannot be cancelled by another build.
+  group: builds-${{ github.ref }}-${{ (inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates) && 'publish' || 'build' }}
+  cancel-in-progress: ${{ !(inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates) }}
 
 env:
   PYTHONUNBUFFERED: "1"
+  UV_NO_SYNC: "1"
 
 jobs:
+  validate:
+    name: Validate build commit
+    uses: ./.github/workflows/ci.yml
+
   # ==========================================
   # 1. GUI BUILDS (PySide6)
   # ==========================================
   build-gui:
+    needs: validate
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 75
@@ -68,16 +75,16 @@ jobs:
             os: macos-latest # Apple Silicon
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
         with:
           enable-cache: true
 
@@ -90,7 +97,7 @@ jobs:
 
       # --- Build Process ---
       - name: Sync Dependencies
-        run: uv sync --locked --no-dev --extra gui --extra build --extra av
+        run: uv sync --locked --no-dev --extra gui --extra build --extra desktop-build --extra av
 
       - name: Fetch PocketBase
         shell: bash
@@ -120,7 +127,8 @@ jobs:
         shell: bash
         run: |
           SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
-          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files
+          NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
+          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
           
           # Universal Rename Logic
           EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"
@@ -148,13 +156,17 @@ jobs:
           hdiutil create -volname "PornFetch" -srcfolder dist_dmg -ov -format UDZO "$DMG_OUTPUT"
 
       - name: Smoke Test
-        if: matrix.platform != 'macos' # UI tests on Mac CI are notoriously flaky
         shell: bash
+        timeout-minutes: 3
+        env:
+          QT_QPA_PLATFORM: offscreen
+          QT_QUICK_BACKEND: software
         run: |
-          if [ "${{ matrix.platform }}" == "linux" ]; then
-            xvfb-run ./"$BIN_OUTPUT" --version
+          if [ "${{ matrix.platform }}" == "macos" ]; then
+            EXECUTABLE=$(uv run --no-sync python -c 'import plistlib; print(plistlib.load(open("Porn Fetch.app/Contents/Info.plist", "rb"))["CFBundleExecutable"])')
+            "Porn Fetch.app/Contents/MacOS/$EXECUTABLE" --smoke-test
           else
-            ./"$BIN_OUTPUT" --version
+            ./"$BIN_OUTPUT" --smoke-test
           fi
 
       - name: Checksum & Summary
@@ -169,7 +181,7 @@ jobs:
         run: uv run --no-sync python packaging/collect_legal.py PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
           path: |
@@ -219,6 +231,7 @@ jobs:
           fi
           if [ "$IFW_ARCH" = "x64" ]; then IFW_ARCH="amd64"; fi
           if [ "$IFW_ARCH" = "arm64" ]; then IFW_ARCH="arm64"; fi
+          cp "PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL.zip" ifw_payload/
           REPO_TAG="${IFW_OS}_${IFW_ARCH}"
           INSTALLER="ifw_output/installers/PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_Setup${INSTALLER_EXT}"
           APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
@@ -234,7 +247,7 @@ jobs:
 
       - name: Upload IFW installer
         if: matrix.arch == 'x64' || matrix.platform == 'macos'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: IFW_installer_${{ matrix.platform }}_${{ matrix.arch }}
           path: ifw_output/installers/*
@@ -242,7 +255,7 @@ jobs:
 
       - name: Upload IFW repository
         if: matrix.arch == 'x64' || matrix.platform == 'macos'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: IFW_repo_${{ matrix.platform }}_${{ matrix.arch }}
           path: ifw_output/repository/
@@ -263,6 +276,7 @@ jobs:
   # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
   build-cli:
+    needs: validate
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -290,16 +304,16 @@ jobs:
             os: macos-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.14"
           architecture: ${{ (matrix.arch == 'x86') && 'x86' || (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
         with:
           enable-cache: true
 
@@ -361,7 +375,7 @@ jobs:
           echo "\`\`\`$(cat "${{ env.CLI_OUTPUT }}.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}
           path: |
@@ -385,12 +399,13 @@ jobs:
   # 3. LINUX 32-BIT CLI BUILD
   # ==========================================
   build-cli-linux-x32:
+    needs: validate
     name: CLI experimental (linux-x32)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Build and smoke test in 32-bit Linux
         run: |
@@ -401,7 +416,7 @@ jobs:
             debian:bookworm bash packaging/build_linux_x86.sh
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: PornFetch_Linux_CLI_x32
           path: |
@@ -414,15 +429,16 @@ jobs:
   # 4. RISC-V CLI BUILD (QEMU)
   # ==========================================
   build-cli-linux-riscv64:
+    needs: validate
     name: CLI experimental (linux-riscv64)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Build and smoke test via QEMU
-        uses: uraimo/run-on-arch-action@v3
+        uses: uraimo/run-on-arch-action@1e2c619f81e6d8609845ea1d2f443a778df1ac68 # v3
         with:
           arch: riscv64
           distro: ubuntu24.04
@@ -445,7 +461,7 @@ jobs:
             uv run --no-sync python packaging/collect_legal.py PornFetch_Linux_CLI_riscv64_LEGAL
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: PornFetch_Linux_CLI_riscv64
           path: |
@@ -464,15 +480,15 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.14"
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
         with:
           enable-cache: true
 
@@ -481,13 +497,13 @@ jobs:
 
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: PornFetch_macos_GUI_x64
           path: dmg_x64
 
       - name: Download macOS arm64 DMG
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: PornFetch_macos_GUI_arm64
           path: dmg_arm64
@@ -505,38 +521,32 @@ jobs:
           cp -pR "/Volumes/arm64_dmg/Porn Fetch.app" "PornFetch_arm64.app"
           hdiutil detach /Volumes/arm64_dmg
           
-          # Use the x64 app as the base framework for our Universal app
-          cp -pR "PornFetch_x64.app" "PornFetch_Universal.app"
-          
-          # Iterate through every file in the arm64 app
-          find "PornFetch_arm64.app" -type f -print0 | while IFS= read -r -d '' arm_file; do
-              rel_path="${arm_file#PornFetch_arm64.app/}"
-              x64_file="PornFetch_Universal.app/$rel_path"
-          
-              # Ensure the file exists in the x64 app too
-              if [ -f "$x64_file" ]; then
-                  # Check if BOTH files are compiled Mach-O binaries
-                  if file "$arm_file" | grep -q "Mach-O" && file "$x64_file" | grep -q "Mach-O"; then
-                      archs=$(lipo -archs "$x64_file")
-          
-                      # If the base file isn't ALREADY a fat binary, fuse them
-                      if ! (echo "$archs" | grep -q "arm64" && echo "$archs" | grep -q "x86_64"); then
-                          echo "Fusing: $rel_path"
-                          lipo -create -output "$x64_file" "$x64_file" "$arm_file"
-                      fi
-                  fi
-              fi
-          done
+          uv run --no-sync python packaging/merge_macos_bundles.py \
+            PornFetch_x64.app PornFetch_arm64.app PornFetch_Universal.app
           
           # Re-sign after changing Mach-O binaries
           echo "Signing Universal App..."
           codesign --force --deep --sign - "PornFetch_Universal.app"
-          
+
           # Package back into a final Universal DMG
           mkdir dist_dmg
           cp -pR "PornFetch_Universal.app" "dist_dmg/Porn Fetch.app"
           ln -s /Applications dist_dmg/Applications
           hdiutil create -volname "PornFetch" -srcfolder dist_dmg -ov -format UDZO "PornFetch_macOS_GUI_Universal.dmg"
+
+      - name: Smoke test both universal architectures
+        shell: bash
+        timeout-minutes: 5
+        env:
+          QT_QPA_PLATFORM: offscreen
+          QT_QUICK_BACKEND: software
+        run: |
+          EXECUTABLE=$(uv run --no-sync python -c 'import plistlib; print(plistlib.load(open("PornFetch_Universal.app/Contents/Info.plist", "rb"))["CFBundleExecutable"])')
+          if ! /usr/bin/arch -x86_64 /usr/bin/true; then
+            sudo softwareupdate --install-rosetta --agree-to-license
+          fi
+          /usr/bin/arch -x86_64 "PornFetch_Universal.app/Contents/MacOS/$EXECUTABLE" --smoke-test
+          /usr/bin/arch -arm64 "PornFetch_Universal.app/Contents/MacOS/$EXECUTABLE" --smoke-test
 
       # 3. Standard QA and Upload
       - name: Checksum & Summary
@@ -553,7 +563,7 @@ jobs:
         run: uv run --no-sync python packaging/collect_legal.py PornFetch_macOS_GUI_Universal_LEGAL
 
       - name: Upload Universal Artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: PornFetch_macOS_GUI_Universal
           path: |
@@ -566,46 +576,75 @@ jobs:
   # ==========================================
   deploy-repositories:
     name: Deploy IFW Repositories
-    needs: [build-gui]
+    needs: [validate, build-gui]
     if: >-
       github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
     runs-on: ubuntu-latest
+    environment: beta
+    concurrency:
+      group: ifw-repository-deploy
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+
+      - name: Install signing dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Configure online signing key
+        shell: bash
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          umask 077
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/cli_online.pem"
+          chmod 600 "$RUNNER_TEMP/cli_online.pem"
 
       - name: Download Built Repositories
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           pattern: IFW_repo_*
           path: dist/ifw_repo
           merge-multiple: true
 
       - name: Deploy Repositories
+        shell: bash
         env:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
+          set -euo pipefail
+          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
           for target in linux_amd64 windows_amd64 darwin_amd64 darwin_arm64; do
-            if [ ! -d "dist/ifw_repo/$target" ]; then
-              nested=$(find dist/ifw_repo -maxdepth 2 -type d -name "$target" 2>/dev/null | head -n 1)
-              if [ -n "$nested" ]; then
-                mv "$nested" "dist/ifw_repo/$target"
-              fi
-            fi
-            if [ -d "dist/ifw_repo/$target" ]; then
-              bash scripts/deploy_ifw_repositories.sh "$target" "dist/ifw_repo/$target"
-            fi
+            test -f "dist/ifw_repo/$target/Updates.xml"
+            uv run --no-sync python packaging/sign_desktop_release.py \
+              --repository "dist/ifw_repo/$target" --platform "$target" \
+              --version "$APP_VERSION.${{ github.run_number }}" \
+              --private-key "$RUNNER_TEMP/cli_online.pem"
+          done
+          for target in linux_amd64 windows_amd64 darwin_amd64 darwin_arm64; do
+            bash scripts/deploy_ifw_repositories.sh "$target" "dist/ifw_repo/$target"
+            uv run --no-sync python packaging/verify_deployment.py desktop \
+              --repository "dist/ifw_repo/$target" --platform "$target" \
+              --remote-url "https://api.pornfetch.to/repo/$target/"
           done
 
       - name: Download Installers
-        continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           pattern: IFW_installer_*
           path: dist/installers
           merge-multiple: true
 
       - name: Publish Standalone Installers
+        shell: bash
         env:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
@@ -626,18 +665,55 @@ jobs:
   # ==========================================
   deploy-cli-updates:
     name: Deploy CLI Updates
-    needs: [build-cli]
+    needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64]
     if: >-
-      always() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
-      (inputs.deploy_cli_updates || inputs.create_release) && needs.build-cli.result == 'success'
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
+      (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
     runs-on: ubuntu-latest
+    environment: beta
+    concurrency:
+      group: cli-update-deploy
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+
+      - name: Install publishing dependencies
+        run: uv sync --locked --no-dev
 
       - name: Download CLI Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
-          path: dist/cli_tuf
+          pattern: PornFetch_*_CLI_*
+          path: dist/cli_artifacts
+          # The publisher uses each artifact directory's name to select its TUF target.
+          merge-multiple: false
+
+      - name: Build signed CLI update repository
+        shell: bash
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          umask 077
+          SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/cli-online.XXXXXX.pem")
+          trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
+          chmod 600 "$SIGNING_KEY_FILE"
+          unset CLI_UPDATE_SIGNING_KEY
+          APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
+          uv run --no-sync python packaging/publish_cli_updates.py \
+            --artifacts dist/cli_artifacts \
+            --remote-url https://api.pornfetch.to/repo/cli/ \
+            --output dist/cli_tuf \
+            --private-key "$SIGNING_KEY_FILE" \
+            --version "$APP_VERSION.${{ github.run_number }}"
 
       - name: Deploy CLI TUF Repo
         env:
@@ -645,25 +721,28 @@ jobs:
         run: |
           bash scripts/deploy_cli_updates.sh dist/cli_tuf
 
+      - name: Verify published CLI repository
+        run: uv run --no-sync python packaging/verify_deployment.py cli --repository dist/cli_tuf --remote-url https://api.pornfetch.to/repo/cli/
+
   # ==========================================
   # 8. PUBLISH RELEASE (TAGS & DISPATCH)
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates]
+    needs: [validate, build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates]
     if: >-
-      always() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
-      needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
+      needs.validate.result == 'success' && needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
       needs.build-macos-universal.result == 'success' &&
       needs.deploy-repositories.result == 'success' && needs.deploy-cli-updates.result == 'success'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           path: all_artifacts
 
@@ -676,6 +755,16 @@ jobs:
           for artifact_dir in all_artifacts/*; do
             artifact_name="${artifact_dir##*/}"
             [[ "$artifact_name" == IFW_repo_* ]] && continue
+            # Artifact downloads reset permissions; restore them before making release ZIPs.
+            for file in "$artifact_dir"/*; do
+              [[ -f "$file" ]] || continue
+              name="${file##*/}"
+              if [[ ( "$artifact_name" == *_CLI_* && "$name" == "$artifact_name" ) ||
+                    "$name" == pocketbase || "$name" == PornFetch_linux_GUI_*.bin ||
+                    "$name" == *_Setup.run ]]; then
+                chmod +x "$file"
+              fi
+            done
             (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
             for file in "$artifact_dir"/*; do
               [[ -f "$file" ]] || continue
@@ -696,6 +785,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.ref_name }}
           GITHUB_REF: ${{ github.ref }}
+          COMMIT_SHA: ${{ github.sha }}
         run: |
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             gh release create "$TAG_NAME" dist_release/* \
@@ -704,10 +794,11 @@ jobs:
               --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
               --verify-tag
           else
-            RELEASE_TAG="build-${{ github.sha }}"
+            RELEASE_TAG="build-${{ github.run_number }}-${{ github.sha }}"
             gh release create "$RELEASE_TAG" dist_release/* \
               --title "Porn Fetch Build (${{ github.sha }})" \
               --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
               --prerelease \
+              --target "$COMMIT_SHA" \
               --draft=false
           fi

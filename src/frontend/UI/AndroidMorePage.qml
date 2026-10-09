@@ -21,7 +21,7 @@ Pane {
         ItemDelegate {
             Layout.fillWidth: true
             Layout.preferredHeight: 88
-            onClicked: root.openPage(4)
+            onClicked: root.openPage(3)
             background: Rectangle { color: root.cardColor; radius: 20 }
             contentItem: RowLayout {
                 spacing: 16
@@ -42,7 +42,7 @@ Pane {
         ItemDelegate {
             Layout.fillWidth: true
             Layout.preferredHeight: 88
-            onClicked: root.openPage(5)
+            onClicked: root.openPage(4)
             background: Rectangle { color: root.cardColor; radius: 20 }
             contentItem: RowLayout {
                 spacing: 16

@@ -16,36 +16,36 @@ jobs:
       group: cli-update-deploy
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.14"
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
         with:
           enable-cache: true
 
       - name: Install publishing dependencies
         run: uv sync --locked --no-dev
 
-      - name: Configure online signing key
+      - name: Refresh signed metadata
         shell: bash
         env:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
         run: |
           set -euo pipefail
           test -n "$CLI_UPDATE_SIGNING_KEY"
-          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$RUNNER_TEMP/cli_online.pem"
-          chmod 600 "$RUNNER_TEMP/cli_online.pem"
-
-      - name: Refresh signed metadata
-        shell: bash
-        run: |
+          umask 077
+          SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/cli-online.XXXXXX.pem")
+          trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
+          chmod 600 "$SIGNING_KEY_FILE"
+          unset CLI_UPDATE_SIGNING_KEY
           uv run --no-sync python packaging/publish_cli_updates.py \
             --remote-url https://api.pornfetch.to/repo/cli/ \
             --output cli_update_repository \
-            --private-key "$RUNNER_TEMP/cli_online.pem" \
+            --private-key "$SIGNING_KEY_FILE" \
             --allow-empty
 
       - name: Publish refreshed metadata
@@ -56,3 +56,5 @@ jobs:
           set -euo pipefail
           if [ ! -f cli_update_repository/metadata/timestamp.json ]; then exit 0; fi
           bash scripts/deploy_cli_updates.sh cli_update_repository
+          uv run --no-sync python packaging/verify_deployment.py cli \
+            --repository cli_update_repository --remote-url https://api.pornfetch.to/repo/cli/
