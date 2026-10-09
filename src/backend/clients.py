@@ -60,7 +60,7 @@ from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
-from src.shared.metadata import write_tags
+from src.shared.provider_routing import ContentKind, resolve_video, route_url
 from base_api.modules.logger import configure_app_logging
 from src.shared.media import VideoObject
 from src.shared.provider_parsing import parse_length, parse_publish_date
@@ -403,42 +403,22 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     if not final_website:
         raise InvalidInput
 
-    load_api_sources = not app_settings.strict_enforcement
-
-    # 2. Call ONLY the specific client for that website
-    if final_website == "pornhub":
-        if "/short/" in parsed_url.path.casefold():
-            return await ph_client.get_short(url=url, load_html=True)
-        return await ph_client.get_video(url=url, load_html=True, load_api=load_api_sources)
-    elif final_website == "eporner":
-        return await ep_client.get_video(url=url, load_html=True, load_api=load_api_sources)
-    elif final_website == "xnxx":
-        return await xn_client.get_video(url=url, load_html=True)
-    elif final_website == "xvideos":
-        return await xv_client.get_video(url=url, load_html=True)
-    elif final_website == "xhamster":
-        if "/moments/" in parsed_url.path.casefold():
-            return await xh_client.get_short(url=url, load_html=True)
-        return await xh_client.get_video(url=url, load_html=True)
-    elif final_website == "spankbang":
-        return await sp_client.get_video(url=url, load_html=True)
-    elif final_website == "youporn":
-        return await yp_client.get_video(url=url, load_html=True)
-    elif final_website == "beeg":
-        # Beeg exposes metadata only through its API source.
-        return await bg_client.get_video(url=url, load_api=True)
-    elif final_website == "porntrex":
-        return await pt_client.get_video(url=url)
-    elif final_website == "xfreehd":
-        return await xf_client.get_video(url=url)
-    elif final_website == "redtube":
-        return await rt_client.get_video(url=url)
-    elif final_website == "thumbzilla":
-        return await th_client.get_video(url=url)
-    elif final_website == "tube8":
-        return await tu_client.get_video(url=url)
-    else:
+    route = route_url(url)
+    if route.kind != ContentKind.VIDEO:
         raise InvalidInput
+    return await resolve_video(client_for(final_website), route,
+                               strict_language=app_settings.strict_enforcement)
+
+
+def client_for(provider: str) -> Any:
+    """Look up the current GUI client, including after a session refresh."""
+    return {
+        "pornhub": ph_client, "eporner": ep_client, "xnxx": xn_client,
+        "xvideos": xv_client, "xhamster": xh_client, "spankbang": sp_client,
+        "youporn": yp_client, "beeg": bg_client, "porntrex": pt_client,
+        "xfreehd": xf_client, "redtube": rt_client, "thumbzilla": th_client,
+        "tube8": tu_client,
+    }[provider]
 
 
 async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
@@ -447,6 +427,8 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     source = "api" if isinstance(video, bg_Video) else "html"
     if source in video.loader_methods:
         await video.load_sources(source)
+    if isinstance(video, ep_Video) and not app_settings.strict_enforcement:
+        await video.load_sources("api")
 
     title = _safe_getattr(video, "title")
     video_source = ""

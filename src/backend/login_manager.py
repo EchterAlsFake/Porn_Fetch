@@ -11,6 +11,7 @@ from src.backend import clients
 from base_api.modules.config import IteratorConfig
 from base_api.modules.logger import configure_app_logging
 from src.shared.errors import CookiesNotFound, LoginError
+from src.shared.provider_accounts import connect_pornhub_cookies
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
 from pornhub_api.modules.errors import LoginFailed, ClientAlreadyLogged
 
@@ -55,6 +56,9 @@ def get_account_video_iterator(
                 account.get_history(iterator_config=_account_video_iterator_config()),
                 "PornHub watch history",
             )
+        if collection_key == "feed":
+            return (account.get_feed(section="videos", iterator_config=_account_video_iterator_config()),
+                    "PornHub subscription feed")
         if collection_key == "recommended":
             return (
                 account.get_recommended(iterator_config=_account_video_iterator_config()),
@@ -96,8 +100,9 @@ def get_account_video_iterator(
         account = clients.xv_client.account
         if collection_key == "watch_later":
             return account.get_watch_later_videos(), "XVideos watch later"
-        if collection_key == "recommended":
-            return account.get_recommended_videos(), "XVideos recommendations"
+        if collection_key == "history":
+            # The pinned provider's method reads /history/, despite its name.
+            return account.get_recommended_videos(), "XVideos watch history"
         if collection_key == "liked":
             return account.get_liked_videos(), "XVideos liked videos"
 
@@ -164,11 +169,7 @@ class LoginPornhub:
             cookies = await asyncio.to_thread(get_site_cookies, "pornhub")
             if cookies:
                 logger.info("Injecting Cookies!")
-                clients.ph_client.core.session.cookies.update(cookies)
-                # The provider API only tracks credential logins itself. Keep
-                # its local state aligned with the authenticated cookie session.
-                clients.ph_client.logged = True
-                return True
+                return await connect_pornhub_cookies(clients.ph_client, cookies, email)
 
             raise CookiesNotFound
 

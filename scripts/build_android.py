@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import configparser
 import hashlib
 import io
 import os
@@ -352,27 +353,33 @@ def update_pysidedeploy_spec(
     mode: str = "debug",
 ) -> None:
     """Update pysidedeploy.spec for target wheels and environment."""
-    content = spec_path.read_text(encoding="utf-8")
-
-    replacements = {
-        r"^wheel_pyside\s*=.*$": f"wheel_pyside = {wheel_pyside.resolve()}",
-        r"^wheel_shiboken\s*=.*$": f"wheel_shiboken = {wheel_shiboken.resolve()}",
-        r"^sdk_path\s*=.*$": f"sdk_path = {sdk_path}",
-        r"^ndk_path\s*=.*$": f"ndk_path = {ndk_path}",
-        r"^recipe_dir\s*=.*$": f"recipe_dir = {project_root / 'deployment' / 'recipes'}",
-        r"^jars_dir\s*=.*$": f"jars_dir = {project_root / 'deployment' / 'jar' / 'PySide6' / 'jar'}",
-        r"^extra_recipes_dir\s*=.*$": f"extra_recipes_dir = {project_root / 'p4a-recipes'}",
-        r"^mode\s*=.*$": f"mode = {mode}",
-        r"^icon\s*=.*$": f"icon = {project_root / 'src' / 'frontend' / 'graphics' / 'logo_transparent.png'}",
-        r"^presplash\s*=.*$": f"presplash = {project_root / 'src' / 'frontend' / 'graphics' / 'logo_transparent.png'}",
+    config = configparser.ConfigParser(interpolation=None)
+    config.read(spec_path, encoding="utf-8")
+    values = {
+        "android": {
+            "wheel_pyside": wheel_pyside.resolve(),
+            "wheel_shiboken": wheel_shiboken.resolve(),
+            "extra_recipes_dir": project_root / "p4a-recipes",
+            "presplash": project_root / "src/frontend/graphics/logo_transparent.png",
+        },
+        "buildozer": {
+            "sdk_path": sdk_path,
+            "ndk_path": ndk_path,
+            "recipe_dir": project_root / "deployment/recipes",
+            "jars_dir": project_root / "deployment/jar/PySide6/jar",
+            "mode": mode,
+        },
+        "app": {"icon": project_root / "src/frontend/graphics/logo_transparent.png"},
     }
-
-    for pattern, repl in replacements.items():
-        content, count = re.subn(pattern, repl, content, flags=re.MULTILINE)
-        if count == 0:
-            content += f"\n{repl}\n"
-
-    spec_path.write_text(content, encoding="utf-8")
+    for section, options in values.items():
+        if not config.has_section(section):
+            config.add_section(section)
+        for key, value in options.items():
+            config.set(section, key, str(value))
+    # Let PySide derive this from the selected wheel instead of reusing the last build's arch.
+    config.remove_option("buildozer", "arch")
+    with spec_path.open("w", encoding="utf-8") as destination:
+        config.write(destination)
 
 
 def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
@@ -405,16 +412,14 @@ def find_wheels_for_arch(
     user_shiboken: Path | None,
 ) -> tuple[Path | None, Path | None]:
     """Find PySide6 and Shiboken6 wheels for a given canonical architecture."""
-    aliases = ARCH_MAP[canon_arch]["aliases"]
-
     pyside_whl: Path | None = None
     shiboken_whl: Path | None = None
 
     if user_pyside and user_pyside.is_file():
-        if any(alias in user_pyside.name.lower() for alias in aliases):
+        if detect_arch_from_filename(user_pyside.name) == canon_arch:
             pyside_whl = user_pyside
     if user_shiboken and user_shiboken.is_file():
-        if any(alias in user_shiboken.name.lower() for alias in aliases):
+        if detect_arch_from_filename(user_shiboken.name) == canon_arch:
             shiboken_whl = user_shiboken
 
     for search_dir in search_dirs:
@@ -423,7 +428,7 @@ def find_wheels_for_arch(
         for whl in search_dir.glob("*.whl"):
             # Avoid .tmp or other files
             lower = whl.name.lower()
-            if any(alias in lower for alias in aliases):
+            if "android" in lower and detect_arch_from_filename(whl.name) == canon_arch:
                 if "pyside6" in lower and not pyside_whl:
                     pyside_whl = whl
                 elif "shiboken6" in lower and not shiboken_whl:
@@ -486,6 +491,15 @@ def build_single_arch(
     # Inject templates into any existing p4a tree
     inject_android_templates(project_root, buildozer_arch)
 
+    # Snapshot existing outputs so an old package cannot masquerade as this build.
+    extensions = (".apk",) if build_mode == "debug" else (".aab", ".apk")
+    output_roots = (project_root, project_root / "bin")
+    previous_outputs = {
+        path: path.stat().st_mtime_ns
+        for root in output_roots for extension in extensions
+        for path in root.glob(f"*{extension}")
+    }
+
     # Execute pyside6-android-deploy
     env = os.environ.copy()
     env["PATH"] = f"{venv_dir / 'bin'}:{env.get('PATH', '')}"
@@ -514,25 +528,25 @@ def build_single_arch(
     # Re-inject templates into generated distribution and re-run buildozer if needed
     inject_android_templates(project_root, buildozer_arch)
 
-    # Locate generated APK
-    candidates = list(project_root.glob(f"*{buildozer_arch}*.apk"))
-    if not candidates:
-        candidates = list(project_root.glob("app-*-debug.apk"))
-    if not candidates:
-        bin_dir = project_root / "bin"
-        if bin_dir.is_dir():
-            candidates = list(bin_dir.glob(f"*{buildozer_arch}*.apk"))
+    candidates = [
+        path for root in output_roots for extension in extensions
+        for path in root.glob(f"*{extension}")
+        if path.stat().st_mtime_ns != previous_outputs.get(path)
+        and (detect_arch_from_filename(path.name) == canon_arch
+             or (detect_arch_from_filename(path.name) is None
+                 and path.name.startswith("app-") and build_mode in path.stem))
+    ]
 
     if not candidates:
-        raise FileNotFoundError(f"Build succeeded but could not locate output APK for {canon_arch}")
+        raise FileNotFoundError(f"Build succeeded but could not locate a new {build_mode} package for {canon_arch}")
 
     # Pick the newest candidate
     apk_path = max(candidates, key=lambda p: p.stat().st_mtime)
-    print(f"[✓] Successfully built APK: {apk_path} ({apk_path.stat().st_size / (1024*1024):.2f} MB)")
+    print(f"[✓] Successfully built package: {apk_path} ({apk_path.stat().st_size / (1024*1024):.2f} MB)")
 
     if output_dir:
         output_dir.mkdir(parents=True, exist_ok=True)
-        dest_apk = output_dir / f"Porn_Fetch-3.9-{buildozer_arch}-{build_mode}.apk"
+        dest_apk = output_dir / f"Porn_Fetch-3.9-{buildozer_arch}-{build_mode}{apk_path.suffix}"
         shutil.copy2(apk_path, dest_apk)
         print(f"[✓] Copied to output destination: {dest_apk}")
         return dest_apk
@@ -623,7 +637,8 @@ def main() -> int:
         return 1
 
     # Verify and apply host patches
-    ensure_host_patches(project_root, venv_dir)
+    if not args.dry_run:
+        ensure_host_patches(project_root, venv_dir)
 
     # Resolve Android SDK and NDK
     sdk_path = find_android_sdk(args.sdk_path)
@@ -647,6 +662,7 @@ def main() -> int:
     # Build loop
     built_apks: list[tuple[str, Path]] = []
     skipped_archs: list[str] = []
+    planned_archs: list[str] = []
 
     for arch in target_archs:
         pyside_whl, shiboken_whl = find_wheels_for_arch(
@@ -668,6 +684,7 @@ def main() -> int:
                 print(f"Checked directories: {', '.join(str(d) for d in search_dirs)}", file=sys.stderr)
                 return 1
 
+        planned_archs.append(arch)
         apk = build_single_arch(
             canon_arch=arch,
             wheel_pyside=pyside_whl,
@@ -689,7 +706,7 @@ def main() -> int:
     print("=" * 70)
     if args.dry_run:
         print("  Dry-run completed successfully. Planned architectures:")
-        for arch in target_archs:
+        for arch in planned_archs:
             print(f"  - {arch} ({ARCH_MAP[arch]['buildozer_arch']})")
     else:
         if built_apks:
@@ -699,6 +716,9 @@ def main() -> int:
         if skipped_archs:
             print(f"  Skipped (no wheels found): {', '.join(skipped_archs)}")
 
+    if not planned_archs:
+        print("ERROR: No architectures had a complete wheel pair.", file=sys.stderr)
+        return 1
     return 0
 
 

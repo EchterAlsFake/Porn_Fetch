@@ -332,6 +332,8 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         mock_select.return_value = FakeQuestionaryPrompt("exit")
         code = await run_wizard()
         self.assertEqual(code, 0)
+        choices = mock_select.call_args.kwargs["choices"]
+        self.assertNotIn("search", {choice.value for choice in choices})
 
 
 if __name__ == "__main__":

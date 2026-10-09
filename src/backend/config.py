@@ -355,10 +355,12 @@ class SettingsManager(QObject):
 
     @Property(bool, notify=trackVideosChanged)
     def track_videos(self) -> bool:
-        return self.get_bool("Video/track_videos", False)
+        return not IS_ANDROID and self.get_bool("Video/track_videos", False)
 
     @track_videos.setter
     def track_videos(self, val):
+        if IS_ANDROID:
+            return
         if val != self.track_videos:
             self._settings.setValue("Video/track_videos", val)
             self.trackVideosChanged.emit(val)

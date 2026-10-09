@@ -114,7 +114,7 @@ Pane {
                             backend.process_single_url(url, customOptions.text, root.filters())
                         else if (sourceType.currentIndex === 1)
                             backend.process_model_url(url, customOptions.text, root.filters())
-                        else
+                        else if (sourceType.currentIndex === 2)
                             backend.process_playlist_url(url, customOptions.text, root.filters())
                         urlField.clear()
                     }

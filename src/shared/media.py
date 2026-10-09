@@ -19,6 +19,16 @@ PREMIUM_QUALITY_NAMES = {
 }
 
 
+def xfreehd_quality(quality: str | int) -> str:
+    """Translate UI resolutions to the provider's documented SD/HD names."""
+    text = str(quality).strip().casefold()
+    if text in {"sd", "worst"}:
+        return "sd"
+    if text in {"hd", "best", "half"}:
+        return "hd"
+    return "hd" if normalize_quality(quality) >= 720 else "sd"
+
+
 def quality_requires_premium(quality: str | int) -> bool:
     """Return whether *quality* is restricted to licensed installations."""
     if str(quality).strip().casefold() in PREMIUM_QUALITY_NAMES:

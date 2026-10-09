@@ -75,6 +75,13 @@ Pane {
                   : qsTr("Not logged in to %1").arg(root.selectedProvider)
         }
 
+        TextField {
+            id: browserUsernameField
+            Layout.fillWidth: true
+            visible: !root.androidLayoutMode && root.selectedProvider === "PornHub"
+            placeholderText: qsTr("PornHub username for browser cookies (not email)")
+        }
+
         GridLayout {
             Layout.fillWidth: true
             columns: root.width < 700 ? 1 : 2
@@ -189,10 +196,11 @@ Pane {
                 Layout.fillWidth: true
                 text: qsTr("Login with Browser Cookies")
                 visible: !root.androidLayoutMode
-                enabled: !root.accountBusy
+                enabled: !root.accountBusy && (root.selectedProvider !== "PornHub"
+                                              || browserUsernameField.text.trim().length > 0)
 
                 onClicked: {
-                    root.backendController.login_account(root.selectedProvider, "", "", true)
+                    root.backendController.login_account(root.selectedProvider, browserUsernameField.text, "", true)
                 }
             }
         }
@@ -221,14 +229,22 @@ Pane {
             Button {
                 Layout.fillWidth: true
                 visible: root.selectedProvider !== "XHamster"
-                text: qsTr("Get Recommended Videos")
+                text: root.selectedProvider === "PornHub" ? qsTr("Get Recommended Videos") : qsTr("Get Watch History")
                 enabled: root.providerLoggedIn && !root.accountBusy
 
                 onClicked: {
                     root.backendController.fetch_account_videos(
-                        root.selectedProvider, "recommended", ""
+                        root.selectedProvider, root.selectedProvider === "PornHub" ? "recommended" : "history", ""
                     )
                 }
+            }
+
+            Button {
+                Layout.fillWidth: true
+                visible: root.selectedProvider === "PornHub"
+                text: qsTr("Get Subscription Feed")
+                enabled: root.providerLoggedIn && !root.accountBusy
+                onClicked: root.backendController.fetch_account_videos(root.selectedProvider, "feed", "")
             }
 
             Button {

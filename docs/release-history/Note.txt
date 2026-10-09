@@ -1,4 +1,0 @@
-These structure exists, because I can now check for updates within Porn Fetch and directly show the
-changelog with it. I don't have a server, so I need to do it this way :)
-
-The "CHANGELOG.md" file will still be used to keep everything in one place.

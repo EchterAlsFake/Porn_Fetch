@@ -99,9 +99,16 @@ async def handle_account_auth(ctx: WizardContext) -> None:
             ).ask_async()
             if not provider or provider == "Cancel":
                 continue
+            username = ""
+            if provider == "PornHub":
+                username = await questionary.text(
+                    "PornHub username for this browser session (not email):", style=WIZARD_STYLE,
+                ).ask_async() or ""
+                if not username.strip():
+                    continue
             with ctx.console.status(f"[bold green]Importing browser cookies for {provider}...[/]", spinner="dots"):
                 try:
-                    ok = await ctx.account_service.login(provider, browser=True)
+                    ok = await ctx.account_service.login(provider, username=username, browser=True)
                     if ok:
                         print_success(ctx.console, "Cookie Import", f"Successfully logged into {provider} with browser cookies!")
                     else:
@@ -123,9 +130,9 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                 continue
 
             col_choices = {
-                "PornHub": ["history", "recommended", "favorites"],
+                "PornHub": ["history", "recommended", "favorites", "feed"],
                 "XHamster": ["liked", "playlist"],
-                "XVideos": ["watch_later", "recommended", "liked"],
+                "XVideos": ["watch_later", "history", "liked"],
             }[prov]
             selected_col = await questionary.select(f"Select {prov} collection:", choices=col_choices, style=WIZARD_STYLE).ask_async()
             if not selected_col:

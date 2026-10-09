@@ -4,10 +4,11 @@ from __future__ import annotations
 import inspect
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 from src.shared.media import VideoObject
+from src.shared.provider_parsing import parse_length, parse_publish_date
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +18,14 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
     source = "api" if provider == "beeg" and "api" in loaders else "html"
     if source in loaders:
         await video.load_sources(source)
+    config = _value(_value(video, "core"), "configuration")
+    if provider == "eporner" and "api" in loaders and not getattr(config, "strict_language", False):
+        await video.load_sources("api")
 
     title = _value(video, "title") or _value(video, "video_id") or "Untitled"
     author = await _author(video, provider)
     qualities = await available_qualities(video)
-    tags = _value(video, "tags") or _value(video, "categories") or []
+    tags = _value(video, "tags") or _value(video, "categories") or _value(video, "action_tags") or []
     if isinstance(tags, str):
         tags = [item.strip() for item in tags.split(",") if item.strip()]
     elif isinstance(tags, dict):
@@ -29,18 +33,19 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
     else:
         tags = [str(item) for item in (tags or [])]
 
-    length = _value(video, "duration") or _value(video, "length") or _value(video, "length_seconds")
+    length = _value(video, "length_seconds") or _value(video, "duration") or _value(video, "length")
     return VideoObject(
         url=str(_value(video, "url") or ""),
         title=_safe_title(str(title)),
         author=str(author or "N/A"),
-        length=_minutes(length),
+        length=parse_length(length, video_source=provider),
         tags=tags,
         thumbnail_url=str(
             _value(video, "thumbnail_url") or _value(video, "thumbnail") or ""
         ),
         video_id=str(_value(video, "video_id") or title),
-        publish_date=_date(_value(video, "publish_date") or _value(video, "created_at")),
+        publish_date=_date(_value(video, "publish_date") or _value(video, "created_at")
+                           or _value(video, "created_timestamp") or _value(video, "date_ago")),
         qualities=qualities,
         status="pending",
         source_video=video,
@@ -48,6 +53,10 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
 
 
 async def available_qualities(video: Any) -> list[int]:
+    if _value(video, "is_hls") is False:
+        # The YouPorn API exposes one preselected MP4, with no quality variants.
+        # Do not send a direct MP4 URL to the HLS manifest parser.
+        return []
     hls = _value(video, "m3u8_base_url")
     if hls:
         core = _value(video, "core") or _value(_value(video, "client"), "core")
@@ -135,29 +144,5 @@ def _safe_title(value: str) -> str:
     return re.sub(r"[\\/:*?\"<>|\x00-\x1f]", "_", value).strip(" .") or "Untitled"
 
 
-def _minutes(value: Any) -> int | None:
-    if value is None:
-        return None
-    try:
-        if isinstance(value, (int, float)):
-            return max(0, round(float(value) / 60))
-        parts = [int(part) for part in str(value).split(":")]
-        if len(parts) == 3:
-            return round((parts[0] * 3600 + parts[1] * 60 + parts[2]) / 60)
-        if len(parts) == 2:
-            return round((parts[0] * 60 + parts[1]) / 60)
-        return round(float(value) / 60)
-    except (TypeError, ValueError):
-        return None
-
-
 def _date(value: Any) -> datetime | None:
-    if isinstance(value, datetime):
-        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
-    if not value:
-        return None
-    try:
-        result = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-        return result if result.tzinfo else result.replace(tzinfo=timezone.utc)
-    except ValueError:
-        return None
+    return parse_publish_date(value)

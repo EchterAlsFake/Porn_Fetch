@@ -13,6 +13,11 @@ if (
 ) and "--android" not in sys.argv:
     sys.argv.append("--android")
 
+if __name__ == "__main__" and "--smoke-test" in sys.argv:
+    from src.backend.packaging_smoke import run_isolated_smoke
+
+    raise SystemExit(run_isolated_smoke())
+
 from src.backend.application import Backend, ProcessVideos, main
 
 __all__ = ["Backend", "ProcessVideos", "main"]

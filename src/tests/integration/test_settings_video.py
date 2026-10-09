@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from PySide6.QtCore import QObject
+
 from src.tests.integration.settings_support import SettingsGUITestBase
 
 
@@ -52,6 +54,26 @@ class TestVideoTabGUI(SettingsGUITestBase):
         self.simulate_combobox("contentLanguageComboBox", 5)
         self.assertEqual(self.settings_manager.locale, "fr-FR")
         self.assert_file_value("Video/locale", "fr-FR")
+
+    def test_content_language_displays_default_on_startup(self) -> None:
+        combo = self.find_control("contentLanguageComboBox")
+        self.assertEqual(combo.property("count"), 14)
+        self.assertEqual(combo.property("currentIndex"), 2)
+        self.assertEqual(combo.property("currentText"), "🇺🇸 English")
+        self.assertEqual(combo.property("currentValue"), "en-US")
+
+    def test_content_language_displays_saved_locale_on_startup(self) -> None:
+        self.settings_manager.locale = "de-DE"
+        page = self.component.create()
+        self.assertIsNotNone(page)
+        try:
+            combo = page.findChild(QObject, "contentLanguageComboBox")
+            self.assertIsNotNone(combo)
+            self.assertEqual(combo.property("currentText"), "🇩🇪 Deutsch")
+            self.assertEqual(combo.property("currentValue"), "de-DE")
+            self.assertEqual(self.settings_manager.locale, "de-DE")
+        finally:
+            page.deleteLater()
 
     def test_strict_enforcement_checkbox(self) -> None:
         self.simulate_checkbox("strictEnforcementCheckBox", True)

@@ -1,15 +1,13 @@
 """Qt/QML adapter for the Qt-free PocketBase services."""
 from __future__ import annotations
 
-import sys
 from typing import Any
 
 from PySide6.QtCore import QObject, Signal, Slot
 
-from src.backend.config import app_settings
+from src.backend.config import IS_ANDROID, app_settings
 from src.shared.media import VideoObject
 
-from .android_tracker import AndroidTracker
 from .client import PocketBaseClient
 from .service import PocketBaseService
 from .tracker import PocketBaseTracker
@@ -23,15 +21,19 @@ class DatabaseBridge(QObject):
     downloadSaved = Signal(str)
     initializationFailed = Signal(str)
 
-    def __init__(self, parent: QObject | None = None, tracker: PocketBaseTracker | None = None):
+    def __init__(
+        self,
+        parent: QObject | None = None,
+        tracker: PocketBaseTracker | None = None,
+        *,
+        tracking_supported: bool = True,
+    ):
         super().__init__(parent)
-        self._tracker = tracker or (
-            AndroidTracker(data_path=app_settings.pocketbase_data_path, enabled=bool(app_settings.track_videos))
-            if (sys.platform == "android" or hasattr(sys, "getandroidapilevel")) else PocketBaseTracker(
-                data_path=app_settings.pocketbase_data_path,
-                enabled=bool(app_settings.track_videos),
-                legacy_sqlite_path=app_settings.legacy_database_path,
-            )
+        # Reuse the disabled tracker contract on Android; no database is created or started.
+        self._tracker = tracker or PocketBaseTracker(
+            data_path=app_settings.pocketbase_data_path,
+            enabled=tracking_supported and not IS_ANDROID and bool(app_settings.track_videos),
+            legacy_sqlite_path=app_settings.legacy_database_path,
         )
         self._tracker.on_download_saved = self.downloadSaved.emit
         self._tracker.on_iterators_changed = self.iteratorsChanged.emit

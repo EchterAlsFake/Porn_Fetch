@@ -401,7 +401,7 @@ export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 # Sync dependencies (GUI extra) with verbose output
 # ------------------------------------------------------------
 info "Syncing dependencies using uv (with --extra gui)..."
-run uv --color always sync --extra gui --extra av
+run uv --color always sync --locked --extra gui --extra build --extra desktop-build --extra av
 
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
@@ -447,8 +447,9 @@ DEPLOY_SPEC_TMP="${VENV_DIR}/pysidedeploy.spec"
 run cp -f "${DEPLOY_SPEC}" "${DEPLOY_SPEC_TMP}"
 
 info "Building with pyside6-deploy..."
-run uv --color always run -- \
-  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files
+NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
+run uv --color always run --no-sync -- \
+  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
 
 # ------------------------------------------------------------
 # Rename output (Linux .bin / macOS .app)

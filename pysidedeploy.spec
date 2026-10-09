@@ -34,13 +34,13 @@ android_packages = buildozer==1.6.0,cython==0.29.33
 # paths to required qml files. comma separated
 # normally all the qml files required by the project are added automatically
 # design studio projects include the qml files using qt resources
-qml_files = src/frontend/UI/AccountPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidMorePage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidStatisticsPage.qml,src/frontend/UI/AndroidSupportedWebsitesPage.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/DownloadsPage.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/InfoPage.qml,src/frontend/UI/InstallDialog.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/LicenseWindow.qml,src/frontend/UI/Main.qml,src/frontend/UI/MessageBox.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SettingsPage.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/SplashScreen.qml,src/frontend/UI/StatisticsPage.qml,src/frontend/UI/SupportedWebsitesPage.qml,src/frontend/UI/Theme.qml
+qml_files = src/frontend/UI/AccountPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidMorePage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidSupportedWebsitesPage.qml,src/frontend/UI/WebsiteSupportData.qml,src/frontend/UI/WebsiteSupportContent.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/DownloadsPage.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/InfoPage.qml,src/frontend/UI/InstallDialog.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/LicenseWindow.qml,src/frontend/UI/Main.qml,src/frontend/UI/MessageBox.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SettingsPage.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/SplashScreen.qml,src/frontend/UI/StatisticsPage.qml,src/frontend/UI/SupportedWebsitesPage.qml,src/frontend/UI/Theme.qml
 
 # excluded qml plugin binaries
 excluded_qml_plugins = QtCharts,QtQuick3D,QtSensors,QtTest,QtWebEngine
 
 # qt modules used. comma separated
-modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Test,Gui
+modules = Quick,Widgets,Qml,Network,Gui,Core,Test,QuickControls2,OpenGL
 
 # qt plugins used by the application. only relevant for desktop deployment
 # for qt plugins used in android application see [android][plugins]

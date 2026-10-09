@@ -31,7 +31,7 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     "quality": ("Video", "Preferred download quality (best, 1080, 720, worst)"),
     "output_path": ("Video", "Output directory for media files"),
     "path_template": ("Video", "Naming template for media files ($title, $author, $video_id)"),
-    "result_limit": ("Video", "Max search or scrape result count"),
+    "result_limit": ("Video", "Max profile or playlist result count"),
     "skip_existing": ("Video", "Skip downloads if file exists"),
     "write_metadata": ("Video", "Embed metadata tags in downloaded MP4 files"),
     "profile_video_mode": ("Video", "Scrape mode: videos, uploads, or both"),

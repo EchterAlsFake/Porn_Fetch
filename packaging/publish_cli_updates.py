@@ -82,8 +82,9 @@ def create_bundle(artifact: Path, target_name: str, version: str, destination: P
     return target
 
 
-def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, private_key: Path, version: str | None, *, allow_empty: bool = False) -> None:
-    root_bytes = ROOT_FILE.read_bytes()
+def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, private_key: Path, version: str | None,
+            *, allow_empty: bool = False, root_file: Path | None = None) -> None:
+    root_bytes = (root_file or ROOT_FILE).read_bytes()
     root = Metadata[Root].from_bytes(root_bytes)
     online_keyid = root.signed.roles["targets"].keyids[0]
     signer = Signer.from_priv_key_uri(f"file2:{private_key.resolve()}", root.signed.keys[online_keyid])
@@ -107,6 +108,8 @@ def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, privat
                 target = create_bundle(artifact, target_name, version, archive)
                 targets[target_name] = target
                 new_files.append((archive, target))
+            if not new_files:
+                raise ValueError("No recognized CLI artifact directories found; do not merge artifact downloads")
         if not targets:
             if allow_empty and artifact_dir is None:
                 print("No CLI update repository exists yet; nothing to refresh")
@@ -162,5 +165,7 @@ if __name__ == "__main__":
     parser.add_argument("--private-key", required=True, type=Path)
     parser.add_argument("--version", help="Monotonic application build version")
     parser.add_argument("--allow-empty", action="store_true", help="Succeed if a scheduled refresh has no repository yet")
+    parser.add_argument("--root-file", type=Path, default=ROOT_FILE, help="Local public trust anchor")
     args = parser.parse_args()
-    publish(args.artifacts, args.remote_url, args.output, args.private_key, args.version, allow_empty=args.allow_empty)
+    publish(args.artifacts, args.remote_url, args.output, args.private_key, args.version,
+            allow_empty=args.allow_empty, root_file=args.root_file)

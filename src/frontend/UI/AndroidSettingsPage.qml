@@ -425,7 +425,7 @@ Pane {
                 }
             }
             SettingCard {
-                heading: qsTr("Files & history")
+                heading: qsTr("Files")
                 ToggleRow {
                     label: qsTr("Write metadata")
                     value: appSettings.write_metadata
@@ -435,12 +435,6 @@ Pane {
                     label: qsTr("Skip existing files")
                     value: appSettings.skip_existing_files
                     onChanged: function(selected) { appSettings.skip_existing_files = selected }
-                }
-                ToggleRow {
-                    label: qsTr("Track downloads")
-                    detail: qsTr("Build a private history on this device. Restart required.")
-                    value: appSettings.track_videos
-                    onChanged: function(selected) { appSettings.track_videos = selected }
                 }
                 RowLayout {
                     Layout.fillWidth: true

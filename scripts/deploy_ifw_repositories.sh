@@ -15,6 +15,11 @@ if [[ -z "${CI_TOKEN:-}" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$REPO_DIR/Updates.xml" || ! -f "$REPO_DIR/release.json" ]]; then
+  echo "Error: IFW repository requires Updates.xml and signed release.json." >&2
+  exit 1
+fi
+
 BUNDLE_TAR="$(mktemp --suffix=.tar.gz)"
 trap 'rm -f "$BUNDLE_TAR"' EXIT
 

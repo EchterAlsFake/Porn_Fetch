@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Callable
 from urllib.parse import urlparse
 
-from src.shared.media import select_allowed_quality
+from src.shared.media import select_allowed_quality, xfreehd_quality
 from src.shared.paths import data_dir
 
 from .settings import CliSettings
@@ -299,11 +299,7 @@ async def download_video(
     configuration_quality: str | int = selected
     module = type(video).__module__.split(".", 1)[0]
     if module == "xfreehd_api":
-        text_quality = str(selected).casefold()
-        try:
-            configuration_quality = "hd" if int(text_quality.removesuffix("p")) >= 720 else "sd"
-        except ValueError:
-            configuration_quality = "sd" if text_quality == "worst" else "hd"
+        configuration_quality = xfreehd_quality(selected)
 
     if controller is not None:
         controller.target = target
@@ -391,8 +387,18 @@ async def download_gallery(
     controller: DownloadController | None = None,
 ) -> DownloadOutcome:
     await _load_album(album)
-    urls = list(await album.get_all_images())
-    title = _sanitize(str(getattr(album, "title", None) or "album"))
+    if hasattr(album, "get_photos"):
+        # PornHub exposes photo dictionaries instead of XFreeHD's URL list.
+        # Use its page count when available; otherwise the documented first page.
+        pages = int(getattr(album, "total_pages", None) or 1)
+        urls = [photo["download_url"] async for photo in album.get_photos(pages=pages)
+                if photo.get("download_url")]
+    else:
+        urls = list(await album.get_all_images())
+    if not urls:
+        raise ValueError("No downloadable images were found in this album")
+    fallback_title = "album-" + Path(urlparse(getattr(album, "url", "")).path).name
+    title = _sanitize(str(getattr(album, "title", None) or fallback_title))
     directory = Path(output_root) / title
     directory.mkdir(parents=True, exist_ok=True)
 

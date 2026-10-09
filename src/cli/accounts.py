@@ -8,6 +8,9 @@ from collections.abc import AsyncIterator, Mapping
 from typing import Any
 from urllib.parse import urlparse
 
+from src.shared.provider_accounts import connect_pornhub_cookies
+from src.shared.provider_routing import HOST_PATTERNS
+
 from .providers import ClientPool
 
 logger = logging.getLogger(__name__)
@@ -40,11 +43,7 @@ class AccountService:
         cookies: Any = await browser_cookies(key) if browser else dict(tokens or {})
         if key == "pornhub":
             if browser:
-                if not cookies:
-                    raise ValueError("PornHub browser cookies were not found")
-                client.core.session.cookies.update(cookies)
-                client.logged = True
-                return True
+                return await connect_pornhub_cookies(client, cookies, username)
             client.credentials.update({"email": username, "password": password})
             return bool(await client.login())
         if key == "xhamster":
@@ -72,17 +71,18 @@ class AccountService:
             raise ValueError(f"log in to {provider} first")
         account = self.pool.client(key).account
         if key == "pornhub":
-            methods = {"history": "get_history", "recommended": "get_recommended", "favorites": "get_favorites"}
+            methods = {"history": "get_history", "recommended": "get_recommended", "favorites": "get_favorites", "feed": "get_feed"}
         elif key == "xhamster":
             methods = {"liked": "get_liked_videos", "playlist": "get_account_playlist"}
             if name == "playlist":
                 parsed = urlparse(playlist_url)
-                if parsed.scheme != "https" or "xhamster.com" not in (parsed.hostname or "") or "/my/playlists/" not in parsed.path:
+                import re
+                if parsed.scheme.casefold() != "https" or not re.search(HOST_PATTERNS["xhamster"], parsed.hostname or "", re.I) or "/my/playlists/" not in parsed.path:
                     raise ValueError("a valid XHamster account playlist URL is required")
                 return account.get_account_playlist(url=playlist_url), "XHamster account playlist"
         else:
             methods = {
-                "watch_later": "get_watch_later_videos", "recommended": "get_recommended_videos",
+                "watch_later": "get_watch_later_videos", "history": "get_recommended_videos",
                 "liked": "get_liked_videos",
             }
         method = methods.get(name)
