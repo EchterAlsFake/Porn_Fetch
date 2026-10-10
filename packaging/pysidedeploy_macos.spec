@@ -68,7 +68,9 @@ macos.permissions =
 mode = standalone
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
+# Qt QML directories contain static archives; Nuitka 4.1.1 treats them as DLLs.
+# Exclude them before macOS dynamic library dependency analysis.
+extra_args = --noinclude-dlls=*.a --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 
