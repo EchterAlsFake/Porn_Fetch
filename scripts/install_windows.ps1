@@ -289,6 +289,12 @@ $env:UV_PROJECT_ENVIRONMENT = $venvDir
 Info "Syncing dependencies using uv (with --extra gui)..."
 Run uv "--color" "always" "sync" "--locked" "--extra" "gui" "--extra" "build" "--extra" "desktop-build" "--extra" "av"
 
+# Preserve the patched dependency sources for every subsequent uv command.
+$env:UV_NO_SYNC = "1"
+Info "Applying and verifying the required QtAsyncio compatibility patch..."
+Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir
+Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir "--verify"
+
 # Activate the venv for update script convenience
 $activateScript = Join-Path $venvDir "Scripts\Activate.ps1"
 if (-not (Test-Path $activateScript)) {

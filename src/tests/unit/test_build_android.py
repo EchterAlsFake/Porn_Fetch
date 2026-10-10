@@ -14,6 +14,7 @@ from scripts.build_android import (
     PATTERN_CAN_READ,
     build_single_arch,
     detect_arch_from_filename,
+    ensure_host_patches,
     find_wheels_for_arch,
     main,
     normalize_arch,
@@ -24,6 +25,28 @@ from scripts.build_android import (
 
 
 class TestAndroidBuildAutomation(unittest.TestCase):
+    def test_host_qtasyncio_patch_failure_stops_build(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "scripts").mkdir()
+            patcher = root / "scripts" / "patch_qtasyncio.py"
+            patcher.touch()
+            with patch("scripts.build_android.subprocess.run") as run:
+                ensure_host_patches(root, root / "venv")
+                self.assertEqual(run.call_count, 2)
+                self.assertEqual(run.call_args.args[0][-1], "--verify")
+                self.assertTrue(all(call.kwargs["check"] for call in run.call_args_list))
+            import subprocess
+            with patch("scripts.build_android.subprocess.run",
+                       side_effect=subprocess.CalledProcessError(2, "patch_qtasyncio.py")):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    ensure_host_patches(root, root / "venv")
+
+    def test_missing_host_qtasyncio_patcher_stops_build(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(FileNotFoundError):
+                ensure_host_patches(Path(temporary), Path(temporary) / "venv")
+
     def test_normalize_arch(self) -> None:
         """Architecture normalization should map aliases to canonical names."""
         self.assertEqual(normalize_arch("aarch64"), "aarch64")

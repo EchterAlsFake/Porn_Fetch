@@ -396,13 +396,13 @@ def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
         else:
             print("[✓] PySide6 android_deploy is properly patched.")
 
-    if patch_qtasyncio.is_file():
-        proc = subprocess.run([sys.executable, str(patch_qtasyncio), str(venv_dir), "--verify"], capture_output=True, text=True)
-        if proc.returncode != 0:
-            print("[*] Applying QtAsyncio patch to virtual environment...")
-            subprocess.run([sys.executable, str(patch_qtasyncio), str(venv_dir)], check=True)
-        else:
-            print("[✓] QtAsyncio is properly patched.")
+    if not patch_qtasyncio.is_file():
+        raise FileNotFoundError(f"Required QtAsyncio patch script missing: {patch_qtasyncio}")
+    print("[*] Applying and verifying QtAsyncio patch to virtual environment...")
+    subprocess.run([sys.executable, str(patch_qtasyncio), str(venv_dir)], check=True)
+    subprocess.run(
+        [sys.executable, str(patch_qtasyncio), str(venv_dir), "--verify"], check=True
+    )
 
 
 def find_wheels_for_arch(

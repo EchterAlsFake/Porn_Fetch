@@ -49,6 +49,11 @@ jobs:
       - name: Install development dependencies
         run: uv sync --locked --extra gui --extra av --group dev
 
+      - name: Apply and verify required QtAsyncio compatibility patch
+        run: |
+          uv run --no-sync python scripts/patch_qtasyncio.py .venv
+          uv run --no-sync python scripts/patch_qtasyncio.py .venv --verify
+
       - name: Check lockfile
         run: uv lock --check
 

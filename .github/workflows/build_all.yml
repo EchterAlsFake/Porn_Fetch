@@ -123,12 +123,17 @@ jobs:
       - name: Embed immutable release and artifact version
         run: uv run --no-sync python packaging/write_build_version.py ${{ github.run_number }}
 
+      - name: Apply and verify required QtAsyncio compatibility patch
+        run: |
+          uv run --no-sync python scripts/patch_qtasyncio.py .venv
+          uv run --no-sync python scripts/patch_qtasyncio.py .venv --verify
+
       - name: Build with pyside6-deploy
         shell: bash
         run: |
           SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
           NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
-          uv run -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
+          uv run --no-sync -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
           
           # Universal Rename Logic
           EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"

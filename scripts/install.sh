@@ -412,6 +412,12 @@ export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 info "Syncing dependencies using uv (with --extra gui)..."
 run uv --color always sync --locked --extra gui --extra build --extra desktop-build --extra av
 
+# Preserve the patched dependency sources for every subsequent uv command.
+export UV_NO_SYNC=1
+info "Applying and verifying the required QtAsyncio compatibility patch..."
+run uv run --no-sync python scripts/patch_qtasyncio.py "${VENV_DIR}"
+run uv run --no-sync python scripts/patch_qtasyncio.py "${VENV_DIR}" --verify
+
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
 # ------------------------------------------------------------
