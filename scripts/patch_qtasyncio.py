@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Safely patch PySide6 6.11 QtAsyncio for Python 3.14, descriptor-based I/O,
+Safely patch PySide6 6.11/6.12 QtAsyncio for Python 3.14, descriptor-based I/O,
 and nested Qt event loops.
 
 The patch adds QSocketNotifier-backed implementations of:
@@ -55,7 +55,7 @@ from pathlib import Path
 from typing import Sequence
 
 PATCH_ID = "qtasyncio-compat-v2"
-SUPPORTED_PYSIDE_MAJOR_MINOR = (6, 11)
+SUPPORTED_PYSIDE_MAJOR_MINORS = ((6, 11), (6, 12))
 
 EVENTS_IMPORT_MARKER = f"{PATCH_ID}:qsocketnotifier-import"
 EVENTS_INIT_MARKER = f"{PATCH_ID}:fd-state"
@@ -1231,10 +1231,11 @@ def print_environment(environment: EnvironmentInfo) -> None:
 
 def validate_version(environment: EnvironmentInfo, *, force: bool) -> None:
     version = parse_version(environment.pyside_version)
-    if version[:2] != SUPPORTED_PYSIDE_MAJOR_MINOR and not force:
-        supported = ".".join(map(str, SUPPORTED_PYSIDE_MAJOR_MINOR))
+    if version[:2] not in SUPPORTED_PYSIDE_MAJOR_MINORS and not force:
+        supported = " or ".join(".".join(map(str, minor)) + ".x"
+                                for minor in SUPPORTED_PYSIDE_MAJOR_MINORS)
         raise PatchError(
-            f"This patcher targets PySide6 {supported}.x, but found "
+            f"This patcher targets PySide6 {supported}, but found "
             f"{environment.pyside_version}. Use --force only after reviewing "
             "the installed QtAsyncio source."
         )

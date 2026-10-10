@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Add --buildozer-file and remove the Python 3.11 gate in PySide6 Android deploy.
+"""Patch PySide6 6.11/6.12 Android deploy with application build settings.
+
+Add --buildozer-file and remove the legacy Python 3.11 gate when present.
 
 Usage: python scripts/patch_android_deploy.py .venv [--dry-run | --verify | --restore]
 Reapply after upgrading PySide6. Backups are stored inside the target venv.
@@ -54,8 +56,8 @@ def android_deploy_path(venv: Path) -> Path:
         capture_output=True, text=True, check=True,
     )
     details = json.loads(result.stdout)
-    if tuple(map(int, details["version"].split(".")[:2])) != (6, 11):
-        raise ValueError(f"Unsupported PySide6 version: {details['version']} (expected 6.11.x)")
+    if tuple(map(int, details["version"].split(".")[:2])) not in ((6, 11), (6, 12)):
+        raise ValueError(f"Unsupported PySide6 version: {details['version']} (expected 6.11.x or 6.12.x)")
     path = Path(details["path"]).resolve()
     if not path.is_file() or not path.is_relative_to(venv):
         raise ValueError(f"Android deploy script is outside {venv}: {path}")
@@ -201,7 +203,14 @@ def patch_buildozer_source(source: str) -> str:
             '                      f" --init-classes={init_classes}")\n'
             '        self.set_value("app", "p4a.extra_args", extra_args)'
         )
-        source = replace_once(source, old, new)
+        if '        modules = ",".join(qt_libs_modules)' in source:
+            # 6.12 filters PySide-only modules (e.g. QtAsyncio). Preserve that filter.
+            sorted_block = new.split('        local_libs = ', 1)[0].replace(
+                "sorted(pysidedeploy_config.modules,", "sorted(qt_libs_modules,"
+            )
+            source = replace_once(source, '        modules = ",".join(qt_libs_modules)\n', sorted_block)
+        else:
+            source = replace_once(source, old, new)
     ast.parse(source)
     return source
 
@@ -267,6 +276,12 @@ def patch_android_config_source(source: str) -> str:
                 + custom_recipes_logic
             )
             source = replace_once(source, old_tail, new_tail)
+        elif old_tail.replace('\n\n        return', '\n        return') in source:
+            # 6.12 removed the blank line before the return.
+            source = replace_once(
+                source, old_tail.replace('\n\n        return', '\n        return'),
+                old_tail.rsplit('        return recipe_dir', 1)[0] + custom_recipes_logic,
+            )
         else:
             raise ValueError("Could not find recipe_dir block to patch in android_config.py")
     ast.parse(source)
@@ -365,12 +380,18 @@ def _cleanup_with_custom_spec(config, preserve_spec: bool) -> None:
 
 def main(name: str = None,''',
     )
-    source = replace_once(
-        source,
-        '         force: bool = False, extra_ignore_dirs: str = None, extra_modules_grouped: str = None):',
-        '         force: bool = False, extra_ignore_dirs: str = None, extra_modules_grouped: str = None,\n'
-        '         buildozer_file: Path = None):',
-    )
+    if '         no_install: bool = False):' in source:
+        source = replace_once(
+            source, '         no_install: bool = False):',
+            '         no_install: bool = False, buildozer_file: Path = None):',
+        )
+    else:
+        source = replace_once(
+            source,
+            '         force: bool = False, extra_ignore_dirs: str = None, extra_modules_grouped: str = None):',
+            '         force: bool = False, extra_ignore_dirs: str = None, extra_modules_grouped: str = None,\n'
+            '         buildozer_file: Path = None):',
+        )
     source = replace_once(
         source,
         '    android_data = AndroidData(wheel_pyside=pyside_wheel, wheel_shiboken=shiboken_wheel,',
@@ -420,11 +441,18 @@ def main(name: str = None,''',
     parser.add_argument(
         "--init", action="store_true",''',
     )
-    source = replace_once(
-        source,
-        '         args.force, args.extra_ignore_dirs, args.extra_modules)',
-        '         args.force, args.extra_ignore_dirs, args.extra_modules, args.buildozer_file)',
-    )
+    if '         args.force, args.extra_ignore_dirs, args.extra_modules, args.no_install)' in source:
+        source = replace_once(
+            source, '         args.force, args.extra_ignore_dirs, args.extra_modules, args.no_install)',
+            '         args.force, args.extra_ignore_dirs, args.extra_modules, args.no_install,\n'
+            '         args.buildozer_file)',
+        )
+    else:
+        source = replace_once(
+            source,
+            '         args.force, args.extra_ignore_dirs, args.extra_modules)',
+            '         args.force, args.extra_ignore_dirs, args.extra_modules, args.buildozer_file)',
+        )
     ast.parse(source)
     return source
 
