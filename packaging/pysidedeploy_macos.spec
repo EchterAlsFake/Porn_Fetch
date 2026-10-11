@@ -70,7 +70,9 @@ mode = standalone
 # (str) specify any extra nuitka arguments
 # Qt QML directories contain static archives; Nuitka 4.1.1 treats them as DLLs.
 # Exclude them before macOS dynamic library dependency analysis.
-extra_args = --noinclude-dlls=*.a --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
+# PySide also includes every top-level directory as data. Development files
+# contain symlinks whose targets are absent from the bundle and break signing.
+extra_args = --noinclude-dlls=*.a --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --noinclude-data-files=scripts/** --noinclude-data-files=packaging/** --noinclude-data-files=docs/** --noinclude-data-files=.github/** --noinclude-data-files=src/tests/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 
