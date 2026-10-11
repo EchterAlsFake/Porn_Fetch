@@ -703,7 +703,7 @@ desktop-build = [
 gui = [
     { name = "asyncstdlib" },
     { name = "certifi" },
-    { name = "pydivert" },
+    { name = "pydivert", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
     { name = "rich-argparse" },
@@ -734,7 +734,7 @@ requires-dist = [
     { name = "patchelf", marker = "sys_platform == 'linux' and extra == 'desktop-build'" },
     { name = "pip", marker = "extra == 'build'" },
     { name = "platformdirs", specifier = ">=4.3" },
-    { name = "pydivert", marker = "extra == 'gui'", specifier = ">=3.1.3" },
+    { name = "pydivert", marker = "(sys_platform == 'linux' and extra == 'gui') or (sys_platform == 'win32' and extra == 'gui')", specifier = ">=3.1.3" },
     { name = "pyinstaller", marker = "extra == 'build'" },
     { name = "pyside6", marker = "extra == 'gui'" },
     { name = "python-dateutil" },
