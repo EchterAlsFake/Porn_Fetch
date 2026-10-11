@@ -1,6 +1,6 @@
 # This project is currently not in a functional state. Please wait a few more days, I am actively working on it 🙏
 
-PS: I am writing an exam on Monday, Tuesday and Wednesday. Life ain't easy rn. 
+Okay Guys. Monday and Tuesday my last 2 exams (for now) and then I got 2 weeks of holidays and I'll release the next version in these 2 weeks, mark my words
 
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
