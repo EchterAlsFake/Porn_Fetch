@@ -349,6 +349,7 @@ make_macos_dmg() {
 # ------------------------------------------------------------
 # Main (OS handling)
 # ------------------------------------------------------------
+main() {
 case "$OS" in
   termux)
     info "Detected Termux"
@@ -506,3 +507,9 @@ else
 fi
 
 ok "Done."
+}
+
+# Parse the complete build before running it and keep child processes (notably
+# Homebrew) from consuming script text when launched with curl ... | bash.
+# Interactive source selection reads from /dev/tty when stdin is unavailable.
+main "$@" </dev/null

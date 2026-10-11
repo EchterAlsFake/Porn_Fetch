@@ -98,5 +98,34 @@ class DeploymentInputTests(unittest.TestCase):
                     self.assertIn("signed", result.stderr)
 
 
+class InstallerTests(unittest.TestCase):
+    def test_piped_macos_installer_continues_after_homebrew_reads_stdin(self):
+        script = (PROJECT_ROOT / "scripts/install.sh").read_text()
+        # Exercise the macOS branch on an offline Linux test runner.
+        script = script.replace('OS="$(detect_os)"', 'OS="darwin"')
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            commands = {
+                "xcode-select": "exit 0\n",
+                "brew": "cat >/dev/null\n",
+                "uv": "echo 'mock uv'\n",
+                # Stop before fetching or compiling; reaching this command proves
+                # the build flow survived the dependency installer's stdin read.
+                "git": "echo 'Reached project fetch'\nexit 42\n",
+            }
+            for name, body in commands.items():
+                command = base / name
+                command.write_text("#!/bin/bash\n" + body)
+                command.chmod(0o755)
+            result = subprocess.run(
+                ["bash"], input=script, text=True, cwd=base,
+                env={"PATH": f"{base}:/usr/bin:/bin"},
+                capture_output=True, timeout=10,
+            )
+            self.assertEqual(result.returncode, 42, result.stdout + result.stderr)
+            self.assertIn("macOS build deps installed", result.stdout)
+            self.assertIn("Reached project fetch", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
