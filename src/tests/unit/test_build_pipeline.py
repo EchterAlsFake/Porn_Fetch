@@ -58,9 +58,64 @@ class MacBundleTests(unittest.TestCase):
                 "plugin:\n\t@rpath/QtGui.framework/Versions/A/QtGui "
                 "(compatibility version 6.0.0, current version 6.12.0)\n"
             )), patch.object(repairer.subprocess, "run") as run:
-                with self.assertRaisesRegex(ValueError, "QtGui binary, found 0"):
-                    repairer.repair_bundle(bundle)
+                with self.assertRaisesRegex(ValueError, "Missing bundled QtGui binary and source framework"):
+                    repairer.repair_bundle(bundle, Path(temporary) / "missing-qt-libs")
                 run.assert_not_called()
+
+    def test_repair_copies_missing_stylekit_frameworks_and_their_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundle = root / "Porn Fetch.app"
+            macos = bundle / "Contents" / "MacOS"
+            plugin = macos / "PySide6/qml/Qt/labs/StyleKit/impl/libstylekitimplplugin.dylib"
+            gui = macos / "QtGui/QtGui"
+            for binary in (plugin, gui):
+                binary.parent.mkdir(parents=True, exist_ok=True)
+                binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            qt_lib_dir = root / "build environment" / "PySide6/Qt/lib"
+            source_binaries = {}
+            for name in ("QtLabsStyleKitImpl", "QtLabsStyleKit"):
+                framework = qt_lib_dir / f"{name}.framework"
+                source = framework / "Versions/A" / name
+                source.parent.mkdir(parents=True)
+                source.write_bytes(b"\xcf\xfa\xed\xfetest")
+                resources = source.parent / "Resources"
+                resources.mkdir()
+                (resources / "Info.plist").write_text("framework metadata")
+                (framework / "Versions/Current").symlink_to("A")
+                (framework / name).symlink_to(f"Versions/Current/{name}")
+                source_binaries[name] = source
+
+            def otool_output(args, **_):
+                path = Path(args[-1])
+                dependency = {
+                    plugin: "QtLabsStyleKitImpl",
+                    source_binaries["QtLabsStyleKitImpl"]: "QtLabsStyleKit",
+                    source_binaries["QtLabsStyleKit"]: "QtGui",
+                }.get(path)
+                return f"{path}:\n" + (
+                    f"\t@rpath/{dependency}.framework/Versions/A/{dependency} "
+                    "(compatibility version 6.0.0, current version 6.12.0)\n" if dependency else ""
+                )
+
+            with patch.object(repairer.subprocess, "check_output", side_effect=otool_output), \
+                 patch.object(repairer.subprocess, "run") as run:
+                self.assertEqual(repairer.repair_bundle(bundle, qt_lib_dir), 3)
+            frameworks = bundle / "Contents/Frameworks"
+            for name in source_binaries:
+                framework = frameworks / f"{name}.framework"
+                self.assertEqual((framework / name).read_bytes(), b"\xcf\xfa\xed\xfetest")
+                self.assertEqual((framework / "Versions/Current").readlink(), Path("A"))
+                self.assertTrue((framework / "Versions/A/Resources/Info.plist").is_file())
+            commands = [call.args[0] for call in run.call_args_list]
+            changes = [command for command in commands if command[0] == "install_name_tool"]
+            targets = [frameworks / "QtLabsStyleKitImpl.framework/Versions/A/QtLabsStyleKitImpl",
+                       frameworks / "QtLabsStyleKit.framework/Versions/A/QtLabsStyleKit", gui]
+            for command, target in zip(changes, targets, strict=True):
+                loader = Path(command[-1])
+                self.assertEqual((loader.parent / command[3].removeprefix("@loader_path/")).resolve(),
+                                 target.resolve())
+            self.assertEqual(commands[-1], ["codesign", "--force", "--deep", "--sign", "-", str(bundle)])
 
     def test_repair_leaves_already_relinked_bundle_unchanged(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
 import stat
 import subprocess
 import sys
@@ -35,7 +36,13 @@ def dependencies(path: Path) -> list[str]:
     ))
 
 
-def repair_bundle(bundle: Path) -> int:
+def pyside_qt_lib_dir() -> Path:
+    import PySide6
+
+    return Path(PySide6.__file__).resolve().parent / "Qt" / "lib"
+
+
+def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
     bundle = bundle.resolve()
     contents = bundle / "Contents"
     if not (contents / "MacOS").is_dir():
@@ -47,15 +54,39 @@ def repair_bundle(bundle: Path) -> int:
         if binary.name.startswith("Qt"):
             qt_libraries.setdefault(binary.name, []).append(binary)
 
-    # Plan every change before modifying the signed bundle. Do not borrow Qt
-    # from a system installation or a different PySide6 build.
+    # Read the whole dependency graph before modifying the signed bundle.
+    # Missing frameworks must come from the PySide6 environment used to build it.
+    pending = [(binary, binary) for binary in binaries]
+    frameworks_to_copy: dict[Path, Path] = {}
+    copied_binaries: list[Path] = []
     changes: dict[Path, list[tuple[str, str]]] = {}
-    for binary in binaries:
-        for dependency in dependencies(binary):
+    for source_binary, binary in pending:
+        for dependency in dependencies(source_binary):
             match = QT_FRAMEWORK.search(dependency)
             if not match or dependency.startswith(("/System/Library/", "/usr/lib/")):
                 continue
             candidates = qt_libraries.get(match[1], [])
+            if not candidates:
+                if qt_lib_dir is None:
+                    qt_lib_dir = pyside_qt_lib_dir()
+                source_framework = qt_lib_dir / f"{match[1]}.framework"
+                target_framework = contents / "Frameworks" / source_framework.name
+                if not source_framework.is_dir():
+                    raise ValueError(
+                        f"Missing bundled {match[1]} binary and source framework {source_framework}; "
+                        f"required by {binary.relative_to(bundle)}. "
+                        "Run repair in the PySide6 environment used for this build, or pass --qt-lib-dir."
+                    )
+                if target_framework.exists():
+                    raise ValueError(f"Incomplete framework already exists: {target_framework}")
+                for source in sorted(source_framework.rglob("*")):
+                    if is_macho(source):
+                        target = target_framework / source.relative_to(source_framework)
+                        pending.append((source, target))
+                        copied_binaries.append(target)
+                        qt_libraries.setdefault(source.name, []).append(target)
+                frameworks_to_copy[target_framework] = source_framework
+                candidates = qt_libraries.get(match[1], [])
             if len(candidates) != 1:
                 raise ValueError(
                     f"Expected one bundled {match[1]} binary, found {len(candidates)}; "
@@ -67,6 +98,11 @@ def repair_bundle(bundle: Path) -> int:
             replacement = "@loader_path/" + os.path.relpath(target, binary.parent)
             if dependency != replacement:
                 changes.setdefault(binary, []).append((dependency, replacement))
+
+    for target, source in frameworks_to_copy.items():
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source, target, symlinks=True)
+        print(f"Bundled missing Qt framework: {target.relative_to(bundle)}")
 
     for binary, replacements in changes.items():
         command = ["install_name_tool"]
@@ -81,12 +117,14 @@ def repair_bundle(bundle: Path) -> int:
             binary.chmod(mode)
         print(f"Repaired Qt dependencies: {binary.relative_to(bundle)}")
 
-    if changes:
+    if changes or frameworks_to_copy:
         # Mach-O edits invalidate the build's signature, including nested code.
         # Nuitka places some libraries under Contents/MacOS, outside the usual
         # framework/plugin directories traversed by codesign --deep.
-        for binary in changes:
+        for binary in sorted(set(changes) | set(copied_binaries)):
             subprocess.run(["codesign", "--force", "--sign", "-", str(binary)], check=True)
+        for framework in frameworks_to_copy:
+            subprocess.run(["codesign", "--force", "--sign", "-", str(framework)], check=True)
         subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(bundle)], check=True)
     return len(changes)
 
@@ -94,12 +132,16 @@ def repair_bundle(bundle: Path) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("bundle", type=Path)
+    parser.add_argument(
+        "--qt-lib-dir", type=Path,
+        help="Qt/lib directory from the PySide6 environment used for this build (default: current PySide6)",
+    )
     args = parser.parse_args()
     if sys.platform != "darwin":
         parser.error("Bundle repair requires macOS (otool, install_name_tool and codesign).")
     try:
-        count = repair_bundle(args.bundle)
-    except (ValueError, subprocess.CalledProcessError) as error:
+        count = repair_bundle(args.bundle, args.qt_lib_dir)
+    except (ImportError, OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Bundle repair failed: {error}\n")
     print(f"Qt bundle repair complete: {count} binaries updated.")
 
