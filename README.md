@@ -176,7 +176,9 @@ To produce distributable single binaries yourself:
   ```bash
   uv run pyside6-deploy -c packaging/pysidedeploy_linux.spec    # Linux
   uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec  # Windows
-  uv run pyside6-deploy -c packaging/pysidedeploy_macos.spec    # macOS
+  # macOS: scan QML imports and generate a spec that excludes unused plugins:
+  uv run --no-sync python packaging/prepare_macos_deploy.py --output /tmp/pornfetch-macos.spec
+  uv run pyside6-deploy -c /tmp/pornfetch-macos.spec
   # Repair and re-sign the macOS bundle after deployment:
   uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
   ```

@@ -197,10 +197,19 @@ uv run pyside6-deploy -c packaging/pysidedeploy_linux.spec
 uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec
 
 # macOS
-uv run pyside6-deploy -c packaging/pysidedeploy_macos.spec
+uv run --no-sync python packaging/prepare_macos_deploy.py --output /tmp/pornfetch-macos.spec
+uv run pyside6-deploy -c /tmp/pornfetch-macos.spec
 uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
 QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 QT_QUICK_BACKEND=software "Porn Fetch.app/Contents/MacOS/main" --smoke-test
 ```
+
+The macOS spec preparation scans the application's QML imports and supported
+runtime styles. It excludes unused QML plugins and their data before compilation,
+preventing modules such as Multimedia, Sensors, WebEngine, Quick3D and StyleKit
+from pulling their frameworks into the application. Previous `.app` bundles and
+deployment output are excluded from project data. Python imports and native
+dependencies still determine the necessary Qt libraries; the current application
+also imports Qt Quick Controls, Widgets and QtTest.
 
 The macOS repair step copies missing Qt frameworks and their dependencies from
 the PySide6 environment used for the build, rewrites framework references to the

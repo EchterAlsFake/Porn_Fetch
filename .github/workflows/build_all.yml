@@ -132,6 +132,10 @@ jobs:
         shell: bash
         run: |
           SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
+          if [ "${{ matrix.platform }}" = "macos" ]; then
+            SPEC_FILE="$RUNNER_TEMP/pornfetch_macos.spec"
+            uv run --no-sync python packaging/prepare_macos_deploy.py --output "$SPEC_FILE"
+          fi
           NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
           uv run --no-sync -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
           
@@ -156,6 +160,7 @@ jobs:
           fi
           uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
           codesign --force --deep --sign - "Porn Fetch.app"
+          du -sh "Porn Fetch.app"
           mkdir dist_dmg
           cp -pR "Porn Fetch.app" dist_dmg/
           ln -s /Applications dist_dmg/Applications

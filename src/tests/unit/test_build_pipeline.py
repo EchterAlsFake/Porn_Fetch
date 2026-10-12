@@ -1,4 +1,7 @@
 """Focused offline regression checks for build artifact handling."""
+import configparser
+import fnmatch
+import shlex
 import subprocess
 import tarfile
 import tempfile
@@ -10,7 +13,54 @@ from src.tests.unit.test_cli_self_update import load_script
 
 merger = load_script("merge_macos_bundles")
 repairer = load_script("repair_macos_bundle")
+preparer = load_script("prepare_macos_deploy")
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+
+class QmlPackagingTests(unittest.TestCase):
+    def test_exclusions_preserve_imported_children_without_keeping_unused_siblings(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            qml = Path(temporary)
+            for module in ("QtQuick", "QtQuick/Layouts", "QtQuick/Scene3D", "QtQuick/Controls",
+                           "QtQuick/Controls/Basic", "QtQuick/Controls/StyleKit", "QtSensors"):
+                directory = qml / module
+                directory.mkdir(parents=True, exist_ok=True)
+                (directory / "qmldir").write_text("module " + module.replace("/", "."))
+            required = {Path("QtQuick"), Path("QtQuick/Layouts"), Path("QtQuick/Controls/Basic")}
+            self.assertEqual(set(preparer.excluded_qml_modules(qml, required)),
+                             {Path("QtQuick/Scene3D"), Path("QtQuick/Controls/StyleKit"), Path("QtSensors")})
+
+    def test_real_qml_scan_excludes_unrelated_plugins_and_keeps_ui_imports(self):
+        import PySide6
+
+        pyside = Path(PySide6.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temporary:
+            spec = Path(temporary) / "macos.spec"
+            preparer.prepare_spec(PROJECT_ROOT / "packaging/pysidedeploy_macos.spec", spec, PROJECT_ROOT, pyside)
+            config = configparser.ConfigParser()
+            config.read(spec)
+            arguments = shlex.split(config.get("nuitka", "extra_args"))
+            dll_exclusions = [arg.split("=", 1)[1] for arg in arguments if arg.startswith("--noinclude-dlls=")]
+            data_exclusions = [arg.split("=", 1)[1] for arg in arguments
+                               if arg.startswith("--noinclude-data-files=")]
+            for module in ("QtMultimedia", "QtSensors", "QtWebEngine", "QtQuick3D", "Qt/labs/StyleKit"):
+                with self.subTest(excluded=module):
+                    self.assertTrue(any(fnmatch.fnmatch(f"{pyside}/Qt/qml/{module}/libplugin.dylib", pattern)
+                                        for pattern in dll_exclusions))
+                    self.assertTrue(any(fnmatch.fnmatch(f"PySide6/qml/{module}/qmldir", pattern)
+                                        for pattern in data_exclusions))
+            for module in ("QtQuick/Layouts", "QtQuick/Dialogs", "QtQuick/Controls/Material",
+                           "Qt5Compat/GraphicalEffects"):
+                with self.subTest(retained=module):
+                    self.assertFalse(any(fnmatch.fnmatch(f"{pyside}/Qt/qml/{module}/libplugin.dylib", pattern)
+                                         for pattern in dll_exclusions))
+                    self.assertFalse(any(fnmatch.fnmatch(f"PySide6/qml/{module}/qmldir", pattern)
+                                         for pattern in data_exclusions))
+            self.assertTrue(any(fnmatch.fnmatch("PornFetch_old.app/Contents/MacOS/main", pattern)
+                                for pattern in data_exclusions))
+            self.assertEqual(config.get("app", "input_file"), str(PROJECT_ROOT / "main.py"))
+            self.assertTrue(all(path.startswith("src/frontend/UI/")
+                                for path in config.get("qt", "qml_files").split(",")))
 
 
 class MacBundleTests(unittest.TestCase):

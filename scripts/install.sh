@@ -461,6 +461,11 @@ ok "Using deploy spec: ${DEPLOY_SPEC}"
 # IMPORTANT: pyside6-deploy may rewrite the spec file -> copy to temp to avoid dirtying the repo
 DEPLOY_SPEC_TMP="${VENV_DIR}/pysidedeploy.spec"
 run cp -f "${DEPLOY_SPEC}" "${DEPLOY_SPEC_TMP}"
+if [[ "${OS}" == "darwin" ]]; then
+  info "Selecting the application's QML modules for macOS packaging..."
+  run uv run --no-sync python packaging/prepare_macos_deploy.py \
+    --template "${DEPLOY_SPEC}" --output "${DEPLOY_SPEC_TMP}"
+fi
 
 info "Building with pyside6-deploy..."
 NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
@@ -497,6 +502,8 @@ if [[ "${OS}" == "darwin" ]]; then
   bundle_executable=$(uv run --no-sync python -c 'import plistlib, sys; print(plistlib.load(open(sys.argv[1], "rb"))["CFBundleExecutable"])' "${OUT_NAME}/Contents/Info.plist")
   run env QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 QT_QUICK_BACKEND=software \
     "./${OUT_NAME}/Contents/MacOS/${bundle_executable}" --smoke-test
+  info "Final application bundle size:"
+  run du -sh "${OUT_NAME}"
   ok "Build successful: $(pwd)/${OUT_NAME}"
   if [[ -n "${FOUND_APP:-}" ]]; then
     make_macos_dmg "./${OUT_NAME}" "./${OUT_NAME%.app}.dmg" "PornFetch"

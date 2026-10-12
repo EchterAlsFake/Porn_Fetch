@@ -74,7 +74,9 @@ All builds depend on the offline test suite for the same commit. The GUI compile
 and its supporting packages are installed from `uv.lock` using the `desktop-build`
 extra. Compiled GUI artifacts run `--smoke-test`, which loads the real QML window,
 legal resources, licensing configuration and update trust root in temporary settings
-without starting network services. macOS builds repair Qt framework references
+without starting network services. macOS builds scan QML imports and runtime styles
+before compilation to exclude unused QML plugin trees and their dependencies.
+They repair Qt framework references
 inside the bundle before signing and use the Cocoa platform plugin for smoke
 tests. The macOS universal app is checked under both Intel and ARM64 before upload.
 
