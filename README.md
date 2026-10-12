@@ -177,6 +177,8 @@ To produce distributable single binaries yourself:
   uv run pyside6-deploy -c packaging/pysidedeploy_linux.spec    # Linux
   uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec  # Windows
   uv run pyside6-deploy -c packaging/pysidedeploy_macos.spec    # macOS
+  # Repair and re-sign the macOS bundle after deployment:
+  uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
   ```
 
 ## Premium license

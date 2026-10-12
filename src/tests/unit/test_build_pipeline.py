@@ -9,10 +9,72 @@ from unittest.mock import patch
 from src.tests.unit.test_cli_self_update import load_script
 
 merger = load_script("merge_macos_bundles")
+repairer = load_script("repair_macos_bundle")
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class MacBundleTests(unittest.TestCase):
+    def test_repair_relinks_cocoa_and_transitive_framework_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "Porn Fetch.app"
+            macos = bundle / "Contents" / "MacOS"
+            cocoa = macos / "PySide6" / "qt-plugins" / "platforms" / "libqcocoa.dylib"
+            gui = macos / "QtGui" / "QtGui"
+            core = macos / "QtCore" / "QtCore"
+            for binary in (cocoa, gui, core):
+                binary.parent.mkdir(parents=True, exist_ok=True)
+                binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            # Universal otool output repeats dependencies for each slice.
+            old_gui = "@rpath/QtGui.framework/Versions/A/QtGui"
+            old_core = "@rpath/QtCore.framework/Versions/A/QtCore"
+            outputs = {
+                str(cocoa): f"{cocoa}:\n\t{old_gui} (compatibility version 6.0.0, current version 6.12.0)\n" * 2,
+                str(gui): f"{gui}:\n\t{old_core} (compatibility version 6.0.0, current version 6.12.0)\n",
+                str(core): f"{core}:\n\t{old_core} (compatibility version 6.0.0, current version 6.12.0)\n",
+            }
+            with patch.object(repairer.subprocess, "check_output", side_effect=lambda args, **_: outputs[args[-1]]), \
+                 patch.object(repairer.subprocess, "run") as run:
+                self.assertEqual(repairer.repair_bundle(bundle), 2)
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertIn(
+                ["install_name_tool", "-change", old_gui, "@loader_path/../../../QtGui/QtGui", str(cocoa)],
+                commands,
+            )
+            self.assertIn(
+                ["install_name_tool", "-change", old_core, "@loader_path/../QtCore/QtCore", str(gui)],
+                commands,
+            )
+            self.assertIn(["codesign", "--force", "--sign", "-", str(cocoa)], commands)
+            self.assertIn(["codesign", "--force", "--sign", "-", str(gui)], commands)
+            self.assertEqual(commands[-1], ["codesign", "--force", "--deep", "--sign", "-", str(bundle)])
+
+    def test_repair_fails_before_modifying_bundle_when_framework_is_missing(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "broken.app"
+            macos = bundle / "Contents" / "MacOS"
+            macos.mkdir(parents=True)
+            (macos / "libqcocoa.dylib").write_bytes(b"\xcf\xfa\xed\xfetest")
+            with patch.object(repairer.subprocess, "check_output", return_value=(
+                "plugin:\n\t@rpath/QtGui.framework/Versions/A/QtGui "
+                "(compatibility version 6.0.0, current version 6.12.0)\n"
+            )), patch.object(repairer.subprocess, "run") as run:
+                with self.assertRaisesRegex(ValueError, "QtGui binary, found 0"):
+                    repairer.repair_bundle(bundle)
+                run.assert_not_called()
+
+    def test_repair_leaves_already_relinked_bundle_unchanged(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "working.app"
+            macos = bundle / "Contents" / "MacOS"
+            macos.mkdir(parents=True)
+            (macos / "libqcocoa.dylib").write_bytes(b"\xcf\xfa\xed\xfetest")
+            with patch.object(repairer.subprocess, "check_output", return_value=(
+                "plugin:\n\t@loader_path/QtGui "
+                "(compatibility version 6.0.0, current version 6.12.0)\n"
+            )), patch.object(repairer.subprocess, "run") as run:
+                self.assertEqual(repairer.repair_bundle(bundle), 0)
+                run.assert_not_called()
+
     def test_merge_extracts_slices_from_fat_inputs(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

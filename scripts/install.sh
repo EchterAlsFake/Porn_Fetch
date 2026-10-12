@@ -476,7 +476,6 @@ if [[ "${OS}" == "darwin" ]]; then
     OUT_NAME="PornFetch_macOS_GUI_${ARCH}.app"
     run rm -rf "${OUT_NAME}" || true
     run mv "Porn Fetch.app" "${OUT_NAME}"
-    ok "Build successful: $(pwd)/${OUT_NAME}"
   else
     # fallback search (in case tool changed output location)
     FOUND_APP="$(find . -maxdepth 3 -name "Porn Fetch.app" -print -quit 2>/dev/null || true)"
@@ -484,15 +483,23 @@ if [[ "${OS}" == "darwin" ]]; then
       OUT_NAME="PornFetch_macOS_GUI_${ARCH}.app"
       run rm -rf "${OUT_NAME}" || true
       run mv "${FOUND_APP}" "${OUT_NAME}"
-      ok "Build successful: $(pwd)/${OUT_NAME}"
-      # Create a drag-and-drop DMG (unsigned)
-      make_macos_dmg "./${OUT_NAME}" "./${OUT_NAME%.app}.dmg" "PornFetch"
 
     else
       error "Build finished but output 'Porn Fetch.app' was not found!"
       error "Check pyside6-deploy logs above for the output directory."
       exit 1
     fi
+  fi
+  info "Repairing bundled Qt framework references..."
+  run uv run --no-sync python packaging/repair_macos_bundle.py "${OUT_NAME}"
+  info "Checking GUI startup with the macOS Cocoa plugin..."
+  local bundle_executable
+  bundle_executable=$(uv run --no-sync python -c 'import plistlib, sys; print(plistlib.load(open(sys.argv[1], "rb"))["CFBundleExecutable"])' "${OUT_NAME}/Contents/Info.plist")
+  run env QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 QT_QUICK_BACKEND=software \
+    "./${OUT_NAME}/Contents/MacOS/${bundle_executable}" --smoke-test
+  ok "Build successful: $(pwd)/${OUT_NAME}"
+  if [[ -n "${FOUND_APP:-}" ]]; then
+    make_macos_dmg "./${OUT_NAME}" "./${OUT_NAME%.app}.dmg" "PornFetch"
   fi
 else
   # Linux: expected ".bin"

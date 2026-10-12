@@ -154,6 +154,7 @@ jobs:
             cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
             chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
           fi
+          uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
           codesign --force --deep --sign - "Porn Fetch.app"
           mkdir dist_dmg
           cp -pR "Porn Fetch.app" dist_dmg/
@@ -169,7 +170,7 @@ jobs:
         run: |
           if [ "${{ matrix.platform }}" == "macos" ]; then
             EXECUTABLE=$(uv run --no-sync python -c 'import plistlib; print(plistlib.load(open("Porn Fetch.app/Contents/Info.plist", "rb"))["CFBundleExecutable"])')
-            "Porn Fetch.app/Contents/MacOS/$EXECUTABLE" --smoke-test
+            QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 "Porn Fetch.app/Contents/MacOS/$EXECUTABLE" --smoke-test
           else
             ./"$BIN_OUTPUT" --smoke-test
           fi
@@ -543,7 +544,8 @@ jobs:
         shell: bash
         timeout-minutes: 5
         env:
-          QT_QPA_PLATFORM: offscreen
+          QT_QPA_PLATFORM: cocoa
+          QT_DEBUG_PLUGINS: '1'
           QT_QUICK_BACKEND: software
         run: |
           EXECUTABLE=$(uv run --no-sync python -c 'import plistlib; print(plistlib.load(open("PornFetch_Universal.app/Contents/Info.plist", "rb"))["CFBundleExecutable"])')

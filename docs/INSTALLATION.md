@@ -198,7 +198,20 @@ uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec
 
 # macOS
 uv run pyside6-deploy -c packaging/pysidedeploy_macos.spec
+uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
+QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 QT_QUICK_BACKEND=software "Porn Fetch.app/Contents/MacOS/main" --smoke-test
 ```
+
+The macOS repair step rewrites Qt framework references to the matching binaries
+inside the application and ad-hoc signs the modified bundle. The automated build
+script and CI run this step and test the Cocoa platform plugin before reporting
+success. An offscreen smoke test does not verify Cocoa startup.
+
+If an existing build reports `Library not loaded: @rpath/QtGui.framework/Versions/A/QtGui`,
+run the repair script with that `.app` path, then repeat the Cocoa smoke test. No
+recompile is needed when the matching Qt libraries are already bundled. If the
+script reports missing or ambiguous libraries, rebuild with matching PySide6
+libraries. Repair runs on macOS and requires the Xcode Command Line Tools.
 
 ---
 
