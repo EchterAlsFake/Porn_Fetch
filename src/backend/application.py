@@ -6,7 +6,7 @@ from pathlib import Path
 import multiprocessing as mp
 
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from src.backend.theme_manager import ThemeManager
@@ -30,7 +30,14 @@ engine = None
 splash = None
 
 if is_main_process:
+    if sys.platform == "win32":
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+            ctypes.c_wchar_p("fi.echteralsfake.pornfetch")
+        )
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
+    app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
     engine = QQmlApplicationEngine()
     if not is_android and "--android" not in sys.argv:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
@@ -92,7 +99,6 @@ from importlib.metadata import metadata, packages_distributions, version
 
 update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
-from PySide6.QtGui import QIcon
 from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
                             QTimer, QFile, QDir, QIODevice)
 
@@ -1437,7 +1443,6 @@ def main() -> None:
     app.setOrganizationName(config.__org_name__)
     app.setApplicationName(config.__app_name__)
     app.setApplicationVersion(config.__version__)
-    app.setWindowIcon(QIcon("qrc:/images/graphics/logo.png"))
     # The asyncio teardown decides when the process may exit. A compositor can
     # still destroy the native window without prematurely stopping QtAsyncio.
     app.setQuitOnLastWindowClosed(False)
