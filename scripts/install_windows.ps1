@@ -315,14 +315,7 @@ Info "Applying and verifying the required QtAsyncio compatibility patch..."
 Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir
 Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir "--verify"
 
-# Activate the venv for update script convenience
-$activateScript = Join-Path $venvDir "Scripts\Activate.ps1"
-if (-not (Test-Path $activateScript)) {
-    throw "Activate script not found: $activateScript"
-}
-
-Info "Activating virtual environment..."
-. $activateScript
+# uv uses UV_PROJECT_ENVIRONMENT directly; no activation script is needed.
 
 # Keep Nuitka quiet / auto-download
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
@@ -336,7 +329,8 @@ $uiUpdateScriptPath = Join-Path $projectDir "src\frontend\update.ps1"
 if (Test-Path $uiUpdateScriptPath) {
     Push-Location (Join-Path $projectDir "src\frontend")
     try {
-        & ".\update.ps1"
+        # Allow this build script in a child process without changing saved policies.
+        Run powershell.exe "-NoProfile" "-ExecutionPolicy" "Bypass" "-File" $uiUpdateScriptPath
     }
     finally {
         Pop-Location
@@ -398,7 +392,6 @@ Ok "Build successful: $destPath"
 
 # Cleanup temp workspace + venv
 Info "Cleaning up..."
-try { Deactivate } catch {}  # ignore if not available
 
 Set-Location C:\
 
