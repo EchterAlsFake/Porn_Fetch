@@ -94,6 +94,12 @@ function Ensure-Uv {
         Invoke-Expression $script
     }
 
+    # Winget updates the persisted PATH, not this running PowerShell session.
+    # Keep existing session entries and load the new machine/user entries.
+    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $env:Path = "$env:Path;$machinePath;$userPath"
+
     # The uv installer defaults to the "user executable directory":
     # %USERPROFILE%\.local\bin  (per uv docs)
     $uvBin = Join-Path $env:USERPROFILE ".local\bin"
