@@ -190,6 +190,7 @@ class Backend(QObject):
     accountStateChanged = Signal()
     accountFetchStateChanged = Signal()
     downloadsChanged = Signal()
+    busyChanged = Signal()
     updateAvailable = Signal("QVariantMap")
     updateProgress = Signal(int, int)
     updateStatus = Signal(str)
@@ -207,6 +208,7 @@ class Backend(QObject):
         self._login_in_progress = False
         self._account_fetch_task: asyncio.Task[object] | None = None
         self._account_fetch_in_progress = False
+        self._video_fetch_task: asyncio.Task[object] | None = None
         self._proxy_test_task: asyncio.Task[object] | None = None
         self._update_check_task: asyncio.Task[object] | None = None
         self._update_check_requested = False
@@ -267,6 +269,10 @@ class Backend(QObject):
     @Property(bool, notify=accountFetchStateChanged)
     def accountFetchInProgress(self) -> bool:
         return self._account_fetch_in_progress
+
+    @Property(bool, notify=busyChanged)
+    def busy(self) -> bool:
+        return self._video_fetch_task is not None
 
     @Property("QVariantMap", notify=accountStateChanged)
     def accountLoginStatus(self) -> dict[str, bool]:
@@ -535,6 +541,8 @@ class Backend(QObject):
     @Slot()
     def cancel_fetching(self):
         stop_flag.set()
+        if self._video_fetch_task is not None:
+            self._video_fetch_task.cancel()
 
     @Slot()
     def clear_temporary_files(self):
@@ -1033,6 +1041,24 @@ class Backend(QObject):
     def on_download_progress(self, video_id: str, percentage: int):
         self._downloads_model.update_progress(video_id, percentage)
 
+    def _start_video_fetch(self, coroutine, *, name: str) -> asyncio.Task | None:
+        if self.busy:
+            coroutine.close()
+            return None
+        stop_flag.clear()
+        self._video_fetch_task = self._spawn(coroutine, name=name)
+        self._video_fetch_task.add_done_callback(self._video_fetch_finished)
+        self.busyChanged.emit()
+        return self._video_fetch_task
+
+    def _video_fetch_finished(self, task: asyncio.Task) -> None:
+        if self._video_fetch_task is task:
+            self._video_fetch_task = None
+            self.busyChanged.emit()
+        if self._account_fetch_task is task and self._account_fetch_in_progress:
+            self._account_fetch_in_progress = False
+            self.accountFetchStateChanged.emit()
+
     @Slot(str, str, dict)
     def process_single_url(self, url: str, custom_options: str, filters: dict):
         """
@@ -1040,7 +1066,7 @@ class Backend(QObject):
         """
         print(f"Received Video / Short URL: {url}")
         filters = VideoFilters(**filters)
-        self._spawn(
+        self._start_video_fetch(
             self._process_single_url(url=url, custom_options=custom_options, filters=filters),
             name="single-video-processing",
         )
@@ -1072,8 +1098,7 @@ class Backend(QObject):
         process_videos.error_signal.connect(self.showMessage.emit)
         await process_videos.start_processing()
 
-        self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
-        self.logger.debug("Started the thread for adding videos...")
+        self.logger.info("Finished preparing videos for the download list")
 
     @Slot(str, str, dict)
     def process_model_url(self, url: str, custom_options: str, filters: dict):
@@ -1083,7 +1108,10 @@ class Backend(QObject):
         """
         print(f"Received Model URL: {url}")
         filters = VideoFilters(**filters)
-        self._spawn(self._process_model_url(url=url, custom_options=custom_options, filters=filters), name="Deine-Mutter")
+        self._start_video_fetch(
+            self._process_model_url(url=url, custom_options=custom_options, filters=filters),
+            name="model-video-processing",
+        )
 
     async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters):
         try:
@@ -1109,8 +1137,8 @@ class Backend(QObject):
 
     @Slot(str, str, dict)
     def process_playlist_url(self, url: str, custom_options: str, filters: dict):
-        self._spawn(self._process_playlist_url(url, custom_options, VideoFilters(**filters)),
-                    name="playlist")
+        self._start_video_fetch(self._process_playlist_url(url, custom_options, VideoFilters(**filters)),
+                               name="playlist-video-processing")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
         try:
@@ -1135,12 +1163,12 @@ class Backend(QObject):
         collection: str,
         playlist_url: str = "",
     ) -> None:
-        if self._account_fetch_task is not None and not self._account_fetch_task.done():
+        if self.busy or (self._account_fetch_task is not None and not self._account_fetch_task.done()):
             return
 
         self._account_fetch_in_progress = True
         self.accountFetchStateChanged.emit()
-        self._account_fetch_task = self._spawn(
+        self._account_fetch_task = self._start_video_fetch(
             self._run_fetch_account_videos(provider, collection, playlist_url),
             name=f"account-{provider.casefold()}-{collection.casefold()}",
         )

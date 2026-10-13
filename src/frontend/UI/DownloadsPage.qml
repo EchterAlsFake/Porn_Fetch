@@ -71,6 +71,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
+                    if (backend.busy || !text.trim()) return
                     backend.process_single_url(videoUrlField.text, customOptions.text, root.getFilters())
                     videoUrlField.text = ""
                 }
@@ -101,6 +102,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
+                    if (backend.busy || !text.trim()) return
                     backend.process_model_url(text, customOptions.text, getFilters())
                     modelUrlField.text = ""
                 }
@@ -132,6 +134,7 @@ Pane {
                 selectByMouse: true
 
                 onAccepted: {
+                    if (backend.busy || !text.trim()) return
                     backend.process_playlist_url(text, customOptions.text, getFilters())
                     playlistUrlField.text = ""
                 }
@@ -185,11 +188,17 @@ Pane {
                 Layout.fillWidth: true
 
                 text: qsTr("Cancel Loading")
+                enabled: backend.busy
 
                 onClicked: {
                     backend.cancel_fetching()
                 }
             }
+        }
+
+        ProcessingIndicator {
+            Layout.fillWidth: true
+            running: backend.busy
         }
 
         StackLayout {
@@ -276,7 +285,7 @@ Pane {
                             }
 
                             Label {
-                                Layout.preferredWidth: 90
+                                Layout.preferredWidth: 130
                                 text: qsTr("Duration")
                             }
 
@@ -411,7 +420,7 @@ Pane {
                                 }
 
                                 Label {
-                                    Layout.preferredWidth: 90
+                                    Layout.preferredWidth: 130
                                     text: downloadRow.duration
                                 }
 

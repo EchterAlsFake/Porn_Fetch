@@ -109,6 +109,7 @@ Pane {
                     text: sourceType.currentIndex === 0 ? qsTr("Get Video") : qsTr("Get Videos")
                     enabled: urlField.text.trim().length > 0 && !backend.busy
                     onClicked: {
+                        if (!enabled) return
                         var url = urlField.text.trim()
                         if (sourceType.currentIndex === 0)
                             backend.process_single_url(url, customOptions.text, root.filters())
@@ -136,6 +137,11 @@ Pane {
             }
         }
 
+        ProcessingIndicator {
+            Layout.fillWidth: true
+            running: backend.busy
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Button {
@@ -145,6 +151,7 @@ Pane {
             }
             Button {
                 text: qsTr("Cancel fetch")
+                enabled: backend.busy
                 onClicked: backend.cancel_fetching()
             }
         }

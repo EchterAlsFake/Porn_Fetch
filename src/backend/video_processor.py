@@ -193,11 +193,11 @@ class ProcessVideos(QObject):
             self.iterator = self.reverse_iterator(self.iterator)
 
         async with aclosing(self.iterator) as iterator:
-            idx = 0
+            idx = 1
             async for video in iterator:
                 print(f"Processing: {video} {idx}")
                 video_url = getattr(video, "url", str(video))
-                if self.result_limit is not None and idx >= self.result_limit:
+                if self.result_limit is not None and idx > self.result_limit:
                     break
 
                 last_error = None  # Keeps track of the

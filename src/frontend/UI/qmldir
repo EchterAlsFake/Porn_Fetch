@@ -6,3 +6,4 @@ singleton Theme 1.0 Theme.qml
 # Component registration
 SmoothScrollView 1.0 SmoothScrollView.qml
 SmoothWheelHandler 1.0 SmoothWheelHandler.qml
+ProcessingIndicator 1.0 ProcessingIndicator.qml

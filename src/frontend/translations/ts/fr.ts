@@ -352,129 +352,129 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="126"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="127"/>
         <source>Save to: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="131"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="132"/>
         <source>Choose folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="143"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="149"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="143"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="149"/>
         <source>Filters and options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="147"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="153"/>
         <source>Cancel fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="160"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="167"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="161"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="168"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="164"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="171"/>
         <source>Download selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="197"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="204"/>
         <source>Save downloaded video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="208"/>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="217"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="215"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="224"/>
         <source>[redacted]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="233"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="240"/>
         <source>Select download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="280"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="287"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="286"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="293"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="286"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="293"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="296"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="303"/>
         <source>Save elsewhere</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="306"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="313"/>
         <source>No downloads yet
 Add a video URL to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="324"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="331"/>
         <source>Cleanup on stop (disables HLS resume)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="325"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="332"/>
         <source>Duration in minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="332"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="339"/>
         <source>Title regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="333"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="340"/>
         <source>Author regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="334"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="341"/>
         <source>Tags regex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="335"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="342"/>
         <source>Quality range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="341"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="348"/>
         <source>Published after (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="342"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="349"/>
         <source>Published before (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="343"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="350"/>
         <source>Custom options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1525,7 +1525,7 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="594"/>
+        <location filename="../../../backend/application.py" line="602"/>
         <source>
         Important: 
 
@@ -1541,69 +1541,77 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="710"/>
+        <location filename="../../../backend/application.py" line="718"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="718"/>
+        <location filename="../../../backend/application.py" line="726"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="729"/>
+        <location filename="../../../backend/application.py" line="737"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="800"/>
+        <location filename="../../../backend/application.py" line="808"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="984"/>
-        <location filename="../../../backend/application.py" line="1021"/>
+        <location filename="../../../backend/application.py" line="992"/>
+        <location filename="../../../backend/application.py" line="1029"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1170"/>
+        <location filename="../../../backend/application.py" line="1198"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1187"/>
+        <location filename="../../../backend/application.py" line="1215"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1250"/>
+        <location filename="../../../backend/application.py" line="1278"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1255"/>
+        <location filename="../../../backend/application.py" line="1283"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1257"/>
+        <location filename="../../../backend/application.py" line="1285"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1262"/>
+        <location filename="../../../backend/application.py" line="1290"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1265"/>
+        <location filename="../../../backend/application.py" line="1293"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1279"/>
+        <location filename="../../../backend/application.py" line="1307"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DownloadListModel</name>
+    <message>
+        <location filename="../../../backend/download_manager.py" line="108"/>
+        <source>%d min %02d sec</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1620,245 +1628,245 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="80"/>
+        <location filename="../../UI/DownloadsPage.qml" line="81"/>
         <source>Get Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="92"/>
+        <location filename="../../UI/DownloadsPage.qml" line="93"/>
         <source>Model URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="100"/>
+        <location filename="../../UI/DownloadsPage.qml" line="101"/>
         <source>Enter a model or channel URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="110"/>
-        <location filename="../../UI/DownloadsPage.qml" line="141"/>
+        <location filename="../../UI/DownloadsPage.qml" line="112"/>
+        <location filename="../../UI/DownloadsPage.qml" line="144"/>
         <source>Get Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="123"/>
+        <location filename="../../UI/DownloadsPage.qml" line="125"/>
         <source>Playlist URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="131"/>
+        <location filename="../../UI/DownloadsPage.qml" line="133"/>
         <source>Enter a playlist URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="165"/>
+        <location filename="../../UI/DownloadsPage.qml" line="168"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="176"/>
+        <location filename="../../UI/DownloadsPage.qml" line="179"/>
         <source>Advanced Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="187"/>
+        <location filename="../../UI/DownloadsPage.qml" line="190"/>
         <source>Cancel Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="221"/>
+        <location filename="../../UI/DownloadsPage.qml" line="230"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="227"/>
+        <location filename="../../UI/DownloadsPage.qml" line="236"/>
         <source>Clear Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="237"/>
+        <location filename="../../UI/DownloadsPage.qml" line="246"/>
         <source>Download Selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="261"/>
+        <location filename="../../UI/DownloadsPage.qml" line="270"/>
         <source>Select / Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="268"/>
+        <location filename="../../UI/DownloadsPage.qml" line="277"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="275"/>
+        <location filename="../../UI/DownloadsPage.qml" line="284"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="280"/>
+        <location filename="../../UI/DownloadsPage.qml" line="289"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="285"/>
+        <location filename="../../UI/DownloadsPage.qml" line="294"/>
         <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="290"/>
+        <location filename="../../UI/DownloadsPage.qml" line="299"/>
         <source>Stop / Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="295"/>
+        <location filename="../../UI/DownloadsPage.qml" line="304"/>
         <source>Progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="363"/>
+        <location filename="../../UI/DownloadsPage.qml" line="372"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="445"/>
+        <location filename="../../UI/DownloadsPage.qml" line="454"/>
         <source>License required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="503"/>
+        <location filename="../../UI/DownloadsPage.qml" line="512"/>
         <source>Stop download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="504"/>
+        <location filename="../../UI/DownloadsPage.qml" line="513"/>
         <source>Resume download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="551"/>
+        <location filename="../../UI/DownloadsPage.qml" line="560"/>
         <source>No downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="577"/>
+        <location filename="../../UI/DownloadsPage.qml" line="586"/>
         <source>General Operations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="588"/>
+        <location filename="../../UI/DownloadsPage.qml" line="597"/>
         <source>Do not clear videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="594"/>
+        <location filename="../../UI/DownloadsPage.qml" line="603"/>
         <source>Cleanup on stop (disables resume for HLS)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="600"/>
+        <location filename="../../UI/DownloadsPage.qml" line="609"/>
         <source>Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="611"/>
+        <location filename="../../UI/DownloadsPage.qml" line="620"/>
         <source>End:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="624"/>
+        <location filename="../../UI/DownloadsPage.qml" line="633"/>
         <source>Video Filters (Applied during fetch)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="634"/>
+        <location filename="../../UI/DownloadsPage.qml" line="643"/>
         <source>Duration (Minutes):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="646"/>
         <location filename="../../UI/DownloadsPage.qml" line="655"/>
+        <location filename="../../UI/DownloadsPage.qml" line="664"/>
         <source>Any</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="646"/>
         <location filename="../../UI/DownloadsPage.qml" line="655"/>
+        <location filename="../../UI/DownloadsPage.qml" line="664"/>
         <source> min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="660"/>
+        <location filename="../../UI/DownloadsPage.qml" line="669"/>
         <source>Title Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="664"/>
+        <location filename="../../UI/DownloadsPage.qml" line="673"/>
         <source>e.g., ^Step.*</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="667"/>
+        <location filename="../../UI/DownloadsPage.qml" line="676"/>
         <source>Author Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="671"/>
+        <location filename="../../UI/DownloadsPage.qml" line="680"/>
         <source>e.g., .*Studio$</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="674"/>
+        <location filename="../../UI/DownloadsPage.qml" line="683"/>
         <source>Tags Regex:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="678"/>
+        <location filename="../../UI/DownloadsPage.qml" line="687"/>
         <source>e.g., pov|amateur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="682"/>
+        <location filename="../../UI/DownloadsPage.qml" line="691"/>
         <source>Quality Range:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="692"/>
+        <location filename="../../UI/DownloadsPage.qml" line="701"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="701"/>
+        <location filename="../../UI/DownloadsPage.qml" line="710"/>
         <source>Publish Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="709"/>
+        <location filename="../../UI/DownloadsPage.qml" line="718"/>
         <source>After (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="717"/>
+        <location filename="../../UI/DownloadsPage.qml" line="726"/>
         <source>Before (YYYY-MM-DD)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="726"/>
+        <location filename="../../UI/DownloadsPage.qml" line="735"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="734"/>
+        <location filename="../../UI/DownloadsPage.qml" line="743"/>
         <source>Custom Title formatting:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="743"/>
+        <location filename="../../UI/DownloadsPage.qml" line="752"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="750"/>
+        <location filename="../../UI/DownloadsPage.qml" line="759"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1999,6 +2007,20 @@ on your machine and route through tor.       </source>
         <location filename="../../UI/Main.qml" line="522"/>
         <location filename="../../UI/Main.qml" line="538"/>
         <source>Widget is hidden due to your privacy settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ProcessingIndicator</name>
+    <message>
+        <location filename="../../UI/ProcessingIndicator.qml" line="17"/>
+        <location filename="../../UI/ProcessingIndicator.qml" line="75"/>
+        <source>Processing videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/ProcessingIndicator.qml" line="81"/>
+        <source>Preparing your download list…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
