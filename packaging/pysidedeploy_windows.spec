@@ -40,10 +40,12 @@ android_packages = buildozer==1.6.0,cython==0.29.33
 qml_files = 
 
 # excluded qml plugin binaries
-excluded_qml_plugins = 
+# QtTest is used by Python diagnostics even though QML does not import it.
+# Avoid automatic QML exclusions removing its Qt6Test.dll dependency.
+excluded_qml_plugins = QtQuick3D,QtCharts,QtWebEngine,QtSensors
 
 # qt modules used. comma separated
-modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
+modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui,Test
 
 # qt plugins used by the application
 plugins = qml,egldeviceintegrations,iconengines,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic

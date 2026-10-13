@@ -125,7 +125,6 @@ from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_proxy_manager import SNIProxyManager
 from src.shared.errors import UnsupportedPlatform, CookiesNotFound, LoginError
-from src.backend.diagnostics import run_smoke_tests
 from src.backend.download_manager import (
     DownloadManager,
     DownloadListModel,
@@ -1461,6 +1460,8 @@ def main() -> None:
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:
+        from src.backend.diagnostics import run_smoke_tests
+
         exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
         raise SystemExit(exit_code)
 
