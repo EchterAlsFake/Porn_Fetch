@@ -94,7 +94,7 @@ except ImportError:
 from typing import AsyncIterator
 from base_api.modules.config import IteratorConfig
 from base_api import DownloadConfigHLS, DownloadConfigRAW
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
 update_splash("Importing (Qt)")

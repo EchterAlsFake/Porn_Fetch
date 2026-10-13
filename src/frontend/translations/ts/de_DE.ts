@@ -1525,7 +1525,7 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="602"/>
+        <location filename="../../../backend/application.py" line="607"/>
         <source>
         Important: 
 
@@ -1541,68 +1541,68 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="718"/>
+        <location filename="../../../backend/application.py" line="723"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="726"/>
+        <location filename="../../../backend/application.py" line="731"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="737"/>
+        <location filename="../../../backend/application.py" line="742"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="808"/>
+        <location filename="../../../backend/application.py" line="813"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="992"/>
-        <location filename="../../../backend/application.py" line="1029"/>
+        <location filename="../../../backend/application.py" line="997"/>
+        <location filename="../../../backend/application.py" line="1034"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1198"/>
+        <location filename="../../../backend/application.py" line="1203"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1215"/>
+        <location filename="../../../backend/application.py" line="1220"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1278"/>
+        <location filename="../../../backend/application.py" line="1283"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1283"/>
+        <location filename="../../../backend/application.py" line="1288"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1285"/>
+        <location filename="../../../backend/application.py" line="1290"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1290"/>
+        <location filename="../../../backend/application.py" line="1295"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1293"/>
+        <location filename="../../../backend/application.py" line="1298"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1307"/>
+        <location filename="../../../backend/application.py" line="1312"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1889,7 +1889,12 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/LicenseWidget.qml" line="193"/>
+        <location filename="../../UI/LicenseWidget.qml" line="195"/>
+        <source>Activation requires an accurate clock. Check your date, time and time zone, and enable automatic time synchronization if activation fails.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/LicenseWidget.qml" line="201"/>
         <source>Activate pasted license</source>
         <translation type="unfinished"></translation>
     </message>

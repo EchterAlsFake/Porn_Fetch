@@ -1,6 +1,7 @@
 """Production lifecycle tests: synthetic keys, no live server or customer data."""
 import base64
 import json
+import os
 import sqlite3
 import tempfile
 import unittest
@@ -128,6 +129,17 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
     async def test_valid_signature_and_literal_noncanonical_json(self):
         claims = self.client.verify_key(signed_key())
         self.assertEqual(self.client.verify_key(resign(claims)), claims)
+
+    async def test_signed_permit_from_future_reports_clock_mismatch(self):
+        self.core.certificate_transform = lambda certificate: permit(
+            self.core.fingerprint, now=self.now + 7200,
+            license_expiry=iso(self.core.entitlement),
+        )
+        status = await self.import_file()
+        self.assertEqual(status.state, "clock_mismatch")
+        self.assertFalse(status.allowed)
+        self.core.certificate_transform = lambda certificate: certificate
+        self.assertTrue((await self.client.check(force=True)).allowed)
 
     async def test_modified_payload_and_signature_and_wrong_public_key(self):
         key = signed_key()
@@ -356,7 +368,9 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(request["timeout"], (5, 20))
             self.assertFalse(request["retry_non_idempotent"])
             self.assertTrue(request["url"].startswith(f"https://licenses.pornfetch.to/v1/accounts/{ACCOUNT}/"))
-        self.assertEqual((Path(self.directory.name)/"licensing.sqlite3").stat().st_mode & 0o777, 0o600)
+        if os.name != "nt":
+            # Windows reports DOS read/write flags, not POSIX permission bits.
+            self.assertEqual((Path(self.directory.name)/"licensing.sqlite3").stat().st_mode & 0o777, 0o600)
 
     async def test_deactivation_reuses_installation_identifier(self):
         await self.import_file()

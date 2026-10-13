@@ -39,6 +39,10 @@ class TemporaryFailure(Exception):
         self.state = state
 
 
+class FuturePermitError(LicenseError):
+    """A correctly signed permit is dated ahead of the local clock."""
+
+
 class BetaLicenseError(LicenseError):
     """An old credential must never be sent to the production endpoint."""
 
@@ -324,8 +328,10 @@ class LicenseClient:
             expiry = timestamp(meta["expiry"])
             if type(meta["ttl"]) is not int or not 0 < meta["ttl"] <= WEEK:
                 raise ValueError
-            if abs(expiry - issued - meta["ttl"]) > 1 or issued > now + 300:
+            if abs(expiry - issued - meta["ttl"]) > 1:
                 raise ValueError
+            if issued > now + 300:
+                raise FuturePermitError("The license server and this device disagree on the current time")
             relationships = machine["relationships"]
             if (
                 machine["type"] != "machines"
@@ -355,6 +361,8 @@ class LicenseClient:
                 "machine_id": machine["id"],
                 "license_expiry": lic_expiry,
             }
+        except FuturePermitError:
+            raise
         except (ValueError, KeyError, TypeError, AttributeError, UnicodeError, InvalidSignature):
             raise LicenseError("Machine permit signature or signed claims are invalid") from None
 
@@ -609,6 +617,8 @@ class LicenseClient:
                 except Rejected as error:
                     record.update(blocked=error.state, retry_at=now + 60)
                     server_rejected = True
+                except FuturePermitError:
+                    record.update(blocked="clock_mismatch", retry_at=now + 60)
                 except LicenseError:
                     record.update(blocked="invalid_signature", retry_at=now + 60)
             now = self.clock()

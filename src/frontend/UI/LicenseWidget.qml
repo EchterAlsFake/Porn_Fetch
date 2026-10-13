@@ -189,6 +189,14 @@ Item {
                     echoMode: TextInput.Password
                     enabled: !root.isBridgeBusy
                 }
+                Text {
+                    Layout.fillWidth: true
+                    visible: !root.hasValidBridge
+                    text: qsTr("Activation requires an accurate clock. Check your date, time and time zone, and enable automatic time synchronization if activation fails.")
+                    font.pixelSize: 12
+                    color: textSec
+                    wrapMode: Text.WordWrap
+                }
                 Button {
                     text: qsTr("Activate pasted license")
                     enabled: !root.isBridgeBusy && pastedLicense.text.length > 0
@@ -419,7 +427,7 @@ Item {
     // ─── ACTIVATION & LICENSE INFO DIALOG ──────────────────────────
     Dialog {
         id: activationDialog
-        parent: Overlay.overlay ? Overlay.overlay : root
+        parent: root.Overlay.overlay ? root.Overlay.overlay : root
         anchors.centerIn: parent
         width: Math.min(parent ? parent.width - 32 : 460, 460)
         modal: true
