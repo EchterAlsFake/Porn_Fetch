@@ -1533,6 +1533,7 @@ def main() -> None:
 
     if splash:
         splash.finish()
+    disable_nuitka_splash()
 
     if args.smoke_test:
         # Only Qt runs here; asynchronous network, licensing and database startup is deferred below.
