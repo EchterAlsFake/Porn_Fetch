@@ -34,9 +34,17 @@ Item {
         target: (typeof bridge !== "undefined" && bridge) ? bridge : null
         ignoreUnknownSignals: true
         function onImportFinished(ok, msg) {
-            toast.isSuccess = ok
-            toast.text      = msg
-            toastAnim.restart()
+            if (ok) {
+                toast.isSuccess = true
+                toast.text = msg
+                toastAnim.restart()
+            } else {
+                importErrorDialog.message = msg
+                if (bridge.state !== "clock_mismatch" && bridge.state !== "clock_invalid") {
+                    importErrorDialog.message += "\n\n" + qsTr("An incorrect device clock can cause activation to fail. Check your date, time and time zone, enable automatic time synchronization, then try again.")
+                }
+                importErrorDialog.open()
+            }
         }
         function onFirstActivation() {
             activationDialog.open()
@@ -188,14 +196,6 @@ Item {
                     placeholderText: qsTr("Paste signed license key or license JSON")
                     echoMode: TextInput.Password
                     enabled: !root.isBridgeBusy
-                }
-                Text {
-                    Layout.fillWidth: true
-                    visible: !root.hasValidBridge
-                    text: qsTr("Activation requires an accurate clock. Check your date, time and time zone, and enable automatic time synchronization if activation fails.")
-                    font.pixelSize: 12
-                    color: textSec
-                    wrapMode: Text.WordWrap
                 }
                 Button {
                     text: qsTr("Activate pasted license")
@@ -425,6 +425,24 @@ Item {
     }
 
     // ─── ACTIVATION & LICENSE INFO DIALOG ──────────────────────────
+    Dialog {
+        id: importErrorDialog
+        objectName: "licenseImportErrorDialog"
+        property string message: ""
+        parent: root.Overlay.overlay ? root.Overlay.overlay : root
+        anchors.centerIn: parent
+        width: Math.min(parent ? parent.width - 32 : 460, 460)
+        title: qsTr("License activation failed")
+        modal: true
+        closePolicy: Popup.NoAutoClose
+        standardButtons: Dialog.Ok
+        contentItem: Label {
+            text: importErrorDialog.message
+            textFormat: Text.PlainText
+            wrapMode: Text.WordWrap
+        }
+    }
+
     Dialog {
         id: activationDialog
         parent: root.Overlay.overlay ? root.Overlay.overlay : root

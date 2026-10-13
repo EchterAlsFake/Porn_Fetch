@@ -1884,13 +1884,18 @@ Liste löschen</translation>
 <context>
     <name>LicenseWidget</name>
     <message>
-        <location filename="../../UI/LicenseWidget.qml" line="188"/>
+        <location filename="../../UI/LicenseWidget.qml" line="44"/>
+        <source>An incorrect device clock can cause activation to fail. Check your date, time and time zone, enable automatic time synchronization, then try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/LicenseWidget.qml" line="196"/>
         <source>Paste signed license key or license JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/LicenseWidget.qml" line="195"/>
-        <source>Activation requires an accurate clock. Check your date, time and time zone, and enable automatic time synchronization if activation fails.</source>
+        <location filename="../../UI/LicenseWidget.qml" line="435"/>
+        <source>License activation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
