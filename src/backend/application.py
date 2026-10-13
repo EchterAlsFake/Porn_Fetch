@@ -37,7 +37,7 @@ if is_main_process:
             ctypes.c_wchar_p("fi.echteralsfake.pornfetch")
         )
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
-    app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
+    app.setWindowIcon(QIcon(":/images/graphics/logo.png"))
     engine = QQmlApplicationEngine()
     if not is_android and "--android" not in sys.argv:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
