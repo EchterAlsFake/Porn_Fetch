@@ -2,6 +2,9 @@
 
 Okay Guys. Monday and Tuesday my last 2 exams (for now) and then I got 2 weeks of holidays and I'll release the next version in these 2 weeks, mark my words
 
+Edit: Tomorrow math exam will cook me (Tuesday) but after 9:20 (UTC) I'll cook this GitHub repo 🗣️ 🔥
+Edit 2: I am done with my math exam and I actually cooked lol 
+
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
