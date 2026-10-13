@@ -82,8 +82,9 @@ function Ensure-Uv {
 
     if (Get-Command winget -ErrorAction SilentlyContinue) {
         Info "Installing uv via winget..."
-        # Accept agreements to prevent interactive prompts
-        Run winget "install" "--id=astral-sh.uv" "-e" "--accept-package-agreements" "--accept-source-agreements"
+        # Restrict lookup to winget so an unrelated msstore failure cannot block uv.
+        # Accept agreements to prevent interactive prompts.
+        Run winget "install" "--id=astral-sh.uv" "-e" "--source" "winget" "--accept-package-agreements" "--accept-source-agreements"
     }
     else {
         Info "winget not found. Installing uv via official installer script..."
