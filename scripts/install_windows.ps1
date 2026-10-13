@@ -72,9 +72,24 @@ function Run {
 # ----------------------------
 # Ensure uv exists
 # ----------------------------
+function Refresh-Path {
+    # Keep session entries while loading changes made by package installers.
+    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $env:Path = "$env:Path;$machinePath;$userPath"
+
+    $uvBin = Join-Path $env:USERPROFILE ".local\bin"
+    if (Test-Path (Join-Path $uvBin "uv.exe")) {
+        $env:Path = "$uvBin;$env:Path"
+    }
+}
+
 function Ensure-Uv {
+    Refresh-Path
     if (Get-Command uv -ErrorAction SilentlyContinue) {
-        Ok "uv already installed: $(uv --version)"
+        $uvVersion = uv --version
+        if ($LASTEXITCODE -ne 0) { throw "Installed uv could not run successfully." }
+        Ok "uv already installed: $uvVersion"
         return
     }
 
@@ -84,7 +99,14 @@ function Ensure-Uv {
         Info "Installing uv via winget..."
         # Restrict lookup to winget so an unrelated msstore failure cannot block uv.
         # Accept agreements to prevent interactive prompts.
-        Run winget "install" "--id=astral-sh.uv" "-e" "--source" "winget" "--accept-package-agreements" "--accept-source-agreements"
+        try {
+            Run winget "install" "--id=astral-sh.uv" "-e" "--source" "winget" "--accept-package-agreements" "--accept-source-agreements"
+        } catch {
+            # Winget can return a failure when uv is already installed and current.
+            Refresh-Path
+            if (-not (Get-Command uv -ErrorAction SilentlyContinue)) { throw }
+            Warn "winget returned an error; checking the installed uv executable..."
+        }
     }
     else {
         Info "winget not found. Installing uv via official installer script..."
@@ -94,24 +116,15 @@ function Ensure-Uv {
         Invoke-Expression $script
     }
 
-    # Winget updates the persisted PATH, not this running PowerShell session.
-    # Keep existing session entries and load the new machine/user entries.
-    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
-    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
-    $env:Path = "$env:Path;$machinePath;$userPath"
-
-    # The uv installer defaults to the "user executable directory":
-    # %USERPROFILE%\.local\bin  (per uv docs)
-    $uvBin = Join-Path $env:USERPROFILE ".local\bin"
-    if (Test-Path (Join-Path $uvBin "uv.exe")) {
-        $env:Path = "$uvBin;$env:Path"
-    }
+    Refresh-Path
 
     if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
         throw "uv installation finished but 'uv' is still not on PATH. Try restarting PowerShell."
     }
 
-    Ok "uv installed successfully: $(uv --version)"
+    $uvVersion = uv --version
+    if ($LASTEXITCODE -ne 0) { throw "Installed uv could not run successfully." }
+    Ok "uv installed successfully: $uvVersion"
 }
 
 # ----------------------------
