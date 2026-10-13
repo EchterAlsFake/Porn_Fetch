@@ -358,7 +358,7 @@ $deploySpecTmp = Join-Path $venvDir "pysidedeploy.spec"
 Copy-Item -Force $deploySpec $deploySpecTmp
 
 Info "Building with pyside6-deploy..."
-$nuitkaVersion = uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))'
+$nuitkaVersion = uv run --no-sync python -c 'import sys; from importlib.metadata import version; print(version(sys.argv[1]))' Nuitka
 if ($LASTEXITCODE -ne 0) { throw "Could not read locked Nuitka version" }
 Run uv "--color" "always" "run" "--no-sync" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files" "--nuitka-version" $nuitkaVersion
 
