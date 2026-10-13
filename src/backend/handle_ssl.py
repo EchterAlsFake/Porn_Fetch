@@ -13,7 +13,7 @@ can establish a secure https connection.
 import logging
 import os
 import ssl # Main library for handling ssl
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 
 
 logger = configure_app_logging(logger_name="Porn Fetch - [SSL Handler]", level=logging.DEBUG)

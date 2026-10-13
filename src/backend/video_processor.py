@@ -18,7 +18,7 @@ from base_api.modules.errors import (
     RateLimitError,
     SecurityAbort,
 )
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from pornhub_api.modules.errors import GifPendingReview, VideoDisabled
 from PySide6.QtCore import QObject, Signal
 

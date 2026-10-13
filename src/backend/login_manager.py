@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 
 from src.backend import clients
 from base_api.modules.config import IteratorConfig
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from src.shared.errors import CookiesNotFound, LoginError
 from src.shared.provider_accounts import connect_pornhub_cookies
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed

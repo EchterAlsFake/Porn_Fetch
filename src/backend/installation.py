@@ -4,7 +4,7 @@ import src.backend.config as config
 
 from pathlib import Path
 from src.shared.errors import UnsupportedPlatform
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from PySide6.QtCore import QStandardPaths, QFile, QCoreApplication
 from src.backend.helper_functions import (chmod_755, write_text_atomic, copy_overwrite_atomic,
                                           get_original_executable_path)

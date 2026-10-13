@@ -6,7 +6,7 @@ from pathlib import Path
 import multiprocessing as mp
 
 import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from src.backend.theme_manager import ThemeManager
@@ -32,7 +32,14 @@ splash = None
 
 if is_main_process:
     install_wayland_message_filter()
+    if sys.platform == "win32":
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+            ctypes.c_wchar_p("fi.echteralsfake.pornfetch")
+        )
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
+    app.setWindowIcon(QIcon(":/images/graphics/logo.png"))
     engine = QQmlApplicationEngine()
     if not is_android and "--android" not in sys.argv:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
@@ -89,12 +96,11 @@ except ImportError:
 from typing import AsyncIterator
 from base_api.modules.config import IteratorConfig
 from base_api import DownloadConfigHLS, DownloadConfigRAW
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
 update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
-from PySide6.QtGui import QIcon
 from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
                             QTimer, QFile, QDir, QIODevice)
 
@@ -127,7 +133,6 @@ from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_proxy_manager import SNIProxyManager
 from src.shared.errors import UnsupportedPlatform, CookiesNotFound, LoginError
-from src.backend.diagnostics import run_smoke_tests
 from src.backend.download_manager import (
     DownloadManager,
     DownloadListModel,
@@ -1461,7 +1466,6 @@ def main() -> None:
     app.setOrganizationName(config.__org_name__)
     app.setApplicationName(config.__app_name__)
     app.setApplicationVersion(config.__version__)
-    app.setWindowIcon(QIcon("qrc:/images/graphics/logo.png"))
     # The asyncio teardown decides when the process may exit. A compositor can
     # still destroy the native window without prematurely stopping QtAsyncio.
     app.setQuitOnLastWindowClosed(False)
@@ -1484,6 +1488,8 @@ def main() -> None:
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if "--test" in sys.argv:
+        from src.backend.diagnostics import run_smoke_tests
+
         exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
         raise SystemExit(exit_code)
 
@@ -1556,6 +1562,7 @@ def main() -> None:
 
     if splash:
         splash.finish()
+    disable_nuitka_splash()
 
     if args.smoke_test:
         # Only Qt runs here; asynchronous network, licensing and database startup is deferred below.

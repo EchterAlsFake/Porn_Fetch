@@ -61,7 +61,7 @@ from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
 from src.shared.provider_routing import ContentKind, resolve_video, route_url
-from base_api.modules.logger import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from src.shared.media import VideoObject
 from src.shared.provider_parsing import parse_length, parse_publish_date
 from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, strip_title, \

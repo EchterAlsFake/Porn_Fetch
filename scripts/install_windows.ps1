@@ -72,9 +72,24 @@ function Run {
 # ----------------------------
 # Ensure uv exists
 # ----------------------------
+function Refresh-Path {
+    # Keep session entries while loading changes made by package installers.
+    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $env:Path = "$env:Path;$machinePath;$userPath"
+
+    $uvBin = Join-Path $env:USERPROFILE ".local\bin"
+    if (Test-Path (Join-Path $uvBin "uv.exe")) {
+        $env:Path = "$uvBin;$env:Path"
+    }
+}
+
 function Ensure-Uv {
+    Refresh-Path
     if (Get-Command uv -ErrorAction SilentlyContinue) {
-        Ok "uv already installed: $(uv --version)"
+        $uvVersion = uv --version
+        if ($LASTEXITCODE -ne 0) { throw "Installed uv could not run successfully." }
+        Ok "uv already installed: $uvVersion"
         return
     }
 
@@ -82,8 +97,16 @@ function Ensure-Uv {
 
     if (Get-Command winget -ErrorAction SilentlyContinue) {
         Info "Installing uv via winget..."
-        # Accept agreements to prevent interactive prompts
-        Run winget "install" "--id=astral-sh.uv" "-e" "--accept-package-agreements" "--accept-source-agreements"
+        # Restrict lookup to winget so an unrelated msstore failure cannot block uv.
+        # Accept agreements to prevent interactive prompts.
+        try {
+            Run winget "install" "--id=astral-sh.uv" "-e" "--source" "winget" "--accept-package-agreements" "--accept-source-agreements"
+        } catch {
+            # Winget can return a failure when uv is already installed and current.
+            Refresh-Path
+            if (-not (Get-Command uv -ErrorAction SilentlyContinue)) { throw }
+            Warn "winget returned an error; checking the installed uv executable..."
+        }
     }
     else {
         Info "winget not found. Installing uv via official installer script..."
@@ -93,18 +116,15 @@ function Ensure-Uv {
         Invoke-Expression $script
     }
 
-    # The uv installer defaults to the "user executable directory":
-    # %USERPROFILE%\.local\bin  (per uv docs)
-    $uvBin = Join-Path $env:USERPROFILE ".local\bin"
-    if (Test-Path (Join-Path $uvBin "uv.exe")) {
-        $env:Path = "$uvBin;$env:Path"
-    }
+    Refresh-Path
 
     if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
         throw "uv installation finished but 'uv' is still not on PATH. Try restarting PowerShell."
     }
 
-    Ok "uv installed successfully: $(uv --version)"
+    $uvVersion = uv --version
+    if ($LASTEXITCODE -ne 0) { throw "Installed uv could not run successfully." }
+    Ok "uv installed successfully: $uvVersion"
 }
 
 # ----------------------------
@@ -295,14 +315,7 @@ Info "Applying and verifying the required QtAsyncio compatibility patch..."
 Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir
 Run uv "run" "--no-sync" "python" "scripts/patch_qtasyncio.py" $venvDir "--verify"
 
-# Activate the venv for update script convenience
-$activateScript = Join-Path $venvDir "Scripts\Activate.ps1"
-if (-not (Test-Path $activateScript)) {
-    throw "Activate script not found: $activateScript"
-}
-
-Info "Activating virtual environment..."
-. $activateScript
+# uv uses UV_PROJECT_ENVIRONMENT directly; no activation script is needed.
 
 # Keep Nuitka quiet / auto-download
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
@@ -316,7 +329,8 @@ $uiUpdateScriptPath = Join-Path $projectDir "src\frontend\update.ps1"
 if (Test-Path $uiUpdateScriptPath) {
     Push-Location (Join-Path $projectDir "src\frontend")
     try {
-        & ".\update.ps1"
+        # Allow this build script in a child process without changing saved policies.
+        Run powershell.exe "-NoProfile" "-ExecutionPolicy" "Bypass" "-File" $uiUpdateScriptPath
     }
     finally {
         Pop-Location
@@ -344,7 +358,7 @@ $deploySpecTmp = Join-Path $venvDir "pysidedeploy.spec"
 Copy-Item -Force $deploySpec $deploySpecTmp
 
 Info "Building with pyside6-deploy..."
-$nuitkaVersion = uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))'
+$nuitkaVersion = uv run --no-sync python -c 'import sys; from importlib.metadata import version; print(version(sys.argv[1]))' Nuitka
 if ($LASTEXITCODE -ne 0) { throw "Could not read locked Nuitka version" }
 Run uv "--color" "always" "run" "--no-sync" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files" "--nuitka-version" $nuitkaVersion
 
@@ -378,7 +392,6 @@ Ok "Build successful: $destPath"
 
 # Cleanup temp workspace + venv
 Info "Cleaning up..."
-try { Deactivate } catch {}  # ignore if not available
 
 Set-Location C:\
 

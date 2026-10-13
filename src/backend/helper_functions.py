@@ -4,7 +4,7 @@ import shutil
 import traceback
 
 from pathlib import Path
-from base_api.base import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from PySide6.QtCore import QIODevice, QSaveFile, QStandardPaths
 from PySide6.QtWidgets import QSpinBox, QCheckBox, QDoubleSpinBox, QLineEdit, QComboBox
 

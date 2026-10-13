@@ -64,6 +64,7 @@ class CheckUpdates:
         try:
             return await CheckUpdates.check_signed_repository()
         except Exception:
+            logger.warning("Signed release metadata is unavailable. Falling back to informational update discovery; automatic installation remains disabled.")
             # Legacy discovery is informational only; installation requires a signed repository.
             update = await CheckUpdates.check_via_http()
             if update:
@@ -139,7 +140,7 @@ class CheckUpdates:
                 if CheckUpdates._version_parts(version) > CheckUpdates._version_parts(__version__):
                     logger.info("A new update is available: %s", version)
                     return update
-                logger.info("Application is up to date (%s)", __version__)
+                logger.info("Legacy update discovery reports no newer version (%s); this does not authenticate the signed release repository.", __version__)
             elif response.status_code == 404:
                 logger.error("Update endpoint returned 404")
             elif response.status_code in {500, 502, 530}:

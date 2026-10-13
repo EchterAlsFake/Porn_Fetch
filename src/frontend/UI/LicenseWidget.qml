@@ -34,9 +34,17 @@ Item {
         target: (typeof bridge !== "undefined" && bridge) ? bridge : null
         ignoreUnknownSignals: true
         function onImportFinished(ok, msg) {
-            toast.isSuccess = ok
-            toast.text      = msg
-            toastAnim.restart()
+            if (ok) {
+                toast.isSuccess = true
+                toast.text = msg
+                toastAnim.restart()
+            } else {
+                importErrorDialog.message = msg
+                if (bridge.state !== "clock_mismatch" && bridge.state !== "clock_invalid") {
+                    importErrorDialog.message += "\n\n" + qsTr("An incorrect device clock can cause activation to fail. Check your date, time and time zone, enable automatic time synchronization, then try again.")
+                }
+                importErrorDialog.open()
+            }
         }
         function onFirstActivation() {
             activationDialog.open()
@@ -418,8 +426,26 @@ Item {
 
     // ─── ACTIVATION & LICENSE INFO DIALOG ──────────────────────────
     Dialog {
+        id: importErrorDialog
+        objectName: "licenseImportErrorDialog"
+        property string message: ""
+        parent: root.Overlay.overlay ? root.Overlay.overlay : root
+        anchors.centerIn: parent
+        width: Math.min(parent ? parent.width - 32 : 460, 460)
+        title: qsTr("License activation failed")
+        modal: true
+        closePolicy: Popup.NoAutoClose
+        standardButtons: Dialog.Ok
+        contentItem: Label {
+            text: importErrorDialog.message
+            textFormat: Text.PlainText
+            wrapMode: Text.WordWrap
+        }
+    }
+
+    Dialog {
         id: activationDialog
-        parent: Overlay.overlay ? Overlay.overlay : root
+        parent: root.Overlay.overlay ? root.Overlay.overlay : root
         anchors.centerIn: parent
         width: Math.min(parent ? parent.width - 32 : 460, 460)
         modal: true

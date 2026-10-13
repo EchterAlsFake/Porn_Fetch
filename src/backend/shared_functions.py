@@ -6,7 +6,7 @@ If you know what you do, you can change a few things here :)
 import logging
 import platform
 
-from base_api.base import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from src.backend.config import __version__
 from src.shared.error_reporting import report_exception, report_public_error
 

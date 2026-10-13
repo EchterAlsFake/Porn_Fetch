@@ -27,7 +27,7 @@ class DesktopPackagingSpecTests(unittest.TestCase):
                     shutil.copy2(source, relocated)
                     with patch.object(Config, "_find_qml_files", return_value=[]), \
                          patch.object(Config, "_find_excluded_qml_plugins", return_value=[]):
-                        config = Config(relocated, PROJECT_ROOT / "main.py", Path("python"),
+                        config = Config(relocated, PROJECT_ROOT / "main.py",
                                         dry_run=True, existing_config_file=True)
                     self.assertEqual(config.project_dir, PROJECT_ROOT)
 
@@ -72,7 +72,11 @@ class DesktopPackagingSpecTests(unittest.TestCase):
 
         self.assertEqual(parser.get("nuitka", "mode"), "onefile")
         extra_args = parser.get("nuitka", "extra_args")
-        self.assertIn("--windows-console-mode=disable", extra_args)
+        self.assertIn("--windows-console-mode=attach", extra_args)
+        self.assertIn("Test", modules)
+        exclusions = parser.get("qt", "excluded_qml_plugins").split(",")
+        self.assertNotIn("QtTest", exclusions)
+        self.assertNotEqual(exclusions, [""], "Automatic exclusions remove QtTest")
         self.assertNotIn("--windows-disable-console", extra_args)
 
     def test_macos_spec_configuration(self):
