@@ -1,9 +1,10 @@
 """Qt/QML adapter for the Qt-free PocketBase services."""
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
-from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtCore import Property, QObject, Signal, Slot
 
 from src.backend.config import IS_ANDROID, app_settings
 from src.shared.media import VideoObject
@@ -20,6 +21,7 @@ class DatabaseBridge(QObject):
     statisticsChanged = Signal()
     downloadSaved = Signal(str)
     initializationFailed = Signal(str)
+    busyChanged = Signal()
 
     def __init__(
         self,
@@ -29,6 +31,7 @@ class DatabaseBridge(QObject):
         tracking_supported: bool = True,
     ):
         super().__init__(parent)
+        self._tasks: set[asyncio.Task[Any]] = set()
         # Reuse the disabled tracker contract on Android; no database is created or started.
         self._tracker = tracker or PocketBaseTracker(
             data_path=app_settings.pocketbase_data_path,
@@ -64,14 +67,32 @@ class DatabaseBridge(QObject):
     def _videos(self) -> dict[str, dict[str, Any]]:
         return self._tracker._videos
 
+    @Property(bool, notify=busyChanged)
+    def busy(self) -> bool:
+        return bool(self._tasks)
+
+    def _track_task(self, task: asyncio.Task[Any]) -> None:
+        if task.done() or task in self._tasks:
+            return
+        was_busy = self.busy
+        self._tasks.add(task)
+        task.add_done_callback(self._task_done)
+        if not was_busy:
+            self.busyChanged.emit()
+
+    def _task_done(self, task: asyncio.Task[Any]) -> None:
+        self._tasks.discard(task)
+        if not self._tasks:
+            self.busyChanged.emit()
+
     def start(self) -> None:
         if self._tracker.enabled:
-            self._tracker.schedule_startup()
+            self._track_task(self._tracker.schedule_startup())
 
     @Slot(object)
     def on_video_updated(self, video: VideoObject) -> None:
         if self._tracker.enabled:
-            self._tracker.spawn_save_video(video)
+            self._track_task(self._tracker.spawn_save_video(video))
 
     @Slot(result=list)
     def getAvailableIterators(self) -> list[dict[str, Any]]:

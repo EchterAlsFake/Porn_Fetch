@@ -11,6 +11,7 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from src.backend.theme_manager import ThemeManager
 from src.backend.splashscreen import SplashController
+from src.backend.qt_logging import install_wayland_message_filter
 
 
 # --- MULTIPROCESSING SAFE SPLASH SCREEN ---
@@ -30,6 +31,7 @@ engine = None
 splash = None
 
 if is_main_process:
+    install_wayland_message_filter()
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
     if not is_android and "--android" not in sys.argv:
@@ -191,6 +193,7 @@ class Backend(QObject):
     accountFetchStateChanged = Signal()
     downloadsChanged = Signal()
     busyChanged = Signal()
+    activityChanged = Signal()
     updateAvailable = Signal("QVariantMap")
     updateProgress = Signal(int, int)
     updateStatus = Signal(str)
@@ -204,6 +207,7 @@ class Backend(QObject):
     def __init__(self, parent: QObject | None = None, *, mobile_layout: bool = False):
         super().__init__(parent)
         self._background_tasks: set[asyncio.Task[object]] = set()
+        self._activity_active = False
         self._login_task: asyncio.Task[object] | None = None
         self._login_in_progress = False
         self._account_fetch_task: asyncio.Task[object] | None = None
@@ -274,6 +278,22 @@ class Backend(QObject):
     def busy(self) -> bool:
         return self._video_fetch_task is not None
 
+    @Property(bool, notify=activityChanged)
+    def activityActive(self) -> bool:
+        return self._activity_active
+
+    @Slot()
+    def _update_activity(self) -> None:
+        active = bool(
+            self._background_tasks
+            or (self._license_bridge is not None and self._license_bridge.busy)
+            or (self.database_bridge is not None and self.database_bridge.busy)
+            or self._is_shutting_down
+        )
+        if active != self._activity_active:
+            self._activity_active = active
+            self.activityChanged.emit()
+
     @Property("QVariantMap", notify=accountStateChanged)
     def accountLoginStatus(self) -> dict[str, bool]:
         return {
@@ -284,8 +304,10 @@ class Backend(QObject):
     def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
         self._license_bridge = license_bridge
         license_bridge.statusChanged.connect(self._enforce_quality_access)
+        license_bridge.statusChanged.connect(self._update_activity)
         license_bridge.entitlementChanged.connect(self.check_for_updates)
         self._enforce_quality_access()
+        self._update_activity()
 
     def _enforce_quality_access(self) -> None:
         preferred_quality = app_settings.mappings_quality.get(app_settings.quality, "best")
@@ -649,10 +671,12 @@ class Backend(QObject):
         task = asyncio.create_task(coro, name=name)
         self._background_tasks.add(task)
         task.add_done_callback(self._background_task_done)
+        self._update_activity()
         return task
 
     def _background_task_done(self, task: asyncio.Task) -> None:
         self._background_tasks.discard(task)
+        self._update_activity()
 
         if task.cancelled():
             self.logger.debug("Background task cancelled: %s", task.get_name())
@@ -687,13 +711,11 @@ class Backend(QObject):
         if self._proxy_test_task is not None and not self._proxy_test_task.done():
             self._proxy_test_task.cancel()
 
-        task = asyncio.create_task(
+        task = self._spawn(
             self._test_proxy(proxy_url, verify_ssl),
             name="proxy-connectivity-test",
         )
         self._proxy_test_task = task
-        self._background_tasks.add(task)
-        task.add_done_callback(self._background_task_done)
 
     async def _test_proxy(self, proxy_url: str, verify_ssl: bool) -> None:
         try:
@@ -1340,6 +1362,7 @@ class Backend(QObject):
             return
 
         self._is_shutting_down = True
+        self._update_activity()
         self.logger.info("Application closing. Initiating async teardown...")
         self._shutdown_task = asyncio.create_task(
             self._teardown_routine(),
@@ -1467,6 +1490,7 @@ def main() -> None:
 
     database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_android)
     backend_instance.database_bridge = database_bridge
+    database_bridge.busyChanged.connect(backend_instance._update_activity)
     database_bridge.initializationFailed.connect(backend_instance.handle_message)
     # Database bridge is used for tracking the downloads / creating statistics (optional feature)
 

@@ -1,5 +1,6 @@
 """Integration checks for the Qt adapter around the database core."""
 
+import asyncio
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,6 +11,29 @@ from src.database.core import PocketBaseTracker
 
 
 class DatabaseBridgeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_busy_covers_startup_and_saving_until_both_finish(self):
+        startup_done = asyncio.Event()
+        save_done = asyncio.Event()
+        startup = asyncio.create_task(startup_done.wait())
+        save = asyncio.create_task(save_done.wait())
+        tracker = Mock(enabled=True)
+        tracker.schedule_startup.return_value = startup
+        tracker.spawn_save_video.return_value = save
+        bridge = DatabaseBridge(tracker=tracker)
+        changes = []
+        bridge.busyChanged.connect(lambda: changes.append(bridge.busy))
+
+        bridge.start()
+        bridge.on_video_updated(Mock())
+        self.assertTrue(bridge.busy)
+        startup_done.set()
+        await startup
+        self.assertTrue(bridge.busy)
+        save_done.set()
+        await save
+        self.assertFalse(bridge.busy)
+        self.assertEqual(changes, [True, False])
+
     def test_database_bridge_wraps_tracker(self):
         tracker = PocketBaseTracker(enabled=False)
         bridge = DatabaseBridge(tracker=tracker)

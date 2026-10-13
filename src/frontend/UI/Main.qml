@@ -18,6 +18,16 @@ ApplicationWindow {
     property bool safeToClose: false
     property bool startupContinued: false
 
+    ActivityEdge {
+        objectName: "activityEdge"
+        parent: Overlay.overlay
+        anchors.fill: parent
+        z: 100
+        active: backend.activityActive
+        accentColor: appSettings.accent_color || "#6366f1"
+        animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden
+    }
+
     function continueStartup() {
         if (startupContinued)
             return

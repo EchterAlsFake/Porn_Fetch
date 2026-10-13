@@ -23,6 +23,16 @@ ApplicationWindow {
     background: Rectangle { color: window.backgroundColor }
 
     property bool safeToClose: false
+
+    ActivityEdge {
+        objectName: "activityEdge"
+        parent: Overlay.overlay
+        anchors.fill: parent
+        z: 100
+        active: backend.activityActive
+        accentColor: appSettings.accent_color || "#6366f1"
+        animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden
+    }
     property int pageIndex: 0
     readonly property bool tablet: contentItem.width >= 960
     readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
