@@ -199,17 +199,48 @@ class MacBundleTests(unittest.TestCase):
             self.assertEqual(commands[-1], ["lipo", str(output / "main"), "-verify_arch", "x86_64", "arm64"])
             self.assertEqual((output / "arm-resource.txt").read_text(), "resource")
 
-    def test_unmatched_native_binary_is_verified(self):
+    def test_merge_preserves_optional_intel_crypto_accelerators(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             intel, arm, output = (root / name for name in ("intel", "arm", "universal"))
             intel.mkdir()
             arm.mkdir()
-            (intel / "main").write_bytes(b"intel only")
+            accelerators = (
+                Path("Contents/MacOS/Cryptodome/Cipher/_raw_aesni.so"),
+                Path("Contents/MacOS/Cryptodome/Hash/_ghash_clmul.so"),
+            )
+            for relative in accelerators:
+                source = intel / relative
+                source.parent.mkdir(parents=True, exist_ok=True)
+                source.write_bytes(b"intel accelerator")
             with patch.object(merger, "is_macho", return_value=True), \
-                 patch.object(merger.subprocess, "run", side_effect=subprocess.CalledProcessError(1, "lipo")):
-                with self.assertRaises(subprocess.CalledProcessError):
-                    merger.merge_bundles(intel, arm, output)
+                 patch.object(merger.subprocess, "run") as run:
+                merger.merge_bundles(intel, arm, output)
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertEqual(commands, [
+                ["lipo", str(output / relative), "-verify_arch", "x86_64"]
+                for relative in accelerators
+            ])
+            for relative in accelerators:
+                self.assertEqual((output / relative).read_bytes(), b"intel accelerator")
+
+    def test_unmatched_native_binary_is_verified(self):
+        for relative in (Path("main"), Path("Contents/MacOS/Cryptodome/Cipher/_raw_aes.so")):
+            with self.subTest(binary=relative), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                intel, arm, output = (root / name for name in ("intel", "arm", "universal"))
+                intel.mkdir()
+                arm.mkdir()
+                binary = intel / relative
+                binary.parent.mkdir(parents=True, exist_ok=True)
+                binary.write_bytes(b"intel only")
+                with patch.object(merger, "is_macho", return_value=True), \
+                     patch.object(merger.subprocess, "run", side_effect=subprocess.CalledProcessError(1, "lipo")) as run:
+                    with self.assertRaises(subprocess.CalledProcessError):
+                        merger.merge_bundles(intel, arm, output)
+                run.assert_called_once_with(
+                    ["lipo", str(output / relative), "-verify_arch", "x86_64", "arm64"], check=True,
+                )
 
 
 class DeploymentInputTests(unittest.TestCase):

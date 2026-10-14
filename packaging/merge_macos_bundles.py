@@ -1,4 +1,4 @@
-"""Merge matching native binaries and verify every Mach-O has both macOS slices."""
+"""Merge macOS bundles, allowing known optional Intel-only accelerators."""
 from __future__ import annotations
 
 import argparse
@@ -6,6 +6,13 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
+
+# PyCryptodome loads these only when the CPU supports AES-NI or CLMUL.
+# ARM uses _raw_aes and _ghash_portable, which must still have both slices.
+INTEL_ONLY_ACCELERATORS = {
+    Path("Contents/MacOS/Cryptodome/Cipher/_raw_aesni.so"),
+    Path("Contents/MacOS/Cryptodome/Hash/_ghash_clmul.so"),
+}
 
 
 def is_macho(path: Path) -> bool:
@@ -30,6 +37,7 @@ def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
                 continue
             relative = destination.relative_to(output)
             sources = ((intel / relative, "x86_64"), (arm / relative, "arm64"))
+            required_architectures = ("x86_64", "arm64")
             if all(source.is_file() and is_macho(source) for source, _ in sources):
                 slices = []
                 for source, architecture in sources:
@@ -45,7 +53,10 @@ def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
                 print(f"Fusing: {relative}")
                 # Separate slices avoid duplicate architectures and in-place lipo input/output.
                 subprocess.run(["lipo", "-create", *slices, "-output", str(destination)], check=True)
-            subprocess.run(["lipo", str(destination), "-verify_arch", "x86_64", "arm64"], check=True)
+            elif relative in INTEL_ONLY_ACCELERATORS and not (arm / relative).exists():
+                print(f"Keeping Intel-only accelerator: {relative}")
+                required_architectures = ("x86_64",)
+            subprocess.run(["lipo", str(destination), "-verify_arch", *required_architectures], check=True)
 
 
 if __name__ == "__main__":
