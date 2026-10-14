@@ -6,6 +6,7 @@ import logging
 import sys
 
 from base_api.modules.logger import configure_app_logging as _configure_app_logging
+
 from src.shared.paths import shared_data_dir
 
 
