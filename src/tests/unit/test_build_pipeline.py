@@ -214,6 +214,7 @@ class MacBundleTests(unittest.TestCase):
                 source.parent.mkdir(parents=True, exist_ok=True)
                 source.write_bytes(b"intel accelerator")
             with patch.object(merger, "is_macho", return_value=True), \
+                 patch.object(merger.subprocess, "check_output", return_value=""), \
                  patch.object(merger.subprocess, "run") as run:
                 merger.merge_bundles(intel, arm, output)
             commands = [call.args[0] for call in run.call_args_list]
@@ -223,6 +224,58 @@ class MacBundleTests(unittest.TestCase):
             ])
             for relative in accelerators:
                 self.assertEqual((output / relative).read_bytes(), b"intel accelerator")
+
+    def test_merge_uses_versioned_arm_library_for_intel_openssl_alias(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            intel, arm, output = (root / name for name in ("intel", "arm", "universal"))
+            relative = Path("Contents/MacOS/libcrypto.dylib")
+            for bundle in (intel, arm):
+                (bundle / relative.parent).mkdir(parents=True)
+                (bundle / relative.with_name("libcrypto.3.dylib")).write_bytes(bundle.name.encode())
+            (intel / relative).write_bytes(b"Homebrew Intel")
+            merged_inputs = {}
+
+            def check_output(command, **_):
+                if command[0] == "lipo":
+                    return "x86_64" if Path(command[-1]).is_relative_to(intel) else "arm64"
+                return f"{command[-1]}:\n/usr/local/opt/openssl@3/lib/libcrypto.3.dylib\n"
+
+            def run(command, **_):
+                if "-create" in command:
+                    merged_inputs[Path(command[-1])] = [Path(path).read_bytes() for path in command[2:4]]
+
+            with patch.object(merger, "is_macho", return_value=True), \
+                 patch.object(merger.subprocess, "check_output", side_effect=check_output), \
+                 patch.object(merger.subprocess, "run", side_effect=run), \
+                 patch.object(merger, "repair_openssl_references"):
+                merger.merge_bundles(intel, arm, output)
+            self.assertEqual(merged_inputs[output / relative], [b"Homebrew Intel", b"arm"])
+            self.assertEqual(merged_inputs[output / relative.with_name("libcrypto.3.dylib")], [b"intel", b"arm"])
+
+    def test_merge_relinks_homebrew_openssl_to_separate_bundled_libraries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)
+            macos = output / "Contents/MacOS"
+            rust = macos / "cryptography/hazmat/bindings/_rust.so"
+            rust.parent.mkdir(parents=True)
+            rust.touch()
+            for name in ("libcrypto.dylib", "libssl.dylib"):
+                (macos / name).touch()
+            crypto = "/usr/local/Cellar/openssl@3/3.6.3/lib/libcrypto.3.dylib"
+            ssl = "/usr/local/opt/openssl@3/lib/libssl.3.dylib"
+            dependencies = "\n".join(
+                f"\t{path} (compatibility version 3.0.0, current version 3.0.0)"
+                for path in (crypto, ssl, "/usr/lib/libSystem.B.dylib")
+            )
+            with patch.object(merger.subprocess, "check_output", return_value=dependencies), \
+                 patch.object(merger.subprocess, "run") as run:
+                self.assertTrue(merger.repair_openssl_references(rust, output))
+            self.assertEqual(run.call_args_list[0].args[0], [
+                "install_name_tool", "-change", crypto, "@loader_path/../../../libcrypto.dylib",
+                "-change", ssl, "@loader_path/../../../libssl.dylib", str(rust),
+            ])
+            self.assertEqual(run.call_args_list[1].args[0], ["codesign", "--force", "--sign", "-", str(rust)])
 
     def test_unmatched_native_binary_is_verified(self):
         for relative in (Path("main"), Path("Contents/MacOS/Cryptodome/Cipher/_raw_aes.so")):
