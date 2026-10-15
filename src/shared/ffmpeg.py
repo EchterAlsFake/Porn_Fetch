@@ -95,7 +95,7 @@ def remux_ts_to_mp4(
     in_p = Path(input_path).resolve()
     out_p = Path(output_path).resolve()
 
-    # 1. Try lossless stream copy first (instantaneous)
+    # The bundled FFmpeg only copies streams; it has no encoders.
     cmd_copy = [
         str(ffmpeg),
         "-y",
@@ -106,25 +106,8 @@ def remux_ts_to_mp4(
         str(out_p),
     ]
     proc = subprocess.run(cmd_copy, capture_output=True, text=True)
-    if proc.returncode == 0:
-        return True
-
-    logger.debug("Lossless stream copy failed (%s); falling back to AAC audio transcoding.", proc.stderr.strip())
-
-    # 2. Fall back to copying video and transcoding audio to AAC
-    cmd_transcode = [
-        str(ffmpeg),
-        "-y",
-        "-v", "error",
-        "-i", str(in_p),
-        "-c:v", "copy",
-        "-c:a", "aac",
-        "-movflags", "+faststart",
-        str(out_p),
-    ]
-    proc2 = subprocess.run(cmd_transcode, capture_output=True, text=True)
-    if proc2.returncode != 0:
-        raise RuntimeError(f"FFmpeg remux failed: {proc2.stderr.strip()}")
+    if proc.returncode != 0:
+        raise RuntimeError(f"FFmpeg stream-copy remux failed: {proc.stderr.strip()}")
 
     return True
 
@@ -162,8 +145,9 @@ def write_metadata_tags(path: str | Path, data: Any) -> bool:
 
             cmd.extend([
                 "-i", str(temporary_thumb),
-                "-map", "0",
-                "-map", "1",
+                "-map", "0:v:0",
+                "-map", "0:a?",
+                "-map", "1:v:0",
                 "-c", "copy",
                 "-disposition:v:1", "attached_pic",
             ])

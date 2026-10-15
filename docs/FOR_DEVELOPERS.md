@@ -13,7 +13,7 @@ Install `uv`, then run:
 uv sync --extra gui --group dev
 ```
 
-The repository's `.python-version` selects Python 3.14. Video remuxing and metadata writing are handled via a static FFmpeg binary in `third_party/` (or system PATH).
+The repository's `.python-version` selects Python 3.14. Video remuxing and metadata writing use a separate, minimal LGPL-only FFmpeg executable in `third_party/` (or system PATH). See [FFmpeg builds](FFMPEG.md) for the pinned source, capabilities, and toolchains.
 
 ## Run the application
 

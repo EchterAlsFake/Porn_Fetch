@@ -153,13 +153,17 @@ cd Porn_Fetch
   uv sync
   ```
 
-#### Step 3: Download Dependencies (PocketBase & FFmpeg)
-Porn Fetch bundles an embedded PocketBase server for persistent download management and an FFmpeg binary for fast video remuxing and metadata tagging:
+#### Step 3: Prepare Dependencies (PocketBase & FFmpeg)
+Porn Fetch uses PocketBase for persistent download management and a minimal
+LGPL-only FFmpeg executable for video remuxing and metadata tagging:
 ```bash
 uv run python scripts/fetch_pocketbase.py
-uv run python scripts/fetch_ffmpeg.py
+uv run python packaging/build_ffmpeg.py
 ```
-This automatically detects your OS and architecture and places `pocketbase` and `ffmpeg` in `third_party/`.
+The commands detect your OS and architecture and place the executables in
+`third_party/`. FFmpeg is compiled from pinned, hash-verified source; it requires
+a C compiler, GNU make, Bash, and zlib development files. Windows builds use
+MSYS2 CLANG64 or CLANGARM64. See [FFmpeg build instructions](FFMPEG.md).
 
 #### Step 4: Patch QtAsyncio (Desktop GUI on Python 3.14)
 Python 3.14 + PySide6 requires an event loop descriptor patch for non-blocking networking and async task cancellation. Run this once after syncing:

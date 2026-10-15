@@ -30,11 +30,17 @@ def download_lgpl_text() -> bytes:
     raise RuntimeError("LGPL download retry loop ended unexpectedly")
 
 
-def collect_legal(output: Path, *, offline: bool = False) -> Path:
+def collect_legal(output: Path, *, offline: bool = False, ffmpeg_legal: list[Path] | None = None) -> Path:
     output.mkdir(parents=True, exist_ok=True)
     for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copy2(PROJECT_ROOT / name, output / name)
     shutil.copytree(PROJECT_ROOT / "LICENSES", output / "LICENSES", dirs_exist_ok=True)
+    sources = ffmpeg_legal if ffmpeg_legal is not None else [PROJECT_ROOT / "third_party/ffmpeg-legal"]
+    for index, source in enumerate(sources):
+        if ffmpeg_legal is not None and not source.is_dir():
+            raise FileNotFoundError(source)
+        if source.is_dir():
+            shutil.copytree(source, output / "ffmpeg" / str(index), dirs_exist_ok=True)
     inventory = [
         "# Python distributions in the build environment",
         "",
@@ -98,5 +104,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--ffmpeg-legal", type=Path, action="append",
+                        help="FFmpeg source/license/build directory; repeat for universal builds")
     arguments = parser.parse_args()
-    print(collect_legal(arguments.output, offline=arguments.offline))
+    print(collect_legal(arguments.output, offline=arguments.offline, ffmpeg_legal=arguments.ffmpeg_legal))

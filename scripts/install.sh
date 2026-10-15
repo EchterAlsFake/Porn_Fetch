@@ -139,19 +139,19 @@ install_linux_build_deps() {
     info "Detected Debian/Ubuntu (apt)"
     run sudo apt-get update
     run sudo apt-get install -y \
-      build-essential cmake python3-dev libssl-dev \
+      build-essential cmake python3-dev libssl-dev zlib1g-dev pkg-config \
       qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev \
       git wget curl
   elif command -v dnf >/dev/null 2>&1; then
     info "Detected Fedora (dnf)"
     run sudo dnf install -y \
-      git wget curl cmake gcc gcc-c++ make \
+      git wget curl cmake gcc gcc-c++ make zlib-devel pkgconf-pkg-config \
       qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtsvg-devel
   elif command -v zypper >/dev/null 2>&1; then
     info "Detected openSUSE (zypper)"
     run sudo zypper refresh
     run sudo zypper install -y \
-      git wget curl cmake gcc gcc-c++ make \
+      git wget curl cmake gcc gcc-c++ make zlib-devel pkg-config \
       libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtsvg-devel
   else
     warn "No known Linux package manager detected. Continuing without system deps install."
@@ -425,10 +425,8 @@ if [[ ! -f "third_party/pocketbase" ]]; then
   info "Fetching PocketBase binary..."
   run uv run --no-sync python scripts/fetch_pocketbase.py --platform "${OS}" --arch "${ARCH}" --dest third_party || true
 fi
-if [[ ! -f "third_party/ffmpeg" ]]; then
-  info "Fetching FFmpeg binary..."
-  run uv run --no-sync python scripts/fetch_ffmpeg.py --platform "${OS}" --arch "${ARCH}" --dest third_party || true
-fi
+info "Building the minimal LGPL-only FFmpeg executable..."
+run uv run --no-sync python packaging/build_ffmpeg.py --platform "${OS}" --arch "${ARCH}" --dest third_party
 
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
@@ -505,6 +503,7 @@ if [[ "${OS}" == "darwin" ]]; then
   mkdir -p "${OUT_NAME}/Contents/MacOS/third_party"
   if [[ -f "third_party/ffmpeg" ]]; then
     cp -p "third_party/ffmpeg" "${OUT_NAME}/Contents/MacOS/third_party/"
+    cp -R "third_party/ffmpeg-legal" "${OUT_NAME}/Contents/MacOS/third_party/"
     chmod +x "${OUT_NAME}/Contents/MacOS/third_party/ffmpeg"
   fi
   if [[ -f "third_party/pocketbase" ]]; then
@@ -539,6 +538,7 @@ else
     mkdir -p "${OUT_NAME}/third_party"
     if [[ -f "third_party/ffmpeg" ]]; then
       cp -p "third_party/ffmpeg" "${OUT_NAME}/third_party/"
+      cp -R "third_party/ffmpeg-legal" "${OUT_NAME}/third_party/"
       chmod +x "${OUT_NAME}/third_party/ffmpeg"
     fi
     if [[ -f "third_party/pocketbase" ]]; then

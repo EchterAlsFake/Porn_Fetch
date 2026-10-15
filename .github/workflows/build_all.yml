@@ -96,7 +96,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y 7zip libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libgl1-mesa-dev xvfb
+          sudo apt-get install -y build-essential pkg-config zlib1g-dev 7zip libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libgl1-mesa-dev xvfb
 
       # --- Build Process ---
       - name: Windows ARM64 OpenSSL (vcpkg)
@@ -139,17 +139,32 @@ jobs:
             fi
           fi
 
-      - name: Fetch FFmpeg
+      - name: Set up Windows FFmpeg compiler
+        if: matrix.platform == 'windows'
+        uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e # v2
+        with:
+          msystem: ${{ matrix.arch == 'arm64' && 'CLANGARM64' || 'CLANG64' }}
+          path-type: inherit
+          update: true
+          install: >-
+            make diffutils pkgconf
+            ${{ matrix.arch == 'arm64' && 'mingw-w64-clang-aarch64-toolchain mingw-w64-clang-aarch64-zlib' || 'mingw-w64-clang-x86_64-toolchain mingw-w64-clang-x86_64-zlib' }}
+
+      - name: Build minimal LGPL FFmpeg (Linux and macOS)
+        if: matrix.platform != 'windows'
         shell: bash
         run: |
-          mkdir -p third_party
-          uv run python scripts/fetch_ffmpeg.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest third_party
-          if [ "${{ matrix.platform }}" = "windows" ] && [ -f third_party/ffmpeg.exe ]; then
-            uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg.exe
-          elif [ -f third_party/ffmpeg ]; then
-            chmod +x third_party/ffmpeg
-            uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg
-          fi
+          uv run --no-sync python packaging/build_ffmpeg.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg"
+          uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg
+          PORN_FETCH_TEST_FFMPEG=third_party/ffmpeg uv run --no-sync python -m unittest src.tests.unit.test_ffmpeg
+
+      - name: Build minimal LGPL FFmpeg (Windows)
+        if: matrix.platform == 'windows'
+        shell: msys2 {0}
+        run: |
+          uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg"
+          uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg.exe
+          PORN_FETCH_TEST_FFMPEG=third_party/ffmpeg.exe uv run --no-sync python -m unittest src.tests.unit.test_ffmpeg
 
       - name: Frontend Update
         shell: bash
@@ -182,6 +197,7 @@ jobs:
             fi
             mkdir -p "Porn Fetch.dist/third_party"
             cp third_party/ffmpeg.exe "Porn Fetch.dist/third_party/" || true
+            cp -R third_party/ffmpeg-legal "Porn Fetch.dist/third_party/"
             cp third_party/pocketbase.exe "Porn Fetch.dist/third_party/" || true
             cp third_party/pocketbase.exe "Porn Fetch.dist/" || true
             
@@ -197,6 +213,7 @@ jobs:
             fi
             mkdir -p "Porn Fetch.dist/third_party"
             cp third_party/ffmpeg "Porn Fetch.dist/third_party/" || true
+            cp -R third_party/ffmpeg-legal "Porn Fetch.dist/third_party/"
             chmod +x "Porn Fetch.dist/third_party/ffmpeg" || true
             cp third_party/pocketbase "Porn Fetch.dist/third_party/" || true
             chmod +x "Porn Fetch.dist/third_party/pocketbase" || true
@@ -210,6 +227,7 @@ jobs:
             echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
           else
             mkdir -p "Porn Fetch.app/Contents/MacOS/third_party"
+            cp -R third_party/ffmpeg-legal "Porn Fetch.app/Contents/MacOS/third_party/"
             if [ -f third_party/ffmpeg ]; then
               cp -p third_party/ffmpeg "Porn Fetch.app/Contents/MacOS/third_party/"
               chmod +x "Porn Fetch.app/Contents/MacOS/third_party/ffmpeg"
@@ -659,7 +677,10 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Collect legal notices
-        run: uv run --no-sync python packaging/collect_legal.py PornFetch_macOS_GUI_Universal_LEGAL
+        run: >-
+          uv run --no-sync python packaging/collect_legal.py PornFetch_macOS_GUI_Universal_LEGAL
+          --ffmpeg-legal dmg_x64/third_party/ffmpeg-legal
+          --ffmpeg-legal dmg_arm64/third_party/ffmpeg-legal
 
       - name: Upload Universal Artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7

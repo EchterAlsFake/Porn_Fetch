@@ -32288,7 +32288,7 @@ tion\x0abefore rely\
 ing on this perm\
 ission for a rel\
 ease.\x0a\
-\x00\x00\x0a&\
+\x00\x00\x0b\xe2\
 #\
  Third-party not\
 ices and release\
@@ -32390,69 +32390,97 @@ le; include its \
 copyright and MI\
 T text with each\
  affected artifa\
-ct. |\x0a| PyAV / F\
-Fmpeg | PyAV met\
-adata: BSD-3-Cla\
-use; FFmpeg conf\
-iguration can va\
-ry by build | In\
-spect the FFmpeg\
- libraries in th\
-e shipped PyAV w\
-heel and include\
- their actual LG\
-PL/GPL and codec\
- notices. Do not\
- label all FFmpe\
-g builds as GPL \
-without checking\
-. |\x0a| Other Pyth\
-on packages | `u\
-v.lock` and inst\
-alled package me\
-tadata | Generat\
-e an artifact-sp\
-ecific list and \
-include the pack\
-ages' license an\
-d notice files; \
-account for plat\
-form extras and \
-transitive depen\
-dencies. |\x0a| App\
-lication graphic\
-s | [Asset prove\
-nance](docs/ASSE\
-T_PROVENANCE.md)\
- | Newly drawn S\
-VGs are part of \
-the application.\
- Preserve the do\
-cumented provena\
-nce of the PNG l\
-ogo and splash a\
-ssets; replace o\
-r clear any unce\
-rtain asset befo\
-re release. |\x0a\x0aT\
-he obsolete libr\
-ary list in `doc\
-s/CREDITS.md` is\
- retained as his\
-torical\x0aacknowle\
-dgment. It does \
-not establish th\
-e shipped depend\
-ency list or lic\
-ense\x0aobligations\
-. Third-party no\
-tices and source\
- availability mu\
-st be present in\
- the\x0adelivered p\
-ackage, not only\
- in this reposit\
-ory.\x0a\
+ct. |\x0a| FFmpeg e\
+xecutable | [LGP\
+L-2.1-or-later](\
+https://ffmpeg.o\
+rg/legal.html), \
+built from pinne\
+d FFmpeg 9.0.2 s\
+ource | The mini\
+mal profile expl\
+icitly disables \
+GPL, version-3, \
+nonfree, and thi\
+rd-party codec f\
+eatures. FFmpeg \
+runs as a separa\
+te executable. I\
+ts complete sour\
+ce archive, lice\
+nse texts, confi\
+gure flags, conf\
+iguration header\
+s, and build has\
+hes accompany it\
+ in `third_party\
+/ffmpeg-legal` a\
+nd release legal\
+ bundles. See [F\
+Fmpeg builds](do\
+cs/FFMPEG.md). |\
+\x0a| zlib | [zlib \
+license](https:/\
+/zlib.net/zlib_l\
+icense.html) | U\
+sed for PNG cove\
+r probing. Linux\
+/macOS use the s\
+ystem library; W\
+indows staticall\
+y links the MSYS\
+2 library and in\
+cludes its `zlib\
+.h` copyright/li\
+cense text in `f\
+fmpeg-legal`. |\x0a\
+| Other Python p\
+ackages | `uv.lo\
+ck` and installe\
+d package metada\
+ta | Generate an\
+ artifact-specif\
+ic list and incl\
+ude the packages\
+' license and no\
+tice files; acco\
+unt for platform\
+ extras and tran\
+sitive dependenc\
+ies. |\x0a| Applica\
+tion graphics | \
+[Asset provenanc\
+e](docs/ASSET_PR\
+OVENANCE.md) | N\
+ewly drawn SVGs \
+are part of the \
+application. Pre\
+serve the docume\
+nted provenance \
+of the PNG logo \
+and splash asset\
+s; replace or cl\
+ear any uncertai\
+n asset before r\
+elease. |\x0a\x0aThe o\
+bsolete library \
+list in `docs/CR\
+EDITS.md` is ret\
+ained as histori\
+cal\x0aacknowledgme\
+nt. It does not \
+establish the sh\
+ipped dependency\
+ list or license\
+\x0aobligations. Th\
+ird-party notice\
+s and source ava\
+ilability must b\
+e present in the\
+\x0adelivered packa\
+ge, not only in \
+this repository.\
+\x0a\
 \x00\x00\x0b\x97\
 \x00\
 \x00)\x0cx\xda\xe5Z\xebn\xdb8\x16\xfe\xef\xa7\xe0\
@@ -34768,21 +34796,21 @@ qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x03\x02\x00\x02\x00\x00\x00\x04\x00\x00\x00\x09\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x03\x1c\x00\x00\x00\x00\x00\x01\x00\x08k'\
-\x00\x00\x01\xa1>F\xc0w\
-\x00\x00\x03\x0c\x00\x01\x00\x00\x00\x01\x00\x07\xfb\x17\
-\x00\x00\x01\xa1>F\xc1Y\
-\x00\x00\x03,\x00\x00\x00\x00\x00\x01\x00\x08kI\
-\x00\x00\x01\xa1>F\xbe\xc7\
-\x00\x00\x03B\x00\x00\x00\x00\x00\x01\x00\x08o\xa1\
-\x00\x00\x01\xa1>F\xbf\x93\
-\x00\x00\x02\xea\x00\x00\x00\x00\x00\x01\x00\x07\xf6z\
+\x00\x00\x03\x1c\x00\x00\x00\x00\x00\x01\x00\x08l\xe3\
+\x00\x00\x01\xa1>\x88\x82\xfd\
+\x00\x00\x03\x0c\x00\x01\x00\x00\x00\x01\x00\x07\xfc\xd3\
+\x00\x00\x01\xa1>\x88\x83\xdb\
+\x00\x00\x03,\x00\x00\x00\x00\x00\x01\x00\x08m\x05\
+\x00\x00\x01\xa1>\x88\x815\
+\x00\x00\x03B\x00\x00\x00\x00\x00\x01\x00\x08q]\
+\x00\x00\x01\xa1>\x88\x82\x12\
+\x00\x00\x02\xea\x00\x00\x00\x00\x00\x01\x00\x07\xf86\
 \x00\x00\x01\xa1 02\x96\
 \x00\x00\x02\x9e\x00\x02\x00\x00\x00\x01\x00\x00\x00\x0f\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x02\xac\x00\x01\x00\x00\x00\x01\x00\x07\xe9\xae\
+\x00\x00\x02\xac\x00\x01\x00\x00\x00\x01\x00\x07\xebj\
 \x00\x00\x01\xa1\x1b\xee\x0bH\
-\x00\x00\x02\xc6\x00\x00\x00\x00\x00\x01\x00\x07\xf5I\
+\x00\x00\x02\xc6\x00\x00\x00\x00\x00\x01\x00\x07\xf7\x05\
 \x00\x00\x01\xa1\x0f\xa2\xf4\x0d\
 \x00\x00\x00\x80\x00\x02\x00\x00\x00\x0d\x00\x00\x00\x12\
 \x00\x00\x00\x00\x00\x00\x00\x00\
@@ -34815,7 +34843,7 @@ qt_resource_struct = b"\
 \x00\x00\x02$\x00\x00\x00\x00\x00\x01\x00\x07\xc9s\
 \x00\x00\x01\xa0\xf1\x1e\xca\xa4\
 \x00\x00\x02l\x00\x00\x00\x00\x00\x01\x00\x07\xdf\x84\
-\x00\x00\x01\xa0\xf1\x1e\xca\xa5\
+\x00\x00\x01\xa1>\x88O)\
 \x00\x00\x028\x00\x00\x00\x00\x00\x01\x00\x07\xdb9\
 \x00\x00\x01\xa0\xf1\x1e\xca\xa4\
 "
