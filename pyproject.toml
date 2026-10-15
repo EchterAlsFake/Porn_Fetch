@@ -58,7 +58,7 @@ build = [
     "pyinstaller",
 ]
 desktop-build = [
-    "nuitka==4.1.1",
+    "nuitka==4.3",
     "ordered-set",
     "zstandard",
     "patchelf; sys_platform == 'linux'",
