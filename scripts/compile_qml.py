@@ -69,7 +69,7 @@ def compile_all_qml() -> int:
             failures += 1
 
     if failures == 0:
-        print(f"[✓] Successfully compiled all {len(qml_files)} QML files to .qmlc.")
+        print(f"[OK] Successfully compiled all {len(qml_files)} QML files to .qmlc.")
     else:
         print(f"[!] Warning: {failures}/{len(qml_files)} QML files failed to compile.", file=sys.stderr)
 
