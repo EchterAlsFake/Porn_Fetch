@@ -17,6 +17,8 @@ CONTROL_STYLES = ("Basic", "Fusion", "Material", "Universal", "Windows", "macOS"
 
 def find_qmlimportscanner(pyside: Path) -> Path:
     candidates = [
+        pyside / "qmlimportscanner.exe",
+        pyside / "qmlimportscanner",
         pyside / "Qt/libexec/qmlimportscanner",
         pyside / "Qt/libexec/qmlimportscanner.exe",
         pyside / "Qt/bin/qmlimportscanner",
@@ -32,8 +34,15 @@ def find_qmlimportscanner(pyside: Path) -> Path:
     raise FileNotFoundError(f"Could not find qmlimportscanner in {pyside} or PATH")
 
 
+def find_qml_root(pyside: Path) -> Path:
+    for candidate in (pyside / "qml", pyside / "Qt/qml"):
+        if candidate.is_dir():
+            return candidate
+    raise FileNotFoundError(f"Could not find QML imports in {pyside / 'qml'} or {pyside / 'Qt/qml'}")
+
+
 def required_qml_modules(project: Path, pyside: Path) -> set[Path]:
-    qml_root = pyside / "Qt/qml"
+    qml_root = find_qml_root(pyside)
     qml_files = sorted((project / "src/frontend/UI").glob("*.qml"))
     if not qml_files:
         raise ValueError("No application QML files found")
@@ -73,7 +82,7 @@ def excluded_qml_modules(qml_root: Path, required: set[Path]) -> list[Path]:
 
 def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> None:
     required = required_qml_modules(project, pyside)
-    excluded = excluded_qml_modules(pyside / "Qt/qml", required)
+    excluded = excluded_qml_modules(find_qml_root(pyside), required)
     config = configparser.ConfigParser()
     config.read(template, encoding="utf-8")
     arguments = shlex.split(config.get("nuitka", "extra_args"))

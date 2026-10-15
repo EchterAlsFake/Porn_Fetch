@@ -1,6 +1,7 @@
 """Focused offline regression checks for build artifact handling."""
 import configparser
 import fnmatch
+import json
 import shlex
 import subprocess
 import tarfile
@@ -14,10 +15,45 @@ from src.tests.unit.test_cli_self_update import load_script
 merger = load_script("merge_macos_bundles")
 repairer = load_script("repair_macos_bundle")
 preparer = load_script("prepare_macos_deploy")
+desktop_preparer = load_script("prepare_deploy")
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class QmlPackagingTests(unittest.TestCase):
+    def test_windows_wheel_layout_is_used_for_scan_and_exclusions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary) / "project"
+            ui = project / "src/frontend/UI"
+            ui.mkdir(parents=True)
+            (ui / "Main.qml").write_text("import QtQuick.Controls\nApplicationWindow {}\n")
+            pyside = Path(temporary) / "PySide6"
+            qml = pyside / "qml"
+            required = ("QtQml", "QtQuick", "QtQuick/Controls", "QtQuick/Controls/Basic")
+            for module in (*required, "QtWebEngine"):
+                directory = qml / module
+                directory.mkdir(parents=True, exist_ok=True)
+                (directory / "qmldir").write_text("module " + module.replace("/", "."))
+            scanner = pyside / "qmlimportscanner.exe"
+            scanner.write_bytes(b"scanner")
+            scanner.chmod(0o755)
+
+            def scan(arguments, **kwargs):
+                self.assertEqual(arguments[0], str(scanner))
+                self.assertEqual(arguments[arguments.index("-importPath") + 1], str(qml))
+                self.assertIn("import QtQuick.Controls.Basic", Path(arguments[-1]).read_text())
+                return json.dumps([{"type": "module", "path": str(qml / module)} for module in required])
+
+            output = project / "windows.spec"
+            with patch.object(desktop_preparer.subprocess, "check_output", side_effect=scan):
+                desktop_preparer.prepare_spec(PROJECT_ROOT / "packaging/pysidedeploy_windows.spec",
+                                             output, project, pyside)
+            config = configparser.ConfigParser()
+            config.read(output)
+            arguments = shlex.split(config.get("nuitka", "extra_args"))
+            self.assertIn("--noinclude-dlls=*/qml/QtWebEngine/*", arguments)
+            self.assertIn("--noinclude-data-files=PySide6/qml/QtWebEngine/**", arguments)
+            self.assertNotIn("--noinclude-dlls=*/qml/QtQuick/*", arguments)
+
     def test_exclusions_preserve_imported_children_without_keeping_unused_siblings(self):
         with tempfile.TemporaryDirectory() as temporary:
             qml = Path(temporary)
