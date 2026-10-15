@@ -1,12 +1,6 @@
 version = 1
 revision = 3
 requires-python = "==3.14.*"
-resolution-markers = [
-    "(platform_machine == 'arm64' and sys_platform == 'darwin') or (platform_machine == 'x86_64' and sys_platform == 'darwin')",
-    "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'x86_64' and sys_platform == 'linux')",
-    "platform_machine == 'AMD64' and sys_platform == 'win32'",
-    "(platform_machine != 'arm64' and platform_machine != 'x86_64' and sys_platform == 'darwin') or (platform_machine != 'aarch64' and platform_machine != 'x86_64' and sys_platform == 'linux') or (platform_machine != 'AMD64' and sys_platform == 'win32') or (sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'win32')",
-]
 
 [[package]]
 name = "altgraph"
@@ -353,39 +347,24 @@ wheels = [
 [[package]]
 name = "eaf-base-api"
 version = "4.2.0"
-source = { directory = "/home/asuna/PycharmProjects/eaf_base_api" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cachetools" },
     { name = "curl-cffi" },
     { name = "tenacity" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "python_full_version >= '3.12' and extra == 'hls'" },
-    { name = "cachetools", specifier = ">=7.0.0" },
-    { name = "curl-cffi" },
-    { name = "m3u8", marker = "extra == 'hls'" },
-    { name = "tenacity", specifier = ">=9.1.2" },
-]
-provides-extras = ["hls"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy" },
-    { name = "pylint" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "types-m3u8" },
+sdist = { url = "https://files.pythonhosted.org/packages/98/c0/13ebf9afc9e693e175992a67cbc9baa5906e1b15948165a1b24d56ffff03/eaf_base_api-4.2.0.tar.gz", hash = "sha256:2a1690a5f5e3feb81df73b64fca3925d3bb59a1f1601ec47ed58f1f211a54da3", size = 71840, upload-time = "2026-09-15T13:34:37.301Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d3/86/3afa844af8bef9da0513a3ee282c2d0740fd83e813e993bf66a0c85cc094/eaf_base_api-4.2.0-py3-none-any.whl", hash = "sha256:09a9bfe0b5e9c87821c1f0a5e674da82fcf65d99e84327462fe81b0c8f341397", size = 72749, upload-time = "2026-09-15T13:34:36.037Z" },
 ]
 
 [[package]]
 name = "filelock"
-version = "4.1.1"
+version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/35/c8/1d457d9150ff948f2ce6ada7715e0eeebbe5d3b58a45271a1e222474bcd3/filelock-4.1.1.tar.gz", hash = "sha256:7ba0927482c5a814b0a7f391d029ccdb8010f576f0a74c0dcde1811e8bc4c1b6", size = 563430, upload-time = "2026-10-11T16:11:54.373Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/a9/1af41b37c3279712b22cdc63aac78a52432202b6fe1f9666a2a3d2831fb4/filelock-4.2.0.tar.gz", hash = "sha256:7a60906c75227cf04d0c273afadc8219400f11aeb13cc69591d4f6cdc6c8036e", size = 569667, upload-time = "2026-10-14T20:57:13.11Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/8b/f837f52905395ba4510fe61f753c24833fb0a9c76e21267bb9f828b664a9/filelock-4.1.1-py3-none-any.whl", hash = "sha256:3f4a557945a7b0f95efeb1f432267affe5d45ac8ddde2aed1b97ebb62382c089", size = 132460, upload-time = "2026-10-11T16:11:52.753Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/a3/9bc26acff301fe1aaea1cc3d82a1d57e0a34df3e1cadbfa91ac2dbcdde5c/filelock-4.2.0-py3-none-any.whl", hash = "sha256:2ff5690882e8cdb00ef31fb3d01a3094c29f30985426c59495afb1733f3b7238", size = 135032, upload-time = "2026-10-14T20:57:11.349Z" },
 ]
 
 [[package]]
@@ -708,7 +687,7 @@ requires-dist = [
     { name = "certifi", marker = "extra == 'gui'" },
     { name = "cryptography" },
     { name = "curl-cffi" },
-    { name = "eaf-base-api", directory = "/home/asuna/PycharmProjects/eaf_base_api" },
+    { name = "eaf-base-api" },
     { name = "nuitka", marker = "extra == 'desktop-build'", specifier = "==4.1.1" },
     { name = "ordered-set", marker = "extra == 'desktop-build'" },
     { name = "patchelf", marker = "sys_platform == 'linux' and extra == 'desktop-build'" },
@@ -1209,11 +1188,11 @@ wheels = [
 
 [[package]]
 name = "truststore"
-version = "0.10.4"
+version = "0.10.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/53/a3/1585216310e344e8102c22482f6060c7a6ea0322b63e026372e6dcefcfd6/truststore-0.10.4.tar.gz", hash = "sha256:9d91bd436463ad5e4ee4aba766628dd6cd7010cf3e2461756b3303710eebc301", size = 26169, upload-time = "2025-08-12T18:49:02.73Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/9f/c5201d42a484c061e528825fc8e2d565f5abd50a4ced6fb7d29c4ec99b2b/truststore-0.10.5.tar.gz", hash = "sha256:30d36967ccaded5cbb38d602c433f53600036c79d502f4533a49b60a03bbefcd", size = 28091, upload-time = "2026-10-12T22:27:31.808Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl", hash = "sha256:adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981", size = 18660, upload-time = "2025-08-12T18:49:01.46Z" },
+    { url = "https://files.pythonhosted.org/packages/51/e9/3a7820be2bb0fe53b6bc9c3be26d3d1158004e4c3ab953aa6840b955b1e9/truststore-0.10.5-py3-none-any.whl", hash = "sha256:9aaaedaefaf06d8b206278cf8b5012bc897f485a874503501e12d776df78951c", size = 19017, upload-time = "2026-10-12T22:27:30.377Z" },
 ]
 
 [[package]]
