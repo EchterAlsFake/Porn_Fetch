@@ -506,9 +506,9 @@ wheels = [
 
 [[package]]
 name = "nuitka"
-version = "4.1.1"
+version = "4.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d2/a6/8cf2a663402c057005f0328bdc691a653fa14848248358ef051f86a21880/nuitka-4.1.1.tar.gz", hash = "sha256:777e2c84d6b168f9bf78c3242b3779958865ae5815d26c76170eb830995368cc", size = 4558061, upload-time = "2026-05-19T08:44:16.716Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fa/5f/ba7cb858da0c98c24f85c54454a5ea18f2b784f658a91531fa051b2f2ee9/nuitka-4.3.tar.gz", hash = "sha256:8b102c6bf30d9504e82e69674d396972729092b25cefa680e8fd05678fdfa30b", size = 4766934, upload-time = "2026-10-10T11:13:15.577Z" }
 
 [[package]]
 name = "ordered-set"
@@ -688,7 +688,7 @@ requires-dist = [
     { name = "cryptography" },
     { name = "curl-cffi" },
     { name = "eaf-base-api" },
-    { name = "nuitka", marker = "extra == 'desktop-build'", specifier = "==4.1.1" },
+    { name = "nuitka", marker = "extra == 'desktop-build'", specifier = "==4.3" },
     { name = "ordered-set", marker = "extra == 'desktop-build'" },
     { name = "patchelf", marker = "sys_platform == 'linux' and extra == 'desktop-build'" },
     { name = "pip", marker = "extra == 'build'" },
