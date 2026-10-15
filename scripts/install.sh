@@ -411,13 +411,24 @@ export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 # Sync dependencies (GUI extra) with verbose output
 # ------------------------------------------------------------
 info "Syncing dependencies using uv (with --extra gui)..."
-run uv --color always sync --locked --extra gui --extra build --extra desktop-build --extra av
+run uv --color always sync --locked --extra gui --extra build --extra desktop-build
 
 # Preserve the patched dependency sources for every subsequent uv command.
 export UV_NO_SYNC=1
 info "Applying and verifying the required QtAsyncio compatibility patch..."
 run uv run --no-sync python scripts/patch_qtasyncio.py "${VENV_DIR}"
 run uv run --no-sync python scripts/patch_qtasyncio.py "${VENV_DIR}" --verify
+
+# Ensure PocketBase and FFmpeg are present in third_party
+mkdir -p third_party
+if [[ ! -f "third_party/pocketbase" ]]; then
+  info "Fetching PocketBase binary..."
+  run uv run --no-sync python scripts/fetch_pocketbase.py --platform "${OS}" --arch "${ARCH}" --dest third_party || true
+fi
+if [[ ! -f "third_party/ffmpeg" ]]; then
+  info "Fetching FFmpeg binary..."
+  run uv run --no-sync python scripts/fetch_ffmpeg.py --platform "${OS}" --arch "${ARCH}" --dest third_party || true
+fi
 
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
@@ -460,12 +471,9 @@ ok "Using deploy spec: ${DEPLOY_SPEC}"
 
 # IMPORTANT: pyside6-deploy may rewrite the spec file -> copy to temp to avoid dirtying the repo
 DEPLOY_SPEC_TMP="${VENV_DIR}/pysidedeploy.spec"
-run cp -f "${DEPLOY_SPEC}" "${DEPLOY_SPEC_TMP}"
-if [[ "${OS}" == "darwin" ]]; then
-  info "Selecting the application's QML modules for macOS packaging..."
-  run uv run --no-sync python packaging/prepare_macos_deploy.py \
-    --template "${DEPLOY_SPEC}" --output "${DEPLOY_SPEC_TMP}"
-fi
+info "Pruning unused QML modules from packaging spec..."
+run uv run --no-sync python packaging/prepare_deploy.py \
+  --template "${DEPLOY_SPEC}" --output "${DEPLOY_SPEC_TMP}"
 
 info "Building with pyside6-deploy..."
 NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
@@ -473,7 +481,7 @@ run uv --color always run --no-sync -- \
   pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
 
 # ------------------------------------------------------------
-# Rename output (Linux .bin / macOS .app)
+# Assembly & Output
 # ------------------------------------------------------------
 if [[ "${OS}" == "darwin" ]]; then
   # pyside6-deploy usually outputs "<AppName>.app" on macOS
@@ -488,12 +496,22 @@ if [[ "${OS}" == "darwin" ]]; then
       OUT_NAME="PornFetch_macOS_GUI_${ARCH}.app"
       run rm -rf "${OUT_NAME}" || true
       run mv "${FOUND_APP}" "${OUT_NAME}"
-
     else
       error "Build finished but output 'Porn Fetch.app' was not found!"
       error "Check pyside6-deploy logs above for the output directory."
       exit 1
     fi
+  fi
+  mkdir -p "${OUT_NAME}/Contents/MacOS/third_party"
+  if [[ -f "third_party/ffmpeg" ]]; then
+    cp -p "third_party/ffmpeg" "${OUT_NAME}/Contents/MacOS/third_party/"
+    chmod +x "${OUT_NAME}/Contents/MacOS/third_party/ffmpeg"
+  fi
+  if [[ -f "third_party/pocketbase" ]]; then
+    cp -p "third_party/pocketbase" "${OUT_NAME}/Contents/MacOS/third_party/"
+    cp -p "third_party/pocketbase" "${OUT_NAME}/Contents/MacOS/"
+    chmod +x "${OUT_NAME}/Contents/MacOS/third_party/pocketbase"
+    chmod +x "${OUT_NAME}/Contents/MacOS/pocketbase"
   fi
   info "Repairing bundled Qt framework references..."
   run uv run --no-sync python packaging/repair_macos_bundle.py "${OUT_NAME}"
@@ -509,13 +527,33 @@ if [[ "${OS}" == "darwin" ]]; then
     make_macos_dmg "./${OUT_NAME}" "./${OUT_NAME%.app}.dmg" "PornFetch"
   fi
 else
-  # Linux: expected ".bin"
-  if [[ -f "Porn Fetch.bin" ]]; then
+  # Linux: standalone directory (or legacy .bin)
+  if [[ -d "Porn Fetch.dist" ]]; then
+    OUT_NAME="PornFetch_Linux_GUI_${ARCH}.dist"
+    run rm -rf "${OUT_NAME}" || true
+    run mv "Porn Fetch.dist" "${OUT_NAME}"
+    if [[ -f "${OUT_NAME}/main" && ! -f "${OUT_NAME}/Porn Fetch" ]]; then
+      cp "${OUT_NAME}/main" "${OUT_NAME}/Porn Fetch"
+      chmod +x "${OUT_NAME}/Porn Fetch"
+    fi
+    mkdir -p "${OUT_NAME}/third_party"
+    if [[ -f "third_party/ffmpeg" ]]; then
+      cp -p "third_party/ffmpeg" "${OUT_NAME}/third_party/"
+      chmod +x "${OUT_NAME}/third_party/ffmpeg"
+    fi
+    if [[ -f "third_party/pocketbase" ]]; then
+      cp -p "third_party/pocketbase" "${OUT_NAME}/third_party/"
+      cp -p "third_party/pocketbase" "${OUT_NAME}/"
+      chmod +x "${OUT_NAME}/third_party/pocketbase"
+      chmod +x "${OUT_NAME}/pocketbase"
+    fi
+    ok "Build successful: $(pwd)/${OUT_NAME}"
+  elif [[ -f "Porn Fetch.bin" ]]; then
     OUT_NAME="PornFetch_Linux_GUI_${ARCH}.bin"
     run mv "Porn Fetch.bin" "${OUT_NAME}"
     ok "Build successful: $(pwd)/${OUT_NAME}"
   else
-    error "Build finished but output file 'Porn Fetch.bin' was not found!"
+    error "Build finished but output 'Porn Fetch.dist' was not found!"
     exit 1
   fi
 fi

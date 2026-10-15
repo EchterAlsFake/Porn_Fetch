@@ -42,8 +42,9 @@ Current UI/docs no longer direct users to obtain an old beta-policy license.
 
 Schema-2 JSON envelopes and raw signed keys are accepted. Schema-1 and known beta
 claims get an explicit migration error. Unknown/wrong signatures or identities are
-rejected locally. Old provisional/cache state cannot grant offline access: a new
-successful production validation and signed checkout are required. Migration never
+rejected locally. Old provisional/cache state cannot grant offline access. A verified
+production credential may qualify for the initial connectivity grace described below;
+subsequent offline access requires successful validation and signed checkout. Migration never
 silently regenerates the installation UUID, transfers licenses, or consumes a seat.
 
 ## Verification and activation
@@ -144,8 +145,9 @@ and normally refreshes online daily; CLI checks on its existing workflow boundar
 Outages use exponential retry backoff up to one hour. Explicit refresh bypasses it.
 
 Offline permission is bounded by the earlier of the signed permit's expiry and
-`last_successful_validation + 604800`. No initial activation grace exists. Failed
-requests and reimports never extend an old signed permit. Cached entitlement fields
+`last_successful_validation + 604800`. The separate initial connectivity grace below
+applies only before activation. Failed requests and reimports never extend an old
+signed permit. Cached entitlement fields
 alone cannot grant entitlement: each decision reads the verified signed certificate.
 Malformed/non-finite timestamps, incorrect UUIDs, identity mismatch, bad signatures,
 TTL excess, implausible cache/issuance times and obvious clock rollback are rejected.
@@ -253,3 +255,13 @@ exercise actual Windows/macOS/Linux Qt maintenance tools and Android import/stor
 confirm artifact signing and committed release dates; finish the server's renewal
 selection UI and payment enablement requirements. Offline passing tests alone do not
 establish production readiness.
+
+## Initial connectivity grace (14 October 2026)
+
+A never-activated signed production credential can unlock the installed eligible build
+for three days from first import only after a transport connection failure or timeout.
+The deadline persists across restarts and reimports. HTTP responses (including 5xx),
+malformed replies, TLS trust errors, beta credentials and explicit rejections do not
+qualify. Rejections stay blocking through outages until validation succeeds. This
+exception does not grant an unsigned update-entitlement deadline. After
+successful validation the existing signed seven-day freshness rule applies.

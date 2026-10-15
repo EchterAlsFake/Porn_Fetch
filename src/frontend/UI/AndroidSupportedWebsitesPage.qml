@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Pane {
     id: root
-    padding: 12
+    padding: 8
     background: Rectangle { color: appSettings.dark_mode ? "#101319" : "#f7f8fc" }
 
     WebsiteSupportContent {

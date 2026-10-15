@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 Pane {
     id: root
-    padding: 12
+    padding: 8
     property bool showFilters: false
     readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
     readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
@@ -71,7 +71,7 @@ Pane {
 
         Rectangle {
             Layout.fillWidth: true
-            implicitHeight: fetchContent.implicitHeight + 28
+            implicitHeight: fetchContent.implicitHeight + 20
             radius: 22
             color: root.cardColor
 
@@ -80,7 +80,7 @@ Pane {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.margins: 14
+                anchors.margins: 10
                 spacing: 8
 
                 Label {
@@ -122,6 +122,7 @@ Pane {
                 }
                 RowLayout {
                     Layout.fillWidth: true
+                    visible: appSettings.android_output_folder.trim() === ""
                     Label {
                         Layout.fillWidth: true
                         text: qsTr("Save to: %1").arg(root.currentOutputFolderName)
@@ -151,6 +152,8 @@ Pane {
             }
             Button {
                 text: qsTr("Cancel fetch")
+                leftPadding: 12
+                rightPadding: 12
                 enabled: backend.busy
                 onClicked: backend.cancel_fetching()
             }
@@ -164,11 +167,24 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
-                Button { text: qsTr("All"); onClicked: backend.select_all_videos(true) }
-                Button { text: qsTr("None"); onClicked: backend.select_all_videos(false) }
+                spacing: 4
+                Button {
+                    text: qsTr("All")
+                    leftPadding: 12
+                    rightPadding: 12
+                    onClicked: backend.select_all_videos(true)
+                }
+                Button {
+                    text: qsTr("None")
+                    leftPadding: 12
+                    rightPadding: 12
+                    onClicked: backend.select_all_videos(false)
+                }
                 Item { Layout.fillWidth: true }
                 Button {
                     text: qsTr("Download selected")
+                    leftPadding: 12
+                    rightPadding: 12
                     enabled: downloadList.count > 0
                     onClicked: backend.download_selected_videos(cleanupStop.checked)
                 }
@@ -196,7 +212,7 @@ Pane {
                     readonly property bool active: status === "queued" || status === "downloading" || status === "stopping"
                     readonly property bool resumable: status === "cancelled" || status === "failed"
                     width: ListView.view.width
-                    padding: 14
+                    padding: 10
                     background: Rectangle { color: root.cardColor; radius: 18 }
 
                     Dialogs.FileDialog {

@@ -97,21 +97,37 @@ jobs:
 
       # --- Build Process ---
       - name: Sync Dependencies
-        run: uv sync --locked --no-dev --extra gui --extra build --extra desktop-build --extra av
+        run: uv sync --locked --no-dev --extra gui --extra build --extra desktop-build
 
       - name: Fetch PocketBase
         shell: bash
         run: |
+          mkdir -p third_party
           if [ "${{ matrix.platform }}" == "macos" ]; then
             mkdir -p "dist_pb"
             uv run python scripts/fetch_pocketbase.py --platform macos --arch ${{ matrix.arch }} --dest dist_pb
+            cp dist_pb/pocketbase third_party/pocketbase || true
           else
-            uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest .
-            if [ "${{ matrix.platform }}" = "windows" ] && [ -f pocketbase.exe ]; then
+            uv run python scripts/fetch_pocketbase.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest third_party
+            if [ "${{ matrix.platform }}" = "windows" ] && [ -f third_party/pocketbase.exe ]; then
+              cp third_party/pocketbase.exe pocketbase.exe
               uv run --no-sync python scripts/write_checksum.py pocketbase.exe
-            elif [ -f pocketbase ]; then
+            elif [ -f third_party/pocketbase ]; then
+              cp third_party/pocketbase pocketbase
               uv run --no-sync python scripts/write_checksum.py pocketbase
             fi
+          fi
+
+      - name: Fetch FFmpeg
+        shell: bash
+        run: |
+          mkdir -p third_party
+          uv run python scripts/fetch_ffmpeg.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --dest third_party
+          if [ "${{ matrix.platform }}" = "windows" ] && [ -f third_party/ffmpeg.exe ]; then
+            uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg.exe
+          elif [ -f third_party/ffmpeg ]; then
+            chmod +x third_party/ffmpeg
+            uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg
           fi
 
       - name: Frontend Update
@@ -131,33 +147,65 @@ jobs:
       - name: Build with pyside6-deploy
         shell: bash
         run: |
-          SPEC_FILE="packaging/pysidedeploy_${{ matrix.platform }}.spec"
-          if [ "${{ matrix.platform }}" = "macos" ]; then
-            SPEC_FILE="$RUNNER_TEMP/pornfetch_macos.spec"
-            uv run --no-sync python packaging/prepare_macos_deploy.py --output "$SPEC_FILE"
-          fi
+          SPEC_FILE="$RUNNER_TEMP/pornfetch_${{ matrix.platform }}.spec"
+          uv run --no-sync python packaging/prepare_deploy.py \
+            --template "packaging/pysidedeploy_${{ matrix.platform }}.spec" \
+            --output "$SPEC_FILE"
           NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
           uv run --no-sync -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
           
-          # Universal Rename Logic
-          EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"
-          OUTPUT_NAME="PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}$EXT"
-          
-          if [ "${{ matrix.platform }}" = "macos" ]; then
-             echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> "$GITHUB_ENV"
+          # Standalone Layout & Assembly
+          if [ "${{ matrix.platform }}" = "windows" ]; then
+            if [ -f "Porn Fetch.dist/main.exe" ] && [ ! -f "Porn Fetch.dist/Porn Fetch.exe" ]; then
+              cp "Porn Fetch.dist/main.exe" "Porn Fetch.dist/Porn Fetch.exe"
+            fi
+            mkdir -p "Porn Fetch.dist/third_party"
+            cp third_party/ffmpeg.exe "Porn Fetch.dist/third_party/" || true
+            cp third_party/pocketbase.exe "Porn Fetch.dist/third_party/" || true
+            cp third_party/pocketbase.exe "Porn Fetch.dist/" || true
+            
+            DIST_NAME="PornFetch_windows_GUI_${{ matrix.arch }}"
+            cp -r "Porn Fetch.dist" "$DIST_NAME"
+            7z a "$DIST_NAME.zip" "$DIST_NAME"
+            echo "DIST_ARCHIVE=$DIST_NAME.zip" >> "$GITHUB_ENV"
+            echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
+          elif [ "${{ matrix.platform }}" = "linux" ]; then
+            if [ -f "Porn Fetch.dist/main" ] && [ ! -f "Porn Fetch.dist/Porn Fetch" ]; then
+              cp "Porn Fetch.dist/main" "Porn Fetch.dist/Porn Fetch"
+              chmod +x "Porn Fetch.dist/Porn Fetch"
+            fi
+            mkdir -p "Porn Fetch.dist/third_party"
+            cp third_party/ffmpeg "Porn Fetch.dist/third_party/" || true
+            chmod +x "Porn Fetch.dist/third_party/ffmpeg" || true
+            cp third_party/pocketbase "Porn Fetch.dist/third_party/" || true
+            chmod +x "Porn Fetch.dist/third_party/pocketbase" || true
+            cp third_party/pocketbase "Porn Fetch.dist/" || true
+            chmod +x "Porn Fetch.dist/pocketbase" || true
+            
+            DIST_NAME="PornFetch_linux_GUI_${{ matrix.arch }}"
+            cp -r "Porn Fetch.dist" "$DIST_NAME"
+            tar -czf "$DIST_NAME.tar.gz" "$DIST_NAME"
+            echo "DIST_ARCHIVE=$DIST_NAME.tar.gz" >> "$GITHUB_ENV"
+            echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
           else
-             mv "Porn Fetch$EXT" "$OUTPUT_NAME"
-             echo "BIN_OUTPUT=$OUTPUT_NAME" >> "$GITHUB_ENV"
+            mkdir -p "Porn Fetch.app/Contents/MacOS/third_party"
+            if [ -f third_party/ffmpeg ]; then
+              cp -p third_party/ffmpeg "Porn Fetch.app/Contents/MacOS/third_party/"
+              chmod +x "Porn Fetch.app/Contents/MacOS/third_party/ffmpeg"
+            fi
+            if [ -f dist_pb/pocketbase ]; then
+              cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/third_party/"
+              cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
+              chmod +x "Porn Fetch.app/Contents/MacOS/third_party/pocketbase"
+              chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
+            fi
+            echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> "$GITHUB_ENV"
           fi
 
       # --- Packaging & QA ---
       - name: macOS DMG Packaging
         if: matrix.platform == 'macos'
         run: |
-          if [ -f dist_pb/pocketbase ]; then
-            cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
-            chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
-          fi
           uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
           codesign --force --deep --sign - "Porn Fetch.app"
           du -sh "Porn Fetch.app"
@@ -176,14 +224,16 @@ jobs:
           if [ "${{ matrix.platform }}" == "macos" ]; then
             EXECUTABLE=$(uv run --no-sync python -c 'import plistlib; print(plistlib.load(open("Porn Fetch.app/Contents/Info.plist", "rb"))["CFBundleExecutable"])')
             QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 "Porn Fetch.app/Contents/MacOS/$EXECUTABLE" --smoke-test
+          elif [ "${{ matrix.platform }}" == "windows" ]; then
+            "$APP_DIR/Porn Fetch.exe" --smoke-test
           else
-            ./"$BIN_OUTPUT" --smoke-test
+            "$APP_DIR/Porn Fetch" --smoke-test
           fi
 
       - name: Checksum & Summary
         shell: bash
         run: |
-          FILE="${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}"
+          FILE="${{ env.DIST_ARCHIVE || env.DMG_OUTPUT }}"
           uv run --no-sync python scripts/write_checksum.py "$FILE"
           echo "### SHA256 Checksum ($FILE)" >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`$(cat "$FILE.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
@@ -196,9 +246,10 @@ jobs:
         with:
           name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
           path: |
-            ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}
-            ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}.sha256
+            ${{ env.DIST_ARCHIVE || env.DMG_OUTPUT }}
+            ${{ env.DIST_ARCHIVE || env.DMG_OUTPUT }}.sha256
             pocketbase*
+            third_party/*
             PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL.zip
 
       - name: Install 7-Zip on macOS for IFW
@@ -227,17 +278,20 @@ jobs:
             IFW_OS="darwin"
             cp -R "Porn Fetch.app" ifw_payload/
             POCKETBASE_BINARY="dist_pb/pocketbase"
+            FFMPEG_BINARY="third_party/ffmpeg"
             INSTALLER_EXT=".dmg"
           elif [ "$IFW_OS" = "windows" ]; then
             IFW_ARCH="amd64"
-            cp "$BIN_OUTPUT" "ifw_payload/Porn Fetch.exe"
-            POCKETBASE_BINARY="pocketbase.exe"
+            cp -R "Porn Fetch.dist"/* ifw_payload/
+            POCKETBASE_BINARY="third_party/pocketbase.exe"
+            FFMPEG_BINARY="third_party/ffmpeg.exe"
             INSTALLER_EXT=".exe"
           else
             IFW_ARCH="amd64"
-            cp "$BIN_OUTPUT" "ifw_payload/Porn Fetch"
+            cp -R "Porn Fetch.dist"/* ifw_payload/
             cp src/frontend/graphics/logo_transparent.png ifw_payload/
-            POCKETBASE_BINARY="pocketbase"
+            POCKETBASE_BINARY="third_party/pocketbase"
+            FFMPEG_BINARY="third_party/ffmpeg"
             INSTALLER_EXT=".run"
           fi
           if [ "$IFW_ARCH" = "x64" ]; then IFW_ARCH="amd64"; fi
@@ -250,18 +304,30 @@ jobs:
             --dist-dir ifw_payload \
             --platform "$IFW_OS" --arch "$IFW_ARCH" \
             --pocketbase-binary "$POCKETBASE_BINARY" \
+            --ffmpeg-binary "$FFMPEG_BINARY" \
             --staging-dir "ifw_output/staging/$REPO_TAG" \
             --output-repo "ifw_output/repository/$REPO_TAG" \
             --output-installer "$INSTALLER" \
             --version "$APP_VERSION.${{ github.run_number }}"
           uv run --no-sync python scripts/write_checksum.py "$INSTALLER"
+          echo "IFW_INSTALLER=$INSTALLER" >> "$GITHUB_ENV"
+          echo "### SHA256 Checksum ($(basename "$INSTALLER"))" >> "$GITHUB_STEP_SUMMARY"
+          cat "$INSTALLER.sha256" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload IFW installer
         if: matrix.arch == 'x64' || matrix.platform == 'macos'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: IFW_installer_${{ matrix.platform }}_${{ matrix.arch }}
-          path: ifw_output/installers/*
+          path: ${{ env.IFW_INSTALLER }}
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload IFW installer checksum separately
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          path: ${{ env.IFW_INSTALLER }}.sha256
+          archive: false
           if-no-files-found: error
 
       - name: Upload IFW repository
@@ -504,7 +570,7 @@ jobs:
           enable-cache: true
 
       - name: Sync Dependencies
-        run: uv sync --locked --no-dev --extra gui --extra build --extra av
+        run: uv sync --locked --no-dev --extra gui --extra build
 
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
@@ -651,7 +717,7 @@ jobs:
       - name: Download Installers
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
-          pattern: IFW_installer_*
+          pattern: PornFetch_*_GUI_*_Setup.*
           path: dist/installers
           merge-multiple: true
 
@@ -772,16 +838,20 @@ jobs:
               [[ -f "$file" ]] || continue
               name="${file##*/}"
               if [[ ( "$artifact_name" == *_CLI_* && "$name" == "$artifact_name" ) ||
-                    "$name" == pocketbase || "$name" == PornFetch_linux_GUI_*.bin ||
+                    "$name" == pocketbase || "$name" == ffmpeg ||
+                    "$name" == PornFetch_linux_GUI_*.bin ||
                     "$name" == *_Setup.run ]]; then
                 chmod +x "$file"
               fi
             done
-            (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
+            # Installers and their separately uploaded checksums are direct assets.
+            if [[ "$artifact_name" != PornFetch_*_GUI_*_Setup.* ]]; then
+              (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
+            fi
             for file in "$artifact_dir"/*; do
               [[ -f "$file" ]] || continue
               name="${file##*/}"
-              [[ "$name" == pocketbase* ]] && continue
+              [[ "$name" == pocketbase* || "$name" == ffmpeg* ]] && continue
               if [[ -e "dist_release/$name" ]]; then
                 echo "Duplicate release asset: $name" >&2
                 exit 1

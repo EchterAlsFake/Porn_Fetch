@@ -21,15 +21,13 @@ Pane {
 
     ScrollView {
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
+        anchors.margins: 8
         contentWidth: availableWidth
         clip: true
 
         ColumnLayout {
             width: parent.width
-            spacing: 14
-            Item { Layout.preferredHeight: 4 }
+            spacing: 8
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Choose a website")
@@ -53,6 +51,8 @@ Pane {
                         required property string modelData
                         Layout.fillWidth: true
                         text: modelData
+                        leftPadding: 10
+                        rightPadding: 10
                         flat: root.providerIndex !== index
                         highlighted: root.providerIndex === index
                         onClicked: root.providerIndex = index
@@ -62,7 +62,7 @@ Pane {
 
             Rectangle {
                 Layout.fillWidth: true
-                implicitHeight: loginContent.implicitHeight + 36
+                implicitHeight: loginContent.implicitHeight + 24
                 radius: 22
                 color: root.cardColor
                 ColumnLayout {
@@ -70,8 +70,8 @@ Pane {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    anchors.margins: 18
-                    spacing: 12
+                    anchors.margins: 12
+                    spacing: 8
                     Label {
                         Layout.fillWidth: true
                         text: root.loggedIn ? qsTr("Connected to %1").arg(root.provider)
@@ -136,7 +136,7 @@ Pane {
 
             Rectangle {
                 Layout.fillWidth: true
-                implicitHeight: collectionsContent.implicitHeight + 36
+                implicitHeight: collectionsContent.implicitHeight + 24
                 radius: 22
                 color: root.cardColor
                 ColumnLayout {
@@ -144,7 +144,7 @@ Pane {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    anchors.margins: 18
+                    anchors.margins: 12
                     spacing: 8
                     Label {
                         Layout.fillWidth: true
@@ -210,7 +210,6 @@ Pane {
                     }
                 }
             }
-            Item { Layout.preferredHeight: 16 }
         }
     }
 }

@@ -45,10 +45,10 @@ qml_files =
 excluded_qml_plugins = QtQuick3D,QtCharts,QtWebEngine,QtSensors
 
 # qt modules used. comma separated
-modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui,Test
+modules = Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
 
 # qt plugins used by the application
-plugins = qml,egldeviceintegrations,iconengines,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
+plugins = qml,iconengines,imageformats,platforms,platformthemes,platforminputcontexts
 
 [android]
 
@@ -67,10 +67,10 @@ plugins =
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
 macos.permissions = 
-mode = onefile
+mode = standalone
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --onefile-windows-splash-screen-image=src/frontend/graphics/splashscreen.png --windows-console-mode=attach
+extra_args = --lto=yes --python-flag=no_docstrings --python-flag=no_asserts --noinclude-dlls=*/plugins/imageformats/libqpdf.* --noinclude-dlls=*/imageformats/qpdf.dll --noinclude-qt-plugins=styles --noinclude-qt-plugins=printsupport --noinclude-qt-plugins=mediaservice --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --include-data-files=src/frontend/UI/*.qmlc=src/frontend/UI/ --include-data-files=src/frontend/resources.rcc=src/frontend/resources.rcc --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --noinclude-data-files=deployment/** --noinclude-data-files=*.app/** --noinclude-data-files=scripts/** --noinclude-data-files=packaging/** --noinclude-data-files=docs/** --noinclude-data-files=.github/** --noinclude-data-files=src/tests/** --noinclude-data-files=demos/** --noinclude-data-files=src/frontend/screenshots/** --noinclude-data-files=src/frontend/translations/ts/** --noinclude-data-files=p4a-recipes/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --windows-console-mode=attach
 
 [buildozer]
 

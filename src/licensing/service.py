@@ -16,7 +16,10 @@ REASONS = {
     "unlicensed": "No production license is installed.",
     "valid": "License active. This build is permanently entitled.",
     "activation_required": "Connect to activate this installation.",
+    "activation_incomplete": "The server was reached but activation did not complete. Please retry or contact support.",
     "activation_failed": "This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support.",
+    "initial_offline_grace": "The license server cannot be reached. Initial access is available for up to 3 days from first import; online validation is still required.",
+    "initial_grace_expired": "The initial 3-day grace period has ended. Connect to validate your license.",
     "offline_grace": "License server unavailable. Using the last successful validation.",
     "expired_grace": "Please connect to validate your license; the 7-day offline grace has ended.",
     "update_entitlement_expired": "Update entitlement expired. This version remains licensed permanently. Renew to receive newer Porn Fetch versions.",
@@ -59,7 +62,7 @@ class LicenseService:
         status = self._status
         clock = getattr(self.client, "clock", time.time)
         if status.allowed and status.expires_at is not None and clock() >= status.expires_at:
-            return replace(status, state="expired_grace", allowed=False)
+            return replace(status, state="initial_grace_expired" if status.state == "initial_offline_grace" else "expired_grace", allowed=False)
         return status
 
     @status.setter

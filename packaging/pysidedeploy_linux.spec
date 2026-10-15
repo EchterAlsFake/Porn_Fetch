@@ -44,16 +44,16 @@ qml_files =
 excluded_qml_plugins =
 
 # qt modules used. comma separated
-modules = Widgets,Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
+modules = Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
 
 # qt plugins used by the application
-plugins = qml,xcbglintegrations,iconengines,accessiblebridge,styles,platformthemes,platforms,imageformats,generic,platforminputcontexts,egldeviceintegrations
+plugins = qml,xcbglintegrations,iconengines,platformthemes,platforms,imageformats,platforminputcontexts
 
 [android]
 
 # path to pyside wheel
 wheel_pyside =
-
+ 
 # path to shiboken wheel
 wheel_shiboken =
 
@@ -66,12 +66,12 @@ plugins =
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
 macos.permissions =
-mode = onefile
+mode = standalone
 
 # (str) specify any extra nuitka arguments
 # Qt QML directories contain static archives; Nuitka 4.1.1 treats them as DLLs.
 # Exclude them before Linux RPATH patching: patchelf only accepts ELF binaries.
-extra_args = --noinclude-dlls=*.a --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
+extra_args = --lto=yes --python-flag=no_docstrings --python-flag=no_asserts --noinclude-dlls=*.a --noinclude-dlls=*/plugins/imageformats/libqpdf.* --noinclude-qt-plugins=styles --noinclude-qt-plugins=printsupport --noinclude-qt-plugins=mediaservice --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --include-data-files=src/frontend/UI/*.qmlc=src/frontend/UI/ --include-data-files=src/frontend/resources.rcc=src/frontend/resources.rcc --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --noinclude-data-files=deployment/** --noinclude-data-files=*.app/** --noinclude-data-files=scripts/** --noinclude-data-files=packaging/** --noinclude-data-files=docs/** --noinclude-data-files=.github/** --noinclude-data-files=src/tests/** --noinclude-data-files=demos/** --noinclude-data-files=src/frontend/screenshots/** --noinclude-data-files=src/frontend/translations/ts/** --noinclude-data-files=p4a-recipes/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 

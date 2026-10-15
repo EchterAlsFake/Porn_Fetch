@@ -13,11 +13,7 @@ Install `uv`, then run:
 uv sync --extra gui --group dev
 ```
 
-The repository's `.python-version` selects Python 3.14. The optional `av` extra installs PyAV on supported platforms when media metadata work requires it:
-
-```bash
-uv sync --extra gui --extra av --group dev
-```
+The repository's `.python-version` selects Python 3.14. Video remuxing and metadata writing are handled via a static FFmpeg binary in `third_party/` (or system PATH).
 
 ## Run the application
 

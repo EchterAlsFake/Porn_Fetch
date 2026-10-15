@@ -54,9 +54,15 @@ class PocketBaseService:
             candidates.append(Path(configured).expanduser())
         orig = _find_original_executable()
         if orig is not None:
+            candidates.append(orig.parent / "third_party" / name)
             candidates.append(orig.parent / name)
+            candidates.append(orig.parent / "Contents" / "MacOS" / "third_party" / name)
+            candidates.append(orig.parent / "Contents" / "MacOS" / name)
+            if orig.parent.name == "MacOS" and orig.parent.parent.name == "Contents":
+                candidates.append(orig.parent.parent.parent.parent / "third_party" / name)
         project_root = Path(__file__).resolve().parents[2]
         candidates.extend([
+            project_root / "third_party" / name,
             project_root / name,
             project_root / "packaging" / "pocketbase" / name,
             project_root / "packaging" / "pocketbase" / sys.platform / name,

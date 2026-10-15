@@ -17,7 +17,7 @@ dependencies = [
     "browser-cookie3>=0.20.1",
     "cryptography",
     "curl-cffi",
-    "eaf_base_api @ git+https://github.com/EchterAlsFake/eaf_base_api@8397f881fbe670572193ec1ae32cee76e7f82533",
+    "eaf-base-api",
     "platformdirs>=4.3",
     "python-dateutil",
     "questionary>=2.1.1",
@@ -47,7 +47,6 @@ porn-fetch = "src.backend.application:main"
 [project.optional-dependencies]
 gui = [
     "PySide6",
-    "asyncstdlib>=3.14.0",
     "certifi",
     "pydivert>=3.1.3; sys_platform == 'win32' or sys_platform == 'linux'",
     "pywin32; sys_platform == 'win32'",
@@ -63,11 +62,6 @@ desktop-build = [
     "ordered-set",
     "zstandard",
     "patchelf; sys_platform == 'linux'",
-]
-av = [
-    "av>=16.1.0; platform_system == 'Windows' and platform_machine == 'AMD64'",
-    "av>=16.1.0; platform_system == 'Darwin' and (platform_machine == 'x86_64' or platform_machine == 'arm64')",
-    "av>=16.1.0; platform_system == 'Linux' and (platform_machine == 'x86_64' or platform_machine == 'aarch64')",
 ]
 
 [dependency-groups]
@@ -141,3 +135,6 @@ omit = [
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
+
+[tool.uv.sources]
+eaf-base-api = { path = "/home/asuna/PycharmProjects/eaf_base_api" }

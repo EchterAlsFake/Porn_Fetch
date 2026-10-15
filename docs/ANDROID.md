@@ -3,8 +3,9 @@
 The Android GUI uses `AndroidMain.qml` and shares the existing Python download and
 account backend with desktop. The phone layout has bottom navigation and download
 cards; wide tablet layouts use a navigation rail. Android downloads are staged in
-the app's private data directory. The user can choose a destination folder from
-Downloads or Settings; completed videos are then copied there automatically.
+the app's private data directory. Downloads offers a destination folder picker
+until a folder is selected; later changes are available in Settings. Completed
+videos are then copied to the selected folder automatically.
 **Save elsewhere** on a completed card remains available for an individual copy.
 Download history, persistent tracking, and statistics are not available on Android.
 No tracking database or PocketBase process is started, even if an older installation
@@ -42,6 +43,22 @@ the target architecture before the APK can be built. The desktop deployment
 specs and Python wheels cannot stand in for Android wheels. The build should
 bundle the QML files under `src/frontend/UI`, the compiled Qt resources, and
 the legal and licensing resources.
+
+After updating the host PySide6 installation, apply and verify the deployment
+patch before invoking `pyside6-android-deploy` directly:
+
+```bash
+uv run --no-sync python scripts/patch_android_deploy.py .venv
+uv run --no-sync python scripts/patch_android_deploy.py .venv --verify
+```
+
+The patch keeps python-for-android on `develop` with `p4a.commit = HEAD`.
+PySide6 6.12 otherwise changes the toolchain to an older release on `master`,
+whose final pip install can bundle host Linux extensions into an Android APK.
+Setting the branch alone is insufficient while that release commit remains pinned.
+Rebuild from clean deployment files after changing toolchains so incompatible
+cached dependencies are not reused. Add `--keep-deployment-files` when investigating
+build issues to retain the generated configuration and p4a checkout.
 
 ## Device checks
 

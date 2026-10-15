@@ -6,9 +6,8 @@ from collections.abc import Callable
 os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Material")
 os.environ.setdefault("QT_QUICK_CONTROLS_MATERIAL_THEME", "Dark")
 
-from PySide6.QtGui import  QGuiApplication
+from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlEngine, QQmlComponent
-from PySide6.QtWidgets import QMessageBox, QApplication
 from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop
 
 _qml_engine = None
@@ -28,11 +27,7 @@ def _get_qml_engine():
 
 
 def _fallback_popup(text: str, title: str):
-    message_box = QMessageBox()
-    message_box.setWindowTitle(title)
-    message_box.setText(text)
-    message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-    message_box.exec()
+    print(f"[{title}] {text}")
 
 from PySide6.QtGui import QGuiApplication
 
@@ -110,7 +105,7 @@ def ui_popup(text, title="Notice"):
         _mobile_notice_handler(title, text)
         return
 
-    app = QApplication.instance()
+    app = QGuiApplication.instance()
     if not app:
         print(f"[{title}] {text}")
         return

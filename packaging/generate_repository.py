@@ -29,20 +29,24 @@ def prepare_staging_directory(
     target_platform: str,
     target_arch: str,
     version: str,
+    ffmpeg_binary: Path | None = None,
 ) -> tuple[Path, Path]:
     """Prepare config/ and packages/ directories for binarycreator and repogen."""
     template_config = PROJECT_ROOT / "packaging" / "installer" / "config" / "config.xml.template"
-    meta_src = PROJECT_ROOT / "packaging" / "installer" / "packages" / "com.echteralsfake.pornfetch" / "meta"
+    package_templates = PROJECT_ROOT / "packaging" / "installer" / "packages"
 
     config_dir = staging_dir / "config"
     packages_dir = staging_dir / "packages"
-    pkg_comp = packages_dir / "com.echteralsfake.pornfetch"
-    meta_dest = pkg_comp / "meta"
+    pkg_comp = packages_dir / "to.pornfetch.echteralsfake"
     data_dest = pkg_comp / "data"
 
+    # Staging may be reused; old payload files must not leak into another component.
+    if packages_dir.exists():
+        shutil.rmtree(packages_dir)
     config_dir.mkdir(parents=True, exist_ok=True)
-    meta_dest.mkdir(parents=True, exist_ok=True)
     data_dest.mkdir(parents=True, exist_ok=True)
+    for asset in template_config.parent.glob("*.qss"):
+        shutil.copy2(asset, config_dir)
 
     graphics_dir = PROJECT_ROOT / "src" / "frontend" / "graphics"
     for suffix in ("png", "ico", "icns"):
@@ -57,8 +61,10 @@ def prepare_staging_directory(
     config_dest.write_text(config_xml_text, encoding="utf-8")
 
     # 2. Copy meta files (package.xml, installscript.qs)
-    for f in meta_src.glob("*"):
-        if f.is_file():
+    for template in package_templates.iterdir():
+        meta_dest = packages_dir / template.name / "meta"
+        meta_dest.mkdir(parents=True, exist_ok=True)
+        for f in (template / "meta").iterdir():
             content = f.read_text(encoding="utf-8")
             if f.name == "package.xml":
                 content = content.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
@@ -75,24 +81,68 @@ def prepare_staging_directory(
         else:
             shutil.copy2(item, dest)
 
-    # 4. Copy PocketBase binary beside the main executable in data/
+    # Ensure executable name matches expected "Porn Fetch" / "Porn Fetch.exe"
+    if target_platform == "windows":
+        if (data_dest / "main.exe").is_file() and not (data_dest / "Porn Fetch.exe").is_file():
+            shutil.copy2(data_dest / "main.exe", data_dest / "Porn Fetch.exe")
+    elif target_platform == "linux":
+        if (data_dest / "main").is_file() and not (data_dest / "Porn Fetch").is_file():
+            shutil.copy2(data_dest / "main", data_dest / "Porn Fetch")
+            (data_dest / "Porn Fetch").chmod(0o755)
+
+    # 4. Resolve the tools before removing bundled copies from the core payload.
+    # Optional tools live outside the macOS app so adding/removing them does not
+    # invalidate the application's code signature.
     pb_bin = pocketbase_binary
     if not pb_bin or not pb_bin.is_file():
         os_label, _, binary_name = resolve_platform(target_platform, target_arch)
-        candidate = PROJECT_ROOT / "packaging" / "pocketbase" / os_label / binary_name
-        if candidate.is_file():
-            pb_bin = candidate
+        candidates = [
+            PROJECT_ROOT / "third_party" / binary_name,
+            PROJECT_ROOT / "packaging" / "pocketbase" / os_label / binary_name,
+            PROJECT_ROOT / binary_name,
+        ]
+        for candidate in candidates:
+            if candidate.is_file():
+                pb_bin = candidate
+                break
 
-    if pb_bin and pb_bin.is_file():
-        logger.info("Staging PocketBase binary: %s into %s", pb_bin, data_dest / pb_bin.name)
-        shutil.copy2(pb_bin, data_dest / pb_bin.name)
-        if target_platform != "windows":
-            (data_dest / pb_bin.name).chmod(0o755)
-    else:
+    if not pb_bin or not pb_bin.is_file():
         raise FileNotFoundError(
             f"PocketBase binary was not found for {target_platform}_{target_arch}. "
             "Pass --pocketbase-binary or fetch it before packaging."
         )
+
+    ff_bin = ffmpeg_binary
+    ff_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
+    if not ff_bin or not ff_bin.is_file():
+        ff_candidates = [
+            PROJECT_ROOT / "third_party" / ff_name,
+            PROJECT_ROOT / "packaging" / "ffmpeg" / target_platform / target_arch / ff_name,
+            PROJECT_ROOT / ff_name,
+        ]
+        for cand in ff_candidates:
+            if cand.is_file():
+                ff_bin = cand
+                break
+
+    if not ff_bin or not ff_bin.is_file():
+        raise FileNotFoundError(
+            f"FFmpeg binary was not found for {target_platform}_{target_arch}. "
+            "Pass --ffmpeg-binary or fetch it before packaging."
+        )
+
+    pb_name = "pocketbase.exe" if target_platform == "windows" else "pocketbase"
+    for tool, source, name in (("pocketbase", pb_bin, pb_name), ("ffmpeg", ff_bin, ff_name)):
+        destination = packages_dir / f"to.pornfetch.echteralsfake.{tool}" / "data" / "third_party" / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        if target_platform != "windows":
+            destination.chmod(0o755)
+
+    tool_names = {"pocketbase", "pocketbase.exe", "ffmpeg", "ffmpeg.exe"}
+    for path in data_dest.rglob("*"):
+        if path.is_file() and (path.name in tool_names or path.name.removesuffix(".sha256") in tool_names):
+            path.unlink()
 
     return config_dest, packages_dir
 
@@ -123,6 +173,12 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=None,
         help="Explicit path to PocketBase executable",
+    )
+    parser.add_argument(
+        "--ffmpeg-binary",
+        type=Path,
+        default=None,
+        help="Explicit path to FFmpeg executable",
     )
     parser.add_argument(
         "--output-repo",
@@ -167,7 +223,14 @@ def main(argv: list[str] | None = None) -> int:
         target_platform=raw_os,
         target_arch=raw_arch,
         version=args.version,
+        ffmpeg_binary=args.ffmpeg_binary.resolve() if args.ffmpeg_binary else None,
     )
+
+    if raw_os == "darwin":
+        # Removing the previously bundled tools changes the signed app resources.
+        app = packages_dir / "to.pornfetch.echteralsfake" / "data" / "Porn Fetch.app"
+        subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(app)], check=True)
+        subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
 
     # 1. Run repogen if --output-repo is specified
     if args.output_repo:

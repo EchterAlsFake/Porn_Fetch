@@ -227,12 +227,69 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
         self.core.online = False
         self.assertFalse((await self.client.check(force=True)).allowed)
 
-    async def test_first_activation_requires_network(self):
+    async def test_initial_grace_has_fixed_three_day_deadline(self):
         self.core.online = False
-        for _ in range(2):
-            result = await self.import_file()
-            self.assertFalse(result.allowed)
-            self.assertEqual(result.state, "network_unavailable")
+        first = await self.import_file()
+        self.assertTrue(first.allowed)
+        self.assertEqual(first.state, "initial_offline_grace")
+        self.assertEqual(first.expires_at, NOW + 3 * DAY)
+        self.now += 3 * DAY - 1
+        self.client = self.make_client()
+        self.assertEqual((await self.import_file()).expires_at, first.expires_at)
+        self.assertTrue((await self.client.check()).allowed)
+        self.now += 1
+        expired = await self.import_file()
+        self.assertFalse(expired.allowed)
+        self.assertEqual(expired.state, "initial_grace_expired")
+        self.core.online = True
+        self.core.now = self.now
+        self.assertEqual((await self.client.check(force=True)).state, "valid")
+
+    async def test_initial_rejection_survives_restart_reimport_and_outage(self):
+        self.core.code = "SUSPENDED"
+        self.assertFalse((await self.import_file()).allowed)
+        self.core.online = False
+        self.client = self.make_client()
+        self.assertEqual((await self.import_file()).state, "suspended")
+        self.assertFalse((await self.client.check(force=True)).allowed)
+
+    async def test_initial_grace_stops_on_explicit_denial(self):
+        self.core.online = False
+        self.assertTrue((await self.import_file()).allowed)
+        self.core.online = True
+        self.core.override = FakeResponse(200, {"meta": {"valid": False}})
+        self.assertFalse((await self.client.check(force=True)).allowed)
+        self.core.online = False
+        self.assertFalse((await self.client.check(force=True)).allowed)
+
+    async def test_non_json_denial_and_malformed_explicit_denial_remain_blocked(self):
+        for response in (FakeResponse(422), FakeResponse(200, {"meta": {"valid": False, "code": []}})):
+            self.core.online = True
+            self.core.override = response
+            self.assertFalse((await self.import_file()).allowed)
+            self.core.online = False
+            self.assertFalse((await self.client.check(force=True)).allowed)
+
+    async def test_initial_grace_does_not_override_known_update_expiry(self):
+        self.core.online = False
+        result = await self.client.import_license(signed_key(expiry=iso(NOW - DAY)))
+        self.assertFalse(result.allowed)
+        self.assertEqual(result.state, "renewal_required")
+
+    async def test_tls_and_programming_errors_do_not_start_grace(self):
+        from curl_cffi.requests.exceptions import SSLError
+        for error in (SSLError("trust failed"), RuntimeError("unexpected")):
+            self.core.failure = error
+            self.assertFalse((await self.import_file()).allowed)
+
+    async def test_initial_service_gate_expires_without_refresh(self):
+        from src.licensing.service import LicenseService
+        self.core.online = False
+        service = LicenseService(self.client)
+        service.status = await self.import_file()
+        self.now += 3 * DAY
+        self.assertFalse(service.status.allowed)
+        self.assertEqual(service.status.state, "initial_grace_expired")
 
     async def test_offline_within_and_outside_exact_seven_days(self):
         await self.import_file()
@@ -308,8 +365,8 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
             self.core.override, self.core.failure = response, error
             with self.subTest(state=state):
                 result = await self.import_file()
-                self.assertEqual(result.state, state)
-                self.assertFalse(result.allowed)
+                self.assertEqual(result.state, "initial_offline_grace" if state == "network_unavailable" else state)
+                self.assertEqual(result.allowed, state == "network_unavailable")
         self.core.override = self.core.failure = None
         await self.import_file()
         self.core.override = FakeResponse(503)

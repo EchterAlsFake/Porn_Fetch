@@ -2,6 +2,7 @@
 import json
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -9,7 +10,7 @@ from unittest.mock import AsyncMock, patch
 from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.cli import self_update
 from src.licensing.client import LicenseStatus
-from src.shared.release import update_eligibility, verify_repository_manifest
+from src.shared.release import update_eligibility, validate_ifw_packages, verify_repository_manifest
 from src.shared.version import RELEASE_TIMESTAMP
 from src.tests.unit.test_cli_self_update import keys_script, load_script
 
@@ -23,7 +24,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         self.base = Path(self.temp.name)
         self.repo = self.base / "repo"
         self.repo.mkdir()
-        (self.repo / "Updates.xml").write_text('<Updates><PackageUpdate><Name>com.echteralsfake.pornfetch</Name><Version>3.10</Version><ReleaseDate>2026-10-06</ReleaseDate></PackageUpdate></Updates>')
+        (self.repo / "Updates.xml").write_text('<Updates><PackageUpdate><Name>to.pornfetch.echteralsfake</Name><Version>3.10</Version><ReleaseDate>2026-10-06</ReleaseDate></PackageUpdate></Updates>')
         (self.repo / "payload.7z").write_bytes(b"test binary")
         self.root = self.base / "root.json"
         keys_script.initialize(self.base / "keys", self.root)
@@ -69,6 +70,29 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             (self.repo / "payload.7z").write_bytes(b"tampering")
             with self.assertRaises(Exception):
                 await updater._stage_repository(update)
+
+    async def test_optional_components_can_be_signed_and_staged(self):
+        xml = ET.parse(self.repo / "Updates.xml")
+        for tool in ("ffmpeg", "pocketbase"):
+            package = ET.SubElement(xml.getroot(), "PackageUpdate")
+            ET.SubElement(package, "Name").text = f"to.pornfetch.echteralsfake.{tool}"
+            ET.SubElement(package, "Version").text = "3.10"
+            ET.SubElement(package, "ReleaseDate").text = "2026-10-06"
+        xml.write(self.repo / "Updates.xml")
+        signer.sign_repository(self.repo, "linux_amd64", "3.10", self.base / "keys/online.pem", self.root)
+        metadata, release = self.verify()
+        update = {**release, "metadata": metadata, "repository_url": "https://updates.example/"}
+
+        async def request(url, **kwargs):
+            return SimpleNamespace(content=(self.repo / url.rsplit("/", 1)[-1]).read_bytes())
+
+        with patch("src.backend.update_service.shared_data_dir", return_value=self.base), \
+                patch("src.backend.update_service.clients.core.request", side_effect=request):
+            stage = await AutoUpdater()._stage_repository(update)
+            self.assertEqual((stage / "payload.7z").read_bytes(), b"test binary")
+        xml.find("PackageUpdate/Version").text = "3.9"
+        with self.assertRaises(ValueError):
+            validate_ifw_packages(xml, "3.10", RELEASE_TIMESTAMP)
 
     async def test_qt_renewal_required_does_not_download_quit_or_cleanup(self):
         updater = AutoUpdater(before_update=AsyncMock(), license_status=AsyncMock(return_value=LicenseStatus("valid", True, license_expires_at=RELEASE_TIMESTAMP-1)))

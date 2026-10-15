@@ -41,14 +41,15 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         self.assertTrue(parser.get("app", "icon").endswith(".png"))
 
         modules = set(parser.get("qt", "modules").split(","))
-        required = {"Core", "Gui", "Widgets", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
+        required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
+        self.assertNotIn("Widgets", modules)
 
         plugins = set(parser.get("qt", "plugins").split(","))
         self.assertIn("qml", plugins)
         self.assertNotIn("platforms/darwin", plugins)
 
-        self.assertEqual(parser.get("nuitka", "mode"), "onefile")
+        self.assertEqual(parser.get("nuitka", "mode"), "standalone")
         extra_args = parser.get("nuitka", "extra_args")
         self.assertIn("--include-data-files=src/frontend/UI/*.qml=src/frontend/UI/", extra_args)
 
@@ -62,18 +63,18 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         self.assertTrue(parser.get("app", "icon").endswith(".ico"))
 
         modules = set(parser.get("qt", "modules").split(","))
-        required = {"Core", "Gui", "Widgets", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
+        required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
+        self.assertNotIn("Widgets", modules)
 
         plugins = set(parser.get("qt", "plugins").split(","))
         self.assertIn("qml", plugins)
         self.assertNotIn("platforms/darwin", plugins)
         self.assertNotIn("xcbglintegrations", plugins)
 
-        self.assertEqual(parser.get("nuitka", "mode"), "onefile")
+        self.assertEqual(parser.get("nuitka", "mode"), "standalone")
         extra_args = parser.get("nuitka", "extra_args")
         self.assertIn("--windows-console-mode=attach", extra_args)
-        self.assertIn("Test", modules)
         exclusions = parser.get("qt", "excluded_qml_plugins").split(",")
         self.assertNotIn("QtTest", exclusions)
         self.assertNotEqual(exclusions, [""], "Automatic exclusions remove QtTest")
@@ -89,8 +90,9 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         self.assertTrue(parser.get("app", "icon").endswith(".icns"))
 
         modules = set(parser.get("qt", "modules").split(","))
-        required = {"Core", "Gui", "Widgets", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
+        required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
+        self.assertNotIn("Widgets", modules)
         self.assertNotIn("DBus", modules)
 
         plugins = set(parser.get("qt", "plugins").split(","))
@@ -123,9 +125,9 @@ class DesktopPackagingSpecTests(unittest.TestCase):
 
 
 class QtIFWStagingTests(unittest.TestCase):
-    def test_prepare_staging_directory_linux_amd64(self):
+    def test_optional_tools_are_excluded_from_core_on_desktop_platforms(self):
         import importlib.util
-        import tempfile
+        import xml.etree.ElementTree as ET
 
         spec = importlib.util.spec_from_file_location(
             "generate_repo_mod", PROJECT_ROOT / "packaging" / "generate_repository.py"
@@ -133,80 +135,69 @@ class QtIFWStagingTests(unittest.TestCase):
         assert spec and spec.loader
         gen_mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(gen_mod)
+        core = "to.pornfetch.echteralsfake"
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp = Path(tmp_dir)
-            dist_dir = tmp / "dist"
-            dist_dir.mkdir()
-            (dist_dir / "Porn Fetch").write_text("#!/bin/sh\necho hi\n")
-            (dist_dir / "logo_transparent.png").write_bytes(b"fakepng")
+        for platform in ("linux", "windows", "darwin"):
+            with self.subTest(platform=platform), tempfile.TemporaryDirectory() as directory:
+                tmp = Path(directory)
+                dist = tmp / "dist"
+                app_dir = dist / "Porn Fetch.app/Contents/MacOS" if platform == "darwin" else dist
+                app_dir.mkdir(parents=True)
+                suffix = ".exe" if platform == "windows" else ""
+                (app_dir / f"Porn Fetch{suffix}").write_bytes(b"application")
+                tools = app_dir / "third_party"
+                tools.mkdir()
+                for tool in ("pocketbase", "ffmpeg"):
+                    name = tool + suffix
+                    (tmp / name).write_bytes(tool.encode())
+                    # Portable builds can already contain duplicate tool copies and sidecars.
+                    for parent in (app_dir, tools):
+                        (parent / name).write_bytes(tool.encode())
+                        (parent / f"{name}.sha256").write_text("checksum")
+                config, packages = gen_mod.prepare_staging_directory(
+                    tmp / "staging", dist, tmp / f"pocketbase{suffix}",
+                    platform, "amd64", "3.9.123", tmp / f"ffmpeg{suffix}",
+                )
+                settings = ET.parse(config)
+                self.assertEqual(settings.findtext("WizardStyle"), "Modern")
+                self.assertTrue((config.parent / settings.findtext("StyleSheet")).is_file())
+                self.assertEqual(settings.findtext("RemoteRepositories/Repository/Url"),
+                                 f"https://api.pornfetch.to/repo/{platform}_amd64")
+                data = packages / core / "data"
+                relative_app = app_dir.relative_to(dist) / f"Porn Fetch{suffix}"
+                self.assertEqual((data / relative_app).read_bytes(), b"application")
+                self.assertFalse(any(p.name.startswith(("pocketbase", "ffmpeg")) for p in data.rglob("*")
+                                     if p.is_file()))
+                self.assertTrue((tools / f"pocketbase{suffix}").is_file(), "Source bundle was modified")
+                metadata = ET.parse(packages / core / "meta/package.xml")
+                self.assertEqual(metadata.findtext("ForcedInstallation"), "true")
+                for tool in ("pocketbase", "ffmpeg"):
+                    component = packages / f"{core}.{tool}"
+                    metadata = ET.parse(component / "meta/package.xml")
+                    self.assertEqual(metadata.findtext("Default"), "false")
+                    self.assertEqual(metadata.findtext("Dependencies"), core)
+                    self.assertEqual(metadata.findtext("Version"), "3.9.123")
+                    binary = component / "data/third_party" / (tool + suffix)
+                    self.assertEqual(binary.read_bytes(), tool.encode())
+                    if platform != "windows":
+                        self.assertEqual(binary.stat().st_mode & 0o777, 0o755)
 
-            pb_file = tmp / "pocketbase"
-            pb_file.write_text("#!/bin/sh\necho pb\n")
+    def test_macos_optional_tools_are_found_beside_app(self):
+        from src.database.service import PocketBaseService
+        from src.shared.ffmpeg import find_ffmpeg
 
-            staging_dir = tmp / "staging"
-            config_xml, pkg_dir = gen_mod.prepare_staging_directory(
-                staging_dir=staging_dir,
-                dist_dir=dist_dir,
-                pocketbase_binary=pb_file,
-                target_platform="linux",
-                target_arch="amd64",
-                version="3.9.123",
-            )
-
-            self.assertTrue(config_xml.is_file())
-            config_content = config_xml.read_text(encoding="utf-8")
-            self.assertIn("<Url>https://api.pornfetch.to/repo/linux_amd64</Url>", config_content)
-            self.assertIn("<Version>3.9.123</Version>", config_content)
-
-            package_xml = pkg_dir / "com.echteralsfake.pornfetch" / "meta" / "package.xml"
-            self.assertTrue(package_xml.is_file())
-            package_content = package_xml.read_text(encoding="utf-8")
-            self.assertIn("<Version>3.9.123</Version>", package_content)
-
-            data_dir = pkg_dir / "com.echteralsfake.pornfetch" / "data"
-            self.assertTrue((data_dir / "Porn Fetch").is_file())
-            self.assertTrue((data_dir / "logo_transparent.png").is_file())
-            self.assertTrue((data_dir / "pocketbase").is_file())
-
-    def test_prepare_staging_directory_windows_amd64(self):
-        import importlib.util
-        import tempfile
-
-        spec = importlib.util.spec_from_file_location(
-            "generate_repo_mod", PROJECT_ROOT / "packaging" / "generate_repository.py"
-        )
-        assert spec and spec.loader
-        gen_mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(gen_mod)
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp = Path(tmp_dir)
-            dist_dir = tmp / "dist"
-            dist_dir.mkdir()
-            (dist_dir / "Porn Fetch.exe").write_bytes(b"fakeexe")
-
-            pb_file = tmp / "pocketbase.exe"
-            pb_file.write_bytes(b"fakepbexe")
-
-            staging_dir = tmp / "staging"
-            config_xml, pkg_dir = gen_mod.prepare_staging_directory(
-                staging_dir=staging_dir,
-                dist_dir=dist_dir,
-                pocketbase_binary=pb_file,
-                target_platform="windows",
-                target_arch="amd64",
-                version="3.9.456",
-            )
-
-            self.assertTrue(config_xml.is_file())
-            config_content = config_xml.read_text(encoding="utf-8")
-            self.assertIn("<Url>https://api.pornfetch.to/repo/windows_amd64</Url>", config_content)
-            self.assertIn("<Version>3.9.456</Version>", config_content)
-
-            data_dir = pkg_dir / "com.echteralsfake.pornfetch" / "data"
-            self.assertTrue((data_dir / "Porn Fetch.exe").is_file())
-            self.assertTrue((data_dir / "pocketbase.exe").is_file())
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            executable = target / "Porn Fetch.app/Contents/MacOS/Porn Fetch"
+            tools = target / "third_party"
+            tools.mkdir()
+            for tool in ("pocketbase", "ffmpeg"):
+                (tools / tool).write_bytes(b"tool")
+                (tools / tool).chmod(0o755)
+            with patch("src.shared.ffmpeg._find_original_executable", return_value=executable):
+                self.assertEqual(find_ffmpeg(), (tools / "ffmpeg").resolve())
+            with patch("src.database.service._find_original_executable", return_value=executable):
+                self.assertEqual(PocketBaseService(target / "data").find_binary(), (tools / "pocketbase").resolve())
 
 
 if __name__ == "__main__":

@@ -39,9 +39,6 @@ ApplicationWindow {
     readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4)
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
                                       qsTr("Info"), qsTr("Supported websites"), qsTr("More")]
-    readonly property var pageDescriptions: [qsTr("Collect and save videos"), qsTr("Your connected accounts"),
-                                             qsTr("Make it yours"),
-                                             qsTr("About this app"), qsTr("Available sources"), qsTr("Explore the app")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
                                       "qrc:/images/graphics/settings.png",
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
@@ -261,15 +258,16 @@ ApplicationWindow {
                 spacing: 0
 
                 Rectangle {
+                    visible: window.settingsDetail || window.moreDetail
                     Layout.fillWidth: true
-                    Layout.preferredHeight: window.tablet ? 92 : 82
+                    Layout.preferredHeight: visible ? 48 : 0
                     color: window.backgroundColor
 
                     RowLayout {
                         anchors.fill: parent
-                        anchors.leftMargin: window.tablet ? 28 : 20
-                        anchors.rightMargin: 16
-                        spacing: 12
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        spacing: 8
                         Button {
                             visible: window.settingsDetail || window.moreDetail
                             Layout.preferredWidth: visible ? 48 : 0
@@ -291,33 +289,14 @@ ApplicationWindow {
                                                window.accentColor.b, 0.18)
                             }
                         }
-                        Image {
-                            visible: !window.tablet && window.pageIndex === 0
-                            Layout.preferredWidth: visible ? 36 : 0
-                            Layout.preferredHeight: 36
-                            source: "qrc:/images/graphics/logo.png"
-                            fillMode: Image.PreserveAspectFit
-                        }
-                        ColumnLayout {
+                        Label {
                             Layout.fillWidth: true
-                            spacing: 1
-                            Label {
-                                text: window.settingsDetail ? settingsPage.titles[settingsPage.section]
-                                      : window.pageNames[window.pageIndex]
-                                color: window.primaryTextColor
-                                font.pixelSize: window.tablet ? 29 : 25
-                                font.bold: true
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
-                            }
-                            Label {
-                                text: window.settingsDetail ? settingsPage.subtitles[settingsPage.section]
-                                      : window.pageDescriptions[window.pageIndex]
-                                color: window.secondaryTextColor
-                                font.pixelSize: 13
-                                Layout.fillWidth: true
-                                elide: Text.ElideRight
-                            }
+                            text: window.settingsDetail ? settingsPage.titles[settingsPage.section]
+                                  : window.pageNames[window.pageIndex]
+                            color: window.primaryTextColor
+                            font.pixelSize: 18
+                            font.bold: true
+                            elide: Text.ElideRight
                         }
                     }
                 }

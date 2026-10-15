@@ -40,7 +40,7 @@ qml_files = src/frontend/UI/AccountPage.qml,src/frontend/UI/AndroidAccountPage.q
 excluded_qml_plugins = QtCharts,QtQuick3D,QtSensors,QtTest,QtWebEngine
 
 # qt modules used. comma separated
-modules = Quick,Widgets,Qml,Network,Gui,Core,Test,QuickControls2,OpenGL
+modules = Core,Qml,Network,Gui,Quick,OpenGL,QuickControls2
 
 # qt plugins used by the application. only relevant for desktop deployment
 # for qt plugins used in android application see [android][plugins]
@@ -49,10 +49,10 @@ plugins =
 [android]
 
 # path to pyside wheel
-wheel_pyside = /home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.11.2-6.11.2-cp314-cp314-android_aarch64.whl
+wheel_pyside = /home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.12.0-6.12.0-cp314-cp314-android_aarch64.whl
 
 # path to shiboken wheel
-wheel_shiboken = /home/asuna/PycharmProjects/Porn_Fetch/shiboken6-6.11.2-6.11.2-cp314-cp314-android_aarch64.whl
+wheel_shiboken = /home/asuna/PycharmProjects/Porn_Fetch/shiboken6-6.12.0-6.12.0-cp314-cp314-android_aarch64.whl
 
 # package identity and version
 package_name = app
@@ -62,7 +62,7 @@ presplash = /home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/logo_tr
 
 # plugins to be copied to libs folder of the packaged application. comma separated
 plugins = platforms_qtforandroid
-requirements = asyncstdlib,certifi,cffi,charset-normalizer,chompjs,colorama,coverage,cryptography,curl_cffi,eaf_base_api,filelock,idna,m3u8,markdown-it-py,pkginfo,python-dateutil,requests,selectolax,tqdm,unofficial-api-for-beeg,unofficial-api-for-eporner,unofficial-api-for-pornhub,unofficial-api-for-porntrex,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx,unofficial-api-for-xvideos,unofficial-api-for-youporn,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3
+requirements = certifi,cffi,charset-normalizer,chompjs,cryptography,curl_cffi,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg,unofficial-api-for-eporner,unofficial-api-for-pornhub,unofficial-api-for-porntrex,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx,unofficial-api-for-xvideos,unofficial-api-for-youporn,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3
 extra_recipes_dir = /home/asuna/PycharmProjects/Porn_Fetch/p4a-recipes
 
 [nuitka]
@@ -73,7 +73,7 @@ extra_recipes_dir = /home/asuna/PycharmProjects/Porn_Fetch/p4a-recipes
 macos.permissions = 
 
 # mode of using nuitka. accepts standalone or onefile. default = onefile
-mode = onefile
+mode = standalone
 
 # specify any extra nuitka arguments
 extra_args = --quiet --noinclude-qt-translations

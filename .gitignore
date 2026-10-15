@@ -27,6 +27,14 @@ dist/
 *.app/
 .temp/
 .private/
+*.qmlc
+*.rcc
+/third_party/
+/IFW_installer_*/
+/IFW_installer_*.zip
+/PornFetch_*/
+/PornFetch_*.zip
+/PornFetch_*.tar.gz
 
 # IDE and editor state
 .idea/

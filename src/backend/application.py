@@ -5,7 +5,12 @@ import tempfile
 from pathlib import Path
 import multiprocessing as mp
 
-import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!.
+from PySide6.QtCore import QResource
+_rcc_candidate = Path(__file__).resolve().parents[1] / "frontend" / "resources.rcc"
+if _rcc_candidate.is_file():
+    QResource.registerResource(str(_rcc_candidate))
+else:
+    import src.frontend.UI.resources # Fallback when binary resource is not pre-compiled
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
@@ -152,15 +157,9 @@ from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DO
                                               TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
 
 
-update_splash("Importing (AV - FFMPEG).")
+from src.shared.ffmpeg import has_ffmpeg
 
-try:
-    from av import open as av_open  # Don't ask
-    from av.audio.resampler import AudioResampler  # Don't ask
-    FORCE_DISABLE_AV = False
-
-except Exception:
-    FORCE_DISABLE_AV = True
+FORCE_DISABLE_AV = not has_ffmpeg()
 
 
 stop_flag = asyncio.Event()

@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 Pane {
     id: root
-    padding: 12
+    padding: 8
     readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
     readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
     readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"

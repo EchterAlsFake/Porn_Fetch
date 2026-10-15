@@ -37,7 +37,7 @@ Pane {
         property string description: ""
         default property alias controls: cardBody.data
         Layout.fillWidth: true
-        implicitHeight: cardBody.implicitHeight + 32
+        implicitHeight: cardBody.implicitHeight + 24
         radius: 20
         color: root.cardColor
         ColumnLayout {
@@ -45,8 +45,8 @@ Pane {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 16
-            spacing: 10
+            anchors.margins: 12
+            spacing: 8
             Label {
                 Layout.fillWidth: true
                 text: card.heading
@@ -242,14 +242,13 @@ Pane {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: root.tablet ? 18 : 12
-        anchors.rightMargin: root.tablet ? 24 : 12
+        anchors.margins: 8
         spacing: root.tablet ? 18 : 0
 
         ScrollView {
             id: categoryScroll
             visible: root.tablet || root.section < 0
-            Layout.preferredWidth: root.tablet ? 260 : root.width - 24
+            Layout.preferredWidth: root.tablet ? 260 : root.width - 16
             Layout.fillHeight: true
             contentWidth: availableWidth
             clip: true
@@ -257,24 +256,6 @@ Pane {
             ColumnLayout {
                 width: categoryScroll.availableWidth
                 spacing: 8
-                Item { Layout.preferredHeight: 6 }
-                Label {
-                    text: qsTr("PREFERENCES")
-                    color: root.accentColor
-                    font.pixelSize: 12
-                    font.bold: true
-                    leftPadding: 12
-                }
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTr("Choose what matters to you")
-                    color: root.mutedColor
-                    font.pixelSize: 13
-                    wrapMode: Text.Wrap
-                    leftPadding: 12
-                    bottomPadding: 8
-                }
-
                 Repeater {
                     model: root.titles
                     delegate: ItemDelegate {

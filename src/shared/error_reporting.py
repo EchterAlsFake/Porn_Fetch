@@ -5,7 +5,6 @@ import json
 import logging
 import platform
 import re
-import traceback
 import uuid
 from collections.abc import Mapping
 from datetime import datetime, timezone
@@ -21,28 +20,19 @@ MAX_MESSAGE_CHARS = 2_000
 MAX_BODY_BYTES = 4_096
 _LOGGER = logging.getLogger(__name__)
 
-ERROR_REPORT_DISCLOSURE = """Automatic error reports are sent only after an operation fails. Each report contains a random per-error correlation ID, UTC timestamp, Porn Fetch version, operating system and architecture, operation and class/function location, error type, relevant provider/quality/index context, the failed URL's scheme/host/path, and the exception traceback.
+ERROR_REPORT_DISCLOSURE = """Optional automatic error reports are sent only after an operation fails and only if you enable them. Each report contains a random per-error correlation ID, UTC timestamp, Porn Fetch version, operating system and architecture, error class, and code function names. New reports omit video URLs, provider/context values, filenames, source lines, exception messages, browsing history and download records.
 
-Before transmission, Porn Fetch removes URL credentials, query strings and fragments, authorization values, cookies, named passwords/tokens/keys/secrets, email addresses, IP addresses, control characters, and user-home names. Reports are capped at 2,000 characters and the complete JSON request at 4 KiB. The HTTPS request contains only {\"message\": \"...\"}; it sends no application credentials, cookies, authorization header, Origin, or Referer. Delivery failures are ignored and never break downloads.
+Reports are capped at 2,000 characters and the complete JSON request at 4 KiB. The HTTPS request to api.pornfetch.to/error_log contains only {\"message\": \"...\"}; it sends no application credentials, cookies or authorization header. This connection is separate from the media-provider proxy settings. The server necessarily receives connection metadata during transport and is configured not to log or store client IP addresses in diagnostic records. Delivery failures do not interrupt downloads.
 
-The relay is configured not to log or store client IP addresses. PocketBase stores only the redacted message, and its public collection API is disabled. Redaction is a safety net and cannot guarantee removal of every possible personal or secret value. Reporting can be changed later in Settings."""
+Reports are stored privately in PocketBase and scheduled for deletion after 30 days (hourly cleanup). Older application versions may send URL paths and redacted tracebacks; query strings and named secrets are filtered, but redaction is not guaranteed anonymisation. You may decline without losing functionality and withdraw consent in Settings at any time. This stops future reports without changing the lawfulness of earlier processing. Privacy details: https://pornfetch.to/privacy_policy"""
 
 ERROR_REPORT_EXAMPLE = """Porn Fetch error report
 correlation_id=a1b2c3d4e5f6
-timestamp=2026-01-15T12:34:56+00:00
+timestamp=2026-10-14T12:00:00+00:00
 version=3.9
 platform=Linux-x86_64
-operation=scrape video metadata
-location=PornHubVideo.load_fields
 error_type=RuntimeError
-video_url=https://example.com/watch/example-video
-provider=pornhub
-video_index=4
-traceback:
-Traceback (most recent call last):
-  File \"[USER HOME]/Porn_Fetch/provider.py\", line 42, in load_fields
-    raise RuntimeError(\"selector did not match\")
-RuntimeError: selector did not match"""
+functions=load_fields,fetch_metadata"""
 
 _URL_RE = re.compile(r"https?://[^\s<>\"']+", re.IGNORECASE)
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])")
@@ -63,7 +53,7 @@ _CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 
 
 def safe_url(value: str) -> str:
-    """Keep a reproducible URL location without credentials, query, or fragment."""
+    """Retain only the scheme and hostname; omit all content-specific URL parts."""
     try:
         parsed = urlsplit(value.strip())
     except ValueError:
@@ -73,13 +63,7 @@ def safe_url(value: str) -> str:
     host = parsed.hostname
     if _IPV4_RE.fullmatch(host) or ":" in host:
         host = "[IP redacted]"
-    elif ":" in host:
-        host = f"[{host}]"
-    try:
-        port = f":{parsed.port}" if parsed.port is not None else ""
-    except ValueError:
-        port = ""
-    return urlunsplit((parsed.scheme.casefold(), f"{host}{port}", parsed.path or "/", "", ""))
+    return urlunsplit((parsed.scheme.casefold(), host, "/", "", ""))
 
 
 def redact_log_text(value: object) -> str:
@@ -97,30 +81,6 @@ def redact_log_text(value: object) -> str:
     return text
 
 
-def _format_traceback(error: BaseException) -> str:
-    rendered = traceback.TracebackException.from_exception(
-        error, capture_locals=False,
-    ).format(chain=True)
-    return "".join(rendered).rstrip()
-
-
-def _clean_context(context: Mapping[str, Any] | None) -> list[str]:
-    lines: list[str] = []
-    remaining = 600
-    for key, value in (context or {}).items():
-        if remaining <= 0 or value is None or value == "":
-            continue
-        safe_key = re.sub(r"[^a-zA-Z0-9_.-]", "_", str(key))[:50]
-        if "url" in safe_key.casefold():
-            safe_value = safe_url(str(value))
-        else:
-            safe_value = redact_log_text(value).replace("\n", " ")
-        line = f"{safe_key}={safe_value[:240]}"[:remaining]
-        lines.append(line)
-        remaining -= len(line) + 1
-    return lines
-
-
 def build_error_report(
     error: BaseException,
     *,
@@ -130,30 +90,24 @@ def build_error_report(
     correlation_id: str | None = None,
     version: str = __version__,
 ) -> tuple[str, str]:
-    """Build one relay-safe report and return it with its correlation ID."""
+    """Use structural diagnostics only; never format exception text or user context."""
     report_id = correlation_id or uuid.uuid4().hex[:12]
-    header = [
+    def identifier(value: str) -> str:
+        return value if re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", value) else "unknown"
+    frames = []
+    tb = error.__traceback__
+    while tb is not None and len(frames) < 12:
+        frames.append(identifier(tb.tb_frame.f_code.co_name))
+        tb = tb.tb_next
+    message = "\n".join([
         "Porn Fetch error report",
-        f"correlation_id={report_id}",
+        f"correlation_id={identifier(report_id)}",
         f"timestamp={datetime.now(timezone.utc).isoformat(timespec='seconds')}",
-        f"version={redact_log_text(version)}",
-        f"platform={platform.system()}-{platform.machine()}",
-        f"operation={redact_log_text(operation)}",
-        f"location={redact_log_text(location)}",
-        f"error_type={type(error).__name__}",
-        *_clean_context(context),
-        "traceback:",
-    ]
-    prefix = redact_log_text("\n".join(header)) + "\n"
-    trace = redact_log_text(_format_traceback(error))
-    available = MAX_MESSAGE_CHARS - len(prefix)
-    if available <= 0:
-        message = prefix[:MAX_MESSAGE_CHARS]
-    elif len(trace) <= available:
-        message = prefix + trace
-    else:
-        marker = "[traceback truncated to relay limit]\n"
-        message = prefix + marker + trace[-max(0, available - len(marker)):]
+        f"version={identifier(version)}",
+        f"platform={identifier(platform.system())}-{identifier(platform.machine())}",
+        f"error_type={identifier(type(error).__name__)}",
+        "functions=" + ",".join(frames),
+    ])
     return _fit_payload(message), report_id
 
 

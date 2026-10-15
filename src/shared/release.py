@@ -8,6 +8,20 @@ from tuf.api.metadata import Metadata, Root, Targets
 ROOT_FILE = Path(__file__).resolve().parents[1] / "cli/update_root.json"
 
 
+def validate_ifw_packages(xml, version, release_timestamp):
+    """Bind every supported IFW component to the same authenticated release."""
+    core = "to.pornfetch.echteralsfake"
+    allowed = {core, f"{core}.ffmpeg", f"{core}.pocketbase"}
+    packages = xml.findall("PackageUpdate")
+    names = [package.findtext("Name") for package in packages]
+    date = datetime.fromtimestamp(release_timestamp, timezone.utc).strftime("%Y-%m-%d")
+    if (core not in names or len(names) != len(set(names)) or not set(names) <= allowed
+            or any(package.findtext("Version") != version or package.findtext("ReleaseDate") != date
+                   for package in packages)
+            or xml.find("RepositoryUpdate") is not None):
+        raise ValueError("Qt repository components do not match the authenticated release")
+
+
 def release_time(value):
     if type(value) is not int or value <= 0:
         raise ValueError("Release timestamp is missing or invalid")

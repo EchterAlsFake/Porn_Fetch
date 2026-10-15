@@ -9,7 +9,7 @@ an installer is offered to beta users.
 ## How the pieces fit together
 
 1. `pyside6-deploy` builds the desktop application for one OS and architecture.
-2. `packaging/generate_repository.py` stages that build, PocketBase, package
+2. `packaging/generate_repository.py` stages that build, optional FFmpeg and PocketBase components, package
    metadata, and the installer configuration.
 3. Qt IFW's `repogen` turns the staged package into a repository containing
    `Updates.xml`, component metadata, and versioned archives.
@@ -110,7 +110,7 @@ separately through `/ci/deploy/download` with `X-CI-Filename`.
 
 CI downloads pinned Qt Installer Framework 4.11 archives and verifies their
 SHA-256 hashes before extracting them. It stages the existing GUI build and
-PocketBase, then runs `repogen` and `binarycreator --hybrid`. For a local build,
+the optional FFmpeg and PocketBase packages, then runs `repogen` and `binarycreator --hybrid`. For a local build,
 install IFW so those commands are on `PATH`, and run the generator with a folder
 containing the compiled app:
 
@@ -119,16 +119,29 @@ python packaging/generate_repository.py \
   --dist-dir /path/to/PornFetch.dist \
   --platform linux --arch x64 \
   --pocketbase-binary /path/to/pocketbase \
+  --ffmpeg-binary /path/to/ffmpeg \
   --output-repo /path/to/output/linux_amd64 \
   --output-installer /path/to/output/PornFetch-linux-x64-installer
 ```
 
 The `--dist-dir` value must be a **directory** with the executable and all
-files the compiled application needs. CI copies its onefile executable into
-that directory under the installed name expected by the package script. The
-PocketBase binary must match the target platform. The script stages a single
-core component named `com.echteralsfake.pornfetch`; keep that ID stable across
-updates.
+files the compiled application needs. Both tool binaries must match the target
+platform. The required core component is `to.pornfetch.echteralsfake`; the optional
+components are `to.pornfetch.echteralsfake.ffmpeg` and
+`to.pornfetch.echteralsfake.pocketbase`. Both tools are unchecked by default and
+have independent payload archives. Duplicate tool binaries and their sidecars
+are removed from the core payload.
+
+Optional tools install into `third_party/` under the target directory. On macOS,
+this directory sits beside `Porn Fetch.app`; the stripped core bundle is ad-hoc
+signed and verified before repository generation. Adding or removing tools later
+does not modify the signed app bundle.
+
+The installer and maintenance tool embed `config/dark.qss` using IFW's `StyleSheet`
+setting with the Modern wizard style. GitHub Actions uploads each installer with
+`archive: false`, making the `.run`, `.exe`, or `.dmg` directly downloadable. Its
+checksum is a separate artifact and a separate release asset. Release publishing
+skips creating wrapper ZIPs for installers and their checksums.
 
 CI uses `3.9.<GitHub run number>` for the IFW component version, so successive
 workflow runs can produce newer updates even while the application's displayed

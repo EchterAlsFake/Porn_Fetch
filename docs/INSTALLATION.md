@@ -30,6 +30,18 @@ Pre-built binaries for Windows, Linux, and macOS are available on the [GitHub Re
 
 These installers set up the application and bundle the Qt `maintenancetool`, which lets you check for and apply updates directly from the official repository.
 
+Download the installer directly; no ZIP extraction is needed. The installer uses
+a dark theme and offers two optional components, both unchecked by default:
+
+- **FFmpeg:** Video remuxing and MP4 metadata tagging. You can skip the bundled
+  copy if FFmpeg is already on your system `PATH` or you do not use these features.
+- **PocketBase:** Persistent download tracking, history, and statistics. You can
+  skip it if you do not need tracking or already have PocketBase on your system `PATH`.
+
+The core application is required. Use `maintenancetool` to add or remove optional
+components later. Skipping components saves installed disk space; the hybrid
+installer still includes their payloads for offline installation.
+
 *Note for Linux:* Make the downloaded `.run` installer executable before launching:
 ```bash
 chmod +x PornFetch_linux_GUI_x64_Setup.run
@@ -141,17 +153,13 @@ cd Porn_Fetch
   uv sync
   ```
 
-- **(Optional) PyAV hardware media processing:**
-  ```bash
-  uv sync --extra gui --extra av --group dev
-  ```
-
-#### Step 3: Download PocketBase
-Porn Fetch uses an embedded PocketBase server for persistent download management and statistics. Download the matching binary for your platform into the project root:
+#### Step 3: Download Dependencies (PocketBase & FFmpeg)
+Porn Fetch bundles an embedded PocketBase server for persistent download management and an FFmpeg binary for fast video remuxing and metadata tagging:
 ```bash
 uv run python scripts/fetch_pocketbase.py
+uv run python scripts/fetch_ffmpeg.py
 ```
-This automatically detects your OS and architecture and places `pocketbase` (or `pocketbase.exe`) in the current folder.
+This automatically detects your OS and architecture and places `pocketbase` and `ffmpeg` in `third_party/`.
 
 #### Step 4: Patch QtAsyncio (Desktop GUI on Python 3.14)
 Python 3.14 + PySide6 requires an event loop descriptor patch for non-blocking networking and async task cancellation. Run this once after syncing:
@@ -246,17 +254,19 @@ python Porn_Fetch_CLI.py
 
 ## 6. Verifying Download Checksums
 
-Official release builds come with a `.sha256` checksum file. To verify integrity:
+Official releases publish `.sha256` files as separate assets for optional integrity
+verification. You only need the installer to install the application. To verify it,
+download the matching checksum asset into the same directory:
 
 - **Linux / macOS:**
   ```bash
-  sha256sum -c PornFetch_linux_GUI_x64.bin.sha256
+  sha256sum -c PornFetch_linux_GUI_x64_Setup.run.sha256
   ```
 - **Windows (PowerShell):**
   ```powershell
-  Get-FileHash PornFetch_windows_GUI_x64.zip -Algorithm SHA256
+  Get-FileHash PornFetch_windows_GUI_x64_Setup.exe -Algorithm SHA256
   ```
-  Compare the resulting hash with the content of `PornFetch_windows_GUI_x64.zip.sha256`.
+  Compare the resulting hash with the content of `PornFetch_windows_GUI_x64_Setup.exe.sha256`.
 
 ---
 

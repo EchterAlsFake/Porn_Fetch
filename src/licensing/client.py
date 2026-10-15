@@ -19,11 +19,21 @@ from urllib.parse import urlsplit
 from base_api.modules.errors import AccessDeniedError, HTTPStatusError
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+from curl_cffi.requests.exceptions import (
+    ConnectionError as CurlConnectionError,
+)
+from curl_cffi.requests.exceptions import (
+    SSLError,
+)
+from curl_cffi.requests.exceptions import (
+    Timeout as CurlTimeout,
+)
 
 from src.shared.version import RELEASE_TIMESTAMP
 
 WEEK = 604800
 DAY = 86400
+INITIAL_GRACE = 3 * DAY
 
 
 class AsyncRequestCore(Protocol):
@@ -402,6 +412,8 @@ class LicenseClient:
                         raise Rejected("suspended_or_denied" if status == 403 else "rejected") from None
                     if status == 404:
                         raise Rejected("not_found") from None
+                    if not 200 <= status < 300:
+                        raise Rejected("activation_failed" if path == "machines" else "rejected") from None
                     raise TemporaryFailure("malformed_response") from None
                 if not 200 <= status < 300:
                     errors = body.get("errors", [])
@@ -430,8 +442,13 @@ class LicenseClient:
                 failure = TemporaryFailure("server_unavailable")
             except TemporaryFailure as error:
                 failure = error
-            except Exception:
+            except SSLError:
+                # A failed trust check is not evidence that the server is unreachable.
+                raise LicenseError("The licensing connection could not be verified") from None
+            except (ConnectionError, TimeoutError, CurlConnectionError, CurlTimeout):
                 failure = TemporaryFailure("network_unavailable")
+            except Exception:
+                failure = TemporaryFailure("malformed_response")
             if attempt + 1 == attempts:
                 raise failure from None
             await asyncio.sleep(0.1)
@@ -495,6 +512,8 @@ class LicenseClient:
             )
             meta = response.get("meta")
             data = response.get("data")
+            if isinstance(meta, dict) and meta.get("valid") is False and meta.get("code") not in ("NO_MACHINE", "NO_MACHINES", "FINGERPRINT_SCOPE_MISMATCH"):
+                require_valid(meta)
             if (not isinstance(meta, dict) or type(meta.get("valid")) is not bool
                     or not isinstance(meta.get("code"), str)):
                 raise TemporaryFailure("malformed_response")
@@ -514,12 +533,15 @@ class LicenseClient:
 
         def require_valid(meta: dict[str, Any]) -> None:
             if not meta["valid"]:
+                code = meta.get("code")
+                if not isinstance(code, str):
+                    raise Rejected("rejected")
                 raise Rejected({
                     "SUSPENDED": "suspended", "BANNED": "revoked",
                     "EXPIRED": "entitlement_server_denied", "NOT_FOUND": "not_found",
                     "TOO_MANY_MACHINES": "installation_limit",
                     "MACHINE_LIMIT_EXCEEDED": "installation_limit",
-                }.get(meta["code"], "rejected"))
+                }.get(code, "rejected"))
 
         meta = await validate()
         if not meta["valid"] and meta["code"] in ("NO_MACHINE", "NO_MACHINES", "FINGERPRINT_SCOPE_MISMATCH"):
@@ -535,7 +557,8 @@ class LicenseClient:
                 # The server may have committed creation before the connection timed out.
                 reconciled = await validate()
                 if not reconciled["valid"]:
-                    raise TemporaryFailure("network_unavailable") from None
+                    # The server answered: unsuccessful creation is not an outage.
+                    raise TemporaryFailure("activation_incomplete") from None
             # A successful create (or duplicate fingerprint race) is not validation.
             meta = await validate()
         require_valid(meta)
@@ -590,7 +613,8 @@ class LicenseClient:
                 return LicenseStatus("unlicensed", False)
             record = state["licenses"][license_id]
             try:
-                if self.verify_key(record["key"])["license"]["id"] != license_id:
+                claims = self.verify_key(record["key"])
+                if claims["license"]["id"] != license_id:
                     raise LicenseError("Cached license identity mismatch")
             except BetaLicenseError:
                 return LicenseStatus("beta_license", False)
@@ -624,7 +648,7 @@ class LicenseClient:
             now = self.clock()
             state["last_seen"] = max(now, state.get("last_seen", now))
             license_expiry = record.get("license_expiry")
-            if rollback:
+            if rollback or now < record["first_import"] or timestamp(claims["license"]["created"]) > now + 300:
                 return LicenseStatus("clock_invalid", False, license_expires_at=license_expiry)
             if record.get("blocked"):
                 return LicenseStatus(
@@ -657,7 +681,19 @@ class LicenseClient:
                     now < expiry, expires_at=expiry, license_expires_at=lic_exp,
                     next_check_at=expiry, failure=record.get("failure") if record.get("offline") else None,
                 )
-            # No successful production validation: no offline access, including beta caches.
+            # Only a transport outage can unlock a never-activated, signed production key.
+            # Reimport/restart never moves first_import; rejection above remains sticky
+            # until a complete successful validation and signed checkout clears it.
+            if not record["activated"] and record.get("failure") == "network_unavailable":
+                expiry = record["first_import"] + INITIAL_GRACE
+                if license_expiry is not None and self.release_timestamp > license_expiry:
+                    return LicenseStatus("renewal_required", False, license_expires_at=license_expiry)
+                return LicenseStatus(
+                    "initial_offline_grace" if now < expiry else "initial_grace_expired",
+                    now < expiry, expires_at=expiry, license_expires_at=license_expiry,
+                    next_check_at=min(expiry, record.get("retry_at", expiry)),
+                    failure="network_unavailable",
+                )
             return LicenseStatus(record.get("failure", "activation_required"), False)
 
     async def deactivate(self) -> LicenseStatus:

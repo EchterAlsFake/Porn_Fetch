@@ -8,7 +8,6 @@ import sys
 import tempfile
 import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
-from datetime import datetime, timezone
 from pathlib import Path
 
 from curl_cffi import Response
@@ -18,7 +17,7 @@ from src.backend import clients
 from src.backend.helper_functions import get_original_executable_path
 from src.backend.shared_functions import configure_app_logging
 from src.shared.paths import shared_data_dir
-from src.shared.release import ROOT_FILE, update_eligibility, verify_repository_manifest
+from src.shared.release import ROOT_FILE, update_eligibility, validate_ifw_packages, verify_repository_manifest
 from src.shared.version import BUILD_VERSION as __version__
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
@@ -248,12 +247,7 @@ class AutoUpdater(QObject):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(response.content)
             xml = ET.parse(stage / "Updates.xml")
-            packages = xml.findall("PackageUpdate")
-            release_date = datetime.fromtimestamp(update["release_timestamp"], timezone.utc).strftime("%Y-%m-%d")
-            if (len(packages) != 1 or packages[0].findtext("Version") != update["version"]
-                    or packages[0].findtext("ReleaseDate") != release_date
-                    or xml.find("RepositoryUpdate") is not None):
-                raise ValueError("Qt repository does not match the authenticated release")
+            validate_ifw_packages(xml, update["version"], update["release_timestamp"])
             # All content is local and hash checked; remote repository substitutions are forbidden.
             if any(el.tag in {"DownloadableArchives", "UpdateFile"} and "://" in (el.text or "") for el in xml.iter()):
                 raise ValueError("External update content is not permitted")

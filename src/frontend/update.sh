@@ -14,5 +14,9 @@ uv run pyside6-lrelease translations/ts/zh_CN.ts -qm translations/qm/zh_CN.qm
 uv run pyside6-lrelease translations/ts/fr.ts -qm translations/qm/fr.qm
 uv run pyside6-lrelease translations/ts/it.ts -qm translations/qm/it.qm
 
-# Resource file
+# Resource files (binary .rcc with zstd compression and fallback .py)
+uv run pyside6-rcc --binary --compress-algo zstd --compress 19 resources.qrc -o resources.rcc
 uv run pyside6-rcc resources.qrc -o UI/resources.py
+
+# Ahead-of-time QML bytecode compilation
+uv run python ../../scripts/compile_qml.py

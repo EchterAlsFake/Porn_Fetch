@@ -27,7 +27,7 @@ task started. Some listed files also had existing user edits, which were preserv
 | QML | `src/frontend/UI/LicenseWidget.qml`, `AndroidSettingsPage.qml`, `SettingsPage.qml`, `Main.qml` |
 | Embedded resources | `src/frontend/resources.qrc`, generated `src/frontend/UI/resources.py` |
 | Generated translations | `src/frontend/translations/ts/{de_DE,en,fr,zh_CN}.ts`, `qm/{de_DE,zh_CN}.qm` |
-| Packaging | `packaging/generate_repository.py`, `publish_cli_updates.py`, `write_cli_build_version.py`, `installer/packages/com.echteralsfake.pornfetch/meta/package.xml`; new `sign_desktop_release.py`, `write_build_version.py` |
+| Packaging | `packaging/generate_repository.py`, `publish_cli_updates.py`, `write_cli_build_version.py`, `installer/packages/to.pornfetch.echteralsfake/meta/package.xml`; new `sign_desktop_release.py`, `write_build_version.py` |
 | Release CI/deployment | `.github/workflows/build_all.yml`, `scripts/deploy_ifw_repositories.sh` |
 | Existing tests/fixtures | `src/tests/unit/test_license_client.py`, `test_update_service.py`; `src/tests/integration/test_license_integration.py`; `src/tests/license_fixtures.py` |
 | New tests/fixtures | `src/tests/unit/test_release_entitlement.py`, `test_licensing_paths.py`; `src/tests/integration/test_keygen_production_opt_in.py`; `src/tests/fixtures/keygen_ed25519_vector.json` |

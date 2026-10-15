@@ -32,15 +32,15 @@ class ErrorReportFormattingTests(unittest.TestCase):
             "2,000 characters", "4 KiB", "not to log or store client IP addresses",
         ):
             self.assertIn(detail, ERROR_REPORT_DISCLOSURE)
-        self.assertIn("video_url=https://example.com/watch/example-video", ERROR_REPORT_EXAMPLE)
-        self.assertIn("traceback:", ERROR_REPORT_EXAMPLE)
+        self.assertNotIn("video_url=", ERROR_REPORT_EXAMPLE)
+        self.assertIn("functions=", ERROR_REPORT_EXAMPLE)
 
     def test_safe_url_preserves_reproduction_path_only(self) -> None:
         value = safe_url("https://user:password@example.com/watch/abc?token=secret#private")
-        self.assertEqual(value, "https://example.com/watch/abc")
+        self.assertEqual(value, "https://example.com/")
         self.assertEqual(
             redact_log_text("https://example.com/home/alice/video"),
-            "https://example.com/home/alice/video",
+            "https://example.com/",
         )
 
     def test_redaction_removes_sensitive_values(self) -> None:
@@ -53,7 +53,7 @@ class ErrorReportFormattingTests(unittest.TestCase):
         redacted = redact_log_text(raw)
         for secret in ("secret", "credential", "hunter2", "user@example.com", "192.0.2.4", "alice"):
             self.assertNotIn(secret, redacted)
-        self.assertIn("https://example.com/watch/abc", redacted)
+        self.assertIn("https://example.com/", redacted)
 
     def test_report_has_context_traceback_and_contract_limits(self) -> None:
         try:
@@ -68,11 +68,12 @@ class ErrorReportFormattingTests(unittest.TestCase):
             )
 
         self.assertEqual(report_id, "test-correlation")
-        self.assertIn("operation=scrape video", message)
-        self.assertIn("location=Example.scrape", message)
-        self.assertIn("video_url=https://example.com/video/42", message)
-        self.assertIn("Traceback (most recent call last)", message)
-        self.assertIn("RuntimeError: synthetic failure", message)
+        self.assertNotIn("operation=", message)
+        self.assertNotIn("location=", message)
+        self.assertNotIn("example.com", message)
+        self.assertIn("functions=", message)
+        self.assertIn("error_type=RuntimeError", message)
+        self.assertNotIn("synthetic failure", message)
         self.assertLessEqual(len(message), MAX_MESSAGE_CHARS)
         self.assertLessEqual(len(_payload_bytes(message)), MAX_BODY_BYTES)
         self.assertEqual(set(json.loads(_payload_bytes(message))), {"message"})

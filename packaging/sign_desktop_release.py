@@ -12,17 +12,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from securesystemslib.signer import Signer
 from tuf.api.metadata import Metadata, Root, TargetFile, Targets
 
-from src.shared.release import ROOT_FILE, safe_repo_path
+from src.shared.release import ROOT_FILE, safe_repo_path, validate_ifw_packages
 from src.shared.version import RELEASE_TIMESTAMP
 
 
 def sign_repository(repository, platform, version, private_key, root_file=ROOT_FILE):
     repository = Path(repository)
     xml = ET.parse(repository / "Updates.xml")
-    packages = xml.findall("PackageUpdate")
-    date = datetime.fromtimestamp(RELEASE_TIMESTAMP, timezone.utc).strftime("%Y-%m-%d")
-    if len(packages) != 1 or packages[0].findtext("Version") != version or packages[0].findtext("ReleaseDate") != date:
-        raise ValueError("Repository version/date must match the compiled release")
+    validate_ifw_packages(xml, version, RELEASE_TIMESTAMP)
     targets = {}
     for path in sorted(repository.rglob("*")):
         if path.is_file() and path.name != "release.json":

@@ -462,8 +462,6 @@ def _sanitize(value: str) -> str:
 
 
 def _has_av() -> bool:
-    try:
-        import av  # noqa: F401
-        return True
-    except ImportError:
-        return False
+    from src.shared.ffmpeg import has_ffmpeg
+
+    return has_ffmpeg()

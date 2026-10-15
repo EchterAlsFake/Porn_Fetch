@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>FFmpeg (optional)</DisplayName>
+    <Description>Video remuxing and MP4 metadata tagging. Skip this if you already have FFmpeg on your system PATH or do not need these features.</Description>
+    <Version>3.9.0</Version>
+    <ReleaseDate>2026-10-06</ReleaseDate>
+    <Default>false</Default>
+    <Dependencies>to.pornfetch.echteralsfake</Dependencies>
+</Package>

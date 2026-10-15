@@ -16,6 +16,7 @@ import argparse
 import ast
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -133,6 +134,17 @@ def patched_source(source: str) -> str:
 
 
 def patch_buildozer_source(source: str) -> str:
+    # PySide 6.12 switched from develop to a release pin whose final pip
+    # install can put host Linux wheels in the Android bundle. Follow develop
+    # as with 6.11; HEAD must also override the upstream release commit.
+    if "P4A_BRANCH = " in source:
+        source, count = re.subn(r'^P4A_BRANCH = .+$', 'P4A_BRANCH = "develop"', source, flags=re.MULTILINE)
+        if count != 1:
+            raise ValueError("Expected one P4A_BRANCH assignment in buildozer.py")
+        source, count = re.subn(r'^P4A_COMMIT = .+$', 'P4A_COMMIT = "HEAD"', source, flags=re.MULTILINE)
+        if count != 1:
+            raise ValueError("Expected one P4A_COMMIT assignment in buildozer.py")
+
     if "pkg_domain = " not in source:
         old_identity = (
             '        self.set_value("app", "title", pysidedeploy_config.title)\n'
@@ -334,6 +346,11 @@ def verify_android_deploy(content: str) -> None:
 
 
 def verify_buildozer(content: str) -> None:
+    if "P4A_BRANCH = " in content:
+        if 'P4A_BRANCH = "develop"' not in content or 'P4A_COMMIT = "HEAD"' not in content:
+            raise ValueError("p4a develop/HEAD patch is not installed in buildozer.py")
+    elif 'self.set_value("app", "p4a.branch", "develop")' not in content:
+        raise ValueError("p4a develop branch is not configured in buildozer.py")
     if "extra_reqs = pysidedeploy_config" not in content:
         raise ValueError("extra_reqs patch is not installed in buildozer.py")
     if "qt_priority" not in content:

@@ -9,6 +9,11 @@
     <InstallerWindowIcon>logo_transparent.png</InstallerWindowIcon>
     <StartMenuDir>Porn Fetch</StartMenuDir>
     <TargetDir>@HomeDir@/Porn Fetch</TargetDir>
+    <WizardStyle>Modern</WizardStyle>
+    <StyleSheet>dark.qss</StyleSheet>
+    <TitleColor>#f1f5f9</TitleColor>
+    <WizardDefaultWidth>800</WizardDefaultWidth>
+    <WizardDefaultHeight>560</WizardDefaultHeight>
     <RemoteRepositories>
         <Repository>
             <Url>https://api.pornfetch.to/repo/@TARGET_REPO@</Url>

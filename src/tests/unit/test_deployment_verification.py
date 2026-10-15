@@ -112,7 +112,7 @@ class DeploymentVerificationTests(unittest.IsolatedAsyncioTestCase):
     async def test_desktop_checks_signed_manifest_xml_and_application_archive(self):
         self.repository.mkdir()
         (self.repository / "Updates.xml").write_text(
-            "<Updates><PackageUpdate><Version>3.9.123</Version>"
+            "<Updates><PackageUpdate><Name>to.pornfetch.echteralsfake</Name><Version>3.9.123</Version>"
             "<ReleaseDate>2026-10-06</ReleaseDate></PackageUpdate></Updates>"
         )
         (self.repository / "payload.7z").write_bytes(b"application payload")

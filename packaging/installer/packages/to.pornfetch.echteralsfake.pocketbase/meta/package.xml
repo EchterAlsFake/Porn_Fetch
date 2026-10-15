@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>PocketBase (optional)</DisplayName>
+    <Description>Local database service for persistent download tracking, history, and statistics. Skip this if you do not need tracking or already have PocketBase on your system PATH.</Description>
+    <Version>3.9.0</Version>
+    <ReleaseDate>2026-10-06</ReleaseDate>
+    <Default>false</Default>
+    <Dependencies>to.pornfetch.echteralsfake</Dependencies>
+</Package>

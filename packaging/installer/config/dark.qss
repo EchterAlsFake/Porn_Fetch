@@ -1,0 +1,55 @@
+/* Embedded by IFW for both the installer and its maintenance tool. */
+QWidget {
+    background-color: #181c25;
+    color: #f1f5f9;
+    font-size: 10pt;
+    selection-background-color: #7165e8;
+    selection-color: #ffffff;
+}
+QLabel, QCheckBox, QRadioButton { background-color: transparent; }
+QWidget:disabled { color: #8791a5; }
+QLineEdit, QTextEdit, QPlainTextEdit, QAbstractItemView, QComboBox, QSpinBox {
+    background-color: #222837;
+    border: 1px solid #475169;
+    border-radius: 6px;
+    padding: 6px;
+    alternate-background-color: #2a3142;
+}
+QLineEdit:focus, QTextEdit:focus, QAbstractItemView:focus {
+    border-color: #a59bff;
+}
+QAbstractItemView::item { padding: 5px; }
+QAbstractItemView::item:selected { background-color: #5145a8; color: #ffffff; }
+QHeaderView::section {
+    background-color: #2a3142;
+    color: #f1f5f9;
+    border: none;
+    padding: 8px;
+}
+QPushButton {
+    background-color: #30394d;
+    border: 1px solid #56617b;
+    border-radius: 6px;
+    padding: 8px 18px;
+    min-width: 72px;
+}
+QPushButton:hover { background-color: #414d66; }
+QPushButton:default { background-color: #6557cf; border-color: #a59bff; }
+QPushButton:default:hover { background-color: #7667e0; }
+QPushButton:pressed { background-color: #5145a8; }
+QPushButton:focus { border: 2px solid #c0b9ff; }
+QPushButton:disabled { background-color: #222837; border-color: #394256; }
+QCheckBox::indicator, QRadioButton::indicator, QAbstractItemView::indicator {
+    width: 16px;
+    height: 16px;
+}
+QProgressBar {
+    background-color: #222837;
+    border: 1px solid #475169;
+    border-radius: 6px;
+    text-align: center;
+}
+QProgressBar::chunk { background-color: #6557cf; border-radius: 5px; }
+QGroupBox { border: 1px solid #475169; border-radius: 6px; margin-top: 12px; padding: 12px; }
+QGroupBox::title { subcontrol-origin: margin; padding: 0 5px; }
+QToolTip { background-color: #30394d; color: #f1f5f9; border: 1px solid #8791a5; }

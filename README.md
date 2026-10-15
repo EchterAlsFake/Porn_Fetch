@@ -53,10 +53,12 @@ Earlier GPL releases keep their GPL rights. The source license and a premium
 feature credential are separate things.
 
 The 3.9 client now requires a signed license on the commercial policy. It includes
-one calendar year of updates from first activation and permanent use of builds
-released within that entitlement, on up to ten installations. First activation
-requires a connection; subsequent offline use is limited to seven days after
-successful validation. Older beta credentials are rejected explicitly.
+31,556,952 seconds (approximately one year) of updates from first activation and permanent use of builds
+released within that entitlement, on up to ten installations. First activation attempts online validation. A valid signed production license
+gets up to three days from first import only for connection failures/timeouts,
+never for explicit rejection, HTTP errors, malformed responses or TLS trust failures.
+Reimport/restart does not reset that period. Subsequent offline use is limited to
+seven days after successful validation. A rejection blocks access through later outages. Older beta credentials are rejected explicitly.
 
 **Payment deployment is still sandboxed as of 6 October 2026; Patreon is disabled.**
 Do not assume this client change enables real payments. See the

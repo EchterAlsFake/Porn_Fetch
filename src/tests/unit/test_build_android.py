@@ -22,6 +22,46 @@ from scripts.build_android import (
     update_buildozer_spec,
     update_pysidedeploy_spec,
 )
+from scripts.patch_android_deploy import patch_buildozer_source, verify_buildozer
+
+
+class TestAndroidDeployToolchain(unittest.TestCase):
+    def test_pyside_612_release_pin_is_replaced_with_develop_head(self):
+        source = '''P4A_BRANCH = "master"
+P4A_COMMIT = "58d21141f17c889bf8585f5665921d72028f8831"
+
+class BuildozerConfig:
+    def configure(self):
+        pkg_domain = "to.pornfetch"
+        extra_reqs = pysidedeploy_config
+        qt_priority = {}
+        self.set_value("app", "p4a.branch", P4A_BRANCH)
+        self.set_value("app", "p4a.commit", P4A_COMMIT)
+'''
+        with self.assertRaisesRegex(ValueError, "develop/HEAD"):
+            verify_buildozer(source)
+        patched = patch_buildozer_source(source)
+        verify_buildozer(patched)
+        self.assertEqual(patch_buildozer_source(patched), patched)
+        namespace = {}
+        exec(compile(patched, "buildozer.py", "exec"), namespace)
+        settings = {}
+        config = namespace["BuildozerConfig"]()
+        config.set_value = lambda section, key, value: settings.update({key: value})
+        namespace["pysidedeploy_config"] = object()
+        config.configure()
+        self.assertEqual(settings, {"p4a.branch": "develop", "p4a.commit": "HEAD"})
+
+    def test_pyside_611_keeps_develop_branch(self):
+        source = '''class BuildozerConfig:
+    def configure(self):
+        pkg_domain = "to.pornfetch"
+        extra_reqs = pysidedeploy_config
+        qt_priority = {}
+        self.set_value("app", "p4a.branch", "develop")
+'''
+        self.assertEqual(patch_buildozer_source(source), source)
+        verify_buildozer(source)
 
 
 class TestAndroidBuildAutomation(unittest.TestCase):

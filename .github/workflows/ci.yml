@@ -47,7 +47,7 @@ jobs:
           enable-cache: true
 
       - name: Install development dependencies
-        run: uv sync --locked --extra gui --extra av --group dev
+        run: uv sync --locked --extra gui --group dev
 
       - name: Apply and verify required QtAsyncio compatibility patch
         run: |
