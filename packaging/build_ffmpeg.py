@@ -104,8 +104,8 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
     components = (build_dir / "config_components.h").read_text(encoding="utf-8")
     if re.search(r"^#define CONFIG_\w+_ENCODER 1$", components, re.MULTILINE):
         raise ValueError("The remux-only FFmpeg build must not contain encoders")
-    subprocess.run([make, f"-j{jobs}", "ffmpeg"], cwd=build_dir, env=environment, check=True)
     binary_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
+    subprocess.run([make, f"-j{jobs}", binary_name], cwd=build_dir, env=environment, check=True)
     executable = build_dir / binary_name
     license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
                                           stderr=subprocess.STDOUT, text=True)
@@ -132,7 +132,7 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
         include = subprocess.check_output(["cygpath", "-w", include], env=environment, text=True).strip()
         shutil.copy2(Path(include) / "zlib.h", legal / "zlib.h")
     (legal / "configuration.txt").write_text(
-        shlex.join(["bash", f"ffmpeg-{VERSION}/configure", *flags]) + "\nmake ffmpeg\n", encoding="utf-8")
+        shlex.join(["bash", f"ffmpeg-{VERSION}/configure", *flags]) + f"\nmake {binary_name}\n", encoding="utf-8")
     (legal / "build.json").write_text(json.dumps({
         "version": VERSION, "platform": target_platform, "arch": arch,
         "source_url": SOURCE_URL, "source_sha256": SOURCE_SHA256,
