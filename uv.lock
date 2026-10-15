@@ -666,7 +666,7 @@ desktop-build = [
 ]
 gui = [
     { name = "certifi" },
-    { name = "pydivert", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "pydivert", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32') or (platform_machine == 'x86_64' and sys_platform == 'win32') or sys_platform == 'linux'" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
     { name = "rich-argparse" },
@@ -693,7 +693,7 @@ requires-dist = [
     { name = "patchelf", marker = "sys_platform == 'linux' and extra == 'desktop-build'" },
     { name = "pip", marker = "extra == 'build'" },
     { name = "platformdirs", specifier = ">=4.3" },
-    { name = "pydivert", marker = "(sys_platform == 'linux' and extra == 'gui') or (sys_platform == 'win32' and extra == 'gui')", specifier = ">=3.1.3" },
+    { name = "pydivert", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32' and extra == 'gui') or (platform_machine == 'x86_64' and sys_platform == 'win32' and extra == 'gui') or (sys_platform == 'linux' and extra == 'gui')", specifier = ">=3.1.3" },
     { name = "pyinstaller", marker = "extra == 'build'" },
     { name = "pyside6", marker = "extra == 'gui'" },
     { name = "python-dateutil" },

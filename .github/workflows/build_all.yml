@@ -140,6 +140,7 @@ jobs:
           fi
 
       - name: Set up Windows FFmpeg compiler
+        id: ffmpeg-msys2
         if: matrix.platform == 'windows'
         uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e # v2
         with:
@@ -162,7 +163,7 @@ jobs:
         if: matrix.platform == 'windows'
         shell: msys2 {0}
         run: |
-          uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg"
+          uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg" --msys2-root "${{ steps.ffmpeg-msys2.outputs.msys2-location }}"
           uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg.exe
           PORN_FETCH_TEST_FFMPEG=third_party/ffmpeg.exe uv run --no-sync python -m unittest src.tests.unit.test_ffmpeg
 

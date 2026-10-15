@@ -2,13 +2,17 @@
 import configparser
 import fnmatch
 import json
+import os
 import shlex
 import subprocess
 import tarfile
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+
+from packaging.requirements import Requirement
 
 from src.tests.unit.test_cli_self_update import load_script
 
@@ -16,7 +20,36 @@ merger = load_script("merge_macos_bundles")
 repairer = load_script("repair_macos_bundle")
 preparer = load_script("prepare_macos_deploy")
 desktop_preparer = load_script("prepare_deploy")
+ffmpeg_builder = load_script("build_ffmpeg")
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+
+class WindowsBuildDependencyTests(unittest.TestCase):
+    def test_pydivert_is_installed_only_for_supported_windows_architecture(self):
+        project = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text())
+        dependency = next(Requirement(value) for value in project["project"]["optional-dependencies"]["gui"]
+                          if value.startswith("pydivert"))
+        for system, machine, expected in (("win32", "ARM64", False), ("win32", "AMD64", True),
+                                          ("win32", "x86_64", True), ("linux", "aarch64", True)):
+            with self.subTest(system=system, machine=machine):
+                self.assertEqual(dependency.marker.evaluate({"sys_platform": system, "platform_machine": machine}),
+                                 expected)
+
+    def test_windows_ffmpeg_uses_explicit_msys2_tools_instead_of_wsl(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "MSYS2 installation"
+            tools = root / "usr/bin"
+            tools.mkdir(parents=True)
+            for name in ("bash.exe", "make.exe"):
+                (tools / name).touch()
+            with patch.dict(os.environ, {"PATH": "WSL launchers"}):
+                for arch, compiler in (("x64", "clang64"), ("arm64", "clangarm64")):
+                    with self.subTest(arch=arch):
+                        bash, make, environment = ffmpeg_builder.build_tools("windows", arch, root)
+                        self.assertEqual(Path(bash), tools / "bash.exe")
+                        self.assertEqual(Path(make), tools / "make.exe")
+                        self.assertEqual(environment["PATH"].split(os.pathsep)[:2],
+                                         [str(root / compiler / "bin"), str(tools)])
 
 
 class QmlPackagingTests(unittest.TestCase):

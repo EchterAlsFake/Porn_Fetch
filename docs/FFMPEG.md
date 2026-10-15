@@ -41,6 +41,10 @@ install `make diffutils pkgconf`, the matching `mingw-w64-clang-*-toolchain`, an
 `mingw-w64-clang-*-zlib` packages. Build on the target architecture; this script
 does not cross-compile.
 
+On Windows, add `--msys2-root C:/msys64` (or your actual installation directory).
+The builder uses that installation's Bash and make explicitly and prepends its
+Clang tools to the build environment. CI obtains this path from the MSYS2 action.
+
 `--work-dir`, `--jobs`, and `--source-archive` customize the working directory,
 parallelism, or a local source archive. Local archives must match the pinned hash.
 The old `scripts/fetch_ffmpeg.py` and `packaging/fetch_ffmpeg.py` entry points run

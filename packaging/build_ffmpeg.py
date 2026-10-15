@@ -39,14 +39,32 @@ async def download_source(destination: Path) -> None:
         destination.write_bytes(response.content)
 
 
+def build_tools(target_platform: str, arch: str, msys2_root: Path | None) -> tuple[str, str, dict[str, str]]:
+    environment = os.environ.copy()
+    if target_platform != "windows":
+        return shutil.which("bash") or "bash", shutil.which("make") or "make", environment
+    if msys2_root is None:
+        raise ValueError("Windows FFmpeg builds require --msys2-root pointing to the MSYS2 installation")
+    root = msys2_root.resolve()
+    tools = root / "usr/bin"
+    bash, make = tools / "bash.exe", tools / "make.exe"
+    for executable in (bash, make):
+        if not executable.is_file():
+            raise FileNotFoundError(executable)
+    compiler = root / ("clangarm64/bin" if arch == "arm64" else "clang64/bin")
+    environment["PATH"] = os.pathsep.join((str(compiler), str(tools), environment.get("PATH", "")))
+    return str(bash), str(make), environment
+
+
 def build(target_platform: str, arch: str, destination: Path, work: Path,
-          source_archive: Path | None = None, jobs: int = 2) -> Path:
+          source_archive: Path | None = None, jobs: int = 2, msys2_root: Path | None = None) -> Path:
     target_platform = normalize_platform(target_platform)
     arch = normalize_arch(arch)
     host = (normalize_platform(sys.platform), normalize_arch(platform.machine()))
     if ((target_platform, arch) != host or target_platform not in {"linux", "darwin", "windows"}
             or arch not in {"x64", "arm64"}):
         raise ValueError(f"Build natively on {target_platform}/{arch}; current host is {host[0]}/{host[1]}")
+    bash, make, environment = build_tools(target_platform, arch, msys2_root)
     work = work.resolve()
     destination = destination.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -77,8 +95,8 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
     elif target_platform == "darwin":
         flags.extend(["--cc=clang", "--extra-cflags=-mmacosx-version-min=11.0",
                       "--extra-ldflags=-mmacosx-version-min=11.0"])
-    command = ["bash", (source_dir / "configure").as_posix(), *flags]
-    subprocess.run(command, cwd=build_dir, check=True)
+    command = [bash, (source_dir / "configure").as_posix(), *flags]
+    subprocess.run(command, cwd=build_dir, env=environment, check=True)
     config = (build_dir / "config.h").read_text(encoding="utf-8")
     for option in ("GPL", "VERSION3", "NONFREE"):
         if f"#define CONFIG_{option} 0" not in config:
@@ -86,7 +104,7 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
     components = (build_dir / "config_components.h").read_text(encoding="utf-8")
     if re.search(r"^#define CONFIG_\w+_ENCODER 1$", components, re.MULTILINE):
         raise ValueError("The remux-only FFmpeg build must not contain encoders")
-    subprocess.run(["make", f"-j{jobs}", "ffmpeg"], cwd=build_dir, check=True)
+    subprocess.run([make, f"-j{jobs}", "ffmpeg"], cwd=build_dir, env=environment, check=True)
     binary_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
     executable = build_dir / binary_name
     license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
@@ -109,8 +127,9 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
         [str(result), "-version"], stderr=subprocess.STDOUT, text=True), encoding="utf-8")
     if target_platform == "windows":
         # The Windows executable statically links MSYS2's permissively licensed zlib.
-        include = subprocess.check_output(["pkg-config", "--variable=includedir", "zlib"], text=True).strip()
-        include = subprocess.check_output(["cygpath", "-w", include], text=True).strip()
+        include = subprocess.check_output(["pkg-config", "--variable=includedir", "zlib"],
+                                          env=environment, text=True).strip()
+        include = subprocess.check_output(["cygpath", "-w", include], env=environment, text=True).strip()
         shutil.copy2(Path(include) / "zlib.h", legal / "zlib.h")
     (legal / "configuration.txt").write_text(
         shlex.join(["bash", f"ffmpeg-{VERSION}/configure", *flags]) + "\nmake ffmpeg\n", encoding="utf-8")
@@ -131,9 +150,10 @@ def main() -> int:
     parser.add_argument("--dest", type=Path, default=PROJECT_ROOT / "third_party")
     parser.add_argument("--work-dir", type=Path, default=PROJECT_ROOT / "build/ffmpeg")
     parser.add_argument("--source-archive", type=Path)
+    parser.add_argument("--msys2-root", type=Path, help="Windows: MSYS2 installation directory")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 2, 4))
     args = parser.parse_args()
-    build(args.platform, args.arch, args.dest, args.work_dir, args.source_archive, args.jobs)
+    build(args.platform, args.arch, args.dest, args.work_dir, args.source_archive, args.jobs, args.msys2_root)
     return 0
 
 
