@@ -208,10 +208,11 @@ jobs:
             echo "DIST_ARCHIVE=$DIST_NAME.zip" >> "$GITHUB_ENV"
             echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
           elif [ "${{ matrix.platform }}" = "linux" ]; then
-            if [ -f "Porn Fetch.dist/main" ] && [ ! -f "Porn Fetch.dist/Porn Fetch" ]; then
-              cp "Porn Fetch.dist/main" "Porn Fetch.dist/Porn Fetch"
+            if [ -f "Porn Fetch.dist/main.bin" ] && [ ! -f "Porn Fetch.dist/Porn Fetch" ]; then
+              cp "Porn Fetch.dist/main.bin" "Porn Fetch.dist/Porn Fetch"
               chmod +x "Porn Fetch.dist/Porn Fetch"
             fi
+            test -x "Porn Fetch.dist/Porn Fetch"
             mkdir -p "Porn Fetch.dist/third_party"
             cp third_party/ffmpeg "Porn Fetch.dist/third_party/" || true
             cp -R third_party/ffmpeg-legal "Porn Fetch.dist/third_party/"

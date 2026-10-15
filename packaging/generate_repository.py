@@ -86,8 +86,8 @@ def prepare_staging_directory(
         if (data_dest / "main.exe").is_file() and not (data_dest / "Porn Fetch.exe").is_file():
             shutil.copy2(data_dest / "main.exe", data_dest / "Porn Fetch.exe")
     elif target_platform == "linux":
-        if (data_dest / "main").is_file() and not (data_dest / "Porn Fetch").is_file():
-            shutil.copy2(data_dest / "main", data_dest / "Porn Fetch")
+        if (data_dest / "main.bin").is_file() and not (data_dest / "Porn Fetch").is_file():
+            shutil.copy2(data_dest / "main.bin", data_dest / "Porn Fetch")
             (data_dest / "Porn Fetch").chmod(0o755)
 
     # 4. Resolve the tools before removing bundled copies from the core payload.

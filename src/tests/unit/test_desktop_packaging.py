@@ -144,7 +144,8 @@ class QtIFWStagingTests(unittest.TestCase):
                 app_dir = dist / "Porn Fetch.app/Contents/MacOS" if platform == "darwin" else dist
                 app_dir.mkdir(parents=True)
                 suffix = ".exe" if platform == "windows" else ""
-                (app_dir / f"Porn Fetch{suffix}").write_bytes(b"application")
+                executable = "main.bin" if platform == "linux" else f"Porn Fetch{suffix}"
+                (app_dir / executable).write_bytes(b"application")
                 tools = app_dir / "third_party"
                 tools.mkdir()
                 for tool in ("pocketbase", "ffmpeg"):
@@ -166,6 +167,8 @@ class QtIFWStagingTests(unittest.TestCase):
                 data = packages / core / "data"
                 relative_app = app_dir.relative_to(dist) / f"Porn Fetch{suffix}"
                 self.assertEqual((data / relative_app).read_bytes(), b"application")
+                if platform == "linux":
+                    self.assertEqual((data / relative_app).stat().st_mode & 0o777, 0o755)
                 self.assertFalse(any(p.name.startswith(("pocketbase", "ffmpeg")) for p in data.rglob("*")
                                      if p.is_file()))
                 self.assertTrue((tools / f"pocketbase{suffix}").is_file(), "Source bundle was modified")

@@ -531,8 +531,8 @@ else
     OUT_NAME="PornFetch_Linux_GUI_${ARCH}.dist"
     run rm -rf "${OUT_NAME}" || true
     run mv "Porn Fetch.dist" "${OUT_NAME}"
-    if [[ -f "${OUT_NAME}/main" && ! -f "${OUT_NAME}/Porn Fetch" ]]; then
-      cp "${OUT_NAME}/main" "${OUT_NAME}/Porn Fetch"
+    if [[ -f "${OUT_NAME}/main.bin" && ! -f "${OUT_NAME}/Porn Fetch" ]]; then
+      cp "${OUT_NAME}/main.bin" "${OUT_NAME}/Porn Fetch"
       chmod +x "${OUT_NAME}/Porn Fetch"
     fi
     mkdir -p "${OUT_NAME}/third_party"
