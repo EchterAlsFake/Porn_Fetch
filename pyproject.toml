@@ -135,6 +135,3 @@ omit = [
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
-
-[tool.uv.sources]
-eaf-base-api = { path = "/home/asuna/PycharmProjects/eaf_base_api" }
