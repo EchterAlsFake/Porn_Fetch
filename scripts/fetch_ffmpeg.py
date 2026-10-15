@@ -12,16 +12,15 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-# yt-dlp/FFmpeg-Builds release asset names
-ASSET_MAP: dict[tuple[str, str], str] = {
-    ("darwin", "x64"): "ffmpeg-master-latest-macos64-gpl.tar.xz",
-    ("darwin", "arm64"): "ffmpeg-master-latest-macosarm64-gpl.tar.xz",
-    ("macos", "x64"): "ffmpeg-master-latest-macos64-gpl.tar.xz",
-    ("macos", "arm64"): "ffmpeg-master-latest-macosarm64-gpl.tar.xz",
-    ("linux", "x64"): "ffmpeg-master-latest-linux64-gpl.tar.xz",
-    ("linux", "arm64"): "ffmpeg-master-latest-linuxarm64-gpl.tar.xz",
-    ("windows", "x64"): "ffmpeg-master-latest-win64-gpl.zip",
-    ("windows", "arm64"): "ffmpeg-master-latest-winarm64-gpl.zip",
+# yt-dlp publishes Linux/Windows builds; Martin Riedl provides macOS builds.
+YTDLP_RELEASE = "https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest"
+DOWNLOAD_URLS: dict[tuple[str, str], str] = {
+    ("darwin", "x64"): "https://ffmpeg.martin-riedl.de/redirect/latest/macos/amd64/release/ffmpeg.zip",
+    ("darwin", "arm64"): "https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/release/ffmpeg.zip",
+    ("linux", "x64"): f"{YTDLP_RELEASE}/ffmpeg-master-latest-linux64-gpl.tar.xz",
+    ("linux", "arm64"): f"{YTDLP_RELEASE}/ffmpeg-master-latest-linuxarm64-gpl.tar.xz",
+    ("windows", "x64"): f"{YTDLP_RELEASE}/ffmpeg-master-latest-win64-gpl.zip",
+    ("windows", "arm64"): f"{YTDLP_RELEASE}/ffmpeg-master-latest-winarm64-gpl.zip",
 }
 
 
@@ -56,8 +55,8 @@ def download_ffmpeg(
     norm_arch = normalize_arch(target_arch)
 
     asset_key = (norm_plat, norm_arch)
-    asset_name = ASSET_MAP.get(asset_key)
-    if not asset_name:
+    url = DOWNLOAD_URLS.get(asset_key)
+    if not url:
         print(
             f"Notice: No prebuilt FFmpeg binary available for {norm_plat}-{norm_arch}. "
             f"FFmpeg integration will rely on PATH or runtime discovery.",
@@ -66,7 +65,7 @@ def download_ffmpeg(
         return None
 
     binary_name = "ffmpeg.exe" if norm_plat == "windows" else "ffmpeg"
-    url = f"https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/{asset_name}"
+    asset_name = url.rsplit("/", 1)[-1]
     print(f"Downloading FFmpeg for {norm_plat}-{norm_arch} from {url}...")
 
     request = urllib.request.Request(
