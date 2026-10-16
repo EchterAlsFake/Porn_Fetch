@@ -541,6 +541,12 @@ Pane {
                 heading: qsTr("Theme")
                 description: qsTr("A Material look designed for your phone and tablet.")
                 ToggleRow { label: qsTr("Dark mode"); value: appSettings.dark_mode; onChanged: function(v) { appSettings.dark_mode = v } }
+                ToggleRow {
+                    label: qsTr("Activity glow")
+                    detail: qsTr("Show a glowing border while the app is busy.")
+                    value: appSettings.activity_glow_enabled
+                    onChanged: function(v) { appSettings.activity_glow_enabled = v }
+                }
                 NumberRow { label: qsTr("Text size"); number: appSettings.font_size; minimum: 8; maximum: 32; onChanged: function(n) { appSettings.font_size = n } }
                 ChoiceRow {
                     label: qsTr("Accent color")

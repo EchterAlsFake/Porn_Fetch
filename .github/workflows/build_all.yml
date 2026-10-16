@@ -53,7 +53,7 @@ jobs:
     needs: validate
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 75
+    timeout-minutes: ${{ matrix.platform == 'windows' && matrix.arch == 'arm64' && 120 || 75 }}
     strategy:
       fail-fast: false
       matrix:

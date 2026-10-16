@@ -23,6 +23,7 @@ ApplicationWindow {
         parent: Overlay.overlay
         anchors.fill: parent
         z: 100
+        enabled: appSettings.activity_glow_enabled
         active: backend.activityActive
         accentColor: appSettings.accent_color || "#6366f1"
         animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden

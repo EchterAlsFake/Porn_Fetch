@@ -1291,6 +1291,20 @@ Pane {
                                 onToggled: appSettings.dark_mode = checked
                             }
 
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: qsTr("Show a glowing border while the app is busy.")
+                            }
+                            Label { text: qsTr("Activity glow") }
+                            Switch {
+                                objectName: "activityGlowSwitch"
+                                Accessible.name: qsTr("Activity glow")
+                                Accessible.description: qsTr("Show a glowing border while the app is busy.")
+                                Layout.fillWidth: true
+                                checked: appSettings.activity_glow_enabled
+                                onToggled: appSettings.activity_glow_enabled = checked
+                            }
+
                             // 3. Accent Color
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.accentColorHelp }
                             Label { text: "Accent Color:" }

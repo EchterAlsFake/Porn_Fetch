@@ -50,6 +50,18 @@ class TestUITabGUI(SettingsGUITestBase):
         self.assertTrue(self.settings_manager.dark_mode)
         self.assert_file_value("UI/dark_mode", True)
 
+    def test_activity_glow_switch_persists(self) -> None:
+        self.assertTrue(self.settings_manager.activity_glow_enabled)
+        self.simulate_switch("activityGlowSwitch", False)
+        self.assertFalse(self.settings_manager.activity_glow_enabled)
+        self.assert_file_value("UI/activity_glow_enabled", False)
+        restored = SettingsManager(self.read_fresh_settings())
+        self.assertFalse(restored.activity_glow_enabled)
+
+        self.simulate_switch("activityGlowSwitch", True)
+        self.assertTrue(self.settings_manager.activity_glow_enabled)
+        self.assert_file_value("UI/activity_glow_enabled", True)
+
     def test_accent_color_combobox(self) -> None:
         # Index 1: "#f44336" (Red)
         self.simulate_combobox("accentColorComboBox", 1)

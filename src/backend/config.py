@@ -49,6 +49,7 @@ class SettingsManager(QObject):
     coreStyleChanged = Signal(str)
     darkModeChanged = Signal(bool)
     accentColorChanged = Signal(str)
+    activityGlowEnabledChanged = Signal(bool)
 
     # Missing Signals
     networkLoggingChanged = Signal(bool)
@@ -930,6 +931,16 @@ class SettingsManager(QObject):
         if val != self.dark_mode:
             self._settings.setValue("UI/dark_mode", val)
             self.darkModeChanged.emit(val)
+
+    @Property(bool, notify=activityGlowEnabledChanged)
+    def activity_glow_enabled(self) -> bool:
+        return self.get_bool("UI/activity_glow_enabled", True)
+
+    @activity_glow_enabled.setter
+    def activity_glow_enabled(self, enabled: bool) -> None:
+        if enabled != self.activity_glow_enabled:
+            self._settings.setValue("UI/activity_glow_enabled", enabled)
+            self.activityGlowEnabledChanged.emit(enabled)
 
     @Property(str, notify=accentColorChanged)
     def accent_color(self) -> str:

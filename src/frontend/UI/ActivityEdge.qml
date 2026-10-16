@@ -10,8 +10,8 @@ Item {
     property bool animationAllowed: true
     property color accentColor: "#6366f1"
     property real strength: 1
-    property real glowWidth: 15
-    property real lineWidth: 2
+    property real glowWidth: 7.5
+    property real lineWidth: 1
     property int pulseDuration: 2000
     property real cornerRadius: 0
     property real pulse: 0.35
@@ -19,7 +19,7 @@ Item {
 
     clip: true
     opacity: showing ? 1 : 0
-    visible: opacity > 0
+    visible: enabled && opacity > 0
 
     Behavior on opacity {
         NumberAnimation { duration: 240; easing.type: Easing.InOutSine }
