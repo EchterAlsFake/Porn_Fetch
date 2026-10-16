@@ -144,7 +144,7 @@ class QtIFWStagingTests(unittest.TestCase):
                 app_dir = dist / "Porn Fetch.app/Contents/MacOS" if platform == "darwin" else dist
                 app_dir.mkdir(parents=True)
                 suffix = ".exe" if platform == "windows" else ""
-                executable = "main.bin" if platform == "linux" else f"Porn Fetch{suffix}"
+                executable = {"linux": "main.bin", "windows": "deploy_main.exe"}.get(platform, f"Porn Fetch{suffix}")
                 (app_dir / executable).write_bytes(b"application")
                 tools = app_dir / "third_party"
                 tools.mkdir()

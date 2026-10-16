@@ -83,8 +83,9 @@ def prepare_staging_directory(
 
     # Ensure executable name matches expected "Porn Fetch" / "Porn Fetch.exe"
     if target_platform == "windows":
-        if (data_dest / "main.exe").is_file() and not (data_dest / "Porn Fetch.exe").is_file():
-            shutil.copy2(data_dest / "main.exe", data_dest / "Porn Fetch.exe")
+        for name in ("deploy_main.exe", "main.exe"):
+            if (data_dest / name).is_file() and not (data_dest / "Porn Fetch.exe").is_file():
+                shutil.copy2(data_dest / name, data_dest / "Porn Fetch.exe")
     elif target_platform == "linux":
         if (data_dest / "main.bin").is_file() and not (data_dest / "Porn Fetch").is_file():
             shutil.copy2(data_dest / "main.bin", data_dest / "Porn Fetch")

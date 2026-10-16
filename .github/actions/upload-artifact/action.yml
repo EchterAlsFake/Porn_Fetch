@@ -1,0 +1,66 @@
+name: Upload artifact with retries
+description: Retry temporary GitHub artifact service failures, replacing incomplete uploads.
+inputs:
+  name:
+    description: Artifact name
+    default: artifact
+  path:
+    description: Files to upload
+    required: true
+  archive:
+    description: Zip the files before uploading
+    default: 'true'
+  if-no-files-found:
+    description: Behavior when the path matches no files
+    default: warn
+runs:
+  using: composite
+  steps:
+    - name: Resolve artifact name
+      id: artifact
+      shell: bash
+      env:
+        ARTIFACT_NAME: ${{ inputs.name }}
+        ARTIFACT_PATH: ${{ inputs.path }}
+        ARCHIVE: ${{ inputs.archive }}
+      run: |
+        # Raw uploads use the file name; overwrite must use that same name.
+        if [ "$ARCHIVE" = false ]; then ARTIFACT_NAME=$(basename "$ARTIFACT_PATH"); fi
+        echo "name=$ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
+    - name: Upload (attempt 1)
+      id: first
+      continue-on-error: true
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: ${{ steps.artifact.outputs.name }}
+        path: ${{ inputs.path }}
+        archive: ${{ inputs.archive }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+    - name: Wait before retry
+      if: steps.first.outcome == 'failure'
+      shell: bash
+      run: sleep 15
+    - name: Upload (attempt 2)
+      id: second
+      if: steps.first.outcome == 'failure'
+      continue-on-error: true
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: ${{ steps.artifact.outputs.name }}
+        path: ${{ inputs.path }}
+        archive: ${{ inputs.archive }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        overwrite: true
+    - name: Wait before final retry
+      if: steps.second.outcome == 'failure'
+      shell: bash
+      run: sleep 30
+    - name: Upload (attempt 3)
+      if: steps.second.outcome == 'failure'
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: ${{ steps.artifact.outputs.name }}
+        path: ${{ inputs.path }}
+        archive: ${{ inputs.archive }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        overwrite: true

@@ -1,6 +1,7 @@
 """Focused offline regression checks for build artifact handling."""
 import configparser
 import fnmatch
+import hashlib
 import json
 import os
 import shlex
@@ -10,7 +11,8 @@ import tempfile
 import tomllib
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock, patch
 
 from packaging.requirements import Requirement
 
@@ -25,6 +27,22 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class WindowsBuildDependencyTests(unittest.TestCase):
+    def test_workflow_assembles_normal_and_long_command_windows_distributions(self):
+        workflow = (PROJECT_ROOT / ".github/workflows/build_all.yml").read_text()
+        assembly = workflow.split('# Standalone Layout & Assembly', 1)[1].split(
+            'if [ "${{ matrix.platform }}" = "windows" ]; then', 1)[1].split(
+            '            mkdir -p "Porn Fetch.dist/third_party"', 1)[0]
+        for long_command in (False, True):
+            with self.subTest(long_command=long_command), tempfile.TemporaryDirectory() as temporary:
+                project = Path(temporary)
+                bundle = project / ("deployment/deploy_main.dist" if long_command else "Porn Fetch.dist")
+                bundle.mkdir(parents=True)
+                (bundle / ("deploy_main.exe" if long_command else "main.exe")).write_bytes(b"application")
+                (bundle / "Qt6Core.dll").write_bytes(b"dependency")
+                subprocess.run(["bash", "-eu", "-c", assembly], cwd=project, check=True)
+                self.assertEqual((project / "Porn Fetch.dist/Porn Fetch.exe").read_bytes(), b"application")
+                self.assertEqual((project / "Porn Fetch.dist/Qt6Core.dll").read_bytes(), b"dependency")
+
     def test_pydivert_is_installed_only_for_supported_windows_architecture(self):
         project = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text())
         dependency = next(Requirement(value) for value in project["project"]["optional-dependencies"]["gui"]
@@ -50,6 +68,32 @@ class WindowsBuildDependencyTests(unittest.TestCase):
                         self.assertEqual(Path(make), tools / "make.exe")
                         self.assertEqual(environment["PATH"].split(os.pathsep)[:2],
                                          [str(root / compiler / "bin"), str(tools)])
+
+
+class FFmpegSourceDownloadTests(unittest.IsolatedAsyncioTestCase):
+    async def test_dns_failure_uses_alternate_host_with_the_same_pinned_hash(self):
+        from base_api.modules.errors import NetworkRequestError
+
+        data = b"source archive fixture"
+        request = AsyncMock(side_effect=[NetworkRequestError("DNS failure"),
+                                        SimpleNamespace(content=data, raise_for_status=Mock())])
+        with tempfile.TemporaryDirectory() as temporary, patch("base_api.BaseCore") as client, \
+                patch.object(ffmpeg_builder, "SOURCE_SHA256", hashlib.sha256(data).hexdigest()):
+            client.return_value.__aenter__.return_value = SimpleNamespace(request=request)
+            destination = Path(temporary) / "source.tar.xz"
+            await ffmpeg_builder.download_source(destination)
+            self.assertEqual(destination.read_bytes(), data)
+            self.assertEqual([call.kwargs["url"] for call in request.await_args_list],
+                             list(ffmpeg_builder.SOURCE_URLS))
+
+    async def test_corrupt_download_is_not_saved_or_accepted(self):
+        request = AsyncMock(return_value=SimpleNamespace(content=b"corrupt", raise_for_status=Mock()))
+        with tempfile.TemporaryDirectory() as temporary, patch("base_api.BaseCore") as client:
+            client.return_value.__aenter__.return_value = SimpleNamespace(request=request)
+            destination = Path(temporary) / "source.tar.xz"
+            with self.assertRaisesRegex(ValueError, "pinned SHA-256"):
+                await ffmpeg_builder.download_source(destination)
+            self.assertFalse(destination.exists())
 
 
 class QmlPackagingTests(unittest.TestCase):

@@ -45,6 +45,10 @@ artifacts into separate directories (`merge-multiple: false`), then runs
 `dist/cli_tuf/targets/`. `scripts/deploy_cli_updates.sh` uploads that generated
 repository rather than raw Actions artifacts.
 
+The publisher retries metadata transport failures up to three times with
+60-second socket timeouts. Only an HTTP 404 for the timestamp starts a new
+repository; connection failures and invalid signed metadata stop publication.
+
 After each upload, `packaging/verify_deployment.py` runs the
 [TUF client workflow](https://theupdateframework.readthedocs.io/en/latest/api/tuf.ngclient.updater.html)
 with the bundled public root and a fresh cache. It requires public metadata to

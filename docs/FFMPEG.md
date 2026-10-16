@@ -4,6 +4,9 @@ Official desktop builds compile FFmpeg 9.0.2 for each native Linux, macOS, and
 Windows x64/ARM64 runner. No third-party precompiled FFmpeg binaries are downloaded.
 The source URL and SHA-256 are pinned in `packaging/build_ffmpeg.py`; the shared
 configure profile lives in `packaging/ffmpeg_configure_flags.txt`.
+Downloads fall back to FFmpeg's `www.ffmpeg.org` hostname if the primary host is
+unreachable. Both serve the same archive, checked against the same pinned hash.
+CI caches the source archive; restored archives are verified before extraction.
 
 The profile explicitly disables GPL, version-3 and nonfree code, external codec
 libraries, networking, device capture, assembly optimizations, and all encoders.

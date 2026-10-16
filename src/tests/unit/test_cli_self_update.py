@@ -7,12 +7,14 @@ import json
 import shutil
 import tempfile
 import unittest
+import urllib.error
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
-from unittest.mock import patch
+from unittest.mock import call, patch
 
+from tuf.api.exceptions import DownloadError, UnsignedMetadataError
 from tuf.ngclient import Updater
 
 from src.cli.self_update import _apply_update, _stage_bundle, target_name, version_parts
@@ -37,6 +39,32 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 class CliUpdateTests(unittest.TestCase):
+    def test_metadata_download_recovers_from_transport_errors(self):
+        metadata = object()
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch.object(publisher, "fetch_previous_metadata", side_effect=[
+                    urllib.error.URLError(TimeoutError("TLS handshake")), DownloadError("connection lost"), metadata,
+                ]) as fetch, patch.object(publisher.time, "sleep") as sleep:
+            self.assertIs(publisher.previous_metadata("https://example.invalid/", b"root", Path(temporary)), metadata)
+            self.assertEqual(fetch.call_count, 3)
+            self.assertEqual(sleep.call_args_list, [call(5), call(10)])
+
+    def test_metadata_download_failure_never_bootstraps_a_new_repository(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch.object(publisher, "fetch_previous_metadata", side_effect=urllib.error.URLError("DNS failure")), \
+                patch.object(publisher.time, "sleep"):
+            with self.assertRaises(urllib.error.URLError):
+                publisher.previous_metadata("https://example.invalid/", b"root", Path(temporary))
+
+    def test_invalid_metadata_is_not_retried(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch.object(publisher, "fetch_previous_metadata", side_effect=UnsignedMetadataError("bad signature")) as fetch, \
+                patch.object(publisher.time, "sleep") as sleep:
+            with self.assertRaises(UnsignedMetadataError):
+                publisher.previous_metadata("https://example.invalid/", b"root", Path(temporary))
+            fetch.assert_called_once()
+            sleep.assert_not_called()
+
     def test_platform_names_and_versions(self):
         self.assertEqual(target_name("Linux", "riscv64"), "linux/riscv64.zip")
         self.assertEqual(target_name("Windows", "AMD64"), "windows/amd64.zip")

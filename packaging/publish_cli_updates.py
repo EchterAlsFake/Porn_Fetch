@@ -7,6 +7,7 @@ import json
 import shutil
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.request
 import zipfile
@@ -14,8 +15,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from securesystemslib.signer import Signer
+from tuf.api.exceptions import DownloadError, DownloadLengthMismatchError
 from tuf.api.metadata import Metadata, MetaFile, Root, Snapshot, TargetFile, Targets, Timestamp
 from tuf.ngclient import Updater
+from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.shared.version import RELEASE_TIMESTAMP
@@ -37,9 +40,21 @@ ARTIFACT_TARGETS = {
 
 
 def previous_metadata(remote_url: str, root_bytes: bytes, cache_dir: Path) -> tuple[Metadata[Targets], Metadata[Snapshot], Metadata[Timestamp]] | None:
+    for attempt in range(3):
+        try:
+            return fetch_previous_metadata(remote_url, root_bytes, cache_dir)
+        except (urllib.error.URLError, TimeoutError, DownloadError) as exc:
+            status = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+            if (attempt == 2 or isinstance(exc, DownloadLengthMismatchError)
+                    or (status is not None and status not in (408, 429) and status < 500)):
+                raise
+            print(f"CLI metadata download failed ({exc}); retrying ({attempt + 2}/3)", flush=True)
+            time.sleep(5 * (attempt + 1))
+
+def fetch_previous_metadata(remote_url: str, root_bytes: bytes, cache_dir: Path) -> tuple[Metadata[Targets], Metadata[Snapshot], Metadata[Timestamp]] | None:
     timestamp_url = f"{remote_url.rstrip('/')}/metadata/timestamp.json"
     try:
-        with urllib.request.urlopen(timestamp_url, timeout=20) as response:
+        with urllib.request.urlopen(timestamp_url, timeout=60) as response:
             response.read(1)
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
@@ -48,11 +63,12 @@ def previous_metadata(remote_url: str, root_bytes: bytes, cache_dir: Path) -> tu
         raise
 
     metadata_dir = cache_dir / "metadata"
-    metadata_dir.mkdir(parents=True)
+    metadata_dir.mkdir(parents=True, exist_ok=True)
     updater = Updater(
         metadata_dir=str(metadata_dir),
         metadata_base_url=f"{remote_url.rstrip('/')}/metadata/",
         bootstrap=root_bytes,
+        fetcher=Urllib3Fetcher(socket_timeout=60),
     )
     updater.refresh()
     return (

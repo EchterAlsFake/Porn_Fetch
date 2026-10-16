@@ -18,6 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 VERSION = "9.0.2"
 SOURCE_URL = f"https://ffmpeg.org/releases/ffmpeg-{VERSION}.tar.xz"
+SOURCE_URLS = (SOURCE_URL, f"https://www.ffmpeg.org/releases/ffmpeg-{VERSION}.tar.xz")
 SOURCE_SHA256 = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e"
 FLAGS_FILE = Path(__file__).with_name("ffmpeg_configure_flags.txt")
 
@@ -32,11 +33,22 @@ def normalize_arch(value: str) -> str:
 
 async def download_source(destination: Path) -> None:
     from base_api import BaseCore
+    from base_api.modules.errors import HTTPStatusError, NetworkRequestError
 
     async with BaseCore() as core:
-        response = await core.request(url=SOURCE_URL, timeout=120)
-        response.raise_for_status()
-        destination.write_bytes(response.content)
+        for index, url in enumerate(SOURCE_URLS):
+            try:
+                response = await core.request(url=url, timeout=120)
+                response.raise_for_status()
+            except (HTTPStatusError, NetworkRequestError):
+                if index == len(SOURCE_URLS) - 1:
+                    raise
+                print(f"FFmpeg download failed from {url}; trying the alternate official hostname", flush=True)
+                continue
+            if hashlib.sha256(response.content).hexdigest() != SOURCE_SHA256:
+                raise ValueError("FFmpeg source archive does not match the pinned SHA-256")
+            destination.write_bytes(response.content)
+            return
 
 
 def build_tools(target_platform: str, arch: str, msys2_root: Path | None) -> tuple[str, str, dict[str, str]]:
