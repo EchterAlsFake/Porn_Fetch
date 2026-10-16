@@ -1,6 +1,7 @@
 from typing import Awaitable, Callable, ParamSpec, TypeVar
 
 from base_api import is_resource_gone
+from base_api.modules.errors import MetadataWriteError as _BaseMetadataWriteError
 
 
 class _Messages:
@@ -48,7 +49,7 @@ class SomethingStupidHappened(Exception):
         self.msg = msg
 
 
-class MetadataWriteError(Exception):
+class MetadataWriteError(_BaseMetadataWriteError):
     def __init__(self, msg: str = TRANSLATE_ERRORS.metadata_write_error):
         super().__init__(msg)
         self.msg = msg

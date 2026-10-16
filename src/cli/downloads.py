@@ -251,6 +251,7 @@ class DownloadOutcome:
     path: Path
     missing_segments: tuple[int, ...] = ()
     skipped: bool = False
+    metadata_written: bool = False
 
 
 def progress_percentage(position: int, total: int) -> int | None:
@@ -270,6 +271,7 @@ async def download_video(
     progress: ProgressCallback | None = None,
     available_qualities: list[str | int] | None = None,
     controller: DownloadController | None = None,
+    metadata: Any = None,
 ) -> DownloadOutcome:
     """Dispatch RAW/HLS downloads and enforce licensing at dispatch time."""
     from base_api import DownloadConfigHLS, DownloadConfigRAW
@@ -330,10 +332,12 @@ async def download_video(
         state_path, segment_dir = get_resume_paths(target)
         state_path.parent.mkdir(parents=True, exist_ok=True)
         segment_dir.mkdir(parents=True, exist_ok=True)
+        can_remux = _has_av()
         hls_config = DownloadConfigHLS(
             quality=configuration_quality, path=target, callback=make_callback("segments"),
             callback_remux=make_callback("segments"),
-            no_title=True, stop_event=event, remux=_has_av(),
+            no_title=True, stop_event=event, remux=can_remux,
+            metadata=metadata if (settings.write_metadata and can_remux) else None,
             segment_state_path=str(state_path),
             segment_dir=str(segment_dir), return_report=True,
             cleanup_on_stop=False, keep_segment_dir=True,
@@ -345,6 +349,7 @@ async def download_video(
 
     status_value = getattr(result, "status", None)
     missing = tuple(getattr(result, "missing", None) or ())
+    metadata_written = bool(getattr(result, "metadata_written", False))
 
     if (controller and controller.is_paused) or (event.is_set() and controller and controller.is_paused):
         status = "paused"
@@ -374,7 +379,7 @@ async def download_video(
 
     if status == "completed" and progress:
         _dispatch_progress(progress, 100, 100)
-    return DownloadOutcome(status, target, missing)
+    return DownloadOutcome(status, target, missing, metadata_written=metadata_written)
 
 
 async def download_gallery(

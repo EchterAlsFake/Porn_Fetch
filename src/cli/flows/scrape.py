@@ -1,6 +1,8 @@
 """Interactive profile and playlist discovery/download workflow."""
 from __future__ import annotations
 
+import asyncio
+
 from contextlib import aclosing
 from typing import Any
 
@@ -241,13 +243,21 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
                         has_premium=has_premium,
                         progress=on_item_progress,
                         available_qualities=med.qualities,
+                        metadata=med,
                     )
                 if outcome.status == "completed":
                     completed_count += 1
-                    if med and ctx.settings.write_metadata and not outcome.skipped and outcome.path.suffix.casefold() == ".mp4" and outcome.path.exists():
+                    if (
+                        med
+                        and ctx.settings.write_metadata
+                        and not outcome.skipped
+                        and not outcome.metadata_written
+                        and outcome.path.suffix.casefold() == ".mp4"
+                        and outcome.path.exists()
+                    ):
                         try:
                             from src.shared.metadata import write_tags
-                            write_tags(str(outcome.path), med)
+                            await asyncio.to_thread(write_tags, str(outcome.path), med)
                         except Exception as error:
                             await ctx.report(
                                 error,

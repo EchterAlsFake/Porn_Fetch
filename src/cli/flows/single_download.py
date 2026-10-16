@@ -158,6 +158,7 @@ async def handle_download_single(ctx: WizardContext) -> None:
                     controller=controller,
                     progress=on_progress,
                     available_qualities=media.qualities,
+                    metadata=media,
                 )
         except (KeyboardInterrupt, asyncio.CancelledError):
             ctx.console.print("\n[yellow]Download interrupted.[/]")
@@ -191,10 +192,17 @@ async def handle_download_single(ctx: WizardContext) -> None:
             return
 
     if outcome.status == "completed":
-        if media is not None and ctx.settings.write_metadata and not outcome.skipped and outcome.path.suffix.casefold() == ".mp4" and outcome.path.exists():
+        if (
+            media is not None
+            and ctx.settings.write_metadata
+            and not outcome.skipped
+            and not outcome.metadata_written
+            and outcome.path.suffix.casefold() == ".mp4"
+            and outcome.path.exists()
+        ):
             try:
                 from src.shared.metadata import write_tags
-                write_tags(str(outcome.path), media)
+                await asyncio.to_thread(write_tags, str(outcome.path), media)
             except Exception as error:
                 await ctx.report(
                     error, "write downloaded video metadata",

@@ -150,6 +150,7 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
                         controller=controller,
                         progress=on_progress,
                         available_qualities=media.qualities,
+                        metadata=media,
                     )
             except (KeyboardInterrupt, asyncio.CancelledError):
                 controller.pause()

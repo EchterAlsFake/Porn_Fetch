@@ -87,6 +87,35 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(video.status, "completed")
             writer.assert_called_once_with(str(output), video)
 
+    async def test_gui_hls_single_pass_metadata_skips_second_write_tags_pass(self):
+        class HLSVideo:
+            def __init__(self):
+                self.download = AsyncMock(
+                    return_value=SimpleNamespace(success=True, metadata_written=True)
+                )
+        source = HLSVideo()
+        settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, download_workers=1,
+                                   timeout=30, retries=1, write_metadata=True)
+        backend = SimpleNamespace(_download_semaphore=asyncio.Semaphore(1), _downloads_model=Mock(),
+                                  download_manager=Mock(), logger=Mock())
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "hls_video.mp4"
+            output.write_bytes(b"downloaded")
+            video = VideoObject(url="https://pornhub.com/view_video.php?viewkey=ph123", title="HLS Example",
+                                author="HLS Author", length=1, tags=["tag1"], thumbnail_url="",
+                                video_id="ph123", publish_date="2026-10-16", qualities=[720],
+                                status="pending", selected_quality="720", output_path=output,
+                                source_video=source)
+            with patch("src.backend.application.app_settings", settings), \
+                    patch("src.backend.application.FORCE_DISABLE_AV", False), \
+                    patch("src.backend.application.write_tags", return_value=True) as writer:
+                await Backend._download_video(backend, "job", video, asyncio.Event(), False)
+            dl_config = source.download.call_args.args[0]
+            self.assertIs(dl_config.metadata, video)
+            self.assertTrue(dl_config.remux)
+            self.assertEqual(video.status, "completed")
+            writer.assert_not_called()
+
     def test_unknown_youporn_mp4_is_available_only_with_entitlement(self):
         class Video:
             is_hls = False

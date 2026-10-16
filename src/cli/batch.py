@@ -466,16 +466,22 @@ async def _download_prepared(
             available_qualities=media.qualities,
             controller=ctrl,
             progress=lambda value: _print_progress(media.title, value),
+            metadata=media,
         )
     except (KeyboardInterrupt, asyncio.CancelledError):
         ctrl.pause()
         print(f"\nPaused: {media.title} (resume later with --resume)")
         return False
 
-    if result.status == "completed" and settings.write_metadata and not result.skipped:
+    if (
+        result.status == "completed"
+        and settings.write_metadata
+        and not result.skipped
+        and not getattr(result, "metadata_written", False)
+    ):
         try:
             from src.shared.metadata import write_tags
-            write_tags(str(result.path), media)
+            await asyncio.to_thread(write_tags, str(result.path), media)
         except Exception as error:
             report_id = await report_exception(
                 error,

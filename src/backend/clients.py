@@ -257,6 +257,9 @@ def refresh_clients() -> None:
     locale_headers, locale_cookies = generate_locale_headers_and_cookies()
     config.locale = locale_headers["Accept-Language"]
     config.cookies = locale_cookies.copy()
+    from src.shared.ffmpeg import find_ffmpeg
+    found_ffmpeg = find_ffmpeg()
+    config.ffmpeg_path = str(found_ffmpeg) if found_ffmpeg else None
 
     logger.info("Refreshing all clients!")
     level = logging.DEBUG if debug_mode else logging.INFO

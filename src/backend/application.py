@@ -955,6 +955,7 @@ class Backend(QObject):
                     video.is_hls = getattr(source_video, "is_hls", True) is not False
                     segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
                     segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
+                    can_remux = not FORCE_DISABLE_AV
                     configuration = DownloadConfigHLS(
                         quality=quality,
                         path=output_path,
@@ -962,7 +963,8 @@ class Backend(QObject):
                         callback_remux=update_progress,
                         no_title=True,
                         stop_event=stop_event,
-                        remux=not FORCE_DISABLE_AV,
+                        remux=can_remux,
+                        metadata=video if (app_settings.write_metadata and can_remux) else None,
                         segment_state_path=str(segment_state_path),
                         segment_dir=str(segment_dir),
                         return_report=True,
@@ -1018,7 +1020,13 @@ class Backend(QObject):
                             self.tr("The video download failed. Error ID: %s") % report_id
                         )
                 if status == "completed":
-                    if app_settings.write_metadata and not FORCE_DISABLE_AV and output_path.exists():
+                    metadata_written = bool(getattr(result, "metadata_written", False))
+                    if (
+                        app_settings.write_metadata
+                        and not FORCE_DISABLE_AV
+                        and not metadata_written
+                        and output_path.exists()
+                    ):
                         try:
                             await asyncio.to_thread(write_tags, str(output_path), video)
                         except Exception:
