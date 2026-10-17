@@ -1126,7 +1126,7 @@ class Backend(QObject):
                 options = IteratorConfig(load_specific_sources=sources)
             mode = {0: "both", 1: "uploads", 2: "videos"}.get(app_settings.model_videos, "videos")
             videos = container_stream(target, pages=30, provider=route.provider,
-                                      profile_mode=mode, iterator_config=options)
+                                      profile_mode=route.profile_mode or mode, iterator_config=options)
         except ValueError as error:
             self.showMessage.emit(str(error))
             return

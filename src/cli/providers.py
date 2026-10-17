@@ -99,7 +99,7 @@ class ClientPool:
             return
         stream = container_stream(
             source, pages=pages, provider=route.provider,
-            profile_mode=getattr(self.runtime_config, "profile_video_mode", "videos"),
+            profile_mode=route.profile_mode or getattr(self.runtime_config, "profile_video_mode", "videos"),
         )
         try:
             async for item in stream:

@@ -8,6 +8,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
+from src.backend import clients
 from src.backend.application import Backend
 from src.shared.media import VideoFilters, VideoObject
 
@@ -59,6 +60,14 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
             await Backend._process_model_url(backend, "https://redtube.com/channel/example", "", VideoFilters())
             client.get_channel.assert_awaited_once()
         backend.showMessage.emit.assert_not_called()
+
+    async def test_gui_xhamster_desi_video_dispatch(self):
+        url = "https://ge.xhamster.desi/videos/example-xh123"
+        client = SimpleNamespace(get_video=AsyncMock(return_value="video"))
+        with patch("src.backend.clients.client_for", return_value=client) as client_for:
+            self.assertEqual(await clients.get_video(url), "video")
+        client_for.assert_called_once_with("xhamster")
+        client.get_video.assert_awaited_once_with(url, load_html=True)
 
     async def test_gui_xfreehd_hd_quality_and_metadata(self):
         class Video:

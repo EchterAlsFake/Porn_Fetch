@@ -34,6 +34,32 @@ async def items(*values):
 
 
 class RoutingTests(unittest.IsolatedAsyncioTestCase):
+    def test_directories_and_unsupported_tabs_are_rejected(self):
+        for url in (
+            "https://pornhub.com/",
+            "https://eporner.com/channels/",
+            "https://redtube.com/channel",
+            "https://xhamster.com/creators/all/countries",
+            "https://xhamster.com/creators/example/shorts",
+            "https://xvideos.com/example#quickies/a/abc123",
+            "https://spankbang.com/abc/playlist/example",
+        ):
+            with self.subTest(url=url), self.assertRaises(ValueError):
+                route_url(url)
+
+    def test_explicit_pornhub_video_tab_selects_the_intended_stream(self):
+        self.assertEqual(route_url("https://pornhub.com/model/example/videos/upload?page=2").profile_mode, "uploads")
+        self.assertEqual(route_url("https://pornhub.com/model/example/videos").profile_mode, "videos")
+
+    async def test_xvideos_profile_alias_follows_channel_identity(self):
+        canonical = "https://www.xvideos.com/channels/example"
+        client = SimpleNamespace(
+            get_pornstar=AsyncMock(return_value=SimpleNamespace(resolved_url=canonical)),
+            get_channel=AsyncMock(return_value="channel"),
+        )
+        self.assertEqual(await resolve_container(client, route_url("https://www.xvideos.com/profiles/example")), "channel")
+        client.get_channel.assert_awaited_once_with(canonical, load_html=True)
+
     async def test_correct_profile_handler(self):
         cases = {
             "https://pornhub.com/model/example": "get_model",
@@ -42,9 +68,18 @@ class RoutingTests(unittest.IsolatedAsyncioTestCase):
             "https://eporner.com/profile/example": "get_channel",
             "https://xhamster.com/users/example": "get_creator",
             "https://xhamster.com/creator/example": "get_creator",
+            "https://ge.xhamster.desi/creators/comatozze": "get_creator",
+            "https://ge.xhamster.desi/channels/brazzers": "get_channel",
+            "https://ge.xhamster.desi/pornstars/polly-yangs": "get_pornstar",
             "https://spankbang.com/profile/example": "get_creator",
+            "https://spankbang.com/kxrn/creator/yvonna/": "get_creator",
+            "https://de.spankbang.com/1gk/channel/spankbang+gold/": "get_channel",
+            "https://de.spankbang.com/en/pornstar/sharon+lee/": "get_pornstar",
             "https://porntrex.com/channels/example": "get_channel",
             "https://xvideos.com/example": "get_channel",
+            "https://de.xvideos.com/models/polly-yangs-model": "get_pornstar",
+            "https://redtube.com/channels/example": "get_channel",
+            "https://xvideos.com/example?utm_source=share": "get_channel",
             "https://redtube.com/amateur/example": "get_amateur",
             "https://thumbzilla.com/channel/example": "get_channel",
             "https://tube8.com/user/example": "get_user",
@@ -83,9 +118,15 @@ class RoutingTests(unittest.IsolatedAsyncioTestCase):
 
     def test_url_titles_do_not_change_content_kind_or_provider(self):
         self.assertEqual(route_url("https://xvideos.com/video123/profile").kind, ContentKind.VIDEO)
-        self.assertEqual(route_url("https://beeg.com/playlist123").kind, ContentKind.VIDEO)
+        self.assertEqual(route_url("https://xvideos.com/video123/models/example").kind, ContentKind.VIDEO)
+        self.assertEqual(route_url("https://spankbang.com/abc/video/creator").kind, ContentKind.VIDEO)
+        self.assertEqual(route_url("https://spankbang.com/abc/video/channel").kind, ContentKind.VIDEO)
+        with self.assertRaises(ValueError):
+            route_url("https://beeg.com/playlist123")
         with self.assertRaises(ValueError):
             route_url("https://example.com/?url=https://pornhub.com/model/example")
+        with self.assertRaises(ValueError):
+            route_url("https://xhamster.desi.example.com/creators/example")
 
 
 class SearchRestrictionTests(unittest.TestCase):

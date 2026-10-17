@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any, AsyncIterator
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 
 class ContentKind(StrEnum):
@@ -21,6 +21,7 @@ class Route:
     provider: str
     kind: ContentKind
     url: str
+    profile_mode: str | None = None
 
 
 PROVIDER_MODULES = {
@@ -36,7 +37,7 @@ HOST_PATTERNS = {
     "eporner": r"(?:^|\.)eporner\.com$",
     "xnxx": r"(?:^|\.)xnxx\d*\.com$",
     "xvideos": r"(?:^|\.)xvideos\d*\.com$",
-    "xhamster": r"(?:^|\.)xhamster\d*\.com$",
+    "xhamster": r"(?:^|\.)xhamster(?:\d*\.com|\.desi)$",
     "spankbang": r"(?:^|\.)spankbang\.com$",
     "youporn": r"(?:^|\.)youporn\.com$",
     "beeg": r"(?:^|\.)beeg\.com$",
@@ -51,12 +52,12 @@ PROFILE_SEGMENTS = {
     "pornhub": {"pornstar", "model", "users", "user", "channels", "channel"},
     "eporner": {"pornstar", "profile", "channel", "channels"},
     "xnxx": {"profile", "user", "users", "pornstar"},
-    "xvideos": {"pornstar", "pornstars", "model", "profiles", "channels", "channel"},
+    "xvideos": {"pornstar", "pornstars", "model", "models", "profiles", "channels", "channel", "amateur-channels"},
     "xhamster": {"pornstars", "pornstar", "creators", "creator", "users", "channels", "channel"},
     "spankbang": {"pornstar", "profile", "creator", "channel"},
     "youporn": {"pornstar", "channel"},
     "porntrex": {"model", "models", "channel", "channels"},
-    "redtube": {"pornstar", "channel", "amateur", "users", "user"},
+    "redtube": {"pornstar", "channel", "channels", "amateur", "users", "user"},
     "thumbzilla": {"pornstar", "channel", "amateur"},
     "tube8": {"pornstar", "channel", "amateur", "user", "users"},
 }
@@ -66,6 +67,15 @@ COLLECTION_SEGMENTS = {
     "youporn": {"collections", "collection"}, "redtube": {"playlist"},
     "thumbzilla": {"playlist"},
 }
+
+
+def _content_section(provider: str, parts: list[str]) -> str:
+    section = parts[0] if parts else ""
+    # SpankBang puts an ID or locale before the profile type.
+    if provider == "spankbang" and section not in PROFILE_SEGMENTS[provider]:
+        if len(parts) >= 3 and parts[1] in PROFILE_SEGMENTS[provider]:
+            return parts[1]
+    return section
 
 
 def route_url(url: str) -> Route:
@@ -80,20 +90,66 @@ def route_url(url: str) -> Route:
     if provider is None:
         raise ValueError(f"unsupported provider host: {host}")
     parts = [segment for segment in parsed.path.casefold().split("/") if segment]
-    section = parts[0] if parts else ""
-    if provider in {"xfreehd", "pornhub"} and section == "album":
+    section = _content_section(provider, parts)
+    query = parse_qs(parsed.query)
+    mode = None
+    if provider == "xvideos" and parsed.fragment.startswith("quickies/"):
+        raise ValueError("XVideos Quickies links are not supported")
+    if provider in {"xfreehd", "pornhub"} and section == "album" and len(parts) >= 2:
         kind = ContentKind.GALLERY
     elif section in COLLECTION_SEGMENTS.get(provider, set()):
+        has_id = len(parts) >= 2 or bool(query.get("playlist_id") or query.get("id"))
+        if provider == "youporn":
+            has_id = len(parts) >= 3 and parts[1] == "videos" and parts[2].isdigit()
+        if not has_id:
+            raise ValueError("An individual playlist or collection URL is required")
         kind = ContentKind.COLLECTION
     elif section in PROFILE_SEGMENTS.get(provider, set()):
+        offset = 1 if provider == "spankbang" and parts[0] != section else 0
+        if len(parts) < offset + 2:
+            raise ValueError("An individual profile or channel URL is required")
+        name = parts[offset + 1]
+        if ((provider == "xhamster" and name in {"all", "contest", "videos"})
+                or (provider == "pornhub" and section in {"user", "users"} and name in {"search", "discover"})):
+            raise ValueError("Profile directories are not supported")
+        suffix = parts[offset + 2:]
+        if any(part in {"shorts", "moments", "albums", "photos", "gifs", "favorites"} for part in suffix):
+            raise ValueError("This profile tab is not supported for video fetching")
+        if provider == "pornhub" and suffix[:1] == ["videos"]:
+            mode = "uploads" if suffix[1:2] == ["upload"] else "videos"
         kind = ContentKind.PROFILE
-    elif provider == "xvideos" and len(parts) == 1 and not parsed.query and not (
-        section.startswith("video") or section in {"account", "history", "search", "new", "best", "tags"}
-    ):
+    elif provider == "xvideos" and parts and not section.startswith("video") and section not in {
+        "account", "history", "search", "new", "best", "tags", "lang", "c", "pornstars",
+        "channels", "models", "profiles", "amateur-channels", "watch-later", "videos-i-like",
+    } and (len(parts) == 1 or parts[1:3] == ["videos", "best"]):
         kind = ContentKind.PROFILE
-    else:
+    elif _is_video_url(provider, parsed.path, query):
         kind = ContentKind.VIDEO
-    return Route(provider, kind, url.strip())
+    else:
+        raise ValueError(f"Unsupported {provider} URL type; enter an individual supported media URL")
+    return Route(provider, kind, url.strip(), profile_mode=mode)
+
+
+def _is_video_url(provider: str, path: str, query: dict[str, list[str]]) -> bool:
+    patterns = {
+        "eporner": r"^/(?:video-[a-z0-9]+|(?:hd-porn|embed)/[a-z0-9]+)(?:/|$)",
+        "xnxx": r"^/video-?[a-z0-9]+(?:/|$)",
+        "xvideos": r"^/(?:video\.?[a-z0-9]+|embedframe/[a-z0-9]+)(?:/|$)",
+        "xhamster": r"^/(?:videos|movies|moments|shorts)/[^/]+",
+        "spankbang": r"^/[a-z0-9]+/(?:video|play|embed)(?:/|$)|^/[a-z0-9]+-[a-z0-9]+/playlist/[^/]+",
+        "youporn": r"^/(?:watch|embed)/[0-9]+(?:/|$)",
+        "beeg": r"^/(?:video/)?-?[0-9]+/?$",
+        "porntrex": r"^/video/[0-9]+(?:/|$)",
+        "xfreehd": r"^/video/[0-9]+(?:/|$)",
+        "redtube": r"^/[0-9]+/?$",
+        "thumbzilla": r"^/watch/[0-9]+(?:/|$)",
+        "tube8": r"^/(?:porn-video|video)/[0-9]+(?:/|$)",
+    }
+    if provider == "pornhub":
+        return (path in {"/view_video.php", "/video/show"} and bool(query.get("viewkey"))) or bool(
+            re.match(r"^/(?:embed|short|shorties)/[a-z0-9]+(?:/|$)", path, re.I)
+        )
+    return bool(re.match(patterns[provider], path, re.I))
 
 
 async def _await_if_needed(value: Any) -> Any:
@@ -104,9 +160,9 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
     path = urlparse(route.url).path.casefold()
     configuration = getattr(getattr(client, "core", None), "configuration", None)
     load_api = not (getattr(configuration, "strict_language", False) if strict_language is None else strict_language)
-    if route.provider == "pornhub" and ("/short/" in path or "/shorties/" in path):
+    if route.provider == "pornhub" and re.match(r"^/(?:short|shorties)/", path):
         return await _await_if_needed(client.get_short(route.url, load_html=True))
-    if route.provider == "xhamster" and ("/moments/" in path or "/shorts/" in path):
+    if route.provider == "xhamster" and re.match(r"^/(?:moments|shorts)/", path):
         return await _await_if_needed(client.get_short(route.url, load_html=True))
     if route.provider == "eporner":
         return await _await_if_needed(client.get_video(
@@ -136,7 +192,8 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
 
     if route.kind != ContentKind.PROFILE or route.provider not in PROFILE_SEGMENTS:
         raise ValueError(f"profiles are not supported for {route.provider}")
-    section = urlparse(route.url).path.casefold().strip("/").split("/")[0]
+    parts = [segment for segment in urlparse(route.url).path.casefold().split("/") if segment]
+    section = _content_section(route.provider, parts)
     segments = {section}
     if route.provider == "pornhub":
         method = "get_channel" if segments & {"channel", "channels"} else (
@@ -146,7 +203,7 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
         )
     elif route.provider in {"redtube", "thumbzilla", "tube8"}:
         method = "get_amateur" if "amateur" in segments else (
-            "get_channel" if "channel" in segments else (
+            "get_channel" if segments & {"channel", "channels"} else (
                 "get_user" if segments & {"user", "users"} else "get_pornstar"
             )
         )
@@ -157,14 +214,20 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
     elif route.provider == "porntrex":
         method = "get_channel" if segments & {"channel", "channels"} else "get_model"
     elif route.provider in {"xvideos", "youporn"}:
-        method = "get_pornstar" if segments & {"pornstar", "pornstars", "model", "profiles"} else "get_channel"
+        method = "get_pornstar" if segments & {"pornstar", "pornstars", "model", "models", "profiles"} else "get_channel"
     elif route.provider == "xnxx":
         method = "get_user"
     elif route.provider == "eporner":
         method = "get_pornstar" if section == "pornstar" else "get_channel"
     else:
         method = "get_pornstar"
-    return await _await_if_needed(getattr(client, method)(route.url, load_html=True))
+    target = await _await_if_needed(getattr(client, method)(route.url, load_html=True))
+    resolved = getattr(target, "resolved_url", None)
+    if route.provider == "xvideos" and section == "profiles" and isinstance(resolved, str):
+        resolved_section = urlparse(resolved).path.strip("/").split("/")[0]
+        if resolved_section in {"channel", "channels", "amateur-channels"}:
+            target = await _await_if_needed(client.get_channel(resolved, load_html=True))
+    return target
 
 
 def container_stream(

@@ -41,7 +41,6 @@ except (ModuleNotFoundError, ImportError):
 
 from src.shared.errors import InvalidInput
 from src.backend.config import app_settings
-from urllib.parse import urlparse
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from typing import Any, List, TypeAlias, Dict
 from pornhub_api import Client as ph_Client, Video as ph_Video, Short as ph_Short
@@ -60,7 +59,7 @@ from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
-from src.shared.provider_routing import ContentKind, resolve_video, route_url
+from src.shared.provider_routing import HOST_PATTERNS, ContentKind, resolve_video, route_url
 from src.shared.logging_setup import configure_app_logging
 from src.shared.media import VideoObject
 from src.shared.provider_parsing import parse_length, parse_publish_date
@@ -164,21 +163,7 @@ def generate_locale_headers_and_cookies(
     return headers, cookies
 
 
-SITE_PATTERNS = [
-    ("pornhub", re.compile(r"(?:^|\.)pornhub(?:premium)?\.com$", re.IGNORECASE)),
-    ("xnxx", re.compile(r"(?:^|\.)xnxx\d*\.com$", re.IGNORECASE)),
-    ("xvideos", re.compile(r"(?:^|\.)xvideos\d*\.com$", re.IGNORECASE)),
-    ("eporner", re.compile(r"(?:^|\.)eporner\.com$", re.IGNORECASE)),
-    ("xhamster", re.compile(r"(?:^|\.)xhamster\d*\.com$", re.IGNORECASE)),
-    ("spankbang", re.compile(r"(?:^|\.)spankbang\.com$", re.IGNORECASE)),
-    ("youporn", re.compile(r"(?:^|\.)youporn\.com$", re.IGNORECASE)),
-    ("beeg", re.compile(r"(?:^|\.)beeg\.com$", re.IGNORECASE)),
-    ("redtube", re.compile(r"(?:^|\.)redtube\.com$", re.IGNORECASE)),
-    ("thumbzilla", re.compile(r"(?:^|\.)thumbzilla\.com$", re.IGNORECASE)),
-    ("tube8", re.compile(r"(?:^|\.)tube8\.com$", re.IGNORECASE)),
-    ("xfreehd", re.compile(r"(?:^|\.)xfreehd\.com$", re.IGNORECASE)),
-    ("porntrex", re.compile(r"(?:^|\.)porntrex\.com$", re.IGNORECASE)),
-]
+SITE_PATTERNS = [(provider, re.compile(pattern, re.IGNORECASE)) for provider, pattern in HOST_PATTERNS.items()]
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -392,24 +377,13 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     if not isinstance(url, str):
         raise InvalidInput
 
-    parsed_url = urlparse(url)
-    hostname = parsed_url.hostname
-    if parsed_url.scheme.casefold() not in {"http", "https"} or not hostname:
-        raise InvalidInput
-
-    final_website = None
-    for website, pattern in SITE_PATTERNS:
-        if pattern.search(hostname):
-            final_website = website
-            break
-
-    if not final_website:
-        raise InvalidInput
-
-    route = route_url(url)
+    try:
+        route = route_url(url)
+    except ValueError as error:
+        raise InvalidInput from error
     if route.kind != ContentKind.VIDEO:
         raise InvalidInput
-    return await resolve_video(client_for(final_website), route,
+    return await resolve_video(client_for(route.provider), route,
                                strict_language=app_settings.strict_enforcement)
 
 

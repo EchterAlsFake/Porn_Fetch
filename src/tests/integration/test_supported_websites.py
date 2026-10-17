@@ -1,7 +1,6 @@
 """Offline checks for the shared website matrix and both responsive QML pages."""
 from __future__ import annotations
 
-import ast
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,8 +9,9 @@ from PySide6.QtCore import QObject, QSettings, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlComponent, QQmlEngine
 
+from src.backend.clients import SITE_PATTERNS
 from src.backend.config import SettingsManager
-from src.shared.provider_routing import PROVIDER_MODULES
+from src.shared.provider_routing import HOST_PATTERNS, PROVIDER_MODULES
 
 PROJECT = Path(__file__).resolve().parents[3]
 UI = PROJECT / "src/frontend/UI"
@@ -53,11 +53,8 @@ class SupportedWebsitesTests(unittest.TestCase):
         catalog = self.load("WebsiteSupportData.qml")
         sites = catalog.property("sites").toVariant()
         self.assertEqual({site["provider"] for site in sites}, set(PROVIDER_MODULES))
-        gui_source = ast.parse((PROJECT / "src/backend/clients.py").read_text(encoding="utf-8"))
-        registration = next(node.value for node in gui_source.body if isinstance(node, ast.Assign)
-                            and any(isinstance(target, ast.Name) and target.id == "SITE_PATTERNS"
-                                    for target in node.targets))
-        self.assertEqual({entry.elts[0].value for entry in registration.elts}, set(PROVIDER_MODULES))
+        self.assertEqual({provider for provider, _pattern in SITE_PATTERNS}, set(PROVIDER_MODULES))
+        self.assertEqual({provider: pattern.pattern for provider, pattern in SITE_PATTERNS}, HOST_PATTERNS)
 
         document = (PROJECT / "docs/WEBSITES.md").read_text(encoding="utf-8")
         names = {site["name"] for site in sites}

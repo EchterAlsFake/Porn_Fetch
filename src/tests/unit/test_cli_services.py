@@ -25,7 +25,7 @@ class ProviderRoutingTests(unittest.TestCase):
             "https://xvideos.com/playlist/12/name": ("xvideos", ContentKind.COLLECTION),
             "https://xhamster.com/creators/name": ("xhamster", ContentKind.PROFILE),
             "https://spankbang.com/pornstar/name": ("spankbang", ContentKind.PROFILE),
-            "https://youporn.com/collections/12/name": ("youporn", ContentKind.COLLECTION),
+            "https://youporn.com/collections/videos/12/": ("youporn", ContentKind.COLLECTION),
             "https://porntrex.com/model/name/": ("porntrex", ContentKind.PROFILE),
             "https://xfreehd.com/album/12/name": ("xfreehd", ContentKind.GALLERY),
             "https://redtube.com/playlist?playlist_id=1": ("redtube", ContentKind.COLLECTION),

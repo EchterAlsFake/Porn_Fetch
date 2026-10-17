@@ -1,0 +1,1092 @@
+{
+  "provenance": {
+    "pornhub": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-pornhub/pornhub_api/api.py",
+      "git_head": "d87106b0f9f978ba470d3037d73129cc5c567e27",
+      "local_sha256": "f3dbc59cba0df0cd59c0f05af7d3d8caab05225fa825ae25a93094de414b970a",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/pornhub_api/api.py",
+      "same_as_installed": true
+    },
+    "eporner": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-eporner/eporner_api/api.py",
+      "git_head": "5bb6d6e086de11441cc39f660032bfa8fd989e42",
+      "local_sha256": "f17a465d7c639714a03bc9318c116b3561a05d487b91b07385c492a461260f31",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/eporner_api/api.py",
+      "same_as_installed": true
+    },
+    "xnxx": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-xnxx/xnxx_api/api.py",
+      "git_head": "e0be260e0d84bdc72e388b3ee86c9c139bf44bd7",
+      "local_sha256": "03e43c0e002b059c6907326f24291c9cbbe7c1751af2c189b09f9019bc13ce7a",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/xnxx_api/api.py",
+      "same_as_installed": true
+    },
+    "xvideos": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-xvideos/xvideos_api/api.py",
+      "git_head": "57c594fe52e149ece89874d78049d01832723bd0",
+      "local_sha256": "6b3b1ffb1e4dd5d2268d23d5547966e3792a8e88d9a10296170b5581d5d7056d",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/xvideos_api/api.py",
+      "same_as_installed": true
+    },
+    "xhamster": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-xhamster/xhamster_api/api.py",
+      "git_head": "1ce38319685289f9f7585bfd926823e1c3681616",
+      "local_sha256": "0d1b7430df50f177bca538a3eca612fcf5b946d713ba9e1cc807dfc14755b7de",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/xhamster_api/api.py",
+      "same_as_installed": true
+    },
+    "spankbang": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-spankbang/spankbang_api/api.py",
+      "git_head": "90cffe5ae5199c67a9e7d4e5fc09f7ae954b4e20",
+      "local_sha256": "52304821a0563b6604dc00f536f27c7a1d827843bf88f5f63ad7b715d480f4c9",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/spankbang_api/api.py",
+      "same_as_installed": true
+    },
+    "youporn": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-youporn/youporn_api/api.py",
+      "git_head": "88209f1864fde124d42092d431c51c57396ced65",
+      "local_sha256": "c7ec8406a8d722c5d82a176fb147c71b521af360b48fa0a6073630406d2e1087",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/youporn_api/api.py",
+      "same_as_installed": true
+    },
+    "beeg": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-beeg/beeg_api/beeg_api.py",
+      "git_head": "a270ace463386d294497c16ce1b61b69b41f3d05",
+      "local_sha256": "0786d9210f46839db1889e2e7baa084d4c2db8d57d62956dd186699ed75ec9f3",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/beeg_api/beeg_api.py",
+      "same_as_installed": true
+    },
+    "porntrex": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-porntrex/porntrex_api/api.py",
+      "git_head": "cb7b108f4a54cd9e3d0eed99ae8e99cb6d9e901d",
+      "local_sha256": "714945e9365996790c4528cd94cd5a13ee88d9cb17b040050dcee5bd2bd6bf80",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/porntrex_api/api.py",
+      "same_as_installed": true
+    },
+    "xfreehd": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-xfreehd/xfreehd_api/api.py",
+      "git_head": "69656ec0e5b6b5e034d41b7c4e2bb77237179b7c",
+      "local_sha256": "c73809c480724e12d2db9b90b58267f5f1b9968acb7bd249e4955580ea5e3b72",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/xfreehd_api/api.py",
+      "same_as_installed": true
+    },
+    "redtube": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-redtube/redtube_api/api.py",
+      "git_head": "ab71ef7f792378d7748ed495e679205970de8344",
+      "local_sha256": "1d374cade5cb0672c6ed7e147173c35a54e45686cdf529c51dbcc3b75ddedb19",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/redtube_api/api.py",
+      "same_as_installed": true
+    },
+    "thumbzilla": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-thumbzilla/thumbzilla_api/api.py",
+      "git_head": "04b5825911506920762ea1635b59c266dfd05893",
+      "local_sha256": "360fbabcc2d67b74f54d71fe1db706c28155864f5ae9c064239a2eab5c0476a4",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/thumbzilla_api/api.py",
+      "same_as_installed": true
+    },
+    "tube8": {
+      "source": "/home/asuna/PycharmProjects/unofficial-api-for-tube8/tube8_api/api.py",
+      "git_head": "86b5dad291808eedebcfeac830191e925ee0d298",
+      "local_sha256": "d031269fe6f0103c20acbccb2ef0bc91ac8b41dc5967397fc7d551078101e218",
+      "installed_source": "/home/asuna/PycharmProjects/Porn_Fetch/.venv/lib/python3.14/site-packages/tube8_api/api.py",
+      "same_as_installed": true
+    }
+  },
+  "routing": [
+    {
+      "url": "https://de.pornhub.com/model/example/videos/upload?page=2",
+      "provider": "pornhub",
+      "kind": "profile",
+      "method": "get_model"
+    },
+    {
+      "url": "https://www.pornhub.net/model/example",
+      "error": "ValueError: unsupported provider host: www.pornhub.net"
+    },
+    {
+      "url": "https://www.pornhub.org/view_video.php?viewkey=ph123",
+      "error": "ValueError: unsupported provider host: www.pornhub.org"
+    },
+    {
+      "url": "https://www.pornhub.com/gif/123",
+      "provider": "pornhub",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.pornhub.com/playlist/viewChunked?id=123",
+      "provider": "pornhub",
+      "kind": "collection",
+      "method": "get_playlist"
+    },
+    {
+      "url": "https://www.eporner.com/channels/",
+      "provider": "eporner",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.eporner.com/profile/example/",
+      "provider": "eporner",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.eporner.com/embed/AbC123/",
+      "provider": "eporner",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.xnxx3.com/profile/example",
+      "provider": "xnxx",
+      "kind": "profile",
+      "method": "get_user"
+    },
+    {
+      "url": "https://www.xnxx.com/pornstar/example/videos/best/1",
+      "provider": "xnxx",
+      "kind": "profile",
+      "method": "get_user"
+    },
+    {
+      "url": "https://de.xvideos.com/example",
+      "provider": "xvideos",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://de.xvideos.com/example?utm_source=share",
+      "provider": "xvideos",
+      "kind": "video"
+    },
+    {
+      "url": "https://de.xvideos.com/example/videos/best/0",
+      "provider": "xvideos",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.xvideos.com/models/example",
+      "provider": "xvideos",
+      "kind": "profile",
+      "method": "get_pornstar"
+    },
+    {
+      "url": "https://www.xvideos.com/amateur-channels/example",
+      "provider": "xvideos",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.xvideos.com/example#quickies/a/abc123",
+      "provider": "xvideos",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.xvideos.es/video.abc123/example",
+      "error": "ValueError: unsupported provider host: www.xvideos.es"
+    },
+    {
+      "url": "https://www.xvideos.com/embedframe/abc123",
+      "provider": "xvideos",
+      "kind": "video"
+    },
+    {
+      "url": "https://xhamster.one/creators/example",
+      "error": "ValueError: unsupported provider host: xhamster.one"
+    },
+    {
+      "url": "https://xhamster2.desi/creators/example",
+      "error": "ValueError: unsupported provider host: xhamster2.desi"
+    },
+    {
+      "url": "https://xhvid.com/users/example",
+      "error": "ValueError: unsupported provider host: xhvid.com"
+    },
+    {
+      "url": "https://xhamster.com/users/example/videos",
+      "provider": "xhamster",
+      "kind": "profile",
+      "method": "get_creator"
+    },
+    {
+      "url": "https://ge.xhamster.desi/creators/example/newest",
+      "provider": "xhamster",
+      "kind": "profile",
+      "method": "get_creator"
+    },
+    {
+      "url": "https://de.spankbang.com/abc/creator/example/",
+      "provider": "spankbang",
+      "kind": "profile",
+      "method": "get_creator"
+    },
+    {
+      "url": "https://de.spankbang.com/abc/channel/example/",
+      "provider": "spankbang",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://de.spankbang.com/en/pornstar/example/",
+      "provider": "spankbang",
+      "kind": "profile",
+      "method": "get_pornstar"
+    },
+    {
+      "url": "https://spankbang.com/abc/playlist/example",
+      "provider": "spankbang",
+      "kind": "video"
+    },
+    {
+      "url": "https://spankbang.com/abc-def/playlist/example",
+      "provider": "spankbang",
+      "kind": "video"
+    },
+    {
+      "url": "https://spankbang.com/abc/embed/",
+      "provider": "spankbang",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.youporn.com/channel/example/duration?page=2",
+      "provider": "youporn",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.youporn.com/collections/videos/123/time?page=2",
+      "provider": "youporn",
+      "kind": "collection",
+      "method": "get_collection"
+    },
+    {
+      "url": "https://www.youporn.com/users/example",
+      "provider": "youporn",
+      "kind": "video"
+    },
+    {
+      "url": "https://beeg.com/video/12345",
+      "provider": "beeg",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.porntrex.com/models/example/",
+      "provider": "porntrex",
+      "kind": "profile",
+      "method": "get_model"
+    },
+    {
+      "url": "https://www.porntrex.com/channels/example/",
+      "provider": "porntrex",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.porntrex.com/playlist/123/example/",
+      "provider": "porntrex",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.porntrex.com/playlists/",
+      "provider": "porntrex",
+      "kind": "video"
+    },
+    {
+      "url": "https://beta.xfreehd.com/album/123/example?page=2",
+      "provider": "xfreehd",
+      "kind": "gallery"
+    },
+    {
+      "url": "https://de.redtube.com/123",
+      "provider": "redtube",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.redtube.com.br/123",
+      "error": "ValueError: unsupported provider host: www.redtube.com.br"
+    },
+    {
+      "url": "https://embed.redtube.com/?id=123",
+      "provider": "redtube",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.redtube.com/channel",
+      "provider": "redtube",
+      "kind": "profile",
+      "method": "get_channel"
+    },
+    {
+      "url": "https://www.redtube.com/channels/vip-4k",
+      "provider": "redtube",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.redtube.com/straight/playlists",
+      "provider": "redtube",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.thumbzilla.com/video/ph123/example",
+      "provider": "thumbzilla",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.thumbzilla.com/amateurs/",
+      "provider": "thumbzilla",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.thumbzilla.com/playlist?playlist_id=123",
+      "provider": "thumbzilla",
+      "kind": "collection",
+      "method": "get_playlist"
+    },
+    {
+      "url": "https://www.tube8.com/porn-video/123/",
+      "provider": "tube8",
+      "kind": "video"
+    },
+    {
+      "url": "https://www.tube8.com/category/example/123/",
+      "provider": "tube8",
+      "kind": "video"
+    }
+  ],
+  "pagination": [
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/model/example",
+      "requests": [
+        "https://de.pornhub.com/model/example/videos?page=1",
+        "https://de.pornhub.com/model/example/videos?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/model/example?utm_source=share",
+      "requests": [
+        "https://de.pornhub.com/model/example?utm_source=share/videos?page=1",
+        "https://de.pornhub.com/model/example?utm_source=share/videos?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/model/example#videos",
+      "requests": [
+        "https://de.pornhub.com/model/example#videos/videos?page=1",
+        "https://de.pornhub.com/model/example#videos/videos?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_uploads",
+      "input": "https://de.pornhub.com/model/example/videos/upload",
+      "requests": [
+        "https://de.pornhub.com/model/example/videos/upload?page=1",
+        "https://de.pornhub.com/model/example/videos/upload?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_uploads",
+      "input": "https://de.pornhub.com/model/example/videos/upload?utm_source=share",
+      "requests": [
+        "https://de.pornhub.com/model/example/videos/upload?utm_source=share/videos/upload?page=1",
+        "https://de.pornhub.com/model/example/videos/upload?utm_source=share/videos/upload?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Model",
+      "method": "get_uploads",
+      "input": "https://de.pornhub.com/model/example/videos/upload#videos",
+      "requests": [
+        "https://de.pornhub.com/model/example/videos/upload#videos/videos/upload?page=1",
+        "https://de.pornhub.com/model/example/videos/upload#videos/videos/upload?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Channel",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/channels/example/videos",
+      "requests": [
+        "https://de.pornhub.com/channels/example/videos/videos?page=1",
+        "https://de.pornhub.com/channels/example/videos/videos?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Channel",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/channels/example/videos?utm_source=share",
+      "requests": [
+        "https://de.pornhub.com/channels/example/videos?utm_source=share/videos?page=1",
+        "https://de.pornhub.com/channels/example/videos?utm_source=share/videos?page=2"
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "class": "Channel",
+      "method": "get_videos",
+      "input": "https://de.pornhub.com/channels/example/videos#videos",
+      "requests": [
+        "https://de.pornhub.com/channels/example/videos#videos/videos?page=1",
+        "https://de.pornhub.com/channels/example/videos#videos/videos?page=2"
+      ]
+    },
+    {
+      "provider": "eporner",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.eporner.com/pornstar/example/",
+      "requests": [
+        "https://de.eporner.com/pornstar/example/1",
+        "https://de.eporner.com/pornstar/example/2"
+      ]
+    },
+    {
+      "provider": "eporner",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.eporner.com/pornstar/example/?utm_source=share",
+      "requests": [
+        "https://de.eporner.com/pornstar/example/1",
+        "https://de.eporner.com/pornstar/example/2"
+      ]
+    },
+    {
+      "provider": "eporner",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.eporner.com/pornstar/example/#videos",
+      "requests": [
+        "https://de.eporner.com/pornstar/example/1",
+        "https://de.eporner.com/pornstar/example/2"
+      ]
+    },
+    {
+      "provider": "xnxx",
+      "class": "User",
+      "method": "videos",
+      "input": "https://www.xnxx.com/profile/example",
+      "requests": [
+        "https://www.xnxx.com/profile/example/videos/best/0",
+        "https://www.xnxx.com/profile/example/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xnxx",
+      "class": "User",
+      "method": "videos",
+      "input": "https://www.xnxx.com/profile/example?utm_source=share",
+      "requests": [
+        "https://www.xnxx.com/profile/example?utm_source=share/videos/best/0",
+        "https://www.xnxx.com/profile/example?utm_source=share/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xnxx",
+      "class": "User",
+      "method": "videos",
+      "input": "https://www.xnxx.com/profile/example#videos",
+      "requests": [
+        "https://www.xnxx.com/profile/example#videos/videos/best/0",
+        "https://www.xnxx.com/profile/example#videos/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.xvideos.com/pornstars/example",
+      "requests": [
+        "https://de.xvideos.com/pornstars/example/videos/best/0",
+        "https://de.xvideos.com/pornstars/example/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.xvideos.com/pornstars/example?utm_source=share",
+      "requests": [
+        "https://de.xvideos.com/pornstars/example?utm_source=share/videos/best/0",
+        "https://de.xvideos.com/pornstars/example?utm_source=share/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "method": "videos",
+      "input": "https://de.xvideos.com/pornstars/example#videos",
+      "requests": [
+        "https://de.xvideos.com/pornstars/example#videos/videos/best/0",
+        "https://de.xvideos.com/pornstars/example#videos/videos/best/1"
+      ]
+    },
+    {
+      "provider": "xhamster",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://ge.xhamster.desi/creators/example/newest",
+      "requests": [
+        "https://ge.xhamster.desi/creators/example/newest",
+        "https://ge.xhamster.desi/creators/example/newest/2"
+      ]
+    },
+    {
+      "provider": "xhamster",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://ge.xhamster.desi/creators/example/newest?utm_source=share",
+      "requests": [
+        "https://ge.xhamster.desi/creators/example/newest?utm_source=share",
+        "https://ge.xhamster.desi/creators/example/newest?utm_source=share/2"
+      ]
+    },
+    {
+      "provider": "xhamster",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://ge.xhamster.desi/creators/example/newest#videos",
+      "requests": [
+        "https://ge.xhamster.desi/creators/example/newest#videos",
+        "https://ge.xhamster.desi/creators/example/newest#videos/2"
+      ]
+    },
+    {
+      "provider": "spankbang",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://de.spankbang.com/abc/creator/example/",
+      "requests": [
+        "https://de.spankbang.com/abc/creator/example/",
+        "https://de.spankbang.com/abc/creator/example//2/",
+        "https://de.spankbang.com/abc/creator/example//3/"
+      ]
+    },
+    {
+      "provider": "spankbang",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://de.spankbang.com/abc/creator/example/?utm_source=share",
+      "requests": [
+        "https://de.spankbang.com/abc/creator/example/?utm_source=share",
+        "https://de.spankbang.com/abc/creator/example/?utm_source=share/2/",
+        "https://de.spankbang.com/abc/creator/example/?utm_source=share/3/"
+      ]
+    },
+    {
+      "provider": "spankbang",
+      "class": "Creator",
+      "method": "videos",
+      "input": "https://de.spankbang.com/abc/creator/example/#videos",
+      "requests": [
+        "https://de.spankbang.com/abc/creator/example/#videos",
+        "https://de.spankbang.com/abc/creator/example/#videos/2/",
+        "https://de.spankbang.com/abc/creator/example/#videos/3/"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Channel",
+      "method": "videos",
+      "input": "https://www.youporn.com/channel/example/duration/",
+      "requests": [
+        "https://www.youporn.com/channel/example/duration/?page=1",
+        "https://www.youporn.com/channel/example/duration/?page=2"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Channel",
+      "method": "videos",
+      "input": "https://www.youporn.com/channel/example/duration/?utm_source=share",
+      "requests": [
+        "https://www.youporn.com/channel/example/duration/?utm_source=share/?page=1",
+        "https://www.youporn.com/channel/example/duration/?utm_source=share/?page=2"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Channel",
+      "method": "videos",
+      "input": "https://www.youporn.com/channel/example/duration/#videos",
+      "requests": [
+        "https://www.youporn.com/channel/example/duration/#videos/?page=1",
+        "https://www.youporn.com/channel/example/duration/#videos/?page=2"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Collection",
+      "method": "videos",
+      "input": "https://www.youporn.com/collections/videos/123/",
+      "requests": [
+        "https://www.youporn.com/collections/videos/123/?page=1",
+        "https://www.youporn.com/collections/videos/123/?page=2"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Collection",
+      "method": "videos",
+      "input": "https://www.youporn.com/collections/videos/123/?utm_source=share",
+      "requests": [
+        "https://www.youporn.com/collections/videos/123/?utm_source=share?page=1",
+        "https://www.youporn.com/collections/videos/123/?utm_source=share?page=2"
+      ]
+    },
+    {
+      "provider": "youporn",
+      "class": "Collection",
+      "method": "videos",
+      "input": "https://www.youporn.com/collections/videos/123/#videos",
+      "requests": [
+        "https://www.youporn.com/collections/videos/123/#videos?page=1",
+        "https://www.youporn.com/collections/videos/123/#videos?page=2"
+      ]
+    },
+    {
+      "provider": "porntrex",
+      "class": "Model",
+      "method": "videos",
+      "input": "https://www.porntrex.com/models/example/",
+      "requests": [
+        "https://www.porntrex.com/models/example/?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=00&_=1761740123131",
+        "https://www.porntrex.com/models/example/?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=01&_=1761740123131"
+      ]
+    },
+    {
+      "provider": "porntrex",
+      "class": "Model",
+      "method": "videos",
+      "input": "https://www.porntrex.com/models/example/?utm_source=share",
+      "requests": [
+        "https://www.porntrex.com/models/example/?utm_source=share?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=00&_=1761740123131",
+        "https://www.porntrex.com/models/example/?utm_source=share?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=01&_=1761740123131"
+      ]
+    },
+    {
+      "provider": "porntrex",
+      "class": "Model",
+      "method": "videos",
+      "input": "https://www.porntrex.com/models/example/#videos",
+      "requests": [
+        "https://www.porntrex.com/models/example/#videos?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=00&_=1761740123131",
+        "https://www.porntrex.com/models/example/#videos?mode=async&function=get_block&block_id=list_videos_common_videos_list_norm&sort_by=post_date&from=01&_=1761740123131"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/users/example",
+      "requests": [
+        "https://de.redtube.com/users/example?page=1",
+        "https://de.redtube.com/users/example?page=2"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/users/example?utm_source=share",
+      "requests": [
+        "https://de.redtube.com/users/example?utm_source=share&page=1",
+        "https://de.redtube.com/users/example?utm_source=share&page=2"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/users/example#videos",
+      "requests": [
+        "https://de.redtube.com/users/example#videos?page=1",
+        "https://de.redtube.com/users/example#videos?page=2"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/playlist?playlist_id=123",
+      "requests": [
+        "https://de.redtube.com/playlist?playlist_id=123&page=1",
+        "https://de.redtube.com/playlist?playlist_id=123&page=2"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/playlist?playlist_id=123&utm_source=share",
+      "requests": [
+        "https://de.redtube.com/playlist?playlist_id=123&utm_source=share&page=1",
+        "https://de.redtube.com/playlist?playlist_id=123&utm_source=share&page=2"
+      ]
+    },
+    {
+      "provider": "redtube",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://de.redtube.com/playlist?playlist_id=123#videos",
+      "requests": [
+        "https://de.redtube.com/playlist?playlist_id=123#videos&page=1",
+        "https://de.redtube.com/playlist?playlist_id=123#videos&page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Pornstar",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/pornstar/example/",
+      "requests": [
+        "https://www.thumbzilla.com/pornstar/example/?page=1",
+        "https://www.thumbzilla.com/pornstar/example/?page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Pornstar",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/pornstar/example/?utm_source=share",
+      "requests": [
+        "https://www.thumbzilla.com/pornstar/example/?utm_source=share&page=1",
+        "https://www.thumbzilla.com/pornstar/example/?utm_source=share&page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Pornstar",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/pornstar/example/#videos",
+      "requests": [
+        "https://www.thumbzilla.com/pornstar/example/#videos?page=1",
+        "https://www.thumbzilla.com/pornstar/example/#videos?page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/playlist?playlist_id=123",
+      "requests": [
+        "https://www.thumbzilla.com/playlist?playlist_id=123&page=1",
+        "https://www.thumbzilla.com/playlist?playlist_id=123&page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/playlist?playlist_id=123&utm_source=share",
+      "requests": [
+        "https://www.thumbzilla.com/playlist?playlist_id=123&utm_source=share&page=1",
+        "https://www.thumbzilla.com/playlist?playlist_id=123&utm_source=share&page=2"
+      ]
+    },
+    {
+      "provider": "thumbzilla",
+      "class": "Playlist",
+      "method": "get_videos",
+      "input": "https://www.thumbzilla.com/playlist?playlist_id=123#videos",
+      "requests": [
+        "https://www.thumbzilla.com/playlist?playlist_id=123#videos&page=1",
+        "https://www.thumbzilla.com/playlist?playlist_id=123#videos&page=2"
+      ]
+    },
+    {
+      "provider": "tube8",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://www.tube8.com/users/example",
+      "requests": [
+        "https://www.tube8.com/users/example?page=1",
+        "https://www.tube8.com/users/example?page=2"
+      ]
+    },
+    {
+      "provider": "tube8",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://www.tube8.com/users/example?utm_source=share",
+      "requests": [
+        "https://www.tube8.com/users/example?utm_source=share?page=1",
+        "https://www.tube8.com/users/example?utm_source=share?page=2"
+      ]
+    },
+    {
+      "provider": "tube8",
+      "class": "User",
+      "method": "get_videos",
+      "input": "https://www.tube8.com/users/example#videos",
+      "requests": [
+        "https://www.tube8.com/users/example#videos?page=1",
+        "https://www.tube8.com/users/example#videos?page=2"
+      ]
+    },
+    {
+      "provider": "xfreehd",
+      "class": "Album",
+      "method": "get_images_by_page",
+      "input": "https://beta.xfreehd.com/album/123/example",
+      "requests": [
+        "https://beta.xfreehd.com/album/123/example?page=2"
+      ]
+    },
+    {
+      "provider": "xfreehd",
+      "class": "Album",
+      "method": "get_images_by_page",
+      "input": "https://beta.xfreehd.com/album/123/example?utm_source=share",
+      "requests": [
+        "https://beta.xfreehd.com/album/123/example?utm_source=share?page=2"
+      ]
+    },
+    {
+      "provider": "xfreehd",
+      "class": "Album",
+      "method": "get_images_by_page",
+      "input": "https://beta.xfreehd.com/album/123/example#photos",
+      "requests": [
+        "https://beta.xfreehd.com/album/123/example#photos?page=2"
+      ]
+    }
+  ],
+  "normalization": [
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://de.xvideos.com/models/example",
+      "output": "https://de.xvideos.com/channels/models/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://de.xvideos.com/model/example",
+      "output": "https://de.xvideos.com/channels/model/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://de.xvideos.com/channels/example",
+      "output": "https://de.xvideos.com/channels/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://de.xvideos.com/example",
+      "output": "https://de.xvideos.com/channels/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://www.xvideos2.com/models/example",
+      "output": "https://www.xvideos2.com/models/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Channel",
+      "input": "https://de.xvideos.com/profiles/example/videos/best/0",
+      "output": "https://de.xvideos.com/profiles/example/videos/best/0"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://de.xvideos.com/models/example",
+      "output": "https://de.xvideos.com/pornstars/models/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://de.xvideos.com/model/example",
+      "output": "https://de.xvideos.com/pornstars/model/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://de.xvideos.com/channels/example",
+      "output": "https://de.xvideos.com/pornstars/channels/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://de.xvideos.com/example",
+      "output": "https://de.xvideos.com/pornstars/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://www.xvideos2.com/models/example",
+      "output": "https://www.xvideos2.com/models/example"
+    },
+    {
+      "provider": "xvideos",
+      "class": "Pornstar",
+      "input": "https://de.xvideos.com/profiles/example/videos/best/0",
+      "output": "https://de.xvideos.com/profiles/example/videos/best/0"
+    }
+  ],
+  "video_ids": [
+    {
+      "provider": "pornhub",
+      "url": "https://www.pornhub.com/view_video.php?viewkey=phABC&t=2",
+      "id": "phABC"
+    },
+    {
+      "provider": "pornhub",
+      "url": "https://www.pornhub.com/embed/phABC",
+      "id": "phABC"
+    },
+    {
+      "provider": "pornhub",
+      "url": "https://www.pornhub.com/video/show?viewkey=phABC",
+      "id": "phABC"
+    },
+    {
+      "provider": "eporner",
+      "url": "https://de.eporner.com/video-AbC123/",
+      "id": "AbC123"
+    },
+    {
+      "provider": "eporner",
+      "url": "https://www.eporner.com/hd-porn/AbC123/",
+      "id": "AbC123"
+    },
+    {
+      "provider": "eporner",
+      "url": "https://www.eporner.com/embed/AbC123/",
+      "id": null
+    },
+    {
+      "provider": "eporner",
+      "url": "https://www.eporner.com/video-AbC123?utm_source=share",
+      "id": "AbC123?utm_source=share"
+    }
+  ],
+  "beeg_requests": [
+    {
+      "url": "https://beeg.com/-012340",
+      "key": "1234",
+      "requests": [
+        "https://store.externulls.com/facts/file/1234",
+        "https://store.externulls.com/video/play_url/1234"
+      ]
+    },
+    {
+      "url": "https://beeg.com/-012340?t=4-60",
+      "key": "12340?t=4-6",
+      "requests": [
+        "https://store.externulls.com/facts/file/12340?t=4-6",
+        "https://store.externulls.com/video/play_url/12340?t=4-6"
+      ]
+    },
+    {
+      "url": "https://beeg.com/-012340/",
+      "key": "",
+      "requests": [
+        "https://store.externulls.com/facts/file/",
+        "https://store.externulls.com/video/play_url/"
+      ]
+    },
+    {
+      "url": "https://beeg.com/video/12340",
+      "key": "1234",
+      "requests": [
+        "https://store.externulls.com/facts/file/1234",
+        "https://store.externulls.com/video/play_url/1234"
+      ]
+    }
+  ],
+  "locale_headers": [
+    {
+      "provider": "pornhub",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "en,en-US",
+      "requests": 0
+    },
+    {
+      "provider": "eporner",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "xnxx",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "xvideos",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "xhamster",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "spankbang",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": null,
+      "requests": 0
+    },
+    {
+      "provider": "youporn",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "beeg",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "porntrex",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "xfreehd",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "de-DE,de;q=0.9",
+      "requests": 0
+    },
+    {
+      "provider": "redtube",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "en,en-US",
+      "requests": 0
+    },
+    {
+      "provider": "thumbzilla",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "en,en-US",
+      "requests": 0
+    },
+    {
+      "provider": "tube8",
+      "configured": "de-DE,de;q=0.9",
+      "session_header": "en,en-US",
+      "requests": 0
+    }
+  ]
+}

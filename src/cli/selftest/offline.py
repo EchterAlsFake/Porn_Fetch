@@ -22,7 +22,7 @@ async def run_offline_tests() -> list[TestResult]:
         samples = {
             "https://pornhub.com/view_video.php?viewkey=test": ("pornhub", ContentKind.VIDEO),
             "https://xvideos.com/pornstars/test": ("xvideos", ContentKind.PROFILE),
-            "https://youporn.com/collections/12/test": ("youporn", ContentKind.COLLECTION),
+            "https://youporn.com/collections/videos/12/": ("youporn", ContentKind.COLLECTION),
             "https://xfreehd.com/album/12/test": ("xfreehd", ContentKind.GALLERY),
         }
         for url, expected in samples.items():
