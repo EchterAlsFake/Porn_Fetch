@@ -9,6 +9,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
 from pathlib import Path
+from urllib.parse import quote
 
 from curl_cffi import Response
 from PySide6.QtCore import QCoreApplication, QFile, QIODevice, QObject, Signal
@@ -240,7 +241,7 @@ class AutoUpdater(QObject):
             metadata = update["metadata"]
             for name, target in metadata.signed.targets.items():
                 response = await clients.core.request(
-                    url=update["repository_url"] + name, allow_redirects=False, timeout=120,
+                    url=update["repository_url"] + quote(name, safe="/"), allow_redirects=False, timeout=120,
                 )
                 target.verify_length_and_hashes(response.content)
                 path = stage / name

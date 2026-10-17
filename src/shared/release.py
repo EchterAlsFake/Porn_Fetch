@@ -30,8 +30,11 @@ def release_time(value):
 
 def safe_repo_path(value):
     path = PurePosixPath(value)
-    if not value or path.is_absolute() or str(path) != value or any(p in (".", "..") for p in path.parts) or not re.fullmatch(r"[A-Za-z0-9_./+~-]+", value):
-        raise ValueError("Unsafe release repository path")
+    # IFW preserves spaces in directory archive names, such as Porn Fetch.app.7z.
+    if (not value or path.is_absolute() or str(path) != value
+            or any(p in (".", "..") for p in path.parts)
+            or not re.fullmatch(r"[A-Za-z0-9_./+~ -]+", value)):
+        raise ValueError(f"Unsafe release repository path: {value!r}")
     return value
 
 

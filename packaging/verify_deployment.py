@@ -6,6 +6,7 @@ import asyncio
 import sys
 import tempfile
 from pathlib import Path
+from urllib.parse import quote
 
 from base_api import BaseCore
 from base_api.modules.config import RuntimeConfig
@@ -78,7 +79,9 @@ async def verify_desktop(core: BaseCore, repository: Path, remote_url: str, plat
     # The largest archive exercises the application payload rather than just IFW metadata.
     payload = max(archives, key=lambda name: metadata.signed.targets[name].length)
     for name in ("Updates.xml", payload):
-        metadata.signed.targets[name].verify_length_and_hashes(await fetch(core, f"{remote_url}/{name}"))
+        metadata.signed.targets[name].verify_length_and_hashes(
+            await fetch(core, f"{remote_url}/{quote(name, safe='/')}"),
+        )
         print(f"Verified desktop payload: {platform}/{name}")
 
 

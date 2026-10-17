@@ -6,15 +6,17 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
+from urllib.parse import unquote
 
 from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.cli import self_update
 from src.licensing.client import LicenseStatus
-from src.shared.release import update_eligibility, validate_ifw_packages, verify_repository_manifest
+from src.shared.release import safe_repo_path, update_eligibility, validate_ifw_packages, verify_repository_manifest
 from src.shared.version import RELEASE_TIMESTAMP
 from src.tests.unit.test_cli_self_update import keys_script, load_script
 
 signer = load_script("sign_desktop_release")
+deployment = load_script("verify_deployment")
 
 
 class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
@@ -70,6 +72,43 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             (self.repo / "payload.7z").write_bytes(b"tampering")
             with self.assertRaises(Exception):
                 await updater._stage_repository(update)
+
+    async def test_ifw_bundle_archives_with_spaces_can_be_signed_and_downloaded(self):
+        name = "to.pornfetch.echteralsfake/3.10Porn Fetch.app.7z"
+        archive = self.repo / name
+        archive.parent.mkdir()
+        archive.write_bytes(b"macOS application bundle")
+        archive.with_suffix(".7z.sha1").write_bytes(b"IFW checksum")
+        signer.sign_repository(self.repo, "darwin_arm64", "3.10", self.base / "keys/online.pem", self.root)
+        metadata, release = verify_repository_manifest(
+            (self.repo / "release.json").read_bytes(), self.root.read_bytes(), "darwin_arm64",
+        )
+        metadata.signed.targets[name].verify_length_and_hashes(archive.read_bytes())
+        base_url = "https://updates.example/"
+
+        async def request(url, **kwargs):
+            self.assertNotIn(" ", url)
+            return SimpleNamespace(content=(self.repo / unquote(url.removeprefix(base_url))).read_bytes())
+
+        with patch("src.backend.update_service.shared_data_dir", return_value=self.base), \
+                patch("src.backend.update_service.clients.core.request", side_effect=request) as download:
+            stage = await AutoUpdater()._stage_repository({
+                **release, "metadata": metadata, "repository_url": base_url,
+            })
+            self.assertEqual((stage / name).read_bytes(), archive.read_bytes())
+            self.assertIn(base_url + name.replace(" ", "%20"), [call.kwargs["url"] for call in download.call_args_list])
+
+        async def fetch(url, **kwargs):
+            return (await request(url, **kwargs)).content
+
+        core = SimpleNamespace(fetch_bytes=AsyncMock(side_effect=fetch))
+        await deployment.verify_desktop(core, self.repo, base_url.rstrip("/"), "darwin_arm64", self.root)
+        self.assertIn(base_url + name.replace(" ", "%20"), [call.args[0] for call in core.fetch_bytes.call_args_list])
+
+    def test_repository_paths_still_reject_traversal(self):
+        for name in ("../Porn Fetch.app.7z", "/Porn Fetch.app.7z", "component/../Porn Fetch.app.7z"):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                safe_repo_path(name)
 
     async def test_optional_components_can_be_signed_and_staged(self):
         xml = ET.parse(self.repo / "Updates.xml")
