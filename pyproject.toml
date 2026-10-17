@@ -23,19 +23,19 @@ dependencies = [
     "questionary>=2.1.1",
     "rich",
     "tuf>=7,<8",
-    "unofficial-api-for-beeg @ git+https://github.com/EchterAlsFake/unofficial-api-for-beeg@433e0e5791e917d2ab3e6cae13748f58da8f561e",
-    "unofficial-api-for-eporner @ git+https://github.com/EchterAlsFake/unofficial-api-for-eporner@771f3ed060e65d22d6566f25577ef9e6dee7765a",
-    "unofficial-api-for-pornhub @ git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub@35f1685d7439c51e38e77f176fd2f8fab56e3696",
-    "unofficial-api-for-porntrex @ git+https://github.com/EchterAlsFake/unofficial-api-for-porntrex@cb3c7db783563294edd18bc66b7253a0b2f1a467",
-    "unofficial-api-for-redtube @ git+https://github.com/EchterAlsFake/unofficial-api-for-redtube@9601fdb5b128dc339c66877a2673192daa67c6bc",
-    "unofficial-api-for-spankbang @ git+https://github.com/EchterAlsFake/unofficial-api-for-spankbang@ce933899edba2807375331840a586dd6450f9a31",
-    "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla@165a8d389c4174b639a89343f9538057d8a308c7",
-    "unofficial-api-for-tube8 @ git+https://github.com/EchterAlsFake/unofficial-api-for-tube8@e042ad746a3662c0182d4c2868b9e0800e712635",
-    "unofficial-api-for-xfreehd @ git+https://github.com/EchterAlsFake/unofficial-api-for-xfreehd@51384674cad8b82e657e97b5f550ca304a78b5bc",
-    "unofficial-api-for-xhamster @ git+https://github.com/EchterAlsFake/unofficial-api-for-xhamster@e452f99c587df06d3d17e56543fc480e99cb0b49",
-    "unofficial-api-for-xnxx @ git+https://github.com/EchterAlsFake/unofficial-api-for-xnxx@468da86a1011f6047e9d9436ffe4f4f97286979f",
-    "unofficial-api-for-xvideos @ git+https://github.com/EchterAlsFake/unofficial-api-for-xvideos@fb8e8b985404fd414c6a26daccd1c26fef2a62fc",
-    "unofficial-api-for-youporn @ git+https://github.com/EchterAlsFake/unofficial-api-for-youporn@be714a80692ea90f38367d19a5e52cd595dc0dde",
+    "unofficial-api-for-beeg",
+    "unofficial-api-for-eporner",
+    "unofficial-api-for-pornhub",
+    "unofficial-api-for-porntrex",
+    "unofficial-api-for-redtube",
+    "unofficial-api-for-spankbang",
+    "unofficial-api-for-thumbzilla",
+    "unofficial-api-for-tube8",
+    "unofficial-api-for-xfreehd",
+    "unofficial-api-for-xhamster",
+    "unofficial-api-for-xnxx",
+    "unofficial-api-for-xvideos",
+    "unofficial-api-for-youporn",
 ]
 
 [project.scripts]
@@ -135,3 +135,6 @@ omit = [
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
+
+[tool.uv.sources]
+eaf-base-api = { path = "/home/asuna/PycharmProjects/eaf_base_api" }
