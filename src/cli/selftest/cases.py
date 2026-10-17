@@ -14,6 +14,8 @@ SINGLE_VIDEO_TESTS = [
     ("Tube8", "https://www.tube8.com/porn-video/264330411/"),
     ("XFreeHD", "https://beta.xfreehd.com/video/1073182/"),
     ("Porntrex", "https://www.porntrex.com/video/3002169/"),
+    ("EMPFlix", "https://www.empflix.com/amateur-porn/ryan-reid-seduces-hot-couple-kylie-rocket-and-mick-in-bnb-threesome/video3728878"),
+    ("TNAFlix", "https://www.tnaflix.com/amateur-porn/You%27re-The-Boss-%28full-movie%29/video11751954"),
 ]
 
 SHORTS_TESTS = [
@@ -40,6 +42,8 @@ PROFILE_TESTS = [
     ("SpankBang Creator", "https://spankbang.com/kxrn/creator/yvonna/"),
     ("YouPorn Channel", "https://www.youporn.com/channel/mia-khalifa/"),
     ("Porntrex Model", "https://www.porntrex.com/models/rose/"),
+    ("EMPFlix Profile", "https://www.empflix.com/profile/dani-daniels"),
+    ("TNAFlix Channel", "https://www.tnaflix.com/channel/team-skeet"),
 ]
 
 ACTIVE_DOWNLOAD_URL = "https://www.pornhub.com/shorties/6a346596ea4ff"

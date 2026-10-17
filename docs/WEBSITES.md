@@ -19,6 +19,8 @@ For Porn Fetch 3.9 (desktop, Android, and CLI).
 | RedTube | Yes | Yes | Yes | — | — | — | — |
 | Thumbzilla | Yes | Yes | Yes | — | — | — | — |
 | Tube8 | Yes | Yes | — | — | — | — | — |
+| EMPFlix | Yes | Yes | — | — | — | — | — |
+| TNAFlix | Yes | Yes | — | — | — | — | — |
 
 
 > [!CAUTION]

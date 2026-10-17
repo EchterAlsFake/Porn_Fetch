@@ -1,0 +1,5626 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-17T14:45:51.936345+00:00",
+  "scope": "Model/Channel/Pornstar/Creator/User/Amateur fixtures for opt-in app network tests; HTTP checks do not establish GUI enumeration success.",
+  "transport": "curl GET with redirects, verified TLS, bounded timeout, browser user-agent; text only, no linked images/videos fetched",
+  "curl_version": "curl 8.23.0 (x86_64-pc-linux-gnu) libcurl/8.23.0 OpenSSL/3.6.5 zlib/1.3.2 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.5 libssh2/1.11.1 nghttp2/1.70.0 ngtcp2/1.25.0 nghttp3/1.18.0 mit-krb5/1.22.2",
+  "status_policy": {
+    "403": "Retain as access-restricted; not an invalid URL.",
+    "404/410": "Exclude this unavailable candidate from positive smoke tests; no conclusion about every URL with the same format.",
+    "0": "Transport/DNS failure is inconclusive.",
+    "2xx": "HTTP availability only; still verify identity and bounded item preparation in the app."
+  },
+  "counts": {
+    "total": 89,
+    "primary": 33,
+    "tiers": {
+      "primary": 33,
+      "variant": 49,
+      "replacement": 6,
+      "diagnostic": 1
+    },
+    "primary_status_codes": {
+      "200": 30,
+      "403": 3
+    },
+    "all_status_codes": {
+      "200": 76,
+      "403": 8,
+      "404": 4,
+      "0": 1
+    },
+    "dispositions": {
+      "http_available": 72,
+      "access_restricted": 8,
+      "unavailable_candidate": 4,
+      "unsupported_resource": 1,
+      "identity_unverified": 2,
+      "transport_inconclusive": 1,
+      "empty_listing": 1
+    },
+    "excluded": 9,
+    "restricted_primary_feeds": 2
+  },
+  "providers_without_profile_api": [
+    {
+      "provider": "beeg",
+      "reason": "Video-only API; no public profile/container factory."
+    },
+    {
+      "provider": "xfreehd",
+      "reason": "Video/Album API; no public Model/Channel/Pornstar factory."
+    }
+  ],
+  "cases": [
+    {
+      "id": "pornhub.model",
+      "provider": "pornhub",
+      "profile_type": "model",
+      "tier": "primary",
+      "url": "https://www.pornhub.com/model/catalina-days",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhub",
+          "path": "pornhub_api/tests/test_user.py",
+          "line": 65,
+          "function": "test_model",
+          "factory_in_test": "get_model"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:18.569219+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/model/catalina-days",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/model/catalina-days",
+        "bytes": 1114921,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_model",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Catalina Days",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 26
+          },
+          {
+            "kind": "hls",
+            "segments": 73
+          }
+        ],
+        "metadata_requests": 9
+      }
+    },
+    {
+      "id": "pornhub.pornstar",
+      "provider": "pornhub",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.pornhub.com/pornstar/danny-d",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhub",
+          "path": "pornhub_api/tests/test_user.py",
+          "line": 31,
+          "function": "test_pornstar",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.214228+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/pornstar/danny-d",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/pornstar/danny-d",
+        "bytes": 1116177,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Danny D",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 36
+          },
+          {
+            "kind": "hls",
+            "segments": 52
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "pornhub.user",
+      "provider": "pornhub",
+      "profile_type": "user",
+      "tier": "primary",
+      "url": "https://www.pornhub.com/users/chappy1918",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhub",
+          "path": "pornhub_api/tests/test_user.py",
+          "line": 88,
+          "function": "test_user",
+          "factory_in_test": "get_user"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:19.265033+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/users/chappy1918",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/users/chappy1918",
+        "bytes": 850519,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "Chappy1918",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 41
+          },
+          {
+            "kind": "hls",
+            "segments": 67
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "pornhub.channel",
+      "provider": "pornhub",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.pornhub.com/channels/brazzers/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhub",
+          "path": "pornhub_api/tests/test_channel.py",
+          "line": 12,
+          "function": "test_channel",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.896946+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/channels/brazzers",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/channels/brazzers",
+        "bytes": 1101187,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 35
+          },
+          {
+            "kind": "hls",
+            "segments": 22
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "eporner.pornstar",
+      "provider": "eporner",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.eporner.com/pornstar/riley-reid/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "../unofficial-api-for-eporner/eporner_api/tests/test_pornstar.py:7"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:52.992240+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.eporner.com/pornstar/riley-reid/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.eporner.com/pornstar/riley-reid/",
+        "bytes": 287863,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Riley Reid",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 7
+      }
+    },
+    {
+      "id": "eporner.channel",
+      "provider": "eporner",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.eporner.com/channel/blacked/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.eporner.com/channels/"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:56.487915+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.eporner.com/channel/blacked/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.eporner.com/channel/blacked/",
+        "bytes": 150669,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "replaces": [
+        "eporner.profile_path"
+      ],
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Blacked",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "xnxx.user",
+      "provider": "xnxx",
+      "profile_type": "user",
+      "tier": "primary",
+      "url": "https://www.xnxx.com/pornstar/cory-chase",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xnxx",
+          "path": "xnxx_api/tests/test_user.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_user"
+        }
+      ],
+      "note": "The public pornstar path intentionally uses Client.get_user().",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.897260+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xnxx.com/pornstar/cory-chase",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 65713,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "XNXX model / channel",
+        "profile_metadata": {
+          "total_videos_count": 3723,
+          "total_pages_count": 75
+        },
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 81
+          },
+          {
+            "kind": "hls",
+            "segments": 298
+          }
+        ],
+        "metadata_requests": 12
+      }
+    },
+    {
+      "id": "xvideos.channel",
+      "provider": "xvideos",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://de.xvideos.com/teddy_tarantino",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xvideos",
+          "path": "xvideos_api/tests/test_channel.py",
+          "line": 8,
+          "function": "test_channel",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.897567+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.xvideos.com/teddy_tarantino",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 102583,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xvideos.pornstar",
+      "provider": "xvideos",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://de.xvideos.com/pornstars/sweetie-fox1",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xvideos",
+          "path": "xvideos_api/tests/test_pornstar.py",
+          "line": 10,
+          "function": "test_pornstar",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.018882+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.xvideos.com/pornstars/sweetie-fox1",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 77946,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Sweetie Fox",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 54
+          },
+          {
+            "kind": "hls",
+            "segments": 150
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xhamster.creator",
+      "provider": "xhamster",
+      "profile_type": "creator",
+      "tier": "primary",
+      "url": "https://xhamster.com/creators/comatozze",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xhamster",
+          "path": "xhamster_api/tests/test_creator.py",
+          "line": 8,
+          "function": "test_creator",
+          "factory_in_test": "get_creator"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.897845+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://xhamster.com/creators/comatozze",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://xhamster.com/creators/comatozze",
+        "bytes": 370287,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_creator",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 9
+      }
+    },
+    {
+      "id": "xhamster.pornstar",
+      "provider": "xhamster",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://xhamster.com/pornstars/polly-yangs",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xhamster",
+          "path": "xhamster_api/tests/test_pornstar.py",
+          "line": 8,
+          "function": "test_pornstar",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.094602+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://xhamster.com/pornstars/polly-yangs",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://xhamster.com/pornstars/polly-yangs",
+        "bytes": 399976,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Polly Yangs",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 321
+          },
+          {
+            "kind": "hls",
+            "segments": 183
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "xhamster.channel",
+      "provider": "xhamster",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://xhamster.com/channels/brazzers",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-xhamster",
+          "path": "xhamster_api/tests/test_channel.py",
+          "line": 8,
+          "function": "test_channel",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:58.024566+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://xhamster.com/channels/brazzers",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://xhamster.com/channels/brazzers",
+        "bytes": 371169,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 162
+          },
+          {
+            "kind": "hls",
+            "segments": 162
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "spankbang.creator",
+      "provider": "spankbang",
+      "profile_type": "creator",
+      "tier": "primary",
+      "url": "https://spankbang.com/kxrn/creator/yvonna/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-spankbang",
+          "path": "spankbang_api/tests/test_creator.py",
+          "line": 123,
+          "function": "test_attributes",
+          "factory_in_test": "get_creator"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:16.960508+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://spankbang.com/kxrn/creator/yvonna/",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5648,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "additional_identity_evidence": {
+        "provider": "spankbang",
+        "url": "https://spankbang.com/kxrn/creator/yvonna/",
+        "method": "get_creator",
+        "transport": "published API / BaseCore",
+        "resolved_url": "https://spankbang.com/kxrn/creator/yvonna/",
+        "result_class": "Creator",
+        "name": "Yvonna",
+        "video_count": "7"
+      },
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_creator",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Yvonna",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 62
+          },
+          {
+            "kind": "hls",
+            "segments": 51
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "spankbang.channel",
+      "provider": "spankbang",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://de.spankbang.com/ho/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-spankbang",
+          "path": "spankbang_api/tests/test_channel.py",
+          "line": 122,
+          "function": "test_attributes",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.898047+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://de.spankbang.com/ho/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5631,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "additional_identity_evidence": {
+        "provider": "spankbang",
+        "url": "https://de.spankbang.com/ho/channel/brazzers/",
+        "method": "get_channel",
+        "transport": "published API / BaseCore",
+        "resolved_url": "https://de.spankbang.com/ho/channel/brazzers/",
+        "result_class": "Channel",
+        "name": "BRAZZERS",
+        "video_count": "4.7K"
+      },
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "BRAZZERS",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 103
+          },
+          {
+            "kind": "hls",
+            "segments": 103
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "spankbang.pornstar",
+      "provider": "spankbang",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://spankbang.com/32/pornstar/angela+white/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-spankbang",
+          "path": "spankbang_api/tests/test_pornstar.py",
+          "line": 120,
+          "function": "test_attributes",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.403601+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://spankbang.com/32/pornstar/angela+white/",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5663,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "additional_identity_evidence": {
+        "provider": "spankbang",
+        "url": "https://spankbang.com/32/pornstar/angela+white/",
+        "method": "get_pornstar",
+        "transport": "published API / BaseCore",
+        "resolved_url": "https://spankbang.com/32/pornstar/angela+white/",
+        "result_class": "Pornstar",
+        "name": "Angela White",
+        "video_count": "1.2K"
+      },
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Angela White",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 72
+          },
+          {
+            "kind": "hls",
+            "segments": 83
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "youporn.channel",
+      "provider": "youporn",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.youporn.com/channel/mia-khalifa/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-youporn",
+          "path": "youporn_api/tests/test_channel.py",
+          "line": 7,
+          "function": "test_everything",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:15.898300+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.youporn.com/channel/mia-khalifa/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.youporn.com/channel/mia-khalifa/",
+        "bytes": 465994,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Mia Khalifa",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 101
+          },
+          {
+            "kind": "hls",
+            "segments": 93
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "youporn.pornstar",
+      "provider": "youporn",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.youporn.com/pornstar/eva-elfie/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-youporn",
+          "path": "youporn_api/tests/test_pornstar.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.151942+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.youporn.com/pornstar/eva-elfie/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.youporn.com/pornstar/eva-elfie/",
+        "bytes": 479893,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Eva Elfie",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 133
+          },
+          {
+            "kind": "hls",
+            "segments": 136
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "porntrex.model",
+      "provider": "porntrex",
+      "profile_type": "model",
+      "tier": "primary",
+      "url": "https://www.porntrex.com/models/rose/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-porntrex",
+          "path": "porntrex_api/tests/test_model.py",
+          "line": 11,
+          "function": "test_all",
+          "factory_in_test": "get_model"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:53.283739+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.porntrex.com/models/rose/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.porntrex.com/models/rose/",
+        "bytes": 742052,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_model",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Rose",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "porntrex.channel",
+      "provider": "porntrex",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.porntrex.com/channels/brazzers/",
+      "sources": [
+        {
+          "kind": "current_channel_directory",
+          "location": "https://www.porntrex.com/channels/"
+        }
+      ],
+      "note": "Active channel selected after the previous channel returned an empty listing.",
+      "http": {
+        "checked_at_utc": "2026-10-17T15:04:39.488924+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.porntrex.com/channels/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.porntrex.com/channels/brazzers/",
+        "bytes": 710004,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "replaces": [
+        "porntrex.empty_channel"
+      ],
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 4
+      }
+    },
+    {
+      "id": "redtube.channel",
+      "provider": "redtube",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://de.redtube.com/channels/freeuse",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-redtube",
+          "path": "redtube_api/tests/test_channel.py",
+          "line": 7,
+          "function": "test_all",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.374021+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.redtube.com/channels/freeuse",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.redtube.com/channels/freeuse",
+        "bytes": 537390,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "FreeUse",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 115
+          },
+          {
+            "kind": "hls",
+            "segments": 116
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "redtube.pornstar",
+      "provider": "redtube",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://de.redtube.com/pornstar/leny+evil",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-redtube",
+          "path": "redtube_api/tests/test_pornstar.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:18.522067+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.redtube.com/pornstar/leny+evil",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.redtube.com/pornstar/leny+evil",
+        "bytes": 539023,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Leny Evil",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 163
+          },
+          {
+            "kind": "hls",
+            "segments": 40
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "redtube.amateur",
+      "provider": "redtube",
+      "profile_type": "amateur",
+      "tier": "primary",
+      "url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-redtube",
+          "path": "redtube_api/tests/test_amatuer.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_amateur"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:16.473939+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+        "bytes": 467741,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_amateur",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Amateur",
+        "profile_name": "Reislin",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 219
+          },
+          {
+            "kind": "hls",
+            "segments": 186
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "redtube.user",
+      "provider": "redtube",
+      "profile_type": "user",
+      "tier": "primary",
+      "url": "https://www.redtube.com/user/31618721",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "../unofficial-api-for-redtube/redtube_api/tests/test_playlist.py:100"
+        }
+      ],
+      "note": "Repository HTML fixture URL independently verified as a real User page; current identity is emilscc. Public identity exists; the website does not expose a public video feed here. Verify metadata and explicitly report restricted video coverage.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:58.812854+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.redtube.com/user/31618721",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 333693,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "additional_identity_evidence": {
+        "provider": "redtube",
+        "url": "https://www.redtube.com/user/31618721",
+        "method": "get_user",
+        "transport": "published API / BaseCore",
+        "resolved_url": "https://www.redtube.com/user/31618721",
+        "result_class": "User",
+        "name": "emilscc"
+      },
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "access_evidence": [
+        {
+          "location": "https://ei.rdtcdn.com/www-static/cdn_files/redtube/js/generated/pc/user-videos_overview.js",
+          "observation": "visibleTabs exposes only playlists when user.isLoggedIn is false; videos-data returned HTTP 401."
+        }
+      ],
+      "replaces": [
+        "redtube.plural_user_candidate"
+      ],
+      "public_video_feed_unavailable": true,
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "skipped",
+        "profile": "User",
+        "profile_name": "emilscc",
+        "rows": 0,
+        "skip_reason": "Public profile metadata verified; this User's video feed is login-only or not publicly exposed",
+        "feed_attempted": true,
+        "gui_errors": []
+      }
+    },
+    {
+      "id": "thumbzilla.channel",
+      "provider": "thumbzilla",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.thumbzilla.com/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-thumbzilla",
+          "path": "thumbzilla_api/tests/test_channel.py",
+          "line": 7,
+          "function": "test_all",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.379764+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/channel/brazzers/",
+        "bytes": 203370,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "thumbzilla.pornstar",
+      "provider": "thumbzilla",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.thumbzilla.com/pornstar/nancy-a/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-thumbzilla",
+          "path": "thumbzilla_api/tests/test_pornstar.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:18.187609+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/pornstar/nancy-a/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/pornstar/nancy-a/",
+        "bytes": 244543,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Nancy A",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 154
+          },
+          {
+            "kind": "hls",
+            "segments": 185
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "thumbzilla.amateur",
+      "provider": "thumbzilla",
+      "profile_type": "amateur",
+      "tier": "primary",
+      "url": "https://www.thumbzilla.com/amateur/0princesspeachy0-ph/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-thumbzilla",
+          "path": "thumbzilla_api/tests/test_amatuer.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_amateur"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:16.635107+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/amateur/0princesspeachy0-ph/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/amateur/0princesspeachy0-ph/",
+        "bytes": 122204,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_amateur",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Amateur",
+        "profile_name": "0princesspeachy0",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 3
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "tube8.channel",
+      "provider": "tube8",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.tube8.com/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.tube8.com/channel/brazzers/"
+        }
+      ],
+      "note": "A channel URL was chosen from the site; the upstream test_channel.py live test actually supplies a pornstar URL.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:53.673863+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/channel/brazzers/",
+        "bytes": 439825,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "tube8.pornstar",
+      "provider": "tube8",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.tube8.com/pornstar/nancy-a/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-tube8",
+          "path": "tube8_api/tests/test_channel.py",
+          "line": 7,
+          "function": "test_all",
+          "factory_in_test": "get_channel"
+        },
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-tube8",
+          "path": "tube8_api/tests/test_pornstar.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:17.609492+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/pornstar/nancy-a/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/pornstar/nancy-a/",
+        "bytes": 472452,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Nancy A",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 154
+          },
+          {
+            "kind": "hls",
+            "segments": 185
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "tube8.amateur",
+      "provider": "tube8",
+      "profile_type": "amateur",
+      "tier": "primary",
+      "url": "https://www.tube8.com/amateur/e6cd031-ph/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-tube8",
+          "path": "tube8_api/tests/test_amatuer.py",
+          "line": 8,
+          "function": "test_all",
+          "factory_in_test": "get_amateur"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:16.810117+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/amateur/e6cd031-ph/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/amateur/e6cd031-ph/",
+        "bytes": 333622,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_amateur",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Amateur",
+        "profile_name": "MidnightMuseX",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 21
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "tube8.user",
+      "provider": "tube8",
+      "profile_type": "user",
+      "tier": "primary",
+      "url": "https://www.tube8.com/user/31618721/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.redtube.com/user/31618721"
+        }
+      ],
+      "note": "Numeric User ID candidate independently verified in current Tube8 HTML; identity emilscc. The named User URL in the HTML snippet test returns Unknown. Public identity exists; the website does not expose a public video feed here. Verify metadata and explicitly report restricted video coverage.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:41:23.531448+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/user/31618721/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/user/31618721/",
+        "bytes": 330147,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "additional_identity_evidence": {
+        "transport": "local parsing of the curl GET response using published tube8_api.api.User._extract_html",
+        "url": "https://www.tube8.com/user/31618721/",
+        "name": "emilscc",
+        "result_class": "User"
+      },
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "access_evidence": [
+        {
+          "location": "https://www.tube8.com/user/31618721/videos-data/",
+          "observation": "Current JSON response has an empty data list, count 0 and success false; the profile shell has no video container."
+        }
+      ],
+      "public_video_feed_unavailable": true,
+      "public_feed_error": "Main video container not found",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:22:14.774457+00:00",
+        "outcome": "skipped",
+        "profile": "User",
+        "profile_name": "emilscc",
+        "rows": 0,
+        "skip_reason": "Public profile metadata verified; the public User page exposes no video listing",
+        "feed_attempted": true,
+        "feed_error": "Failed to process page 0 at https://www.tube8.com/user/31618721/?page=1 on attempt 1: Main video container not found"
+      }
+    },
+    {
+      "id": "pornhub.model_alias",
+      "provider": "pornhub",
+      "profile_type": "model_alias",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/model/teddy-tarantino",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhub",
+          "path": "pornhub_api/tests/test_user.py",
+          "line": 13,
+          "function": "test_gif_from_pornstar",
+          "factory_in_test": "get_pornstar"
+        },
+        {
+          "kind": "website_or_prior_observation",
+          "location": "../unofficial-api-for-pornhub/pornhub_api/tests/test_user.py:13"
+        }
+      ],
+      "note": "Redirects to /pornstar/teddy-tarantino.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:52.991781+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/pornstar/teddy-tarantino",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/pornstar/teddy-tarantino",
+        "bytes": 1076769,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Teddy Tarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 50
+          },
+          {
+            "kind": "hls",
+            "segments": 123
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "pornhub.featured_tab",
+      "provider": "pornhub",
+      "profile_type": "featured_tab",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/model/catalina-days/videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/model/catalina-days"
+        }
+      ],
+      "note": "Derived videos tab; should select featured videos.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.257971+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/model/catalina-days/videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/model/catalina-days/videos",
+        "bytes": 1130895,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": "videos"
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": "videos"
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Catalina Days",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 26
+          },
+          {
+            "kind": "hls",
+            "segments": 38
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "pornhub.uploads_tab",
+      "provider": "pornhub",
+      "profile_type": "uploads_tab",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/model/catalina-days/videos/upload",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/model/catalina-days"
+        }
+      ],
+      "note": "Derived upload tab; should select uploads.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.196003+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/model/catalina-days/videos",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/model/catalina-days/videos",
+        "bytes": 1128106,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": "uploads"
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": "videos"
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Catalina Days",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 26
+          },
+          {
+            "kind": "hls",
+            "segments": 38
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "pornhub.localized",
+      "provider": "pornhub",
+      "profile_type": "localized",
+      "tier": "variant",
+      "url": "https://de.pornhub.com/channels/brazzers",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/channels/brazzers"
+        }
+      ],
+      "note": "Language host linked by the site.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.081787+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.pornhub.com/channels/brazzers",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.pornhub.com/channels/brazzers",
+        "bytes": 1105145,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 53
+          },
+          {
+            "kind": "hls",
+            "segments": 15
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "pornhub.user_numeric",
+      "provider": "pornhub",
+      "profile_type": "user_numeric",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/user/617235451/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/model/teddy-tarantino"
+        }
+      ],
+      "note": "User ID link found in current HTML.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.757788+00:00",
+        "curl_exit": 0,
+        "status": 404,
+        "final_url": "https://www.pornhub.com/user/617235451",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          404
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 986260,
+        "title_indicates_missing": true,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "unavailable_candidate",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "pornhub.user_numeric.replacement"
+    },
+    {
+      "id": "pornhub.singular_channel_candidate",
+      "provider": "pornhub",
+      "profile_type": "singular_channel_candidate",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/channel/brazzers",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/channels/brazzers"
+        }
+      ],
+      "note": "Derived alias; do not presume website support.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:06.661190+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/channels/brazzers",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/channels/brazzers",
+        "bytes": 1099593,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 100
+          },
+          {
+            "kind": "hls",
+            "segments": 45
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "eporner.localized",
+      "provider": "eporner",
+      "profile_type": "localized",
+      "tier": "variant",
+      "url": "https://de.eporner.com/pornstar/riley-reid/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.eporner.com/pornstar/riley-reid/"
+        }
+      ],
+      "note": "Language host.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.258352+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.eporner.com/pornostar/riley-reid/",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://de.eporner.com/pornostar/riley-reid/",
+        "bytes": 290440,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Riley Reid",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 4
+      }
+    },
+    {
+      "id": "eporner.page_two",
+      "provider": "eporner",
+      "profile_type": "page_two",
+      "tier": "variant",
+      "url": "https://www.eporner.com/pornstar/riley-reid/2/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.eporner.com/pornstar/riley-reid/"
+        }
+      ],
+      "note": "Path pagination.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.386228+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.eporner.com/pornstar/riley-reid/2/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.eporner.com/pornstar/riley-reid/2/",
+        "bytes": 265128,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Riley Reid",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "eporner.profile_path",
+      "provider": "eporner",
+      "profile_type": "profile_path",
+      "tier": "variant",
+      "url": "https://www.eporner.com/profile/BALove_PMV/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.eporner.com/pornstar/riley-reid/"
+        }
+      ],
+      "note": "This is a website User profile; the API has Pornstar/Channel abstractions, and cannot enumerate this path as a Channel.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:57.599393+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.eporner.com/profile/BALove_PMV/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.eporner.com/profile/BALove_PMV/",
+        "bytes": 108669,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "unsupported_resource",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "error": "Unsupported eporner URL type; enter an individual supported media URL"
+      },
+      "resolved_route": {
+        "error": "Unsupported eporner URL type; enter an individual supported media URL"
+      },
+      "replaced_by": "eporner.channel"
+    },
+    {
+      "id": "xnxx.profile_alias_candidate",
+      "provider": "xnxx",
+      "profile_type": "profile_alias_candidate",
+      "tier": "variant",
+      "url": "https://www.xnxx.com/profile/alex_adams69",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.xnxx.com/pornstar/alex_adams69"
+        }
+      ],
+      "note": "Derived alias; a 404 only rejects this candidate, not every /profile/ URL.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:56.488234+00:00",
+        "curl_exit": 0,
+        "status": 404,
+        "final_url": "https://www.xnxx.com/profile/alex_adams69",
+        "redirects": 0,
+        "response_chain": [
+          404
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 50543,
+        "title_indicates_missing": true,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "unavailable_candidate",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "xnxx.profile_alias_candidate.replacement"
+    },
+    {
+      "id": "xnxx.video_tab",
+      "provider": "xnxx",
+      "profile_type": "video_tab",
+      "tier": "variant",
+      "url": "https://www.xnxx.com/pornstar/cory-chase/videos/best/0",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.xnxx.com/pornstar/cory-chase"
+        }
+      ],
+      "note": "Listing tab returns JSON; HTTP success alone does not establish initial profile metadata parsing.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.258718+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xnxx.com/pornstar/cory-chase/videos/best/0",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "application/json",
+        "canonical_url": null,
+        "bytes": 59566,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "XNXX model / channel",
+        "profile_metadata": {
+          "total_videos_count": 3723,
+          "total_pages_count": 75
+        },
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 81
+          },
+          {
+            "kind": "hls",
+            "segments": 298
+          }
+        ],
+        "metadata_requests": 12
+      }
+    },
+    {
+      "id": "xnxx.mirror",
+      "provider": "xnxx",
+      "profile_type": "mirror",
+      "tier": "variant",
+      "url": "https://www.xnxx3.com/pornstar/cory-chase",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/xnxx.py"
+        }
+      ],
+      "note": "Documented historical alternate host; verify live redirect.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.078993+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xnxx3.com/pornstar/cory-chase",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 65100,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "XNXX model / channel",
+        "profile_metadata": {
+          "total_videos_count": 3723,
+          "total_pages_count": 75
+        },
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 81
+          },
+          {
+            "kind": "hls",
+            "segments": 298
+          }
+        ],
+        "metadata_requests": 12
+      }
+    },
+    {
+      "id": "xvideos.prefixed_channel",
+      "provider": "xvideos",
+      "profile_type": "prefixed_channel",
+      "tier": "variant",
+      "url": "https://www.xvideos.com/channels/teddy_tarantino",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.xvideos.com/profiles/teddy_tarantino"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:57.547509+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos.com/channels/teddy_tarantino",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 103373,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xvideos.profile_alias",
+      "provider": "xvideos",
+      "profile_type": "profile_alias",
+      "tier": "variant",
+      "url": "https://www.xvideos.com/profiles/teddy_tarantino",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "docs/url-routing-audit/online.json"
+        }
+      ],
+      "note": "Redirects to a Channel despite the /profiles/ prefix.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:52.992765+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos.com/channels/teddy_tarantino",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 103373,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 20
+      }
+    },
+    {
+      "id": "xvideos.model_alias",
+      "provider": "xvideos",
+      "profile_type": "model_alias",
+      "tier": "variant",
+      "url": "https://de.xvideos.com/models/polly-yangs-model",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "docs/url-routing-audit/online.json"
+        }
+      ],
+      "note": "Active /models/ to /pornstars/ redirect.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:54.780569+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.xvideos.com/pornstars/polly-yangs-model",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 94689,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Polly Yangs",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 136
+          },
+          {
+            "kind": "hls",
+            "segments": 187
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xvideos.amateur_channel_alias",
+      "provider": "xvideos",
+      "profile_type": "amateur_channel_alias",
+      "tier": "variant",
+      "url": "https://www.xvideos.com/amateur-channels/teddy_tarantino",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.xvideos.com/channels/teddy_tarantino"
+        }
+      ],
+      "note": "Derived alternate channel prefix; resolved identity checked.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:58.778403+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos.com/channels/teddy_tarantino",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 103373,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xvideos.bare_channel_tab",
+      "provider": "xvideos",
+      "profile_type": "bare_channel_tab",
+      "tier": "variant",
+      "url": "https://de.xvideos.com/teddy_tarantino/videos/best/0",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://de.xvideos.com/teddy_tarantino"
+        }
+      ],
+      "note": "Bare channel with JSON listing suffix.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.259069+00:00",
+        "curl_exit": 0,
+        "status": 404,
+        "final_url": "https://de.xvideos.com/teddy_tarantino/videos/best/0",
+        "redirects": 0,
+        "response_chain": [
+          404
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 39517,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "unavailable_candidate",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "xvideos.bare_channel_tab.replacement"
+    },
+    {
+      "id": "xvideos.mirror",
+      "provider": "xvideos",
+      "profile_type": "mirror",
+      "tier": "variant",
+      "url": "https://www.xvideos2.com/channels/teddy_tarantino",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/xvideos.py"
+        }
+      ],
+      "note": "Documented alternate host.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.124510+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos2.com/channels/teddy_tarantino",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 102391,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 16
+      }
+    },
+    {
+      "id": "xhamster.localized_mirror",
+      "provider": "xhamster",
+      "profile_type": "localized_mirror",
+      "tier": "variant",
+      "url": "https://ge.xhamster.desi/creators/comatozze",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "docs/url-routing-audit/online.json"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:52.992977+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://ge.xhamster.desi/creators/comatozze",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://ge.xhamster.desi/creators/comatozze",
+        "bytes": 372489,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "xhamster.user_path",
+      "provider": "xhamster",
+      "profile_type": "user_path",
+      "tier": "variant",
+      "url": "https://ge.xhamster.desi/users/cumatozz",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://ge.xhamster.desi/creators/comatozze"
+        }
+      ],
+      "note": "Associated User path; the app intentionally selects get_creator().",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:53.917614+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://ge.xhamster.desi/users/cumatozz",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://ge.xhamster.desi/users/cumatozz",
+        "bytes": 231436,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "xhamster.newest_tab",
+      "provider": "xhamster",
+      "profile_type": "newest_tab",
+      "tier": "variant",
+      "url": "https://ge.xhamster.desi/creators/comatozze/newest",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://ge.xhamster.desi/creators/comatozze"
+        }
+      ],
+      "note": "Tab linked by the website.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.259299+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://ge.xhamster.desi/creators/comatozze/newest",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://ge.xhamster.desi/creators/comatozze/newest",
+        "bytes": 383592,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "xhamster.tab_page_filter",
+      "provider": "xhamster",
+      "profile_type": "tab_page_filter",
+      "tier": "variant",
+      "url": "https://ge.xhamster.desi/creators/comatozze/newest/2?sort=newest",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://ge.xhamster.desi/creators/comatozze/newest"
+        }
+      ],
+      "note": "Derived page/filter regression URL.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.417072+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://ge.xhamster.desi/creators/comatozze/newest/2?sort=newest",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://ge.xhamster.desi/creators/comatozze/newest/2",
+        "bytes": 369493,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "spankbang.alternate_creator",
+      "provider": "spankbang",
+      "profile_type": "alternate_creator",
+      "tier": "variant",
+      "url": "https://de.spankbang.com/jpqa/creator/freya+erlenberg/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "docs/url-routing-audit/online.json"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:52.993180+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://de.spankbang.com/jpqa/creator/freya+erlenberg/",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5679,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Freya Erlenberg",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 184
+          },
+          {
+            "kind": "hls",
+            "segments": 315
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "spankbang.locale_pornstar",
+      "provider": "spankbang",
+      "profile_type": "locale_pornstar",
+      "tier": "variant",
+      "url": "https://spankbang.com/en/pornstar/sharon+lee/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "docs/url-routing-audit/online.json"
+        }
+      ],
+      "note": "Locale-prefixed profile rather than numeric-ID prefix.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:34:53.750097+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://spankbang.com/en/pornstar/sharon+lee/",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5657,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Sharon Lee",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 228
+          },
+          {
+            "kind": "hls",
+            "segments": 119
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "spankbang.page_filter",
+      "provider": "spankbang",
+      "profile_type": "page_filter",
+      "tier": "variant",
+      "url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://de.spankbang.com/ho/channel/brazzers/"
+        }
+      ],
+      "note": "Page two plus quality filter; app metadata reports 4.7K videos.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.259522+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5731,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "additional_listing_observations": [
+        {
+          "url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd",
+          "transport": "published API / BaseCore",
+          "status": "loaded",
+          "video_link_count": 72,
+          "video_ids_sha256": "8d86a03aaaa097cffb93ea40ee89b6b030ef42b92a0ff0729e810b57da89698d",
+          "resolved_url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd"
+        },
+        {
+          "url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd",
+          "transport": "published API / BaseCore",
+          "status": "loaded",
+          "video_link_count": 72,
+          "video_ids_sha256": "060d4d6180d212a3c48294b6160dc68996492f39c1bfbcec8592eb661d397794",
+          "resolved_url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd"
+        }
+      ],
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "BRAZZERS",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 103
+          },
+          {
+            "kind": "hls",
+            "segments": 103
+          }
+        ],
+        "metadata_requests": 9
+      }
+    },
+    {
+      "id": "youporn.localized",
+      "provider": "youporn",
+      "profile_type": "localized",
+      "tier": "variant",
+      "url": "https://de.youporn.com/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.youporn.com/channel/brazzers/"
+        }
+      ],
+      "note": "Language host linked by the website.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.525510+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.youporn.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.youporn.com/channel/brazzers/",
+        "bytes": 468292,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "youporn.sort_page",
+      "provider": "youporn",
+      "profile_type": "sort_page",
+      "tier": "variant",
+      "url": "https://www.youporn.com/channel/mia-khalifa/rating/?page=2",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.youporn.com/channel/mia-khalifa/"
+        }
+      ],
+      "note": "Derived sorting/pagination combination.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.571730+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.youporn.com/channel/mia-khalifa/rating/?page=2",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.youporn.com/channel/mia-khalifa/?page=2",
+        "bytes": 465755,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Mia Khalifa",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 192
+          },
+          {
+            "kind": "hls",
+            "segments": 158
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "redtube.singular_channel",
+      "provider": "redtube",
+      "profile_type": "singular_channel",
+      "tier": "variant",
+      "url": "https://www.redtube.com/channel/vip-4k",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.redtube.com/channels/vip-4k"
+        }
+      ],
+      "note": "Derived singular alias.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.630335+00:00",
+        "curl_exit": 0,
+        "status": 404,
+        "final_url": "https://www.redtube.com/channel/vip-4k",
+        "redirects": 0,
+        "response_chain": [
+          404
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 372832,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "unavailable_candidate",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "redtube.singular_channel.replacement"
+    },
+    {
+      "id": "redtube.plural_user_candidate",
+      "provider": "redtube",
+      "profile_type": "plural_user_candidate",
+      "tier": "variant",
+      "url": "https://www.redtube.com/users/31618721",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.redtube.com/user/31618721"
+        }
+      ],
+      "note": "Returns a generic page; the singular /user/31618721 URL has a verified identity.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.445759+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.redtube.com/users/31618721",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 349902,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "identity_unverified",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "redtube.user"
+    },
+    {
+      "id": "redtube.user_playlists_tab",
+      "provider": "redtube",
+      "profile_type": "user_playlists_tab",
+      "tier": "variant",
+      "url": "https://www.redtube.com/user/31618721?tab=playlists",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "../unofficial-api-for-redtube/redtube_api/tests/test_playlist.py:100"
+        }
+      ],
+      "note": " Public identity exists; the website does not expose a public video feed here. Verify metadata and explicitly report restricted video coverage.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.242246+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.redtube.com/user/31618721?tab=playlists",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 336181,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "access_evidence": [
+        {
+          "location": "https://ei.rdtcdn.com/www-static/cdn_files/redtube/js/generated/pc/user-videos_overview.js",
+          "observation": "visibleTabs exposes only playlists when user.isLoggedIn is false; videos-data returned HTTP 401."
+        }
+      ],
+      "public_video_feed_unavailable": true,
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "skipped",
+        "profile": "User",
+        "profile_name": "emilscc",
+        "rows": 0,
+        "skip_reason": "Public profile metadata verified; this User's video feed is login-only or not publicly exposed",
+        "feed_attempted": true,
+        "gui_errors": []
+      }
+    },
+    {
+      "id": "thumbzilla.localized",
+      "provider": "thumbzilla",
+      "profile_type": "localized",
+      "tier": "variant",
+      "url": "https://de.thumbzilla.com/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.thumbzilla.com/channel/brazzers/"
+        }
+      ],
+      "note": "Language host.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.657909+00:00",
+        "curl_exit": 6,
+        "status": 0,
+        "final_url": "https://de.thumbzilla.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [],
+        "content_type": null,
+        "canonical_url": null,
+        "bytes": 0,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": "curl: (6) Could not resolve host: de.thumbzilla.com"
+      },
+      "disposition": "transport_inconclusive",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "thumbzilla.localized.replacement"
+    },
+    {
+      "id": "thumbzilla.page_two",
+      "provider": "thumbzilla",
+      "profile_type": "page_two",
+      "tier": "variant",
+      "url": "https://www.thumbzilla.com/channel/brazzers/?page=2",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.thumbzilla.com/channel/brazzers/"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.135351+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/channel/brazzers/?page=2",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/channel/brazzers/?page=2",
+        "bytes": 203384,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "tube8.localized",
+      "provider": "tube8",
+      "profile_type": "localized",
+      "tier": "variant",
+      "url": "https://de.tube8.com/channel/brazzers/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.tube8.com/channel/brazzers/"
+        }
+      ],
+      "note": "Language host linked by the website.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.730016+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.tube8.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.tube8.com/channel/brazzers/",
+        "bytes": 441330,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "tube8.page_two",
+      "provider": "tube8",
+      "profile_type": "page_two",
+      "tier": "variant",
+      "url": "https://www.tube8.com/channel/brazzers/?page=2",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.tube8.com/channel/brazzers/"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.579774+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/channel/brazzers/?page=2",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/channel/brazzers/?page=2",
+        "bytes": 439363,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "tube8.named_user_candidate",
+      "provider": "tube8",
+      "profile_type": "named_user_candidate",
+      "tier": "variant",
+      "url": "https://www.tube8.com/user/midnightmusex/",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "../unofficial-api-for-tube8/tube8_api/tests/test_amatuer.py:40"
+        }
+      ],
+      "note": "HTML snippet fixture, not the live network test; current API returns Unknown. Retain as evidence, exclude from positive smoke cases.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:36:59.094437+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/user/midnightmusex/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/user/midnightmusex/",
+        "bytes": 330161,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "identity_unverified",
+      "positive_smoke_candidate": false,
+      "additional_identity_evidence": {
+        "provider": "tube8",
+        "url": "https://www.tube8.com/user/midnightmusex/",
+        "method": "get_user",
+        "transport": "published API / BaseCore",
+        "resolved_url": "https://www.tube8.com/user/midnightmusex/",
+        "result_class": "User",
+        "name": "Unknown"
+      },
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "replaced_by": "tube8.named_user_candidate.replacement"
+    },
+    {
+      "id": "pornhub.query_fragment",
+      "provider": "pornhub",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.pornhub.com/model/catalina-days?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.pornhub.com/model/catalina-days"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:07.265675+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/model/catalina-days?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/model/catalina-days",
+        "bytes": 1115629,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Catalina Days",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 26
+          },
+          {
+            "kind": "hls",
+            "segments": 38
+          }
+        ],
+        "metadata_requests": 2
+      }
+    },
+    {
+      "id": "eporner.query_fragment",
+      "provider": "eporner",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.eporner.com/pornstar/riley-reid/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.eporner.com/pornstar/riley-reid/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.042307+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.eporner.com/pornstar/riley-reid/",
+        "redirects": 1,
+        "response_chain": [
+          301,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.eporner.com/pornstar/riley-reid/",
+        "bytes": 287863,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Riley Reid",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "xnxx.query_fragment",
+      "provider": "xnxx",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.xnxx.com/pornstar/cory-chase?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.xnxx.com/pornstar/cory-chase"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.776156+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xnxx.com/pornstar/cory-chase?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 65929,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "XNXX model / channel",
+        "profile_metadata": {
+          "total_videos_count": 3723,
+          "total_pages_count": 75
+        },
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 81
+          },
+          {
+            "kind": "hls",
+            "segments": 298
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "xvideos.query_fragment",
+      "provider": "xvideos",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://de.xvideos.com/teddy_tarantino?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://de.xvideos.com/teddy_tarantino"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.909929+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.xvideos.com/teddy_tarantino?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 102879,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "xhamster.query_fragment",
+      "provider": "xhamster",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://xhamster.com/creators/comatozze?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://xhamster.com/creators/comatozze"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.304476+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://xhamster.com/creators/comatozze?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          103,
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://xhamster.com/creators/comatozze",
+        "bytes": 372937,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xhamster",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Comatozze",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 24
+          },
+          {
+            "kind": "hls",
+            "segments": 209
+          }
+        ],
+        "metadata_requests": 7
+      }
+    },
+    {
+      "id": "spankbang.query_fragment",
+      "provider": "spankbang",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://spankbang.com/kxrn/creator/yvonna/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://spankbang.com/kxrn/creator/yvonna/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.874719+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://spankbang.com/kxrn/creator/yvonna/?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5787,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Creator",
+        "profile_name": "Yvonna",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 62
+          },
+          {
+            "kind": "hls",
+            "segments": 51
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "youporn.query_fragment",
+      "provider": "youporn",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.youporn.com/channel/mia-khalifa/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.youporn.com/channel/mia-khalifa/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.328196+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.youporn.com/channel/mia-khalifa/?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.youporn.com/channel/mia-khalifa/",
+        "bytes": 464969,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "youporn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Mia Khalifa",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 101
+          },
+          {
+            "kind": "hls",
+            "segments": 93
+          }
+        ],
+        "metadata_requests": 2
+      }
+    },
+    {
+      "id": "porntrex.query_fragment",
+      "provider": "porntrex",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.porntrex.com/models/rose/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.porntrex.com/models/rose/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:03.852909+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.porntrex.com/models/rose/?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.porntrex.com/models/rose/",
+        "bytes": 742052,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Rose",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 3
+      }
+    },
+    {
+      "id": "redtube.query_fragment",
+      "provider": "redtube",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://de.redtube.com/channels/freeuse?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://de.redtube.com/channels/freeuse"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.771094+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.redtube.com/channels/freeuse?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://de.redtube.com/channels/freeuse",
+        "bytes": 538928,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "FreeUse",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 115
+          },
+          {
+            "kind": "hls",
+            "segments": 116
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "thumbzilla.query_fragment",
+      "provider": "thumbzilla",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.thumbzilla.com/channel/brazzers/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.thumbzilla.com/channel/brazzers/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:04.838443+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/channel/brazzers/?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/channel/brazzers/",
+        "bytes": 202907,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 2
+      }
+    },
+    {
+      "id": "tube8.query_fragment",
+      "provider": "tube8",
+      "profile_type": "query_fragment",
+      "tier": "variant",
+      "url": "https://www.tube8.com/channel/brazzers/?utm_source=porn-fetch-test#videos",
+      "sources": [
+        {
+          "kind": "website_or_prior_observation",
+          "location": "https://www.tube8.com/channel/brazzers/"
+        }
+      ],
+      "note": "Derived from a verified primary URL; fragment is local, query must survive request composition.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:05.322165+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/channel/brazzers/?utm_source=porn-fetch-test#videos",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/channel/brazzers/",
+        "bytes": 439144,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 2
+      }
+    },
+    {
+      "id": "xvideos.prefixed_video_tab",
+      "provider": "xvideos",
+      "profile_type": "prefixed_video_tab",
+      "tier": "variant",
+      "url": "https://www.xvideos.com/channels/teddy_tarantino/videos/best/0",
+      "sources": [
+        {
+          "kind": "derived_variant",
+          "location": "https://www.xvideos.com/channels/teddy_tarantino"
+        }
+      ],
+      "note": "Real prefixed-channel AJAX tab returns JSON; compare with the unavailable bare-channel tab candidate.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:57.695968+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos.com/channels/teddy_tarantino/videos/best/0",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "application/json",
+        "canonical_url": null,
+        "bytes": 49702,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "spankbang.quality_filter",
+      "provider": "spankbang",
+      "profile_type": "quality_filter",
+      "tier": "variant",
+      "url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd",
+      "sources": [
+        {
+          "kind": "derived_variant",
+          "location": "https://de.spankbang.com/ho/channel/brazzers/"
+        }
+      ],
+      "note": "App transport verified this filtered page and page two as distinct nonempty listings; curl returns 403.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:43:57.696684+00:00",
+        "curl_exit": 0,
+        "status": 403,
+        "final_url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd",
+        "redirects": 0,
+        "response_chain": [
+          403
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": null,
+        "bytes": 5703,
+        "title_indicates_missing": false,
+        "challenge_hint": true,
+        "error": null
+      },
+      "disposition": "access_restricted",
+      "positive_smoke_candidate": true,
+      "additional_listing_observations": [
+        {
+          "url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd",
+          "transport": "published API / BaseCore",
+          "status": "loaded",
+          "video_link_count": 72,
+          "video_ids_sha256": "8d86a03aaaa097cffb93ea40ee89b6b030ef42b92a0ff0729e810b57da89698d",
+          "resolved_url": "https://de.spankbang.com/ho/channel/brazzers/?q=hd"
+        },
+        {
+          "url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd",
+          "transport": "published API / BaseCore",
+          "status": "loaded",
+          "video_link_count": 72,
+          "video_ids_sha256": "060d4d6180d212a3c48294b6160dc68996492f39c1bfbcec8592eb661d397794",
+          "resolved_url": "https://de.spankbang.com/ho/channel/brazzers/2/?q=hd"
+        }
+      ],
+      "input_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "spankbang",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "BRAZZERS",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 103
+          },
+          {
+            "kind": "hls",
+            "segments": 103
+          }
+        ],
+        "metadata_requests": 7
+      }
+    },
+    {
+      "id": "pornhub.user_numeric.replacement",
+      "provider": "pornhub",
+      "profile_type": "user",
+      "tier": "replacement",
+      "url": "https://www.pornhub.com/users/chappy1918",
+      "replaces": [
+        "pornhub.user_numeric"
+      ],
+      "expected_factory": "get_user",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.pornhub.com/users/chappy1918"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.504390+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.pornhub.com/users/chappy1918",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.pornhub.com/users/chappy1918",
+        "bytes": 854604,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "pornhub",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "Chappy1918",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 41
+          },
+          {
+            "kind": "hls",
+            "segments": 67
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "xnxx.profile_alias_candidate.replacement",
+      "provider": "xnxx",
+      "profile_type": "user",
+      "tier": "replacement",
+      "url": "https://www.xnxx.com/pornstar/alex_adams69",
+      "replaces": [
+        "xnxx.profile_alias_candidate"
+      ],
+      "expected_factory": "get_user",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.xnxx.com/pornstar/alex_adams69"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.504897+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xnxx.com/pornstar/alex_adams69",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": null,
+        "bytes": 65631,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xnxx",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "XNXX model / channel",
+        "profile_metadata": {
+          "total_videos_count": 1307,
+          "total_pages_count": 27
+        },
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 113
+          },
+          {
+            "kind": "hls",
+            "segments": 145
+          }
+        ],
+        "metadata_requests": 8
+      }
+    },
+    {
+      "id": "xvideos.bare_channel_tab.replacement",
+      "provider": "xvideos",
+      "profile_type": "channel",
+      "tier": "replacement",
+      "url": "https://www.xvideos.com/channels/teddy_tarantino/videos/best/0",
+      "replaces": [
+        "xvideos.bare_channel_tab"
+      ],
+      "expected_factory": "get_channel",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.xvideos.com/channels/teddy_tarantino/videos/best/0"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.505269+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.xvideos.com/channels/teddy_tarantino/videos/best/0",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "application/json",
+        "canonical_url": null,
+        "bytes": 49702,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "xvideos",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Teddytarantino",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 65
+          },
+          {
+            "kind": "hls",
+            "segments": 188
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "redtube.singular_channel.replacement",
+      "provider": "redtube",
+      "profile_type": "channel",
+      "tier": "replacement",
+      "url": "https://www.redtube.com/channels/vip-4k",
+      "replaces": [
+        "redtube.singular_channel"
+      ],
+      "expected_factory": "get_channel",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.redtube.com/channels/vip-4k"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.505554+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.redtube.com/channels/vip-4k",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.redtube.com/channels/vip-4k",
+        "bytes": 511987,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "redtube",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "VIP4K",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 178
+          },
+          {
+            "kind": "hls",
+            "segments": 92
+          }
+        ],
+        "metadata_requests": 10
+      }
+    },
+    {
+      "id": "thumbzilla.localized.replacement",
+      "provider": "thumbzilla",
+      "profile_type": "channel",
+      "tier": "replacement",
+      "url": "https://www.thumbzilla.com/channel/brazzers/",
+      "replaces": [
+        "thumbzilla.localized"
+      ],
+      "expected_factory": "get_channel",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.thumbzilla.com/channel/brazzers/"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.505766+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.thumbzilla.com/channel/brazzers/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.thumbzilla.com/channel/brazzers/",
+        "bytes": 203347,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "thumbzilla",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 90
+          },
+          {
+            "kind": "hls",
+            "segments": 89
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "tube8.named_user_candidate.replacement",
+      "provider": "tube8",
+      "profile_type": "user",
+      "tier": "replacement",
+      "url": "https://www.tube8.com/user/31618721/",
+      "replaces": [
+        "tube8.named_user_candidate"
+      ],
+      "expected_factory": "get_user",
+      "sources": [
+        {
+          "kind": "upstream_tests_and_current_website",
+          "location": "https://www.tube8.com/user/31618721/"
+        }
+      ],
+      "note": "Fresh curl GET returned 200. Uses a current canonical resource path; does not imply the unavailable alias format exists.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "http": {
+        "checked_at_utc": "2026-10-17T14:54:08.506055+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tube8.com/user/31618721/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tube8.com/user/31618721/",
+        "bytes": 330153,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tube8",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "public_video_feed_unavailable": true,
+      "public_feed_error": "Main video container not found",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:22:14.774457+00:00",
+        "outcome": "skipped",
+        "profile": "User",
+        "profile_name": "emilscc",
+        "rows": 0,
+        "skip_reason": "Public profile metadata verified; the public User page exposes no video listing",
+        "feed_attempted": true,
+        "feed_error": "Failed to process page 0 at https://www.tube8.com/user/31618721/?page=1 on attempt 1: Main video container not found"
+      }
+    },
+    {
+      "id": "porntrex.empty_channel",
+      "provider": "porntrex",
+      "profile_type": "channel",
+      "tier": "diagnostic",
+      "url": "https://www.porntrex.com/channels/nubile-films/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-porntrex",
+          "path": "porntrex_api/tests/test_channel.py",
+          "line": 13,
+          "function": "test_all",
+          "factory_in_test": "get_model"
+        }
+      ],
+      "note": "The site currently has no video entries; the GUI pipeline correctly produces no rows.",
+      "http": {
+        "checked_at_utc": "2026-10-17T14:40:16.307725+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.porntrex.com/channels/nubile-films/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://www.porntrex.com/channels/nubile-films/",
+        "bytes": 424133,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "empty_listing",
+      "positive_smoke_candidate": false,
+      "input_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "porntrex",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "replaced_by": "porntrex.channel"
+    },
+    {
+      "id": "eporner.localized_canonical",
+      "provider": "eporner",
+      "profile_type": "pornstar",
+      "tier": "variant",
+      "url": "https://de.eporner.com/pornostar/riley-reid/",
+      "sources": [
+        {
+          "kind": "observed_language_redirect",
+          "location": "https://de.eporner.com/pornstar/riley-reid/"
+        }
+      ],
+      "note": "The real localized canonical path is accepted by the app.",
+      "positive_smoke_candidate": true,
+      "disposition": "http_available",
+      "http": {
+        "checked_at_utc": "2026-10-17T15:04:39.489320+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://de.eporner.com/pornostar/riley-reid/",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=utf-8",
+        "canonical_url": "https://de.eporner.com/pornostar/riley-reid/",
+        "bytes": 290319,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "input_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "eporner",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Riley Reid",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 1
+      }
+    },
+    {
+      "id": "empflix.profile",
+      "provider": "empflix",
+      "profile_type": "profile",
+      "tier": "primary",
+      "url": "https://www.empflix.com/profile/dani-daniels",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-empflix",
+          "path": "empflix_api/tests/test_profile.py",
+          "line": 27,
+          "function": "test_profile_extract_pornstar",
+          "factory_in_test": "get_profile"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.empflix.com/profile/dani-daniels",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.empflix.com/profile/dani-daniels",
+        "bytes": 172884,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "empflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "empflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_profile",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "outcome": "passed",
+        "profile": "Profile",
+        "profile_name": "Dani Daniels",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "tnaflix.channel",
+      "provider": "tnaflix",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.tnaflix.com/channel/team-skeet",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-tnaflix",
+          "path": "tnaflix_api/tests/test_channel.py",
+          "line": 15,
+          "function": "test_channel_extract",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tnaflix.com/channel/team-skeet",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tnaflix.com/channel/team-skeet",
+        "bytes": 110752,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tnaflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tnaflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Team Skeet",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 4
+      }
+    },
+    {
+      "id": "tnaflix.profile",
+      "provider": "tnaflix",
+      "profile_type": "profile",
+      "tier": "primary",
+      "url": "https://www.tnaflix.com/profile/lisa-ann",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-tnaflix",
+          "path": "tnaflix_api/tests/test_profile.py",
+          "line": 15,
+          "function": "test_profile_extract",
+          "factory_in_test": "get_profile"
+        }
+      ],
+      "note": "",
+      "http": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://www.tnaflix.com/profile/lisa-ann",
+        "redirects": 0,
+        "response_chain": [
+          200
+        ],
+        "content_type": "text/html; charset=UTF-8",
+        "canonical_url": "https://www.tnaflix.com/profile/lisa-ann",
+        "bytes": 182031,
+        "title_indicates_missing": false,
+        "challenge_hint": false,
+        "error": null
+      },
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "tnaflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "resolved_route": {
+        "provider": "tnaflix",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_profile",
+      "last_gui_check": {
+        "checked_at_utc": "2026-10-17T18:40:00.000000+00:00",
+        "outcome": "passed",
+        "profile": "Profile",
+        "profile_name": "Lisa Ann",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 4
+      }
+    }
+  ],
+  "app_routes_checked_at_utc": "2026-10-17T18:17:25.919175+00:00",
+  "last_gui_verification": {
+    "started_at_utc": "2026-10-17T18:20:31.334643+00:00",
+    "command": "uv run python -m src.tests.smoke.profile_urls --include-variants --items 2",
+    "scope": "Real GUI profile dispatch, preparation, Qt list roles/signals and stream URL resolution; no media downloads",
+    "unique_urls": 73,
+    "passed": 70,
+    "skipped": 3,
+    "failed": 0,
+    "note": "Expanded live checks plus a focused Tube8 User recheck after adding specific absent-public-listing classification. Skips verify profile metadata and attempt the real feed; they do not establish list coverage."
+  }
+}

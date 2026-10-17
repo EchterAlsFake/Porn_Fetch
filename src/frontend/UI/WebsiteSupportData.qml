@@ -44,6 +44,12 @@ QtObject {
           cli: [qsTr("Yes"), qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")] },
         { provider: "tube8", name: "Tube8",
           gui: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")],
+          cli: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")] },
+        { provider: "empflix", name: "EMPFlix",
+          gui: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")],
+          cli: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")] },
+        { provider: "tnaflix", name: "TNAFlix",
+          gui: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")],
           cli: [qsTr("Yes"), qsTr("Yes"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—"), qsTr("—")] }
     ]
     readonly property var notes: [

@@ -7,10 +7,10 @@ under the Porn Fetch Source-Available License 1.0 permission to combine those
 portions with that application and distribute the combination under the Porn
 Fetch Source-Available License 1.0:
 
-unofficial-api-for-beeg, unofficial-api-for-eporner,
+unofficial-api-for-beeg, unofficial-api-for-empflix, unofficial-api-for-eporner,
 unofficial-api-for-pornhub, unofficial-api-for-porntrex,
 unofficial-api-for-redtube, unofficial-api-for-spankbang,
-unofficial-api-for-thumbzilla, unofficial-api-for-tube8,
+unofficial-api-for-thumbzilla, unofficial-api-for-tnaflix, unofficial-api-for-tube8,
 unofficial-api-for-xfreehd, unofficial-api-for-xhamster,
 unofficial-api-for-xnxx, unofficial-api-for-xvideos,
 unofficial-api-for-youporn.

@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any, AsyncIterator
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 
 class ContentKind(StrEnum):
@@ -30,6 +30,7 @@ PROVIDER_MODULES = {
     "spankbang": "spankbang_api", "youporn": "youporn_api", "beeg": "beeg_api",
     "porntrex": "porntrex_api", "xfreehd": "xfreehd_api", "redtube": "redtube_api",
     "thumbzilla": "thumbzilla_api", "tube8": "tube8_api",
+    "empflix": "empflix_api", "tnaflix": "tnaflix_api",
 }
 
 HOST_PATTERNS = {
@@ -46,11 +47,13 @@ HOST_PATTERNS = {
     "redtube": r"(?:^|\.)redtube\.com$",
     "thumbzilla": r"(?:^|\.)thumbzilla\.com$",
     "tube8": r"(?:^|\.)tube8\.com$",
+    "empflix": r"(?:^|\.)empflix\.com$",
+    "tnaflix": r"(?:^|\.)tnaflix\.com$",
 }
 
 PROFILE_SEGMENTS = {
     "pornhub": {"pornstar", "model", "users", "user", "channels", "channel"},
-    "eporner": {"pornstar", "profile", "channel", "channels"},
+    "eporner": {"pornstar", "pornostar", "channel", "channels"},
     "xnxx": {"profile", "user", "users", "pornstar"},
     "xvideos": {"pornstar", "pornstars", "model", "models", "profiles", "channels", "channel", "amateur-channels"},
     "xhamster": {"pornstars", "pornstar", "creators", "creator", "users", "channels", "channel"},
@@ -60,6 +63,8 @@ PROFILE_SEGMENTS = {
     "redtube": {"pornstar", "channel", "channels", "amateur", "users", "user"},
     "thumbzilla": {"pornstar", "channel", "amateur"},
     "tube8": {"pornstar", "channel", "amateur", "user", "users"},
+    "empflix": {"profile", "pornstar", "pornstars"},
+    "tnaflix": {"profile", "pornstar", "pornstars", "channel", "channels"},
 }
 
 COLLECTION_SEGMENTS = {
@@ -132,7 +137,7 @@ def route_url(url: str) -> Route:
 
 def _is_video_url(provider: str, path: str, query: dict[str, list[str]]) -> bool:
     patterns = {
-        "eporner": r"^/(?:video-[a-z0-9]+|(?:hd-porn|embed)/[a-z0-9]+)(?:/|$)",
+        "eporner": r"^/(?:video-[a-z0-9]+|(?:hd-porn|embed|porno-video)/[a-z0-9]+)(?:/|$)",
         "xnxx": r"^/video-?[a-z0-9]+(?:/|$)",
         "xvideos": r"^/(?:video\.?[a-z0-9]+|embedframe/[a-z0-9]+)(?:/|$)",
         "xhamster": r"^/(?:videos|movies|moments|shorts)/[^/]+",
@@ -144,6 +149,8 @@ def _is_video_url(provider: str, path: str, query: dict[str, list[str]]) -> bool
         "redtube": r"^/[0-9]+/?$",
         "thumbzilla": r"^/watch/[0-9]+(?:/|$)",
         "tube8": r"^/(?:porn-video|video)/[0-9]+(?:/|$)",
+        "empflix": r"^/(?:(?:[^/]+/)+video[0-9]+|video[0-9]+|videos?/[0-9]+|videos?/[^/]+-[0-9]+\.html)(?:/|$)",
+        "tnaflix": r"^/(?:(?:[^/]+/)+video[0-9]+|video[0-9]+|videos?/[0-9]+|videos?/[^/]+-[0-9]+\.html)(?:/|$)",
     }
     if provider == "pornhub":
         return (path in {"/view_video.php", "/video/show"} and bool(query.get("viewkey"))) or bool(
@@ -156,6 +163,13 @@ async def _await_if_needed(value: Any) -> Any:
     return await value if inspect.isawaitable(value) else value
 
 
+def eporner_video_id(url: str) -> str | None:
+    """Retain the case-sensitive ID in canonical and localized video paths."""
+    match = re.match(r"^/(?:video-|(?:hd-porn|embed|porno-video)/)([a-z0-9]+)(?:/|$)",
+                     urlparse(url).path, re.I)
+    return match.group(1) if match else None
+
+
 async def resolve_video(client: Any, route: Route, *, strict_language: bool | None = None) -> Any:
     path = urlparse(route.url).path.casefold()
     configuration = getattr(getattr(client, "core", None), "configuration", None)
@@ -165,8 +179,11 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
     if route.provider == "xhamster" and re.match(r"^/(?:moments|shorts)/", path):
         return await _await_if_needed(client.get_short(route.url, load_html=True))
     if route.provider == "eporner":
+        url = route.url
+        if path.startswith("/porno-video/") and (video_id := eporner_video_id(url)):
+            url = urlparse(url)._replace(path=f"/video-{video_id}/").geturl()
         return await _await_if_needed(client.get_video(
-            route.url, load_html=True,
+            url, load_html=True,
             load_api=load_api,
         ))
     if route.provider == "pornhub":
@@ -192,7 +209,9 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
 
     if route.kind != ContentKind.PROFILE or route.provider not in PROFILE_SEGMENTS:
         raise ValueError(f"profiles are not supported for {route.provider}")
-    parts = [segment for segment in urlparse(route.url).path.casefold().split("/") if segment]
+    parsed = urlparse(route.url)
+    original_parts = [segment for segment in parsed.path.split("/") if segment]
+    parts = [segment.casefold() for segment in original_parts]
     section = _content_section(route.provider, parts)
     segments = {section}
     if route.provider == "pornhub":
@@ -218,10 +237,38 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
     elif route.provider == "xnxx":
         method = "get_user"
     elif route.provider == "eporner":
-        method = "get_pornstar" if section == "pornstar" else "get_channel"
+        method = "get_pornstar" if section in {"pornstar", "pornostar"} else "get_channel"
+    elif route.provider == "tnaflix":
+        method = "get_channel" if segments & {"channel", "channels"} else (
+            "get_pornstar" if segments & {"pornstar", "pornstars"} else "get_profile"
+        )
+    elif route.provider == "empflix":
+        method = "get_pornstar" if segments & {"pornstar", "pornstars"} else "get_profile"
     else:
         method = "get_pornstar"
-    target = await _await_if_needed(getattr(client, method)(route.url, load_html=True))
+    # AJAX/video tabs can return JSON or omit the profile header. Load identity
+    # from the base profile before creating its listing stream. Keep spelling,
+    # filters and the requested upload mode (already recorded on Route).
+    target_url = route.url
+    if route.provider in {"pornhub", "xnxx", "xvideos"}:
+        depth = 1 if route.provider == "xvideos" and section not in PROFILE_SEGMENTS["xvideos"] else 2
+        if parts[depth:depth + 1] == ["videos"]:
+            target_url = parsed._replace(path="/" + "/".join(original_parts[:depth]), fragment="").geturl()
+    target = await _await_if_needed(getattr(client, method)(target_url, load_html=True))
+    if route.provider == "xhamster" and section == "users" and hasattr(client, "core"):
+        # User pages can link their public Creator identity in the personal-info
+        # block. Their own root is not the Creator's video listing.
+        from selectolax.lexbor import LexborHTMLParser
+
+        html = await client.core.fetch_text(target_url)
+        parser = LexborHTMLParser(html)
+        for anchor in parser.css(".personal-info-block .user-details a[href]"):
+            linked = urljoin(target_url, anchor.attributes["href"])
+            parsed_link = urlparse(linked)
+            if (parsed_link.path.startswith("/creators/") and parsed_link.hostname
+                    and re.search(HOST_PATTERNS["xhamster"], parsed_link.hostname, re.I)):
+                target = await _await_if_needed(client.get_creator(linked, load_html=True))
+                break
     resolved = getattr(target, "resolved_url", None)
     if route.provider == "xvideos" and section == "profiles" and isinstance(resolved, str):
         resolved_section = urlparse(resolved).path.strip("/").split("/")[0]
@@ -237,8 +284,8 @@ def container_stream(
     if hasattr(container, "__aiter__"):
         return container
     if provider == "pornhub" and profile_mode in {"uploads", "both"} and hasattr(container, "get_uploads"):
-        videos = _call_stream(container, "get_videos", pages) if profile_mode == "both" else None
-        uploads = _call_stream(container, "get_uploads", pages)
+        videos = _call_stream(container, "get_videos", pages, iterator_config) if profile_mode == "both" else None
+        uploads = _call_stream(container, "get_uploads", pages, iterator_config)
         return _chain_streams(*(stream for stream in (videos, uploads) if stream is not None))
     for name in ("get_videos", "videos"):
         if getattr(container, name, None):

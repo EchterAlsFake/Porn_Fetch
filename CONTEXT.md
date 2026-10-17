@@ -92,6 +92,13 @@ Schema-2 license client, shared service, and production public configuration. It
 - `manual/`: SNI lab instructions and isolated support tooling.
 - `helper.py`: interactive suite selector with explicit online/download confirmations.
 
+Live GUI profile checks use `src/backend/profile_diagnostics.py` and the JSON
+inventory at `docs/url-routing-audit/profile-fixtures.json`. Run them explicitly
+with `uv run python -m src.tests.smoke.profile_urls --include-variants`, or use
+`main.py --test-profiles`. They prepare real list rows and resolve playlists,
+while blocking media downloads. See `docs/URL_TEST_FIXTURES.md` for coverage and
+public User-feed limitations.
+
 ## Repository support directories
 
 - `docs/`: user/developer docs, release history, and project history.

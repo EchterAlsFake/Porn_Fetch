@@ -41,6 +41,10 @@ SUITES = {
         "Online provider checks",
         [sys.executable, "Porn_Fetch_CLI.py", "--test-mode"],
     ),
+    "gui_profiles": (
+        "Online GUI profile/list-model checks (metadata and playlists only)",
+        [sys.executable, "-m", "src.tests.smoke.profile_urls", "--include-variants"],
+    ),
     "downloads": (
         "Online checks plus active download",
         [sys.executable, "Porn_Fetch_CLI.py", "--test-mode", "--test-downloads"],
@@ -51,7 +55,7 @@ SUITES = {
     ),
 }
 
-ONLINE = {"providers", "downloads", "sni"}
+ONLINE = {"providers", "gui_profiles", "downloads", "sni"}
 
 
 async def choose_suites() -> list[str]:

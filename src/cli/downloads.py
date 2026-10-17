@@ -314,7 +314,7 @@ async def download_video(
         event = stop_event or asyncio.Event()
 
     loop = asyncio.get_running_loop()
-    raw = module in {"eporner_api", "porntrex_api", "xfreehd_api"}
+    raw = module in {"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api"}
 
     def make_callback(unit: str) -> Callable[[int, int], None]:
         def callback(position: int, total: int) -> None:

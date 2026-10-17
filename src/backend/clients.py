@@ -57,9 +57,11 @@ from xhamster_api.api import Short as xh_Short
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
+from empflix_api import Client as ef_Client, Video as ef_Video
+from tnaflix_api import Client as tf_Client, Video as tf_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
-from src.shared.provider_routing import HOST_PATTERNS, ContentKind, resolve_video, route_url
+from src.shared.provider_routing import HOST_PATTERNS, ContentKind, eporner_video_id, resolve_video, route_url
 from src.shared.logging_setup import configure_app_logging
 from src.shared.media import VideoObject
 from src.shared.provider_parsing import parse_length, parse_publish_date
@@ -75,7 +77,7 @@ AllowedVideoType: TypeAlias = (
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    xf_Video | ep_Video | pt_Video
+    xf_Video | ep_Video | pt_Video | ef_Video | tf_Video
     # Those are all non HLS streams for now
 )
 
@@ -181,6 +183,8 @@ core_xf = BaseCore(configuration=config)
 core_rt = BaseCore(configuration=config)
 core_th = BaseCore(configuration=config)
 core_tu = BaseCore(configuration=config)
+core_ef = BaseCore(configuration=config)
+core_tf = BaseCore(configuration=config)
 
 ep_client = ep_Client(core=core_ep)
 xv_client = xv_Client(core=core_xv)
@@ -195,14 +199,16 @@ ph_client = ph_Client(core=core_ph)
 rt_client = rt_Client(core=core_rt)
 th_client = th_Client(core=core_th)
 tu_client = tu_Client(core=core_tu)
+ef_client = ef_Client(core=core_ef)
+tf_client = tf_Client(core=core_tf)
 
 cores = [
     core_ep, core_ph, core_xv, core_xh, core_xn, core_sp, core_yp, core_bg, core_pt, core_xf, core_rt, core_th,
-    core_tu,
+    core_tu, core_ef, core_tf,
 ]
 
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-           rt_Video, th_Video, tu_Video, ph_Short, xh_Short]
+           rt_Video, th_Video, tu_Video, ef_Video, tf_Video, ph_Short, xh_Short]
 
 logger.debug("Successfully initialized all clients and!")
 
@@ -262,15 +268,19 @@ def refresh_clients() -> None:
     core_rt.enable_logging(level=level, log_file="BaseCore_RT.log" if debug_mode else None)
     core_tu.enable_logging(level=level, log_file="BaseCore_Tu.log" if debug_mode else None)
     core_th.enable_logging(level=level, log_file="BaseCore_TH.log" if debug_mode else None)
+    core_ef.enable_logging(level=level, log_file="BaseCore_EF.log" if debug_mode else None)
+    core_tf.enable_logging(level=level, log_file="BaseCore_TF.log" if debug_mode else None)
 
     cores_to_update = {
         core, core_ep, core_ph, core_xv, core_xh, core_xn, core_sp,
-        core_yp, core_bg, core_pt, core_xf, core_rt, core_th, core_tu
+        core_yp, core_bg, core_pt, core_xf, core_rt, core_th, core_tu,
+        core_ef, core_tf
     }
 
     clients_list = [
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
-        yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client
+        yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
+        ef_client, tf_client
     ]
 
     for client in clients_list:
@@ -346,6 +356,7 @@ async def close_all_clients() -> None:
     for client in (
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
+        ef_client, tf_client,
     ):
         unique_cores.add(client.core)
     await asyncio.gather(*(item.close() for item in unique_cores), return_exceptions=True)
@@ -394,11 +405,15 @@ def client_for(provider: str) -> Any:
         "xvideos": xv_client, "xhamster": xh_client, "spankbang": sp_client,
         "youporn": yp_client, "beeg": bg_client, "porntrex": pt_client,
         "xfreehd": xf_client, "redtube": rt_client, "thumbzilla": th_client,
-        "tube8": tu_client,
+        "tube8": tu_client, "empflix": ef_client, "tnaflix": tf_client,
     }[provider]
 
 
 async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
+    if isinstance(video, ep_Video) and (path_id := eporner_video_id(video.url)):
+        # Localized listing links can use /porno-video/ instead of /video-.
+        # video_id is the API's ordinary identity field, not a lazy media field.
+        video.video_id = path_id
     # Iterator results may be lazy. Load the provider's page source before
     # reading fields; Beeg is the one supported provider with only an API source.
     source = "api" if isinstance(video, bg_Video) else "html"
@@ -544,6 +559,15 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.video_id
         publish_date = video.publish_date
 
+    elif isinstance(video, (ef_Video, tf_Video)):
+        video_source = "empflix" if isinstance(video, ef_Video) else "tnaflix"
+        author = video.author_name or "N/A"
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail_url
+        publish_date = video.publish_date
+        video_id = video.video_id
+
     else:
         raise SomethingStupidHappened
 
@@ -621,6 +645,13 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
         await video.load_fields("parsed_urls")
         return video.get_url_by_quality(quality=quality, mode="h264")
 
+    elif isinstance(video, (ef_Video, tf_Video)):
+        await video.load_fields("video_qualities", "direct_download_urls")
+        qn = normalize_quality_value(quality)
+        available = video.video_qualities or []
+        chosen_height = choose_quality_from_list(available, qn)
+        return (video.direct_download_urls or {})[chosen_height]
+
     raise TypeError(f"Unsupported legacy video type: {type(video).__name__}")
 
 
@@ -654,6 +685,11 @@ async def get_available_qualities(video: Any) -> List[int]:
     # Your legacy wrapper already exposes `video_qualities` as list[str]
     if isinstance(video, (ep_Video, xf_Video)):
         quals = video.video_qualities()
+        return sorted({normalize_quality(q) for q in quals})
+
+    elif isinstance(video, (ef_Video, tf_Video)):
+        await video.load_fields("video_qualities")
+        quals = video.video_qualities or []
         return sorted({normalize_quality(q) for q in quals})
 
     else:

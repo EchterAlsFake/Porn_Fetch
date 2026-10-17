@@ -53,8 +53,12 @@ this transport metadata. Redirect identity survives text-cache hits.
 Unverified historical mirrors and unimplemented resource families were not
 advertised as newly supported. GIFs, Quickies, unsupported profile tabs, and
 unsupported provider playlists/albums still require their own extraction paths.
-The separate live GUI profile diagnostic suite discussed with the audit remains
-future work; these changes repair the underlying APIs and routing first.
+The [live GUI profile diagnostic suite](URL_TEST_FIXTURES.md) now exercises the
+real backend, preparation pipeline and Qt list model. Its follow-up fixes handle
+Eporner's German `/pornostar/` and `/porno-video/` paths, preserve case-sensitive
+video IDs, resolve AJAX tabs through the base profile, and follow XHamster's
+explicit User-to-Creator identity link. Eporner's unsupported `/profile/` User
+pages are rejected instead of being incorrectly treated as Channels.
 
 ## Verification
 
@@ -68,6 +72,7 @@ future work; these changes repair the underlying APIs and routing first.
   [Post-fix observations](url-routing-audit/post-fix-online.json) record those
   bounded checks. No media files were downloaded.
 
-Build artifacts and raw network responses remain outside Git. Version bumps and
-Git pushes do not themselves publish packages to PyPI; distribution lockfiles
-remain tied to their existing published artifacts until a package release.
+Build artifacts and raw network responses remain outside Git. The versions in
+the table have since been published; Porn Fetch's dependency requirements and
+lockfile now use these releases. HLS support is explicitly enabled through the
+shared core's `hls` extra.

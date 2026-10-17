@@ -1528,42 +1528,42 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1199"/>
+        <location filename="../../../backend/application.py" line="1200"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1216"/>
+        <location filename="../../../backend/application.py" line="1217"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1279"/>
+        <location filename="../../../backend/application.py" line="1280"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1284"/>
+        <location filename="../../../backend/application.py" line="1285"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1286"/>
+        <location filename="../../../backend/application.py" line="1287"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1291"/>
+        <location filename="../../../backend/application.py" line="1292"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1294"/>
+        <location filename="../../../backend/application.py" line="1295"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1308"/>
+        <location filename="../../../backend/application.py" line="1309"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2960,6 +2960,26 @@ Liste löschen</translation>
         <location filename="../../UI/WebsiteSupportData.qml" line="47"/>
         <location filename="../../UI/WebsiteSupportData.qml" line="47"/>
         <location filename="../../UI/WebsiteSupportData.qml" line="47"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
         <source>—</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2970,32 +2990,32 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="56"/>
         <source>Supported in Porn Fetch 3.9. Yes = supported; — = unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="51"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="57"/>
         <source>Paste a full video, profile, or playlist URL. Supported profile types vary by website.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="58"/>
         <source>Keyword search is unavailable for legal reasons.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="59"/>
         <source>Photo albums are CLI-only.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="54"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="60"/>
         <source>Availability and quality depend on the video, your region, and any required website account. Free downloads are limited to 720p; higher qualities require a Porn Fetch license. Some YouPorn MP4-only videos also require a license because their resolution is unknown.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/WebsiteSupportData.qml" line="55"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="61"/>
         <source>HQporner, MissAV, and unlisted websites are not supported.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3075,6 +3095,14 @@ Liste löschen</translation>
         <location filename="../../UI/WebsiteSupportData.qml" line="46"/>
         <location filename="../../UI/WebsiteSupportData.qml" line="47"/>
         <location filename="../../UI/WebsiteSupportData.qml" line="47"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="49"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="50"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="52"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
+        <location filename="../../UI/WebsiteSupportData.qml" line="53"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>

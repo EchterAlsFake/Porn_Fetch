@@ -900,7 +900,7 @@ class Backend(QObject):
                 if isinstance(source_video, clients.xf_Video):
                     from src.shared.media import xfreehd_quality
                     quality = xfreehd_quality(quality)
-                raw_video_types = (clients.ep_Video, clients.pt_Video, clients.xf_Video)
+                raw_video_types = (clients.ep_Video, clients.pt_Video, clients.xf_Video, clients.ef_Video, clients.tf_Video)
 
                 if isinstance(source_video, raw_video_types):
                     video.is_hls = False
@@ -1114,18 +1114,19 @@ class Backend(QObject):
             name="model-video-processing",
         )
 
-    async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters):
+    async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters,
+                                 *, pages: int = 30, iterator_config: IteratorConfig | None = None):
         try:
             route = route_url(url)
             if route.kind != ContentKind.PROFILE:
                 raise ValueError("Please enter a supported profile or channel URL.")
-            target = await resolve_container(clients.client_for(route.provider), route, pages=30)
-            options = None
-            if route.provider == "eporner":
+            target = await resolve_container(clients.client_for(route.provider), route, pages=pages)
+            options = iterator_config
+            if options is None and route.provider == "eporner":
                 sources = ("html",) if app_settings.strict_enforcement else ("api", "html")
                 options = IteratorConfig(load_specific_sources=sources)
             mode = {0: "both", 1: "uploads", 2: "videos"}.get(app_settings.model_videos, "videos")
-            videos = container_stream(target, pages=30, provider=route.provider,
+            videos = container_stream(target, pages=pages, provider=route.provider,
                                       profile_mode=route.profile_mode or mode, iterator_config=options)
         except ValueError as error:
             self.showMessage.emit(str(error))
@@ -1414,10 +1415,12 @@ def main() -> None:
         before maybe buying something that doesn't work anymore.""")
     parser.add_argument("--version", "-v", action="store_true", help="Shows the current version of Porn Fetch")
     parser.add_argument("--smoke-test", action="store_true", help="Load bundled QML and resources offline, then exit")
+    parser.add_argument("--test-profiles", action="store_true", help="Run live GUI profile metadata/playlist tests without media downloads")
+    parser.add_argument("--test-profile-variants", action="store_true", help="Include localized/alias profile fixtures in live tests")
     parser.add_argument("--android", action="store_true", help="Preview the Android QML layout on desktop")
 
     args = parser.parse_args()
-    if args.smoke_test and args.test:
+    if args.smoke_test and (args.test or args.test_profiles or args.test_profile_variants):
         parser.error("--smoke-test cannot be combined with the online --test mode")
     test_mode = False
 
@@ -1425,7 +1428,7 @@ def main() -> None:
         print_runtime_version_info()
         sys.exit(0)
 
-    if args.test:
+    if args.test or args.test_profiles or args.test_profile_variants:
         test_mode = True
 
     sys.unraisablehook = custom_unraisable_hook
@@ -1461,10 +1464,24 @@ def main() -> None:
     backend_instance = Backend(parent=engine, mobile_layout=is_android or args.android)
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
-    if "--test" in sys.argv:
+    if test_mode:
         from src.backend.diagnostics import run_smoke_tests
 
-        exit_code = QtAsyncio.run(run_smoke_tests(backend=backend_instance, model=backend_instance._downloads_model), keep_running=False)
+        # Diagnostics observe errors through QSignalSpy; modal dialogs would
+        # otherwise stall an unattended run before it can report the failure.
+        backend_instance.showMessage.disconnect(backend_instance.handle_message)
+
+        async def run_diagnostics():
+            try:
+                return await run_smoke_tests(
+                    backend=backend_instance, model=backend_instance._downloads_model,
+                    profiles_only=args.test_profiles or (args.test_profile_variants and not args.test),
+                    include_profile_variants=args.test_profile_variants,
+                )
+            finally:
+                await clients.close_all_clients()
+
+        exit_code = QtAsyncio.run(run_diagnostics(), keep_running=False)
         raise SystemExit(exit_code)
 
 

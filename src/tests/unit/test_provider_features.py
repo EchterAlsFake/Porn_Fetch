@@ -38,6 +38,7 @@ class RoutingTests(unittest.IsolatedAsyncioTestCase):
         for url in (
             "https://pornhub.com/",
             "https://eporner.com/channels/",
+            "https://eporner.com/profile/example",
             "https://redtube.com/channel",
             "https://xhamster.com/creators/all/countries",
             "https://xhamster.com/creators/example/shorts",
@@ -65,7 +66,7 @@ class RoutingTests(unittest.IsolatedAsyncioTestCase):
             "https://pornhub.com/model/example": "get_model",
             "https://pornhub.com/users/example": "get_user",
             "https://eporner.com/channel/example": "get_channel",
-            "https://eporner.com/profile/example": "get_channel",
+            "https://de.eporner.com/pornostar/example": "get_pornstar",
             "https://xhamster.com/users/example": "get_creator",
             "https://xhamster.com/creator/example": "get_creator",
             "https://ge.xhamster.desi/creators/comatozze": "get_creator",
@@ -83,6 +84,11 @@ class RoutingTests(unittest.IsolatedAsyncioTestCase):
             "https://redtube.com/amateur/example": "get_amateur",
             "https://thumbzilla.com/channel/example": "get_channel",
             "https://tube8.com/user/example": "get_user",
+            "https://www.empflix.com/profile/dani-daniels": "get_profile",
+            "https://www.empflix.com/pornstar/dani-daniels": "get_pornstar",
+            "https://www.tnaflix.com/channel/team-skeet": "get_channel",
+            "https://www.tnaflix.com/profile/lisa-ann": "get_profile",
+            "https://www.tnaflix.com/pornstar/lisa-ann": "get_pornstar",
         }
         for url, method in cases.items():
             with self.subTest(url=url):

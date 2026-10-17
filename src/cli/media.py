@@ -62,7 +62,16 @@ async def available_qualities(video: Any) -> list[int]:
         core = _value(video, "core") or _value(_value(video, "client"), "core")
         return sorted({int(item) for item in await core.list_available_qualities(hls)})
 
-    method = getattr(video, "video_qualities", None)
+    if hasattr(video, "load_fields") and hasattr(video, "is_field_loaded"):
+        if not video.is_field_loaded("video_qualities"):
+            try:
+                await video.load_fields("video_qualities")
+            except Exception:
+                pass
+    try:
+        method = getattr(video, "video_qualities", None)
+    except Exception:
+        method = None
     if method:
         values = method() if callable(method) else method
         if hasattr(values, "__await__"):

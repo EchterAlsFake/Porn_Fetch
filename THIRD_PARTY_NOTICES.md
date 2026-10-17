@@ -8,7 +8,7 @@ is an inventory, not a substitute for those license texts.
 
 | Component | Current license evidence | Distribution note |
 | --- | --- | --- |
-| `eaf_base_api` and the thirteen `unofficial-api-for-*` packages in `pyproject.toml` | Installed metadata: AGPL-3.0-or-later for `eaf_base_api`; AGPL-3.0-only for the providers | The [additional permission](LICENSES/Provider-permission.txt) applies only to portions Johannes Habel may license separately. Audit other contributions before distribution. |
+| `eaf_base_api` and the fifteen `unofficial-api-for-*` packages in `pyproject.toml` | Installed metadata: AGPL-3.0-or-later for `eaf_base_api`; AGPL-3.0-only for the providers | The [additional permission](LICENSES/Provider-permission.txt) applies only to portions Johannes Habel may license separately. Audit other contributions before distribution. |
 | PySide6 and Qt 6 | PySide6 metadata: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only; [Qt licensing](https://www.qt.io/development/open-source-lgpl-obligations) | Audit each bundled Qt module; preserve the LGPL notices and source availability, and verify that users can replace the LGPL libraries in the actual installer or one-file build. |
 | `browser-cookie3`, `pydivert` | Installed metadata: LGPL; LGPL-3.0-or-later OR GPL-2.0-or-later | Include the exact distribution licenses and comply with the chosen LGPL/GPL terms. |
 | PocketBase executable | [MIT](https://github.com/pocketbase/pocketbase/blob/master/LICENSE.md) | Installer and CI workflows download and bundle this executable; include its copyright and MIT text with each affected artifact. |

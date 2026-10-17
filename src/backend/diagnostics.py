@@ -135,6 +135,14 @@ TESTS = [
     WebsiteTest(
         name="porntrex",
         url="https://www.porntrex.com/video/3002169/gaia-on-top-anal-creampie"
+    ),
+    WebsiteTest(
+        name="empflix",
+        url="https://www.empflix.com/amateur-porn/ryan-reid-seduces-hot-couple-kylie-rocket-and-mick-in-bnb-threesome/video3728878"
+    ),
+    WebsiteTest(
+        name="tnaflix",
+        url="https://www.tnaflix.com/amateur-porn/You%27re-The-Boss-%28full-movie%29/video11751954"
     )
 
     # This contains all websites to test for the single URL mode
@@ -247,7 +255,10 @@ async def test_url(
         "A row was created, but it did not contain valid metadata"
     )
 
-async def run_smoke_tests(backend, model) -> int:
+async def run_smoke_tests(backend, model, *, profiles_only: bool = False,
+                          include_profile_variants: bool = False) -> int:
+    from src.backend.profile_diagnostics import ProfileFeedUnavailable, load_profile_cases, test_profile_url
+
     # Let Qt continuously sanity-check your model while we're testing.
     model_tester = QAbstractItemModelTester(
         model,
@@ -256,14 +267,18 @@ async def run_smoke_tests(backend, model) -> int:
 
     passed = 0
     failed = 0
+    skipped = 0
 
     print()
     print("=" * 72)
     print(" LIVE WEBSITE SMOKE TESTS")
     print("=" * 72)
 
-    for number, test in enumerate(TESTS, start=1):
-        prefix = f"[{number:02d}/{len(TESTS):02d}] {test.name}"
+    video_tests = [] if profiles_only else TESTS
+    profiles = load_profile_cases(include_variants=include_profile_variants)
+    total = len(video_tests) + len(profiles)
+    for number, test in enumerate(video_tests, start=1):
+        prefix = f"[{number:02d}/{total:02d}] {test.name}"
 
         try:
             result = await test_url(
@@ -287,12 +302,27 @@ async def run_smoke_tests(backend, model) -> int:
             print(f"      qualities : {result['qualities']}")
             print(f"      selected  : {result['selected_quality']}")
 
+    for number, case in enumerate(profiles, start=len(video_tests) + 1):
+        prefix = f"[{number:02d}/{total:02d}] {case['id']}"
+        try:
+            result = await test_profile_url(backend, model, case)
+        except ProfileFeedUnavailable as exc:
+            skipped += 1
+            print(f"{prefix:<40} SKIP\n      {exc}")
+        except Exception as exc:
+            failed += 1
+            print(f"{prefix:<40} FAIL\n      {exc}")
+        else:
+            passed += 1
+            print(f"{prefix:<40} PASS ({result['rows']} rows; {result['streams']})")
+
     print()
     print("=" * 72)
     print(
         f"{passed} passed | "
         f"{failed} failed | "
-        f"{len(TESTS)} total"
+        f"{skipped} restricted | "
+        f"{total} total"
     )
 
     print("=" * 72)
