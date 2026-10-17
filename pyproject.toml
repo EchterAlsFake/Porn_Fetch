@@ -63,6 +63,11 @@ desktop-build = [
     "zstandard",
     "patchelf; sys_platform == 'linux'",
 ]
+android-build = [
+    "jinja2",
+    "pkginfo",
+    "tqdm",
+]
 
 [dependency-groups]
 dev = [
@@ -136,5 +141,3 @@ omit = [
 skip_covered = true
 show_missing = true
 
-[tool.uv.sources]
-eaf-base-api = { path = "/home/asuna/PycharmProjects/eaf_base_api" }
