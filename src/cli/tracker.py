@@ -73,7 +73,7 @@ async def record_cli_download(
         return None
 
     status = outcome.status if isinstance(outcome, DownloadOutcome) else str(outcome)
-    output_path = target or (outcome.path if isinstance(outcome, DownloadOutcome) else None)
+    output_path = outcome.path if isinstance(outcome, DownloadOutcome) else target
 
     # Normalize to VideoObject
     if isinstance(video, VideoObject):

@@ -104,7 +104,7 @@ class PocketBaseTracker:
         async with self._save_lock:
             client = await self._ensure_client()
             iterator_record = await self._upsert_iterator(client, video)
-            payload = self.create_video_payload(video, iterator_record)
+            payload = await asyncio.to_thread(self.create_video_payload, video, iterator_record)
             existing = await client.find_by_url(VIDEO_COLLECTION, video.url)
             if existing:
                 record = await client.update_record(VIDEO_COLLECTION, existing["id"], payload)

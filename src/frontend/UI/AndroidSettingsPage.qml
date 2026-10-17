@@ -421,13 +421,12 @@ Pane {
                     Layout.fillWidth: true
                     Label {
                         Layout.fillWidth: true
-                        text: qsTr("Storage permission")
+                        text: qsTr("Folder access")
                         color: root.textColor
                     }
                     Button {
-                        text: backend.has_storage_permission ? qsTr("Granted ✓") : qsTr("Grant access")
-                        enabled: !backend.has_storage_permission
-                        onClicked: backend.request_storage_permission()
+                        text: qsTr("Choose folder")
+                        onClicked: outputFolderDialog.open()
                     }
                 }
                 Label {

@@ -36,7 +36,8 @@ class ModelStore:
             if not isinstance(model, str) or not isinstance(state, dict):
                 continue
             downloaded = _ordered_unique(state.get("downloaded", []))
-            pending = [url for url in _ordered_unique(state.get("pending", [])) if url not in downloaded]
+            downloaded_set = set(downloaded)
+            pending = [url for url in _ordered_unique(state.get("pending", [])) if url not in downloaded_set]
             result[model] = {"downloaded": downloaded, "pending": pending}
         return result
 
@@ -92,11 +93,18 @@ class ModelStore:
         return added
 
     def mark_downloaded(self, model_url: str, video_url: str) -> None:
+        self.mark_downloaded_many(model_url, [video_url])
+
+    def mark_downloaded_many(self, model_url: str, video_urls: Iterable[str]) -> None:
+        completed = list(dict.fromkeys(video_urls))
+        if not completed:
+            return
         state = self._read()
         entry = state.setdefault(model_url, {"downloaded": [], "pending": []})
-        entry["pending"] = [url for url in entry["pending"] if url != video_url]
-        if video_url not in entry["downloaded"]:
-            entry["downloaded"].append(video_url)
+        completed_set = set(completed)
+        entry["pending"] = [url for url in entry["pending"] if url not in completed_set]
+        known = set(entry["downloaded"])
+        entry["downloaded"].extend(url for url in completed if url not in known)
         self._write(state)
 
     def counts(self, model_url: str) -> tuple[int, int]:

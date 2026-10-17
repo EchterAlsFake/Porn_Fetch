@@ -318,7 +318,10 @@ Pane {
                             Layout.fillWidth: true
                             text: qsTr("Save elsewhere")
                             visible: card.status === "completed"
-                            onClicked: exportDialog.open()
+                            onClicked: {
+                                exportDialog.selectedFile = backend.download_file_url(card.jobId)
+                                exportDialog.open()
+                            }
                         }
                     }
                 }

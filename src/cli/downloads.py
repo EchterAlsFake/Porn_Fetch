@@ -8,6 +8,7 @@ import json
 import logging
 import re
 import shutil
+from contextlib import aclosing
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import StrEnum
@@ -18,6 +19,7 @@ from urllib.parse import urlparse
 from src.shared.media import select_allowed_quality, xfreehd_quality
 from src.shared.paths import data_dir
 
+from .concurrency import run_workers
 from .settings import CliSettings
 
 logger = logging.getLogger(__name__)
@@ -392,16 +394,6 @@ async def download_gallery(
     controller: DownloadController | None = None,
 ) -> DownloadOutcome:
     await _load_album(album)
-    if hasattr(album, "get_photos"):
-        # PornHub exposes photo dictionaries instead of XFreeHD's URL list.
-        # Use its page count when available; otherwise the documented first page.
-        pages = int(getattr(album, "total_pages", None) or 1)
-        urls = [photo["download_url"] async for photo in album.get_photos(pages=pages)
-                if photo.get("download_url")]
-    else:
-        urls = list(await album.get_all_images())
-    if not urls:
-        raise ValueError("No downloadable images were found in this album")
     fallback_title = "album-" + Path(urlparse(getattr(album, "url", "")).path).name
     title = _sanitize(str(getattr(album, "title", None) or fallback_title))
     directory = Path(output_root) / title
@@ -415,29 +407,53 @@ async def download_gallery(
     else:
         event = stop_event or asyncio.Event()
 
-    semaphore = asyncio.Semaphore(max(1, concurrency))
     completed = 0
-    width = max(4, len(str(max(1, len(urls)))))
+    discovered = 0
+    discovery_done = False
 
-    async def fetch(index: int, url: str) -> None:
+    async def images():
+        nonlocal discovered, discovery_done
+        if hasattr(album, "get_photos"):
+            pages = int(getattr(album, "total_pages", None) or 1)
+            async with aclosing(album.get_photos(pages=pages)) as photos:
+                async for photo in photos:
+                    if event.is_set():
+                        break
+                    if url := photo.get("download_url"):
+                        discovered += 1
+                        yield discovered, url
+        else:
+            urls = await album.get_all_images()
+            for index, url in enumerate(urls, 1):
+                if event.is_set():
+                    break
+                discovered = index
+                yield index, url
+        discovery_done = True
+
+    async def fetch(item: tuple[int, str]) -> None:
         nonlocal completed
+        index, url = item
         if event.is_set():
             return
         suffix = Path(urlparse(url).path).suffix.casefold()
         if suffix not in KNOWN_IMAGE_EXTENSIONS:
             suffix = ".jpg"
-        destination = directory / f"{index:0{width}d}{suffix}"
-        async with semaphore:
+        destination = directory / f"{index:04d}{suffix}"
+        if not destination.exists():
+            content = await album.core.fetch_bytes(url)
             if event.is_set():
                 return
-            if not destination.exists():
-                content = await album.core.fetch_bytes(url)
-                destination.write_bytes(content)
+            destination.write_bytes(content)
         completed += 1
         if progress:
-            _dispatch_progress(progress, completed, len(urls))
+            _dispatch_progress(progress, completed, discovered if discovery_done else 0)
 
-    await asyncio.gather(*(fetch(index, url) for index, url in enumerate(urls, 1)))
+    await run_workers(images(), fetch, concurrency)
+    if not discovered and not event.is_set():
+        raise ValueError("No downloadable images were found in this album")
+    if progress and not event.is_set():
+        _dispatch_progress(progress, completed, discovered)
 
     if (controller and controller.is_paused) or (event.is_set() and controller and controller.is_paused):
         status = "paused"

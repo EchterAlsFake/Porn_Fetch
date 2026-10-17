@@ -1,6 +1,8 @@
 """Interactive tracked-model and queue management flow."""
 from __future__ import annotations
 
+import asyncio
+
 import questionary
 from rich.panel import Panel
 from rich.table import Table
@@ -118,70 +120,81 @@ async def handle_batch_management(ctx: WizardContext) -> None:
             with make_download_progress(ctx.console) as progress:
                 overall_task = progress.add_task("[bold #ff2a85]Downloading Pending...[/]", total=total_pending)
                 for model_url, state in models:
-                    for pending_url in list(state["pending"]):
-                        task_id = progress.add_task(f"Downloading {pending_url[:30]}...", total=None)
+                    completed_urls = []
+                    try:
+                        for pending_url in list(state["pending"]):
+                            task_id = progress.add_task(f"Downloading {pending_url[:30]}...", total=None)
 
-                        def on_pending_progress(completed: int, total: int, unit: str = "items") -> None:
-                            progress.update(task_id, completed=completed, total=total if total > 0 else None, unit=unit)
+                            def on_pending_progress(completed: int, total: int, unit: str = "items") -> None:
+                                progress.update(task_id, completed=completed, total=total if total > 0 else None, unit=unit)
 
-                        try:
-                            route, source = await ctx.pool.resolve(pending_url)
-                            media = await prepare_video(source, route.provider)
-                            eff_q = select_allowed_quality(ctx.settings.quality, media.qualities, has_premium) or ctx.settings.quality
-                            target = output_path_for(media, ctx.settings)
-                            outcome = await download_video(
-                                source,
-                                target,
-                                eff_q,
-                                ctx.settings,
-                                has_premium=has_premium,
-                                progress=on_pending_progress,
-                                available_qualities=media.qualities,
-                            )
-                            if outcome.status == "completed":
-                                success_count += 1
-                                ctx.model_store.mark_downloaded(model_url, pending_url)
-                                if ctx.settings.write_metadata and not outcome.skipped and outcome.path.suffix.casefold() == ".mp4" and outcome.path.exists():
-                                    try:
-                                        from src.shared.metadata import write_tags
-                                        write_tags(str(outcome.path), media)
-                                    except Exception as error:
-                                        await ctx.report(
-                                            error,
-                                            "write download metadata",
-                                            "src.cli.flows.models.handle_batch_management",
-                                        )
-                            else:
-                                fail_count += 1
-                            await record_cli_download(
-                                ctx.settings,
-                                video=media,
-                                outcome=outcome,
-                                target=target,
-                                quality=eff_q,
-                                origin_url=model_url,
-                                origin_name=model_url,
-                            )
-                        except Exception as error:
-                            fail_count += 1
-                            await ctx.report(
-                                error,
-                                "download tracked video",
-                                "src.cli.flows.models.handle_batch_management",
-                                video_url=pending_url,
-                                model_url=model_url,
-                            )
-                            if "media" in locals() and media is not None:
+                            try:
+                                route, source = await ctx.pool.resolve(pending_url)
+                                media = await prepare_video(source, route.provider)
+                                eff_q = select_allowed_quality(ctx.settings.quality, media.qualities, has_premium) or ctx.settings.quality
+                                target = output_path_for(media, ctx.settings)
+                                outcome = await download_video(
+                                    source,
+                                    target,
+                                    eff_q,
+                                    ctx.settings,
+                                    has_premium=has_premium,
+                                    progress=on_pending_progress,
+                                    available_qualities=media.qualities,
+                                    metadata=media,
+                                )
+                                if outcome.status == "completed":
+                                    success_count += 1
+                                    completed_urls.append(pending_url)
+                                    if (
+                                        ctx.settings.write_metadata
+                                        and not outcome.skipped
+                                        and not outcome.metadata_written
+                                        and outcome.path.suffix.casefold() == ".mp4"
+                                        and outcome.path.exists()
+                                    ):
+                                        try:
+                                            from src.shared.metadata import write_tags
+                                            await asyncio.to_thread(write_tags, str(outcome.path), media)
+                                        except Exception as error:
+                                            await ctx.report(
+                                                error,
+                                                "write download metadata",
+                                                "src.cli.flows.models.handle_batch_management",
+                                            )
+                                else:
+                                    fail_count += 1
                                 await record_cli_download(
                                     ctx.settings,
                                     video=media,
-                                    outcome="failed",
+                                    outcome=outcome,
+                                    target=target,
+                                    quality=eff_q,
                                     origin_url=model_url,
                                     origin_name=model_url,
                                 )
-                        finally:
-                            progress.remove_task(task_id)
-                            progress.advance(overall_task)
+                            except Exception as error:
+                                fail_count += 1
+                                await ctx.report(
+                                    error,
+                                    "download tracked video",
+                                    "src.cli.flows.models.handle_batch_management",
+                                    video_url=pending_url,
+                                    model_url=model_url,
+                                )
+                                if "media" in locals() and media is not None:
+                                    await record_cli_download(
+                                        ctx.settings,
+                                        video=media,
+                                        outcome="failed",
+                                        origin_url=model_url,
+                                        origin_name=model_url,
+                                    )
+                            finally:
+                                progress.remove_task(task_id)
+                                progress.advance(overall_task)
+                    finally:
+                        await asyncio.to_thread(ctx.model_store.mark_downloaded_many, model_url, completed_urls)
 
             ctx.console.print(Panel(
                 f"[bold green]Completed:[/] {success_count}\n"

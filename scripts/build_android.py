@@ -239,11 +239,29 @@ def patch_pyside_wheel_if_needed(wheel_path: Path, venv_dir: Path) -> bool:
         tmp_path.unlink(missing_ok=True)
 
 
+def patch_p4a_adaptive_icon(project_root: Path) -> None:
+    """Ensure all p4a build.py files create mipmap-anydpi-v26 before writing icon.xml."""
+    buildozer_dir = project_root / ".buildozer"
+    if not buildozer_dir.is_dir():
+        return
+    for build_py in buildozer_dir.rglob("build.py"):
+        try:
+            txt = build_py.read_text(encoding="utf-8")
+            target = "shutil.copy(args.icon_bg, join(res_dir, 'mipmap/icon_background.png'))"
+            patch = "\n        ensure_dir(join(res_dir, 'mipmap-anydpi-v26'))"
+            if target in txt and patch not in txt:
+                txt = txt.replace(target, target + patch, 1)
+                build_py.write_text(txt, encoding="utf-8")
+                print(f"[✓] Patched adaptive icon directory in {build_py.relative_to(project_root)}")
+        except Exception:
+            pass
+
+
 def inject_android_templates(project_root: Path, buildozer_arch: str) -> None:
     """Inject native Java bridge and custom Android assets into buildozer/p4a trees."""
+    patch_p4a_adaptive_icon(project_root)
     templates_dir = project_root / "deployment" / "android_templates"
     if not templates_dir.is_dir():
-        print(f"[!] Templates dir not found: {templates_dir}")
         return
 
     python_activity = templates_dir / "PythonActivity.java"
@@ -317,6 +335,7 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
     content = spec_path.read_text(encoding="utf-8")
 
     replacements = {
+        r"^p4a\.hook\s*=.*$": f"p4a.hook = {project_root / 'scripts' / 'android_storage_hook.py'}",
         r"^android\.archs\s*=.*$": f"android.archs = {buildozer_arch}",
         r"^android\.sdk_path\s*=.*$": f"android.sdk_path = {sdk_path}",
         r"^android\.ndk_path\s*=.*$": f"android.ndk_path = {ndk_path}",
@@ -403,6 +422,19 @@ def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
     subprocess.run(
         [sys.executable, str(patch_qtasyncio), str(venv_dir), "--verify"], check=True
     )
+
+
+def ensure_android_deploy_deps(venv_dir: Path) -> None:
+    """Verify that required deployment dependencies are installed in the venv."""
+    missing_deps = []
+    for pkg in ("jinja2", "pkginfo", "tqdm"):
+        try:
+            subprocess.run([str(venv_dir / "bin" / "python"), "-c", f"import {pkg}"], check=True, capture_output=True)
+        except subprocess.CalledProcessError:
+            missing_deps.append(pkg)
+    if missing_deps:
+        print(f"[*] Installing required Android deployment dependencies: {', '.join(missing_deps)}...")
+        subprocess.run(["uv", "pip", "install", *missing_deps], check=True)
 
 
 def find_wheels_for_arch(
@@ -505,10 +537,17 @@ def build_single_arch(
     env["PATH"] = f"{venv_dir / 'bin'}:{env.get('PATH', '')}"
     env["VIRTUAL_ENV"] = str(venv_dir)
 
-    deploy_cmd = [
-        str(venv_dir / "bin" / "python"),
-        "-m",
-        "PySide6.scripts.android_deploy",
+    pyside_scripts_dirs = list(venv_dir.glob("lib/python*/site-packages/PySide6/scripts"))
+    if pyside_scripts_dirs:
+        env["PYTHONPATH"] = f"{pyside_scripts_dirs[0]}:{env.get('PYTHONPATH', '')}".rstrip(":")
+
+    pyside_deploy_bin = venv_dir / "bin" / "pyside6-android-deploy"
+    if pyside_deploy_bin.is_file():
+        deploy_cmd = [str(pyside_deploy_bin)]
+    else:
+        deploy_cmd = [str(venv_dir / "bin" / "python"), "-m", "PySide6.scripts.android_deploy"]
+
+    deploy_cmd.extend([
         "-c",
         str(pysidedeploy_spec),
         "--buildozer-file",
@@ -518,7 +557,7 @@ def build_single_arch(
         "--wheel-shiboken",
         str(wheel_shiboken.resolve()),
         "--keep-deployment-files",
-    ]
+    ])
 
     print(f"[*] Running deployment command:\n    {' '.join(deploy_cmd)}\n")
     proc = subprocess.run(deploy_cmd, cwd=project_root, env=env)
@@ -639,6 +678,7 @@ def main() -> int:
     # Verify and apply host patches
     if not args.dry_run:
         ensure_host_patches(project_root, venv_dir)
+        ensure_android_deploy_deps(venv_dir)
 
     # Resolve Android SDK and NDK
     sdk_path = find_android_sdk(args.sdk_path)

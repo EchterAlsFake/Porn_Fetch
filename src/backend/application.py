@@ -14,6 +14,7 @@ else:
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
+from src.backend.android_storage import copy_download_file, folder_destination
 from src.backend.theme_manager import ThemeManager
 from src.backend.splashscreen import SplashController
 from src.backend.qt_logging import install_wayland_message_filter
@@ -107,7 +108,7 @@ from importlib.metadata import metadata, packages_distributions, version
 update_splash("Importing (Qt)")
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
-                            QTimer, QFile, QDir, QIODevice)
+                            QTimer, QFile, QIODevice)
 
 update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
@@ -206,7 +207,6 @@ class Backend(QObject):
     proxySslError = Signal(str, str)
     proxyApplied = Signal(bool)
     shutdown_complete = Signal()
-    storagePermissionChanged = Signal()
 
     def __init__(self, parent: QObject | None = None, *, mobile_layout: bool = False):
         super().__init__(parent)
@@ -433,25 +433,19 @@ class Backend(QObject):
         async def export() -> None:
             try:
                 await asyncio.to_thread(self._copy_download_file, source,
-                    destination.toString() if destination.scheme() == "content" else destination.toLocalFile())
+                    destination.toString(QUrl.ComponentFormattingOption.FullyEncoded) if destination.scheme() == "content" else destination.toLocalFile())
                 self.handle_message("Download exported successfully.")
             except Exception as error:
                 self.handle_message(f"Could not export download: {error}")
 
         self._spawn(export(), name=f"export-{job_id}")
 
-    @staticmethod
-    def _copy_download_file(source: Path, target_path: str) -> None:
-        target = QFile(target_path)
-        if not target.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Truncate):
-            raise OSError(target.errorString())
-        try:
-            with source.open("rb") as downloaded:
-                while chunk := downloaded.read(1024 * 1024):
-                    if target.write(chunk) != len(chunk):
-                        raise OSError(target.errorString())
-        finally:
-            target.close()
+    _copy_download_file = staticmethod(copy_download_file)
+
+    @Slot(str, result=QUrl)
+    def download_file_url(self, job_id: str) -> QUrl:
+        video = self._downloads_model.get_video(job_id)
+        return QUrl.fromLocalFile(str(Path(video.output_path).resolve())) if video and video.output_path else QUrl()
 
     @Slot(str)
     def set_android_output_folder(self, folder_url: str) -> None:
@@ -466,41 +460,14 @@ class Backend(QObject):
             self.logger.warning("Invalid folder scheme: %r for URL %r", folder.scheme(), cleaned)
             self.handle_message("Choose a folder from the system picker.")
             return
-        app_settings.android_output_folder = folder.toString()
+        app_settings.android_output_folder = folder.toString(QUrl.ComponentFormattingOption.FullyEncoded)
         self.logger.info("Persisted android output folder: %r", app_settings.android_output_folder)
-
-    @Slot()
-    def request_storage_permission(self) -> None:
-        """Trigger Android native permission prompt for full file access."""
-        self.logger.info("Requesting all files access permission from Android...")
-        app_dir = Path(os.environ.get("ANDROID_PRIVATE", QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)))
-        trigger = app_dir / ".request_storage"
-        try:
-            trigger.touch()
-        except Exception as err:
-            self.logger.warning("Could not create trigger file: %s", err)
-
-    @Property(bool, notify=storagePermissionChanged)
-    def has_storage_permission(self) -> bool:
-        if not is_android:
-            return True
-        try:
-            test_dir = Path("/storage/emulated/0/Download")
-            if test_dir.is_dir():
-                test_file = test_dir / ".pf_perm_check"
-                test_file.touch()
-                test_file.unlink(missing_ok=True)
-                return True
-        except Exception:
-            pass
-        return False
 
     async def _auto_export_android_download(self, source: Path) -> None:
         folder_url = QUrl(app_settings.android_output_folder)
         if not folder_url.isValid() or folder_url.scheme() not in ("content", "file"):
             return
-        folder = folder_url.toString() if folder_url.scheme() == "content" else folder_url.toLocalFile()
-        target_path = QDir(folder).filePath(source.name)
+        target_path = folder_destination(folder_url, source.name)
         try:
             def copy_to_folder() -> None:
                 if app_settings.skip_existing_files and QFile.exists(target_path):

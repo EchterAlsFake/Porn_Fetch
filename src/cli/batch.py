@@ -13,6 +13,7 @@ from src.shared.error_reporting import report_exception
 from src.shared.legal import legal_document
 from src.shared.media import select_allowed_quality
 
+from .concurrency import bounded_map
 from .downloads import DownloadController, PausedStore, download_gallery, download_video
 from .media import prepare_video
 from .model_store import ModelStore
@@ -279,11 +280,11 @@ async def run_batch(args: argparse.Namespace) -> int:
             for model_url, state in models.models():
                 pending = list(state["pending"])
                 outcomes = await _download_many(pool, pending, settings, license_status.allowed)
-                for video_url, outcome in zip(pending, outcomes):
-                    if outcome:
-                        models.mark_downloaded(model_url, video_url)
-                    else:
-                        failures += 1
+                await asyncio.to_thread(
+                    models.mark_downloaded_many, model_url,
+                    [url for url, outcome in zip(pending, outcomes) if outcome],
+                )
+                failures += sum(not outcome for outcome in outcomes)
 
         direct_outcomes = await _download_many(pool, args.url, settings, license_status.allowed)
         for outcome in direct_outcomes:
@@ -301,13 +302,11 @@ async def run_batch(args: argparse.Namespace) -> int:
                         prepared.append(await prepare_video(source, provider))
                         if len(prepared) >= settings.result_limit:
                             break
-                semaphore = asyncio.Semaphore(settings.parallel_downloads)
                 async def dispatch(media):
-                    async with semaphore:
-                        if settings.processing_delay:
-                            await asyncio.sleep(settings.processing_delay)
-                        return await _download_prepared(media, settings, license_status.allowed)
-                for outcome in await asyncio.gather(*(dispatch(media) for media in prepared)):
+                    if settings.processing_delay:
+                        await asyncio.sleep(settings.processing_delay)
+                    return await _download_prepared(media, settings, license_status.allowed)
+                for outcome in await bounded_map(prepared, dispatch, settings.parallel_downloads):
                     if not outcome:
                         failures += 1
                         if not args.ignore_errors:
@@ -334,15 +333,12 @@ async def run_batch(args: argparse.Namespace) -> int:
 async def _download_many(
     pool: ClientPool, urls: list[str], settings: CliSettings, premium: bool,
 ) -> list[bool]:
-    semaphore = asyncio.Semaphore(settings.parallel_downloads)
-
     async def dispatch(url: str) -> bool:
-        async with semaphore:
-            if settings.processing_delay:
-                await asyncio.sleep(settings.processing_delay)
-            return await _download_url(pool, url, settings, premium)
+        if settings.processing_delay:
+            await asyncio.sleep(settings.processing_delay)
+        return await _download_url(pool, url, settings, premium)
 
-    return list(await asyncio.gather(*(dispatch(url) for url in urls)))
+    return await bounded_map(urls, dispatch, settings.parallel_downloads)
 
 
 async def _scan_model(
