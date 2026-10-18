@@ -157,11 +157,14 @@ clock/binary cannot be made into a trustworthy hardware root.
 
 ## Perpetual update entitlement and renewals
 
-`src/shared/version.py` embeds the approved immutable release timestamp:
-`1791244800` = **2026-10-06T00:00:00Z**. CI embeds the artifact build version separately;
-it never replaces the release date with build time, file mtime, or the runtime clock.
-The release owner must commit the correct new timestamp with each new release and
-keep it fixed for all rebuilds of that release.
+Before building, CI updates `__version__`, `BUILD_VERSION`, and `RELEASE_TIMESTAMP` in
+`src/shared/version.py`. The full version is entered in the workflow's
+`release_version` field (for example `3.9.66`), or taken from the tag. The release
+timestamp is the original workflow run's creation time from GitHub. Every build
+and publishing job uses that same timestamp, including reruns, so the application,
+CLI bundles, signed manifests, and IFW package dates agree. A new workflow run is
+a new beta release; rebuilding a run preserves its release date. Source checkouts
+retain development defaults. The runtime clock and file mtimes never set release eligibility.
 
 The running build is entitled iff its release timestamp is at or before the signed
 checkout's license expiry. The current wall clock only controls the separate offline

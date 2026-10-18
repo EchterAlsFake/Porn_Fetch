@@ -59,6 +59,18 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_missing_maintenance_tool_finishes_without_starting_installation(self):
+        updater = AutoUpdater()
+        finished = []
+        updater.finished.connect(lambda: finished.append(True))
+        with (
+            patch("src.backend.update_service.find_maintenance_tool", return_value=None),
+            patch("subprocess.Popen") as launch,
+        ):
+            await updater.run()
+        launch.assert_not_called()
+        self.assertEqual(finished, [True])
+
     async def test_check_via_maintenancetool_with_updates(self):
         xml_output = (
             b"<updates>\n"
@@ -104,7 +116,9 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                             await updater._run()
                         self.assertTrue(cleanup_called, "Pre-update cleanup hook was not invoked")
                         mock_popen.assert_called_once()
-                        self.assertIn("--set-temp-repository", mock_popen.call_args.args[0])
+                        self.assertEqual(mock_popen.call_args.args[0], [
+                            str(tmp_path), "--updater", "--set-temp-repository", tmp_path.parent.as_uri(),
+                        ])
                         mock_quit.assert_called_once()
         finally:
             tmp_path.unlink(missing_ok=True)

@@ -9,6 +9,7 @@ import questionary
 from rich.console import Console
 from rich.panel import Panel
 
+from .beta_disclaimer import prompt_beta_disclaimer
 from .downloads import PausedStore
 from .flows import (
     handle_account_auth,
@@ -58,6 +59,9 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
     console = Console()
     store = SettingsStore()
     settings = store.load()
+    settings = await prompt_beta_disclaimer(settings, store, console=console)
+    if settings is None:
+        return 1
 
     explicit_reporting_choice = getattr(args, "error_reporting", None) if args else None
     if explicit_reporting_choice is not None:

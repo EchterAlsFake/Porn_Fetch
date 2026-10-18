@@ -537,25 +537,25 @@ Add a video URL to get started</source>
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="11"/>
-        <location filename="../../UI/AndroidMain.qml" line="210"/>
+        <location filename="../../UI/AndroidMain.qml" line="227"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="41"/>
-        <location filename="../../UI/AndroidMain.qml" line="333"/>
+        <location filename="../../UI/AndroidMain.qml" line="350"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="41"/>
-        <location filename="../../UI/AndroidMain.qml" line="333"/>
+        <location filename="../../UI/AndroidMain.qml" line="350"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="41"/>
-        <location filename="../../UI/AndroidMain.qml" line="333"/>
+        <location filename="../../UI/AndroidMain.qml" line="350"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -571,7 +571,7 @@ Add a video URL to get started</source>
     </message>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="42"/>
-        <location filename="../../UI/AndroidMain.qml" line="333"/>
+        <location filename="../../UI/AndroidMain.qml" line="350"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
@@ -601,27 +601,27 @@ Add a video URL to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="126"/>
+        <location filename="../../UI/AndroidMain.qml" line="143"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="134"/>
+        <location filename="../../UI/AndroidMain.qml" line="151"/>
         <source>Automatic error reporting is disabled until you choose to enable it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="155"/>
+        <location filename="../../UI/AndroidMain.qml" line="172"/>
         <source>No, keep disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="163"/>
+        <location filename="../../UI/AndroidMain.qml" line="180"/>
         <source>Yes, enable reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="278"/>
+        <location filename="../../UI/AndroidMain.qml" line="295"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1486,7 +1486,7 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="595"/>
+        <location filename="../../../backend/application.py" line="599"/>
         <source>
         Important: 
 
@@ -1502,69 +1502,102 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="711"/>
+        <location filename="../../../backend/application.py" line="715"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="719"/>
+        <location filename="../../../backend/application.py" line="723"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="730"/>
+        <location filename="../../../backend/application.py" line="734"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="801"/>
+        <location filename="../../../backend/application.py" line="805"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="987"/>
-        <location filename="../../../backend/application.py" line="1030"/>
+        <location filename="../../../backend/application.py" line="991"/>
+        <location filename="../../../backend/application.py" line="1034"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1200"/>
+        <location filename="../../../backend/application.py" line="1204"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1217"/>
+        <location filename="../../../backend/application.py" line="1221"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1280"/>
+        <location filename="../../../backend/application.py" line="1284"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1285"/>
+        <location filename="../../../backend/application.py" line="1289"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1287"/>
+        <location filename="../../../backend/application.py" line="1291"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1292"/>
+        <location filename="../../../backend/application.py" line="1296"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1295"/>
+        <location filename="../../../backend/application.py" line="1299"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1309"/>
+        <location filename="../../../backend/application.py" line="1313"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BetaDisclaimerDialog</name>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="25"/>
+        <source>Porn Fetch v3.9 BETA disclaimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="62"/>
+        <source>Please read the disclaimer. OK will be available in %1 seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="63"/>
+        <source>Click OK to consent and continue, or Exit to close Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="73"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="80"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="80"/>
+        <source>OK (%1 s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1881,103 +1914,98 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="105"/>
+        <location filename="../../UI/Main.qml" line="125"/>
         <source>License rejected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="143"/>
+        <location filename="../../UI/Main.qml" line="163"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="152"/>
+        <location filename="../../UI/Main.qml" line="172"/>
         <source>This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="179"/>
+        <location filename="../../UI/Main.qml" line="199"/>
         <source>Synthetic example of a stored report:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="217"/>
+        <location filename="../../UI/Main.qml" line="237"/>
         <source>No, keep disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="226"/>
+        <location filename="../../UI/Main.qml" line="246"/>
         <source>Yes, enable reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="280"/>
+        <location filename="../../UI/Main.qml" line="301"/>
         <source>🚀 New Update Available!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="294"/>
+        <location filename="../../UI/Main.qml" line="315"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="313"/>
+        <location filename="../../UI/Main.qml" line="334"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="329"/>
+        <location filename="../../UI/Main.qml" line="350"/>
         <source>Download:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="335"/>
-        <source>Authenticated Link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Main.qml" line="347"/>
-        <source>Anonymous Link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../UI/Main.qml" line="357"/>
+        <source>View GitHub releases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/Main.qml" line="368"/>
         <source>Important Info:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="372"/>
+        <location filename="../../UI/Main.qml" line="384"/>
         <source>Changelog:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="431"/>
+        <location filename="../../UI/Main.qml" line="444"/>
         <source>Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="437"/>
+        <location filename="../../UI/Main.qml" line="450"/>
         <source>Updating…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="437"/>
+        <location filename="../../UI/Main.qml" line="450"/>
         <source>Auto Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="442"/>
+        <location filename="../../UI/Main.qml" line="455"/>
         <source>Starting update…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="501"/>
+        <location filename="../../UI/Main.qml" line="514"/>
         <source>SUPPORTED WEBSITES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="533"/>
-        <location filename="../../UI/Main.qml" line="549"/>
+        <location filename="../../UI/Main.qml" line="546"/>
+        <location filename="../../UI/Main.qml" line="562"/>
         <source>Widget is hidden due to your privacy settings...</source>
         <translation type="unfinished"></translation>
     </message>

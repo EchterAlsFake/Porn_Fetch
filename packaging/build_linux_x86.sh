@@ -30,7 +30,8 @@ install -m 755 /tmp/uv-i686-unknown-linux-gnu/uv /usr/local/bin/uv
 cd "$project_dir"
 uv sync --locked --no-dev --extra build --python /opt/python-3.14/bin/python3.14
 uv run --no-sync python -c 'import struct; assert struct.calcsize("P") == 4'
-uv run --no-sync python packaging/write_cli_build_version.py "$BUILD_RUN_NUMBER" linux x32
+uv run --no-sync python packaging/write_build_version.py "$BUILD_RELEASE_VERSION" --release-timestamp "$BUILD_RELEASE_TIMESTAMP"
+uv run --no-sync python packaging/write_cli_build_version.py linux x32
 uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
 readelf -h dist/Porn_Fetch_CLI > /tmp/cli-elf-header.txt
 grep -q 'Machine:.*Intel 80386' /tmp/cli-elf-header.txt

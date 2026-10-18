@@ -11,7 +11,13 @@ from urllib.parse import unquote
 from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.cli import self_update
 from src.licensing.client import LicenseStatus
-from src.shared.release import safe_repo_path, update_eligibility, validate_ifw_packages, verify_repository_manifest
+from src.shared.release import (
+    STATIC_CHANGELOG_NAME,
+    safe_repo_path,
+    update_eligibility,
+    validate_ifw_packages,
+    verify_repository_manifest,
+)
 from src.shared.version import RELEASE_TIMESTAMP
 from src.tests.unit.test_cli_self_update import keys_script, load_script
 
@@ -41,6 +47,53 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         metadata.signed.targets["payload.7z"].verify_length_and_hashes(b"test binary")
         with self.assertRaises(Exception):
             metadata.signed.targets["payload.7z"].verify_length_and_hashes(b"bad binary")
+
+    def test_changelog_is_signed_with_the_release(self):
+        signer.sign_repository(
+            self.repo, "linux_amd64", "3.10", self.base / "keys/online.pem", self.root,
+            changelog="### Fixes\n- Updated the beta release.",
+        )
+        metadata, release = self.verify()
+        self.assertEqual(release["changelog"], "### Fixes\n- Updated the beta release.")
+        self.assertEqual(release["changelog_format"], "markdown")
+        self.assertEqual(release["changelog_path"], STATIC_CHANGELOG_NAME)
+        metadata.signed.targets[STATIC_CHANGELOG_NAME].verify_length_and_hashes(
+            (self.repo / STATIC_CHANGELOG_NAME).read_bytes(),
+        )
+        payload = json.loads((self.repo / "release.json").read_text())
+        payload["signed"]["release"]["changelog"] = "Modified notes"
+        with self.assertRaises(Exception):
+            verify_repository_manifest(json.dumps(payload).encode(), self.root.read_bytes(), "linux_amd64")
+
+    async def test_update_fetches_and_verifies_server_changelog(self):
+        notes = "### Fixes\n- Current release notes."
+        signer.sign_repository(
+            self.repo, "linux_amd64", "3.10", self.base / "keys/online.pem", self.root,
+            changelog=notes,
+        )
+        with (
+            patch("src.backend.update_service.platform.system", return_value="Linux"),
+            patch("src.backend.update_service.platform.machine", return_value="x86_64"),
+            patch("src.backend.update_service.QFile") as resource,
+            patch("src.backend.update_service.ROOT_FILE", self.root),
+            patch("src.backend.update_service.__version__", "3.9.0"),
+            patch("src.backend.update_service.clients.core.request", new=AsyncMock(return_value=SimpleNamespace(
+                content=(self.repo / "release.json").read_bytes(),
+            ))),
+            patch("src.backend.update_service.clients.core.fetch_bytes", new=AsyncMock(
+                return_value=(self.repo / STATIC_CHANGELOG_NAME).read_bytes(),
+            )) as fetch,
+        ):
+            resource.return_value.exists.return_value = False
+            update = await CheckUpdates.check_signed_repository()
+            self.assertEqual(update["changelog"].strip(), notes)
+            fetch.assert_awaited_once_with(
+                "https://api.pornfetch.to/repo/linux_amd64/CHANGELOG_STATIC.md",
+                allow_redirects=False, timeout=20,
+            )
+            fetch.return_value = b"Unverified replacement notes"
+            update = await CheckUpdates.check_signed_repository()
+            self.assertEqual(update["changelog"], notes)
 
     def test_changed_release_date_and_wrong_root_rejected(self):
         payload = json.loads((self.repo / "release.json").read_text())

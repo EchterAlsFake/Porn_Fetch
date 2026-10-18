@@ -37,11 +37,25 @@ ApplicationWindow {
             backend.check_for_updates()
     }
 
-    Component.onCompleted: {
+    function continueAfterBetaDisclaimer() {
         if (appSettings.error_reporting_decided)
             continueStartup()
         else
             Qt.callLater(function() { errorReportingDialog.open() })
+    }
+
+    Component.onCompleted: {
+        if (appSettings.beta_disclaimer_accepted)
+            continueAfterBetaDisclaimer()
+        else
+            Qt.callLater(function() { betaDisclaimerDialog.open() })
+    }
+
+    BetaDisclaimerDialog {
+        id: betaDisclaimerDialog
+        disclaimer: betaDisclaimer
+        onConfirmed: window.continueAfterBetaDisclaimer()
+        onExitRequested: window.close()
     }
 
     onClosing: (closeEvent) => {
@@ -58,9 +72,11 @@ ApplicationWindow {
             updateDialog.version = details.version || ""
             updateDialog.installAllowed = details.install_allowed === true
             updateDialog.entitlementMessage = details.entitlement_message || ""
-            updateDialog.authenticatedUrl = details.url || ""
-            updateDialog.anonymousUrl = details.anonymous_download || ""
+            updateDialog.releaseUrl = details.release_url || ""
             updateDialog.importantInfo = details.important_info || ""
+            // Clear old notes before switching between HTML and Markdown.
+            updateDialog.changelog = ""
+            updateDialog.changelogFormat = details.changelog_format || "html"
             updateDialog.changelog = details.changelog || ""
             updateDialog.updateInProgress = false
             updateDialog.statusMessage = ""
@@ -80,6 +96,10 @@ ApplicationWindow {
             if (normalized.indexOf("failed") !== -1
                     || normalized.indexOf("successful") !== -1)
                 updateDialog.updateInProgress = false
+        }
+
+        function onUpdateFinished() {
+            updateDialog.updateInProgress = false
         }
 
         function onShutdown_complete() {
@@ -236,14 +256,15 @@ ApplicationWindow {
 
     Dialog {
         id: updateDialog
+        objectName: "updateDialog"
 
         property bool installAllowed: false
         property string entitlementMessage: ""
         property string version: ""
-        property string authenticatedUrl: ""
-        property string anonymousUrl: ""
+        property string releaseUrl: ""
         property string importantInfo: ""
         property string changelog: ""
+        property string changelogFormat: "html"
         property string statusMessage: ""
         property real downloadedBytes: 0
         property real totalBytes: 0
@@ -332,28 +353,18 @@ ApplicationWindow {
                         }
 
                         Button {
-                            text: qsTr("Authenticated Link")
+                            objectName: "updateReleasesButton"
+                            text: qsTr("View GitHub releases")
                             flat: true
-                            enabled: updateDialog.authenticatedUrl !== ""
-                            onClicked: Qt.openUrlExternally(updateDialog.authenticatedUrl)
-                        }
-
-                        Label {
-                            text: "|"
-                            color: "#94a3b8"
-                        }
-
-                        Button {
-                            text: qsTr("Anonymous Link")
-                            flat: true
-                            enabled: updateDialog.anonymousUrl !== ""
-                            onClicked: Qt.openUrlExternally(updateDialog.anonymousUrl)
+                            enabled: updateDialog.releaseUrl !== ""
+                            onClicked: Qt.openUrlExternally(updateDialog.releaseUrl)
                         }
 
                         Item { Layout.fillWidth: true }
                     }
 
                     Label {
+                        visible: updateDialog.importantInfo !== ""
                         text: qsTr("Important Info:")
                         color: "#5dade2"
                         font.bold: true
@@ -361,6 +372,7 @@ ApplicationWindow {
 
                     Text {
                         Layout.fillWidth: true
+                        visible: updateDialog.importantInfo !== ""
                         text: updateDialog.importantInfo
                         color: "#e0e0e0"
                         textFormat: Text.RichText
@@ -376,7 +388,7 @@ ApplicationWindow {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        implicitHeight: changelogText.implicitHeight + 20
+                        implicitHeight: changelogText.contentHeight + 20
                         radius: 6
                         color: "#2a2a2a"
                         border.color: "#444444"
@@ -384,11 +396,12 @@ ApplicationWindow {
 
                         Text {
                             id: changelogText
+                            objectName: "updateChangelogText"
                             anchors.fill: parent
                             anchors.margins: 10
                             text: updateDialog.changelog
                             color: "#e0e0e0"
-                            textFormat: Text.RichText
+                            textFormat: updateDialog.changelogFormat === "markdown" ? Text.MarkdownText : Text.RichText
                             wrapMode: Text.Wrap
                             onLinkActivated: (link) => Qt.openUrlExternally(link)
                         }

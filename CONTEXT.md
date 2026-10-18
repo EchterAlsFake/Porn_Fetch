@@ -6,6 +6,9 @@ This file is maintained as a concise map of the current development tree. Read i
 
 - Name: Porn Fetch
 - Current source version: 3.9
+- Current release notes: root `CHANGELOG_STATIC.md`; full history: `docs/CHANGELOG.md`.
+- Manual builds take a full `release_version` in the workflow; CI stamps that version
+  and one workflow timestamp into all binaries and release metadata.
 - Python: 3.14 (the repository default)
 - GUI: PySide6 / Qt 6 with QML
 - CLI: Questionary and Rich, with no Qt dependency

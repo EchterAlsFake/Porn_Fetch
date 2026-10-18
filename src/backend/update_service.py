@@ -89,6 +89,15 @@ class CheckUpdates:
         metadata, release = verify_repository_manifest(response.content, root_bytes, tag)
         if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
             return None
+        if changelog_path := release.get("changelog_path"):
+            try:
+                notes = await clients.core.fetch_bytes(
+                    url + quote(changelog_path, safe="/"), allow_redirects=False, timeout=20,
+                )
+                metadata.signed.targets[changelog_path].verify_length_and_hashes(notes)
+                release = {**release, "changelog": notes.decode("utf-8"), "changelog_format": "markdown"}
+            except Exception:
+                logger.warning("Could not fetch the verified release changelog; using the signed manifest's notes.")
         return {**release, "metadata": metadata, "repository_url": url, "source": "signed_repository"}
 
     @staticmethod
@@ -164,6 +173,7 @@ class AutoUpdater(QObject):
 
     statusReport = Signal(str)
     updateProgress = Signal(int, int)
+    finished = Signal()
 
     def __init__(
         self,
@@ -183,6 +193,8 @@ class AutoUpdater(QObject):
         except Exception as error:
             logger.exception("Update launch failed")
             self.statusReport.emit(f"Update failed: {error}")
+        finally:
+            self.finished.emit()
 
     async def _run(self) -> None:
         tool = find_maintenance_tool()

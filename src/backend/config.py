@@ -10,6 +10,7 @@ from pathlib import Path
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Property, QSettings, QStandardPaths, QUrl, Signal, Slot
 from src.shared.version import __version__
+from src.shared.beta_disclaimer import BETA_DISCLAIMER_VERSION
 
 __license__ = "Porn Fetch Source-Available License 1.0"
 __author__ = "Johannes Habel"
@@ -54,6 +55,7 @@ class SettingsManager(QObject):
     # Missing Signals
     networkLoggingChanged = Signal(bool)
     errorReportingDecisionChanged = Signal(bool)
+    betaDisclaimerAcceptedChanged = Signal()
 
     # These Signals are not needed yet, but who knows
     logLevelChanged = Signal(int)
@@ -575,6 +577,15 @@ class SettingsManager(QObject):
             self.reloadClients.emit(val)
 
     # System / Misc related
+    @Property(bool, notify=betaDisclaimerAcceptedChanged)
+    def beta_disclaimer_accepted(self) -> bool:
+        return self._settings.value("Misc/beta_disclaimer_version", "") == BETA_DISCLAIMER_VERSION
+
+    def accept_beta_disclaimer(self) -> None:
+        self._settings.setValue("Misc/beta_disclaimer_version", BETA_DISCLAIMER_VERSION)
+        self._settings.sync()
+        self.betaDisclaimerAcceptedChanged.emit()
+
     @Property(bool, notify=updateChecksChanged)
     def update_checks(self) -> bool:
         return self.get_bool("Misc/update_checks", True)

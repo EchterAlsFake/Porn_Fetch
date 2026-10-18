@@ -143,12 +143,27 @@ setting with the Modern wizard style. GitHub Actions uploads each installer with
 checksum is a separate artifact and a separate release asset. Release publishing
 skips creating wrapper ZIPs for installers and their checksums.
 
-CI uses `3.9.<GitHub run number>` for the IFW component version, so successive
-workflow runs can produce newer updates even while the application's displayed
-version remains 3.9. For a local build, pass a higher `--version` than the one
+Enter the full numeric version in **Run workflow → release_version**, for example
+`3.9.66`. CI uses that exact version in the application, CLI, IFW components,
+signed manifests, and GitHub release. Tag-triggered builds use the tag version,
+with an optional leading `v` removed. Choose a higher version than the one
 already deployed. Upload the generated repository before telling users an
 update is available. The maintenance tool compares component versions, so an
 unchanged version will not appear as a newer update.
+
+CI also embeds the original workflow run's creation time as the release timestamp
+before building or signing. All platforms and publishing jobs share it, and reruns
+keep it fixed. It supplies both the displayed release date and license update
+eligibility. Edit the root `CHANGELOG_STATIC.md` before publishing: it contains only
+the current source's release notes, while `docs/CHANGELOG.md` keeps the full version
+history. CI publishes the static file with every platform repository and hashes it
+in `release.json`. The app fetches it directly from
+`https://api.pornfetch.to/repo/<platform>/CHANGELOG_STATIC.md`, verifies its hash, and
+renders the Markdown. Signed inline notes remain available if the file cannot be
+downloaded. GitHub releases use the same static file as their release description.
+The app's manual download button
+opens the GitHub releases page; IFW component archives are consumed by the maintenance
+tool. Auto Update stages and verifies the repository, then launches that tool's updater UI.
 
 ## Checks before distribution
 

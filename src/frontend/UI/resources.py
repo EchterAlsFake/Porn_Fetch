@@ -32217,7 +32217,7 @@ icense, not an O\
 SI-approved open\
 -source\x0alicense.\
 \x0a\
-\x00\x00\x04G\
+\x00\x00\x04\x7f\
 A\
 dditional permis\
 sion for Porn Fe\
@@ -32249,46 +32249,49 @@ urce-Available L\
 icense 1.0:\x0a\x0auno\
 fficial-api-for-\
 beeg, unofficial\
--api-for-eporner\
-,\x0aunofficial-api\
--for-pornhub, un\
+-api-for-empflix\
+, unofficial-api\
+-for-eporner,\x0aun\
 official-api-for\
--porntrex,\x0aunoff\
-icial-api-for-re\
-dtube, unofficia\
-l-api-for-spankb\
-ang,\x0aunofficial-\
-api-for-thumbzil\
-la, unofficial-a\
-pi-for-tube8,\x0aun\
-official-api-for\
--xfreehd, unoffi\
-cial-api-for-xha\
-mster,\x0aunofficia\
-l-api-for-xnxx, \
+-pornhub, unoffi\
+cial-api-for-por\
+ntrex,\x0aunofficia\
+l-api-for-redtub\
+e, unofficial-ap\
+i-for-spankbang,\
+\x0aunofficial-api-\
+for-thumbzilla, \
 unofficial-api-f\
-or-xvideos,\x0aunof\
-ficial-api-for-y\
-ouporn.\x0a\x0aThis pe\
-rmission does no\
-t change the AGP\
-L terms of copie\
-s obtained separ\
-ately,\x0adoes not \
-cover another pe\
-rson's copyright\
-ed contributions\
-, and does not r\
-educe\x0arights in \
-any other compon\
-ent. Verify owne\
-rship of every i\
-ncluded contribu\
-tion\x0abefore rely\
-ing on this perm\
-ission for a rel\
-ease.\x0a\
-\x00\x00\x0b\xe2\
+or-tnaflix, unof\
+ficial-api-for-t\
+ube8,\x0aunofficial\
+-api-for-xfreehd\
+, unofficial-api\
+-for-xhamster,\x0au\
+nofficial-api-fo\
+r-xnxx, unoffici\
+al-api-for-xvide\
+os,\x0aunofficial-a\
+pi-for-youporn.\x0a\
+\x0aThis permission\
+ does not change\
+ the AGPL terms \
+of copies obtain\
+ed separately,\x0ad\
+oes not cover an\
+other person's c\
+opyrighted contr\
+ibutions, and do\
+es not reduce\x0ari\
+ghts in any othe\
+r component. Ver\
+ify ownership of\
+ every included \
+contribution\x0abef\
+ore relying on t\
+his permission f\
+or a release.\x0a\
+\x00\x00\x0b\xe1\
 #\
  Third-party not\
 ices and release\
@@ -32322,165 +32325,165 @@ ence | Distribut\
 ion note |\x0a| ---\
  | --- | --- |\x0a|\
  `eaf_base_api` \
-and the thirteen\
- `unofficial-api\
--for-*` packages\
- in `pyproject.t\
-oml` | Installed\
- metadata: AGPL-\
-3.0-or-later for\
- `eaf_base_api`;\
- AGPL-3.0-only f\
-or the providers\
- | The [addition\
-al permission](L\
-ICENSES/Provider\
--permission.txt)\
- applies only to\
- portions Johann\
-es Habel may lic\
-ense separately.\
- Audit other con\
-tributions befor\
-e distribution. \
-|\x0a| PySide6 and \
-Qt 6 | PySide6 m\
-etadata: LGPL-3.\
-0-only OR GPL-2.\
-0-only OR GPL-3.\
-0-only; [Qt lice\
-nsing](https://w\
-ww.qt.io/develop\
-ment/open-source\
--lgpl-obligation\
-s) | Audit each \
-bundled Qt modul\
-e; preserve the \
-LGPL notices and\
- source availabi\
-lity, and verify\
- that users can \
-replace the LGPL\
- libraries in th\
-e actual install\
-er or one-file b\
-uild. |\x0a| `brows\
-er-cookie3`, `py\
-divert` | Instal\
-led metadata: LG\
-PL; LGPL-3.0-or-\
-later OR GPL-2.0\
--or-later | Incl\
-ude the exact di\
-stribution licen\
-ses and comply w\
-ith the chosen L\
-GPL/GPL terms. |\
-\x0a| PocketBase ex\
-ecutable | [MIT]\
-(https://github.\
-com/pocketbase/p\
-ocketbase/blob/m\
-aster/LICENSE.md\
-) | Installer an\
-d CI workflows d\
-ownload and bund\
-le this executab\
-le; include its \
-copyright and MI\
-T text with each\
- affected artifa\
-ct. |\x0a| FFmpeg e\
-xecutable | [LGP\
-L-2.1-or-later](\
-https://ffmpeg.o\
-rg/legal.html), \
-built from pinne\
-d FFmpeg 9.0.2 s\
-ource | The mini\
-mal profile expl\
-icitly disables \
-GPL, version-3, \
-nonfree, and thi\
-rd-party codec f\
-eatures. FFmpeg \
-runs as a separa\
-te executable. I\
-ts complete sour\
-ce archive, lice\
-nse texts, confi\
-gure flags, conf\
-iguration header\
-s, and build has\
-hes accompany it\
- in `third_party\
-/ffmpeg-legal` a\
-nd release legal\
- bundles. See [F\
-Fmpeg builds](do\
-cs/FFMPEG.md). |\
-\x0a| zlib | [zlib \
-license](https:/\
-/zlib.net/zlib_l\
-icense.html) | U\
-sed for PNG cove\
-r probing. Linux\
-/macOS use the s\
-ystem library; W\
-indows staticall\
-y links the MSYS\
-2 library and in\
-cludes its `zlib\
-.h` copyright/li\
-cense text in `f\
-fmpeg-legal`. |\x0a\
-| Other Python p\
-ackages | `uv.lo\
-ck` and installe\
-d package metada\
-ta | Generate an\
- artifact-specif\
-ic list and incl\
-ude the packages\
-' license and no\
-tice files; acco\
-unt for platform\
- extras and tran\
-sitive dependenc\
-ies. |\x0a| Applica\
-tion graphics | \
-[Asset provenanc\
-e](docs/ASSET_PR\
-OVENANCE.md) | N\
-ewly drawn SVGs \
-are part of the \
-application. Pre\
-serve the docume\
-nted provenance \
-of the PNG logo \
-and splash asset\
-s; replace or cl\
-ear any uncertai\
-n asset before r\
-elease. |\x0a\x0aThe o\
-bsolete library \
-list in `docs/CR\
-EDITS.md` is ret\
-ained as histori\
-cal\x0aacknowledgme\
-nt. It does not \
-establish the sh\
-ipped dependency\
- list or license\
-\x0aobligations. Th\
-ird-party notice\
-s and source ava\
-ilability must b\
-e present in the\
-\x0adelivered packa\
-ge, not only in \
-this repository.\
-\x0a\
+and the fifteen \
+`unofficial-api-\
+for-*` packages \
+in `pyproject.to\
+ml` | Installed \
+metadata: AGPL-3\
+.0-or-later for \
+`eaf_base_api`; \
+AGPL-3.0-only fo\
+r the providers \
+| The [additiona\
+l permission](LI\
+CENSES/Provider-\
+permission.txt) \
+applies only to \
+portions Johanne\
+s Habel may lice\
+nse separately. \
+Audit other cont\
+ributions before\
+ distribution. |\
+\x0a| PySide6 and Q\
+t 6 | PySide6 me\
+tadata: LGPL-3.0\
+-only OR GPL-2.0\
+-only OR GPL-3.0\
+-only; [Qt licen\
+sing](https://ww\
+w.qt.io/developm\
+ent/open-source-\
+lgpl-obligations\
+) | Audit each b\
+undled Qt module\
+; preserve the L\
+GPL notices and \
+source availabil\
+ity, and verify \
+that users can r\
+eplace the LGPL \
+libraries in the\
+ actual installe\
+r or one-file bu\
+ild. |\x0a| `browse\
+r-cookie3`, `pyd\
+ivert` | Install\
+ed metadata: LGP\
+L; LGPL-3.0-or-l\
+ater OR GPL-2.0-\
+or-later | Inclu\
+de the exact dis\
+tribution licens\
+es and comply wi\
+th the chosen LG\
+PL/GPL terms. |\x0a\
+| PocketBase exe\
+cutable | [MIT](\
+https://github.c\
+om/pocketbase/po\
+cketbase/blob/ma\
+ster/LICENSE.md)\
+ | Installer and\
+ CI workflows do\
+wnload and bundl\
+e this executabl\
+e; include its c\
+opyright and MIT\
+ text with each \
+affected artifac\
+t. |\x0a| FFmpeg ex\
+ecutable | [LGPL\
+-2.1-or-later](h\
+ttps://ffmpeg.or\
+g/legal.html), b\
+uilt from pinned\
+ FFmpeg 9.0.2 so\
+urce | The minim\
+al profile expli\
+citly disables G\
+PL, version-3, n\
+onfree, and thir\
+d-party codec fe\
+atures. FFmpeg r\
+uns as a separat\
+e executable. It\
+s complete sourc\
+e archive, licen\
+se texts, config\
+ure flags, confi\
+guration headers\
+, and build hash\
+es accompany it \
+in `third_party/\
+ffmpeg-legal` an\
+d release legal \
+bundles. See [FF\
+mpeg builds](doc\
+s/FFMPEG.md). |\x0a\
+| zlib | [zlib l\
+icense](https://\
+zlib.net/zlib_li\
+cense.html) | Us\
+ed for PNG cover\
+ probing. Linux/\
+macOS use the sy\
+stem library; Wi\
+ndows statically\
+ links the MSYS2\
+ library and inc\
+ludes its `zlib.\
+h` copyright/lic\
+ense text in `ff\
+mpeg-legal`. |\x0a|\
+ Other Python pa\
+ckages | `uv.loc\
+k` and installed\
+ package metadat\
+a | Generate an \
+artifact-specifi\
+c list and inclu\
+de the packages'\
+ license and not\
+ice files; accou\
+nt for platform \
+extras and trans\
+itive dependenci\
+es. |\x0a| Applicat\
+ion graphics | [\
+Asset provenance\
+](docs/ASSET_PRO\
+VENANCE.md) | Ne\
+wly drawn SVGs a\
+re part of the a\
+pplication. Pres\
+erve the documen\
+ted provenance o\
+f the PNG logo a\
+nd splash assets\
+; replace or cle\
+ar any uncertain\
+ asset before re\
+lease. |\x0a\x0aThe ob\
+solete library l\
+ist in `docs/CRE\
+DITS.md` is reta\
+ined as historic\
+al\x0aacknowledgmen\
+t. It does not e\
+stablish the shi\
+pped dependency \
+list or license\x0a\
+obligations. Thi\
+rd-party notices\
+ and source avai\
+lability must be\
+ present in the\x0a\
+delivered packag\
+e, not only in t\
+his repository.\x0a\
+\
 \x00\x00\x0b\x97\
 \x00\
 \x00)\x0cx\xda\xe5Z\xebn\xdb8\x16\xfe\xef\xa7\xe0\
@@ -34796,21 +34799,21 @@ qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x03\x02\x00\x02\x00\x00\x00\x04\x00\x00\x00\x09\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x03\x1c\x00\x00\x00\x00\x00\x01\x00\x08l\xe3\
-\x00\x00\x01\xa1K3Y\x85\
-\x00\x00\x03\x0c\x00\x01\x00\x00\x00\x01\x00\x07\xfc\xd3\
-\x00\x00\x01\xa1K3Ze\
-\x00\x00\x03,\x00\x00\x00\x00\x00\x01\x00\x08m\x05\
-\x00\x00\x01\xa1K3W\xd9\
-\x00\x00\x03B\x00\x00\x00\x00\x00\x01\x00\x08q]\
-\x00\x00\x01\xa1K3X\xac\
-\x00\x00\x02\xea\x00\x00\x00\x00\x00\x01\x00\x07\xf86\
+\x00\x00\x03\x1c\x00\x00\x00\x00\x00\x01\x00\x08m\x1a\
+\x00\x00\x01\xa1M\x98k\xc2\
+\x00\x00\x03\x0c\x00\x01\x00\x00\x00\x01\x00\x07\xfd\x0a\
+\x00\x00\x01\xa1M\x98l\xa2\
+\x00\x00\x03,\x00\x00\x00\x00\x00\x01\x00\x08m<\
+\x00\x00\x01\xa1M\x98j\x0e\
+\x00\x00\x03B\x00\x00\x00\x00\x00\x01\x00\x08q\x94\
+\x00\x00\x01\xa1M\x98j\xe8\
+\x00\x00\x02\xea\x00\x00\x00\x00\x00\x01\x00\x07\xf8m\
 \x00\x00\x01\xa1 02\x96\
 \x00\x00\x02\x9e\x00\x02\x00\x00\x00\x01\x00\x00\x00\x0f\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x02\xac\x00\x01\x00\x00\x00\x01\x00\x07\xebj\
+\x00\x00\x02\xac\x00\x01\x00\x00\x00\x01\x00\x07\xeb\xa1\
 \x00\x00\x01\xa1\x1b\xee\x0bH\
-\x00\x00\x02\xc6\x00\x00\x00\x00\x00\x01\x00\x07\xf7\x05\
+\x00\x00\x02\xc6\x00\x00\x00\x00\x00\x01\x00\x07\xf7<\
 \x00\x00\x01\xa1\x0f\xa2\xf4\x0d\
 \x00\x00\x00\x80\x00\x02\x00\x00\x00\x0d\x00\x00\x00\x12\
 \x00\x00\x00\x00\x00\x00\x00\x00\
@@ -34842,10 +34845,10 @@ qt_resource_struct = b"\
 \x00\x00\x01\xa1\x168\xa3\xe2\
 \x00\x00\x02$\x00\x00\x00\x00\x00\x01\x00\x07\xc9s\
 \x00\x00\x01\xa0\xf1\x1e\xca\xa4\
-\x00\x00\x02l\x00\x00\x00\x00\x00\x01\x00\x07\xdf\x84\
-\x00\x00\x01\xa1>\x88O)\
+\x00\x00\x02l\x00\x00\x00\x00\x00\x01\x00\x07\xdf\xbc\
+\x00\x00\x01\xa1K3\xc3\xd5\
 \x00\x00\x028\x00\x00\x00\x00\x00\x01\x00\x07\xdb9\
-\x00\x00\x01\xa0\xf1\x1e\xca\xa4\
+\x00\x00\x01\xa1K3\xae\xad\
 "
 
 def qInitResources():

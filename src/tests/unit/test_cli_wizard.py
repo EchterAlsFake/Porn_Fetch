@@ -26,6 +26,7 @@ from src.cli.wizard import (
     print_banner,
     run_wizard,
 )
+from src.shared.beta_disclaimer import BETA_DISCLAIMER_VERSION
 
 
 class FakeQuestionaryPrompt:
@@ -330,7 +331,15 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
     @patch("questionary.select")
     async def test_run_wizard_immediate_exit(self, mock_select):
         mock_select.return_value = FakeQuestionaryPrompt("exit")
-        code = await run_wizard()
+        self.settings_store.save(self.settings.overridden(
+            beta_disclaimer_version=BETA_DISCLAIMER_VERSION,
+            error_reporting_decided=True,
+        ))
+        with (
+            patch("src.cli.wizard.SettingsStore", return_value=self.settings_store),
+            patch("src.cli.wizard.WizardContext", return_value=self.ctx),
+        ):
+            code = await run_wizard()
         self.assertEqual(code, 0)
         choices = mock_select.call_args.kwargs["choices"]
         self.assertNotIn("search", {choice.value for choice in choices})

@@ -114,8 +114,10 @@ update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
 from src.backend.license_bridge import LicenseBridge, load_production_config
+from src.backend.beta_disclaimer import BetaDisclaimerBridge
 from src.licensing.service import create_license_service
 from src.shared.paths import shared_data_dir
+from src.shared.release import GITHUB_RELEASES_URL
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_gui import (ui_popup, set_mobile_notice_handler, Signals,
@@ -202,6 +204,7 @@ class Backend(QObject):
     updateAvailable = Signal("QVariantMap")
     updateProgress = Signal(int, int)
     updateStatus = Signal(str)
+    updateFinished = Signal()
     proxyTestSucceeded = Signal(str, "QVariantMap")
     proxyTestFailed = Signal(str, str)
     proxySslError = Signal(str, str)
@@ -235,6 +238,7 @@ class Backend(QObject):
         self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update, license_status=self._update_license_status)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
+        self.auto_updater.finished.connect(self.updateFinished)
         self.showMessage.connect(self.handle_message)
         if is_android or mobile_layout:
             set_mobile_notice_handler(self.mobileNotice.emit)
@@ -388,10 +392,10 @@ class Backend(QObject):
             "install_allowed": install_allowed,
             "entitlement_message": message,
             "version": str(update.get("version", "")),
-            "url": str(update.get("url", "")),
-            "anonymous_download": str(update.get("anonymous_download", "")),
+            "release_url": str(update.get("release_url") or GITHUB_RELEASES_URL),
             "important_info": str(update.get("important_info", "")),
-            "changelog": str(update.get("changelog", "")),
+            "changelog": str(update.get("changelog") or "Release notes are available on the GitHub releases page."),
+            "changelog_format": str(update.get("changelog_format", "html")),
         }
         self.logger.info("New update found: %s", details["version"])
         self.updateAvailable.emit(details)
@@ -1511,6 +1515,8 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
+    beta_disclaimer = BetaDisclaimerBridge(app_settings, parent=engine)
+    engine.rootContext().setContextProperty("betaDisclaimer", beta_disclaimer)
     engine.rootContext().setContextProperty("androidLayout", is_android or args.android)
     for context_name, resource_path in (
         ("applicationLicenseText", ":/legal/LICENSE"),

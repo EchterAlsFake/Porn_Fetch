@@ -6,6 +6,8 @@ from pathlib import Path, PurePosixPath
 from tuf.api.metadata import Metadata, Root, Targets
 
 ROOT_FILE = Path(__file__).resolve().parents[1] / "cli/update_root.json"
+GITHUB_RELEASES_URL = "https://github.com/EchterAlsFake/Porn_Fetch/releases"
+STATIC_CHANGELOG_NAME = "CHANGELOG_STATIC.md"
 
 
 def validate_ifw_packages(xml, version, release_timestamp):
@@ -52,6 +54,8 @@ def verify_repository_manifest(blob, root_bytes, target_platform):
         raise ValueError("Release repository has no Updates.xml")
     for name in metadata.signed.targets:
         safe_repo_path(name)
+    if release.get("changelog_path") and release["changelog_path"] not in metadata.signed.targets:
+        raise ValueError("Release changelog is not included in the signed repository")
     return metadata, release
 
 

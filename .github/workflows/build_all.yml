@@ -3,6 +3,10 @@ name: Cross-Platform Build Pipeline
 on:
   workflow_dispatch:
     inputs:
+      release_version:
+        description: "Full release version (e.g. 3.9.66); must be newer than the published version"
+        type: string
+        required: true
       create_release:
         description: "Publish artifacts as a GitHub Release"
         type: boolean
@@ -46,11 +50,36 @@ jobs:
     name: Validate build commit
     uses: ./.github/workflows/ci.yml
 
+  release-metadata:
+    name: Set release version and timestamp
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      timestamp: ${{ steps.release.outputs.timestamp }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Read the original workflow creation time
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.release_version || github.ref_name }}
+        run: |
+          RELEASE_VERSION="${RELEASE_VERSION#v}"
+          RELEASE_CREATED_AT=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq .created_at)
+          RELEASE_TIMESTAMP=$(python3 -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$RELEASE_CREATED_AT")
+          python3 packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          echo "timestamp=$RELEASE_TIMESTAMP" >> "$GITHUB_OUTPUT"
+          echo "version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
+
   # ==========================================
   # 1. GUI BUILDS (PySide6)
   # ==========================================
   build-gui:
-    needs: validate
+    needs: [validate, release-metadata]
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ ((matrix.platform == 'windows' && matrix.arch == 'arm64') || (matrix.platform == 'macos' && matrix.arch == 'x64')) && 120 || 75 }}
@@ -179,8 +208,8 @@ jobs:
           bash src/frontend/update.sh
           uv run --no-sync scripts/patch.py
 
-      - name: Embed immutable release and artifact version
-        run: uv run --no-sync python packaging/write_build_version.py ${{ github.run_number }}
+      - name: Embed workflow release and artifact version
+        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
 
       - name: Apply and verify required QtAsyncio compatibility patch
         run: |
@@ -363,7 +392,7 @@ jobs:
             --staging-dir "ifw_output/staging/$REPO_TAG" \
             --output-repo "ifw_output/repository/$REPO_TAG" \
             --output-installer "$INSTALLER" \
-            --version "$APP_VERSION.${{ github.run_number }}"
+            --version "$APP_VERSION"
           uv run --no-sync python scripts/write_checksum.py "$INSTALLER"
           echo "IFW_INSTALLER=$INSTALLER" >> "$GITHUB_ENV"
           echo "### SHA256 Checksum ($(basename "$INSTALLER"))" >> "$GITHUB_STEP_SUMMARY"
@@ -408,7 +437,7 @@ jobs:
   # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
   build-cli:
-    needs: validate
+    needs: [validate, release-metadata]
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -483,7 +512,8 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} ${{ matrix.platform }} ${{ matrix.arch }}
+          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+          uv run --no-sync python packaging/write_cli_build_version.py ${{ matrix.platform }} ${{ matrix.arch }}
           uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
@@ -531,7 +561,7 @@ jobs:
   # 3. LINUX 32-BIT CLI BUILD
   # ==========================================
   build-cli-linux-x32:
-    needs: validate
+    needs: [validate, release-metadata]
     name: CLI experimental (linux-x32)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
     runs-on: ubuntu-24.04
@@ -544,7 +574,8 @@ jobs:
           docker run --rm --platform linux/386 \
             --mount type=bind,source="$GITHUB_WORKSPACE",target=/workspace \
             --workdir /workspace \
-            --env BUILD_RUN_NUMBER="${{ github.run_number }}" \
+            --env BUILD_RELEASE_VERSION="${{ needs.release-metadata.outputs.version }}" \
+            --env BUILD_RELEASE_TIMESTAMP="${{ needs.release-metadata.outputs.timestamp }}" \
             debian:bookworm bash packaging/build_linux_x86.sh
 
       - name: Upload Artifact
@@ -561,7 +592,7 @@ jobs:
   # 4. RISC-V CLI BUILD (QEMU)
   # ==========================================
   build-cli-linux-riscv64:
-    needs: validate
+    needs: [validate, release-metadata]
     name: CLI experimental (linux-riscv64)
     if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
     runs-on: ubuntu-24.04
@@ -584,7 +615,8 @@ jobs:
             export UV_NO_PROGRESS=1
             uv python install 3.14
             uv sync --locked --no-dev --extra build --python 3.14
-            uv run --no-sync python packaging/write_cli_build_version.py ${{ github.run_number }} linux riscv64
+            uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+            uv run --no-sync python packaging/write_cli_build_version.py linux riscv64
             uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
             readelf -h dist/Porn_Fetch_CLI | grep -q 'Machine:.*RISC-V'
             mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_riscv64
@@ -712,7 +744,7 @@ jobs:
   # ==========================================
   deploy-repositories:
     name: Deploy IFW Repositories
-    needs: [validate, build-gui]
+    needs: [validate, build-gui, release-metadata]
     if: >-
       github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
@@ -732,6 +764,9 @@ jobs:
 
       - name: Install signing dependencies
         run: uv sync --locked --no-dev
+
+      - name: Embed workflow release and artifact version
+        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
 
       - name: Configure online signing key
         shell: bash
@@ -762,7 +797,7 @@ jobs:
             test -f "dist/ifw_repo/$target/Updates.xml"
             uv run --no-sync python packaging/sign_desktop_release.py \
               --repository "dist/ifw_repo/$target" --platform "$target" \
-              --version "$APP_VERSION.${{ github.run_number }}" \
+              --version "$APP_VERSION" \
               --private-key "$RUNNER_TEMP/cli_online.pem"
           done
           for target in linux_amd64 windows_amd64 darwin_amd64 darwin_arm64; do
@@ -801,7 +836,7 @@ jobs:
   # ==========================================
   deploy-cli-updates:
     name: Deploy CLI Updates
-    needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64]
+    needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
@@ -836,6 +871,7 @@ jobs:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
         run: |
           set -euo pipefail
+          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
           test -n "$CLI_UPDATE_SIGNING_KEY"
           umask 077
           SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/cli-online.XXXXXX.pem")
@@ -849,7 +885,7 @@ jobs:
             --remote-url https://api.pornfetch.to/repo/cli/ \
             --output dist/cli_tuf \
             --private-key "$SIGNING_KEY_FILE" \
-            --version "$APP_VERSION.${{ github.run_number }}"
+            --version "$APP_VERSION"
 
       - name: Deploy CLI TUF Repo
         env:
@@ -865,7 +901,7 @@ jobs:
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [validate, build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates]
+    needs: [validate, build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
       needs.validate.result == 'success' && needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
@@ -923,22 +959,12 @@ jobs:
       - name: Create or Update GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.ref_name }}
-          GITHUB_REF: ${{ github.ref }}
           COMMIT_SHA: ${{ github.sha }}
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            gh release create "$TAG_NAME" dist_release/* \
-              --title "Porn Fetch $TAG_NAME" \
-              --prerelease \
-              --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
-              --verify-tag
-          else
-            RELEASE_TAG="build-${{ github.run_number }}-${{ github.sha }}"
-            gh release create "$RELEASE_TAG" dist_release/* \
-              --title "Porn Fetch Build (${{ github.sha }})" \
-              --notes "3.9 beta build. The crypto sandbox checkout is a test: no real transaction takes place and no money is processed." \
-              --prerelease \
-              --target "$COMMIT_SHA" \
-              --draft=false
-          fi
+          gh release create "v$RELEASE_VERSION" dist_release/* \
+            --title "Porn Fetch $RELEASE_VERSION" \
+            --notes-file CHANGELOG_STATIC.md \
+            --prerelease \
+            --target "$COMMIT_SHA" \
+            --draft=false

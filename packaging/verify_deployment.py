@@ -70,7 +70,7 @@ def verify_cli_client(repository: Path, remote_url: str, root_file: Path) -> Non
 async def verify_desktop(core: BaseCore, repository: Path, remote_url: str, platform: str,
                          root_file: Path = ROOT_FILE) -> None:
     blob = await fetch(core, f"{remote_url}/release.json")
-    metadata, _ = verify_repository_manifest(blob, root_file.read_bytes(), platform)
+    metadata, release = verify_repository_manifest(blob, root_file.read_bytes(), platform)
     if blob != (repository / "release.json").read_bytes():
         raise ValueError("Published desktop manifest does not match this deployment")
     archives = [name for name in metadata.signed.targets if name.endswith(".7z")]
@@ -78,7 +78,10 @@ async def verify_desktop(core: BaseCore, repository: Path, remote_url: str, plat
         raise ValueError("Published desktop repository has no package archives")
     # The largest archive exercises the application payload rather than just IFW metadata.
     payload = max(archives, key=lambda name: metadata.signed.targets[name].length)
-    for name in ("Updates.xml", payload):
+    filenames = ["Updates.xml", payload]
+    if release.get("changelog_path"):
+        filenames.append(release["changelog_path"])
+    for name in filenames:
         metadata.signed.targets[name].verify_length_and_hashes(
             await fetch(core, f"{remote_url}/{quote(name, safe='/')}"),
         )

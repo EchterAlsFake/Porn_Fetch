@@ -110,9 +110,26 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: {
+    function continueAfterBetaDisclaimer() {
         if (!appSettings.error_reporting_decided)
             Qt.callLater(function() { consentDialog.open() })
+    }
+
+    Component.onCompleted: {
+        if (appSettings.beta_disclaimer_accepted)
+            continueAfterBetaDisclaimer()
+        else
+            Qt.callLater(function() { betaDisclaimerDialog.open() })
+    }
+
+    BetaDisclaimerDialog {
+        id: betaDisclaimerDialog
+        disclaimer: betaDisclaimer
+        surfaceColor: window.surfaceColor
+        textColor: window.primaryTextColor
+        borderColor: window.secondaryTextColor
+        onConfirmed: window.continueAfterBetaDisclaimer()
+        onExitRequested: window.close()
     }
 
     Dialog {
