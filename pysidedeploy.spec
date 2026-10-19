@@ -34,10 +34,10 @@ mode = standalone
 extra_args = --quiet --noinclude-qt-translations
 
 [buildozer]
-mode = debug
+mode = release
 recipe_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/recipes
 jars_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/jar/PySide6/jar
-ndk_path = /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r27c
+ndk_path = /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r28c
 sdk_path = /home/asuna/.pyside6_android_deploy/android-sdk
 local_libs = plugins_platforms_qtforandroid
 arch = aarch64

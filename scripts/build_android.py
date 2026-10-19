@@ -9,6 +9,7 @@ Supports:
   - Dynamic spec file updating (buildozer.spec and pysidedeploy.spec)
   - Automatic injection of native Java bridge (PythonActivity.java) and theme/splash templates
   - Pre-flight validation of deployment patches
+  - Reuse of Buildozer downloads and compiled dependencies unless --clean is requested
 
 Example invocations:
   ./build_android.sh --architecture=aarch64 --wheel-pyside=<wheel> --wheel-shiboken=<wheel>
@@ -56,6 +57,8 @@ ARCH_MAP: dict[str, dict[str, object]] = {
 }
 
 ALL_CANONICAL_ARCHS = ["aarch64", "armv7a", "x86_64", "i686"]
+ANDROID_NDK_VERSION = "28c"
+ANDROID_NDK_REVISION = "28.2.13676358"
 
 PATTERN_CAN_READ = bytes([0xb8, 0x00, 0x40, 0x4d, 0x2c, 0x2a, 0xb8, 0x00, 0x46])
 PATCH_CAN_READ = bytes([0x04, 0xac])  # iconst_1; ireturn
@@ -105,18 +108,29 @@ def find_android_sdk(user_sdk: Path | None = None) -> Path | None:
 
 
 def find_android_ndk(user_ndk: Path | None = None) -> Path | None:
-    """Find Android NDK directory."""
-    if user_ndk and user_ndk.is_dir():
+    """Find r28c using its package metadata, ignoring stale environment paths."""
+    def is_required_ndk(path: Path) -> bool:
+        properties = path / "source.properties"
+        return properties.is_file() and re.search(
+            rf"^Pkg\.Revision\s*=\s*{re.escape(ANDROID_NDK_REVISION)}\s*$",
+            properties.read_text(encoding="utf-8"), re.MULTILINE,
+        ) is not None
+
+    if user_ndk:
+        if not is_required_ndk(user_ndk):
+            raise ValueError(f"Android NDK r{ANDROID_NDK_VERSION} ({ANDROID_NDK_REVISION}) required: {user_ndk}")
         return user_ndk.resolve()
-    for env_var in ("ANDROID_NDK_HOME", "ANDROID_NDK_ROOT"):
+    for env_var in ("ANDROID_NDK_HOME", "ANDROID_NDK_ROOT", "ANDROIDNDK"):
         val = os.environ.get(env_var)
-        if val and Path(val).is_dir():
+        if val and is_required_ndk(Path(val)):
             return Path(val).resolve()
-    pyside_ndk_dir = Path.home() / ".pyside6_android_deploy" / "android-ndk"
-    if pyside_ndk_dir.is_dir():
-        subdirs = sorted([d for d in pyside_ndk_dir.glob("android-ndk-*") if d.is_dir()], reverse=True)
-        if subdirs:
-            return subdirs[0].resolve()
+    candidates = [Path.home() / ".pyside6_android_deploy" / "android-ndk" / f"android-ndk-r{ANDROID_NDK_VERSION}"]
+    sdk = find_android_sdk()
+    if sdk:
+        candidates.append(sdk / "ndk" / ANDROID_NDK_REVISION)
+    for candidate in candidates:
+        if is_required_ndk(candidate):
+            return candidate.resolve()
     return None
 
 
@@ -335,10 +349,14 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
     content = spec_path.read_text(encoding="utf-8")
 
     replacements = {
+        r"^p4a\.branch\s*=.*$": "p4a.branch = develop",
+        r"^p4a\.commit\s*=.*$": "p4a.commit = HEAD",
         r"^p4a\.hook\s*=.*$": f"p4a.hook = {project_root / 'scripts' / 'android_storage_hook.py'}",
         r"^android\.archs\s*=.*$": f"android.archs = {buildozer_arch}",
         r"^android\.sdk_path\s*=.*$": f"android.sdk_path = {sdk_path}",
         r"^android\.ndk_path\s*=.*$": f"android.ndk_path = {ndk_path}",
+        r"^android\.ndk\s*=.*$": f"android.ndk = {ANDROID_NDK_VERSION}",
+        r"^android\.release_artifact\s*=.*$": "android.release_artifact = apk",
         r"^p4a\.local_recipes\s*=.*$": f"p4a.local_recipes = {project_root / 'deployment' / 'recipes'}",
         r"^bin_dir\s*=.*$": f"bin_dir = {project_root}",
         r"^presplash\.filename\s*=.*$": f"presplash.filename = {project_root / 'src' / 'frontend' / 'graphics' / 'logo_square.png'}",
@@ -346,6 +364,24 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
         r"^icon\.adaptive_foreground\.filename\s*=.*$": f"icon.adaptive_foreground.filename = {project_root / 'src' / 'frontend' / 'graphics' / 'icon_foreground.png'}",
         r"^icon\.adaptive_background\.filename\s*=.*$": f"icon.adaptive_background.filename = {project_root / 'src' / 'frontend' / 'graphics' / 'icon_background.png'}",
     }
+
+    # PySide can regenerate buildozer.spec with the display title as the package
+    # name and omit our dependencies. With --buildozer-file it no longer applies
+    # these settings itself, so recover them from the deployment config here.
+    deploy_config = configparser.ConfigParser(interpolation=None)
+    deploy_config.read(project_root / "pysidedeploy.spec", encoding="utf-8")
+    for option, buildozer_option in (
+        ("package_name", "package.name"),
+        ("package_domain", "package.domain"),
+        ("version", "version"),
+        ("requirements", "requirements"),
+    ):
+        value = (deploy_config.get("android", option, fallback="")
+                 or deploy_config.get("app", option, fallback=""))
+        if value:
+            if option == "requirements":
+                value = f"python3,shiboken6,PySide6,{value}"
+            replacements[rf"^{re.escape(buildozer_option)}\s*=.*$"] = f"{buildozer_option} = {value}"
 
     jar_dir = project_root / "deployment" / "jar" / "PySide6" / "jar"
     if jar_dir.is_dir():
@@ -369,7 +405,7 @@ def update_pysidedeploy_spec(
     sdk_path: Path,
     ndk_path: Path,
     project_root: Path,
-    mode: str = "debug",
+    mode: str = "release",
 ) -> None:
     """Update pysidedeploy.spec for target wheels and environment."""
     config = configparser.ConfigParser(interpolation=None)
@@ -469,6 +505,20 @@ def find_wheels_for_arch(
     return pyside_whl, shiboken_whl
 
 
+def restore_buildozer_cache(project_root: Path) -> None:
+    """Recover the cache moved into deployment/ by older PySide deploy patches."""
+    previous_cache = project_root / "deployment" / ".buildozer"
+    build_dir = project_root / ".buildozer"
+    if previous_cache.is_dir():
+        if build_dir.exists():
+            raise FileExistsError(
+                f"Both {build_dir} and {previous_cache} exist. "
+                "Move one aside before building so neither cache is deleted."
+            )
+        print(f"[*] Restoring Buildozer cache from {previous_cache}")
+        shutil.move(str(previous_cache), str(build_dir))
+
+
 def build_single_arch(
     canon_arch: str,
     wheel_pyside: Path,
@@ -477,7 +527,7 @@ def build_single_arch(
     venv_dir: Path,
     sdk_path: Path,
     ndk_path: Path,
-    build_mode: str = "debug",
+    build_mode: str = "release",
     clean: bool = False,
     dry_run: bool = False,
     output_dir: Path | None = None,
@@ -499,13 +549,25 @@ def build_single_arch(
     # Patch wheel if necessary
     if not dry_run:
         patch_pyside_wheel_if_needed(wheel_pyside, venv_dir)
+        # Restore before --clean and template injection, which operate on .buildozer.
+        restore_buildozer_cache(project_root)
 
     # Clean if requested
     arch_build_dir = project_root / ".buildozer" / "android" / "platform" / f"build-{buildozer_arch}"
-    if clean and arch_build_dir.exists():
-        print(f"[*] Cleaning build directory: {arch_build_dir}")
-        if not dry_run:
-            shutil.rmtree(arch_build_dir, ignore_errors=True)
+    ndk_stamp = arch_build_dir / ".porn-fetch-ndk"
+    cached_ndk = ndk_stamp.read_text(encoding="utf-8").strip() if ndk_stamp.is_file() else None
+    if cached_ndk != ANDROID_NDK_REVISION and any(
+        directory.exists() for directory in (arch_build_dir / "build", arch_build_dir / "dists")
+    ):
+        print(f"[*] Rebuilding native cache for NDK r{ANDROID_NDK_VERSION}; keeping downloaded archives")
+        clean = True
+    if clean:
+        # p4a keeps downloaded archives in packages/ beside these directories.
+        for directory in (arch_build_dir / "build", arch_build_dir / "dists"):
+            if directory.exists():
+                print(f"[*] Cleaning build directory: {directory}")
+                if not dry_run:
+                    shutil.rmtree(directory)
 
     # Update specs
     buildozer_spec = project_root / "buildozer.spec"
@@ -517,6 +579,8 @@ def build_single_arch(
         print(f"[*] (dry-run) Would run pyside6-android-deploy for {canon_arch}")
         return None
 
+    arch_build_dir.mkdir(parents=True, exist_ok=True)
+    ndk_stamp.write_text(ANDROID_NDK_REVISION + "\n", encoding="utf-8")
     update_buildozer_spec(buildozer_spec, buildozer_arch, sdk_path, ndk_path, project_root)
     update_pysidedeploy_spec(pysidedeploy_spec, wheel_pyside, wheel_shiboken, sdk_path, ndk_path, project_root, mode=build_mode)
 
@@ -524,7 +588,7 @@ def build_single_arch(
     inject_android_templates(project_root, buildozer_arch)
 
     # Snapshot existing outputs so an old package cannot masquerade as this build.
-    extensions = (".apk",) if build_mode == "debug" else (".aab", ".apk")
+    extensions = (".apk",)
     output_roots = (project_root, project_root / "bin")
     previous_outputs = {
         path: path.stat().st_mtime_ns
@@ -536,6 +600,8 @@ def build_single_arch(
     env = os.environ.copy()
     env["PATH"] = f"{venv_dir / 'bin'}:{env.get('PATH', '')}"
     env["VIRTUAL_ENV"] = str(venv_dir)
+    for variable in ("ANDROIDNDK", "ANDROID_NDK_HOME", "ANDROID_NDK_ROOT"):
+        env[variable] = str(ndk_path)
 
     pyside_scripts_dirs = list(venv_dir.glob("lib/python*/site-packages/PySide6/scripts"))
     if pyside_scripts_dirs:
@@ -571,13 +637,17 @@ def build_single_arch(
         path for root in output_roots for extension in extensions
         for path in root.glob(f"*{extension}")
         if path.stat().st_mtime_ns != previous_outputs.get(path)
+        and build_mode in path.stem
         and (detect_arch_from_filename(path.name) == canon_arch
              or (detect_arch_from_filename(path.name) is None
                  and path.name.startswith("app-") and build_mode in path.stem))
     ]
 
     if not candidates:
-        raise FileNotFoundError(f"Build succeeded but could not locate a new {build_mode} package for {canon_arch}")
+        raise FileNotFoundError(
+            f"No new {build_mode} package found for {canon_arch}; "
+            "check the deployment log above for build errors"
+        )
 
     # Pick the newest candidate
     apk_path = max(candidates, key=lambda p: p.stat().st_mtime)
@@ -629,13 +699,13 @@ def main() -> int:
     parser.add_argument(
         "--ndk-path",
         type=Path,
-        help="Custom path to Android NDK (auto-detected if omitted)",
+        help="Path to Android NDK r28c (auto-detected and revision-checked if omitted)",
     )
     parser.add_argument(
         "--build-mode",
         choices=["debug", "release"],
-        default="debug",
-        help="Build mode: debug or release (default: debug)",
+        default="release",
+        help="Build mode: debug or release APK (default: release)",
     )
     parser.add_argument(
         "--output-dir",
@@ -650,7 +720,7 @@ def main() -> int:
     parser.add_argument(
         "--clean",
         action="store_true",
-        help="Clean the architecture's build cache before building",
+        help="Recompile the selected architecture; keep downloaded dependency archives",
     )
     parser.add_argument(
         "--dry-run",
@@ -682,13 +752,17 @@ def main() -> int:
 
     # Resolve Android SDK and NDK
     sdk_path = find_android_sdk(args.sdk_path)
-    ndk_path = find_android_ndk(args.ndk_path)
+    try:
+        ndk_path = find_android_ndk(args.ndk_path)
+    except ValueError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
 
     if not sdk_path:
         print("ERROR: Android SDK not found. Specify --sdk-path or set $ANDROID_SDK_ROOT.", file=sys.stderr)
         return 1
     if not ndk_path:
-        print("ERROR: Android NDK not found. Specify --ndk-path or set $ANDROID_NDK_HOME.", file=sys.stderr)
+        print("ERROR: Android NDK r28c not found. Specify --ndk-path or set $ANDROID_NDK_HOME.", file=sys.stderr)
         return 1
 
     # Target architectures

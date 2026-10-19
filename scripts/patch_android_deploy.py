@@ -2,6 +2,7 @@
 """Patch PySide6 6.11/6.12 Android deploy with application build settings.
 
 Add --buildozer-file and remove the legacy Python 3.11 gate when present.
+Keep Buildozer's download and compilation cache in the project's .buildozer directory.
 
 Usage: python scripts/patch_android_deploy.py .venv [--dry-run | --verify | --restore]
 Reapply after upgrading PySide6. Backups are stored inside the target venv.
@@ -28,7 +29,15 @@ from typing import Callable
 MARKER = "porn-fetch-buildozer-file-v1"
 BUILDOZER_MARKER = "porn-fetch-qt-priority-v1"
 CONFIG_MARKER = "porn-fetch-custom-recipes-v1"
+ARCH_MARKER = "porn-fetch-32bit-android-arch-v1"
 RECIPE_TMPL_MARKER = "porn-fetch-all-abi3-v1"
+FAILURE_MARKER = "porn-fetch-deploy-failure-v1"
+CACHE_MARKER = "porn-fetch-buildozer-cache-v1"
+TOOLCHAIN_MARKER = "porn-fetch-ndk28c-release-apk-v1"
+NDK_SHA1 = '''_NDK_SHA1: dict[str, str] = {
+    "linux": "a7b54a5de87fecd125a17d54f73c446199e72a64",
+    "darwin": "fc20a6bf15a30fb3428c9b60a7308793a362dc6d",
+}'''
 VERSION_GUARD = '''    # check if the Python version is greater than 3.12
     if sys.version_info >= (3, 12):
         raise RuntimeError("[DEPLOY] Android deployment requires Python version 3.11 or lower. "
@@ -125,10 +134,66 @@ def replace_once(source: str, old: str, new: str) -> str:
 def patched_source(source: str) -> str:
     if MARKER not in source:
         source = add_buildozer_file_support(source)
+    source = patch_build_cache_source(source)
     if VERSION_GUARD in source:
         source = replace_once(source, VERSION_GUARD, "")
     elif "Android deployment requires Python version 3.11 or lower" in source:
         raise ValueError("PySide6 Python version guard changed; refusing an incomplete patch")
+    if FAILURE_MARKER not in source:
+        source = replace_once(
+            source,
+            '    except Exception:\n        print(f"Exception occurred: {traceback.format_exc()}")\n',
+            '    except Exception:\n        print(f"Exception occurred: {traceback.format_exc()}")\n'
+            f'        raise  # {FAILURE_MARKER}: return a failing exit status to the build wrapper\n',
+        )
+    ast.parse(source)
+    return source
+
+
+def patch_build_cache_source(source: str) -> str:
+    if CACHE_MARKER in source:
+        return source
+
+    source = replace_once(
+        source,
+        '''    cleanup(config=config, is_android=not preserve_spec)
+    if preserve_spec:
+        build_dir = config.project_dir / ".buildozer"
+        if build_dir.exists():
+            shutil.rmtree(build_dir)
+''',
+        f'''    # {CACHE_MARKER}: let Buildozer/p4a decide which dependencies need rebuilding.
+    if config.dry_run:
+        return
+    build_dir = config.project_dir / ".buildozer"
+    previous_cache = config.generated_files_path / ".buildozer"
+    if previous_cache.is_dir():
+        if build_dir.exists():
+            raise FileExistsError(
+                f"[DEPLOY] Both {{build_dir}} and {{previous_cache}} exist. "
+                "Move one aside before deploying so neither cache is deleted."
+            )
+        logging.info(f"[DEPLOY] Restoring Buildozer cache from {{previous_cache}}")
+        shutil.move(str(previous_cache), str(build_dir))
+    cleanup(config=config, is_android=False)
+    if not preserve_spec:
+        (config.project_dir / "buildozer.spec").unlink(missing_ok=True)
+''',
+    )
+    source = replace_once(
+        source,
+        '''        # move buildozer build files to {generated_files_path}
+        if not dry_run:
+            buildozer_build_dir = config.project_dir / ".buildozer"
+            if not buildozer_build_dir.exists():
+                logging.info(f"[DEPLOY] Unable to copy {buildozer_build_dir} to "
+                             f"{config.generated_files_path}. {buildozer_build_dir} does not exist")
+            logging.info(f"[DEPLOY] copy {buildozer_build_dir} to {config.generated_files_path}")
+            shutil.move(buildozer_build_dir, config.generated_files_path)
+
+''',
+        '        # Keep .buildozer in place for the next incremental build.\n',
+    )
     ast.parse(source)
     return source
 
@@ -182,6 +247,16 @@ def patch_buildozer_source(source: str) -> str:
         )
         source = replace_once(source, old_identity, new_identity)
 
+    if TOOLCHAIN_MARKER not in source:
+        source = replace_once(
+            source,
+            '        # android platform specific\n',
+            f'        # {TOOLCHAIN_MARKER}\n'
+            '        self.set_value("app", "android.ndk", "28c")\n'
+            '        self.set_value("app", "android.release_artifact", "apk")\n\n'
+            '        # android platform specific\n',
+        )
+
     if "extra_reqs = pysidedeploy_config" not in source:
         old_reqs = '        self.set_value("app", "requirements", "python3,shiboken6,PySide6")'
         new_reqs = (
@@ -227,9 +302,49 @@ def patch_buildozer_source(source: str) -> str:
     return source
 
 
+def patch_android_utilities_source(source: str) -> str:
+    source, count = re.subn(
+        r'^ANDROID_NDK_VERSION = .+$', 'ANDROID_NDK_VERSION = "28c"', source, flags=re.MULTILINE,
+    )
+    if count != 1:
+        raise ValueError("Expected one ANDROID_NDK_VERSION assignment in android_utilities.py")
+    # PySide 6.12 verifies NDK archives; keep those checksums in step with r28c.
+    if "_NDK_SHA1" in source:
+        source, count = re.subn(r'^_NDK_SHA1[^=\n]*= \{.*?^\}', NDK_SHA1, source,
+                                flags=re.MULTILINE | re.DOTALL)
+        if count != 1:
+            raise ValueError("Expected one _NDK_SHA1 mapping in android_utilities.py")
+    ast.parse(source)
+    return source
+
+
+def verify_android_utilities(content: str) -> None:
+    if patch_android_utilities_source(content) != content:
+        raise ValueError("NDK r28c download configuration is not installed in android_utilities.py")
+
+
 def patch_android_config_source(source: str) -> str:
     if "import shutil" not in source:
         source = replace_once(source, "import tempfile\n", "import shutil\nimport tempfile\n")
+    if ARCH_MARKER not in source:
+        # Recent PySide deploy tools recognize only the official 64-bit CPython
+        # targets. Our locally built wheels also provide the 32-bit Qt ABIs.
+        source = replace_once(
+            source,
+            "\n\nclass AndroidConfig(Config):",
+            f"\n\n# {ARCH_MARKER}: support locally built 32-bit Android wheels.\n"
+            'platform_map = {**platform_map, "armv7a": "armeabi-v7a",\n'
+            '                "armeabi-v7a": "armeabi-v7a", "i686": "x86", "x86": "x86"}\n'
+            "\n\nclass AndroidConfig(Config):",
+        )
+        source = replace_once(
+            source,
+            "        arch = get_wheel_android_arch(wheel=self.wheel_pyside)\n",
+            "        arch = get_wheel_android_arch(wheel=self.wheel_pyside)\n"
+            "        if not arch:\n"
+            "            arch = next((name for name in platform_map\n"
+            '                         if self.wheel_pyside.stem.endswith(f"_{name}")), None)\n',
+        )
     if "recipe_dir = None" in source:
         source = replace_once(source, "        recipe_dir = None\n", "        recipe_dir = self.recipe_dir\n")
     if CONFIG_MARKER not in source:
@@ -343,6 +458,12 @@ def verify_android_deploy(content: str) -> None:
         raise ValueError("Patch is not installed in android_deploy.py")
     if VERSION_GUARD in content:
         raise ValueError("Python 3.11 version guard is still present in android_deploy.py")
+    if FAILURE_MARKER not in content:
+        raise ValueError("Deployment failure propagation patch is not installed in android_deploy.py")
+    if CACHE_MARKER not in content:
+        raise ValueError("Buildozer cache preservation patch is not installed in android_deploy.py")
+    if "shutil.move(buildozer_build_dir, config.generated_files_path)" in content:
+        raise ValueError("android_deploy.py still moves the Buildozer cache after building")
 
 
 def verify_buildozer(content: str) -> None:
@@ -357,6 +478,8 @@ def verify_buildozer(content: str) -> None:
         raise ValueError("qt_priority patch is not installed in buildozer.py")
     if "pkg_domain = " not in content:
         raise ValueError("identity patch is not installed in buildozer.py")
+    if TOOLCHAIN_MARKER not in content:
+        raise ValueError("NDK r28c and release APK settings are not installed in buildozer.py")
 
 
 def verify_android_config(content: str) -> None:
@@ -364,6 +487,8 @@ def verify_android_config(content: str) -> None:
         raise ValueError("custom recipes patch is not installed in android_config.py")
     if "import shutil" not in content:
         raise ValueError("import shutil is missing in android_config.py")
+    if ARCH_MARKER not in content:
+        raise ValueError("32-bit Android architecture patch is not installed in android_config.py")
 
 
 def verify_pyside_recipe_tmpl(content: str) -> None:
@@ -516,6 +641,13 @@ def main() -> int:
                 path=deploy_android_config_path(venv),
                 patch_fn=patch_android_config_source,
                 verify_fn=verify_android_config,
+                is_python=True,
+            ),
+            PatchTarget(
+                name="android_utilities",
+                path=deploy_android_config_path(venv).with_name("android_utilities.py"),
+                patch_fn=patch_android_utilities_source,
+                verify_fn=verify_android_utilities,
                 is_python=True,
             ),
             PatchTarget(

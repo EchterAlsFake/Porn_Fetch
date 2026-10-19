@@ -26,7 +26,7 @@ plugins =
 extra_args =
 
 [buildozer]
-mode = debug
+mode = release
 recipe_dir =
 jars_dir =
 ndk_path =

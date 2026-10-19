@@ -37,6 +37,15 @@ pyside6-android-deploy --config-file packaging/pysidedeploy_android.spec \
   --keep-deployment-files
 ```
 
+The build wrapper defaults to a **release APK** and requires **NDK r28c**
+(`28.2.13676358`). It checks `source.properties`, uses the same NDK path for
+PySide, Buildozer and python-for-android, and explicitly sets
+`android.release_artifact = apk`. Stale NDK environment variables are ignored
+during discovery; an explicit `--ndk-path` pointing to another revision fails.
+Use `--build-mode=debug` only when a debug APK is wanted. Release APKs use
+Buildozer's existing signing configuration; without signing credentials the
+result is an unsigned release APK.
+
 The current source requires Python 3.14 and uses native packages, including
 `curl-cffi` and `cryptography`. Their Android compatibility must be resolved for
 the target architecture before the APK can be built. The desktop deployment
@@ -56,9 +65,25 @@ The patch keeps python-for-android on `develop` with `p4a.commit = HEAD`.
 PySide6 6.12 otherwise changes the toolchain to an older release on `master`,
 whose final pip install can bundle host Linux extensions into an Android APK.
 Setting the branch alone is insufficient while that release commit remains pinned.
-Rebuild from clean deployment files after changing toolchains so incompatible
-cached dependencies are not reused. Add `--keep-deployment-files` when investigating
-build issues to retain the generated configuration and p4a checkout.
+
+The deployment patch leaves Buildozer's cache in the project's `.buildozer/`
+directory across runs, including failed builds. Buildozer and python-for-android
+can then reuse downloaded archives, hostpython, libffi, other compiled recipes,
+and compatible distributions. PySide's generated recipes and jars are still
+refreshed. `--keep-deployment-files` retains those generated deployment files;
+the Buildozer cache is retained regardless of that flag.
+
+The wrapper `./build_android.sh --architecture=aarch64 --wheels-dir=/path/to/wheels`
+applies and verifies the patch automatically. It also restores a cache left in
+`deployment/.buildozer/` by an older deployment before cleaning or building.
+Subsequent runs keep it at `.buildozer/` so compiled paths stay stable.
+
+Add `--clean` to the wrapper command after changing Qt wheels, native recipes,
+or the toolchain. This removes the selected architecture's compiled build and
+distribution cache while keeping downloaded dependency archives and other
+architectures' builds. Python/QML-only changes can use the normal incremental build.
+When first upgrading an existing cache to the pinned NDK, the wrapper rebuilds
+that architecture's native output once, preserving its downloaded archives.
 
 ## Device checks
 
