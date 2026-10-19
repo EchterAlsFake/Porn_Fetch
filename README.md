@@ -1,9 +1,5 @@
 # This project is currently not in a functional state. Please wait a few more days, I am actively working on it 🙏
 
-I will go to Belgrade for a concert from Dead Blonde on Sunday. I am broke as fuck so if you wanna donate me a couple of Energy Drinks, so that I survive the 2 hour rave and still have energy for coding, here you go: Paypal -> EchterAlsFake@proton.me
-
-Would genuienly help me (seriously). I don't know anyone else to ask bruh. In return I'll work my ass off the next 3 days to get a beta released. Deal? 
-
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
