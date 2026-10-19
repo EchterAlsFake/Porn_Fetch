@@ -34,7 +34,20 @@ Build jobs do not receive the online key. Deployment selects `environment: beta`
 and writes the PEM to a mode-0600 temporary file, deleting it after signing.
 The desktop deployment also uses this online key for its signed release manifest.
 
-In **Build All**, set `Legal review complete` and `Deploy signed CLI updates`. Creating a release also publishes CLI updates. CI appends the GitHub run number to the app version for each build. Publishing rejects a target whose version does not increase. **Refresh CLI Update Metadata** renews signed metadata every three days between releases and can also be run manually. A failed refresh needs attention before the timestamp expires after seven days.
+In **Cross-Platform Build Pipeline → Run workflow**, set `build_target` to `cli`
+to skip GUI compilation, installers, and the macOS universal build. Choose `both`
+(the default) to build both frontends, or `gui` to skip CLI builds and deployment.
+All selections still run shared validation. Tag pushes build both frontends.
+
+For CLI update testing, enter the full `release_version` (for example `3.9.1`),
+set `Legal review complete` and `Deploy signed CLI updates`, and save that build.
+Repeat with a newer version (for example `3.9.2`), then run `self-update` from
+the older executable. Creating a GitHub Release also deploys updates for the
+selected frontend(s); it requires successful builds and deployment for those
+frontends. Publishing rejects a target whose version does not increase.
+**Refresh CLI Update Metadata** renews signed metadata every three days between
+releases and can also be run manually. A failed refresh needs attention before
+the timestamp expires after seven days.
 
 Build All first runs the reusable offline CI suite on the same commit. Publishing runs
 are queued separately from ordinary builds and are not automatically cancelled by a newer run.

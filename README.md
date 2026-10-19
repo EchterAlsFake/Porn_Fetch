@@ -197,6 +197,13 @@ with the current client; old beta credentials are not upgraded automatically.
 See the [installation guide](docs/INSTALLATION.md).
 
 ## General Information
+
+In the **Cross-Platform Build Pipeline → Run workflow** form, choose `build_target`:
+`cli`, `gui`, or `both` (the default). CLI-only runs skip GUI compilation, installers,
+and the macOS universal build; GUI-only runs skip all CLI builds. Update deployment
+and GitHub Release publishing follow the selected target. Tag pushes build both.
+All selections still run the shared validation suite.
+
 > [!NOTE]
 > **Targets in the current build workflow.** A target in the workflow does not
 > mean its first beta artifact has passed manual testing.

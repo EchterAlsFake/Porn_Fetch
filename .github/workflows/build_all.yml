@@ -7,6 +7,15 @@ on:
         description: "Full release version (e.g. 3.9.66); must be newer than the published version"
         type: string
         required: true
+      build_target:
+        description: "Build CLI, GUI, or both"
+        type: choice
+        options:
+          - both
+          - cli
+          - gui
+        default: both
+        required: true
       create_release:
         description: "Publish artifacts as a GitHub Release"
         type: boolean
@@ -80,6 +89,7 @@ jobs:
   # ==========================================
   build-gui:
     needs: [validate, release-metadata]
+    if: inputs.build_target != 'cli'
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ ((matrix.platform == 'windows' && matrix.arch == 'arm64') || (matrix.platform == 'macos' && matrix.arch == 'x64')) && 120 || 75 }}
@@ -438,6 +448,7 @@ jobs:
   # ==========================================
   build-cli:
     needs: [validate, release-metadata]
+    if: inputs.build_target != 'gui'
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -563,7 +574,7 @@ jobs:
   build-cli-linux-x32:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-x32)
-    if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -594,7 +605,7 @@ jobs:
   build-cli-linux-riscv64:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-riscv64)
-    if: github.event_name == 'workflow_dispatch' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -746,7 +757,7 @@ jobs:
     name: Deploy IFW Repositories
     needs: [validate, build-gui, release-metadata]
     if: >-
-      github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
+      github.event_name == 'workflow_dispatch' && inputs.build_target != 'cli' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
     runs-on: ubuntu-latest
     environment: beta
@@ -838,7 +849,7 @@ jobs:
     name: Deploy CLI Updates
     needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, release-metadata]
     if: >-
-      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.legal_review_complete &&
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
     runs-on: ubuntu-latest
     environment: beta
@@ -904,9 +915,10 @@ jobs:
     needs: [validate, build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
-      needs.validate.result == 'success' && needs.build-gui.result == 'success' && needs.build-cli.result == 'success' &&
-      needs.build-macos-universal.result == 'success' &&
-      needs.deploy-repositories.result == 'success' && needs.deploy-cli-updates.result == 'success'
+      needs.validate.result == 'success' &&
+      (inputs.build_target == 'cli' || (needs.build-gui.result == 'success' &&
+        needs.build-macos-universal.result == 'success' && needs.deploy-repositories.result == 'success')) &&
+      (inputs.build_target == 'gui' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success'))
     runs-on: ubuntu-24.04
     permissions:
       contents: write
