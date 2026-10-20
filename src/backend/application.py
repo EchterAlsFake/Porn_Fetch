@@ -1518,6 +1518,9 @@ def main() -> None:
     beta_disclaimer = BetaDisclaimerBridge(app_settings, parent=engine)
     engine.rootContext().setContextProperty("betaDisclaimer", beta_disclaimer)
     engine.rootContext().setContextProperty("androidLayout", is_android or args.android)
+    from src.backend.android_display import AndroidDisplay
+    display_geometry = AndroidDisplay(os.environ.get("ANDROID_PRIVATE", "") if is_android else "", parent=engine)
+    engine.rootContext().setContextProperty("androidDisplay", display_geometry)
     for context_name, resource_path in (
         ("applicationLicenseText", ":/legal/LICENSE"),
         ("thirdPartyNoticesText", ":/legal/THIRD_PARTY_NOTICES.md"),

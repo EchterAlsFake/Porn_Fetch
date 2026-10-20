@@ -11,6 +11,7 @@ from scripts.android_storage_hook import before_apk_assemble, before_apk_build, 
 from src.backend.android_storage import copy_download_file, folder_destination
 
 ACTIVITY = '''public class PythonActivity extends QtActivity {
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (this.activityResultListeners == null) return;
         listener.onActivityResult(requestCode, resultCode, intent);
@@ -36,7 +37,11 @@ class AndroidActivityTests(unittest.TestCase):
             activity.parent.mkdir(parents=True)
             activity.write_text(ACTIVITY)
             before_apk_assemble(SimpleNamespace(_dist=SimpleNamespace(dist_dir=directory)))
-            self.assertEqual(activity.read_text(), patch_activity(ACTIVITY))
+            self.assertIn('PornFetchDisplay.install(this);', activity.read_text())
+            self.assertTrue((activity.parent / 'PornFetchDisplay.java').exists())
+            first = activity.read_text()
+            before_apk_assemble(SimpleNamespace(_dist=SimpleNamespace(dist_dir=directory)))
+            self.assertEqual(activity.read_text(), first)
 
     def test_hook_patches_build_py_adaptive_icon(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -25,7 +25,7 @@ package_domain = to.pornfetch
 version = 3.9
 presplash = /home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/logo_transparent.png
 plugins = platforms_qtforandroid
-requirements = certifi,cffi,charset-normalizer,chompjs,cryptography,curl_cffi,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg,unofficial-api-for-eporner,unofficial-api-for-pornhub,unofficial-api-for-porntrex,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx,unofficial-api-for-xvideos,unofficial-api-for-youporn,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3
+requirements = certifi,cffi,charset-normalizer,chompjs,cryptography,curl_cffi,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg,unofficial-api-for-eporner,unofficial-api-for-pornhub,unofficial-api-for-porntrex,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx,unofficial-api-for-xvideos,unofficial-api-for-youporn,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3,unofficial-api-for-empflix,unofficial-api-for-tnaflix
 extra_recipes_dir = /home/asuna/PycharmProjects/Porn_Fetch/p4a-recipes
 
 [nuitka]

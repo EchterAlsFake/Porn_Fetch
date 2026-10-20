@@ -104,8 +104,8 @@ class DownloadListModel(QAbstractListModel):
             display_duration = "N/A"
 
         else:
-            minutes, seconds = divmod(int(video.length), 60)
-            display_duration = self.tr("%d min %02d sec") % (minutes, seconds)
+            # Provider normalization and duration filters use rounded minutes.
+            display_duration = self.tr("%d min") % int(video.length)
 
         selected_quality = select_allowed_quality(
             preferred_quality,

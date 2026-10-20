@@ -72,6 +72,9 @@ desktop.ini
 # Android build and local test artifacts
 .buildozer/
 *.apk
+*.apk.idsig
+*.jks
+*.keystore
 *.aab
 *.whl
 *.whl.orig

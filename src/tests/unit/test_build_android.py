@@ -4,6 +4,7 @@ from __future__ import annotations
 import configparser
 import io
 import sys
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -19,6 +20,7 @@ from scripts.build_android import (
     find_android_ndk,
     find_wheels_for_arch,
     main,
+    sign_apk,
     normalize_arch,
     patch_pyside_wheel_if_needed,
     update_buildozer_spec,
@@ -34,6 +36,47 @@ from scripts.patch_android_deploy import (
     verify_android_utilities,
     verify_buildozer,
 )
+
+
+class TestApkSigning(unittest.TestCase):
+    def test_align_sign_verify_and_publish(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            apk = root / "unsigned.apk"
+            apk.write_bytes(b"unsigned")
+            commands = []
+
+            def run(command, **kwargs):
+                commands.append(command)
+                self.assertEqual(kwargs, {"check": True})  # Password prompts inherit stdin.
+                if command[0] == "zipalign":
+                    Path(command[-1]).write_bytes(b"aligned")
+                elif command[1] == "sign":
+                    output = Path(command[command.index("--out") + 1])
+                    output.write_bytes(b"signed")
+                    Path(str(output) + ".idsig").write_bytes(b"signature")
+                return subprocess.CompletedProcess(command, 0)
+
+            with patch("scripts.build_android.subprocess.run", side_effect=run):
+                result = sign_apk(apk, root, root / "key.jks", "alias")
+            self.assertEqual(result, root / "app-signed.apk")
+            self.assertEqual(result.read_bytes(), b"signed")
+            self.assertEqual((root / "app-aligned.apk").read_bytes(), b"aligned")
+            self.assertTrue(Path(str(result) + ".idsig").exists())
+            self.assertEqual(commands[0][:6], ["zipalign", "-p", "-f", "-v", "4", str(apk)])
+            self.assertEqual(commands[1][1:6], ["sign", "--ks", str(root / "key.jks"), "--ks-key-alias", "alias"])
+            self.assertEqual(commands[2][:3], ["apksigner", "verify", "--verbose"])
+
+    def test_failed_signing_preserves_previous_signed_apk(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            previous = root / "app-signed-aarch64.apk"
+            previous.write_bytes(b"previous release")
+            with patch("scripts.build_android.subprocess.run",
+                       side_effect=subprocess.CalledProcessError(1, "apksigner")):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    sign_apk(root / "unsigned.apk", root, root / "key.jks", "alias", "aarch64")
+            self.assertEqual(previous.read_bytes(), b"previous release")
 
 
 class TestAndroidDeployToolchain(unittest.TestCase):

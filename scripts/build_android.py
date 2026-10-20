@@ -10,6 +10,13 @@ Supports:
   - Automatic injection of native Java bridge (PythonActivity.java) and theme/splash templates
   - Pre-flight validation of deployment patches
   - Reuse of Buildozer downloads and compiled dependencies unless --clean is requested
+  - Release APK alignment, signing and verification (use --unsigned to skip)
+
+Release signing defaults to my-release-key.jks / my-key-alias in the project root.
+The signing tools must be on PATH. apksigner prompts for passwords interactively.
+Single-architecture builds produce app-aligned.apk and app-signed.apk in the
+project root (or --output-dir). Multi-architecture builds add architecture suffixes.
+Debug builds retain the build tool's debug signature.
 
 Example invocations:
   ./build_android.sh --architecture=aarch64 --wheel-pyside=<wheel> --wheel-shiboken=<wheel>
@@ -663,6 +670,34 @@ def build_single_arch(
     return apk_path
 
 
+def sign_apk(apk: Path, output_dir: Path, keystore: Path, key_alias: str,
+             architecture: str | None = None) -> Path:
+    """Align, sign and verify a release APK; inherit stdin for password prompts."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    suffix = f"-{architecture}" if architecture else ""
+    aligned = output_dir / f"app-aligned{suffix}.apk"
+    signed = output_dir / f"app-signed{suffix}.apk"
+    # Publish only verified output, preserving a previous signed build on failure.
+    with tempfile.TemporaryDirectory(prefix="apk-sign-", dir=output_dir) as temporary:
+        staged_aligned = Path(temporary) / aligned.name
+        staged_signed = Path(temporary) / signed.name
+        subprocess.run(["zipalign", "-p", "-f", "-v", "4", str(apk), str(staged_aligned)], check=True)
+        subprocess.run(["apksigner", "sign", "--ks", str(keystore),
+                        "--ks-key-alias", key_alias, "--out", str(staged_signed),
+                        str(staged_aligned)], check=True)
+        subprocess.run(["apksigner", "verify", "--verbose", str(staged_signed)], check=True)
+        staged_aligned.replace(aligned)
+        staged_signed.replace(signed)
+        signature = Path(str(staged_signed) + ".idsig")
+        destination_signature = Path(str(signed) + ".idsig")
+        if signature.exists():
+            signature.replace(destination_signature)
+        else:
+            destination_signature.unlink(missing_ok=True)
+    print(f"[✓] Signed and verified APK: {signed}")
+    return signed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -728,10 +763,26 @@ def main() -> int:
         help="Show what would be run without actually compiling APKs",
     )
 
+    parser.add_argument("--keystore", type=Path, default=Path("my-release-key.jks"),
+                        help="Release keystore, relative to project root (default: my-release-key.jks)")
+    parser.add_argument("--key-alias", default="my-key-alias", help="Signing key alias (default: my-key-alias)")
+    parser.add_argument("--unsigned", action="store_true", help="Skip automatic release APK signing")
+
     args = parser.parse_args()
 
     # Determine project root
     project_root = Path(__file__).resolve().parent.parent
+
+    signing = args.build_mode == "release" and not args.unsigned
+    keystore = args.keystore if args.keystore.is_absolute() else project_root / args.keystore
+    if signing and not args.dry_run:
+        if not keystore.is_file():
+            print(f"ERROR: Signing keystore not found: {keystore}. Use --keystore or --unsigned.", file=sys.stderr)
+            return 1
+        for tool in ("zipalign", "apksigner"):
+            if not shutil.which(tool):
+                print(f"ERROR: {tool} not found on PATH; required for release signing.", file=sys.stderr)
+                return 1
 
     # Determine virtual environment
     if args.venv:
@@ -812,6 +863,18 @@ def main() -> int:
             dry_run=args.dry_run,
             output_dir=args.output_dir,
         )
+        if signing:
+            signing_output = args.output_dir.resolve() if args.output_dir else project_root
+            suffix = arch if target_arch == "all" else None
+            if args.dry_run:
+                print(f"[*] (dry-run) Would zipalign, sign with {keystore} (alias {args.key_alias}), "
+                      f"and verify app-signed{'-' + suffix if suffix else ''}.apk in {signing_output}")
+            elif apk:
+                try:
+                    apk = sign_apk(apk, signing_output, keystore, args.key_alias, suffix)
+                except (OSError, subprocess.CalledProcessError) as error:
+                    print(f"ERROR: APK signing failed: {error}", file=sys.stderr)
+                    return 1
         if apk:
             built_apks.append((arch, apk))
 

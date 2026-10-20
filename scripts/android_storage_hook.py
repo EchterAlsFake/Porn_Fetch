@@ -67,5 +67,13 @@ def before_apk_assemble(toolchain) -> None:
     activity = (Path(toolchain._dist.dist_dir) / "src/main/java/org/kivy/android/PythonActivity.java")
     source = activity.read_text(encoding="utf-8")
     patched = patch_activity(source)
+    call = "org.kivy.android.PornFetchDisplay.install(this);"
+    if call not in patched:
+        anchor = "super.onCreate(savedInstanceState);"
+        if anchor not in patched:
+            raise ValueError("Cannot locate Qt activity onCreate for display outline")
+        patched = patched.replace(anchor, anchor + "\n        " + call, 1)
+    helper = Path(__file__).parent / "android" / "PornFetchDisplay.java"
+    (activity.parent / helper.name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
     if patched != source:
         activity.write_text(patched, encoding="utf-8")

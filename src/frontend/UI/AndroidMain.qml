@@ -26,6 +26,7 @@ ApplicationWindow {
 
     ActivityEdge {
         objectName: "activityEdge"
+        outline: androidDisplay.outline
         parent: Overlay.overlay
         anchors.fill: parent
         z: 100
@@ -35,7 +36,8 @@ ApplicationWindow {
         animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden
     }
     property int pageIndex: 0
-    readonly property bool tablet: contentItem.width >= 960
+    readonly property bool tablet: contentItem.width >= 600
+    readonly property bool expanded: contentItem.width >= 840
     readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
     readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4)
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
@@ -204,13 +206,18 @@ ApplicationWindow {
 
             Rectangle {
                 visible: window.tablet
-                Layout.preferredWidth: visible ? 204 : 0
+                Layout.preferredWidth: visible ? (window.expanded ? 204 : 88) : 0
                 Layout.fillHeight: true
                 color: window.navigationColor
 
-                ColumnLayout {
+                ScrollView {
+                    id: navigationScroll
                     anchors.fill: parent
-                    anchors.margins: 12
+                    anchors.margins: window.expanded ? 12 : 4
+                    contentWidth: availableWidth
+                    clip: true
+                    ColumnLayout {
+                    width: navigationScroll.availableWidth
                     spacing: 8
 
                     RowLayout {
@@ -224,6 +231,7 @@ ApplicationWindow {
                             fillMode: Image.PreserveAspectFit
                         }
                         Label {
+                            visible: window.expanded
                             text: qsTr("Porn Fetch")
                             color: window.primaryTextColor
                             font.pixelSize: 18
@@ -237,8 +245,9 @@ ApplicationWindow {
                             required property int index
                             required property string modelData
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 54
+                            Layout.preferredHeight: window.expanded ? 54 : 72
                             enabled: !appSettings.anonymous_mode || index < 3
+                            Accessible.name: modelData
                             onClicked: window.pageIndex = index
                             background: Rectangle {
                                 radius: 18
@@ -247,10 +256,13 @@ ApplicationWindow {
                                                  window.accentColor.b, 0.20)
                                        : "transparent"
                             }
-                            contentItem: RowLayout {
-                                spacing: 12
+                            contentItem: GridLayout {
+                                columns: window.expanded ? 2 : 1
+                                rowSpacing: 2
+                                columnSpacing: 12
                                 Image {
                                     source: window.pageIcons[index]
+                                    Layout.alignment: Qt.AlignHCenter
                                     Layout.preferredWidth: 28
                                     Layout.preferredHeight: 28
                                     fillMode: Image.PreserveAspectFit
@@ -258,6 +270,8 @@ ApplicationWindow {
                                 Label {
                                     Layout.fillWidth: true
                                     text: modelData
+                                    horizontalAlignment: window.expanded ? Text.AlignLeft : Text.AlignHCenter
+                                    font.pixelSize: window.expanded ? 14 : 11
                                     color: window.pageIndex === index
                                            ? window.accentColor : window.primaryTextColor
                                     font.bold: window.pageIndex === index
@@ -266,7 +280,7 @@ ApplicationWindow {
                             }
                         }
                     }
-                    Item { Layout.fillHeight: true }
+                    }
                 }
             }
 
@@ -354,6 +368,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 Layout.preferredWidth: 1
                                 Layout.fillHeight: true
+                                Accessible.name: modelData
                                 enabled: index !== 3 || !appSettings.anonymous_mode
                                 onClicked: {
                                     if (index === 3) window.pageIndex = 5
@@ -382,6 +397,9 @@ ApplicationWindow {
                                     Label {
                                         Layout.alignment: Qt.AlignHCenter
                                         text: modelData
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignHCenter
+                                        elide: Text.ElideRight
                                         color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
                                                ? window.accentColor : window.secondaryTextColor
                                         font.pixelSize: 11

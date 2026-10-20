@@ -20,13 +20,17 @@ Pane {
     background: Rectangle { color: root.pageColor }
 
     ScrollView {
-        anchors.fill: parent
-        anchors.margins: 8
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins: 16
+        width: Math.min(parent.width - 32, 640)
+        id: accountScroll
         contentWidth: availableWidth
         clip: true
 
         ColumnLayout {
-            width: parent.width
+            width: accountScroll.availableWidth
             spacing: 8
             Label {
                 Layout.fillWidth: true
@@ -41,9 +45,10 @@ Pane {
                 color: root.mutedColor
                 wrapMode: Text.Wrap
             }
-            RowLayout {
+            GridLayout {
+                columns: accountScroll.availableWidth < 360 ? 1 : 3
                 Layout.fillWidth: true
-                spacing: 8
+                columnSpacing: 8
                 Repeater {
                     model: root.providers
                     delegate: Button {

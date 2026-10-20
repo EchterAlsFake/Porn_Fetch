@@ -85,7 +85,7 @@ class VideoObject:
     url: str
     title: str
     author: str
-    length: int | None
+    length: int | None  # Rounded minutes, as returned by parse_length().
     tags: list[str] | None
     thumbnail_url: str
     video_id: str
