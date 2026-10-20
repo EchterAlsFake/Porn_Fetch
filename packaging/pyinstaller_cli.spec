@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
-from PyInstaller.utils.hooks import collect_all, collect_submodules
+from PyInstaller.utils.hooks import collect_all, collect_data_files, collect_submodules
 
 project_root = os.path.abspath(os.path.join(SPECPATH, ".."))
 
@@ -25,7 +25,7 @@ analysis = Analysis(
     [os.path.join(project_root, "Porn_Fetch_CLI.py")],
     pathex=[project_root],
     binaries=questionary_binaries + rich_binaries,
-    datas=questionary_datas + rich_datas + [
+    datas=questionary_datas + rich_datas + collect_data_files("certifi") + [
         (os.path.join(project_root, "src", "licensing", "production.json"), "src/licensing"),
         (os.path.join(project_root, "docs", "CREDITS.md"), "docs"),
         (os.path.join(project_root, "LICENSE"), "."),

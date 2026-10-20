@@ -708,6 +708,7 @@ name = "porn-fetch"
 source = { editable = "." }
 dependencies = [
     { name = "browser-cookie3" },
+    { name = "certifi" },
     { name = "cryptography" },
     { name = "curl-cffi" },
     { name = "eaf-base-api", extra = ["hls"] },
@@ -750,7 +751,6 @@ desktop-build = [
     { name = "zstandard" },
 ]
 gui = [
-    { name = "certifi" },
     { name = "pydivert", marker = "(platform_machine == 'AMD64' and sys_platform == 'win32') or (platform_machine == 'x86_64' and sys_platform == 'win32') or sys_platform == 'linux'" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
@@ -769,7 +769,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "browser-cookie3", specifier = ">=0.20.1" },
-    { name = "certifi", marker = "extra == 'gui'" },
+    { name = "certifi" },
     { name = "cryptography" },
     { name = "curl-cffi" },
     { name = "eaf-base-api", extras = ["hls"], specifier = ">=4.2.2" },

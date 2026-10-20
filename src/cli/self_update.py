@@ -12,10 +12,24 @@ import sys
 import tempfile
 import time
 import zipfile
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
+import certifi
 from platformdirs import user_cache_dir
+from rich.console import Console
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    Progress,
+    TaskProgressColumn,
+    TextColumn,
+    TimeRemainingColumn,
+    TransferSpeedColumn,
+)
+from tuf.api.metadata import TargetFile
 from tuf.ngclient import Updater
+from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
 from src.shared.release import release_time, update_eligibility
 
@@ -23,6 +37,37 @@ UPDATE_REPO_URL = "https://api.pornfetch.to/repo/cli"
 REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", UPDATE_REPO_URL).rstrip("/") + "/"
 ROOT_FILE = Path(__file__).with_name("update_root.json")
 BUILD_FILE = Path(__file__).with_name("update_build.json")
+
+
+class _ProgressFetcher(Urllib3Fetcher):
+    on_chunk: Callable[[int], None] | None = None
+
+    def _fetch(self, url: str) -> Iterator[bytes]:
+        return self._track_chunks(super()._fetch(url))
+
+    def _track_chunks(self, chunks: Iterator[bytes]) -> Iterator[bytes]:
+        for chunk in chunks:
+            if self.on_chunk is not None:
+                self.on_chunk(len(chunk))
+            yield chunk
+
+
+def _download_update(updater: Updater, target: TargetFile, fetcher: _ProgressFetcher) -> Path:
+    with Progress(
+        TextColumn("[bold cyan]Downloading update[/]"),
+        BarColumn(),
+        TaskProgressColumn(),
+        DownloadColumn(),
+        TransferSpeedColumn(),
+        TimeRemainingColumn(),
+        console=Console(stderr=True),
+    ) as progress:
+        task = progress.add_task("update", total=target.length)
+        fetcher.on_chunk = lambda size: progress.advance(task, size)
+        try:
+            return Path(updater.download_target(target))
+        finally:
+            fetcher.on_chunk = None
 
 
 def target_name(system: str | None = None, machine: str | None = None) -> str:
@@ -179,12 +224,20 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
         target_dir = cache / "targets"
         metadata_dir.mkdir(parents=True, exist_ok=True)
         target_dir.mkdir(parents=True, exist_ok=True)
+        # Frozen OpenSSL can retain the build machine's CA paths. Use the
+        # bundled roots unless the user configured a certificate store.
+        if getattr(sys, "frozen", False) and not (
+            os.environ.get("SSL_CERT_FILE") or os.environ.get("SSL_CERT_DIR")
+        ):
+            os.environ["SSL_CERT_FILE"] = certifi.where()
+        fetcher = _ProgressFetcher()
         updater = Updater(
             metadata_dir=str(metadata_dir),
             metadata_base_url=REPOSITORY_URL + "metadata/",
             target_dir=str(target_dir),
             target_base_url=REPOSITORY_URL + "targets/",
             bootstrap=ROOT_FILE.read_bytes(),
+            fetcher=fetcher,
         )
         target = updater.get_targetinfo(name)
         if target is None or not isinstance(target.custom, dict):
@@ -211,7 +264,7 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
             if not sys.stdin.isatty() or input("Download and install this signed update? [y/N] ").strip().lower() not in {"y", "yes"}:
                 print("Update cancelled.")
                 return 0
-        archive = Path(updater.download_target(target))
+        archive = _download_update(updater, target, fetcher)
         stage = Path(tempfile.mkdtemp(prefix=".pornfetch-update-", dir=executable.parent))
         _stage_bundle(archive, stage, name, latest, executable, released)
         helper = stage / ("pornfetch-update-helper.exe" if sys.platform == "win32" else "pornfetch-update-helper")
@@ -230,4 +283,6 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
         return 0
     except Exception as exc:
         print(f"CLI update failed: {exc}", file=sys.stderr)
+        if exc.__cause__ is not None:
+            print(f"Cause: {exc.__cause__}", file=sys.stderr)
         return 1
