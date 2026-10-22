@@ -1,5 +1,8 @@
 # This project is currently not in a functional state. Please wait a few more days, I am actively working on it 🙏
 
+# Security Notice regarding PHP
+The Porn Fetch server is NOT affected by the recent PHP security vulnerability. The server will remain functioning and your data stays safe :) 
+
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
 > The downloadable 3.8 release is an older GPL release. Its app, license,
