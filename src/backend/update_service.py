@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
 from pathlib import Path
@@ -19,6 +20,7 @@ from src.backend.helper_functions import get_original_executable_path
 from src.backend.shared_functions import configure_app_logging
 from src.shared.paths import shared_data_dir
 from src.shared.release import ROOT_FILE, update_eligibility, validate_ifw_packages, verify_repository_manifest
+from src.shared.service_transport import ServiceCore
 from src.shared.version import BUILD_VERSION as __version__
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
@@ -26,6 +28,7 @@ logger = configure_app_logging(logger_name="PornFetch - [Update]")
 DEFAULT_UPDATE_URL = "https://api.pornfetch.to/update"
 UPDATE_URL_ENVIRONMENT_VARIABLE = "PORNFETCH_UPDATE_URL"
 DEFAULT_REPO_BASE_URL = "https://api.pornfetch.to/repo"
+service_core = ServiceCore(clients.app_settings)
 
 
 def get_update_url() -> str:
@@ -61,9 +64,14 @@ class CheckUpdates:
 
     @staticmethod
     async def check() -> dict | None:
+        from src.shared.android_updates import check, is_android_device
+        if is_android_device():
+            return await asyncio.to_thread(check, clients.app_settings, __version__)
         try:
             return await CheckUpdates.check_signed_repository()
         except Exception:
+            if service_core.tor_enabled:
+                raise
             logger.warning("Signed release metadata is unavailable. Falling back to informational update discovery; automatic installation remains disabled.")
             # Legacy discovery is informational only; installation requires a signed repository.
             update = await CheckUpdates.check_via_http()
@@ -75,7 +83,7 @@ class CheckUpdates:
     async def check_signed_repository() -> dict | None:
         tag = platform.system().lower() + "_" + {"x86_64": "amd64", "x64": "amd64", "aarch64": "arm64"}.get(platform.machine().lower(), platform.machine().lower())
         url = DEFAULT_REPO_BASE_URL + "/" + tag + "/"
-        response = await clients.core.request(url=url + "release.json", allow_redirects=False, timeout=20)
+        response = await service_core.request(url=url + "release.json", allow_redirects=False)
         resource = QFile(":/updates/root.json")
         if resource.exists():
             if not resource.open(QIODevice.OpenModeFlag.ReadOnly):
@@ -91,8 +99,8 @@ class CheckUpdates:
             return None
         if changelog_path := release.get("changelog_path"):
             try:
-                notes = await clients.core.fetch_bytes(
-                    url + quote(changelog_path, safe="/"), allow_redirects=False, timeout=20,
+                notes = await service_core.fetch_bytes(
+                    url + quote(changelog_path, safe="/"), allow_redirects=False,
                 )
                 metadata.signed.targets[changelog_path].verify_length_and_hashes(notes)
                 release = {**release, "changelog": notes.decode("utf-8"), "changelog_format": "markdown"}
@@ -102,6 +110,8 @@ class CheckUpdates:
 
     @staticmethod
     async def check_via_maintenancetool() -> dict | None:
+        if service_core.tor_enabled:
+            return await CheckUpdates.check_signed_repository()
         tool = find_maintenance_tool()
         if not tool:
             return None
@@ -142,7 +152,7 @@ class CheckUpdates:
     async def check_via_http() -> dict | None:
         url = get_update_url()
         try:
-            response: Response = await clients.core.request(url=url)
+            response: Response = await service_core.request(url=url)
             if response.status_code == 200:
                 update = response.json()
                 version = str(update.get("version", "")).removeprefix("latest - ").strip()
@@ -184,11 +194,13 @@ class AutoUpdater(QObject):
         super().__init__(parent)
         self.before_update = before_update
         self.license_status = license_status
+        self._android_cancel = threading.Event()
 
     async def run(self) -> None:
         try:
             await self._run()
         except asyncio.CancelledError:
+            self._android_cancel.set()
             raise
         except Exception as error:
             logger.exception("Update launch failed")
@@ -197,12 +209,24 @@ class AutoUpdater(QObject):
             self.finished.emit()
 
     async def _run(self) -> None:
+        from src.shared.android_updates import download_and_request_install, is_android_device
+        if is_android_device():
+            if self.license_status is None:
+                self.statusReport.emit("Validate your license before updating.")
+                return
+            status = await self.license_status()
+            self.statusReport.emit("Downloading and verifying the Android update…")
+            self._android_cancel.clear()
+            await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__, status,
+                                    None, self._android_cancel)
+            self.statusReport.emit("APK verified. Waiting for Android's installation confirmation…")
+            return
         tool = find_maintenance_tool()
         if not tool:
             self.statusReport.emit(
                 "Automatic updates require an installation managed by the Qt Maintenance Tool.\n"
                 "Please download the latest beta build from "
-                "https://github.com/EchterAlsFake/Porn_Fetch/releases/"
+                "https://pornfetch.to/download"
             )
             return
 
@@ -252,13 +276,9 @@ class AutoUpdater(QObject):
         try:
             metadata = update["metadata"]
             for name, target in metadata.signed.targets.items():
-                response = await clients.core.request(
-                    url=update["repository_url"] + quote(name, safe="/"), allow_redirects=False, timeout=120,
-                )
-                target.verify_length_and_hashes(response.content)
                 path = stage / name
                 path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes(response.content)
+                await service_core.download_verified(update["repository_url"] + quote(name, safe="/"), target, path)
             xml = ET.parse(stage / "Updates.xml")
             validate_ifw_packages(xml, update["version"], update["release_timestamp"])
             # All content is local and hash checked; remote repository substitutions are forbidden.

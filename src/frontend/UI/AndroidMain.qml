@@ -4,6 +4,7 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 ApplicationWindow {
+    ServiceTorFailureDialog {}
     id: window
     visible: true
     width: 400
@@ -414,4 +415,44 @@ ApplicationWindow {
             }
         }
     }
+    Dialog {
+        id: androidUpdateDialog
+        property var details: ({})
+        property bool busy: false
+        property string status: ""
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(window.width - 32, 520)
+        height: Math.min(window.height - 48, 600)
+        modal: true
+        title: qsTr("Porn Fetch update")
+        standardButtons: Dialog.Close
+        onRejected: if (busy) backend.cancel_update()
+        contentItem: ColumnLayout {
+            spacing: 16
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.version ? qsTr("Version %1 is available").arg(androidUpdateDialog.details.version) : qsTr("App updates") }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.entitlement_message || "" }
+            ScrollView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+                Label { width: parent.width; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.changelog || ""; textFormat: Text.PlainText }
+            }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport === "tor"; text: torStatus.text }
+            Button {
+                Layout.fillWidth: true
+                text: qsTr("Download and install update")
+                enabled: androidUpdateDialog.details.install_allowed === true && !androidUpdateDialog.busy
+                onClicked: { androidUpdateDialog.busy = true; androidUpdateDialog.status = qsTr("Preparing verified download…"); backend.auto_update() }
+            }
+        }
+    }
+    Connections {
+        target: backend
+        function onUpdateAvailable(details) { androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; androidUpdateDialog.open() }
+        function onUpdateStatus(status) { androidUpdateDialog.status = status; androidUpdateDialog.open() }
+        function onUpdateFinished() { androidUpdateDialog.busy = false }
+    }
+
 }

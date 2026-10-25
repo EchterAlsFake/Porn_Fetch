@@ -35,6 +35,10 @@ def collect_legal(output: Path, *, offline: bool = False, ffmpeg_legal: list[Pat
     for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copy2(PROJECT_ROOT / name, output / name)
     shutil.copytree(PROJECT_ROOT / "LICENSES", output / "LICENSES", dirs_exist_ok=True)
+    tor = PROJECT_ROOT / "src/shared/tor"
+    if (tor / "notices").is_dir():
+        shutil.copytree(tor / "notices", output / "tor", dirs_exist_ok=True)
+        shutil.copy2(tor / "provenance.json", output / "tor/provenance.json")
     sources = ffmpeg_legal if ffmpeg_legal is not None else [PROJECT_ROOT / "third_party/ffmpeg-legal"]
     for index, source in enumerate(sources):
         if ffmpeg_legal is not None and not source.is_dir():

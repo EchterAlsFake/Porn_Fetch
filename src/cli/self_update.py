@@ -206,8 +206,9 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
 
 
 async def _license_status():
+    from src.cli.settings import SettingsStore
     from src.licensing.service import create_license_service
-    service = create_license_service(None)
+    service = create_license_service(SettingsStore().load())
     try:
         return await service.check(force=True)
     finally:
@@ -216,6 +217,9 @@ async def _license_status():
 
 def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
     try:
+        from src.cli.settings import SettingsStore
+        from src.shared.service_transport import ServiceFetcher
+        settings = SettingsStore().load()
         build = json.loads(BUILD_FILE.read_text(encoding="utf-8"))
         current = build["version"]
         name = build.get("target") or target_name()
@@ -230,7 +234,7 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
             os.environ.get("SSL_CERT_FILE") or os.environ.get("SSL_CERT_DIR")
         ):
             os.environ["SSL_CERT_FILE"] = certifi.where()
-        fetcher = _ProgressFetcher()
+        fetcher = ServiceFetcher(settings)
         updater = Updater(
             metadata_dir=str(metadata_dir),
             metadata_base_url=REPOSITORY_URL + "metadata/",

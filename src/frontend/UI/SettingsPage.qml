@@ -1069,32 +1069,21 @@ Pane {
                                 onToggled: appSettings.dns_over_https = checked
                             }
 
-                            HelpButton {
-                                Layout.fillWidth: false
-                                helpText: AppStrings.torIntegrationHelp
-                            }
+                            HelpButton { helpText: AppStrings.torIntegrationHelp }
                             CheckBox {
-                                objectName: "enableTorCheckBox"
-                                Accessible.name: qsTr("Enable Tor Integration")
-                                Accessible.description: AppStrings.torIntegrationHelp
-                                text: "Enable Tor Integration"
+                                objectName: "serviceTorCheckBox"
+                                Accessible.name: qsTr("Use Tor for updates and licensing")
+                                text: qsTr("Use Tor for updates and licensing")
                                 Layout.fillWidth: true
-                                checked: appSettings.enable_tor
-                                onToggled: appSettings.enable_tor = checked
+                                checked: appSettings.service_transport === "tor"
+                                onToggled: appSettings.service_transport = checked ? "tor" : "direct"
                             }
-
-                            HelpButton {
-                                Layout.fillWidth: false
-                                helpText: AppStrings.onionRoutingHelp
-                            }
-                            CheckBox {
-                                objectName: "enableTorServerRoutingCheckBox"
-                                Accessible.name: qsTr("Route License / Update checking through .onion domain")
-                                Accessible.description: AppStrings.onionRoutingHelp
-                                text: "Route License / Update checking through .onion domain"
+                            Item {}
+                            Label {
                                 Layout.fillWidth: true
-                                checked: appSettings.enable_tor_server_routing
-                                onToggled: appSettings.enable_tor_server_routing = checked
+                                wrapMode: Text.WordWrap
+                                text: torStatus.text
+                                visible: appSettings.service_transport === "tor"
                             }
 
                             HelpButton {

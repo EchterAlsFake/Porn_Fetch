@@ -8,12 +8,13 @@ on:
         type: string
         required: true
       build_target:
-        description: "Build CLI, GUI, or both"
+        description: "Build desktop + Android GUI, CLI, both, or Android only"
         type: choice
         options:
           - both
           - cli
           - gui
+          - android
         default: both
         required: true
       create_release:
@@ -32,6 +33,17 @@ on:
         description: "Publish signed CLI update bundles to the beta server"
         type: boolean
         default: false
+      deploy_website:
+        description: "Publish built packages to the independent Porn Fetch website"
+        type: boolean
+        default: false
+      website_channel:
+        description: "Website release channel (independent of updater feeds)"
+        type: choice
+        options:
+          - beta
+          - stable
+        default: beta
       experimental_builds:
         description: "Also build Linux 32-bit and RISC-V CLI artifacts"
         type: boolean
@@ -47,8 +59,8 @@ permissions:
 
 concurrency:
   # Publishing runs have their own queue and cannot be cancelled by another build.
-  group: builds-${{ github.ref }}-${{ (inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates) && 'publish' || 'build' }}
-  cancel-in-progress: ${{ !(inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates) }}
+  group: builds-${{ github.ref }}-${{ (inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates || inputs.deploy_website) && 'publish' || 'build' }}
+  cancel-in-progress: ${{ !(inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates || inputs.deploy_website) }}
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -89,7 +101,7 @@ jobs:
   # ==========================================
   build-gui:
     needs: [validate, release-metadata]
-    if: inputs.build_target != 'cli'
+    if: inputs.build_target != 'cli' && inputs.build_target != 'android'
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ ((matrix.platform == 'windows' && matrix.arch == 'arm64') || (matrix.platform == 'macos' && matrix.arch == 'x64')) && 120 || 75 }}
@@ -158,6 +170,15 @@ jobs:
           $cryptoPath = uv run --no-sync python -c "import cryptography, os; print(os.path.dirname(cryptography.__file__))"
           $dllTarget = Join-Path $cryptoPath "hazmat\bindings"
           Copy-Item -Path (Join-Path $env:OPENSSL_DIR "bin\*.dll") -Destination $dllTarget -Force
+
+      - name: Prepare bundled Tor
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" = linux ] && [ "${{ matrix.arch }}" = arm64 ]; then
+            sudo apt-get update
+            sudo apt-get install -y libevent-dev libssl-dev zlib1g-dev pkg-config
+          fi
+          uv run --no-sync python packaging/fetch_tor.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --work-dir "$RUNNER_TEMP/tor-build"
 
       - name: Fetch PocketBase
         shell: bash
@@ -255,6 +276,8 @@ jobs:
             cp third_party/pocketbase.exe "Porn Fetch.dist/third_party/" || true
             cp third_party/pocketbase.exe "Porn Fetch.dist/" || true
             
+            mkdir -p "Porn Fetch.dist/src/shared"
+            cp -pR src/shared/tor "Porn Fetch.dist/src/shared/"
             DIST_NAME="PornFetch_windows_GUI_${{ matrix.arch }}"
             cp -r "Porn Fetch.dist" "$DIST_NAME"
             7z a "$DIST_NAME.zip" "$DIST_NAME"
@@ -275,12 +298,16 @@ jobs:
             cp third_party/pocketbase "Porn Fetch.dist/" || true
             chmod +x "Porn Fetch.dist/pocketbase" || true
             
+            mkdir -p "Porn Fetch.dist/src/shared"
+            cp -pR src/shared/tor "Porn Fetch.dist/src/shared/"
             DIST_NAME="PornFetch_linux_GUI_${{ matrix.arch }}"
             cp -r "Porn Fetch.dist" "$DIST_NAME"
             tar -czf "$DIST_NAME.tar.gz" "$DIST_NAME"
             echo "DIST_ARCHIVE=$DIST_NAME.tar.gz" >> "$GITHUB_ENV"
             echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
           else
+            mkdir -p "Porn Fetch.app/Contents/MacOS/src/shared"
+            cp -pR src/shared/tor "Porn Fetch.app/Contents/MacOS/src/shared/"
             mkdir -p "Porn Fetch.app/Contents/MacOS/third_party"
             cp -R third_party/ffmpeg-legal "Porn Fetch.app/Contents/MacOS/third_party/"
             if [ -f third_party/ffmpeg ]; then
@@ -443,12 +470,192 @@ jobs:
             -d "{\"status\":\"$STATUS\",\"details\":\"Run #${{ github.run_number }}\"}" \
             https://api.pornfetch.to/ci/gui_build || true
 
+  build-android:
+    name: Android (${{ matrix.arch }})
+    needs: [validate, release-metadata]
+    if: inputs.build_target != 'cli'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    environment: beta
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: aarch64
+            abi: arm64-v8a
+          - arch: armv7a
+            abi: armeabi-v7a
+          - arch: x86_64
+            abi: x86_64
+          - arch: i686
+            abi: x86
+    env:
+      ANDROID_ARCH: ${{ matrix.arch }}
+      ANDROID_ABI: ${{ matrix.abi }}
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Configure external Android build environment
+        run: |
+          # Qt scans the project for QML; keep the host venv and wheels outside it.
+          echo "UV_PROJECT_ENVIRONMENT=$RUNNER_TEMP/android-venv" >> "$GITHUB_ENV"
+          echo "VIRTUAL_ENV=$RUNNER_TEMP/android-venv" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        with:
+          enable-cache: true
+
+      - name: Require Android signing credentials before publishing
+        if: inputs.deploy_website || inputs.create_release
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Configure $name in the beta environment to publish signed Android APKs."
+              exit 1
+            fi
+          done
+
+      - name: Install Android host dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git zip unzip autoconf automake libtool pkg-config cmake ninja-build zlib1g-dev libffi-dev libssl-dev libltdl-dev gettext libncurses-dev libtinfo6 libegl1 libgl1 libxkbcommon0 libdbus-1-3
+          uv sync --locked --no-dev --extra gui --extra android-build
+          uv pip install --python "$VIRTUAL_ENV/bin/python" "PySide6==6.12.0" pip buildozer cython
+          echo "$VIRTUAL_ENV/bin" >> "$GITHUB_PATH"
+
+      - name: Configure JDK 21, Android SDK 36 and NDK r28c
+        run: |
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          printf '%s\n' y y y y y y y y y y y y y y y y | "$SDKMANAGER" --licenses > /dev/null
+          "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
+          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+          echo "$JAVA_HOME/bin" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/build-tools/36.0.0" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+
+      - name: Download and verify Python 3.14 Android wheels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          WHEELS_DIR="$RUNNER_TEMP/android-wheels"
+          mkdir -p "$WHEELS_DIR"
+          gh release download 6.12.0 --repo EchterAlsFake/PySide6-to-Android --dir "$WHEELS_DIR" \
+            --pattern "pyside6-6.12.0-6.12.0-cp314-cp314-android_${ANDROID_ARCH}.whl" \
+            --pattern "shiboken6-6.12.0-6.12.0-cp314-cp314-android_${ANDROID_ARCH}.whl" \
+            --pattern SHA256SUMS
+          cd "$WHEELS_DIR"
+          echo "be61b5035d31f5ec7805f2dc017c7e49de7b790381bee9be4a7ab9df8468382a  SHA256SUMS" | sha256sum --check --strict
+          grep -E " (pyside6|shiboken6)-6\.12\.0-6\.12\.0-cp314-cp314-android_${ANDROID_ARCH}\.whl$" SHA256SUMS > selected.sha256
+          test "$(wc -l < selected.sha256)" -eq 2
+          sha256sum --check --strict selected.sha256
+
+      - name: Prepare bundled Android Tor
+        run: python packaging/fetch_tor.py --platform android --arch "$ANDROID_ARCH" --work-dir "$RUNNER_TEMP/tor-build"
+
+      - name: Apply and verify QtAsyncio and Android deployment patches
+        run: |
+          python scripts/patch_qtasyncio.py "$VIRTUAL_ENV"
+          python scripts/patch_qtasyncio.py "$VIRTUAL_ENV" --verify
+          python scripts/patch_android_deploy.py "$VIRTUAL_ENV"
+          python scripts/patch_android_deploy.py "$VIRTUAL_ENV" --verify
+
+      - name: Prepare Android application and release version
+        env:
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
+          RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
+        run: |
+          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          python packaging/prepare_android_ci.py --venv "$VIRTUAL_ENV" --version "$RELEASE_VERSION"
+          # Regenerate recipes and JARs from this ABI's patched wheel. The tracked
+          # deployment cache contains paths from a local developer environment.
+          rm -rf -- deployment/jar deployment/recipes/PySide6 deployment/recipes/shiboken6
+          python scripts/patch.py
+          pyside6-rcc --binary --compress-algo zlib --compress 9 src/frontend/resources.qrc -o src/frontend/resources.rcc
+          pyside6-rcc --compress-algo zlib --compress 9 src/frontend/resources.qrc -o src/frontend/UI/resources.py
+
+      - name: Build release APK
+        run: |
+          python scripts/build_android.py --architecture "$ANDROID_ARCH" \
+            --wheel-pyside "$RUNNER_TEMP/android-wheels/pyside6-6.12.0-6.12.0-cp314-cp314-android_${ANDROID_ARCH}.whl" \
+            --wheel-shiboken "$RUNNER_TEMP/android-wheels/shiboken6-6.12.0-6.12.0-cp314-cp314-android_${ANDROID_ARCH}.whl" \
+            --venv "$VIRTUAL_ENV" --sdk-path "$ANDROID_HOME" --ndk-path "$ANDROID_NDK_HOME" \
+            --build-mode release --unsigned --output-dir "$RUNNER_TEMP/android-output" \
+            < /dev/null 2>&1 | tee "$RUNNER_TEMP/android-build.log"
+
+      - name: Sign APK and collect notices
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
+        run: |
+          mkdir -p android_release
+          shopt -s nullglob
+          APKS=("$RUNNER_TEMP/android-output/"*.apk)
+          test "${#APKS[@]}" -eq 1
+          APK="${APKS[0]}"
+          test -s "$APK"
+          python -c 'import os, sys, zipfile; archive = zipfile.ZipFile(sys.argv[1]); assert archive.getinfo("lib/" + os.environ["ANDROID_ABI"] + "/libTor.so").file_size > 0' "$APK"
+          aapt2 dump xmltree "$APK" --file AndroidManifest.xml > "$RUNNER_TEMP/android-manifest.txt"
+          grep -q PornFetchUpdateProvider "$RUNNER_TEMP/android-manifest.txt"
+          grep -q REQUEST_INSTALL_PACKAGES "$RUNNER_TEMP/android-manifest.txt"
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            umask 077
+            KEYSTORE="$RUNNER_TEMP/android-release.jks"
+            trap 'rm -f "$KEYSTORE"' EXIT
+            python -c 'import base64, os, pathlib; pathlib.Path(os.environ["RUNNER_TEMP"], "android-release.jks").write_bytes(base64.b64decode(os.environ["ANDROID_KEYSTORE_BASE64"], validate=True))'
+            zipalign -P 16 -f -v 4 "$APK" "$RUNNER_TEMP/android-aligned.apk"
+            apksigner sign --ks "$KEYSTORE" --ks-key-alias "$ANDROID_KEY_ALIAS" \
+              --ks-pass env:ANDROID_KEYSTORE_PASSWORD --key-pass env:ANDROID_KEY_PASSWORD \
+              --out "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk" "$RUNNER_TEMP/android-aligned.apk"
+            apksigner verify --verbose "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk"
+          else
+            cp "$APK" "android_release/PornFetch_android_GUI_${ANDROID_ABI}_unsigned.apk"
+            echo "::notice::Build-only APK is unsigned. Configure Android signing secrets for installable, publishable APKs."
+          fi
+          python packaging/collect_legal.py "android_release/PornFetch_android_GUI_${ANDROID_ABI}_LEGAL"
+          for file in android_release/*.apk; do python scripts/write_checksum.py "$file"; done
+
+      - name: Upload Android APK and notices
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: PornFetch_android_GUI_${{ matrix.abi }}
+          path: |
+            android_release/*.apk
+            android_release/*.apk.sha256
+            android_release/*_LEGAL.zip
+          if-no-files-found: error
+
+      - name: Preserve Android build diagnostics
+        if: always()
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: android-build-diagnostics-${{ matrix.arch }}
+          path: |
+            ${{ runner.temp }}/android-build.log
+            buildozer.spec
+            pysidedeploy.spec
+            ${{ runner.temp }}/android-manifest.txt
+
   # ==========================================
   # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
   build-cli:
     needs: [validate, release-metadata]
-    if: inputs.build_target != 'gui'
+    if: inputs.build_target != 'gui' && inputs.build_target != 'android'
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -509,6 +716,15 @@ jobs:
           $cryptoPath = uv run --no-sync python -c "import cryptography, os; print(os.path.dirname(cryptography.__file__))"
           $dllTarget = Join-Path $cryptoPath "hazmat\bindings"
           Copy-Item -Path (Join-Path $env:OPENSSL_DIR "bin\*.dll") -Destination $dllTarget -Force
+
+      - name: Prepare bundled Tor
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" = linux ] && [ "${{ matrix.arch }}" = arm64 ]; then
+            sudo apt-get update
+            sudo apt-get install -y libevent-dev libssl-dev zlib1g-dev pkg-config
+          fi
+          uv run --no-sync python packaging/fetch_tor.py --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --work-dir "$RUNNER_TEMP/tor-build"
 
       - name: Fetch PocketBase
         shell: bash
@@ -574,7 +790,7 @@ jobs:
   build-cli-linux-x32:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-x32)
-    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -605,7 +821,7 @@ jobs:
   build-cli-linux-riscv64:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-riscv64)
-    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -757,7 +973,7 @@ jobs:
     name: Deploy IFW Repositories
     needs: [validate, build-gui, release-metadata]
     if: >-
-      github.event_name == 'workflow_dispatch' && inputs.build_target != 'cli' && inputs.legal_review_complete &&
+      github.event_name == 'workflow_dispatch' && inputs.build_target != 'cli' && inputs.build_target != 'android' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
     runs-on: ubuntu-latest
     environment: beta
@@ -849,7 +1065,7 @@ jobs:
     name: Deploy CLI Updates
     needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, release-metadata]
     if: >-
-      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.legal_review_complete &&
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
     runs-on: ubuntu-latest
     environment: beta
@@ -912,13 +1128,14 @@ jobs:
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [validate, build-gui, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
+    needs: [validate, build-gui, build-android, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
       needs.validate.result == 'success' &&
-      (inputs.build_target == 'cli' || (needs.build-gui.result == 'success' &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || (needs.build-gui.result == 'success' &&
         needs.build-macos-universal.result == 'success' && needs.deploy-repositories.result == 'success')) &&
-      (inputs.build_target == 'gui' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success'))
+      (inputs.build_target == 'gui' || inputs.build_target == 'android' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success')) &&
+      (inputs.build_target == 'cli' || needs.build-android.result == 'success')
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -938,6 +1155,7 @@ jobs:
           shopt -s nullglob
           for artifact_dir in all_artifacts/*; do
             artifact_name="${artifact_dir##*/}"
+            [[ "$artifact_name" != PornFetch_* ]] && continue
             [[ "$artifact_name" == IFW_repo_* ]] && continue
             # Artifact downloads reset permissions; restore them before making release ZIPs.
             for file in "$artifact_dir"/*; do
@@ -980,3 +1198,61 @@ jobs:
             --prerelease \
             --target "$COMMIT_SHA" \
             --draft=false
+
+  # Independent website distribution; existing update publishers are unchanged.
+  publish-website:
+    name: Publish Website Downloads
+    needs: [validate, build-gui, build-android, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, build-macos-universal, release-metadata]
+    if: >-
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.deploy_website && inputs.legal_review_complete &&
+      needs.validate.result == 'success' && needs.release-metadata.result == 'success' &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || (needs.build-gui.result == 'success' && needs.build-macos-universal.result == 'success')) &&
+      (inputs.build_target == 'gui' || inputs.build_target == 'android' || (needs.build-cli.result == 'success' &&
+        (!inputs.experimental_builds || (needs.build-cli-linux-x32.result == 'success' && needs.build-cli-linux-riscv64.result == 'success')))) &&
+      (inputs.build_target == 'cli' || needs.build-android.result == 'success')
+    runs-on: ubuntu-24.04
+    environment: beta
+    concurrency:
+      group: website-release-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+      - name: Download website packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          pattern: PornFetch_*
+          path: website_artifacts
+          merge-multiple: false
+      - name: Stamp source archive version
+        env:
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
+          RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
+        run: python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+      - name: Publish and verify website release
+        env:
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+          WEBSITE_RELEASE_TOKEN: ${{ secrets.WEBSITE_RELEASE_TOKEN }}
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_ORIGIN || 'https://pornfetch.to' }}
+          RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
+          RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
+          RELEASE_CHANNEL: ${{ inputs.website_channel }}
+          BUILD_COMMIT: ${{ github.sha }}
+          RELEASE_BUILD_TARGET: ${{ inputs.build_target }}
+        run: |
+          python packaging/publish_website_release.py \
+            --artifacts website_artifacts --output website_release --source-root . \
+            --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
+            --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
+            --notes CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
+          if [ "$RELEASE_BUILD_TARGET" != cli ]; then
+            test -n "$CLI_UPDATE_SIGNING_KEY"
+            umask 077
+            SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")
+            trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
+            printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
+            unset CLI_UPDATE_SIGNING_KEY
+            python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
+          fi

@@ -1,8 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
+from pathlib import Path
 from PyInstaller.utils.hooks import collect_all, collect_data_files, collect_submodules
 
 project_root = os.path.abspath(os.path.join(SPECPATH, ".."))
+tor_root = Path(project_root) / "src/shared/tor"
+tor_binaries = [(str(path), "src/shared/tor") for path in tor_root.iterdir() if path.is_file() and path.name != "provenance.json"] if tor_root.is_dir() else []
+tor_data = [(str(tor_root / "notices"), "src/shared/tor/notices"),
+            (str(tor_root / "provenance.json"), "src/shared/tor")] if tor_root.is_dir() else []
 
 providers = [
     "pornhub_api", "eporner_api", "xnxx_api", "xvideos_api", "xhamster_api",
@@ -24,8 +29,8 @@ hiddenimports = (
 analysis = Analysis(
     [os.path.join(project_root, "Porn_Fetch_CLI.py")],
     pathex=[project_root],
-    binaries=questionary_binaries + rich_binaries,
-    datas=questionary_datas + rich_datas + collect_data_files("certifi") + [
+    binaries=questionary_binaries + rich_binaries + tor_binaries,
+    datas=questionary_datas + rich_datas + tor_data + collect_data_files("certifi") + [
         (os.path.join(project_root, "src", "licensing", "production.json"), "src/licensing"),
         (os.path.join(project_root, "docs", "CREDITS.md"), "docs"),
         (os.path.join(project_root, "LICENSE"), "."),

@@ -104,6 +104,7 @@ class SettingsManager(QObject):
     sniObfuscationStrictProfileChanged = Signal(str)
     proxyChanged = Signal(str)
     proxySSLVerificationChanged = Signal(bool)
+    serviceTransportChanged = Signal(str)
 
     def __init__(self, settings: QSettings | None = None):
         super().__init__()
@@ -753,6 +754,29 @@ class SettingsManager(QObject):
     @Property(bool, notify=enableTorChanged)
     def enable_tor(self) -> bool:
         return self.get_bool("Privacy/enable_tor", False)
+
+    @Property(str, notify=serviceTransportChanged)
+    def service_transport(self):
+        value = self._settings.value("Privacy/service_transport", "")
+        if value not in {"direct", "tor"}:
+            value = "tor" if self.enable_tor and self.enable_tor_server_routing else "direct"
+            self._settings.setValue("Privacy/service_transport", value)
+        return value
+
+    @service_transport.setter
+    def service_transport(self, value):
+        if value not in {"direct", "tor"}:
+            raise ValueError("Service transport must be direct or tor")
+        if value != self.service_transport:
+            self._settings.setValue("Privacy/service_transport", value)
+            self.serviceTransportChanged.emit(value)
+            if value == "direct":
+                from src.shared.tor_runtime import runtime
+                import asyncio
+                try:
+                    asyncio.get_running_loop().run_in_executor(None, runtime.stop)
+                except RuntimeError:
+                    runtime.stop()
 
     @enable_tor.setter
     def enable_tor(self, val):

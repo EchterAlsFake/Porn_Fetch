@@ -46,6 +46,7 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     "processing_delay": ("Performance", "Delay between dispatches (seconds)"),
     # Network / Privacy
     "proxy": ("Network", "Proxy URL (http:// or socks5://)"),
+    "service_transport": ("Network", "Updates and licensing: direct or tor (app-managed; no direct fallback)"),
     "http_version": ("Network", "HTTP protocol version (v1, v2, v3)"),
     "ip_preference": ("Network", "IP version preference (auto, ipv4, ipv6)"),
     "impersonation": ("Network", "TLS fingerprint impersonation (chrome, safari)"),

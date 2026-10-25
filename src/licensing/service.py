@@ -76,6 +76,13 @@ class LicenseService:
             from datetime import datetime, timezone
             end = datetime.fromtimestamp(self.status.license_expires_at, timezone.utc).strftime("%d %B %Y")
             reason = f"Your update entitlement ended on {end}. " + reason
+        if getattr(self.core, "tor_enabled", False) is True:
+            failure = getattr(getattr(self.core, "policy", None), "last_failure", "")
+            if isinstance(failure, str) and failure and (
+                self.status.failure in {"network_unavailable", "server_unavailable"}
+                or self.status.state in {"network_unavailable", "server_unavailable"}
+            ):
+                reason += "\n\n" + failure
         return reason
 
     async def check(self, *, force: bool = False) -> LicenseStatus:
@@ -117,7 +124,7 @@ def create_license_service(
         production = json.loads(production_path.read_text(encoding="utf-8"))
     else:
         production = dict(production_config)
-    core = LicensingCore()
+    core = LicensingCore(runtime_config)
     client = LicenseClient(
         state_path or shared_data_dir(), core=core,
         public_key=production["public_key"], account_id=production["account_id"],

@@ -33,6 +33,8 @@ jobs:
         shell: bash
         env:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+          WEBSITE_RELEASE_TOKEN: ${{ secrets.WEBSITE_RELEASE_TOKEN }}
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_ORIGIN || 'https://pornfetch.to' }}
         run: |
           set -euo pipefail
           test -n "$CLI_UPDATE_SIGNING_KEY"
@@ -47,6 +49,10 @@ jobs:
             --output cli_update_repository \
             --private-key "$SIGNING_KEY_FILE" \
             --allow-empty
+          if [ -n "$WEBSITE_RELEASE_TOKEN" ]; then
+            uv run --no-sync python packaging/publish_android_updates.py \
+              --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --allow-empty
+          fi
 
       - name: Publish refreshed metadata
         shell: bash

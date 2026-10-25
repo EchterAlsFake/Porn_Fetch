@@ -519,8 +519,8 @@ Pane {
                 heading: qsTr("Connection protection")
                 ToggleRow { label: qsTr("DNS over HTTPS"); value: appSettings.dns_over_https; onChanged: function(v) { appSettings.dns_over_https = v } }
                 ToggleRow { label: qsTr("Encrypted Client Hello"); value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
-                ToggleRow { label: qsTr("Use Tor"); value: appSettings.enable_tor; onChanged: function(v) { appSettings.enable_tor = v } }
-                ToggleRow { label: qsTr("Route license requests through Tor"); value: appSettings.enable_tor_server_routing; onChanged: function(v) { appSettings.enable_tor_server_routing = v } }
+                ToggleRow { label: qsTr("Use Tor for updates and licensing"); value: appSettings.service_transport === "tor"; onChanged: function(v) { appSettings.service_transport = v ? "tor" : "direct" } }
+                Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: torStatus.text; visible: appSettings.service_transport === "tor" }
                 Button {
                     Layout.fillWidth: true
                     text: appSettings.proxy ? qsTr("Configure proxy") : qsTr("Set up proxy")
@@ -586,6 +586,7 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Maintenance")
+                Button { Layout.fillWidth: true; text: qsTr("Check for app updates"); onClicked: backend.check_for_updates() }
                 Button { Layout.fillWidth: true; text: qsTr("Clear temporary files"); onClicked: backend.clear_temporary_files() }
                 Button { Layout.fillWidth: true; text: qsTr("Reset settings"); onClicked: backend.reset_pornfetch() }
             }

@@ -77,6 +77,12 @@ class _TestBridge(QObject):
         self._is_premium = premium
 
 
+class _TestTorStatus(QObject):
+    @Property(str, constant=True)
+    def text(self):
+        return "Tor starts when a license or update request needs it."
+
+
 class SettingsGUITestBase(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -90,6 +96,8 @@ class SettingsGUITestBase(unittest.TestCase):
         self.engine.rootContext().setContextProperty("appSettings", self.settings_manager)
         self.engine.rootContext().setContextProperty("backend", self.backend)
         self.engine.rootContext().setContextProperty("bridge", self.bridge)
+        self.tor_status = _TestTorStatus(self.engine)
+        self.engine.rootContext().setContextProperty("torStatus", self.tor_status)
 
         ui_dir = Path("src/frontend/UI").resolve()
         self.engine.addImportPath(str(ui_dir))

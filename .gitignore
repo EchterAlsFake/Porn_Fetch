@@ -80,4 +80,5 @@ desktop.ini
 *.whl.orig
 *.license
 .pyside6_android_deploy_patch/
+src/shared/tor/
 examples/

@@ -47,6 +47,7 @@ class CliSettings:
     segment_cache_ttl: float = 300.0
     # Network / privacy
     proxy: str = ""
+    service_transport: str = "direct"
     proxy_auth: str = ""
     interface: str = ""
     http_version: str = "v2"
@@ -71,6 +72,8 @@ class CliSettings:
     legacy_database_path: str = "./downloads.db"
 
     def validate(self) -> None:
+        if self.service_transport not in {"direct", "tor"}:
+            raise ValueError("service transport must be direct or tor")
         positive = (
             "result_limit", "parallel_downloads", "timeout", "request_attempts",
             "download_workers", "pages_concurrency", "videos_concurrency",
@@ -114,6 +117,7 @@ class CliSettings:
 
         self.validate()
         runtime = RuntimeConfig()
+        runtime.service_transport = self.service_transport
         runtime.response_cache_size_bytes = self.response_cache_mb * 1024 * 1024
         runtime.response_cache_ttl = self.response_cache_ttl
         runtime.segment_cache_size_bytes = self.segment_cache_mb * 1024 * 1024

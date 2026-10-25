@@ -108,6 +108,12 @@ public User-feed limitations.
 - `packaging/`: PyInstaller and PySide/Nuitka build specifications.
 - `scripts/`: install, maintenance, QtAsyncio, and macOS bundle scripts.
 - `.github/workflows/`: offline CI and platform build pipelines.
+- Android CI: `build_all.yml` builds all four ABIs using the existing patch/build
+  scripts and Python 3.14 wheels. See `docs/ANDROID_CI.md` for signing secrets,
+  Android-only runs and website publication.
+- Tor: app-owned service routing and runtime are in `src/shared/service_transport.py`
+  and `tor_runtime.py`; see `docs/TOR_SUPPORT.md`. Android updates use the separate
+  website-hosted TUF feed and a native user-confirmed installer bridge.
 
 ## Common commands
 

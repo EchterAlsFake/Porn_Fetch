@@ -4,7 +4,9 @@ Loaded by python-for-android through p4a.hook, including on clean builds.
 """
 from __future__ import annotations
 
+import configparser
 import re
+import shutil
 from pathlib import Path
 
 MARKER = "porn-fetch-storage-results-v1"
@@ -65,6 +67,17 @@ def before_apk_build(toolchain) -> None:
 def before_apk_assemble(toolchain) -> None:
     """p4a invokes this for APK and AAB builds, after generating Java sources."""
     activity = (Path(toolchain._dist.dist_dir) / "src/main/java/org/kivy/android/PythonActivity.java")
+    project = Path(__file__).resolve().parents[1]
+    tor = project / "src/shared/tor/libTor.so"
+    if tor.is_file():
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(project / "buildozer.spec")
+        abi = config["app"]["android.archs"]
+        if abi not in {"arm64-v8a", "armeabi-v7a", "x86", "x86_64"}:
+            raise ValueError("Tor native library requires a single supported Android ABI")
+        native = Path(toolchain._dist.dist_dir) / "libs" / abi
+        native.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(tor, native / "libTor.so")
     source = activity.read_text(encoding="utf-8")
     patched = patch_activity(source)
     call = "org.kivy.android.PornFetchDisplay.install(this);"
@@ -73,7 +86,27 @@ def before_apk_assemble(toolchain) -> None:
         if anchor not in patched:
             raise ValueError("Cannot locate Qt activity onCreate for display outline")
         patched = patched.replace(anchor, anchor + "\n        " + call, 1)
+    platform_call = "org.kivy.android.PornFetchPlatform.install(this);"
+    if platform_call not in patched:
+        patched = patched.replace(call, call + "\n        " + platform_call, 1)
     helper = Path(__file__).parent / "android" / "PornFetchDisplay.java"
     (activity.parent / helper.name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
+    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java"):
+        helper = Path(__file__).parent / "android" / name
+        (activity.parent / name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
+    for manifest in (Path(toolchain._dist.dist_dir) / "src/main/AndroidManifest.xml",
+                     Path(toolchain._dist.dist_dir) / "AndroidManifest.xml"):
+        if manifest.is_file():
+            text = manifest.read_text(encoding="utf-8")
+            if "PornFetchUpdateProvider" not in text:
+                text = text.replace("</application>", '<provider android:name="org.kivy.android.PornFetchUpdateProvider" '
+                                    'android:authorities="to.pornfetch.app.updates" android:exported="false" '
+                                    'android:grantUriPermissions="true" /></application>')
+                text = text.replace("<application", '<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n<application', 1)
+            import re
+            text = re.sub(r'android:extractNativeLibs="[^"]*"', 'android:extractNativeLibs="true"', text)
+            if 'android:extractNativeLibs=' not in text:
+                text = text.replace("<application", '<application android:extractNativeLibs="true"', 1)
+            manifest.write_text(text, encoding="utf-8")
     if patched != source:
         activity.write_text(patched, encoding="utf-8")

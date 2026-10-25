@@ -18,6 +18,8 @@ ApplicationWindow {
     property bool safeToClose: false
     property bool startupContinued: false
 
+    ServiceTorFailureDialog {}
+
     ActivityEdge {
         objectName: "activityEdge"
         parent: Overlay.overlay

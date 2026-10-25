@@ -230,21 +230,9 @@ apply to you.
 ")
 
     readonly property string torIntegrationHelp:
-        qsTr("
-The Tor Network is a heavily encrypted internet which is run by volunteers all over the world. Porn Fetch supports
-a native Tor integration. By enabling this, Porn Fetch will start the Tor service on your PC and route its traffic
-through the onion network.
+        qsTr("Porn Fetch starts its bundled Tor client for update and license requests. These requests use my onion service. If Tor cannot connect, no direct connection is attempted. Media and website browsing use their separate network settings. Tor hides your network address; your license and installation identity still identify your entitlement to my server.")
 
-This is NOT illegal and absolutely a good way to protect your privacy. However:
-It is ethically a bad idea to route internet traffic like video streaming through the Tor network as it slows down
-the entire network for everyone. Please only use this feature if you really have to. (Seriously)
-")
-
-    readonly property string onionRoutingHelp:
-        qsTr("
-The server of Porn Fetch that is used for Update and License checking has a native .onion Tor domain. By enabling this,
-Porn Fetch will connect to the Tor domain instead of the clearnet domain.
-")
+    readonly property string onionRoutingHelp: torIntegrationHelp
 
     readonly property string proxySetupHelp:
         qsTr("

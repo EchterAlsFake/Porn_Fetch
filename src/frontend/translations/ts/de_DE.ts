@@ -642,93 +642,118 @@
 <context>
     <name>AndroidMain</name>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="11"/>
-        <location filename="../../UI/AndroidMain.qml" line="235"/>
+        <location filename="../../UI/AndroidMain.qml" line="12"/>
+        <location filename="../../UI/AndroidMain.qml" line="236"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="43"/>
-        <location filename="../../UI/AndroidMain.qml" line="364"/>
+        <location filename="../../UI/AndroidMain.qml" line="44"/>
+        <location filename="../../UI/AndroidMain.qml" line="365"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="43"/>
-        <location filename="../../UI/AndroidMain.qml" line="364"/>
+        <location filename="../../UI/AndroidMain.qml" line="44"/>
+        <location filename="../../UI/AndroidMain.qml" line="365"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="43"/>
-        <location filename="../../UI/AndroidMain.qml" line="364"/>
+        <location filename="../../UI/AndroidMain.qml" line="44"/>
+        <location filename="../../UI/AndroidMain.qml" line="365"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="44"/>
+        <location filename="../../UI/AndroidMain.qml" line="45"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="44"/>
+        <location filename="../../UI/AndroidMain.qml" line="45"/>
         <source>Supported websites</source>
         <translation type="unfinished">Unterstützte Webseiten</translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="44"/>
-        <location filename="../../UI/AndroidMain.qml" line="364"/>
+        <location filename="../../UI/AndroidMain.qml" line="45"/>
+        <location filename="../../UI/AndroidMain.qml" line="365"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="79"/>
+        <location filename="../../UI/AndroidMain.qml" line="80"/>
         <source>License rejected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="84"/>
+        <location filename="../../UI/AndroidMain.qml" line="85"/>
         <source>License imported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="84"/>
+        <location filename="../../UI/AndroidMain.qml" line="85"/>
         <source>License import failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="85"/>
+        <location filename="../../UI/AndroidMain.qml" line="86"/>
         <source>License imported successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="85"/>
+        <location filename="../../UI/AndroidMain.qml" line="86"/>
         <source>Failed to import license.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="145"/>
+        <location filename="../../UI/AndroidMain.qml" line="146"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="153"/>
+        <location filename="../../UI/AndroidMain.qml" line="154"/>
         <source>Automatic error reporting is disabled until you choose to enable it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="174"/>
+        <location filename="../../UI/AndroidMain.qml" line="175"/>
         <source>No, keep disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="182"/>
+        <location filename="../../UI/AndroidMain.qml" line="183"/>
         <source>Yes, enable reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidMain.qml" line="309"/>
+        <location filename="../../UI/AndroidMain.qml" line="310"/>
         <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="428"/>
+        <source>Porn Fetch update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="433"/>
+        <source>Version %1 is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="433"/>
+        <source>App updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="445"/>
+        <source>Download and install update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="447"/>
+        <source>Preparing verified download…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -819,7 +844,7 @@
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="213"/>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="627"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="628"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1031,12 +1056,7 @@
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="522"/>
-        <source>Use Tor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="523"/>
-        <source>Route license requests through Tor</source>
+        <source>Use Tor for updates and licensing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1176,71 +1196,76 @@
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="589"/>
-        <source>Clear temporary files</source>
+        <source>Check for app updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="590"/>
+        <source>Clear temporary files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="591"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="602"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="603"/>
         <source>Premium active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="602"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="603"/>
         <source>No active license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="607"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="608"/>
         <source>Update entitlement ends: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="607"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="608"/>
         <source>valid for current release, includes 1 year of updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="614"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="615"/>
         <source>Machine Limit: 10 devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="621"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="622"/>
         <source>Next Online Check: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="632"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="633"/>
         <source>Refresh license (renews 7-day check-in)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="639"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="640"/>
         <source>Deactivate license (frees 1 of 10 machine seats)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="646"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="647"/>
         <source>Each license supports up to 10 machines. Permanent licenses are valid for the current release and include 1 year of updates. Deactivating unlinks this device to free up a machine seat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="653"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="654"/>
         <source>Production license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="654"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="655"/>
         <source>The beta checkout is a test. No real transaction takes place.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="657"/>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="658"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1538,27 +1563,11 @@ apply to you.
     </message>
     <message>
         <location filename="../../UI/AppStrings.qml" line="233"/>
-        <source>
-The Tor Network is a heavily encrypted internet which is run by volunteers all over the world. Porn Fetch supports
-a native Tor integration. By enabling this, Porn Fetch will start the Tor service on your PC and route its traffic
-through the onion network.
-
-This is NOT illegal and absolutely a good way to protect your privacy. However:
-It is ethically a bad idea to route internet traffic like video streaming through the Tor network as it slows down
-the entire network for everyone. Please only use this feature if you really have to. (Seriously)
-</source>
+        <source>Porn Fetch starts its bundled Tor client for update and license requests. These requests use my onion service. If Tor cannot connect, no direct connection is attempted. Media and website browsing use their separate network settings. Tor hides your network address; your license and installation identity still identify your entitlement to my server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="244"/>
-        <source>
-The server of Porn Fetch that is used for Update and License checking has a native .onion Tor domain. By enabling this,
-Porn Fetch will connect to the Tor domain instead of the clearnet domain.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AppStrings.qml" line="250"/>
+        <location filename="../../UI/AppStrings.qml" line="238"/>
         <source>
 A Proxy is basically just a service that routes your internet traffic. It is similar to a VPN. You can find free proxies
 on the internet, although I absolutely do not recommend you doing that.
@@ -1568,23 +1577,23 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="254"/>
+        <location filename="../../UI/AppStrings.qml" line="242"/>
         <source>This defines the language of Porn Fetch&apos;s user interace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="257"/>
+        <location filename="../../UI/AppStrings.qml" line="245"/>
         <source>This sets the point size of the text in the UI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="260"/>
+        <location filename="../../UI/AppStrings.qml" line="248"/>
         <source>Material UI looks like Android, Fusion like the native OS, Universal looks just bad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="263"/>
-        <location filename="../../UI/AppStrings.qml" line="266"/>
+        <location filename="../../UI/AppStrings.qml" line="251"/>
+        <location filename="../../UI/AppStrings.qml" line="254"/>
         <source>You really need an explanation for this xD</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1592,7 +1601,7 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="599"/>
+        <location filename="../../../backend/application.py" line="609"/>
         <source>
         Important: 
 
@@ -1608,68 +1617,68 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="715"/>
+        <location filename="../../../backend/application.py" line="725"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="723"/>
+        <location filename="../../../backend/application.py" line="733"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="734"/>
+        <location filename="../../../backend/application.py" line="744"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="805"/>
+        <location filename="../../../backend/application.py" line="815"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="991"/>
-        <location filename="../../../backend/application.py" line="1034"/>
+        <location filename="../../../backend/application.py" line="1001"/>
+        <location filename="../../../backend/application.py" line="1044"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1204"/>
+        <location filename="../../../backend/application.py" line="1214"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1221"/>
+        <location filename="../../../backend/application.py" line="1231"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1284"/>
+        <location filename="../../../backend/application.py" line="1294"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1289"/>
+        <location filename="../../../backend/application.py" line="1299"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1291"/>
+        <location filename="../../../backend/application.py" line="1301"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1296"/>
+        <location filename="../../../backend/application.py" line="1306"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1299"/>
+        <location filename="../../../backend/application.py" line="1309"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1313"/>
+        <location filename="../../../backend/application.py" line="1323"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2020,98 +2029,98 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="125"/>
+        <location filename="../../UI/Main.qml" line="127"/>
         <source>License rejected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="163"/>
+        <location filename="../../UI/Main.qml" line="165"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="172"/>
+        <location filename="../../UI/Main.qml" line="174"/>
         <source>This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="199"/>
+        <location filename="../../UI/Main.qml" line="201"/>
         <source>Synthetic example of a stored report:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="237"/>
+        <location filename="../../UI/Main.qml" line="239"/>
         <source>No, keep disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="246"/>
+        <location filename="../../UI/Main.qml" line="248"/>
         <source>Yes, enable reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="301"/>
+        <location filename="../../UI/Main.qml" line="303"/>
         <source>🚀 New Update Available!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="315"/>
+        <location filename="../../UI/Main.qml" line="317"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="334"/>
+        <location filename="../../UI/Main.qml" line="336"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="350"/>
+        <location filename="../../UI/Main.qml" line="352"/>
         <source>Download:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="357"/>
+        <location filename="../../UI/Main.qml" line="359"/>
         <source>View GitHub releases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="368"/>
+        <location filename="../../UI/Main.qml" line="370"/>
         <source>Important Info:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="384"/>
+        <location filename="../../UI/Main.qml" line="386"/>
         <source>Changelog:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="444"/>
+        <location filename="../../UI/Main.qml" line="446"/>
         <source>Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="450"/>
+        <location filename="../../UI/Main.qml" line="452"/>
         <source>Updating…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="450"/>
+        <location filename="../../UI/Main.qml" line="452"/>
         <source>Auto Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="455"/>
+        <location filename="../../UI/Main.qml" line="457"/>
         <source>Starting update…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="514"/>
+        <location filename="../../UI/Main.qml" line="516"/>
         <source>SUPPORTED WEBSITES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/Main.qml" line="546"/>
-        <location filename="../../UI/Main.qml" line="562"/>
+        <location filename="../../UI/Main.qml" line="548"/>
+        <location filename="../../UI/Main.qml" line="564"/>
         <source>Widget is hidden due to your privacy settings...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2346,6 +2355,24 @@ Liste löschen</translation>
     </message>
 </context>
 <context>
+    <name>ServiceTorFailureDialog</name>
+    <message>
+        <location filename="../../UI/ServiceTorFailureDialog.qml" line="14"/>
+        <source>Porn Fetch over Tor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/ServiceTorFailureDialog.qml" line="50"/>
+        <source>Turn off Tor for Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/ServiceTorFailureDialog.qml" line="55"/>
+        <source>Keep Tor enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingsPage</name>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="48"/>
@@ -2395,15 +2422,15 @@ Liste löschen</translation>
     </message>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="133"/>
-        <location filename="../../UI/SettingsPage.qml" line="1360"/>
-        <location filename="../../UI/SettingsPage.qml" line="1366"/>
+        <location filename="../../UI/SettingsPage.qml" line="1349"/>
+        <location filename="../../UI/SettingsPage.qml" line="1355"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="134"/>
         <location filename="../../UI/SettingsPage.qml" line="148"/>
-        <location filename="../../UI/SettingsPage.qml" line="1374"/>
+        <location filename="../../UI/SettingsPage.qml" line="1363"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2661,124 +2688,120 @@ Liste löschen</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1078"/>
-        <source>Enable Tor Integration</source>
+        <location filename="../../UI/SettingsPage.qml" line="1075"/>
+        <location filename="../../UI/SettingsPage.qml" line="1076"/>
+        <source>Use Tor for updates and licensing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1092"/>
-        <source>Route License / Update checking through .onion domain</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/SettingsPage.qml" line="1107"/>
+        <location filename="../../UI/SettingsPage.qml" line="1096"/>
         <source>Primary DNS over HTTPS Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1130"/>
+        <location filename="../../UI/SettingsPage.qml" line="1119"/>
         <source>Fallback DNS over HTTPS Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1152"/>
+        <location filename="../../UI/SettingsPage.qml" line="1141"/>
         <source>SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1173"/>
+        <location filename="../../UI/SettingsPage.qml" line="1162"/>
         <source>Lite SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1183"/>
+        <location filename="../../UI/SettingsPage.qml" line="1172"/>
         <source>Strict SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1195"/>
+        <location filename="../../UI/SettingsPage.qml" line="1184"/>
         <source>Strict SNI Obfuscation Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1211"/>
+        <location filename="../../UI/SettingsPage.qml" line="1200"/>
         <source>Proxy Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1215"/>
+        <location filename="../../UI/SettingsPage.qml" line="1204"/>
         <source>Configure or test proxy…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1216"/>
+        <location filename="../../UI/SettingsPage.qml" line="1205"/>
         <source>Set up proxy…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1246"/>
+        <location filename="../../UI/SettingsPage.qml" line="1235"/>
         <source>Graphical User Interface Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1262"/>
+        <location filename="../../UI/SettingsPage.qml" line="1251"/>
         <source>Font Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1274"/>
+        <location filename="../../UI/SettingsPage.qml" line="1263"/>
         <source>Application Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1287"/>
+        <location filename="../../UI/SettingsPage.qml" line="1276"/>
         <source>Dark Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1296"/>
-        <location filename="../../UI/SettingsPage.qml" line="1302"/>
+        <location filename="../../UI/SettingsPage.qml" line="1285"/>
+        <location filename="../../UI/SettingsPage.qml" line="1291"/>
         <source>Show a glowing border while the app is busy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1298"/>
-        <location filename="../../UI/SettingsPage.qml" line="1301"/>
+        <location filename="../../UI/SettingsPage.qml" line="1287"/>
+        <location filename="../../UI/SettingsPage.qml" line="1290"/>
         <source>Activity glow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1313"/>
+        <location filename="../../UI/SettingsPage.qml" line="1302"/>
         <source>Application Accent Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1394"/>
+        <location filename="../../UI/SettingsPage.qml" line="1383"/>
         <source>Purchase a license on the website, then paste the signed key or import your license file. Includes one year of updates and permanent use of entitled versions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1405"/>
+        <location filename="../../UI/SettingsPage.qml" line="1394"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1406"/>
+        <location filename="../../UI/SettingsPage.qml" line="1395"/>
         <source>Restores all application settings to their default values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1414"/>
+        <location filename="../../UI/SettingsPage.qml" line="1403"/>
         <source>Clear Temporary Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1432"/>
+        <location filename="../../UI/SettingsPage.qml" line="1421"/>
         <source>Install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/SettingsPage.qml" line="1445"/>
+        <location filename="../../UI/SettingsPage.qml" line="1434"/>
         <source>Uninstall Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>

@@ -116,23 +116,18 @@ class TestPrivacyTabGUI(SettingsGUITestBase):
         self.assertTrue(self.settings_manager.dns_over_https)
         self.assert_file_value("Privacy/dns_over_https", True)
 
-    def test_enable_tor_checkbox(self) -> None:
-        self.simulate_checkbox("enableTorCheckBox", True)
-        self.assertTrue(self.settings_manager.enable_tor)
-        self.assert_file_value("Privacy/enable_tor", True)
+    def test_service_tor_checkbox(self) -> None:
+        self.simulate_checkbox("serviceTorCheckBox", True)
+        self.assertEqual(self.settings_manager.service_transport, "tor")
+        self.assert_file_value("Privacy/service_transport", "tor")
 
-        self.simulate_checkbox("enableTorCheckBox", False)
-        self.assertFalse(self.settings_manager.enable_tor)
-        self.assert_file_value("Privacy/enable_tor", False)
+        self.simulate_checkbox("serviceTorCheckBox", False)
+        self.assertEqual(self.settings_manager.service_transport, "direct")
+        self.assert_file_value("Privacy/service_transport", "direct")
 
-    def test_enable_tor_server_routing_checkbox(self) -> None:
-        self.simulate_checkbox("enableTorServerRoutingCheckBox", False)
-        self.assertFalse(self.settings_manager.enable_tor_server_routing)
-        self.assert_file_value("Privacy/enable_tor_server_routing", False)
-
-        self.simulate_checkbox("enableTorServerRoutingCheckBox", True)
-        self.assertTrue(self.settings_manager.enable_tor_server_routing)
-        self.assert_file_value("Privacy/enable_tor_server_routing", True)
+    def test_service_tor_off_by_default(self) -> None:
+        self.assertEqual(self.settings_manager.service_transport, "direct")
+        self.assertFalse(self.find_control("serviceTorCheckBox").property("checked"))
 
     def test_primary_dns_textfield(self) -> None:
         test_dns = "https://1.1.1.1/dns-query"

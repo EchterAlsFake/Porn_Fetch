@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
+from contextlib import asynccontextmanager, contextmanager
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -25,7 +26,35 @@ signer = load_script("sign_desktop_release")
 deployment = load_script("verify_deployment")
 
 
+@contextmanager
+def streamed_responses(request):
+    downloads = AsyncMock(side_effect=request)
+
+    @asynccontextmanager
+    async def stream(method, url, **kwargs):
+        response = await downloads(url=url, **kwargs)
+
+        async def chunks(**_kwargs):
+            yield response.content
+
+        yield SimpleNamespace(status_code=200, aiter_content=chunks)
+
+    with patch("src.backend.update_service.service_core.initialize_session"), \
+         patch("src.backend.update_service.service_core.session", SimpleNamespace(stream=stream)):
+        yield downloads
+
+
 class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
+    async def test_tor_update_check_never_launches_networked_maintenance_tool(self):
+        with (
+            patch("src.backend.update_service.service_core", SimpleNamespace(tor_enabled=True)),
+            patch.object(CheckUpdates, "check_signed_repository", new=AsyncMock(return_value={"version": "3.10"})) as check,
+            patch("src.backend.update_service.asyncio.create_subprocess_exec", new=AsyncMock()) as launch,
+        ):
+            self.assertEqual(await CheckUpdates.check_via_maintenancetool(), {"version": "3.10"})
+            check.assert_awaited_once()
+            launch.assert_not_called()
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -77,10 +106,10 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             patch("src.backend.update_service.QFile") as resource,
             patch("src.backend.update_service.ROOT_FILE", self.root),
             patch("src.backend.update_service.__version__", "3.9.0"),
-            patch("src.backend.update_service.clients.core.request", new=AsyncMock(return_value=SimpleNamespace(
+            patch("src.backend.update_service.service_core.request", new=AsyncMock(return_value=SimpleNamespace(
                 content=(self.repo / "release.json").read_bytes(),
             ))),
-            patch("src.backend.update_service.clients.core.fetch_bytes", new=AsyncMock(
+            patch("src.backend.update_service.service_core.fetch_bytes", new=AsyncMock(
                 return_value=(self.repo / STATIC_CHANGELOG_NAME).read_bytes(),
             )) as fetch,
         ):
@@ -89,7 +118,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(update["changelog"].strip(), notes)
             fetch.assert_awaited_once_with(
                 "https://api.pornfetch.to/repo/linux_amd64/CHANGELOG_STATIC.md",
-                allow_redirects=False, timeout=20,
+                allow_redirects=False,
             )
             fetch.return_value = b"Unverified replacement notes"
             update = await CheckUpdates.check_signed_repository()
@@ -119,7 +148,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         async def request(url, **kwargs):
             return SimpleNamespace(content=(self.repo / url.rsplit("/", 1)[-1]).read_bytes())
         updater = AutoUpdater()
-        with patch("src.backend.update_service.shared_data_dir", return_value=self.base), patch("src.backend.update_service.clients.core.request", side_effect=request):
+        with patch("src.backend.update_service.shared_data_dir", return_value=self.base), streamed_responses(request):
             stage = await updater._stage_repository(update)
             self.assertEqual((stage / "payload.7z").read_bytes(), b"test binary")
             (self.repo / "payload.7z").write_bytes(b"tampering")
@@ -144,7 +173,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             return SimpleNamespace(content=(self.repo / unquote(url.removeprefix(base_url))).read_bytes())
 
         with patch("src.backend.update_service.shared_data_dir", return_value=self.base), \
-                patch("src.backend.update_service.clients.core.request", side_effect=request) as download:
+                streamed_responses(request) as download:
             stage = await AutoUpdater()._stage_repository({
                 **release, "metadata": metadata, "repository_url": base_url,
             })
@@ -179,7 +208,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             return SimpleNamespace(content=(self.repo / url.rsplit("/", 1)[-1]).read_bytes())
 
         with patch("src.backend.update_service.shared_data_dir", return_value=self.base), \
-                patch("src.backend.update_service.clients.core.request", side_effect=request):
+                streamed_responses(request):
             stage = await AutoUpdater()._stage_repository(update)
             self.assertEqual((stage / "payload.7z").read_bytes(), b"test binary")
         xml.find("PackageUpdate/Version").text = "3.9"

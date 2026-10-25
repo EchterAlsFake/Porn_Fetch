@@ -388,7 +388,9 @@ class LicenseClient:
         attempts = 2 if method == "GET" or path == "licenses/actions/validate-key" else 1
         for attempt in range(attempts):
             try:
-                async with asyncio.timeout(25):
+                if getattr(self.core, "tor_enabled", False) is True:
+                    await self.core.prepare()
+                async with asyncio.timeout(150 if getattr(self.core, "tor_enabled", False) is True else 25):
                     response = await self.core.request(
                         url=self.base_url + path, method=method,
                         headers={"Authorization": "License " + key,

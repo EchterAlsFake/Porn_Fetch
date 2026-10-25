@@ -1,0 +1,23 @@
+{
+  "bundle_version": "15.0.26",
+  "base_url": "https://archive.torproject.org/tor-package-archive/torbrowser/15.0.26/",
+  "checksum_manifest_sha256": "c52c31ec97fa134d21c069fbd9819f9f59a8bfe47bfb2715a80e5e5645097aa4",
+  "assets": {
+    "tor-expert-bundle-android-aarch64-15.0.26.tar.gz": "a1a67ec77ce0a7c4fca446fd9f915fbb0302c3107c2d56ab213196187cfd894a",
+    "tor-expert-bundle-android-armv7-15.0.26.tar.gz": "4fcdb5540f7ea2f529b9063115d66dd7dfa61e5602bfaab96a78e8046bb4b8d5",
+    "tor-expert-bundle-android-x86-15.0.26.tar.gz": "a76c881f1b7feb10994cacb4d0bc0b1ba388a25463b4f25985b7805af2091bbb",
+    "tor-expert-bundle-android-x86_64-15.0.26.tar.gz": "11dbac44e2ee29df2cd6e3a5f38164d2630b2c85342f6a041b9cb57d7012d071",
+    "tor-expert-bundle-linux-i686-15.0.26.tar.gz": "e3195aa30946de60b1a31ef584f2e8bc2623a99815f4a102a89257a01bef9a77",
+    "tor-expert-bundle-linux-x86_64-15.0.26.tar.gz": "19cf18726eecb362e0f21d27afa9ea9efe5da928bfdfbb1ceb5fe54519e87f4a",
+    "tor-expert-bundle-macos-aarch64-15.0.26.tar.gz": "a3febb6179152b0b4f56a0f5cc57bf5cc8ecef7db35e7c3e9d5a044c8158c26c",
+    "tor-expert-bundle-macos-x86_64-15.0.26.tar.gz": "e1ae4d4a734d28bb590839188511deb3cebc26fcbce9df66d01b2c452060fe95",
+    "tor-expert-bundle-windows-i686-15.0.26.tar.gz": "55a1e4c9b6df47c6e5fde1b3d755c858374d6cc0809c1dd1533a8622bb52de96",
+    "tor-expert-bundle-windows-x86_64-15.0.26.tar.gz": "c1988c701de2f24f7d098d1d6d7f507b58f27740d097f29c246e0524d639b252"
+  },
+  "tor_version": "0.4.9.14",
+  "signed_manifest_key": "EF6E286DDA85EA2A4BA7DE684E2C6E8793298290",
+  "linux_arm64_source": {
+    "url": "https://dist.torproject.org/tor-0.4.9.14.tar.gz",
+    "sha256": "182449ac1c8ff43278da27b69b02040e11d03d0327db6d9126e4190ec6235e4a"
+  }
+}

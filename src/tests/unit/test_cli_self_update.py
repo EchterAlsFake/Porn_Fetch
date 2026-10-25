@@ -183,6 +183,7 @@ class CliUpdateTests(unittest.TestCase):
                             patch.object(self_update, "REPOSITORY_URL", url), \
                             patch.object(self_update, "user_cache_dir", return_value=str(base / "cli-cache")), \
                             patch.object(self_update, "_license_status") as license_status, \
+                            patch("src.shared.service_transport.ServiceFetcher", lambda settings: self_update._ProgressFetcher()), \
                             redirect_stdout(io.StringIO()) as output:
                         self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False), 0)
                     self.assertIn("up to date (3.9.1)", output.getvalue())

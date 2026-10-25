@@ -378,14 +378,19 @@ class Backend(QObject):
         return await self._license_bridge._run_check(force=True)
 
     async def _check_for_updates(self) -> None:
-        update = await CheckUpdates.check()
+        try:
+            update = await CheckUpdates.check()
+        except Exception as error:
+            self.updateStatus.emit(f"Update check failed: {error}")
+            return
         if update is None:
+            self.updateStatus.emit("No update available.")
             return
 
         from src.shared.release import update_eligibility
         install_allowed = False
         message = update.get("entitlement_message", "Release metadata could not be authenticated.")
-        if update.get("source") == "signed_repository":
+        if update.get("source") in {"signed_repository", "signed_android"}:
             status = await self._update_license_status()
             install_allowed, message = update_eligibility(status, update["release_timestamp"])
         details = {
@@ -399,6 +404,11 @@ class Backend(QObject):
         }
         self.logger.info("New update found: %s", details["version"])
         self.updateAvailable.emit(details)
+
+    @Slot()
+    def cancel_update(self) -> None:
+        if self._auto_update_task is not None and not self._auto_update_task.done():
+            self._auto_update_task.cancel()
 
     @Slot()
     def auto_update(self) -> None:
@@ -1374,6 +1384,10 @@ class Backend(QObject):
                     self.logger.exception("Could not close %s", name)
 
             await close_component("network clients", clients.close_all_clients)
+            from src.backend.update_service import service_core
+            from src.shared.tor_runtime import runtime
+            await close_component("update transport", service_core.close)
+            await close_component("Tor", lambda: asyncio.to_thread(runtime.stop))
             if self._license_bridge is not None:
                 await close_component("license service", self._license_bridge.close)
             if sni_proxy_manager:
@@ -1501,7 +1515,7 @@ def main() -> None:
     download_manager.video_updated.connect(database_bridge.on_video_updated) # Updates existing entry (optional)
 
     license_service = create_license_service(
-        clients.config,
+        app_settings,
         Path.cwd() / "licensing" if args.smoke_test else (
             Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_android else shared_data_dir()
         ),
@@ -1515,6 +1529,10 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
+    from src.backend.tor_status import TorStatus
+    tor_status = TorStatus(parent=engine)
+    tor_status.installResult.connect(backend_instance.updateStatus)
+    engine.rootContext().setContextProperty("torStatus", tor_status)
     beta_disclaimer = BetaDisclaimerBridge(app_settings, parent=engine)
     engine.rootContext().setContextProperty("betaDisclaimer", beta_disclaimer)
     engine.rootContext().setContextProperty("androidLayout", is_android or args.android)
