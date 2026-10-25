@@ -6,7 +6,7 @@ from pathlib import Path
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ["QML_DISABLE_DISK_CACHE"] = "1"
 
-from PySide6.QtCore import QAbstractListModel, QModelIndex, QUrl, Qt, QMetaObject
+from PySide6.QtCore import QAbstractListModel, QMetaObject, QModelIndex, Qt, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuick import QQuickItem

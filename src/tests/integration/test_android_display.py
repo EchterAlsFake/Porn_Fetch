@@ -6,12 +6,13 @@ from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtTest import QTest
+
 from src.backend.android_display import AndroidDisplay
 
 
 class AndroidDisplayTests(unittest.TestCase):
     def test_atomic_outline_update_and_desktop_fallback(self):
-        app = QCoreApplication.instance() or QCoreApplication([])
+        self.app = QCoreApplication.instance() or QCoreApplication([])
         self.assertEqual(AndroidDisplay().outline, {})
         with tempfile.TemporaryDirectory() as directory:
             bridge = AndroidDisplay(directory)

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import configparser
 import io
-import sys
 import subprocess
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -20,9 +20,9 @@ from scripts.build_android import (
     find_android_ndk,
     find_wheels_for_arch,
     main,
-    sign_apk,
     normalize_arch,
     patch_pyside_wheel_if_needed,
+    sign_apk,
     update_buildozer_spec,
     update_pysidedeploy_spec,
 )
