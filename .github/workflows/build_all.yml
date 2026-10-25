@@ -537,13 +537,17 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           printf '%s\n' y y y y y y y y y y y y y y y y | "$SDKMANAGER" --licenses > /dev/null
           "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
-          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
-          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
-          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
-          echo "$JAVA_HOME/bin" >> "$GITHUB_PATH"
-          echo "$ANDROID_HOME/build-tools/36.0.0" >> "$GITHUB_PATH"
-          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          {
+            echo "JAVA_HOME=$JAVA_HOME"
+            echo "ANDROID_SDK_ROOT=$ANDROID_HOME"
+            echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358"
+            echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/28.2.13676358"
+          } >> "$GITHUB_ENV"
+          {
+            echo "$JAVA_HOME/bin"
+            echo "$ANDROID_HOME/build-tools/36.0.0"
+            echo "$ANDROID_HOME/platform-tools"
+          } >> "$GITHUB_PATH"
 
       - name: Download and verify Python 3.14 Android wheels
         env:
