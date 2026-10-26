@@ -1,6 +1,7 @@
 """Production lifecycle tests: synthetic keys, no live server or customer data."""
 import base64
 import json
+import logging
 import os
 import sqlite3
 import tempfile
@@ -375,10 +376,15 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.failure, "server_unavailable")
 
     async def test_no_secret_in_error_or_log(self):
-        self.core.failure = RuntimeError(signed_key())
-        with self.assertNoLogs(level="DEBUG"):
+        key = signed_key()
+        self.core.failure = RuntimeError(key)
+        with self.assertLogs(level="DEBUG") as logs:
+            # Capture even when the client emits nothing; asyncio may emit
+            # harmless slow-task warnings on a busy runner.
+            logging.getLogger(__name__).debug("Checking license failure log redaction")
             result = await self.import_file()
-        self.assertNotIn(signed_key(), str(result))
+        self.assertNotIn(key, "\n".join(logs.output))
+        self.assertNotIn(key, str(result))
 
     async def test_beta_migration_rejects_without_network(self):
         for field, value in (("account", BETA_ACCOUNT), ("policy", BETA_POLICY)):
