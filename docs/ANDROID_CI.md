@@ -49,6 +49,35 @@ runner. The workflow decodes it in the runner's temporary directory, passes
 passwords through environment variables, verifies each signature, and removes
 the temporary keystore. It does not upload signing material.
 
+For a first release with no existing signing identity, create a key once using
+the JDK's `keytool`, in a private directory outside the checkout:
+
+```bash
+umask 077
+keytool -genkeypair -storetype PKCS12 -keystore android-release.p12 \
+  -alias pornfetch-release -keyalg RSA -keysize 4096 -validity 36500
+```
+
+Keep the keystore and its password in a separate encrypted backup. Reuse this
+identity for every later release; an APK signed with another key cannot update
+an existing installation. PKCS#12 stores use the same store and key password.
+
+Upload the keystore directly through standard input, then enter the passwords
+and alias at the CLI's hidden prompts:
+
+```bash
+python -c 'import base64, pathlib; print(base64.b64encode(pathlib.Path("android-release.p12").read_bytes()).decode())' \
+  | gh secret set ANDROID_KEYSTORE_BASE64 --repo EchterAlsFake/Porn_Fetch --env beta
+gh secret set ANDROID_KEYSTORE_PASSWORD --repo EchterAlsFake/Porn_Fetch --env beta
+gh secret set ANDROID_KEY_ALIAS --repo EchterAlsFake/Porn_Fetch --env beta
+gh secret set ANDROID_KEY_PASSWORD --repo EchterAlsFake/Porn_Fetch --env beta
+gh secret list --repo EchterAlsFake/Porn_Fetch --env beta
+```
+
+Use `pornfetch-release` as the alias for the example key. For an existing
+keystore, use its actual filename, alias and passwords. Base64 must have no
+embedded line breaks because the workflow validates it strictly.
+
 Without a keystore, build-only runs retain explicitly named `_unsigned.apk`
 artifacts for build diagnostics; those need signing before installation.
 `deploy_website` or `create_release` requires all four signing secrets up front.
@@ -76,3 +105,7 @@ build and device testing. Native dependency compilation, ABI-specific runtime
 issues and SDK/Gradle compatibility may need follow-up fixes. The matrix builds
 the APKs; passing workflow lint or offline packaging tests alone does not prove
 that an APK starts successfully on Android.
+
+After changing build scripts or workflow files, start a new workflow run from
+the updated commit. Re-running failed jobs uses the original commit, although
+newly configured environment secrets are available to those jobs.

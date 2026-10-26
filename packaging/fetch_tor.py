@@ -40,8 +40,18 @@ def build_linux_arm64(config, destination, work):
     with tarfile.open(archive) as bundle:
         bundle.extractall(tree, filter="data")
     build = next(tree.glob("tor-*"))
-    subprocess.run(["./configure", "--enable-static-tor", "--with-libevent-dir=/usr",
-                    "--with-openssl-dir=/usr", "--with-zlib-dir=/usr", "--disable-asciidoc",
+    # Tor appends /lib to installation prefixes. Ubuntu's static archives live
+    # in a multiarch directory instead; pass each library's actual directory.
+    library_options = []
+    for package, archives in (("libevent", ("libevent.a",)),
+                              ("openssl", ("libssl.a", "libcrypto.a")), ("zlib", ("libz.a",))):
+        directory = Path(subprocess.check_output(
+            ["pkg-config", "--variable=libdir", package], text=True).strip())
+        for name in archives:
+            if not (directory / name).is_file():
+                raise FileNotFoundError(f"Missing static Tor dependency: {directory / name}")
+        library_options.append(f"--with-{package}-dir={directory}")
+    subprocess.run(["./configure", "--enable-static-tor", *library_options, "--disable-asciidoc",
                     "--disable-manpage", "--disable-html-manual", "--disable-unittests",
                     "--disable-system-torrc", "--disable-lzma", "--disable-zstd"], cwd=build, check=True)
     subprocess.run(["make", "-j", str(min(os.cpu_count() or 2, 4))], cwd=build, check=True)
