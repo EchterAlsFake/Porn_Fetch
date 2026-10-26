@@ -123,3 +123,19 @@ that an APK starts successfully on Android.
 After changing build scripts or workflow files, start a new workflow run from
 the updated commit. Re-running failed jobs uses the original commit, although
 newly configured environment secrets are available to those jobs.
+
+### Retry website publication without rebuilding
+
+Use **Publish Existing Website Builds** (`publish_website.yml`) with the completed
+Cross-Platform Build Pipeline run ID, its exact release version, and the original
+website channel. Confirm the redistribution review for those artifacts. The job
+reuses the run's original source commit and creation timestamp, downloads its
+existing artifacts, and publishes both website downloads and the signed Android
+feed. Existing staged manifests must match exactly; published releases remain
+immutable. Artifacts must still be available in GitHub Actions.
+
+The website upload server must support requests lasting longer than a normal
+page request. Production uses Gunicorn's threaded workers (`--threads 4
+--timeout 90`) so the worker can report that it is alive during a long upload.
+A synchronous worker's default timeout can terminate an APK upload and appear
+in CI as `BrokenPipeError`; inspect the server's worker-timeout log first.

@@ -9,7 +9,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 PUBLISHER = Path(__file__).resolve().parents[3] / "packaging/publish_website_release.py"
 
@@ -140,3 +140,26 @@ class WebsitePublisherTests(unittest.TestCase):
             self.artifacts, self.root / "second", "3.9.66", "beta", 1792833600, "a" * 40, "notes"
         )
         self.assertEqual(first, second)
+
+    def test_upload_reports_early_http_rejection_and_closes_connection(self):
+        payload = self.root / "build.apk"
+        payload.write_bytes(b"apk")
+        connection = Mock()
+        connection.send.side_effect = BrokenPipeError()
+        connection.getresponse.return_value.status = 413
+        with patch.object(self.publisher.http.client, "HTTPSConnection", return_value=connection):
+            with self.assertRaisesRegex(RuntimeError, r"PUT /ci/files/build.apk: upload rejected \(HTTP 413\)"):
+                self.publisher.send("https://example.com", "PUT", "/ci/files/build.apk", "private-token", payload)
+        connection.getresponse.assert_called_once()
+        connection.close.assert_called_once()
+
+    def test_upload_identifies_file_when_server_disconnects_without_response(self):
+        payload = self.root / "build.apk"
+        payload.write_bytes(b"apk")
+        connection = Mock()
+        connection.send.side_effect = BrokenPipeError()
+        connection.getresponse.side_effect = self.publisher.http.client.RemoteDisconnected()
+        with patch.object(self.publisher.http.client, "HTTPSConnection", return_value=connection):
+            with self.assertRaisesRegex(RuntimeError, "PUT /ci/files/build.apk: connection closed during upload"):
+                self.publisher.send("https://example.com", "PUT", "/ci/files/build.apk", "private-token", payload)
+        connection.close.assert_called_once()

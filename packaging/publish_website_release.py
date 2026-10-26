@@ -195,17 +195,26 @@ def send(origin, method, path, token, payload=None, byte_range=False):
                 "Content-Type", "application/octet-stream" if isinstance(payload, Path) else "application/json"
             )
         connection.endheaders()
-        if isinstance(payload, Path):
-            with payload.open("rb") as source:
-                while chunk := source.read(1024 * 1024):
-                    connection.send(chunk)
-        elif payload is not None:
-            connection.send(payload)
+        try:
+            if isinstance(payload, Path):
+                with payload.open("rb") as source:
+                    while chunk := source.read(1024 * 1024):
+                        connection.send(chunk)
+            elif payload is not None:
+                connection.send(payload)
+        except (BrokenPipeError, ConnectionResetError) as exc:
+            # Servers can reject a request before the client finishes sending it.
+            # Read that response so CI reports the HTTP failure instead of EPIPE.
+            try:
+                response = connection.getresponse()
+            except (OSError, http.client.HTTPException):
+                raise RuntimeError(f"Website {method} {path}: connection closed during upload") from exc
+            raise RuntimeError(f"Website {method} {path}: upload rejected (HTTP {response.status})") from exc
         response = connection.getresponse()
         data = response.read(1024 * 1024)
         expected = {206} if byte_range else {200, 201}
         if response.status not in expected:
-            raise RuntimeError(f"Website publishing request failed (HTTP {response.status})")
+            raise RuntimeError(f"Website {method} {path} failed (HTTP {response.status})")
         if byte_range and len(data) != 1:
             raise RuntimeError("Published download failed range verification")
         return data
@@ -219,6 +228,7 @@ def publish(origin, token, output, manifest):
     if not result["published"]:
         for artifact in manifest["artifacts"]:
             name = quote(artifact["filename"], safe="")
+            print(f"Uploading {artifact['filename']} ({artifact['size']:,} bytes)", flush=True)
             send(origin, "PUT", f"/ci/website-releases/{version}/files/{name}", token, output / artifact["filename"])
     send(origin, "POST", f"/ci/website-releases/{version}/publish", token, b"{}")
     catalog = json.loads(send(origin, "GET", f"/download/catalog.json?version={version}", ""))

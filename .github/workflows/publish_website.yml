@@ -1,0 +1,112 @@
+name: Publish Existing Website Builds
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Completed Cross-Platform Build Pipeline run ID
+        required: true
+        type: string
+      release_version:
+        description: Exact version used by that build
+        required: true
+        type: string
+      website_channel:
+        description: Website release channel
+        type: choice
+        options: [beta, stable]
+        default: beta
+      legal_review_complete:
+        description: Confirm redistribution review for these artifacts
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: website-release-deploy
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  publish:
+    if: inputs.legal_review_complete
+    runs-on: ubuntu-24.04
+    environment: beta
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: tooling
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+      - name: Validate original build and preserve its metadata
+        id: build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+        run: |
+          [[ "$BUILD_RUN_ID" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_RUN_ID" > build.json
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_RUN_ID/jobs?per_page=100" > jobs.json
+          python - <<'PY'
+          import json, os
+          from datetime import datetime
+          run = json.load(open("build.json"))
+          jobs = [job for page in json.load(open("jobs.json")) for job in page["jobs"]]
+          assert run["path"] == ".github/workflows/build_all.yml", "Expected cross-platform build workflow"
+          assert run["head_repository"]["full_name"] == os.environ["GITHUB_REPOSITORY"]
+          assert run["status"] == "completed", "Build is still running"
+          assert any(job["name"] == "Validate build commit / offline-tests" and job["conclusion"] == "success" for job in jobs)
+          builds = [job for job in jobs if job["name"].startswith(("GUI (", "CLI (", "Android (", "CLI experimental ("))]
+          assert builds and any(job["conclusion"] == "success" for job in builds), "No successful builds"
+          assert all(job["conclusion"] in {"success", "skipped"} for job in builds), "A platform build failed"
+          timestamp = int(datetime.fromisoformat(run["created_at"].replace("Z", "+00:00")).timestamp())
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"commit={run['head_sha']}\ntimestamp={timestamp}\n")
+          PY
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.build.outputs.commit }}
+          path: source
+      - name: Install publishing dependencies
+        run: uv sync --project tooling --locked --no-dev
+      - name: Download completed build packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.build_run_id }}
+          pattern: PornFetch_*
+          path: website_artifacts
+          merge-multiple: false
+      - name: Publish and verify website release and Android feed
+        env:
+          WEBSITE_RELEASE_TOKEN: ${{ secrets.WEBSITE_RELEASE_TOKEN }}
+          CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_ORIGIN || 'https://pornfetch.to' }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          RELEASE_CHANNEL: ${{ inputs.website_channel }}
+          RELEASE_TIMESTAMP: ${{ steps.build.outputs.timestamp }}
+          BUILD_COMMIT: ${{ steps.build.outputs.commit }}
+        run: |
+          uv run --project tooling --no-sync python source/packaging/write_build_version.py \
+            "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          uv run --project tooling --no-sync python tooling/packaging/publish_website_release.py \
+            --artifacts website_artifacts --output website_release --source-root source \
+            --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
+            --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
+            --notes source/CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
+          test -n "$CLI_UPDATE_SIGNING_KEY"
+          umask 077
+          SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")
+          trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
+          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
+          unset CLI_UPDATE_SIGNING_KEY
+          uv run --project tooling --no-sync python tooling/packaging/publish_android_updates.py \
+            --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --allow-empty

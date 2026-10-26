@@ -1235,6 +1235,9 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.14"
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+      - name: Install publishing dependencies
+        run: uv sync --locked --no-dev
       - name: Download website packages
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
@@ -1245,7 +1248,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
           RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
-        run: python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+        run: uv run --no-sync python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
       - name: Publish and verify website release
         env:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
@@ -1257,7 +1260,7 @@ jobs:
           BUILD_COMMIT: ${{ github.sha }}
           RELEASE_BUILD_TARGET: ${{ inputs.build_target }}
         run: |
-          python packaging/publish_website_release.py \
+          uv run --no-sync python packaging/publish_website_release.py \
             --artifacts website_artifacts --output website_release --source-root . \
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
             --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
@@ -1269,5 +1272,5 @@ jobs:
             trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
             printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
             unset CLI_UPDATE_SIGNING_KEY
-            python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
+            uv run --no-sync python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
           fi
