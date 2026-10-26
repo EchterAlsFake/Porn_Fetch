@@ -351,6 +351,22 @@ def inject_android_templates(project_root: Path, buildozer_arch: str) -> None:
             shutil.copy2(splash_logo, dest_res / "splash_logo.png")
 
 
+def extract_qt_jars(wheel: Path, project_root: Path) -> None:
+    """Prepare the selected wheel's Java bindings before writing Buildozer settings."""
+    destination = project_root / "deployment/jar/PySide6/jar"
+    if destination.exists():
+        shutil.rmtree(destination)
+    destination.mkdir(parents=True)
+    with zipfile.ZipFile(wheel) as archive:
+        for name in archive.namelist():
+            if name.startswith("PySide6/jar/") and name.endswith(".jar"):
+                (destination / Path(name).name).write_bytes(archive.read(name))
+    bindings = destination / "Qt6AndroidBindings.jar"
+    with zipfile.ZipFile(bindings) as archive:
+        if "org/qtproject/qt/android/bindings/QtActivity.class" not in archive.namelist():
+            raise ValueError(f"QtActivity is missing from {bindings}")
+
+
 def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, ndk_path: Path, project_root: Path) -> None:
     """Update buildozer.spec for target architecture and current environment."""
     content = spec_path.read_text(encoding="utf-8")
@@ -398,7 +414,7 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
 
     for pattern, repl in replacements.items():
         content, count = re.subn(pattern, repl, content, flags=re.MULTILINE)
-        if count == 0 and not pattern.startswith(r"^android\.add_jars"):
+        if count == 0:
             # If not found, append under [app]
             content = content.replace("[app]\n", f"[app]\n{repl}\n")
 
@@ -588,6 +604,7 @@ def build_single_arch(
 
     arch_build_dir.mkdir(parents=True, exist_ok=True)
     ndk_stamp.write_text(ANDROID_NDK_REVISION + "\n", encoding="utf-8")
+    extract_qt_jars(wheel_pyside, project_root)
     update_buildozer_spec(buildozer_spec, buildozer_arch, sdk_path, ndk_path, project_root)
     update_pysidedeploy_spec(pysidedeploy_spec, wheel_pyside, wheel_shiboken, sdk_path, ndk_path, project_root, mode=build_mode)
 

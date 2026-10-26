@@ -17,6 +17,7 @@ from scripts.build_android import (
     build_single_arch,
     detect_arch_from_filename,
     ensure_host_patches,
+    extract_qt_jars,
     find_android_ndk,
     find_wheels_for_arch,
     main,
@@ -268,6 +269,27 @@ class BuildozerConfig:
 
 
 class TestAndroidBuildAutomation(unittest.TestCase):
+    def test_clean_build_extracts_and_registers_qt_activity_jars(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            wheel = root / "pyside.whl"
+            bindings = io.BytesIO()
+            with zipfile.ZipFile(bindings, "w") as jar:
+                jar.writestr("org/qtproject/qt/android/bindings/QtActivity.class", b"activity")
+            with zipfile.ZipFile(wheel, "w") as bundle:
+                bundle.writestr("PySide6/jar/Qt6AndroidBindings.jar", bindings.getvalue())
+                bundle.writestr("PySide6/jar/Qt6Android.jar", b"qt")
+            spec = root / "buildozer.spec"
+            spec.write_text("[app]\ntitle = Porn Fetch\n")
+            extract_qt_jars(wheel, root)
+            update_buildozer_spec(spec, "arm64-v8a", root / "sdk", root / "ndk", root)
+            config = configparser.ConfigParser()
+            config.read(spec)
+            jars = config["app"]["android.add_jars"].split(",")
+            self.assertEqual({Path(name).name for name in jars}, {"Qt6Android.jar", "Qt6AndroidBindings.jar"})
+            for name in jars:
+                self.assertTrue(Path(name).is_file())
+
     def test_ndk_discovery_requires_r28c_even_with_stale_environment(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -483,6 +505,7 @@ mode = onefile
                 return type("Result", (), {"returncode": 0})()
 
             with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \
+                 patch("scripts.build_android.extract_qt_jars"), \
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \
@@ -522,6 +545,7 @@ mode = onefile
                 return type("Result", (), {"returncode": 0})()
 
             with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \
+                 patch("scripts.build_android.extract_qt_jars"), \
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \

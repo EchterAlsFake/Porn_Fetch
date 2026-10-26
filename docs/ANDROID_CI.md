@@ -29,6 +29,14 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
   existing Android build script. The wrapper patches the target wheel too.
 - Generated Qt recipes and JARs are recreated from the selected wheel. The
   checked-in developer cache must not supply another ABI's absolute wheel paths.
+- The wrapper extracts the wheel's JARs and writes `android.add_jars` before
+  invoking PySide deploy, including on a clean runner. It checks that the
+  bindings JAR contains `QtActivity` before starting compilation.
+- Local recipes build `curl_cffi` 0.17.0 for every ABI against checksum-verified
+  curl-impersonate 2.3.1 Android libraries. CFFI 2.1.1 matches that version's
+  runtime requirement. OpenSSL is pinned to the maintained 3.5.9 LTS release.
+  Cryptography 50.0.2 uses the target Python installation
+  for Rust/CFFI compilation so 32-bit targets never use 64-bit host headers.
 - `packaging/prepare_android_ci.py` keeps app requirements, package identity,
   permissions and minimum API, replacing machine paths and the release version.
   It uses the tracked Android PySide deployment template, not desktop settings.
