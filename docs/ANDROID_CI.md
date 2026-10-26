@@ -37,6 +37,8 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
   runtime requirement. OpenSSL is pinned to the maintained 3.5.9 LTS release.
   Cryptography 50.0.2 uses the target Python installation
   for Rust/CFFI compilation so 32-bit targets never use 64-bit host headers.
+  Maintained recipes live in `p4a-recipes`; the deploy patch copies them into
+  `deployment/recipes` after PySide cleans its generated deployment directory.
 - `packaging/prepare_android_ci.py` keeps app requirements, package identity,
   permissions and minimum API, replacing machine paths and the release version.
   It uses the tracked Android PySide deployment template, not desktop settings.

@@ -269,6 +269,43 @@ class BuildozerConfig:
 
 
 class TestAndroidBuildAutomation(unittest.TestCase):
+    def test_custom_native_recipes_survive_deployment_cleanup(self):
+        import logging
+        import shutil
+
+        source = '''# porn-fetch-32bit-android-arch-v1
+import shutil
+
+class AndroidConfig:
+    def find_recipe_dir(self):
+        recipe_dir = None
+        if not self.dry_run:
+            recipe_dir = ((self.generated_files_path
+                           / "recipes").resolve())
+
+        return recipe_dir
+'''
+        namespace = {"Path": Path, "logging": logging}
+        exec(compile(patch_android_config_source(source), "android_config.py", "exec"), namespace)
+        project = Path(__file__).resolve().parents[3]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            shutil.copytree(project / "p4a-recipes", root / "p4a-recipes")
+            generated = root / "deployment"
+            generated.mkdir()
+            shutil.rmtree(generated)  # PySide's cleanup happens before find_recipe_dir.
+            config = namespace["AndroidConfig"]()
+            config.recipe_dir = generated / "recipes"
+            config.generated_files_path = generated
+            config.source_file = root / "main.py"
+            config.project_dir = root
+            config.dry_run = False
+            config.get_value = lambda *args, **kwargs: str(root / "p4a-recipes")
+            destination = config.find_recipe_dir()
+            for name in ("cryptography", "curl_cffi", "libcurl_impersonate"):
+                self.assertEqual((destination / name / "__init__.py").read_bytes(),
+                                 (project / "p4a-recipes" / name / "__init__.py").read_bytes())
+
     def test_clean_build_extracts_and_registers_qt_activity_jars(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
