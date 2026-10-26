@@ -16,6 +16,10 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
   project to avoid Qt's QML scanner traversing installed packages.
 - JDK 21, SDK Platform 36, Build Tools 36.0.0, NDK r28c / 28.2.13676358. This
   follows the companion guide's tested NDK choice; it does not rebuild Qt.
+- The runner's `cmdline-tools/latest` directory is exposed at SDK `tools` for
+  Buildozer 1.6's `tools/bin/sdkmanager` lookup. CI checks that this command runs
+  before compilation. APK builds use Bash with `pipefail` so logging through
+  `tee` preserves compilation failures and prevents subsequent signing steps.
 - Minimum Android API 28, retained from the application's working Buildozer spec.
 - Matching PySide6 and Shiboken6 `cp314-cp314` wheels from
   <https://github.com/EchterAlsFake/PySide6-to-Android/releases/tag/6.12.0>.

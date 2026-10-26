@@ -549,6 +549,16 @@ jobs:
             echo "$ANDROID_HOME/platform-tools"
           } >> "$GITHUB_PATH"
 
+      - name: Expose Android SDK tools for Buildozer
+        shell: bash
+        run: |
+          # Buildozer 1.6 still resolves sdkmanager through tools/bin.
+          # Link the full tools directory so sdkmanager also finds its JARs.
+          if [ ! -e "$ANDROID_HOME/tools" ]; then
+            ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
+          fi
+          "$ANDROID_HOME/tools/bin/sdkmanager" --version
+
       - name: Download and verify Python 3.14 Android wheels
         env:
           GH_TOKEN: ${{ github.token }}
@@ -590,6 +600,7 @@ jobs:
           pyside6-rcc --compress-algo zlib --compress 9 src/frontend/resources.qrc -o src/frontend/UI/resources.py
 
       - name: Build release APK
+        shell: bash
         run: |
           python scripts/build_android.py --architecture "$ANDROID_ARCH" \
             --wheel-pyside "$RUNNER_TEMP/android-wheels/pyside6-6.12.0-6.12.0-cp314-cp314-android_${ANDROID_ARCH}.whl" \
