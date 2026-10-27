@@ -152,6 +152,20 @@ class SearchRestrictionTests(unittest.TestCase):
 
 
 class MediaTests(unittest.IsolatedAsyncioTestCase):
+    async def test_method_based_qualities_are_not_loaded_as_media_fields(self):
+        for qualities in (["480p", "720p", "1080p"], [480, 720]):
+            with self.subTest(qualities=qualities):
+                video = SimpleNamespace(
+                    video_qualities=Mock(return_value=qualities),
+                    is_field_loaded=Mock(side_effect=ValueError("not a dataclass field")),
+                    load_fields=AsyncMock(),
+                )
+                self.assertEqual(await available_qualities(video),
+                                 [int(str(quality).removesuffix("p")) for quality in qualities])
+                video.video_qualities.assert_called_once_with()
+                video.is_field_loaded.assert_not_called()
+                video.load_fields.assert_not_awaited()
+
     async def test_raw_youporn_is_not_parsed_as_hls(self):
         core = SimpleNamespace(list_available_qualities=AsyncMock())
         video = SimpleNamespace(is_hls=False, m3u8_base_url="https://media.test/video.mp4", core=core)
@@ -186,15 +200,24 @@ class MediaTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(list(Path(outcome.path).glob("*.jpg"))), 2)
 
     async def test_pornhub_browser_login_initializes_account_username(self):
-        client = SimpleNamespace(core=SimpleNamespace(session=SimpleNamespace(cookies={})),
+        html = '<div class="profileData"><a class="username" href="/users/example">Account</a></div><a href="/user/logout">Logout</a>'
+        client = SimpleNamespace(core=SimpleNamespace(session=SimpleNamespace(cookies={}),
+                                                      fetch_text=AsyncMock(return_value=html)),
                                  account=SimpleNamespace(name=None), logged=False,
                                  get_user=AsyncMock(return_value="user"))
         self.assertTrue(await connect_pornhub_cookies(client, {"session": "cookie"}, "example"))
         self.assertEqual(client.account.name, "example")
         self.assertEqual(client.account.user, "user")
         self.assertTrue(client.logged)
+        self.assertTrue(await connect_pornhub_cookies(client, {"session": "cookie"}))
+        self.assertEqual(client.account.name, "example")
         with self.assertRaises(ValueError):
-            await connect_pornhub_cookies(client, {"session": "cookie"}, "")
+            await connect_pornhub_cookies(client, {"session": "cookie"}, "someone-else")
+        self.assertFalse(client.logged)
+        client.core.fetch_text.return_value = '<a href="/login">Login</a>'
+        with self.assertRaises(ValueError):
+            await connect_pornhub_cookies(client, {"session": "cookie"}, "example")
+        self.assertFalse(client.logged)
 
 
 if __name__ == "__main__":

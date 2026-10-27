@@ -41,7 +41,7 @@ Pane {
         ItemDelegate {
             Layout.fillWidth: true
             Layout.preferredHeight: 88
-            onClicked: root.openPage(4)
+            onClicked: Qt.openUrlExternally("https://pornfetch.to/#websites")
             background: Rectangle { color: root.cardColor; radius: 20 }
             contentItem: RowLayout {
                 spacing: 16

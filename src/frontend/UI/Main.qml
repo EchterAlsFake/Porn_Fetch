@@ -2,11 +2,14 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 ApplicationWindow {
     id: window
     font.pointSize: appSettings.font_size
+    Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
+    Material.accent: appSettings.accent_color
 
     width: 1350
     height: 720
@@ -15,7 +18,7 @@ ApplicationWindow {
 
     visible: true
     title: qsTr("Video Downloader")
-    property bool safeToClose: false
+    property alias safeToClose: shutdownController.safeToClose
     property bool startupContinued: false
 
     ServiceTorFailureDialog {}
@@ -60,11 +63,10 @@ ApplicationWindow {
         onExitRequested: window.close()
     }
 
-    onClosing: (closeEvent) => {
-        if (!safeToClose) {
-            closeEvent.accepted = false
-            backend.initiate_shutdown()
-        }
+    ApplicationShutdown {
+        id: shutdownController
+        targetWindow: window
+        backendController: backend
     }
 
     Connections {
@@ -104,10 +106,6 @@ ApplicationWindow {
             updateDialog.updateInProgress = false
         }
 
-        function onShutdown_complete() {
-            window.safeToClose = true
-            window.close()
-        }
     }
 
     Connections {
@@ -467,53 +465,57 @@ ApplicationWindow {
         anchors.margins: 8
         spacing: 6
 
-        TabBar {
-            id: navigation
-
+        RowLayout {
             Layout.fillWidth: true
+            TabBar {
+                id: navigation
 
-            TabButton {
-                icon.source: "qrc:/images/graphics/download.svg"
-                icon.width: 24
-                icon.height: 24
-                icon.color: "transparent"
-                display: AbstractButton.IconOnly
+                Layout.fillWidth: true
+
+                TabButton {
+                    icon.source: "qrc:/images/graphics/download.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: "transparent"
+                    display: AbstractButton.IconOnly
+                }
+
+                TabButton {
+                    icon.source: "qrc:/images/graphics/account.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: "transparent"
+                    display: AbstractButton.IconOnly
+                }
+
+                TabButton {
+                    icon.source: "qrc:/images/graphics/database.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: "transparent"
+                    display: AbstractButton.IconOnly
+                }
+
+                TabButton {
+                    icon.source: "qrc:/images/graphics/settings.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: "transparent"
+                    display: AbstractButton.IconOnly
+                }
+
+                TabButton {
+                    icon.source: "qrc:/images/graphics/information.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: "transparent"
+                    display: AbstractButton.IconOnly
+                }
+
             }
-
-            TabButton {
-                icon.source: "qrc:/images/graphics/account.svg"
-                icon.width: 24
-                icon.height: 24
-                icon.color: "transparent"
-                display: AbstractButton.IconOnly
-            }
-
-            TabButton {
-                icon.source: "qrc:/images/graphics/database.svg"
-                icon.width: 24
-                icon.height: 24
-                icon.color: "transparent"
-                display: AbstractButton.IconOnly
-            }
-
-            TabButton {
-                icon.source: "qrc:/images/graphics/settings.svg"
-                icon.width: 24
-                icon.height: 24
-                icon.color: "transparent"
-                display: AbstractButton.IconOnly
-            }
-
-            TabButton {
-                icon.source: "qrc:/images/graphics/information.svg"
-                icon.width: 24
-                icon.height: 24
-                icon.color: "transparent"
-                display: AbstractButton.IconOnly
-            }
-
-            TabButton {
+            Button {
                 text: qsTr("SUPPORTED WEBSITES")
+                onClicked: Qt.openUrlExternally("https://pornfetch.to/#websites")
             }
         }
 
@@ -551,23 +553,6 @@ ApplicationWindow {
                 }
 
             }
-
-
-            Item {
-                SupportedWebsitesPage {
-                    anchors.fill: parent
-                    visible: !appSettings.anonymous_mode
-                }
-
-                Label {
-                    anchors.centerIn: parent
-                    text: qsTr("Widget is hidden due to your privacy settings...")
-                    font.pixelSize: appSettings.font_size
-                    visible: appSettings.anonymous_mode
-                }
-
-            }
-
         }
     }
 }

@@ -249,7 +249,10 @@ ApplicationWindow {
                             Layout.preferredHeight: window.expanded ? 54 : 72
                             enabled: !appSettings.anonymous_mode || index < 3
                             Accessible.name: modelData
-                            onClicked: window.pageIndex = index
+                            onClicked: {
+                                if (index === 4) Qt.openUrlExternally("https://pornfetch.to/#websites")
+                                else window.pageIndex = index
+                            }
                             background: Rectangle {
                                 radius: 18
                                 color: window.pageIndex === index
@@ -343,7 +346,7 @@ ApplicationWindow {
                     AndroidAccountPage {}
                     AndroidSettingsPage { id: settingsPage; objectName: "androidSettingsPage" }
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
-                    AndroidSupportedWebsitesPage { visible: !appSettings.anonymous_mode }
+                    Item {} // Keep existing page indices stable; website support opens in the browser.
                     AndroidMorePage {
                         visible: !appSettings.anonymous_mode
                         onOpenPage: function(index) { window.pageIndex = index }
@@ -439,7 +442,7 @@ ApplicationWindow {
                 Label { width: parent.width; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.changelog || ""; textFormat: Text.PlainText }
             }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status }
-            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport === "tor"; text: torStatus.text }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport !== "direct"; text: torStatus.text }
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Download and install update")

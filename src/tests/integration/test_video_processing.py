@@ -33,6 +33,7 @@ class VideoProcessingTests(unittest.IsolatedAsyncioTestCase):
             settings = SimpleNamespace(
                 retries=1, output_path=directory, result_limit=2,
                 quality=2, mappings_quality={2: "720"},
+                processing_delay=0, log_level=1, log_level_map={1: "INFO"},
             )
             manager = Mock()
             with patch("src.backend.video_processor.app_settings", settings):
@@ -59,6 +60,7 @@ class VideoProcessingTests(unittest.IsolatedAsyncioTestCase):
         backend._video_fetch_task = None
         backend._account_fetch_task = None
         backend._account_fetch_in_progress = False
+        backend._is_shutting_down = False
         backend._spawn = lambda coroutine, **kwargs: asyncio.create_task(coroutine)
         self.addCleanup(stop_flag.clear)
         return backend

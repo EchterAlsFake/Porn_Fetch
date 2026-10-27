@@ -201,6 +201,11 @@ Pane {
                         height: 50
                         highlighted: ListView.isCurrentItem // Visual highlight
 
+                        icon.source: "qrc:/images/graphics/settings/"
+                                     + ["video", "gauge", "settings", "shield", "palette"][index] + ".svg"
+                        icon.width: 22
+                        icon.height: 22
+                        display: AbstractButton.TextBesideIcon
                         text: modelData // 'modelData' refers to the string ("Video", etc.)
                         width: navList.width // Span full width of sidebar
 
@@ -224,6 +229,7 @@ Pane {
                 // StackLayout allows having multiple children, but only ONE is visible at a time.
                 // It acts exactly like QStackedWidget from Qt Widgets.
                 StackLayout {
+                    objectName: "settingsStack"
                     id: stackLayout
 
                     anchors.fill: parent
@@ -1024,13 +1030,14 @@ Pane {
 
                         GridLayout {
                             columnSpacing: 15
-                            columns: window.compact ? 1 : 2
+                            columns: 2
                             width: scrollviewPrivacy.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
 
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.anonymousModeHelp
                             }
                             CheckBox {
@@ -1044,6 +1051,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.encryptedCHHelp
                             }
                             CheckBox {
@@ -1057,6 +1065,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.dnsOverHTTPSHelp
                             }
                             CheckBox {
@@ -1069,25 +1078,14 @@ Pane {
                                 onToggled: appSettings.dns_over_https = checked
                             }
 
-                            HelpButton { helpText: AppStrings.torIntegrationHelp }
-                            CheckBox {
-                                objectName: "serviceTorCheckBox"
-                                Accessible.name: qsTr("Use Tor for updates and licensing")
-                                text: qsTr("Use Tor for updates and licensing")
+                            TorRouting {
+                                Layout.columnSpan: 2
                                 Layout.fillWidth: true
-                                checked: appSettings.service_transport === "tor"
-                                onToggled: appSettings.service_transport = checked ? "tor" : "direct"
-                            }
-                            Item {}
-                            Label {
-                                Layout.fillWidth: true
-                                wrapMode: Text.WordWrap
-                                text: torStatus.text
-                                visible: appSettings.service_transport === "tor"
                             }
 
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.dnsPrimaryHelp
                             }
                             TextField {
@@ -1111,6 +1109,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.fallbackDNSHelp
                             }
                             TextField {
@@ -1134,6 +1133,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.sniObfuscationHelp
                             }
                             CheckBox {
@@ -1147,7 +1147,7 @@ Pane {
                                 }
 
                             GridLayout {
-                                Layout.columnSpan: 2          // <--- Fixes the layout breakage
+                                Layout.columnSpan: 2
                                 Layout.fillWidth: true
                                 columns: window.compact ? 1 : 2
                                 columnSpacing: 15
@@ -1194,6 +1194,7 @@ Pane {
                             }
                             HelpButton {
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.proxySetupHelp
                             }
                             Button {
@@ -1275,7 +1276,7 @@ Pane {
                                 objectName: "darkModeSwitch"
                                 Accessible.name: qsTr("Dark Mode")
                                 Accessible.description: AppStrings.darkModeHelp
-                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignLeft
                                 checked: appSettings.dark_mode
                                 onToggled: appSettings.dark_mode = checked
                             }
@@ -1289,7 +1290,7 @@ Pane {
                                 objectName: "activityGlowSwitch"
                                 Accessible.name: qsTr("Activity glow")
                                 Accessible.description: qsTr("Show a glowing border while the app is busy.")
-                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignLeft
                                 checked: appSettings.activity_glow_enabled
                                 onToggled: appSettings.activity_glow_enabled = checked
                             }

@@ -62,22 +62,17 @@ async def available_qualities(video: Any) -> list[int]:
         core = _value(video, "core") or _value(_value(video, "client"), "core")
         return sorted({int(item) for item in await core.list_available_qualities(hls)})
 
-    if hasattr(video, "load_fields") and hasattr(video, "is_field_loaded"):
-        if not video.is_field_loaded("video_qualities"):
-            try:
-                await video.load_fields("video_qualities")
-            except Exception:
-                pass
-    try:
-        method = getattr(video, "video_qualities", None)
-    except Exception:
-        method = None
-    if method:
-        values = method() if callable(method) else method
-        if hasattr(values, "__await__"):
-            values = await values
+    qualities = _value(video, "video_qualities")
+    if callable(qualities):
+        # Eporner and XFreeHD expose a method over already-loaded HTML fields,
+        # not a BaseMedia field that can be passed to load_fields().
+        values = qualities()
     else:
-        values = _value(video, "available_qualities") or []
+        if "video_qualities" in getattr(video, "__dataclass_fields__", {}):
+            await video.load_fields("video_qualities")
+        values = _value(video, "video_qualities") or _value(video, "available_qualities") or []
+    if inspect.isawaitable(values):
+        values = await values
     result: set[int] = set()
     for item in values or []:
         match = re.search(r"\d+", str(item))

@@ -6,7 +6,6 @@ from contextlib import aclosing
 from datetime import datetime
 from pathlib import Path
 import re
-from string import Template
 from typing import AsyncGenerator, AsyncIterator
 import uuid
 
@@ -27,15 +26,13 @@ from src.backend.config import __version__, app_settings
 from src.backend.download_manager import DownloadManager, VideoFilters, VideoObject
 from src.backend.helper_functions import make_debug_log
 from src.shared.error_reporting import report_exception
+from src.shared.download_options import title_template, video_output_path
 from src.shared.errors import (
     AppBotBlocked,
     AppNetworkError,
     AppNotFoundError,
     safe_api_call,
 )
-
-
-log_level = app_settings.log_level_map.get(app_settings.log_level)
 
 
 class ProcessVideos(QObject):
@@ -50,6 +47,8 @@ class ProcessVideos(QObject):
                  download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event,
                  origin_iterator_url: str | None = None, origin_iterator_name: str | None = None) -> None:
         super().__init__()
+        video_filters.validate()
+        title_template(custom_path_options)
         self.iterator = iterator
         self.custom_path_options = custom_path_options
         self.download_manager = download_manager
@@ -61,7 +60,8 @@ class ProcessVideos(QObject):
         self.max_attempts = app_settings.retries
         self.output_path = app_settings.output_path
         self.result_limit = app_settings.result_limit
-        self.logger = configure_app_logging(logger_name="Porn Fetch - [ProcesVideos]", log_file="PornFetch.log", level=log_level)
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [ProcesVideos]", log_file="PornFetch.log",
+                                            level=app_settings.log_level_map.get(app_settings.log_level, "INFO"))
 
     @staticmethod
     async def reverse_iterator(iterator: AsyncIterator):
@@ -101,6 +101,8 @@ class ProcessVideos(QObject):
 
         # 3. Quality Filters (Evaluated based on the highest available quality)
         if filters.quality_minimum or filters.quality_maximum:
+            if not attributes.qualities:
+                return False
             max_quality = self._get_max_quality(attributes.qualities)
 
             if filters.quality_minimum:
@@ -117,17 +119,16 @@ class ProcessVideos(QObject):
         if filters.published_after:
             if attributes.publish_date is None:
                 return False
-            # .replace(tzinfo=None) safely handles timezone-aware datetimes for comparison
-            after_date = datetime.fromisoformat(filters.published_after).replace(tzinfo=None)
-            pub_date = attributes.publish_date.replace(tzinfo=None)
+            after_date = datetime.fromisoformat(filters.published_after).date()
+            pub_date = attributes.publish_date.date()
             if pub_date < after_date:
                 return False
 
         if filters.published_before:
             if attributes.publish_date is None:
                 return False
-            before_date = datetime.fromisoformat(filters.published_before).replace(tzinfo=None)
-            pub_date = attributes.publish_date.replace(tzinfo=None)
+            before_date = datetime.fromisoformat(filters.published_before).date()
+            pub_date = attributes.publish_date.date()
             if pub_date > before_date:
                 return False
 
@@ -136,21 +137,11 @@ class ProcessVideos(QObject):
 
     @staticmethod
     def _parse_quality(quality_str: str | int) -> int:
-        """Extracts the integer resolution from strings like '1080p', '720', '4K'."""
+        """Read resolution labels, with 4K represented by its 2160 vertical pixels."""
         if not quality_str:
             return 0
 
-        if isinstance(quality_str, int):
-            return quality_str
-
-        # Simple handler for "4k" edge cases
-        if quality_str.lower() == "4k":
-            return 2160
-
-        # Strips all non-digit characters (e.g., "1080p60" -> 108060, so we just grab the resolution part safely)
-        # Assuming typical formats like "1080p", "720p"
-        match = re.search(r'\d+', quality_str)
-        return int(match.group()) if match else 0
+        return VideoFilters.quality_value(quality_str)
 
     def _get_max_quality(self, qualities: list[str | int]) -> int:
         """Finds the highest resolution available in the list of qualities."""
@@ -167,24 +158,7 @@ class ProcessVideos(QObject):
         return video, video_attributes
 
     def create_output_path(self, video_attributes: VideoObject, index: int, user_pattern: str) -> Path:
-        base_path = self.output_path
-        context = {
-            "output_path": base_path,
-            "author": video_attributes.author,
-            "title": video_attributes.title,
-            "video_id": video_attributes.video_id,
-            "index": f"{index:02d}",  # Zero-padded index (01, 02, etc.)
-            "publish_date": video_attributes.publish_date,
-            "length": video_attributes.length,
-        }
-
-        template = Template(user_pattern)
-        resolved_string = template.safe_substitute(context)
-        resolved_path = Path(resolved_string).expanduser()
-        uses_output_path = "$output_path" in user_pattern or "${output_path}" in user_pattern
-        if not resolved_path.is_absolute() and not uses_output_path:
-            resolved_path = Path(base_path).expanduser() / resolved_path
-        return resolved_path
+        return video_output_path(video_attributes, index, user_pattern, self.output_path)
 
     async def start_processing(self):
         self.logger.info("Starting Processing of Iterator!")
@@ -193,18 +167,32 @@ class ProcessVideos(QObject):
             self.iterator = self.reverse_iterator(self.iterator)
 
         async with aclosing(self.iterator) as iterator:
-            idx = 1
+            idx = 0
+            examined = 0
             async for video in iterator:
+                idx += 1
+                if self.stop_flag.is_set():
+                    return
+                if idx < max(1, self.video_filters.start_index):
+                    continue
+                if self.video_filters.end_index and idx > self.video_filters.end_index:
+                    break
                 print(f"Processing: {video} {idx}")
                 video_url = getattr(video, "url", str(video))
-                if self.result_limit is not None and idx > self.result_limit:
+                if self.result_limit is not None and examined >= self.result_limit:
                     break
+                examined += 1
 
                 last_error = None  # Keeps track of the
                 last_exception = None
 
                 if self.stop_flag.is_set():
                     return  # User hit the abort button
+
+                if app_settings.processing_delay:
+                    await asyncio.sleep(float(app_settings.processing_delay))
+                    if self.stop_flag.is_set():
+                        return
 
                 try:
                     self.logger.debug(f"Current Index: {idx}")
@@ -307,7 +295,3 @@ class ProcessVideos(QObject):
                             last_error = f"{last_error.rstrip()}\n\nError ID: {report_id}"
                     if last_error is not None:
                         self.error_signal.emit(last_error)
-
-                idx += 1
-
-

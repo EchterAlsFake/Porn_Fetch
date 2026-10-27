@@ -1,6 +1,7 @@
 """Qt-free media models shared by the graphical and terminal frontends."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -78,6 +79,37 @@ class VideoFilters:
     quality_maximum: str | None = None
     published_before: str | None = None
     published_after: str | None = None
+    start_index: int = 0
+    end_index: int = 0
+
+    @staticmethod
+    def quality_value(value: str | int) -> int:
+        return 2160 if str(value).strip().casefold() == "4k" else normalize_quality(value)
+
+    def validate(self) -> None:
+        for label, pattern in (("Title", self.title_regex), ("Author", self.author_regex), ("Tags", self.tags_regex)):
+            if pattern:
+                try:
+                    re.compile(pattern, re.IGNORECASE)
+                except re.error as error:
+                    raise ValueError(f"{label} regex is invalid: {error.msg}") from error
+        for label, minimum, maximum in (
+            ("Duration", self.duration_minimum, self.duration_maximum),
+            ("Quality", self.quality_value(self.quality_minimum) if self.quality_minimum else None,
+             self.quality_value(self.quality_maximum) if self.quality_maximum else None),
+        ):
+            if (minimum is not None and minimum < 0) or (maximum is not None and maximum < 0):
+                raise ValueError(f"{label} limits must not be negative.")
+            if minimum is not None and maximum is not None and minimum > maximum:
+                raise ValueError(f"{label} minimum must not exceed maximum.")
+        after = datetime.fromisoformat(self.published_after).date() if self.published_after else None
+        before = datetime.fromisoformat(self.published_before).date() if self.published_before else None
+        if after is not None and before is not None and after > before:
+            raise ValueError("The publication date 'after' must not exceed 'before'.")
+        if self.start_index < 0 or self.end_index < 0:
+            raise ValueError("Start and End must not be negative.")
+        if self.end_index and max(1, self.start_index) > self.end_index:
+            raise ValueError("Start must not exceed End. Use 0 for no End limit.")
 
 
 @dataclass(slots=True)

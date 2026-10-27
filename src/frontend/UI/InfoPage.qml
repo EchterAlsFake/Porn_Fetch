@@ -39,17 +39,17 @@ Rectangle {
                     || infoWheelHandler.scrolling
         }
 
-        Column {
+        ColumnLayout {
             id: contentColumn
-            width: parent.width - 40
-            anchors.horizontalCenter: parent.horizontalCenter
+            width: infoFlickable.width - 40
+            x: 20
             y: 30
             spacing: 25
 
             // Header Section
             Item {
-                width: parent.width
-                height: 140
+                Layout.fillWidth: true
+                implicitHeight: Math.max(140, headerColumn.implicitHeight + 40)
                 
                 Rectangle {
                     anchors.fill: parent
@@ -61,7 +61,9 @@ Rectangle {
                 }
 
                 Column {
+                    id: headerColumn
                     anchors.centerIn: parent
+                    width: parent.width - 40
                     spacing: 8
                     
                     Text {
@@ -70,7 +72,9 @@ Rectangle {
                         font.bold: true
                         font.family: "Inter, sans-serif"
                         color: "#ffffff"
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
                     }
                     
                     Text {
@@ -78,7 +82,9 @@ Rectangle {
                         font.pixelSize: 18
                         font.family: "Inter, sans-serif"
                         color: "#00f2fe"
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
                     }
                     
                     Text {
@@ -86,7 +92,9 @@ Rectangle {
                         font.pixelSize: 14
                         font.family: "Inter, sans-serif"
                         color: "#a0a0c0"
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
                     }
                 }
             }
@@ -142,38 +150,35 @@ Rectangle {
             }
 
             // Other Tech
-            RowLayout {
-                width: parent.width
-                spacing: 20
+            GridLayout {
+                Layout.fillWidth: true
+                columns: width < 700 ? 1 : 2
+                columnSpacing: 20
+                rowSpacing: 20
                 
                 CreditCard {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
                     title: "Android"
                     icon: "📱"
                     content: "Buildozer\nCython\nChaquopy"
                 }
 
                 CreditCard {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
                     title: "Applications"
                     icon: "⚙️"
                     content: "FFMPEG (via pyav)\n\nUsed for processing\nmedia streams."
                 }
-            }
-            
-            RowLayout {
-                width: parent.width
-                spacing: 20
-                
+
                 CreditCard {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
                     title: "macOS Build"
                     icon: "🍎"
                     content: "OneClick-macOS-Simple-KVM\n\nMakes macOS builds possible."
                 }
 
                 CreditCard {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1
                     title: "iOS Testing"
                     icon: "📱"
                     content: "palera1n\nKitty-XZ\n\nJailbreak testing."
@@ -202,58 +207,68 @@ Rectangle {
         }
     }
 
-    // Custom Component for Cards
     component CreditCard: Rectangle {
+        id: card
+        objectName: "creditCard"
         property string title: ""
         property string content: ""
         property string icon: ""
-        
-        width: parent ? parent.width : 0
-        height: cardColumn.height + 40
+
+        Layout.fillWidth: true
+        Layout.minimumWidth: 0
+        Layout.alignment: Qt.AlignTop
+        implicitWidth: 320
+        implicitHeight: cardColumn.implicitHeight + 40
         radius: 12
         color: "#252545"
         opacity: 0.9
         border.color: "#3a3a6a"
         border.width: 1
 
-        Column {
+        ColumnLayout {
             id: cardColumn
-            width: parent.width - 40
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 20
             spacing: 10
 
             RowLayout {
-                width: parent.width
+                Layout.fillWidth: true
                 spacing: 10
-                
+
                 Text {
-                    text: parent.parent.parent.icon
+                    text: card.icon
                     font.pixelSize: 24
                 }
-                
+
                 Text {
-                    text: parent.parent.parent.title
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
+                    text: card.title
                     font.pixelSize: 20
                     font.bold: true
                     font.family: "Inter, sans-serif"
                     color: "#ffffff"
-                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
                 }
             }
-            
+
             Rectangle {
-                width: parent.width
-                height: 1
+                Layout.fillWidth: true
+                implicitHeight: 1
                 color: "#3a3a6a"
             }
 
             Text {
-                width: parent.width
-                text: parent.parent.content
+                Layout.fillWidth: true
+                Layout.minimumWidth: 0
+                text: card.content
                 font.pixelSize: 14
                 font.family: "Inter, sans-serif"
                 color: "#c0c0d0"
-                wrapMode: Text.WordWrap
+                textFormat: Text.PlainText
+                wrapMode: Text.Wrap
                 lineHeight: 1.4
             }
         }

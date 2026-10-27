@@ -27,8 +27,7 @@ IS_SOURCE_RUN = True
 
 IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
 
-TEMP_DIRECTORY = (Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation))
-                  / "PornFetch" if IS_ANDROID else Path(".temp"))
+TEMP_DIRECTORY = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation)) / "PornFetch"
 TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
 TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 
@@ -672,6 +671,7 @@ class SettingsManager(QObject):
         if val != self.log_level:
             self._settings.setValue("Misc/log_level", val)
             self.logLevelChanged.emit(val)
+            self.reloadClients.emit(val)
 
     @Property(str, notify=httpVersionChanged)
     def http_version(self) -> str:
@@ -758,18 +758,20 @@ class SettingsManager(QObject):
     @Property(str, notify=serviceTransportChanged)
     def service_transport(self):
         value = self._settings.value("Privacy/service_transport", "")
-        if value not in {"direct", "tor"}:
+        if value not in {"direct", "tor", "tor_all"}:
             value = "tor" if self.enable_tor and self.enable_tor_server_routing else "direct"
             self._settings.setValue("Privacy/service_transport", value)
         return value
 
     @service_transport.setter
     def service_transport(self, value):
-        if value not in {"direct", "tor"}:
-            raise ValueError("Service transport must be direct or tor")
+        if value not in {"direct", "tor", "tor_all"}:
+            raise ValueError("Tor routing must be direct, tor, or tor_all")
         if value != self.service_transport:
             self._settings.setValue("Privacy/service_transport", value)
+            self._settings.sync()
             self.serviceTransportChanged.emit(value)
+            self.reloadClients.emit(value)
             if value == "direct":
                 from src.shared.tor_runtime import runtime
                 import asyncio

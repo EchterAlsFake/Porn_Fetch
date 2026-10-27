@@ -17,7 +17,7 @@ Dialog {
     Connections {
         target: torStatus
         function onFailure(message) {
-            if (appSettings.service_transport === "tor") {
+            if (appSettings.service_transport !== "direct") {
                 root.message = message
                 root.open()
             }
@@ -27,7 +27,7 @@ Dialog {
         target: appSettings
         function onServiceTransportChanged(mode) {
             torStatus.resetFailureNotice()
-            if (mode !== "tor") root.close()
+            if (mode === "direct") root.close()
         }
     }
     contentItem: ScrollView {

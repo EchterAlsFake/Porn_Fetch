@@ -44,7 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--license", action="store_true", help="show the application source license")
     parser.add_argument("--third-party-notices", action="store_true", help="show the bundled third-party notice inventory")
     parser.add_argument("--test-mode", action="store_true", help="run comprehensive CLI self-test with every URL across all supported sites")
-    parser.add_argument("--test-downloads", action="store_true", help="opt-in to live download, pause/resume, and PyAV metadata tagging tests during test mode")
+    parser.add_argument("--test-downloads", action="store_true", help="opt-in to a live sample download during test mode; the test helper offers separate pause/resume and cleanup workflows")
     parser.add_argument("--resume", action="store_true", help="resume all paused downloads from previous sessions")
     parser.add_argument("--stats", action="store_true", help="display PocketBase download statistics and exit")
     parser.add_argument(
@@ -254,6 +254,8 @@ async def run_batch(args: argparse.Namespace) -> int:
     for url in args.remove_model_from_database:
         models.remove(url)
 
+    from src.shared.tor_transport import configure as configure_tor_transport
+    configure_tor_transport(settings)
     pool = ClientPool(settings.to_runtime_config())
     license_service = create_license_service(settings.to_runtime_config())
     failures = 0

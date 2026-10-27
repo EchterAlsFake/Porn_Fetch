@@ -11,6 +11,7 @@ import tempfile
 import urllib.request
 import zipfile
 from collections.abc import Callable
+from contextlib import contextmanager
 from pathlib import Path
 
 from .errors import PocketBaseError
@@ -18,6 +19,20 @@ from .errors import PocketBaseError
 logger = logging.getLogger(__name__)
 
 DEFAULT_POCKETBASE_VERSION = "0.40.4"
+
+
+@contextmanager
+def _download_response(request):
+    from src.shared.tor_transport import all_traffic_enabled, runtime, tor_options
+    if all_traffic_enabled():
+        from curl_cffi import requests
+        with requests.Session(**tor_options(runtime.ensure_ready()), verify=True) as session:
+            with session.stream("GET", request.full_url, headers=dict(request.header_items()), timeout=30) as response:
+                response.raise_for_status()
+                yield response.headers, response.iter_content(chunk_size=65536)
+    else:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            yield response.headers, iter(lambda: response.read(65536), b"")
 
 
 def resolve_platform(
@@ -151,15 +166,10 @@ def download_and_extract_pocketbase(
     with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp_file:
         tmp_path = Path(tmp_file.name)
         try:
-            with urllib.request.urlopen(req, timeout=30) as response:
-                total_size = int(response.headers.get("Content-Length", 0))
+            with _download_response(req) as (headers, chunks):
+                total_size = int(headers.get("Content-Length", 0))
                 bytes_downloaded = 0
-                chunk_size = 64 * 1024
-
-                while True:
-                    chunk = response.read(chunk_size)
-                    if not chunk:
-                        break
+                for chunk in chunks:
                     tmp_file.write(chunk)
                     bytes_downloaded += len(chunk)
                     if progress_callback:

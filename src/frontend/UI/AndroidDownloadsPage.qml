@@ -179,11 +179,14 @@ Pane {
                     ColumnLayout {
                         visible: root.showFilters
                         Layout.fillWidth: true
-                        CheckBox {
-                            id: cleanupStop
+                        RowLayout {
                             Layout.fillWidth: true
-                            text: qsTr("Delete partial files on stop")
-                            implicitHeight: 48
+                            CheckBox {
+                                id: cleanupStop
+                                text: qsTr("Cleanup on stop")
+                                implicitHeight: 48
+                            }
+                            HelpButton { helpText: AppStrings.cleanupOnStopHelp }
                         }
                         Label {
                             text: qsTr("Duration in minutes")
@@ -231,12 +234,12 @@ Pane {
                             ComboBox {
                                 id: minQuality
                                 Layout.fillWidth: true
-                                model: ["Any", "240", "360", "480", "720", "1080", "1440", "2160"]
+                                model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
                             ComboBox {
                                 id: maxQuality
                                 Layout.fillWidth: true
-                                model: ["Any", "240", "360", "480", "720", "1080", "1440", "2160"]
+                                model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
                         }
                         TextField {
@@ -253,6 +256,10 @@ Pane {
                             id: customOptions
                             Layout.fillWidth: true
                             placeholderText: qsTr("Custom options")
+                        }
+                        HelpButton {
+                            text: qsTr("Title formatting options")
+                            helpText: AppStrings.titleFormattingHelp
                         }
                     }
                 }
@@ -356,6 +363,12 @@ Pane {
                 contentItem: ColumnLayout {
                     spacing: 4
                     RowLayout {
+                        ToolButton {
+                            icon.source: "qrc:/images/graphics/settings/trash.svg"
+                            display: AbstractButton.IconOnly
+                            Accessible.name: qsTr("Remove video from list")
+                            onClicked: backend.remove_video(card.jobId)
+                        }
                         Layout.fillWidth: true
                         spacing: 4
                         CheckBox {

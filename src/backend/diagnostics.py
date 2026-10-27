@@ -94,7 +94,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="XNXX",
-        url="https://www.xnxx.com/video-i60z5ca/als_der_stiefbruder_amara_der_heissen_kleinen_schwester_ihr_tagebuch_findet_weiss_er_dass_es_der_weg_zu_ihrer_sussen_muschi_ist._sieh_zu_wie_sie_seinen_schwanz_bis_zu_einem_gesicht_voller_sperma_lutscht_und_fickt_nur_um_sie_dreckig_zu_halten"
+        url="https://www.xnxx.com/video-1gav4l94/allein_im_seehaus_mit_meiner_stieftochter"
     ),
     WebsiteTest(
         name="xvideos",
@@ -102,7 +102,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="eporner",
-        url="https://www.eporner.com/video-cENxynmNow9/the-best-of-miak-onlyf-4k-hdr/"
+        url="https://www.eporner.com/video-2MWhVhhsAfM/zz-olenade/"
     ),
     WebsiteTest(
         name="spankbang",
@@ -130,11 +130,11 @@ TESTS = [
     ),
     WebsiteTest(
         name="xfreehd",
-        url="https://beta.xfreehd.com/video/1073182/braless-neighbor-in-the-morning-mina-sakura"
+        url="https://beta.xfreehd.com/video/1092426/jmonn-omg-the-latest-cchd-23-10-26"
     ),
     WebsiteTest(
         name="porntrex",
-        url="https://www.porntrex.com/video/3002169/gaia-on-top-anal-creampie"
+        url="https://www.porntrex.com/video/3140379/nikky-dandeli-she-really-loves-to-ride-a-dick-with-her-huge-ass-light-footjob-and-cum-on-feet"
     ),
     WebsiteTest(
         name="empflix",

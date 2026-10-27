@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from typing import Any
 
 from PySide6.QtCore import Property, QObject, Signal, Slot
@@ -32,6 +33,8 @@ class DatabaseBridge(QObject):
     ):
         super().__init__(parent)
         self._tasks: set[asyncio.Task[Any]] = set()
+        self._refresh_task: asyncio.Task[None] | None = None
+        self._closing = False
         # Reuse the disabled tracker contract on Android; no database is created or started.
         self._tracker = tracker or PocketBaseTracker(
             data_path=app_settings.pocketbase_data_path,
@@ -82,16 +85,37 @@ class DatabaseBridge(QObject):
 
     def _task_done(self, task: asyncio.Task[Any]) -> None:
         self._tasks.discard(task)
+        if not task.cancelled() and (error := task.exception()) is not None:
+            if self._closing:
+                logging.getLogger(__name__).error("History write failed during shutdown: %s", error)
+            else:
+                self.initializationFailed.emit(f"Could not save download history: {error}")
         if not self._tasks:
             self.busyChanged.emit()
 
     def start(self) -> None:
-        if self._tracker.enabled:
+        if self._tracker.enabled and not self._closing:
             self._track_task(self._tracker.schedule_startup())
+
+    @Slot()
+    def refresh(self) -> None:
+        """Reload persisted history without blocking the GUI or duplicating requests."""
+        if self._closing or not self._tracker.enabled or (self._refresh_task is not None and not self._refresh_task.done()):
+            return
+        self._refresh_task = asyncio.create_task(self._refresh_history(), name="history-refresh")
+        self._track_task(self._refresh_task)
+
+    async def _refresh_history(self) -> None:
+        try:
+            await self._tracker.refresh_cache()
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            self.initializationFailed.emit(f"Could not refresh download history: {error}")
 
     @Slot(object)
     def on_video_updated(self, video: VideoObject) -> None:
-        if self._tracker.enabled:
+        if self._tracker.enabled and not self._closing:
             self._track_task(self._tracker.spawn_save_video(video))
 
     @Slot(result=list)
@@ -115,4 +139,16 @@ class DatabaseBridge(QObject):
         return self._tracker.get_dashboard_stats()
 
     async def close(self) -> None:
+        self._closing = True
+        if self._refresh_task is not None and not self._refresh_task.done():
+            self._refresh_task.cancel()
+            await asyncio.gather(self._refresh_task, return_exceptions=True)
+        writes = tuple(self._tasks)
+        if writes:
+            _, pending = await asyncio.wait(writes, timeout=15)
+            if pending:
+                logging.getLogger(__name__).warning("Timed out flushing %d history tasks", len(pending))
+                for task in pending:
+                    task.cancel()
+            await asyncio.gather(*writes, return_exceptions=True)
         await self._tracker.close()

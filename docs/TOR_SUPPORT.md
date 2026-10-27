@@ -1,19 +1,39 @@
-# Managed Tor for updates and licensing
+# Managed Tor routing
 
 The GUI, CLI and Android app can route Porn Fetch service requests through:
 `http://pornfetchc5ct7s7uiervf4ziymmus5gy33gyqc6vkdtqyr5pbxrxmid.onion`.
 
 ## Behavior
 
-“Use Tor for updates and licensing” is off by default. Enabling it starts an
-app-owned Tor client when a service request needs it. The bootstrap limit is
-180 seconds and progress appears in the GUI. A failed Tor connection stops the
-request; the client never falls back to a direct connection. Media traffic,
-website credentials, custom media proxies and SNI settings use their existing
-separate configuration.
+Privacy settings offer three Tor routes, with Off as the default:
+
+- **Updates + licensing only**: service requests use the Porn Fetch onion service.
+  Media and provider requests keep their existing network settings.
+- **All app traffic (including downloads)**: service requests still use the onion
+  service; provider pages, account requests, playlists, HLS segments and raw MP4
+  downloads use Tor exits. Error reports and PocketBase installation downloads
+  also use Tor. Loopback PocketBase communication stays local. External browser
+  links and other applications are outside this app's routing.
+- **Off**: the usual service and media network settings apply.
+
+Selecting All app traffic requires acknowledging the notice reserving Tor video
+downloads for people in censored countries where consuming pornography is illegal
+and can lead to jail time or other punishments. It explains the bandwidth cost
+to other Tor users and discourages unnecessary downloads. Cancelling preserves
+the previous route. Finish active work before changing the routing selector.
+
+An app-owned Tor client starts when a routed request needs it. The bootstrap
+limit is 180 seconds and progress appears in the GUI. A failed Tor connection
+stops the request; there is no direct fallback. All app traffic takes precedence
+over the custom media proxy, SNI proxy, interface binding, environment proxies
+and bypass lists. It uses SOCKS5 remote hostname resolution, disables DoH/ECH
+lookups and forces HTTP/2 over TCP to avoid DNS or QUIC bypasses. Certificates
+remain verified. The stored custom networking settings are restored when leaving
+All app traffic.
 
 The GUI migrates the old settings using `enable_tor && enable_tor_server_routing`.
-The CLI has `service_transport` set to `direct` or `tor` in its settings menu.
+The CLI has `service_transport` set to `direct`, `tor` (services only) or
+`tor_all` (all app traffic) in its settings menu, with the same notice.
 Explicit service transports ignore environment proxy settings, use remote SOCKS
 hostname resolution and refuse redirects. HTTP is allowed only for the exact
 configured onion service while Tor mode is enabled; ordinary service requests
@@ -23,8 +43,9 @@ The Tor process has loopback-only SOCKS/control ports, cookie-authenticated
 control access, a private persistent data directory and no relay role. It stops
 when Tor is disabled in the GUI or the app exits. Android operation follows the
 app's lifetime; this is not a system VPN or an always-on background service.
-Tor hides the client's network address from the service, but the license and
-installation identity continue to identify its entitlement. Existing offline
+Tor hides the client's network address from the service. License keys and
+installation IDs are randomly generated values containing no personal
+information; they do not identify a user as a person. Existing offline
 license permits, machine limits, signed certificates and update entitlement
 rules are unchanged.
 
@@ -32,11 +53,11 @@ Failures on this service route open the same notification on desktop and Android
 including initial/background license and update checks. The notice distinguishes
 Tor startup failures, an unreachable Porn Fetch onion service, and temporary
 server errors; it does not claim that a server error means Tor itself is broken.
-Users can keep Tor enabled or explicitly turn it off for updates and licensing,
+Users can keep Tor enabled or explicitly turn it off,
 then retry. Repeated identical notices are grouped for 60 seconds. The CLI keeps
 the Tor explanation in update errors and licensing outage status. Video-provider
 errors stay with the existing download/provider UI and never trigger this service
-notification. Disabling service Tor does not change media proxy settings.
+notification. Turning Tor off restores the stored media proxy settings.
 
 ## Runtime packaging
 
@@ -93,7 +114,10 @@ server's `docs/TOR_SUPPORT.md` for gateway/storage deployment.
 
 The offline unit suite checks route selection, no-direct-fallback behavior,
 runtime lifecycle, signed metadata, payload verification, installer handoff and
-cancellation. GUI smoke tests cover both desktop and Android QML layouts. A real
+cancellation. A local SOCKS fixture checks remote hostname resolution for provider
+requests, HLS segments and raw MP4 streams without public network traffic. GUI
+checks cover routing selection and accepting/cancelling the all-traffic notice.
+GUI smoke tests cover both desktop and Android QML layouts. A real
 Android APK build and device/emulator installation are still needed to validate
 the native runtime and package-manager interaction for each ABI. Linux ARM64
 compilation and platform code signing still need validation in their build jobs.

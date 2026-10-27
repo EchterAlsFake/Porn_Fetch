@@ -21,6 +21,7 @@ from src.database.installer import (
 )
 from src.licensing.service import rejection_notice
 from src.shared.media import quality_requires_premium
+from src.shared.tor_transport import ALL_TRAFFIC_NOTICE
 
 from ..settings import CliSettings
 from .context import WizardContext
@@ -46,7 +47,7 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     "processing_delay": ("Performance", "Delay between dispatches (seconds)"),
     # Network / Privacy
     "proxy": ("Network", "Proxy URL (http:// or socks5://)"),
-    "service_transport": ("Network", "Updates and licensing: direct or tor (app-managed; no direct fallback)"),
+    "service_transport": ("Network", "Tor routing: direct, tor (updates/licensing), tor_all (all app traffic)"),
     "http_version": ("Network", "HTTP protocol version (v1, v2, v3)"),
     "ip_preference": ("Network", "IP version preference (auto, ipv4, ipv6)"),
     "impersonation": ("Network", "TLS fingerprint impersonation (chrome, safari)"),
@@ -202,7 +203,19 @@ async def handle_settings(ctx: WizardContext) -> None:
             current_val = getattr(ctx.settings, target_setting)
             new_val: Any = None
 
-            if isinstance(current_val, bool):
+            if target_setting == "service_transport":
+                new_val = await questionary.select(
+                    "Tor routing:",
+                    choices=[questionary.Choice("Off", value="direct"),
+                             questionary.Choice("Updates + licensing only", value="tor"),
+                             questionary.Choice("All app traffic (including downloads)", value="tor_all")],
+                    default=current_val, style=WIZARD_STYLE,
+                ).ask_async()
+                if new_val == "tor_all" and current_val != "tor_all":
+                    ctx.console.print(Panel(ALL_TRAFFIC_NOTICE, title="Using Tor for video downloads"))
+                    if not await questionary.confirm("Enable Tor for all app traffic?", default=False, style=WIZARD_STYLE).ask_async():
+                        continue
+            elif isinstance(current_val, bool):
                 new_val = await questionary.confirm(f"Enable {target_setting}?", default=current_val, style=WIZARD_STYLE).ask_async()
             elif target_setting == "quality":
                 has_premium = ctx.license_service.status.allowed

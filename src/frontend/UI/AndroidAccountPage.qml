@@ -39,12 +39,6 @@ Pane {
                 font.pixelSize: 20
                 font.bold: true
             }
-            Label {
-                Layout.fillWidth: true
-                text: qsTr("Sign in to collect videos from your account.")
-                color: root.mutedColor
-                wrapMode: Text.Wrap
-            }
             GridLayout {
                 columns: accountScroll.availableWidth < 360 ? 1 : 3
                 Layout.fillWidth: true
@@ -63,6 +57,11 @@ Pane {
                         onClicked: root.providerIndex = index
                     }
                 }
+            }
+
+            AccountLoginHelp {
+                provider: root.provider
+                browserImportAvailable: false
             }
 
             Rectangle {
@@ -84,16 +83,6 @@ Pane {
                         color: root.textColor
                         font.pixelSize: 19
                         font.bold: true
-                        wrapMode: Text.Wrap
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: root.tokenLogin
-                              ? qsTr("Enter the session tokens from your browser.")
-                              : root.provider === "XHamster"
-                                ? qsTr("Enter your username and password.")
-                                : qsTr("Enter your email address and password.")
-                        color: root.mutedColor
                         wrapMode: Text.Wrap
                     }
                     TextField {

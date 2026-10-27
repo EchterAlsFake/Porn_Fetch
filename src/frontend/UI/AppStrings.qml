@@ -4,6 +4,9 @@ pragma Singleton
 
 // Contains basically the texts for the QML app so that they are in a unified place
 QtObject {
+    readonly property string cleanupOnStopHelp: qsTr("If a download is stopped before it finishes, Cleanup on stop deletes its downloaded segments and temporary files so they do not waste storage space. This makes resuming that partial download impossible; starting it again downloads it from the beginning.")
+    readonly property string titleFormattingHelp: qsTr("Use these placeholders in the output filename or path:\n\n$title — video title\n$video_id — video identifier\n$author — author or channel\n$index — position in this fetch, padded to two digits (01, 02, …)\n$publish_date — publication date, when available\n$length — duration in minutes, when available\n$output_path — configured output folder\n\nExample: $author/$index - $title\nExample: ${title}_$video_id\n\nLeave the field empty to use the default filename. Relative paths are saved inside your configured output folder. Use $$ for a literal dollar sign. Only these placeholders are supported; date format expressions and video-object attribute access are not supported. Publication dates use YYYY-MM-DD; missing dates or lengths become unknown. Original titles stay visible and are used for filtering. Characters unsafe in filenames, including / and |, are replaced only in the generated filename. Template separators can create folders. Use $index or $video_id to distinguish titles that produce the same filename.")
+
     readonly property string videoQualityHelp:
         qsTr("The Video quality that you apply here is the preference meaning all videos fetched will try to be downloaded in the specified quality.
         If the quality is not available the next 'best' quality will be picked.
@@ -230,7 +233,10 @@ apply to you.
 ")
 
     readonly property string torIntegrationHelp:
-        qsTr("Porn Fetch starts its bundled Tor client for update and license requests. These requests use my onion service. If Tor cannot connect, no direct connection is attempted. Media and website browsing use their separate network settings. Tor hides your network address; your license and installation identity still identify your entitlement to my server.")
+        qsTr("Porn Fetch starts its bundled Tor client when needed. Choose Updates + licensing only to route those requests through the Porn Fetch onion service, or All app traffic to also route website requests and video downloads through Tor. If Tor cannot connect, routed requests fail without a direct fallback.\n\nThe license key and installation ID are randomly generated values. They contain no personal information and do not identify you as a person.\n\nAll app traffic overrides custom proxy, network interface, DNS over HTTPS and HTTP/3 settings for Internet requests. Local app services stay on your device. Links opened in an external browser use that browser's settings. Tor does not guarantee anonymity or safety.")
+
+    readonly property string torAllTrafficNotice:
+        qsTr("Use Tor for all app traffic only if you live in a censored country where consuming pornography is illegal and can lead to jail time or other punishments.\n\nVideo downloads use substantial bandwidth and slow the Tor network down for everyone else. Using Tor for downloads is morally discouraged unless it is strictly necessary.\n\nThis routes Porn Fetch's Internet requests through Tor. It does not route other apps or links opened in your external browser, and it does not guarantee anonymity or safety.")
 
     readonly property string onionRoutingHelp: torIntegrationHelp
 

@@ -5,25 +5,45 @@ This file is responsible for managing the login to the sites + automatic cookie 
 import asyncio
 import http.cookiejar
 from collections.abc import AsyncIterator, Mapping
-from urllib.parse import urlparse
+
+from base_api import ErrorAction, ErrorMode, ScrapeErrorContext, make_iterator_config
+from base_api.modules.config import IteratorConfig
+from pornhub_api.modules.errors import ClientAlreadyLogged, LoginFailed
+from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
 
 from src.backend import clients
-from base_api.modules.config import IteratorConfig
-from src.shared.logging_setup import configure_app_logging
 from src.shared.errors import CookiesNotFound, LoginError
-from src.shared.provider_accounts import connect_pornhub_cookies
-from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
-from pornhub_api.modules.errors import LoginFailed, ClientAlreadyLogged
-
+from src.shared.logging_setup import configure_app_logging
+from src.shared.provider_accounts import (
+    connect_pornhub_cookies,
+    connect_xvideos_cookies,
+    valid_xhamster_playlist_url,
+    verify_account_session,
+)
 
 logger = configure_app_logging(logger_name="PornFetch - [Login Manager]")
 
 _XVIDEOS_LOGIN_COOKIES = ("session_token", "session_token_auth")
 
 
-def _account_video_iterator_config() -> IteratorConfig:
+def _account_page_error(context: ScrapeErrorContext) -> ErrorAction:
+    """A missing later page ends pagination; first-page/auth failures stay visible."""
+    if context.page_index > 0:
+        error: BaseException | None = context.error
+        seen = set()
+        while error is not None and id(error) not in seen:
+            seen.add(id(error))
+            if getattr(error, "status_code", None) == 404:
+                return ErrorAction.SKIP
+            error = error.__cause__
+    return ErrorAction.YIELD
+
+
+def _account_video_iterator_config(*, post: bool = False) -> IteratorConfig:
     """Load the HTML metadata consumed by the shared video-list pipeline."""
-    return IteratorConfig(load_specific_sources=("html",))
+    return make_iterator_config(load_specific_sources=("html",), page_request_method="POST" if post else "GET",
+                                page_error_mode=ErrorMode.YIELD, item_error_mode=ErrorMode.YIELD,
+                                page_error_handler=_account_page_error)
 
 
 def provider_is_logged_in(provider: str) -> bool:
@@ -72,6 +92,8 @@ def get_account_video_iterator(
 
     elif provider_key == "xhamster":
         account = clients.xh_client.account
+        if account is None:
+            raise LoginError("Please log in to XHamster before fetching account videos.")
         if collection_key == "liked":
             return (
                 account.get_liked_videos(
@@ -80,13 +102,7 @@ def get_account_video_iterator(
                 "XHamster liked videos",
             )
         if collection_key == "playlist":
-            parsed_url = urlparse(playlist_url.strip())
-            hostname = (parsed_url.hostname or "").casefold()
-            if (
-                parsed_url.scheme != "https"
-                or not (hostname == "xhamster.com" or hostname.endswith(".xhamster.com"))
-                or "/my/playlists/" not in parsed_url.path
-            ):
+            if not valid_xhamster_playlist_url(playlist_url):
                 raise LoginError("Please enter a valid XHamster account playlist URL.")
             return (
                 account.get_account_playlist(
@@ -98,18 +114,20 @@ def get_account_video_iterator(
 
     elif provider_key == "xvideos":
         account = clients.xv_client.account
+        if account is None:
+            raise LoginError("Please log in to XVideos before fetching account videos.")
         if collection_key == "watch_later":
-            return account.get_watch_later_videos(), "XVideos watch later"
+            return account.get_watch_later_videos(iterator_config=_account_video_iterator_config(post=True)), "XVideos watch later"
         if collection_key == "history":
             # The pinned provider's method reads /history/, despite its name.
-            return account.get_recommended_videos(), "XVideos watch history"
+            return account.get_recommended_videos(iterator_config=_account_video_iterator_config(post=True)), "XVideos watch history"
         if collection_key == "liked":
-            return account.get_liked_videos(), "XVideos liked videos"
+            return account.get_liked_videos(iterator_config=_account_video_iterator_config(post=True)), "XVideos liked videos"
 
     raise LoginError(f"{collection!r} is not available for {provider} accounts.")
 
 
-def get_site_cookies(website: str) -> http.cookiejar.CookieJar:
+def get_site_cookies(website: str, *, browser_name: str | None = None) -> http.cookiejar.CookieJar:
     """
     Safely queries available desktop browsers for cookies matching site keywords.
     Handles TLD variants automatically and catches platform-specific exceptions.
@@ -136,7 +154,9 @@ def get_site_cookies(website: str) -> http.cookiejar.CookieJar:
 
     found_domains: set[str] = set()
 
-    for browser_name, loader in browser_loaders:
+    for candidate_name, loader in browser_loaders:
+        if browser_name is not None and candidate_name.casefold() != browser_name.casefold():
+            continue
         if loader is None:
             continue
 
@@ -154,7 +174,7 @@ def get_site_cookies(website: str) -> http.cookiejar.CookieJar:
 
         except Exception as e:
             # Catch common issues: missing browsers, locked DBs, OS keychain denials
-            logger.debug(f"Skipping {browser_name}: {e}")
+            logger.debug("Skipping %s: %s", candidate_name, type(e).__name__)
             continue
 
     logger.info(f"Successfully extracted cookies for domains: {found_domains}")
@@ -204,11 +224,18 @@ class LoginXhamster:
         try:
             if custom_cookies:
                 logger.info("Trying Login for XHamster [Cookies]")
+                clients.xh_client.account = None
+                clients.xh_client.core.initialize_session()
+                session = clients.xh_client.core.session
+                if session is None:
+                    raise LoginError("Could not initialize the XHamster session")
+                session.cookies.clear()
                 account = await clients.xh_client.login(
                     username="",
                     password="",
                     cookies=dict(custom_cookies),
                 )
+                await verify_account_session(clients.xh_client, "xhamster")
                 clients.xh_client.account = account
                 return account is not None
 
@@ -223,11 +250,18 @@ class LoginXhamster:
                 cookies = await asyncio.to_thread(get_site_cookies, "xhamster")
                 if cookies:
                     logger.info("Injecting Cookies!")
+                    clients.xh_client.account = None
+                    clients.xh_client.core.initialize_session()
+                    session = clients.xh_client.core.session
+                    if session is None:
+                        raise LoginError("Could not initialize the XHamster session")
+                    session.cookies.clear()
                     account = await clients.xh_client.login(
                         username="",
                         password="",
                         cookies=cookies,
                     )
+                    await verify_account_session(clients.xh_client, "xhamster")
                     clients.xh_client.account = account
                     return account is not None
 
@@ -246,16 +280,18 @@ class LoginXVideos:
         custom_cookies: Mapping[str, str] | None = None,
         from_browser: bool = False,
     ) -> bool:
+        browser_jar = None
         if from_browser:
             logger.info("Trying Login for XVideos [Cookies - Browser]")
             browser_cookies = await asyncio.to_thread(get_site_cookies, "xvideos")
             if not browser_cookies:
                 raise CookiesNotFound
 
+            browser_jar = browser_cookies
             custom_cookies = {
                 cookie.name: cookie.value
                 for cookie in browser_cookies
-                if cookie.name in _XVIDEOS_LOGIN_COOKIES
+                if cookie.name in _XVIDEOS_LOGIN_COOKIES and cookie.value
             }
 
         cookies = dict(custom_cookies or {})
@@ -271,5 +307,4 @@ class LoginXVideos:
             )
 
         logger.info("Trying Login for XVideos [Cookies]")
-        clients.xv_client.account = clients.xv_client.get_account(cookies=cookies)
-        return clients.xv_client.account is not None
+        return await connect_xvideos_cookies(clients.xv_client, cookies, browser_jar=browser_jar)

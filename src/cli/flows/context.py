@@ -8,6 +8,7 @@ from rich.console import Console
 
 from src.licensing.service import LicenseService, create_license_service, rejection_notice
 from src.shared.error_reporting import report_exception
+from src.shared.tor_transport import configure as configure_tor_transport
 
 from ..accounts import AccountService
 from ..model_store import ModelStore
@@ -32,6 +33,7 @@ class WizardContext:
         license_service: LicenseService | None = None,
     ) -> None:
         self.settings = settings
+        configure_tor_transport(settings)
         self.settings_store = settings_store
         self.console = console or Console()
         self.model_store = model_store or ModelStore()
@@ -64,6 +66,7 @@ class WizardContext:
     async def refresh_pool(self) -> None:
         """Rebuild client pool and license service when settings change."""
         old_pool = self.pool
+        configure_tor_transport(self.settings)
         old_lic = self.license_service
         config = self.settings.to_runtime_config()
         self.pool = ClientPool(config)

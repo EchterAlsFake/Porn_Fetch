@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import unittest
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -21,10 +22,42 @@ from src.backend.profile_diagnostics import (
     test_profile_url,
     verify_stream,
 )
+from src.shared.media import VideoObject
 from src.shared.provider_routing import eporner_video_id, resolve_container, resolve_video, route_url
 
 
 class ProfileDiagnosticTests(unittest.IsolatedAsyncioTestCase):
+    async def test_profile_rows_keep_normalized_minutes_and_current_row_numbers(self):
+        backend = make_test_backend()
+        model = backend._downloads_model
+        case = {"url": "https://pornhub.com/model/example", "provider": "pornhub"}
+
+        def prepared(identifier):
+            return VideoObject(
+                url="https://pornhub.com/view_video.php?viewkey=example",
+                title="Example", author="Author", length=12, tags=[],
+                thumbnail_url="https://images.example/thumbnail.jpg", video_id=identifier,
+                publish_date=None, qualities=[720], status="pending", identifier=identifier,
+                index=1, source_video=object(), output_path=Path("unused-profile-test.mp4"),
+                origin_iterator_url=case["url"], origin_iterator_name="Example",
+            )
+
+        # Reusing a list must not restart its display numbering on each fetch.
+        model.add_video(prepared("existing"), "720")
+
+        async def process(*args, **kwargs):
+            model.add_video(prepared("new"), "720")
+
+        backend._process_model_url = AsyncMock(side_effect=process)
+        with patch("src.backend.profile_diagnostics.resolve_container",
+                   AsyncMock(return_value=SimpleNamespace(name="Example"))), \
+                patch("src.backend.profile_diagnostics.verify_stream",
+                      AsyncMock(return_value={"kind": "direct", "url_resolved": True})):
+            result = await test_profile_url(backend, model, case)
+        self.assertEqual(result["rows"], 1)
+        self.assertEqual(model.data(model.index(1, 0), model.TitleRole), "2) Example")
+        self.assertEqual(model.data(model.index(1, 0), model.DurationRole), "12 min")
+
     def test_every_primary_branch_and_replacement_is_recorded(self):
         primary = load_profile_cases()
         self.assertEqual(len(primary), 33)

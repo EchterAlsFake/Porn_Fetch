@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 from base_api import BaseCore
 from base_api.modules.config import RuntimeConfig
 from curl_cffi import requests
+from curl_cffi.const import CurlOpt
 from tuf.ngclient.fetcher import FetcherInterface
 
 from .tor_runtime import TorUnavailable, runtime
@@ -28,13 +29,15 @@ def service_failure_message(kind):
         "connection": "Porn Fetch's update or licensing server could not be reached through Tor. The onion service or Tor connection may be unavailable.",
         "server": "Porn Fetch's update or licensing server returned a temporary error over Tor. Tor itself may still be connected.",
     }[kind]
-    return (detail + "\n\nNo direct connection was attempted. Retry, or turn off “Use Tor for updates and licensing” "
-            "in Privacy settings and retry using a direct connection.\n\n"
-            "Video downloads and third-party websites use separate connection settings.")
+    return (detail + "\n\nNo direct connection was attempted. Retry, or turn off Tor by selecting Off under "
+            "Tor routing in Privacy settings and retry using a direct connection.\n\n"
+            "If All app traffic is selected, video downloads and third-party websites also require Tor.")
 
 
 def service_mode(settings=None):
     value = getattr(settings, "service_transport", None)
+    if value == "tor_all":
+        return "tor"
     if value in {"direct", "tor"}:
         return value
     return "tor" if getattr(settings, "enable_tor", False) and getattr(settings, "enable_tor_server_routing", False) else "direct"
@@ -52,7 +55,7 @@ class ServicePolicy:
             changed.connect(self._set_mode)
 
     def _set_mode(self, value):
-        self._qt_mode = value
+        self._qt_mode = "tor" if value == "tor_all" else value
         self.last_failure = ""
 
     def failed(self, kind):
@@ -117,6 +120,11 @@ class ServiceCore(BaseCore):
         config.http_version = "v2"
         config.dns_over_https = None
         super().__init__(configuration=config)
+
+    def initialize_session(self):
+        super().initialize_session()
+        if self.session is not None:
+            self.session.curl_options[CurlOpt.NOPROXY] = b""
 
     @property
     def tor_enabled(self):
@@ -186,7 +194,7 @@ class ServiceFetcher(FetcherInterface):
     def _fetch(self, url):
         routed, proxy = self.policy.route(url)
         try:
-            with requests.Session(trust_env=False, verify=True) as session:
+            with requests.Session(trust_env=False, verify=True, curl_options={CurlOpt.NOPROXY: b""}) as session:
                 with session.stream("GET", routed, proxy=proxy or "", allow_redirects=False,
                                     timeout=(30, 120)) as response:
                     self.policy.response_received(response.status_code, via_tor=bool(proxy))

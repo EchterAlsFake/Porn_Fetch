@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
-import QtQuick.Layouts
 
 Button {
     id: control
@@ -28,14 +27,8 @@ Button {
         text: control.text
     }
 
-    Dialog {
+    ScrollableMessageDialog {
         id: helpDialog
-
-        parent: Overlay.overlay
-        anchors.centerIn: parent
-        width: Math.min(520, Math.max(320, (parent ? parent.width : 568) - 48))
-        height: Math.min(Math.max(180, (parent ? parent.height : 568) - 48),
-                         Math.max(180, helpMessage.implicitHeight + 140))
 
         // Keep the settings page interactive so an open help message reflects
         // font changes immediately.
@@ -49,17 +42,6 @@ Button {
         // Keeping this as a binding also updates an already-open dialog.
         font: control.font
 
-        contentItem: SmoothScrollView {
-            id: helpScroll
-            clip: true
-
-            Label {
-                id: helpMessage
-                width: helpScroll.availableWidth
-                text: control.helpText
-                font: helpDialog.font
-                wrapMode: Text.Wrap
-            }
-        }
+        message: control.helpText
     }
 }

@@ -519,8 +519,7 @@ Pane {
                 heading: qsTr("Connection protection")
                 ToggleRow { label: qsTr("DNS over HTTPS"); value: appSettings.dns_over_https; onChanged: function(v) { appSettings.dns_over_https = v } }
                 ToggleRow { label: qsTr("Encrypted Client Hello"); value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
-                ToggleRow { label: qsTr("Use Tor for updates and licensing"); value: appSettings.service_transport === "tor"; onChanged: function(v) { appSettings.service_transport = v ? "tor" : "direct" } }
-                Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: torStatus.text; visible: appSettings.service_transport === "tor" }
+                TorRouting { Layout.fillWidth: true }
                 Button {
                     Layout.fillWidth: true
                     text: appSettings.proxy ? qsTr("Configure proxy") : qsTr("Set up proxy")

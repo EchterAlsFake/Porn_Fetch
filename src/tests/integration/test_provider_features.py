@@ -134,7 +134,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         media = SimpleNamespace(source_video=Video(), qualities=[], selected_quality=None)
         for premium in (False, True):
             backend = SimpleNamespace(
-                _download_tasks={}, _download_stop_events={},
+                _download_tasks={}, _download_stop_events={}, _is_shutting_down=False,
                 _downloads_model=Mock(get_video=Mock(return_value=media)),
                 has_premium_access=lambda: premium, logger=Mock(), showMessage=Mock(),
                 tr=lambda message: message,

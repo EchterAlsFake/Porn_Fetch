@@ -36,7 +36,7 @@ PROVIDER_MODULES = {
 HOST_PATTERNS = {
     "pornhub": r"(?:^|\.)pornhub(?:premium)?\.com$",
     "eporner": r"(?:^|\.)eporner\.com$",
-    "xnxx": r"(?:^|\.)xnxx\d*\.com$",
+    "xnxx": r"(?:^|\.)(?:xnxx\d*\.com|xnxx\.es|xnxx-(?:ru|arabic|india)\.com)$",
     "xvideos": r"(?:^|\.)xvideos\d*\.com$",
     "xhamster": r"(?:^|\.)xhamster(?:\d*\.com|\.desi)$",
     "spankbang": r"(?:^|\.)spankbang\.com$",
@@ -46,7 +46,7 @@ HOST_PATTERNS = {
     "xfreehd": r"(?:^|\.)xfreehd\.com$",
     "redtube": r"(?:^|\.)redtube\.com$",
     "thumbzilla": r"(?:^|\.)thumbzilla\.com$",
-    "tube8": r"(?:^|\.)tube8\.com$",
+    "tube8": r"(?:^|\.)tube8\.(?:com|fr|es)$",
     "empflix": r"(?:^|\.)empflix\.com$",
     "tnaflix": r"(?:^|\.)tnaflix\.com$",
 }

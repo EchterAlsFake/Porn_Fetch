@@ -207,13 +207,19 @@ async def test_profile_url(backend, model, case: dict, *, timeout: float = 90, i
                 raise AssertionError("List row has missing video/thumbnail URLs or media identity")
             if not isinstance(video.tags, list) or not isinstance(video.author, str) or not video.author.strip():
                 raise AssertionError("List row has invalid author/tag metadata")
-            if model.data(index, model.TitleRole) != f"{video.index}) {video.title}":
+            if model.data(index, model.TitleRole) != f"{row + 1}) {video.title}":
                 raise AssertionError("QML title role differs from the prepared video")
             if model.data(index, model.AuthorRole) != video.author:
                 raise AssertionError("QML author role differs from the prepared video")
-            minutes, seconds = divmod(video.length, 60)
-            if model.data(index, model.DurationRole) != model.tr("%d min %02d sec") % (minutes, seconds):
-                raise AssertionError("QML duration role differs from the prepared video")
+            # VideoObject.length is normalized to rounded minutes by the
+            # provider adapter; the list model displays those minutes directly.
+            expected_duration = model.tr("%d min") % video.length
+            actual_duration = model.data(index, model.DurationRole)
+            if actual_duration != expected_duration:
+                raise AssertionError(
+                    f"QML duration role differs from the prepared video: "
+                    f"expected {expected_duration!r}, got {actual_duration!r}"
+                )
             available = model.data(index, model.AvailableQualitiesRole)
             if available != [str(q) for q in video.qualities]:
                 raise AssertionError("QML qualities differ from the prepared video")

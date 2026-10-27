@@ -21,3 +21,12 @@ The obsolete library list in `docs/CREDITS.md` is retained as historical
 acknowledgment. It does not establish the shipped dependency list or license
 obligations. Third-party notices and source availability must be present in the
 delivered package, not only in this repository.
+
+## Settings icons
+
+The video, gauge, settings, shield, palette and trash SVGs in
+`src/frontend/graphics/settings/` are by Lucide Icons and Contributors, from
+https://github.com/lucide-icons/lucide/tree/main/icons (downloaded 2026-10-26).
+They are distributed under the ISC license, with the Feather-derived icons
+covered by the MIT notice included in [LICENSES/Lucide.txt](LICENSES/Lucide.txt).
+See https://lucide.dev/license. The SVG artwork is unmodified.

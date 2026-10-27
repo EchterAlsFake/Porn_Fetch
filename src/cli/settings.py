@@ -72,8 +72,8 @@ class CliSettings:
     legacy_database_path: str = "./downloads.db"
 
     def validate(self) -> None:
-        if self.service_transport not in {"direct", "tor"}:
-            raise ValueError("service transport must be direct or tor")
+        if self.service_transport not in {"direct", "tor", "tor_all"}:
+            raise ValueError("service transport must be direct, tor, or tor_all")
         positive = (
             "result_limit", "parallel_downloads", "timeout", "request_attempts",
             "download_workers", "pages_concurrency", "videos_concurrency",

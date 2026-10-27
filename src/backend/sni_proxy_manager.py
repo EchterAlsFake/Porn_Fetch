@@ -72,6 +72,9 @@ class SNIProxyManager:
             return
         self.settings.proxyChanged.connect(self._restart_for_network_change)
         self.settings.interfaceChanged.connect(self._restart_for_network_change)
+        changed = getattr(self.settings, "serviceTransportChanged", None)
+        if changed is not None:
+            changed.connect(self._restart_for_network_change)
         self._connections_installed = True
 
     def start(self) -> str | None:
@@ -79,7 +82,7 @@ class SNIProxyManager:
         self.stop(clear_active=False)
         self.last_error = None
 
-        if not self.settings.sni_obfuscation:
+        if not self.settings.sni_obfuscation or getattr(self.settings, "service_transport", "direct") == "tor_all":
             self.settings.active_sni_proxy_url = None
             return None
 

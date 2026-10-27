@@ -5,6 +5,7 @@ import QtQuick.Layouts
 
 Pane {
     id: root
+    objectName: "statisticsPage"
     padding: 0
 
     property var statistics: ({
@@ -128,12 +129,15 @@ Pane {
                 }
 
                 Button {
+                    objectName: "statisticsRefreshButton"
                     text: qsTr("Refresh")
-                    onClicked: root.refresh()
+                    enabled: !databaseBridge.busy
+                    onClicked: databaseBridge.refresh()
                 }
             }
 
             Rectangle {
+                objectName: "trackingDisabledNotice"
                 Layout.fillWidth: true
                 Layout.leftMargin: 8
                 Layout.rightMargin: 8
@@ -162,6 +166,7 @@ Pane {
                 rowSpacing: 12
 
                 MetricCard {
+                    objectName: "statisticsTotal"
                     label: qsTr("Tracked videos")
                     value: root.statistics.total
                     detail: qsTr("all database records")
@@ -169,6 +174,7 @@ Pane {
                 }
 
                 MetricCard {
+                    objectName: "statisticsSuccessful"
                     label: qsTr("Successful")
                     value: root.statistics.successful
                     detail: qsTr("completed downloads")
@@ -176,6 +182,7 @@ Pane {
                 }
 
                 MetricCard {
+                    objectName: "statisticsFailed"
                     label: qsTr("Failed")
                     value: root.statistics.failed
                     detail: qsTr("downloads to revisit")
@@ -183,6 +190,7 @@ Pane {
                 }
 
                 MetricCard {
+                    objectName: "statisticsSuccessRate"
                     label: qsTr("Success rate")
                     value: root.statistics.successRate + "%"
                     detail: qsTr("finished attempts")
@@ -226,6 +234,7 @@ Pane {
 
                                 Canvas {
                                     id: outcomeChart
+                                    objectName: "statisticsOutcomeChart"
                                     anchors.centerIn: parent
                                     width: 180
                                     height: 180
@@ -347,6 +356,7 @@ Pane {
                             Label {
                                 Layout.fillWidth: true
                                 text: root.formattedDate(root.statistics.lastDownloaded)
+                                objectName: "statisticsLastActivity"
                                 font.pixelSize: 16
                                 font.bold: true
                                 elide: Text.ElideRight
@@ -363,6 +373,7 @@ Pane {
 
                             Label {
                                 text: root.statistics.totalSizeMb.toLocaleString(Qt.locale(), "f", 1) + " MB"
+                                objectName: "statisticsFileSize"
                                 font.pixelSize: 22
                                 font.bold: true
                             }
@@ -418,6 +429,7 @@ Pane {
                         model: root.statistics.sources || []
 
                         delegate: ColumnLayout {
+                            objectName: "statisticsSourceRow"
                             required property var modelData
                             Layout.fillWidth: true
                             spacing: 6
@@ -428,6 +440,7 @@ Pane {
                                 Label {
                                     Layout.fillWidth: true
                                     text: root.privacyMode ? qsTr("Hidden source") : modelData.name
+                                    objectName: "statisticsSourceName"
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
@@ -481,6 +494,7 @@ Pane {
                     Label {
                         Layout.fillWidth: true
                         visible: !root.statistics.sources || root.statistics.sources.length === 0
+                        objectName: "statisticsEmptySources"
                         text: qsTr("Source activity will appear here after tracked downloads.")
                         color: root.subtleTextColor
                         horizontalAlignment: Text.AlignHCenter

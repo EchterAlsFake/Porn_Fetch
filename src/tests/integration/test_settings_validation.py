@@ -169,7 +169,7 @@ class TestSettingsAccessibility(SettingsGUITestBase):
             ("anonymousModeCheckBox", "Anonymous Mode"),
             ("encryptedCHCheckBox", "Encrypted Client Hello"),
             ("dnsOverHTTPSCheckBox", "DNS over HTTPS"),
-            ("serviceTorCheckBox", "Use Tor for updates and licensing"),
+            ("torRoutingComboBox", "Tor routing"),
             ("dnsPrimaryInput", "Primary DNS over HTTPS Server"),
             ("dnsFallbackInput", "Fallback DNS over HTTPS Server"),
             ("sniObfuscationCheckBox", "SNI Obfuscation"),

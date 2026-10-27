@@ -100,7 +100,7 @@ class PocketBaseService:
             f"--migrationsDir={self.migrations_directory}",
         ]
         await self._run_command(
-            binary, "superuser", "upsert", SUPERUSER_EMAIL, password, *flags
+            binary, "superuser", "upsert", *flags, "--", SUPERUSER_EMAIL, password
         )
 
         port = self._reserve_port()

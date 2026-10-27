@@ -1,4 +1,4 @@
-"""Application-owned Tor client. No relay, system service or media proxy changes."""
+"""Application-owned Tor client. No relay or system service changes."""
 from __future__ import annotations
 
 import atexit

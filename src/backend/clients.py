@@ -64,8 +64,9 @@ from src.shared.errors import SomethingStupidHappened
 from src.shared.provider_routing import HOST_PATTERNS, ContentKind, eporner_video_id, resolve_video, route_url
 from src.shared.logging_setup import configure_app_logging
 from src.shared.media import VideoObject
+from src.shared.tor_transport import MediaCore, FAIL_CLOSED_PROXY, all_traffic_enabled
 from src.shared.provider_parsing import parse_length, parse_publish_date
-from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, strip_title, \
+from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, \
     normalize_quality_value
 from curl_cffi.const import CurlOpt
 
@@ -169,22 +170,22 @@ SITE_PATTERNS = [(provider, re.compile(pattern, re.IGNORECASE)) for provider, pa
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-core = BaseCore(configuration=config)
-core_ep = BaseCore(configuration=config)
-core_ph = BaseCore(configuration=config)
-core_xv = BaseCore(configuration=config)
-core_xh = BaseCore(configuration=config)
-core_xn = BaseCore(configuration=config)
-core_sp = BaseCore(configuration=config)
-core_yp = BaseCore(configuration=config)
-core_bg = BaseCore(configuration=config)
-core_pt = BaseCore(configuration=config)
-core_xf = BaseCore(configuration=config)
-core_rt = BaseCore(configuration=config)
-core_th = BaseCore(configuration=config)
-core_tu = BaseCore(configuration=config)
-core_ef = BaseCore(configuration=config)
-core_tf = BaseCore(configuration=config)
+core = MediaCore(configuration=config, settings=app_settings)
+core_ep = MediaCore(configuration=config, settings=app_settings)
+core_ph = MediaCore(configuration=config, settings=app_settings)
+core_xv = MediaCore(configuration=config, settings=app_settings)
+core_xh = MediaCore(configuration=config, settings=app_settings)
+core_xn = MediaCore(configuration=config, settings=app_settings)
+core_sp = MediaCore(configuration=config, settings=app_settings)
+core_yp = MediaCore(configuration=config, settings=app_settings)
+core_bg = MediaCore(configuration=config, settings=app_settings)
+core_pt = MediaCore(configuration=config, settings=app_settings)
+core_xf = MediaCore(configuration=config, settings=app_settings)
+core_rt = MediaCore(configuration=config, settings=app_settings)
+core_th = MediaCore(configuration=config, settings=app_settings)
+core_tu = MediaCore(configuration=config, settings=app_settings)
+core_ef = MediaCore(configuration=config, settings=app_settings)
+core_tf = MediaCore(configuration=config, settings=app_settings)
 
 ep_client = ep_Client(core=core_ep)
 xv_client = xv_Client(core=core_xv)
@@ -229,22 +230,25 @@ def refresh_clients() -> None:
     config.request_delay = app_settings.network_delay
     config.timeout = app_settings.timeout
     config.max_bandwidth_mb = app_settings.speed_limit
-    active_sni_proxy = getattr(app_settings, "active_sni_proxy_url", None)
-    config.proxy = active_sni_proxy or app_settings.proxy or None
+    tor_all = all_traffic_enabled(app_settings)
+    config.service_transport = app_settings.service_transport
+    active_sni_proxy = None if tor_all else getattr(app_settings, "active_sni_proxy_url", None)
+    config.proxy = FAIL_CLOSED_PROXY if tor_all else (active_sni_proxy or app_settings.proxy or None)
     # Both SNI proxy implementations are TCP-only. Never allow HTTP/3/QUIC to
     # silently bypass the local proxy when obfuscation is enabled.
-    config.http_version = "v2" if active_sni_proxy else app_settings.http_version
-    config.dns_over_https = app_settings.dns_server if app_settings.dns_over_https else None
+    config.http_version = "v2" if tor_all or active_sni_proxy else app_settings.http_version
+    config.dns_over_https = app_settings.dns_server if app_settings.dns_over_https and not tor_all else None
+    config.fallback_dns = app_settings.fallback_dns if app_settings.dns_over_https and not tor_all else None
     config.impersonation = app_settings.impersonation
     config.custom_ja3 = app_settings.custom_ja3 if app_settings.custom_ja3 else None
-    config.verify_ssl = app_settings.proxy_ssl_verification
-    config.trust_env = app_settings.trust_environment
+    config.verify_ssl = True if tor_all else app_settings.proxy_ssl_verification
+    config.trust_env = False if tor_all else app_settings.trust_environment
     config.max_workers_download = app_settings.download_workers
     config.videos_concurrency = app_settings.videos_concurrency
     config.pages_concurrency = app_settings.pages_concurrency
     # With the local proxy enabled curl connects to loopback. The proxy manager
     # applies the selected interface/source address to its Internet-facing socket.
-    config.interface = None if active_sni_proxy else (app_settings.interface or None)
+    config.interface = None if tor_all or active_sni_proxy else (app_settings.interface or None)
     locale_headers, locale_cookies = generate_locale_headers_and_cookies()
     config.locale = locale_headers["Accept-Language"]
     config.cookies = locale_cookies.copy()
@@ -253,7 +257,7 @@ def refresh_clients() -> None:
     config.ffmpeg_path = str(found_ffmpeg) if found_ffmpeg else None
 
     logger.info("Refreshing all clients!")
-    level = logging.DEBUG if debug_mode else logging.INFO
+    level = logging.DEBUG if debug_mode else getattr(logging, app_settings.log_level_map.get(app_settings.log_level, "INFO"))
     core.enable_logging(level=level, log_file="BaseCore.log" if debug_mode else None)
     core_ep.enable_logging(level=level, log_file="BaseCore_EP.log" if debug_mode else None)
     core_ph.enable_logging(level=level, log_file="BaseCore_PH.log" if debug_mode else None)
@@ -309,7 +313,7 @@ def refresh_clients() -> None:
             c.session.cookies.update(locale_cookies)
             if hasattr(CurlOpt, "ECH"):
                 c.session.curl_options[CurlOpt.ECH] = (
-                    b"true" if app_settings.encrypted_ch else b"false"
+                    b"true" if app_settings.encrypted_ch and not tor_all else b"false"
                 )
             if hasattr(CurlOpt, "RESOLVE"):
                 c.session.curl_options[CurlOpt.RESOLVE] = list(DOH_BOOTSTRAP_RESOLVES)
@@ -456,8 +460,12 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     elif isinstance(video, xv_Video):
         video_source = "xvideos"
-        author_object = await video.get_author
-        author = getattr(author_object, "name", None) or "N/A"
+        # Newer provider versions expose the uploader on the video page itself.
+        # Avoid an unrelated channel/statistics request for every prepared row.
+        author = _safe_getattr(video, "author_name")
+        if not author:
+            author_object = await video.get_author
+            author = getattr(author_object, "name", None) or "N/A"
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
@@ -592,7 +600,8 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     # Normalize publish date into UTC datetime (optional extra field)
     publish_dt_utc = parse_publish_date(publish_date)
-    title = strip_title(title)
+    # Keep the provider title for display/regexes; sanitize only output paths.
+    title = str(title or "untitled")
     video_object = VideoObject(
         url=video.url,
         thumbnail_url=thumbnail or "",

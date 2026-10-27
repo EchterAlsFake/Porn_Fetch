@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 ProgressCallback = Callable[..., None]
 KNOWN_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
+RAW_VIDEO_MODULES = frozenset({"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api"})
 
 
 class DownloadState(StrEnum):
@@ -38,31 +39,35 @@ class DownloadState(StrEnum):
     FAILED = "failed"
 
 
-def get_resume_paths(target: str | Path) -> tuple[Path, Path]:
-    """Return the (state_path, segment_dir) for HLS segment persistence."""
+def get_resume_paths(target: str | Path, *, state_directory: Path | None = None) -> tuple[Path, Path]:
+    """Return HLS persistence paths, optionally under an isolated state root."""
     key = hashlib.sha256(str(Path(target).resolve()).encode()).hexdigest()[:20]
-    resume = data_dir() / "resume"
+    resume = (state_directory if state_directory is not None else data_dir()) / "resume"
     state_path = resume / "states" / key
     segment_dir = resume / "segments" / key
     return state_path, segment_dir
 
 
-def has_resume_state(target: str | Path) -> bool:
-    """Return whether partial segments or state file exist for *target*."""
-    state_path, segment_dir = get_resume_paths(target)
+def has_resume_state(target: str | Path, *, state_directory: Path | None = None) -> bool:
+    """Return whether HLS segments/state or a RAW checkpoint exist for *target*."""
+    state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
     if state_path.exists():
+        return True
+    if Path(f"{target}.raw-state.json").exists():
         return True
     if segment_dir.exists() and any(segment_dir.iterdir()):
         return True
     return False
 
 
-def clear_resume_state(target: str | Path) -> None:
-    """Purge temporary HLS resume files and segment directories for *target*."""
-    state_path, segment_dir = get_resume_paths(target)
-    if state_path.exists():
+def clear_resume_state(target: str | Path, *, state_directory: Path | None = None) -> None:
+    """Purge HLS/RAW resume state, segments and assembly temporary files."""
+    state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
+    raw_state = Path(f"{target}.raw-state.json")
+    for temporary in (state_path, Path(f"{state_path}.tmp"), Path(f"{target}.tmp"),
+                      raw_state, raw_state.with_name(raw_state.name + ".tmp")):
         try:
-            state_path.unlink()
+            temporary.unlink(missing_ok=True)
         except OSError:
             pass
     if segment_dir.exists():
@@ -151,6 +156,7 @@ class DownloadController:
         kind: str = "video",
         provider: str = "",
         on_state_change: Callable[[DownloadState], None] | None = None,
+        state_directory: Path | None = None,
     ) -> None:
         self.url = url
         self.target = Path(target) if target else None
@@ -159,6 +165,12 @@ class DownloadController:
         self.kind = kind
         self.provider = provider
         self.on_state_change = on_state_change
+        self.state_directory = state_directory
+        self.paused_store = PausedStore(
+            state_directory / "paused_downloads.json" if state_directory is not None else None
+        )
+        self._download_running = False
+        self.cleanup_on_cancel = False
 
         self._state: DownloadState = DownloadState.PENDING
         self._stop_event: asyncio.Event = asyncio.Event()
@@ -194,7 +206,7 @@ class DownloadController:
         self.set_state(DownloadState.PAUSED)
         self._stop_event.set()
         if self.url and self.target:
-            PausedStore().add(
+            self.paused_store.add(
                 url=self.url,
                 target=self.target,
                 title=self.title or self.target.name,
@@ -209,20 +221,22 @@ class DownloadController:
         self.set_state(DownloadState.CANCELLED)
         self._stop_event.set()
         if self.target:
-            if cleanup:
-                clear_resume_state(self.target)
+            # Active writers must finish before their files can be removed.
+            if cleanup and not self._download_running:
+                clear_resume_state(self.target, state_directory=self.state_directory)
                 if self.target.exists() and not self.target.is_dir():
                     try:
                         self.target.unlink()
                     except OSError:
                         pass
-            PausedStore().remove(self.target)
+            self.paused_store.remove(self.target)
         if self.url:
-            PausedStore().remove(self.url)
+            self.paused_store.remove(self.url)
 
     def resume(self) -> None:
         """Reset the stop event to allow downloading to resume."""
         self._stop_event = asyncio.Event()
+        self.cleanup_on_cancel = False
         self.set_state(DownloadState.DOWNLOADING)
 
 
@@ -277,10 +291,17 @@ async def download_video(
 ) -> DownloadOutcome:
     """Dispatch RAW/HLS downloads and enforce licensing at dispatch time."""
     from base_api import DownloadConfigHLS, DownloadConfigRAW
+    from base_api.modules.errors import DownloadCancelled
 
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
-    if target.exists() and settings.skip_existing:
+    state_directory = controller.state_directory if controller else None
+    paused_store = controller.paused_store if controller else PausedStore()
+    resuming = has_resume_state(target, state_directory=state_directory) or any(
+        item.get("target") and Path(item["target"]).resolve() == target.resolve()
+        for item in paused_store.load()
+    )
+    if target.exists() and settings.skip_existing and not resuming:
         if progress:
             progress(100)
         return DownloadOutcome("completed", target, skipped=True)
@@ -314,7 +335,7 @@ async def download_video(
         event = stop_event or asyncio.Event()
 
     loop = asyncio.get_running_loop()
-    raw = module in {"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api"}
+    raw = module in RAW_VIDEO_MODULES
 
     def make_callback(unit: str) -> Callable[[int, int], None]:
         def callback(position: int, total: int) -> None:
@@ -328,10 +349,8 @@ async def download_video(
         stop_event=event, max_workers=settings.download_workers,
         read_timeout=float(settings.timeout), max_retries=settings.request_attempts,
     )
-    if raw:
-        result = await video.download(raw_config, mode="h264") if module == "eporner_api" else await video.download(raw_config)
-    else:
-        state_path, segment_dir = get_resume_paths(target)
+    if not raw:
+        state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
         state_path.parent.mkdir(parents=True, exist_ok=True)
         segment_dir.mkdir(parents=True, exist_ok=True)
         can_remux = _has_av()
@@ -344,10 +363,26 @@ async def download_video(
             segment_dir=str(segment_dir), return_report=True,
             cleanup_on_stop=False, keep_segment_dir=True,
         )
-        if module == "youporn_api":
+    if controller:
+        controller._download_running = True
+    try:
+        if raw:
+            result = await video.download(raw_config, mode="h264") if module == "eporner_api" else await video.download(raw_config)
+        elif module == "youporn_api":
             result = await video.download(hls_config, backup_configuration=raw_config)
         else:
             result = await video.download(hls_config)
+    except DownloadCancelled:
+        if not event.is_set():
+            raise
+        # RAW providers raise on cooperative stop; HLS can return a report.
+        result = None
+    finally:
+        if controller:
+            controller._download_running = False
+            if event.is_set() and controller.cleanup_on_cancel:
+                clear_resume_state(target, state_directory=state_directory)
+                target.unlink(missing_ok=True)
 
     status_value = getattr(result, "status", None)
     missing = tuple(getattr(result, "missing", None) or ())
@@ -361,14 +396,7 @@ async def download_video(
         status = "cancelled"
         if controller:
             controller.set_state(DownloadState.CANCELLED)
-            if getattr(controller, "cleanup_on_cancel", False):
-                clear_resume_state(target)
-                if target.exists() and not target.is_dir():
-                    try:
-                        target.unlink()
-                    except OSError:
-                        pass
-    elif result is False or status_value == "missing":
+    elif result is False or status_value in {"missing", "failed"}:
         status = "failed"
         if controller:
             controller.set_state(DownloadState.FAILED)
@@ -376,8 +404,8 @@ async def download_video(
         status = "completed"
         if controller:
             controller.set_state(DownloadState.COMPLETED)
-        clear_resume_state(target)
-        PausedStore().remove(target)
+        clear_resume_state(target, state_directory=state_directory)
+        paused_store.remove(target)
 
     if status == "completed" and progress:
         _dispatch_progress(progress, 100, 100)

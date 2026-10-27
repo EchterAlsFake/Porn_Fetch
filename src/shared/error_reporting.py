@@ -137,12 +137,17 @@ async def report_public_error(message: str) -> bool:
     if not safe_message.strip():
         return False
     try:
+        from src.shared.tor_transport import all_traffic_enabled, runtime, tor_options
+        options = {}
+        if all_traffic_enabled():
+            import asyncio
+            options = tor_options(await asyncio.to_thread(runtime.ensure_ready))
         session = AsyncSession(
             headers={"Content-Type": "application/json"},
             cookies={},
             discard_cookies=True,
             default_headers=False,
-            trust_env=False,
+            **(options or {"trust_env": False}),
         )
     except Exception:
         _LOGGER.debug("Could not create error-report session", exc_info=True)

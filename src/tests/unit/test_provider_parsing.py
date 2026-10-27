@@ -16,6 +16,13 @@ class DurationParsingTests(unittest.TestCase):
         self.assertEqual(parse_length(120, video_source="pornhub"), 2)
         self.assertEqual(parse_length(12, video_source="xnxx"), 12)
 
+    def test_youporn_seconds_and_formatted_duration(self):
+        # YouPorn's video_duration field contains seconds, while the HTML
+        # fallback can contain a clock-formatted duration.
+        self.assertEqual(parse_length("570", video_source="youporn"), 10)
+        self.assertEqual(parse_length(570, video_source="youporn"), 10)
+        self.assertEqual(parse_length("9:30", video_source="youporn"), 10)
+
     def test_missing_duration(self):
         self.assertIsNone(parse_length(None))
         self.assertIsNone(parse_length("not available"))

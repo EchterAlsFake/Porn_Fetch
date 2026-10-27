@@ -80,7 +80,7 @@ class DownloadListModel(QAbstractListModel):
         if role == self.JobIdRole:
             return item.get("jobId", "")
         elif role == self.TitleRole:
-            return item.get("title", "")
+            return f"{index.row() + 1}) {item.get('title', '')}"
         elif role == self.AuthorRole:
             return item.get("author", "")
         elif role == self.DurationRole:
@@ -117,7 +117,7 @@ class DownloadListModel(QAbstractListModel):
         job_id = str(video.identifier or video.video_id or len(self._items)) # Job ID for unique reference of the row
         item_data = {
             "jobId": str(job_id),
-            "title": f"{video.index}) {video.title}" if video.index else video.title,
+            "title": video.title,
             "author": video.author,
             "duration": display_duration,
             "availableQualities": [str(quality) for quality in video.qualities],
@@ -134,6 +134,18 @@ class DownloadListModel(QAbstractListModel):
         self._row_by_id[job_id] = new_row
         self.endInsertRows() # Stops creating (QML starts displaying the row here)
         return selected_quality # For verification the actual quality is returned
+
+    def remove_video(self, job_id: str) -> bool:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return False
+        self.beginRemoveRows(QModelIndex(), row, row)
+        self._items.pop(row)
+        self._row_by_id = {item["jobId"]: index for index, item in enumerate(self._items)}
+        self.endRemoveRows()
+        if row < len(self._items):
+            self.dataChanged.emit(self.index(row, 0), self.index(len(self._items) - 1, 0), [self.TitleRole])
+        return True
 
     def set_video_quality(self, job_id: str, new_quality: str) -> bool:
         """This applies a new quality based on the users choice for a given video"""
@@ -164,6 +176,18 @@ class DownloadListModel(QAbstractListModel):
         if row is None:
             return None
         return self._items[row]["_video"]
+
+    def refresh_metadata(self, job_id: str) -> None:
+        row = self._row_by_id.get(str(job_id))
+        if row is None:
+            return
+        item = self._items[row]
+        video = item["_video"]
+        item.update(title=video.title, author=video.author,
+                    duration=self.tr("%d min") % int(video.length) if video.length is not None else "N/A",
+                    availableQualities=[str(quality) for quality in video.qualities])
+        index = self.index(row, 0)
+        self.dataChanged.emit(index, index, [self.TitleRole, self.AuthorRole, self.DurationRole, self.AvailableQualitiesRole])
 
     def get_status(self, job_id: str) -> str | None:
         row = self._row_by_id.get(str(job_id))
@@ -230,7 +254,7 @@ class DownloadListModel(QAbstractListModel):
 class DownloadManager(QObject): # Inherit from QObject so we can work with Slots and Signals
     video_added = Signal(VideoObject) # Tells the list model when a new video is there
     video_updated = Signal(VideoObject) # Updates the status for a video
-    video_removed = Signal(int) # Removes the row
+    video_removed = Signal(str) # Removes the row
 
     def __init__(self):
         super().__init__()

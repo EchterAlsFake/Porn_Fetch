@@ -19,7 +19,7 @@ class TorStatus(QObject):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._text = "Tor starts when a license or update request needs it."
+        self._text = "Tor starts when a routed request needs it."
         self.received.connect(self._receive)
         runtime.progress = self.received.emit
         self._last_failure = ""

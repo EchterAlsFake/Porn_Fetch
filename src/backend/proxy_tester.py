@@ -80,6 +80,9 @@ async def test_proxy(
     verify_ssl: bool = True,
 ) -> ProxyTestResult:
     """Make an HTTPS request through ``proxy_url`` and collect basic stats."""
+    from src.shared.tor_transport import all_traffic_enabled
+    if all_traffic_enabled():
+        raise ValueError("Turn off All app traffic Tor routing before testing a custom proxy.")
     proxy_url = validate_proxy_url(proxy_url)
     info_fields = [
         CurlInfo.CONNECT_TIME,

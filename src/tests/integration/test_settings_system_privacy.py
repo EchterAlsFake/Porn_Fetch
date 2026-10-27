@@ -116,18 +116,44 @@ class TestPrivacyTabGUI(SettingsGUITestBase):
         self.assertTrue(self.settings_manager.dns_over_https)
         self.assert_file_value("Privacy/dns_over_https", True)
 
-    def test_service_tor_checkbox(self) -> None:
-        self.simulate_checkbox("serviceTorCheckBox", True)
+    def test_service_tor_scope(self) -> None:
+        self.simulate_combobox("torRoutingComboBox", 1)
         self.assertEqual(self.settings_manager.service_transport, "tor")
         self.assert_file_value("Privacy/service_transport", "tor")
 
-        self.simulate_checkbox("serviceTorCheckBox", False)
+        self.simulate_combobox("torRoutingComboBox", 0)
         self.assertEqual(self.settings_manager.service_transport, "direct")
         self.assert_file_value("Privacy/service_transport", "direct")
 
     def test_service_tor_off_by_default(self) -> None:
         self.assertEqual(self.settings_manager.service_transport, "direct")
-        self.assertFalse(self.find_control("serviceTorCheckBox").property("checked"))
+        self.assertEqual(self.find_control("torRoutingComboBox").property("currentIndex"), 0)
+
+    def test_all_traffic_requires_accepting_notice(self) -> None:
+        from PySide6.QtCore import QSizeF
+        from PySide6.QtQuick import QQuickWindow
+        from PySide6.QtTest import QTest
+
+        window = QQuickWindow()
+        window.resize(900, 700)
+        self.root.setParentItem(window.contentItem())
+        self.root.setSize(QSizeF(900, 700))
+        window.show()
+        self.addCleanup(window.close)
+        self.simulate_combobox("torRoutingComboBox", 1)
+        self.simulate_combobox("torRoutingComboBox", 2)
+        warning = self.find_control("torAllTrafficWarning")
+        self.assertTrue(warning.property("visible"))
+        self.assertEqual(self.settings_manager.service_transport, "tor")
+        warning.reject()
+        QTest.qWait(250)
+        self.assertEqual(self.settings_manager.service_transport, "tor")
+        self.assertEqual(self.find_control("torRoutingComboBox").property("currentIndex"), 1)
+        self.simulate_combobox("torRoutingComboBox", 2)
+        warning.accept()
+        self.assertEqual(self.settings_manager.service_transport, "tor_all")
+        self.assert_file_value("Privacy/service_transport", "tor_all")
+        self.assertEqual(self.find_control("torRoutingComboBox").property("currentIndex"), 2)
 
     def test_primary_dns_textfield(self) -> None:
         test_dns = "https://1.1.1.1/dns-query"

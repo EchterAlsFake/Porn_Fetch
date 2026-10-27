@@ -102,6 +102,7 @@ except ImportError:
 from typing import AsyncIterator
 from base_api.modules.config import IteratorConfig
 from base_api import DownloadConfigHLS, DownloadConfigRAW
+from base_api.modules.errors import DownloadCancelled
 from src.shared.logging_setup import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
@@ -120,8 +121,7 @@ from src.shared.paths import shared_data_dir
 from src.shared.release import GITHUB_RELEASES_URL
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
-from src.backend.shared_gui import (ui_popup, set_mobile_notice_handler, Signals,
-                                    available_title_formatting_options)
+from src.backend.shared_gui import ui_popup, set_mobile_notice_handler, Signals
 from src.backend.helper_functions import safe_rmtree
 from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
 from src.shared.metadata import write_tags
@@ -140,6 +140,7 @@ from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.sni_proxy_manager import SNIProxyManager
+from src.shared.tor_transport import configure as configure_tor_transport
 from src.shared.errors import UnsupportedPlatform, CookiesNotFound, LoginError
 from src.backend.download_manager import (
     DownloadManager,
@@ -166,6 +167,7 @@ FORCE_DISABLE_AV = not has_ffmpeg()
 
 
 stop_flag = asyncio.Event()
+configure_tor_transport(app_settings)
 sni_proxy_manager = None if is_android or "--android" in sys.argv else SNIProxyManager(app_settings)
 log_level = app_settings.log_level_map.get(app_settings.log_level)
 
@@ -253,7 +255,9 @@ class Backend(QObject):
         # saved request settings once the real GUI backend is initialized and
         # refresh them immediately when the content locale changes.
         self.load_clients()
-        app_settings.reloadClients.connect(self.load_clients)
+        self.bind_runtime_settings()
+        if not mobile_layout:
+            self.bind_download_recovery()
         if sni_proxy_manager and sni_proxy_manager.last_error:
             QTimer.singleShot(
                 0,
@@ -643,6 +647,8 @@ class Backend(QObject):
 
     @Slot(object)
     def load_clients(self, _locale: str | None = None) -> None:
+        if self._is_shutting_down:
+            return
         if any(not task.done() for task in self._background_tasks):
             self._client_refresh_pending = True
             self.logger.info("Deferring client refresh until active tasks finish")
@@ -650,10 +656,39 @@ class Backend(QObject):
 
         self._client_refresh_pending = False
         clients.refresh_clients()
+        self.logger.setLevel(app_settings.log_level_map.get(app_settings.log_level, "INFO"))
         self.accountStateChanged.emit()
+
+    def bind_runtime_settings(self) -> None:
+        """Use the same runtime wiring for normal startup and diagnostics."""
+        app_settings.reloadClients.connect(self.load_clients)
+        app_settings.parallelDownloadsChanged.connect(self.update_parallel_downloads)
+
+    def bind_database_bridge(self, bridge: DatabaseBridge) -> None:
+        """Connect download history and activity to the desktop database consumer."""
+        self.database_bridge = bridge
+        bridge.busyChanged.connect(self._update_activity)
+        bridge.initializationFailed.connect(self.handle_message)
+        self.download_manager.video_added.connect(bridge.on_video_updated)
+        self.download_manager.video_updated.connect(bridge.on_video_updated)
+
+    def bind_download_recovery(self) -> None:
+        from src.backend.download_recovery import DownloadRecovery
+        self._download_recovery = DownloadRecovery(self, Path(TEMP_DIRECTORY) / "download-queue.json")
+        self._download_recovery.restore()
+
+    @Slot(int)
+    def update_parallel_downloads(self, limit: int) -> None:
+        if any(not task.done() for task in self._download_tasks.values()):
+            self._pending_parallel_limit = max(1, int(limit))
+            return
+        self._pending_parallel_limit = None
+        self._download_semaphore = asyncio.Semaphore(max(1, int(limit)))
 
     def _spawn(self, coro, *, name: str) -> asyncio.Task:
         task = asyncio.create_task(coro, name=name)
+        if self._is_shutting_down:
+            task.cancel()
         self._background_tasks.add(task)
         task.add_done_callback(self._background_task_done)
         self._update_activity()
@@ -673,19 +708,20 @@ class Backend(QObject):
                     "Background task failed: %s",
                     task.get_name(),
                 )
-                asyncio.create_task(
-                    report_exception(
-                        error,
-                        operation="run GUI background task",
-                        location="Backend._background_task_done",
-                        context={"task_name": task.get_name()},
-                        enabled=app_settings.enable_logging,
-                        version=__version__,
-                    ),
-                    name=f"report-{task.get_name()}",
-                )
+                if not self._is_shutting_down:
+                    asyncio.create_task(
+                        report_exception(
+                            error,
+                            operation="run GUI background task",
+                            location="Backend._background_task_done",
+                            context={"task_name": task.get_name()},
+                            enabled=app_settings.enable_logging,
+                            version=__version__,
+                        ),
+                        name=f"report-{task.get_name()}",
+                    )
 
-        if self._client_refresh_pending and not any(
+        if not self._is_shutting_down and self._client_refresh_pending and not any(
             not pending_task.done() for pending_task in self._background_tasks
         ):
             self.load_clients()
@@ -775,6 +811,18 @@ class Backend(QObject):
             video.selected_quality = new_quality
             self.logger.info(f"Updated backend quality for: {job_id} to: {new_quality}")
 
+    @Slot(str)
+    def remove_video(self, job_id: str) -> None:
+        """Remove a queue entry, cooperatively stopping active work first."""
+        job_id = str(job_id)
+        task = self._download_tasks.get(job_id)
+        if task is not None and not task.done():
+            self.stop_download(job_id)
+            task.add_done_callback(lambda _: self.remove_video(job_id))
+            return
+        self._downloads_model.remove_video(job_id)
+        self.download_manager.remove_video(job_id)
+
     @Slot(str, bool)
     def set_video_selected(self, job_id: str, selected: bool) -> None:
         self._downloads_model.set_selected(job_id, selected)
@@ -790,13 +838,15 @@ class Backend(QObject):
 
     @Slot(str, bool)
     def download_video(self, job_id: str, cleanup_on_stop: bool = False) -> None:
+        if self._is_shutting_down:
+            return
         job_id = str(job_id)
         existing_task = self._download_tasks.get(job_id)
         if existing_task is not None and not existing_task.done():
             return
 
         video = self._downloads_model.get_video(job_id)
-        if video is None or video.source_video is None:
+        if video is None:
             self.logger.warning("Cannot download unknown video: %s", job_id)
             return
         allowed_quality = select_allowed_quality(
@@ -843,8 +893,16 @@ class Backend(QObject):
 
     def _download_task_finished(self, job_id: str, task: asyncio.Task[object]) -> None:
         if self._download_tasks.get(job_id) is task:
+            # A queued task can be cancelled before its coroutine first runs.
+            # In that case _download_video cannot publish its final status.
+            if task.cancelled() and self._downloads_model.get_status(job_id) in {"queued", "stopping"}:
+                self._downloads_model.set_status(job_id, "cancelled")
+                self.download_manager.update_status(job_id, "cancelled")
             self._download_tasks.pop(job_id, None)
             self._download_stop_events.pop(job_id, None)
+            pending_limit = getattr(self, "_pending_parallel_limit", None)
+            if pending_limit is not None and not self._download_tasks:
+                self.update_parallel_downloads(pending_limit)
 
     @Slot(str)
     def stop_download(self, job_id: str) -> None:
@@ -852,8 +910,15 @@ class Backend(QObject):
         stop_event = self._download_stop_events.get(job_id)
         if stop_event is None:
             return
+        was_queued = self._downloads_model.get_status(job_id) == "queued"
         stop_event.set()
         self._downloads_model.set_status(job_id, "stopping")
+        if was_queued:
+            # No writer has started. Cancel the semaphore wait immediately;
+            # active downloads still use the cooperative stop event above.
+            task = self._download_tasks.get(job_id)
+            if task is not None and not task.done():
+                task.cancel()
 
     async def _download_video(
         self,
@@ -862,6 +927,7 @@ class Backend(QObject):
         stop_event: asyncio.Event,
         cleanup_on_stop: bool,
     ) -> None:
+        download_started = False
         try:
             async with self._download_semaphore:
                 if stop_event.is_set():
@@ -869,6 +935,20 @@ class Backend(QObject):
                     self._downloads_model.set_status(job_id, "cancelled")
                     self.download_manager.update_status(job_id, "cancelled")
                     return
+
+                if video.source_video is None:
+                    # Restored rows contain local metadata only. Resolve a fresh
+                    # native video/session when the user explicitly resumes.
+                    source = await clients.get_video(video.url)
+                    fresh = await clients.load_video_attributes(source)
+                    quality = select_allowed_quality(video.selected_quality, fresh.qualities, self.has_premium_access())
+                    if not quality:
+                        raise ValueError("The restored video no longer offers a permitted quality")
+                    for attribute in ("title", "author", "length", "tags", "thumbnail_url", "video_id", "publish_date", "qualities"):
+                        setattr(video, attribute, getattr(fresh, attribute))
+                    video.source_video = source
+                    self._downloads_model.refresh_metadata(job_id)
+                    self._downloads_model.set_video_quality(job_id, quality)
 
                 if app_settings.processing_delay:
                     await asyncio.sleep(int(app_settings.processing_delay))
@@ -879,18 +959,24 @@ class Backend(QObject):
                         return
 
                 output_path = Path(video.output_path or video.title)
-                if not output_path.suffix:
-                    output_path = output_path.with_suffix(".mp4")
+                from src.shared.download_options import video_file_path
+                output_path = video_file_path(output_path)
                 output_path.parent.mkdir(parents=True, exist_ok=True)
                 video.output_path = output_path
 
-                if output_path.exists() and app_settings.skip_existing_files:
+                if (output_path.exists() and app_settings.skip_existing_files
+                        and video.status not in {"cancelled", "failed"}
+                        and not Path(f"{output_path}.raw-state.json").exists()
+                        and not (Path(TEMP_DIRECTORY_STATES) / job_id).exists()):
                     self._downloads_model.update_progress(job_id, 100)
                     self._downloads_model.set_status(job_id, "completed")
                     self.download_manager.update_status(job_id, "completed")
+                    self._downloads_model.remove_video(job_id)
+                    self.download_manager.remove_video(job_id)
                     return
 
                 self._downloads_model.set_status(job_id, "downloading")
+                download_started = True
 
                 event_loop = asyncio.get_running_loop()
                 last_reported_percentage = -1
@@ -936,6 +1022,10 @@ class Backend(QObject):
                     video.is_hls = getattr(source_video, "is_hls", True) is not False
                     segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
                     segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
+                    from src.shared.download_recovery import discard_changed_hls_quality
+                    await asyncio.to_thread(discard_changed_hls_quality, segment_state_path, segment_dir, quality)
+                    segment_dir.mkdir(parents=True, exist_ok=True)
+                    segment_state_path.parent.mkdir(parents=True, exist_ok=True)
                     can_remux = not FORCE_DISABLE_AV
                     configuration = DownloadConfigHLS(
                         quality=quality,
@@ -950,7 +1040,9 @@ class Backend(QObject):
                         segment_dir=str(segment_dir),
                         return_report=True,
                         cleanup_on_stop=cleanup_on_stop,
-                        keep_segment_dir=not cleanup_on_stop,
+                        # cleanup_on_stop decides whether cancellation keeps
+                        # segments. Completed downloads always release them.
+                        keep_segment_dir=False,
                     )
                     if isinstance(source_video, clients.yp_Video):
                         backup_configuration = DownloadConfigRAW(
@@ -974,7 +1066,7 @@ class Backend(QObject):
                 video.missing_segments = getattr(result, "missing", None)
                 if stop_event.is_set() or report_status == "cancelled":
                     status = "cancelled"
-                elif report_status == "missing" or result is False:
+                elif report_status in {"missing", "failed"} or result is False:
                     status = "failed"
                 else:
                     status = "completed"
@@ -1016,6 +1108,13 @@ class Backend(QObject):
                     if is_android or "--android" in sys.argv:
                         await self._auto_export_android_download(output_path)
                 self.download_manager.update_status(job_id, status)
+                if status == "completed":
+                    self._downloads_model.remove_video(job_id)
+                    self.download_manager.remove_video(job_id)
+        except DownloadCancelled:
+            video.status = "cancelled"
+            self._downloads_model.set_status(job_id, "cancelled")
+            self.download_manager.update_status(job_id, "cancelled")
         except asyncio.CancelledError:
             video.status = "cancelled"
             self._downloads_model.set_status(job_id, "cancelled")
@@ -1043,6 +1142,22 @@ class Backend(QObject):
                 self.showMessage.emit(
                     self.tr("The video download failed. Error ID: %s") % report_id
                 )
+        finally:
+            if download_started and cleanup_on_stop and stop_event.is_set():
+                # The provider has stopped and closed its writers before these
+                # files are removed. Include the RAW checkpoint introduced by
+                # resumable multipart downloads and the HLS assembly/state files.
+                def cleanup_partial_files():
+                    raw_state = Path(f"{output_path}.raw-state.json")
+                    hls_state = Path(TEMP_DIRECTORY_STATES) / job_id
+                    for path in (output_path, Path(f"{output_path}.tmp"), raw_state,
+                                 Path(f"{raw_state}.tmp"), hls_state, Path(f"{hls_state}.tmp")):
+                        try:
+                            path.unlink(missing_ok=True)
+                        except OSError:
+                            self.logger.warning("Could not remove download temporary file: %s", path)
+                    safe_rmtree(Path(TEMP_DIRECTORY_SEGMENTS) / job_id)
+                await asyncio.to_thread(cleanup_partial_files)
 
     @Property(QObject, notify=downloadsChanged)
     def downloads(self):
@@ -1057,7 +1172,7 @@ class Backend(QObject):
         self._downloads_model.update_progress(video_id, percentage)
 
     def _start_video_fetch(self, coroutine, *, name: str) -> asyncio.Task | None:
-        if self.busy:
+        if self.busy or self._is_shutting_down:
             coroutine.close()
             return None
         stop_flag.clear()
@@ -1074,17 +1189,24 @@ class Backend(QObject):
             self._account_fetch_in_progress = False
             self.accountFetchStateChanged.emit()
 
+    def _start_filtered_fetch(self, operation, url: str, custom_options: str, values: dict, name: str) -> None:
+        from src.shared.download_options import title_template
+        try:
+            filters = VideoFilters(**values)
+            filters.validate()
+            title_template(custom_options)
+        except (ValueError, TypeError) as error:
+            self.showMessage.emit(str(error))
+            return
+        self._start_video_fetch(operation(url, custom_options, filters), name=name)
+
     @Slot(str, str, dict)
     def process_single_url(self, url: str, custom_options: str, filters: dict):
         """
         This function processes either a single Video or a Short depending on the platform.
         """
         print(f"Received Video / Short URL: {url}")
-        filters = VideoFilters(**filters)
-        self._start_video_fetch(
-            self._process_single_url(url=url, custom_options=custom_options, filters=filters),
-            name="single-video-processing",
-        )
+        self._start_filtered_fetch(self._process_single_url, url, custom_options, filters, "single-video-processing")
 
     async def _process_single_url(self, url: str, custom_options: str, filters: VideoFilters):
         self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
@@ -1122,11 +1244,7 @@ class Backend(QObject):
         ListView to allow the user to individually select the videos for download
         """
         print(f"Received Model URL: {url}")
-        filters = VideoFilters(**filters)
-        self._start_video_fetch(
-            self._process_model_url(url=url, custom_options=custom_options, filters=filters),
-            name="model-video-processing",
-        )
+        self._start_filtered_fetch(self._process_model_url, url, custom_options, filters, "model-video-processing")
 
     async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters,
                                  *, pages: int = 30, iterator_config: IteratorConfig | None = None):
@@ -1153,8 +1271,7 @@ class Backend(QObject):
 
     @Slot(str, str, dict)
     def process_playlist_url(self, url: str, custom_options: str, filters: dict):
-        self._start_video_fetch(self._process_playlist_url(url, custom_options, VideoFilters(**filters)),
-                               name="playlist-video-processing")
+        self._start_filtered_fetch(self._process_playlist_url, url, custom_options, filters, "playlist-video-processing")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
         try:
@@ -1295,7 +1412,6 @@ class Backend(QObject):
                 return
 
             if succeeded:
-                self.accountStateChanged.emit()
                 self.showMessage.emit(self.tr("You have successfully logged in."))
             else:
                 self.showMessage.emit(self.tr("The login failed. Please verify your account details."))
@@ -1323,6 +1439,9 @@ class Backend(QObject):
                 self.tr("An unexpected login error occurred. Please check the log for details.")
             )
         finally:
+            # Cookie/token validation can clear an old account before failing.
+            # Notify QML on failure/cancellation as well as successful login.
+            self.accountStateChanged.emit()
             self._login_in_progress = False
             self.loginStateChanged.emit()
 
@@ -1364,9 +1483,12 @@ class Backend(QObject):
         )
 
     async def _teardown_routine(self):
-        """Safely cancel all tracked tasks and wait for them to close."""
+        """Stop writers, persist recovery/history, then close their transports."""
         try:
-            tasks_to_await = set(self._background_tasks)
+            downloads = set(self._download_tasks.values())
+            for job in tuple(self._download_tasks):
+                self.stop_download(job)
+            tasks_to_await = set(self._background_tasks) - downloads
             if self._proxy_test_task and not self._proxy_test_task.done():
                 tasks_to_await.add(self._proxy_test_task)
 
@@ -1377,11 +1499,26 @@ class Backend(QObject):
                 await asyncio.gather(*tasks_to_await, return_exceptions=True)
                 self.logger.info("All background tasks stopped successfully.")
 
+            if downloads:
+                done, pending = await asyncio.wait(downloads, timeout=30)
+                if pending:
+                    self.logger.warning("Forcing cancellation of %d downloads after shutdown grace period", len(pending))
+                    for task in pending:
+                        task.cancel()
+                await asyncio.gather(*downloads, return_exceptions=True)
+
             async def close_component(name: str, cleanup) -> None:
                 try:
                     await cleanup()
                 except Exception:
                     self.logger.exception("Could not close %s", name)
+
+            recovery = getattr(self, "_download_recovery", None)
+            if recovery is not None:
+                await close_component("download recovery", recovery.close)
+            if self.database_bridge is not None:
+                await close_component("database service", self.database_bridge.close)
+            app_settings.sync()
 
             await close_component("network clients", clients.close_all_clients)
             from src.backend.update_service import service_core
@@ -1395,8 +1532,6 @@ class Backend(QObject):
                     sni_proxy_manager.stop()
                 except Exception:
                     self.logger.exception("Could not stop the SNI proxy")
-            if self.database_bridge is not None:
-                await close_component("database service", self.database_bridge.close)
             if self._pending_pocketbase_move is not None:
                 await close_component(
                     "pending database move",
@@ -1504,15 +1639,7 @@ def main() -> None:
 
 
     database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_android)
-    backend_instance.database_bridge = database_bridge
-    database_bridge.busyChanged.connect(backend_instance._update_activity)
-    database_bridge.initializationFailed.connect(backend_instance.handle_message)
-    # Database bridge is used for tracking the downloads / creating statistics (optional feature)
-
-    # Download manager connects to QML to manage downloads and create the actual rows in the ListView
-    download_manager = backend_instance.download_manager
-    download_manager.video_added.connect(database_bridge.on_video_updated) # Writes to database (optional)
-    download_manager.video_updated.connect(database_bridge.on_video_updated) # Updates existing entry (optional)
+    backend_instance.bind_database_bridge(database_bridge)
 
     license_service = create_license_service(
         app_settings,
@@ -1529,6 +1656,8 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
+    from src.backend.ui_translation import UiTranslation
+    engine.ui_translation = UiTranslation(app_settings, engine)
     from src.backend.tor_status import TorStatus
     tor_status = TorStatus(parent=engine)
     tor_status.installResult.connect(backend_instance.updateStatus)

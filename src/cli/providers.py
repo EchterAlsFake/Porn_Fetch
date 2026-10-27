@@ -47,8 +47,8 @@ class ClientPool:
     def _make_core(self) -> Any:
         if self._core_factory:
             return self._core_factory(self.runtime_config)
-        from base_api import BaseCore
-        return BaseCore(configuration=self.runtime_config)
+        from src.shared.tor_transport import MediaCore
+        return MediaCore(configuration=self.runtime_config)
 
     def client(self, provider: str) -> Any:
         if self._closed:
