@@ -21,7 +21,7 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 NAME = re.compile(
-    r"PornFetch_(linux|windows|macos|android)_(GUI|CLI)_(arm64-v8a|armeabi-v7a|x86_64|x64|arm64|x86|x32|riscv64|universal)(_Setup)?(_LEGAL)?(?:\.(?:zip|dmg|exe|run|bin|apk))?",
+    r"PornFetch_(linux|windows|macos|android)_(GUI|CLI)_(arm64-v8a|armeabi-v7a|x86_64|x64|arm64|x86|x32|riscv64|universal)(_Setup)?(_LEGAL)?(?:\.(?:tar\.gz|zip|dmg|exe|run|bin|apk))?",
     re.I,
 )
 ARCH = {"arm64-v8a": "arm64", "armeabi-v7a": "armv7", "x86_64": "x64"}
@@ -135,9 +135,10 @@ def prepare(artifact_root, output, version, channel, timestamp, commit, notes, s
             attributes = classify(path.name)
             if path.is_file() and attributes:
                 add_file(path, attributes, output, artifacts)
-                found = True
+                if attributes["kind"] != "notices":
+                    found = True
         if not found:
-            raise ValueError(f"No recognized release package in {directory.name}")
+            raise ValueError(f"No recognized application package in {directory.name}")
     if not artifacts:
         raise ValueError("No built application artifacts to publish")
     if source_root:

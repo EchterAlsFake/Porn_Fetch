@@ -1,5 +1,6 @@
 """Website packaging checks use synthetic artifacts and no publishing credentials."""
 
+import hashlib
 import importlib.util
 import json
 import os
@@ -68,6 +69,31 @@ class WebsitePublisherTests(unittest.TestCase):
             self.assertIn("pocketbase.exe", archive.namelist())
             self.assertIn("PornFetch_windows_CLI_x64.exe", archive.namelist())
         self.assertEqual(json.loads((self.output / "manifest.json").read_text()), manifest)
+
+    def test_linux_gui_tarballs_and_notices_are_in_published_manifest(self):
+        for arch in ("x64", "arm64"):
+            name = f"PornFetch_linux_GUI_{arch}"
+            self.artifact(name, {name + ".tar.gz": b"linux gui " + arch.encode(),
+                                 name + "_LEGAL.zip": b"notices"})
+        manifest = self.publisher.prepare(self.artifacts, self.output, "3.9.66", "beta", 1792833600, "a" * 40, "notes")
+        self.assertEqual(len(manifest["artifacts"]), 4)
+        for arch in ("x64", "arm64"):
+            filename = f"PornFetch_linux_GUI_{arch}.tar.gz"
+            package = next(item for item in manifest["artifacts"] if item["filename"] == filename)
+            content = b"linux gui " + arch.encode()
+            self.assertEqual((self.output / filename).read_bytes(), content)
+            self.assertEqual(package["kind"], "gui")
+            self.assertEqual(package["platform"], "linux")
+            self.assertEqual(package["arch"], arch)
+            self.assertEqual(package["size"], len(content))
+            self.assertEqual(package["sha256"], hashlib.sha256(content).hexdigest())
+        self.assertEqual(json.loads((self.output / "manifest.json").read_text()), manifest)
+
+    def test_notices_alone_do_not_count_as_an_application_package(self):
+        self.artifact("PornFetch_linux_GUI_x64", {"PornFetch_linux_GUI_x64_LEGAL.zip": b"notices"})
+        with self.assertRaisesRegex(ValueError, "No recognized application package"):
+            self.publisher.prepare(self.artifacts, self.output, "3.9.66", "beta", 1792833600, "a" * 40, "notes")
+        self.assertFalse((self.output / "manifest.json").exists())
 
     def test_all_android_abis_are_published_with_matching_notices(self):
         for abi in ("arm64-v8a", "armeabi-v7a", "x86_64", "x86"):
