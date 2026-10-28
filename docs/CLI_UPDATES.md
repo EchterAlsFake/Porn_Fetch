@@ -214,11 +214,11 @@ payload rejection. It never reads production PEM files or contacts the productio
 API. For manual experiments, the publisher and verifier accept `--root-file`
 to select a disposable public root without modifying the bundled root.
 
-## Update entitlement
+## Free automatic updates
 
 Signed target custom metadata and the hashed bundle manifest both contain
 `release_timestamp`, taken from `src/shared/version.py` in the release commit.
-`--check` reports whether the release is entitled. Installation refreshes licensing
-and blocks before downloading when renewal is required or the signed date is missing.
-Renewal keeps the same key; repeat the update check after refreshing. The date must
-be fixed for each release and must never be generated from the installing device clock.
+`--check` reports available updates. Checking and installing updates are free and do not
+contact the licensing service. Installation still requires a valid signed release date
+and verified artifacts. The date must be fixed for each release and must never be
+generated from the installing device clock.

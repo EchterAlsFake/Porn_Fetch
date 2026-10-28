@@ -237,7 +237,7 @@ class Backend(QObject):
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
-        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update, license_status=self._update_license_status)
+        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.auto_updater.finished.connect(self.updateFinished)
@@ -317,7 +317,6 @@ class Backend(QObject):
         self._license_bridge = license_bridge
         license_bridge.statusChanged.connect(self._enforce_quality_access)
         license_bridge.statusChanged.connect(self._update_activity)
-        license_bridge.entitlementChanged.connect(self.check_for_updates)
         self._enforce_quality_access()
         self._update_activity()
 
@@ -375,12 +374,6 @@ class Backend(QObject):
             name="update-check",
         )
 
-    async def _update_license_status(self):
-        from src.licensing.client import LicenseStatus
-        if self._license_bridge is None:
-            return LicenseStatus("unlicensed", False)
-        return await self._license_bridge._run_check(force=True)
-
     async def _check_for_updates(self) -> None:
         try:
             update = await CheckUpdates.check()
@@ -391,12 +384,11 @@ class Backend(QObject):
             self.updateStatus.emit("No update available.")
             return
 
-        from src.shared.release import update_eligibility
         install_allowed = False
         message = update.get("entitlement_message", "Release metadata could not be authenticated.")
         if update.get("source") in {"signed_repository", "signed_android"}:
-            status = await self._update_license_status()
-            install_allowed, message = update_eligibility(status, update["release_timestamp"])
+            install_allowed = True
+            message = "Automatic updates are free for everyone."
         details = {
             "install_allowed": install_allowed,
             "entitlement_message": message,

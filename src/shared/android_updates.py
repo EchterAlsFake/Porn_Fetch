@@ -10,7 +10,7 @@ from pathlib import Path
 
 from tuf.ngclient import Updater
 
-from .release import ROOT_FILE, release_time, update_eligibility
+from .release import ROOT_FILE, release_time
 from .service_transport import ServiceFetcher
 
 REPOSITORY = "https://pornfetch.to/repo/android/"
@@ -64,7 +64,7 @@ def check(settings, current):
             "changelog_format": "markdown"}
 
 
-def download_and_request_install(settings, current, license_status, progress=None, cancel=None):
+def download_and_request_install(settings, current, progress=None, cancel=None):
     def on_chunk(size):
         if cancel is not None and cancel.is_set():
             raise InterruptedError("Android update cancelled")
@@ -80,9 +80,7 @@ def download_and_request_install(settings, current, license_status, progress=Non
         raise ValueError("Android update has the wrong identity")
     if tuple(map(int, custom["version"].split("."))) <= tuple(map(int, current.split("."))):
         raise ValueError("The Android update is not newer")
-    entitled, reason = update_eligibility(license_status, release_time(custom.get("release_timestamp")))
-    if not entitled:
-        raise PermissionError(reason)
+    release_time(custom.get("release_timestamp"))
     path = Path(client.download_target(target))
     if cancel is not None and cancel.is_set():
         raise InterruptedError("Android update cancelled")

@@ -225,7 +225,7 @@ Item {
                         columnSpacing: 12
 
                         Text {
-                            text: "Update entitlement ends:"
+                            text: "Premium version entitlement ends:"
                             font.pixelSize: 12
                             font.weight: Font.DemiBold
                             color: textSec
@@ -238,7 +238,7 @@ Item {
                             color: success
                             horizontalAlignment: Text.AlignRight
                             ToolTip.visible: expiryMa.containsMouse
-                            ToolTip.text: "Permanent license: valid for current release + updates for 1 year after first activation"
+                            ToolTip.text: "Premium features are covered in releases for 1 year after first activation. App updates are free for everyone."
                             MouseArea {
                                 id: expiryMa
                                 anchors.fill: parent
@@ -296,7 +296,7 @@ Item {
                         font.pixelSize: 13
                     }
                     Text {
-                        text: "How do expiry, 1-yr updates & 10-machine limits work?"
+                        text: "How do premium entitlement & 10-machine limits work?"
                         font.pixelSize: 12
                         font.underline: helpMa.containsMouse
                         color: helpMa.containsMouse ? accentGlow : accent
@@ -545,7 +545,7 @@ Item {
                             spacing: 8
                             Text { text: "📅"; font.pixelSize: 15 }
                             Text {
-                                text: "Update Entitlement & 1-Year Updates"
+                                text: "Premium Version Entitlement & Free App Updates"
                                 font.pixelSize: 14
                                 font.bold: true
                                 color: textPri
@@ -559,7 +559,7 @@ Item {
                             lineHeight: 1.25
                             color: textSec
                             textFormat: Text.RichText
-                            text: "• <b>Update entitlement ends:</b> The deadline for receiving new releases. A <b>Permanent License</b> provides perpetual access to the versions released during your entitlement and includes all subsequent updates and releases for <b>1 year after first activation</b>. After 1 year, you may continue using every version released during your active year forever without paying again.<br><br>• <b>Offline Permit:</b> Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately."
+                            text: "• <b>Premium version entitlement ends:</b> The release deadline for licensed premium features. App updates are free for everyone, including without a license. A <b>Permanent License</b> provides perpetual premium access to versions released during the <b>first year after activation</b>. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.<br><br>• <b>Offline Permit:</b> Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately."
                         }
                     }
 

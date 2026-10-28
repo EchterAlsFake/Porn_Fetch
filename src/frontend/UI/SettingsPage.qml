@@ -1381,7 +1381,7 @@ Pane {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("Purchase a license on the website, then paste the signed key or import your license file. Includes one year of updates and permanent use of entitled versions.")
+                text: qsTr("Purchase a license on the website, then paste the signed key or import your license file. Automatic app updates are free for everyone. Licenses provide premium features for entitled versions.")
                 wrapMode: Text.WordWrap
             }
 

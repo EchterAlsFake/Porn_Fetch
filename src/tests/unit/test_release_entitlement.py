@@ -1,4 +1,4 @@
-"""Release signatures, artifact binding, and installer entitlement gates."""
+"""Release signatures, artifact binding, and license-free installation."""
 import json
 import tempfile
 import unittest
@@ -11,11 +11,9 @@ from urllib.parse import unquote
 
 from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.cli import self_update
-from src.licensing.client import LicenseStatus
 from src.shared.release import (
     STATIC_CHANGELOG_NAME,
     safe_repo_path,
-    update_eligibility,
     validate_ifw_packages,
     verify_repository_manifest,
 )
@@ -134,14 +132,6 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(Exception):
             verify_repository_manifest((self.repo / "release.json").read_bytes(), other.read_bytes(), "linux_amd64")
 
-    def test_entitled_and_renewal_required_updates(self):
-        status = LicenseStatus("valid", True, license_expires_at=RELEASE_TIMESTAMP)
-        self.assertTrue(update_eligibility(status, RELEASE_TIMESTAMP)[0])
-        allowed, text = update_eligibility(status, RELEASE_TIMESTAMP + 86400)
-        self.assertFalse(allowed)
-        self.assertIn("Renew", text)
-        self.assertIn("06 October 2026", text)
-
     async def test_qt_stage_verifies_all_bytes_before_launch(self):
         metadata, release = self.verify()
         update = {**release, "metadata": metadata, "repository_url": "https://updates.example/"}
@@ -215,29 +205,50 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):
             validate_ifw_packages(xml, "3.10", RELEASE_TIMESTAMP)
 
-    async def test_qt_renewal_required_does_not_download_quit_or_cleanup(self):
-        updater = AutoUpdater(before_update=AsyncMock(), license_status=AsyncMock(return_value=LicenseStatus("valid", True, license_expires_at=RELEASE_TIMESTAMP-1)))
-        with patch("src.backend.update_service.find_maintenance_tool", return_value=self.base / "tool"), patch.object(CheckUpdates, "check_signed_repository", AsyncMock(return_value={"release_timestamp":RELEASE_TIMESTAMP})), patch.object(updater, "_stage_repository", AsyncMock()) as stage, patch("subprocess.Popen") as launch:
+    async def test_qt_update_without_license_launches_after_cleanup(self):
+        updater = AutoUpdater(before_update=AsyncMock())
+        with (
+            patch("src.backend.update_service.find_maintenance_tool", return_value=self.base / "tool"),
+            patch.object(CheckUpdates, "check_signed_repository", AsyncMock(return_value={"release_timestamp": RELEASE_TIMESTAMP})),
+            patch.object(updater, "_stage_repository", AsyncMock(return_value=self.base)) as stage,
+            patch("subprocess.Popen") as launch,
+            patch("src.backend.update_service.QCoreApplication.quit") as quit_app,
+            patch("src.licensing.service.create_license_service", side_effect=AssertionError("Updates must not contact licensing")),
+        ):
             await updater._run()
-            launch.assert_not_called()
-            stage.assert_not_called()
-            updater.before_update.assert_not_called()
+            stage.assert_awaited_once()
+            updater.before_update.assert_awaited_once()
+            launch.assert_called_once()
+            quit_app.assert_called_once()
 
     async def test_unsigned_discovery_never_offers_install(self):
         with patch.object(CheckUpdates,"check_signed_repository", AsyncMock(side_effect=ValueError)), patch.object(CheckUpdates,"check_via_http", AsyncMock(return_value={"version":"4.0"})):
             self.assertFalse((await CheckUpdates.check())["install_allowed"])
 
 
-class CliEntitlementTests(unittest.TestCase):
-    def test_cli_blocks_unentitled_update_before_download(self):
+class CliFreeUpdateTests(unittest.TestCase):
+    def test_cli_installs_without_license(self):
         from unittest.mock import MagicMock
-        target = SimpleNamespace(custom={"version":"999.0", "release_timestamp":RELEASE_TIMESTAMP})
+        target = SimpleNamespace(custom={"version": "999.0", "release_timestamp": RELEASE_TIMESTAMP})
         updater = MagicMock()
         updater.get_targetinfo.return_value = target
-        with tempfile.TemporaryDirectory() as cache, patch.object(self_update, "Updater", return_value=updater), patch.object(self_update,"user_cache_dir",return_value=cache), patch.object(self_update,"_license_status",AsyncMock(return_value=LicenseStatus("valid",True,license_expires_at=RELEASE_TIMESTAMP-1))), patch.object(self_update,"_installation_path") as installation:
-            self.assertEqual(self_update.run_self_update(check_only=False,assume_yes=True),1)
-            updater.download_target.assert_not_called()
-            installation.assert_not_called()
+        with tempfile.TemporaryDirectory() as cache:
+            executable = Path(cache) / "pornfetch"
+            executable.write_bytes(b"installed CLI")
+            with (
+                patch.object(self_update, "Updater", return_value=updater),
+                patch.object(self_update, "user_cache_dir", return_value=cache),
+                patch("src.licensing.service.create_license_service", side_effect=AssertionError("Updates must not contact licensing")) as licensing,
+                patch.object(self_update, "_installation_path", return_value=executable),
+                patch.object(self_update, "_download_update") as download,
+                patch.object(self_update, "_stage_bundle") as stage,
+                patch("subprocess.Popen") as launch,
+            ):
+                self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=True), 0)
+                download.assert_called_once()
+                stage.assert_called_once()
+                launch.assert_called_once()
+                licensing.assert_not_called()
 
     def test_cli_missing_release_date_cannot_install(self):
         from unittest.mock import MagicMock

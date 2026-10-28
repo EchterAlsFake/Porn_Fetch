@@ -51,9 +51,10 @@ The 3.9 source is under the [Porn Fetch Source-Available License 1.0](LICENSE).
 Earlier GPL releases keep their GPL rights. The source license and a premium
 feature credential are separate things.
 
-The 3.9 client now requires a signed license on the commercial policy. It includes
-31,556,952 seconds (approximately one year) of updates from first activation and permanent use of builds
-released within that entitlement, on up to ten installations. First activation attempts online validation. A valid signed production license
+Automatic app updates are free for everyone on desktop, Android, and CLI, without a license.
+Premium features require a signed license on the commercial policy. It covers premium features in builds released within
+31,556,952 seconds (approximately one year) from first activation, with permanent premium use of those builds
+on up to ten installations. First activation attempts online validation. A valid signed production license
 gets up to three days from first import only for connection failures/timeouts,
 never for explicit rejection, HTTP errors, malformed responses or TLS trust failures.
 Reimport/restart does not reset that period. Subsequent offline use is limited to

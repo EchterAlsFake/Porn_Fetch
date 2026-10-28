@@ -5,7 +5,6 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from tuf.api.metadata import TargetFile
@@ -30,13 +29,12 @@ class AndroidUpdatesTests(unittest.TestCase):
         self.client = MagicMock()
         self.client.get_targetinfo.return_value = self.target
         self.client.download_target.return_value = str(self.apk)
-        self.license = SimpleNamespace(entitled_to=lambda _time: True)
 
     def test_signed_identity_and_user_confirmed_install_command(self):
         with patch.object(service, "updater", return_value=self.client):
             update = service.check(None, "3.9.1")
             self.assertEqual(update["source"], "signed_android")
-            service.download_and_request_install(None, "3.9.1", self.license)
+            service.download_and_request_install(None, "3.9.1")
         request = json.loads((self.root / "install-update.json").read_text())
         self.assertEqual(request, {"version": "3.9.77", "abi": "arm64-v8a"})
         self.assertEqual((self.root / "pornfetch-update.apk").read_bytes(), b"synthetic APK")
@@ -45,13 +43,13 @@ class AndroidUpdatesTests(unittest.TestCase):
         with patch.object(service, "updater", return_value=self.client):
             self.target.custom["abi"] = "x86"
             with self.assertRaises(ValueError):
-                service.download_and_request_install(None, "3.9.1", self.license)
+                service.download_and_request_install(None, "3.9.1")
             self.target.custom["abi"] = "arm64-v8a"
             self.apk.write_bytes(b"tampered")
             with self.assertRaises(Exception):
-                service.download_and_request_install(None, "3.9.1", self.license)
+                service.download_and_request_install(None, "3.9.1")
             event = threading.Event()
             event.set()
             with self.assertRaises(InterruptedError):
-                service.download_and_request_install(None, "3.9.1", self.license, cancel=event)
+                service.download_and_request_install(None, "3.9.1", cancel=event)
         self.assertFalse((self.root / "install-update.json").exists())

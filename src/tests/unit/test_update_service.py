@@ -6,14 +6,14 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import AsyncMock, patch
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from src.backend.update_service import (
     AutoUpdater,
     CheckUpdates,
     find_maintenance_tool,
 )
-from src.licensing.client import LicenseStatus
 from src.shared.version import RELEASE_TIMESTAMP
 
 
@@ -71,6 +71,33 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
         launch.assert_not_called()
         self.assertEqual(finished, [True])
 
+    async def test_signed_updates_are_offered_without_license_bridge(self):
+        from src.backend.application import Backend
+
+        backend = SimpleNamespace(
+            _license_bridge=None, updateAvailable=MagicMock(), updateStatus=MagicMock(), logger=MagicMock(),
+        )
+        for source in ("signed_repository", "signed_android", "http"):
+            with self.subTest(source=source), patch.object(CheckUpdates, "check", AsyncMock(return_value={
+                "source": source, "version": "3.10", "release_timestamp": RELEASE_TIMESTAMP,
+            })):
+                await Backend._check_for_updates(backend)
+                details = backend.updateAvailable.emit.call_args.args[0]
+                self.assertEqual(details["install_allowed"], source != "http")
+                if details["install_allowed"]:
+                    self.assertIn("free for everyone", details["entitlement_message"])
+
+    async def test_android_updater_without_license_requests_install(self):
+        updater = AutoUpdater()
+        with (
+            patch("src.shared.android_updates.is_android_device", return_value=True),
+            patch("src.shared.android_updates.download_and_request_install") as install,
+            patch("src.licensing.service.create_license_service", side_effect=AssertionError("Updates must not contact licensing")),
+        ):
+            await updater._run()
+            install.assert_called_once()
+            self.assertIs(install.call_args.args[-1], updater._android_cancel)
+
     async def test_check_via_maintenancetool_with_updates(self):
         xml_output = (
             b"<updates>\n"
@@ -107,7 +134,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                 nonlocal cleanup_called
                 cleanup_called = True
 
-            updater = AutoUpdater(before_update=mock_cleanup, license_status=AsyncMock(return_value=LicenseStatus("valid", True, license_expires_at=RELEASE_TIMESTAMP)))
+            updater = AutoUpdater(before_update=mock_cleanup)
 
             with patch("src.backend.update_service.find_maintenance_tool", return_value=tmp_path):
                 with patch("subprocess.Popen") as mock_popen:

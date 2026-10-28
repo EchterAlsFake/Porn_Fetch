@@ -604,7 +604,7 @@ Pane {
                 Label {
                     Layout.fillWidth: true
                     visible: Boolean(bridge.isValid && bridge.licenseExpiresAt !== "")
-                    text: qsTr("Update entitlement ends: %1 (%2)").arg(bridge.licenseExpiresAt).arg(qsTr("valid for current release, includes 1 year of updates"))
+                    text: qsTr("Premium version entitlement ends: %1 (%2)").arg(bridge.licenseExpiresAt).arg(qsTr("covers premium features in releases for 1 year"))
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }
@@ -643,7 +643,7 @@ Pane {
                 Label {
                     Layout.fillWidth: true
                     visible: bridge.isValid
-                    text: qsTr("Each license supports up to 10 machines. Permanent licenses are valid for the current release and include 1 year of updates. Deactivating unlinks this device to free up a machine seat.")
+                    text: qsTr("Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.")
                     color: root.mutedColor
                     font.pixelSize: 11
                     wrapMode: Text.Wrap

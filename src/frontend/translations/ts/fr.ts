@@ -1229,12 +1229,17 @@
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="607"/>
-        <source>Update entitlement ends: %1 (%2)</source>
+        <source>Premium version entitlement ends: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="607"/>
-        <source>valid for current release, includes 1 year of updates</source>
+        <source>covers premium features in releases for 1 year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="646"/>
+        <source>Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1255,11 +1260,6 @@
     <message>
         <location filename="../../UI/AndroidSettingsPage.qml" line="639"/>
         <source>Deactivate license (frees 1 of 10 machine seats)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/AndroidSettingsPage.qml" line="646"/>
-        <source>Each license supports up to 10 machines. Permanent licenses are valid for the current release and include 1 year of updates. Deactivating unlinks this device to free up a machine seat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1645,7 +1645,7 @@ on your machine and route through tor.       </source>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="613"/>
+        <location filename="../../../backend/application.py" line="605"/>
         <source>
         Important: 
 
@@ -1661,68 +1661,68 @@ on your machine and route through tor.       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="761"/>
+        <location filename="../../../backend/application.py" line="753"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="769"/>
+        <location filename="../../../backend/application.py" line="761"/>
         <source>The SSL connection failed even with certificate verification disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="780"/>
+        <location filename="../../../backend/application.py" line="772"/>
         <source>Could not connect through this proxy. Check the address and credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="865"/>
+        <location filename="../../../backend/application.py" line="857"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1093"/>
-        <location filename="../../../backend/application.py" line="1143"/>
+        <location filename="../../../backend/application.py" line="1085"/>
+        <location filename="../../../backend/application.py" line="1135"/>
         <source>The video download failed. Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1331"/>
+        <location filename="../../../backend/application.py" line="1323"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1348"/>
+        <location filename="../../../backend/application.py" line="1340"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1411"/>
+        <location filename="../../../backend/application.py" line="1403"/>
         <source>The selected login provider is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1415"/>
+        <location filename="../../../backend/application.py" line="1407"/>
         <source>You have successfully logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1417"/>
+        <location filename="../../../backend/application.py" line="1409"/>
         <source>The login failed. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1422"/>
+        <location filename="../../../backend/application.py" line="1414"/>
         <source>%s rejected the login. Please verify your account details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1425"/>
+        <location filename="../../../backend/application.py" line="1417"/>
         <source>You are already logged in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="1439"/>
+        <location filename="../../../backend/application.py" line="1431"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2852,7 +2852,7 @@ Arrow keys change a focused quality selection or number input.</source>
     </message>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="1384"/>
-        <source>Purchase a license on the website, then paste the signed key or import your license file. Includes one year of updates and permanent use of entitled versions.</source>
+        <source>Purchase a license on the website, then paste the signed key or import your license file. Automatic app updates are free for everyone. Licenses provide premium features for entitled versions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

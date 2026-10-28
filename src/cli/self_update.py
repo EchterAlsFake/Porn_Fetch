@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import os
 import platform
@@ -31,7 +30,7 @@ from tuf.api.metadata import TargetFile
 from tuf.ngclient import Updater
 from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
-from src.shared.release import release_time, update_eligibility
+from src.shared.release import release_time
 
 UPDATE_REPO_URL = "https://api.pornfetch.to/repo/cli"
 REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", UPDATE_REPO_URL).rstrip("/") + "/"
@@ -205,16 +204,6 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
     return _apply_update(stage, executable)
 
 
-async def _license_status():
-    from src.cli.settings import SettingsStore
-    from src.licensing.service import create_license_service
-    service = create_license_service(SettingsStore().load())
-    try:
-        return await service.check(force=True)
-    finally:
-        await service.close()
-
-
 def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
     try:
         from src.cli.settings import SettingsStore
@@ -255,12 +244,6 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
             return 0
         print(f"Porn Fetch CLI {latest} is available for {name} (installed: {current}).")
         released = release_time(target.custom.get("release_timestamp"))
-        status = asyncio.run(_license_status())
-        entitled, reason = update_eligibility(status, released)
-        print(reason)
-        if not entitled:
-            print("Purchase / renew: https://pornfetch.to/ — then refresh your license.")
-            return 0 if check_only else 1
         if check_only:
             return 0
         executable = _installation_path()

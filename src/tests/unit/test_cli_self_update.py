@@ -182,12 +182,12 @@ class CliUpdateTests(unittest.TestCase):
                             patch.object(self_update, "ROOT_FILE", root_file), \
                             patch.object(self_update, "REPOSITORY_URL", url), \
                             patch.object(self_update, "user_cache_dir", return_value=str(base / "cli-cache")), \
-                            patch.object(self_update, "_license_status") as license_status, \
+                            patch("src.licensing.service.create_license_service", side_effect=AssertionError("Updates must not contact licensing")) as license_service, \
                             patch("src.shared.service_transport.ServiceFetcher", lambda settings: self_update._ProgressFetcher()), \
                             redirect_stdout(io.StringIO()) as output:
                         self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False), 0)
                     self.assertIn("up to date (3.9.1)", output.getvalue())
-                    license_status.assert_not_called()
+                    license_service.assert_not_called()
 
                     # Progress reporting must not bypass TUF's payload verification.
                     remote_bundle = next((public / "targets").rglob("*.zip"))

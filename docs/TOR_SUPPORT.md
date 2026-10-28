@@ -46,8 +46,8 @@ app's lifetime; this is not a system VPN or an always-on background service.
 Tor hides the client's network address from the service. License keys and
 installation IDs are randomly generated values containing no personal
 information; they do not identify a user as a person. Existing offline
-license permits, machine limits, signed certificates and update entitlement
-rules are unchanged.
+license permits, machine limits, signed certificates and premium version entitlement
+rules are unchanged. Automatic app updates are free and do not require licensing requests.
 
 Failures on this service route open the same notification on desktop and Android,
 including initial/background license and update checks. The notice distinguishes
@@ -95,7 +95,7 @@ Standalone CLI updates use TUF with the selected service transport.
 
 Android uses a separate TUF feed at `/repo/android/`, with the existing update
 trust root. Target metadata binds the ABI, package, version, release timestamp
-and APK hash. The app checks update entitlement, downloads and verifies the APK,
+and APK hash. The app downloads and verifies the APK without a license check,
 then asks Android to open its installer using a read-only content URI.
 
 The native bridge checks the package, newer version code, architecture and the

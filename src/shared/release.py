@@ -57,14 +57,3 @@ def verify_repository_manifest(blob, root_bytes, target_platform):
     if release.get("changelog_path") and release["changelog_path"] not in metadata.signed.targets:
         raise ValueError("Release changelog is not included in the signed repository")
     return metadata, release
-
-
-def update_eligibility(status, released):
-    release_time(released)
-    date = datetime.fromtimestamp(released, timezone.utc).strftime("%d %B %Y")
-    if status.entitled_to(released):
-        return True, f"Released {date}. This update is included in your entitlement."
-    if status.license_expires_at is not None and released > status.license_expires_at:
-        end = datetime.fromtimestamp(status.license_expires_at, timezone.utc).strftime("%d %B %Y")
-        return False, f"Released {date}. Your update entitlement ended on {end}. Renew to receive this update. Your current installation is unchanged."
-    return False, f"Released {date}. Validate a production license before installing this update."

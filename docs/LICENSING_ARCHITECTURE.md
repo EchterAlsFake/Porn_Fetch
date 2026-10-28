@@ -155,7 +155,7 @@ The signed server issue time bounds the local timestamp even if the cache is edi
 This is modest cache protection, not invasive anti-tamper DRM; a fully user-controlled
 clock/binary cannot be made into a trustworthy hardware root.
 
-## Perpetual update entitlement and renewals
+## Premium version entitlement and renewals
 
 Before building, CI updates `__version__`, `BUILD_VERSION`, and `RELEASE_TIMESTAMP` in
 `src/shared/version.py`. The full version is entered in the workflow's
@@ -166,28 +166,29 @@ CLI bundles, signed manifests, and IFW package dates agree. A new workflow run i
 a new beta release; rebuilding a run preserves its release date. Source checkouts
 retain development defaults. The runtime clock and file mtimes never set release eligibility.
 
+Automatic app updates are free for everyone and never consult licensing. The following
+entitlement rules govern premium-feature access in the installed build.
+
 The running build is entitled iff its release timestamp is at or before the signed
 checkout's license expiry. The current wall clock only controls the separate offline
 window and the informational "Update entitlement expired" message. Keygen's commercial
 policy has `duration=31556952` (one calendar year), `FROM_FIRST_ACTIVATION`,
 `MAINTAIN_ACCESS`, and `FROM_NOW_IF_EXPIRED`. The client accepts `valid=true, EXPIRED`.
 An old entitled build continues working after the update year when freshness checks
-succeed. A later build reports renewal required. A null initial key expiry never means
-unlimited updates.
+succeed. A later build reports renewal required for premium features. A null initial key expiry never means
+unlimited premium version entitlement.
 
 Renewal is performed server-side/payment-side. The client never calls the renewal
 administration action. Refreshing obtains a new signed checkout with the renewed
-expiry, keeping the original key and UUID. No extra activation is consumed. Qt emits
-an entitlement-change signal to refresh update discovery immediately. CLI update
-checks validate again. Both frontends link to the website; completing its customer
+expiry, keeping the original key and UUID. No extra activation is consumed. Both frontends link to the website; completing its customer
 renewal selection UI is a server release dependency.
 
 ## Updater integrity and behavior
 
 **CLI:** existing TUF root/targets verification binds version, release timestamp and
 bundle hash. The hashed archive manifest repeats the timestamp and must agree. The
-client reports eligibility during discovery and blocks an unentitled/missing-date
-update before downloading or staging. Publisher metadata refresh preserves target
+client reports available updates without a license check and blocks updates with a
+missing or invalid signed date before downloading or staging. Publisher metadata refresh preserves target
 custom fields. New signed targets obtain the date from the release source commit.
 
 **Qt:** `packaging/sign_desktop_release.py` signs TUF Targets metadata as `release.json`
@@ -197,13 +198,12 @@ of **all** repository files, including `Updates.xml` and archives. The bundled T
 is also in the Qt resources. Deployment publishes payloads first, then Updates.xml,
 then the signed release manifest. A partial deployment fails verification safely.
 
-Discovery verifies signatures and metadata expiration, then shows the signed version,
-release date and eligibility/renewal message. Before installation, it refreshes both
-metadata and license, checks entitlement again, verifies every repository file into
-private local staging, and checks the XML version/date. It launches IFW with
+Discovery verifies signatures and metadata expiration, then offers the signed version
+for free installation. Before installation, it refreshes metadata, verifies every
+repository file into private local staging, and checks the XML version/date. It launches IFW with
 `--set-temp-repository file:///...`, which replaces the remote repositories for that
-fetch. This prevents a mutable remote feed from switching versions after entitlement
-was checked. Denial never runs pre-update cleanup or closes the current installation.
+fetch. This prevents a mutable remote feed from switching versions after verification.
+Failed verification never runs pre-update cleanup or closes the current installation.
 Unsigned legacy discovery can display availability but cannot enable automatic install.
 
 The Qt manifest currently expires after 30 days and must be republished/refreshed by
@@ -222,7 +222,7 @@ and native packaged installer behavior still need their platform release checks.
 Offline tests cover all 23 requested cases, plus activation response loss, sticky
 non-JSON denials, policy migration, same-key renewal, cache tampering, null commercial
 expiry, scoped account routes, TLS isolation, Qt feature gates, signed update metadata,
-artifact tampering and both updater denial paths. The fixed synthetic vector was
+artifact tampering and license-free updater paths. The fixed synthetic vector was
 signed independently with OpenSSL using a test-only seed and Keygen's exact format;
 other fixtures use deterministic synthetic Ed25519 keys. It is not represented as a
 production-issued credential. The existing local beta license also verified against

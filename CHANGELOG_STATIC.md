@@ -4,6 +4,10 @@ These notes cover the current 3.9 development tree and changes since 3.8, update
 
 The checkout remains a free sandbox simulation for this beta. These application changes do not enable real payments.
 
+### Free automatic updates
+
+- Automatic updates are free for everyone on desktop, Android, and CLI, without a license or licensing-server check. Signed metadata and artifact verification remain required. Premium-feature licensing remains unchanged.
+
 ### Supported websites and URL handling
 
 - Added RedTube, Thumbzilla and Tube8 video and profile integration.
@@ -147,7 +151,7 @@ The checkout remains a free sandbox simulation for this beta. These application 
 #### Android
 
 - Added a separate signed Android TUF feed with APK architecture, package, version, release timestamp and hash metadata.
-- Verify the downloaded APK, update entitlement and signing identity before handing it to Android's installer through a read-only content URI.
+- Verify the downloaded APK and signing identity before handing it to Android's installer through a read-only content URI.
 - Let Android request installation permission and final confirmation; updates are not installed silently.
 - Preserve the installed application if an update is cancelled or verification/download fails.
 - Android update and installation flows still require validation on real devices and built APKs.

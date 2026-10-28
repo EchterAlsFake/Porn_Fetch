@@ -19,7 +19,7 @@ from src.backend import clients
 from src.backend.helper_functions import get_original_executable_path
 from src.backend.shared_functions import configure_app_logging
 from src.shared.paths import shared_data_dir
-from src.shared.release import ROOT_FILE, update_eligibility, validate_ifw_packages, verify_repository_manifest
+from src.shared.release import ROOT_FILE, validate_ifw_packages, verify_repository_manifest
 from src.shared.service_transport import ServiceCore
 from src.shared.version import BUILD_VERSION as __version__
 
@@ -189,11 +189,9 @@ class AutoUpdater(QObject):
         self,
         parent: QObject | None = None,
         before_update: Callable[[], Awaitable[None]] | None = None,
-        license_status: Callable[[], Awaitable] | None = None,
     ) -> None:
         super().__init__(parent)
         self.before_update = before_update
-        self.license_status = license_status
         self._android_cancel = threading.Event()
 
     async def run(self) -> None:
@@ -211,13 +209,9 @@ class AutoUpdater(QObject):
     async def _run(self) -> None:
         from src.shared.android_updates import download_and_request_install, is_android_device
         if is_android_device():
-            if self.license_status is None:
-                self.statusReport.emit("Validate your license before updating.")
-                return
-            status = await self.license_status()
             self.statusReport.emit("Downloading and verifying the Android update…")
             self._android_cancel.clear()
-            await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__, status,
+            await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__,
                                     None, self._android_cancel)
             self.statusReport.emit("APK verified. Waiting for Android's installation confirmation…")
             return
@@ -230,17 +224,9 @@ class AutoUpdater(QObject):
             )
             return
 
-        if self.license_status is None:
-            self.statusReport.emit("Validate your production license before updating.")
-            return
         update = await CheckUpdates.check_signed_repository()
         if update is None:
             self.statusReport.emit("No update available.")
-            return
-        status = await self.license_status()
-        entitled, reason = update_eligibility(status, update["release_timestamp"])
-        self.statusReport.emit(reason)
-        if not entitled:
             return
         repository = await self._stage_repository(update)
 
