@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import platform
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -20,6 +23,32 @@ from src.shared.version import RELEASE_TIMESTAMP, __version__  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("qt_ifw_builder")
+
+
+def run_archive_tool(command: list[str], output: Path, compression: int, benchmark: bool) -> None:
+    """Compare IFW compression using identical staged inputs; retain the smallest result."""
+    if not benchmark:
+        subprocess.run([*command[:-1], "--compression", str(compression), command[-1]], check=True)
+        return
+    if output.exists():
+        raise FileExistsError(f"Benchmark output already exists: {output}")
+    with tempfile.TemporaryDirectory(prefix="ifw-compression-", dir=output.parent) as temporary:
+        results = []
+        for level in (5, 7, 9):
+            candidate = Path(temporary) / str(level) / output.name
+            candidate.parent.mkdir()
+            started = time.monotonic()
+            subprocess.run([*command[:-1], "--compression", str(level), str(candidate)], check=True)
+            size = (candidate.stat().st_size if candidate.is_file() else
+                    sum(path.stat().st_size for path in candidate.rglob("*")
+                        if path.is_file() and not path.is_symlink()))
+            results.append({"level": level, "bytes": size, "seconds": time.monotonic() - started})
+        winner = min(results, key=lambda result: (result["bytes"], result["level"]))
+        shutil.move(str(Path(temporary) / str(winner["level"]) / output.name), output)
+        output.with_name(output.name + ".compression.json").write_text(
+            json.dumps({"selected_level": winner["level"], "results": results}, indent=2) + "\n",
+            encoding="utf-8",
+        )
 
 
 def prepare_staging_directory(
@@ -205,6 +234,10 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Application version (default: {__version__})",
     )
 
+    parser.add_argument("--compression", type=int, choices=(0, 1, 3, 5, 7, 9), default=5)
+    parser.add_argument("--benchmark-compression", action="store_true",
+                        help="Compare IFW levels 5/7/9 and retain the smallest output (slower)")
+
     args = parser.parse_args(argv)
 
     raw_os = "windows" if args.platform in {"win32", "windows"} else "darwin" if args.platform in {"darwin", "macos"} else "linux"
@@ -241,7 +274,7 @@ def main(argv: list[str] | None = None) -> int:
         cmd_repo = [repogen, "-p", str(packages_dir), str(repo_out)]
         logger.info("Generating online repository: %s", " ".join(cmd_repo))
         try:
-            subprocess.run(cmd_repo, check=True)
+            run_archive_tool(cmd_repo, repo_out, args.compression, args.benchmark_compression)
             logger.info("Online repository successfully created at: %s", repo_out)
         except Exception as exc:
             logger.error("Failed to run repogen: %s", exc)
@@ -255,7 +288,7 @@ def main(argv: list[str] | None = None) -> int:
         cmd_inst = [binarycreator, "--hybrid", "-c", str(config_xml), "-p", str(packages_dir), str(inst_out)]
         logger.info("Generating hybrid installer: %s", " ".join(cmd_inst))
         try:
-            subprocess.run(cmd_inst, check=True)
+            run_archive_tool(cmd_inst, inst_out, args.compression, args.benchmark_compression)
             logger.info("Installer successfully created at: %s", inst_out)
         except Exception as exc:
             logger.error("Failed to run binarycreator: %s", exc)

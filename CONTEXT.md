@@ -106,7 +106,7 @@ public User-feed limitations.
 ## Repository support directories
 
 - `docs/`: user/developer docs, release history, and project history.
-- `packaging/`: PyInstaller and PySide/Nuitka build specifications.
+- `packaging/`: PyInstaller and PySide/Nuitka build specifications. Release payload inventories and optional IFW compression benchmarks are documented in `docs/RELEASE_SIZE.md`.
 - `scripts/`: install, maintenance, QtAsyncio, and macOS bundle scripts.
 - `.github/workflows/`: offline CI and platform build pipelines.
 - Android CI: `build_all.yml` builds all four ABIs using the existing patch/build

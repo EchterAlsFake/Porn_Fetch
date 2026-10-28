@@ -44,6 +44,10 @@ on:
           - beta
           - stable
         default: beta
+      benchmark_compression:
+        description: "Compare IFW compression levels 5/7/9 (slower)"
+        type: boolean
+        default: false
       experimental_builds:
         description: "Also build Linux 32-bit and RISC-V CLI artifacts"
         type: boolean
@@ -266,7 +270,7 @@ jobs:
             fi
             for EXECUTABLE in deploy_main.exe main.exe; do
               if [ -f "Porn Fetch.dist/$EXECUTABLE" ] && [ ! -f "Porn Fetch.dist/Porn Fetch.exe" ]; then
-                cp "Porn Fetch.dist/$EXECUTABLE" "Porn Fetch.dist/Porn Fetch.exe"
+                mv "Porn Fetch.dist/$EXECUTABLE" "Porn Fetch.dist/Porn Fetch.exe"
               fi
             done
             test -f "Porn Fetch.dist/Porn Fetch.exe"
@@ -274,7 +278,6 @@ jobs:
             cp third_party/ffmpeg.exe "Porn Fetch.dist/third_party/" || true
             cp -R third_party/ffmpeg-legal "Porn Fetch.dist/third_party/"
             cp third_party/pocketbase.exe "Porn Fetch.dist/third_party/" || true
-            cp third_party/pocketbase.exe "Porn Fetch.dist/" || true
             
             mkdir -p "Porn Fetch.dist/src/shared"
             cp -pR src/shared/tor "Porn Fetch.dist/src/shared/"
@@ -285,7 +288,7 @@ jobs:
             echo "APP_DIR=Porn Fetch.dist" >> "$GITHUB_ENV"
           elif [ "${{ matrix.platform }}" = "linux" ]; then
             if [ -f "Porn Fetch.dist/main.bin" ] && [ ! -f "Porn Fetch.dist/Porn Fetch" ]; then
-              cp "Porn Fetch.dist/main.bin" "Porn Fetch.dist/Porn Fetch"
+              mv "Porn Fetch.dist/main.bin" "Porn Fetch.dist/Porn Fetch"
               chmod +x "Porn Fetch.dist/Porn Fetch"
             fi
             test -x "Porn Fetch.dist/Porn Fetch"
@@ -295,8 +298,6 @@ jobs:
             chmod +x "Porn Fetch.dist/third_party/ffmpeg" || true
             cp third_party/pocketbase "Porn Fetch.dist/third_party/" || true
             chmod +x "Porn Fetch.dist/third_party/pocketbase" || true
-            cp third_party/pocketbase "Porn Fetch.dist/" || true
-            chmod +x "Porn Fetch.dist/pocketbase" || true
             
             mkdir -p "Porn Fetch.dist/src/shared"
             cp -pR src/shared/tor "Porn Fetch.dist/src/shared/"
@@ -316,9 +317,7 @@ jobs:
             fi
             if [ -f dist_pb/pocketbase ]; then
               cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/third_party/"
-              cp -p dist_pb/pocketbase "Porn Fetch.app/Contents/MacOS/"
               chmod +x "Porn Fetch.app/Contents/MacOS/third_party/pocketbase"
-              chmod +x "Porn Fetch.app/Contents/MacOS/pocketbase"
             fi
             echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> "$GITHUB_ENV"
           fi
@@ -361,6 +360,16 @@ jobs:
 
       - name: Collect legal notices
         run: uv run --no-sync python packaging/collect_legal.py PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_LEGAL
+
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: gui-${{ matrix.platform }}-${{ matrix.arch }}
+          paths: |
+            Porn Fetch.dist
+            Porn Fetch.app
+            ${{ env.DIST_ARCHIVE }}
+            ${{ env.DMG_OUTPUT }}
 
       - name: Upload Artifact
         uses: ./.github/actions/upload-artifact
@@ -421,7 +430,9 @@ jobs:
           REPO_TAG="${IFW_OS}_${IFW_ARCH}"
           INSTALLER="ifw_output/installers/PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_Setup${INSTALLER_EXT}"
           APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
-          uv run --no-sync python packaging/generate_repository.py \
+          COMPRESSION_ARGS=()
+          if [ "${{ inputs.benchmark_compression }}" = "true" ]; then COMPRESSION_ARGS+=(--benchmark-compression); fi
+          uv run --no-sync python packaging/generate_repository.py "${COMPRESSION_ARGS[@]}" \
             --dist-dir ifw_payload \
             --platform "$IFW_OS" --arch "$IFW_ARCH" \
             --pocketbase-binary "$POCKETBASE_BINARY" \
@@ -434,6 +445,15 @@ jobs:
           echo "IFW_INSTALLER=$INSTALLER" >> "$GITHUB_ENV"
           echo "### SHA256 Checksum ($(basename "$INSTALLER"))" >> "$GITHUB_STEP_SUMMARY"
           cat "$INSTALLER.sha256" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report installer sizes
+        if: matrix.arch == 'x64' || matrix.platform == 'macos'
+        uses: ./.github/actions/report-sizes
+        with:
+          name: ifw-${{ matrix.platform }}-${{ matrix.arch }}
+          paths: |
+            ifw_output/installers/*
+            ifw_output/repository/*
 
       - name: Upload IFW installer
         if: matrix.arch == 'x64' || matrix.platform == 'macos'
@@ -644,6 +664,13 @@ jobs:
           python packaging/collect_legal.py "android_release/PornFetch_android_GUI_${ANDROID_ABI}_LEGAL"
           for file in android_release/*.apk; do python scripts/write_checksum.py "$file"; done
 
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: android-${{ matrix.arch }}
+          paths: |
+            android_release/*.apk
+
       - name: Upload Android APK and notices
         uses: ./.github/actions/upload-artifact
         with:
@@ -778,6 +805,14 @@ jobs:
           echo "### SHA256 Checksum (${{ env.CLI_OUTPUT }})" >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`$(cat "${{ env.CLI_OUTPUT }}.sha256")\`\`\`" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: cli-${{ matrix.platform }}-${{ matrix.arch }}
+          paths: |
+            ${{ env.CLI_OUTPUT }}
+            pocketbase*
+
       - name: Upload Artifact
         uses: ./.github/actions/upload-artifact
         with:
@@ -819,6 +854,13 @@ jobs:
             --env BUILD_RELEASE_VERSION="${{ needs.release-metadata.outputs.version }}" \
             --env BUILD_RELEASE_TIMESTAMP="${{ needs.release-metadata.outputs.timestamp }}" \
             debian:bookworm bash packaging/build_linux_x86.sh
+
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: cli-linux-x32
+          paths: |
+            PornFetch_Linux_CLI_x32
 
       - name: Upload Artifact
         uses: ./.github/actions/upload-artifact
@@ -865,6 +907,13 @@ jobs:
             ./PornFetch_Linux_CLI_riscv64 --test-mode --filter offline
             uv run --no-sync python scripts/write_checksum.py PornFetch_Linux_CLI_riscv64
             uv run --no-sync python packaging/collect_legal.py PornFetch_Linux_CLI_riscv64_LEGAL
+
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: cli-linux-riscv64
+          paths: |
+            PornFetch_Linux_CLI_riscv64
 
       - name: Upload Artifact
         uses: ./.github/actions/upload-artifact
@@ -971,6 +1020,14 @@ jobs:
           uv run --no-sync python packaging/collect_legal.py PornFetch_macOS_GUI_Universal_LEGAL
           --ffmpeg-legal dmg_x64/third_party/ffmpeg-legal
           --ffmpeg-legal dmg_arm64/third_party/ffmpeg-legal
+
+      - name: Report release sizes
+        uses: ./.github/actions/report-sizes
+        with:
+          name: gui-macos-universal
+          paths: |
+            PornFetch_Universal.app
+            PornFetch_macOS_GUI_Universal.dmg
 
       - name: Upload Universal Artifact
         uses: ./.github/actions/upload-artifact

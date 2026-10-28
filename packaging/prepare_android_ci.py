@@ -18,6 +18,12 @@ def prepare(project: Path, venv: Path, version: str) -> None:
     app["source.dir"] = str(project)
     extensions = app.get("source.include_exts", "py,png,qml,js").split(",")
     app["source.include_exts"] = ",".join(dict.fromkeys([*extensions, "json", "txt"]))
+    # Keep runtime assets and notices, but never ship repository tooling/tests.
+    excluded = app.get("source.exclude_dirs", "").split(",")
+    app["source.exclude_dirs"] = ",".join(dict.fromkeys(filter(None, [
+        *excluded, "src/tests", "src/frontend/screenshots", "src/frontend/translations/ts",
+        "scripts", "packaging", "demos", "p4a-recipes",
+    ])))
     app["android.api"] = "36"
     app.pop("android.add_jars", None)
     buildozer["buildozer"]["bin_dir"] = str(project)

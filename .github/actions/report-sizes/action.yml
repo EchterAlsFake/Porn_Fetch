@@ -1,0 +1,30 @@
+name: Report release payload sizes
+description: Keep size inventories and compiler diagnostics separate from published downloads.
+inputs:
+  name:
+    required: true
+    description: Platform and artifact label
+  paths:
+    required: true
+    description: Newline separated payload paths or globs
+runs:
+  using: composite
+  steps:
+    - name: Inventory payloads
+      shell: bash
+      env:
+        SIZE_PATHS: ${{ inputs.paths }}
+        SIZE_LABEL: ${{ inputs.name }}
+      run: python packaging/report_sizes.py --paths "$SIZE_PATHS" --label "$SIZE_LABEL" --output "size-reports/$SIZE_LABEL.json"
+    - name: Preserve size and collection diagnostics
+      uses: ./.github/actions/upload-artifact
+      with:
+        name: size-diagnostics-${{ inputs.name }}
+        path: |
+          size-reports/${{ inputs.name }}.json
+          deployment/compilation-report.xml
+          build/Porn_Fetch_CLI/*.toc
+          build/Porn_Fetch_CLI/warn-*.txt
+          build/Porn_Fetch_CLI/xref-*.html
+          build/Porn_Fetch_CLI/payload-inventory.json
+          ifw_output/**/*.compression.json

@@ -86,6 +86,8 @@ def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> N
     config = configparser.ConfigParser()
     config.read(template, encoding="utf-8")
     arguments = shlex.split(config.get("nuitka", "extra_args"))
+    arguments.extend(["--nofollow-import-to=src.frontend.UI.resources",
+                      "--report=deployment/compilation-report.xml"])
     for module in excluded:
         relative = module.as_posix()
         arguments.extend([
