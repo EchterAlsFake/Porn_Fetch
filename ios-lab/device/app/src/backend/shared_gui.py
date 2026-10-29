@@ -1,0 +1,172 @@
+import os
+import sys
+from pathlib import Path
+from collections.abc import Callable
+
+os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Material")
+os.environ.setdefault("QT_QUICK_CONTROLS_MATERIAL_THEME", "Dark")
+
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlEngine, QQmlComponent
+from PySide6.QtCore import Signal, QObject, QCoreApplication, QUrl, QEventLoop
+
+_qml_engine = None
+_mobile_notice_handler: Callable[[str, str], None] | None = None
+
+
+def set_mobile_notice_handler(handler: Callable[[str, str], None] | None) -> None:
+    global _mobile_notice_handler
+    _mobile_notice_handler = handler
+
+
+def _get_qml_engine():
+    global _qml_engine
+    if _qml_engine is None:
+        _qml_engine = QQmlEngine()
+    return _qml_engine
+
+
+def _fallback_popup(text: str, title: str):
+    print(f"[{title}] {text}")
+
+from PySide6.QtGui import QGuiApplication
+
+
+def _show_qml_popup_impl(text: str, title: str):
+    app = QGuiApplication.instance()
+    if not app:
+        return
+
+    qml_file = Path(__file__).parent.parent / "frontend" / "UI" / "MessageBox.qml"
+    if not qml_file.exists():
+        _fallback_popup(text, title)
+        return
+
+    engine = _get_qml_engine()
+    component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml_file.resolve())))
+
+    if component.isError():
+        print(
+            f"[shared_gui] QML Error loading MessageBox.qml: {component.errors()}"
+        )
+        _fallback_popup(text, title)
+        return
+
+    obj = component.create()
+    if not obj:
+        _fallback_popup(text, title)
+        return
+
+    obj.setProperty("dialogTitle", str(title))
+    obj.setProperty("messageText", str(text))
+
+    # Get dimensions (default fallback if properties aren't set yet)
+    dw = obj.property("width") or 440
+    dh = obj.property("height") or 220
+
+    # 1. Use focusWindow() instead of activeWindow()
+    active_win = QGuiApplication.focusWindow()
+
+    if active_win and active_win.isVisible():
+        geo = active_win.geometry()
+        cx = geo.x() + (geo.width() - dw) // 2
+        cy = geo.y() + (geo.height() - dh) // 2
+        obj.setProperty("x", max(0, cx))
+        obj.setProperty("y", max(0, cy))
+    else:
+        screen = QGuiApplication.primaryScreen()
+        if screen:
+            geo = screen.geometry()
+            cx = geo.x() + (geo.width() - dw) // 2
+            cy = geo.y() + (geo.height() - dh) // 2
+            obj.setProperty("x", max(0, cx))
+            obj.setProperty("y", max(0, cy))
+
+    loop = QEventLoop()
+    obj.closed.connect(loop.quit)
+    obj.show()
+    obj.raise_()
+    obj.requestActivate()
+    loop.exec()
+    obj.deleteLater()
+
+
+def ui_popup(text, title="Notice"):
+    """A styled QML UI popup for small messages and notifications to the user."""
+    if text is None:
+        text = ""
+    else:
+        text = str(text)
+
+    if title is None or not isinstance(title, str):
+        title = "Notice"
+
+    if (sys.platform == "android" or hasattr(sys, "getandroidapilevel")) and _mobile_notice_handler is not None:
+        _mobile_notice_handler(title, text)
+        return
+
+    app = QGuiApplication.instance()
+    if not app:
+        print(f"[{title}] {text}")
+        return
+
+    _show_qml_popup_impl(text, title)
+
+
+def reset_pornfetch():
+    # TODO
+    ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
+
+
+def show_error(message):
+    ui_popup(text=message, title="Error")
+
+
+class Signals(QObject):
+    """Signals for the Download class"""
+    # Progress Signal
+    total_progress = Signal(int) # Sets the current value for the progressbar
+    total_progress_range = Signal(int) # Sets the maximum for the total progressbar
+    progress_add_to_tree_widget = Signal(int, int)  # Tracks the number of videos
+    # loaded and processed into the tree widget
+    progress_video_range = Signal(int, int)         # video_id, total
+    progress_video = Signal(int, int, int)          # video_id, pos, total
+    progress_remux = Signal(int, int, int)          # video_id, pos, total   <-- NEW
+    download_completed = Signal(int, dict)                # video_id
+
+    error_signal = Signal(object)
+    login_result = Signal(object)
+
+    # Animations
+    start_undefined_range = Signal()  # Starts the loading animation progressbar
+    stop_undefined_range = Signal()  # Stops the loading animation progressbar
+
+    # Operations / Reportings
+    install_finished = Signal(object)  # Reports if the Porn Fetch installation was finished
+    uninstall_finished = Signal(object)  # Reports if the Porn Fetch uninstallation was finished
+    internet_check = Signal(object)  # Reports if the internet checks were successful
+    update_check = Signal(bool, dict)
+    result = Signal(dict)  # Reports the result of the internet checks if something went wrong
+    clear_tree_widget_signal = Signal()  # A signal to clear the tree widget
+    text_data_to_tree_widget = Signal(int)  # Sends the text data in the form of a dictionary to the main class
+    progress_send_video = Signal(object,
+                                 object)  # Sends the selected video objects from the tree widget to the main class
+    tree_widget_finished = Signal()
+    # to download them
+    url_iterators = Signal(object, object)  # Sends the processed URLs from the file to Porn Fetch
+
+
+
+def on_checkbox_clicked(checked: bool):
+    if checked:
+        debug_mode_warning()
+
+
+def debug_mode_warning():
+    text = QCoreApplication.translate("main",
+"""
+Debug mode is only intended for developing with Porn Fetch or for very specific error traceback. It will print a lot of things,
+that are going on into your Terminal and will save VERY detailed log files that can contain sensitive information.
+
+If you are using only the GUI this will not affect your user experience, but may slow down your system.""")
+    ui_popup(text)

@@ -1,0 +1,20 @@
+Cloning into '/Users/asuna/ios-lab/device/qt-src/pyside-setup'...
+warning: refs/tags/v6.12.0 6aefae25747a8d860d201f3ab2b2e199b9e8e006 is not a commit!
+Note: switching to 'f50facb83fc3dc5f3240c854668c7a6dd93871b2'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Updating files:  30% (1430/4717)Updating files:  31% (1463/4717)Updating files:  32% (1510/4717)Updating files:  33% (1557/4717)Updating files:  34% (1604/4717)Updating files:  35% (1651/4717)Updating files:  36% (1699/4717)Updating files:  37% (1746/4717)Updating files:  38% (1793/4717)Updating files:  39% (1840/4717)Updating files:  40% (1887/4717)Updating files:  41% (1934/4717)Updating files:  42% (1982/4717)Updating files:  43% (2029/4717)Updating files:  44% (2076/4717)Updating files:  45% (2123/4717)Updating files:  46% (2170/4717)Updating files:  47% (2217/4717)Updating files:  48% (2265/4717)Updating files:  49% (2312/4717)Updating files:  50% (2359/4717)Updating files:  51% (2406/4717)Updating files:  52% (2453/4717)Updating files:  53% (2501/4717)Updating files:  54% (2548/4717)Updating files:  55% (2595/4717)Updating files:  56% (2642/4717)Updating files:  57% (2689/4717)Updating files:  58% (2736/4717)Updating files:  59% (2784/4717)Updating files:  60% (2831/4717)Updating files:  61% (2878/4717)Updating files:  62% (2925/4717)Updating files:  62% (2939/4717)Updating files:  63% (2972/4717)Updating files:  64% (3019/4717)Updating files:  65% (3067/4717)Updating files:  66% (3114/4717)Updating files:  67% (3161/4717)Updating files:  68% (3208/4717)Updating files:  69% (3255/4717)Updating files:  70% (3302/4717)Updating files:  71% (3350/4717)Updating files:  72% (3397/4717)Updating files:  73% (3444/4717)Updating files:  74% (3491/4717)Updating files:  75% (3538/4717)Updating files:  76% (3585/4717)Updating files:  77% (3633/4717)Updating files:  78% (3680/4717)Updating files:  79% (3727/4717)Updating files:  80% (3774/4717)Updating files:  81% (3821/4717)Updating files:  82% (3868/4717)Updating files:  83% (3916/4717)Updating files:  84% (3963/4717)Updating files:  85% (4010/4717)Updating files:  86% (4057/4717)Updating files:  87% (4104/4717)Updating files:  88% (4151/4717)Updating files:  89% (4199/4717)Updating files:  90% (4246/4717)Updating files:  91% (4293/4717)Updating files:  92% (4340/4717)Updating files:  93% (4387/4717)Updating files:  94% (4434/4717)Updating files:  95% (4482/4717)Updating files:  96% (4529/4717)Updating files:  97% (4576/4717)Updating files:  97% (4591/4717)Updating files:  98% (4623/4717)Updating files:  99% (4670/4717)Updating files: 100% (4717/4717)Updating files: 100% (4717/4717), done.

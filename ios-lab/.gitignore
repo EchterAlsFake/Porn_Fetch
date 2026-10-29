@@ -1,0 +1,15 @@
+# This branch intentionally tracks the small source/diagnostic view, including
+# selected files normally ignored by the parent project. Full build state is in
+# the associated draft release. Avoid accidental future credential/media adds.
+/ssh/
+**/id_ed25519*
+**/id_rsa*
+**/.env
+**/credentials.toml
+**/cookies.txt
+**/cookies.json
+**/.gnupg/
+**/.ssh/
+/build/phone-original.ts
+/build/phone-remuxed.mp4
+/build/pornfetch-screenshot.png

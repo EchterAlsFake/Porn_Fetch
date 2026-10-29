@@ -1,0 +1,19 @@
+Cloning into '/Users/asuna/ios-lab/device/qt-src/qtsvg'...
+warning: refs/tags/v6.12.0 0a753f450c4b4671cc97ef1c566512b9ab322382 is not a commit!
+Note: switching to '883a58532078d003cefef0a549bfe9f885ce41f5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+

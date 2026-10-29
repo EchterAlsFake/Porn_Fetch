@@ -1,0 +1,6 @@
+Collecting av
+  Downloading av-19.0.2-cp312-abi3-macosx_11_0_x86_64.whl.metadata (5.0 kB)
+Downloading av-19.0.2-cp312-abi3-macosx_11_0_x86_64.whl (22.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 22.6/22.6 MB 3.3 MB/s  0:00:07
+Installing collected packages: av
+Successfully installed av-19.0.2

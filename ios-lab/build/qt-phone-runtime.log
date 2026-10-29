@@ -1,0 +1,173 @@
+qt.qpa.plugin: init_platform called with pluginNamesWithArguments "ios" platformPluginPath "" platformThemeName ""
+qt.qpa.plugin: Attempting to load Qt platform plugin "ios" with arguments QList()
+qt.qpa.application: Application launched - moving from Qt::ApplicationActive to Qt::ApplicationSuspended
+qt.qpa.application: no platform integration yet, setting state directly
+qt.qpa.plugin: Successfully loaded Qt platform plugin "ios"
+qt.qpa.theme: Adding platform integration's theme names to list of theme names: QList("ios")
+qt.qpa.theme: Attempting to create platform theme "ios" via QPlatformThemeFactory::create
+qt.qpa.theme: Attempting to create platform theme "ios" via createPlatformTheme
+qt.qpa.theme: Successfully created platform theme "ios" via createPlatformTheme
+qt.qpa.input.devices: Registered QInputDevice(QPointingDevice("touchscreen" TouchScreen id=8589934592 ptrType=Finger caps=Position|Pressure maxPts=10)
+qt.qpa.input.devices: Registered QInputDevice(QPointingDevice("Apple Pencil" Stylus id=8589934593 ptrType=Pen caps=Position|Pressure|Hover|Rotation|XTilt|YTilt|ZPosition)
+qt.qpa.window.scene: Replacing application delegate <QIOSDynamicSceneDelegate: 0x2831d0820> with QIOSApplicationDelegate
+qt.qpa.fonts: Populating theme fonts...
+qt.qpa.fonts: Got unseen family ".AppleSystemUIFont" for QPlatformTheme::SystemFont
+qt.qpa.fonts: Enumerating font variants based on UICTFontDescriptor <0x2817d0f00> = {
+    NSCTFontTraitsAttribute =     {
+        NSCTFontUIFontDesignTrait = NSCTFontUIFontDesignDefault;
+    };
+} resulted in 29 matching descriptors (
+    "UICTFontDescriptor <0x2817d1da0> = {\n    NSFontNameAttribute = \".AppleSystemUIFont\";\n}",
+    "UICTFontDescriptor <0x2817d2c40> = {\n    NSFontNameAttribute = \".AppleSystemUIFontItalic\";\n}",
+    "UICTFontDescriptor <0x2817d23a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontUltraLight\";\n}",
+    "UICTFontDescriptor <0x2817d30c0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontUltraLightItalic\";\n}",
+    "UICTFontDescriptor <0x2817d20a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontThin\";\n}",
+    "UICTFontDescriptor <0x2817d2e80> = {\n    NSFontNameAttribute = \".AppleSystemUIFontThinItalic\";\n}",
+    "UICTFontDescriptor <0x2817d2220> = {\n    NSFontNameAttribute = \".AppleSystemUIFontLight\";\n}",
+    "UICTFontDescriptor <0x2817d2fa0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontLightItalic\";\n}",
+    "UICTFontDescriptor <0x2817d2520> = {\n    NSFontNameAttribute = \".AppleSystemUIFontMedium\";\n}",
+    "UICTFontDescriptor <0x2817d31e0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontMediumItalic\";\n}",
+    "UICTFontDescriptor <0x2817d1f20> = {\n    NSFontNameAttribute = \".AppleSystemUIFontEmphasized\";\n}",
+    "UICTFontDescriptor <0x2817d26a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontDemi\";\n}",
+    "UICTFontDescriptor <0x2817d2d60> = {\n    NSFontNameAttribute = \".AppleSystemUIFontEmphasizedItalic\";\n}",
+    "UICTFontDescriptor <0x2817d3300> = {\n    NSFontNameAttribute = \".AppleSystemUIFontDemiItalic\";\n}",
+    "UICTFontDescriptor <0x2817d2820> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBold\";\n}",
+    "UICTFontDescriptor <0x2817d3420> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBoldItalic\";\n}",
+    "UICTFontDescriptor <0x2817d29a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontHeavy\";\n}",
+    "UICTFontDescriptor <0x2817d3540> = {\n    NSFontNameAttribute = \".AppleSystemUIFontHeavyItalic\";\n}",
+    "UICTFontDescriptor <0x2817d2b20> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBlack\";\n}",
+    "UICTFontDescriptor <0x2817d3660> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBlackItalic\";\n}",
+    "UICTFontDescriptor <0x2817d3780> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Regular\";\n}",
+    "UICTFontDescriptor <0x2817d3c00> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-UltraLight\";\n}",
+    "UICTFontDescriptor <0x2817d39c0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Thin\";\n}",
+    "UICTFontDescriptor <0x2817d3ae0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Light\";\n}",
+    "UICTFontDescriptor <0x2817d3d20> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Medium\";\n}",
+    "UICTFontDescriptor <0x2817d3e40> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Semibold\";\n}",
+    "UICTFontDescriptor <0x2817d38a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Bold\";\n}",
+    "UICTFontDescriptor <0x2817d3f60> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Heavy\";\n}",
+    "UICTFontDescriptor <0x2817dc0c0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Black\";\n}"
+)
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuItemFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MessageBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::LabelFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TipLabelFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::StatusBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TitleBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MdiSubWindowTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::DockWidgetTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::PushButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::CheckBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::RadioButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ToolButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ItemViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ListViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::HeaderViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ListBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ComboMenuItemFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ComboLineEditFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::SmallFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MiniFont
+qt.qpa.fonts: Got unseen family "Menlo" for QPlatformTheme::FixedFont
+qt.qpa.fonts: Enumerating font variants based on UICTFontDescriptor <0x2817d54a0> = {
+    NSFontFamilyAttribute = Menlo;
+} resulted in 4 matching descriptors (
+    "UICTFontDescriptor <0x2817d5080> = {\n    NSFontNameAttribute = \"Menlo-Regular\";\n}",
+    "UICTFontDescriptor <0x2817d4f60> = {\n    NSFontNameAttribute = \"Menlo-Italic\";\n}",
+    "UICTFontDescriptor <0x2817d51a0> = {\n    NSFontNameAttribute = \"Menlo-Bold\";\n}",
+    "UICTFontDescriptor <0x2817d4c00> = {\n    NSFontNameAttribute = \"Menlo-BoldItalic\";\n}"
+)
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::GroupBoxTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TabButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::EditorFont
+qt.qpa.fonts: Populating theme fonts took 16 ms
+qt.qpa.backingstore: Check for forced use of QRhi resulted in enable false with api Null
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) new geometry is QRect(0,0 375x667)
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) new geometry is QRect(0,0 375x667)
+qt.widgets.painting: Marking QRect(0,0 375x667) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Sending update request to QLabel(0x16f2bbed8) with QWidgetRepaintManager::UpdateLater
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10240d700; scene = <FBSScene: 0x281ddc200; identifier: sceneID:local.asuna.QtPhoneHello-default>; persistentIdentifier = 1B9FAFC3-D979-4FE8-A314-C17920E98733; activationState = UISceneActivationStateUnattached; settingsScene = <UIWindowScene: 0x10240d700>; windows = (
+)> did update properties
+qt.qpa.window.scene: Connecting <UIWindowScene: 0x10240d700; scene = <FBSScene: 0x281ddc200; identifier: sceneID:local.asuna.QtPhoneHello-default>; persistentIdentifier = 1B9FAFC3-D979-4FE8-A314-C17920E98733; activationState = UISceneActivationStateUnattached; settingsScene = <UIWindowScene: 0x10240d700>; windows = (
+)> to <UISceneSession: 0x2826c22c0; scene = (null); role = UIWindowSceneSessionRoleApplication; sceneConfiguration = <UISceneConfiguration: 0x2826c2380>; persistentIdentifier = 1B9FAFC3-D979-4FE8-A314-C17920E98733; userInfo = <(null): 0x0>
+qt.qpa.window: View controller <QIOSViewController: 0x10240e6f0> moved from QObject(0x0) to QIOSScreen(0x2818d78e0)
+qt.qpa.application: ApplicationWillEnterForeground - moving from Qt::ApplicationSuspended to Qt::ApplicationInactive
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) QRegion(0,0 375x667) isExposed true
+qt.widgets.painting: Syncing QRegion(0,0 375x667) of QLabel(0x16f2bbed8)
+qt.widgets.painting: Marking QRegion(0,0 375x667) of top level QLabel(0x16f2bbed8) as needing flush
+qt.widgets.painting: Painting and flushing dirty top level QRegion(0,0 375x667) and dirty widgets QList()
+qt.widgets.painting: Drawing QRegion(0,0 375x667) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x283ddf3d0 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawRecursive|UseEffectRegionBounds)
+qt.qpa.fonts: Populating font database...
+qt.qpa.fonts: Populating available families took 2 ms
+qt.qpa.fonts: Populating system descriptors took 62 ms
+qt.qpa.fonts: Resolved font smoothing algorithm. Defaults = {
+    AppleFontSmoothing = "<null>";
+    CGFontRenderingFontSmoothingDisabled = "<null>";
+} Result = QCoreTextFontEngine::Disabled
+qt.widgets.painting: Marking QRegion(0,0 375x667) of top level QLabel(0x16f2bbed8) as needing flush
+qt.widgets.painting: Flushing top level QRegion(0,0 375x667) and children QList()
+qt.widgets.painting: Flushing QRegion(0,0 375x667) of QLabel(0x16f2bbed8) to QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") 
+qt.qpa.backingstore: Setting up RHI support in 0x283ddf3c0 for QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") with QSurface::MetalSurface and requested API QPlatformBackingStoreRhiConfig::Metal
+qt.rhi.general: Metal device: Apple A10 GPU
+qt.qpa.backingstore: Creating swapchain for window QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")
+qt.rhi.general: got CAMetalLayer, pixel size 375x667 (scale 1.00)
+qt.qpa.backingstore: Composing and flushing QRegion(0,0 375x667) of QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") at offset QPoint(0,0) with 0 texture(s) in QPlatformTextureList(0x101b14260) via swapchain 0x102408750
+qt.rhi.rub: [rub] new frame
+[rub] release to pool upd.batch # 0 / bufferOps active 5 of 5 data 240 largeAlloc 0 textureOps active 1 of 1
+qt.qpa.window: triggering root VC layout when coming out of suspended state
+qt.widgets.painting: Marking QRect(0,0 375x667) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Sending update request to QLabel(0x16f2bbed8) with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Marking QRect(0,0 375x667) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Marking QRect(16,16 343x635) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.qpa.application: done moving to Qt::ApplicationInactive
+qt.widgets.painting: Marking QRegion(0,0 375x667) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Syncing dirty widgets
+qt.widgets.painting: Painting and flushing dirty top level QRegion(null) and dirty widgets QList(QLabel(0x16f2bbed8))
+qt.widgets.painting: Drawing QRegion(0,0 375x667) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x283ddf3d0 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawRecursive|DontDrawOpaqueChildren)
+qt.widgets.painting: Marking QRegion(0,0 375x667) of top level QLabel(0x16f2bbed8) as needing flush
+qt.widgets.painting: Flushing top level QRegion(0,0 375x667) and children QList()
+qt.widgets.painting: Flushing QRegion(0,0 375x667) of QLabel(0x16f2bbed8) to QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") 
+qt.qpa.backingstore: Composing and flushing QRegion(0,0 375x667) of QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") at offset QPoint(0,0) with 0 texture(s) in QPlatformTextureList(0x101b14260) via swapchain 0x102408750
+qt.rhi.general: got CAMetalLayer, pixel size 750x1334 (scale 2.00)
+qt.rhi.rub: [rub] new frame
+[rub] release to pool upd.batch # 1 / bufferOps active 4 of 4 data 120 largeAlloc 0 textureOps active 1 of 1
+qt.widgets.painting: Marking QRect(0,0 375x667) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Sending update request to QLabel(0x16f2bbed8) with QWidgetRepaintManager::UpdateLater
+qt.widgets.painting: Marking QRect(16,16 343x635) of QLabel(0x16f2bbed8) dirty with QWidgetRepaintManager::UpdateLater
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) new geometry is QRect(0,20 375x647)
+qt.widgets.painting: Syncing dirty widgets
+qt.widgets.painting: Painting and flushing dirty top level QRegion(null) and dirty widgets QList(QLabel(0x16f2bbed8))
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x283ddf3d0 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawRecursive|UseEffectRegionBounds)
+qt.widgets.painting: Marking QRegion(0,0 375x647) of top level QLabel(0x16f2bbed8) as needing flush
+qt.widgets.painting: Flushing top level QRegion(0,0 375x647) and children QList()
+qt.widgets.painting: Flushing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) to QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") 
+qt.qpa.backingstore: Composing and flushing QRegion(0,0 375x647) of QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") at offset QPoint(0,0) with 0 texture(s) in QPlatformTextureList(0x101b14260) via swapchain 0x102408750
+qt.rhi.general: got CAMetalLayer, pixel size 750x1294 (scale 2.00)
+qt.rhi.rub: [rub] new frame
+[rub] release to pool upd.batch # 2 / bufferOps active 4 of 4 data 120 largeAlloc 0 textureOps active 1 of 1
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) new geometry is QRect(0,20 375x647)
+qt.qpa.window: QIOSWindow(0x2826c1ac0, window=QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow")) QRegion(0,0 375x647) isExposed true
+qt.widgets.painting: Syncing QRegion(0,0 375x647) of QLabel(0x16f2bbed8)
+qt.widgets.painting: Flushing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) to QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") 
+qt.qpa.backingstore: Composing and flushing QRegion(0,0 375x647) of QWidgetWindow(0x2817d5bc0, name="QLabelClassWindow") at offset QPoint(0,0) with 0 texture(s) in QPlatformTextureList(0x101b14260) via swapchain 0x102408750
+qt.rhi.rub: [rub] new frame
+[rub] release to pool upd.batch # 3 / bufferOps active 4 of 4 data 120 largeAlloc 0 textureOps active 1 of 1
+qt.widgets.painting: Syncing dirty widgets
+qt.widgets.painting: Painting and flushing dirty top level QRegion(null) and dirty widgets QList()
+qt.widgets.painting: Flushing top level QRegion(null) and children QList()
+qt.qpa.application: ApplicationDidBecomeActive - moving from Qt::ApplicationInactive to Qt::ApplicationActive
+qt.qpa.application: Attempting update request delivery after becoming active
+qt.qpa.application: done moving to Qt::ApplicationActive
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)
+qt.widgets.painting: Drawing QRegion(0,0 375x647) of QLabel(0x16f2bbed8) at QPoint(0,0) into paint device 0x16f234d80 with QFlags<QWidgetPrivate::DrawWidgetFlag>(DrawAsRoot|DrawPaintOnScreen|DrawRecursive|DrawInvisible|DontSetCompositionMode)

@@ -1,0 +1,32 @@
+--- a/base_api/modules/ffmpeg.py
++++ b/base_api/modules/ffmpeg.py
+@@ -50,6 +50,9 @@
+     extra_roots: tuple[Path, ...] = (),
+ ) -> Path | None:
+     """Discover an explicit, bundled, or system FFmpeg executable."""
++    if sys.platform == "ios":
++        from ios_ffmpeg import library_path
++        return library_path()
+     binary_name = "ffmpeg.exe" if sys.platform == "win32" else "ffmpeg"
+ 
+     # 1. Explicit argument, runtime config, or environment variable override
+@@ -218,6 +221,9 @@
+     When *metadata* or *thumbnail* is supplied, tags and attached cover art are
+     written in the same single FFmpeg pass to avoid a second full-file rewrite.
+     """
++    if sys.platform == "ios":
++        from ios_ffmpeg import remux_ts_to_mp4 as native_remux
++        return native_remux(input_path, output_path, metadata=metadata, thumbnail=thumbnail)
+     ffmpeg = find_ffmpeg(ffmpeg_bin, extra_roots=extra_roots)
+     if not ffmpeg:
+         raise FileNotFoundError("FFmpeg executable not found. Install FFmpeg or bundle it in third_party/.")
+@@ -285,6 +291,9 @@
+     extra_roots: tuple[Path, ...] = (),
+ ) -> bool:
+     """Write tags and optional cover thumbnail into an existing MP4 file using FFmpeg."""
++    if sys.platform == "ios":
++        from ios_ffmpeg import write_metadata_tags as native_tags
++        return native_tags(path, data, thumbnail=thumbnail)
+     ffmpeg = find_ffmpeg(ffmpeg_bin, extra_roots=extra_roots)
+     if not ffmpeg:
+         logger.warning("FFmpeg not found; skipping MP4 metadata tagging.")

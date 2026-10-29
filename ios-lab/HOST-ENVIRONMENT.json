@@ -1,0 +1,30 @@
+{
+  "macos": {
+    "exit_code": 0,
+    "output": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.2\nBuildVersion:\t\t24G325"
+  },
+  "host": {
+    "exit_code": 0,
+    "output": "x86_64 i386"
+  },
+  "xcode": {
+    "exit_code": 0,
+    "output": "Xcode 26.3\nBuild version 17C519"
+  },
+  "homebrew": {
+    "exit_code": 0,
+    "output": "autoconf 2.73\nautomake 1.19\nbrotli 1.2.0\nca-certificates 2026-09-25 2026-10-20\ncmake 4.4.4\ncurl 8.22.0_1\ngettext 1.0\ngh 2.103.3\ngit 2.56.0_1\ngmp 6.3.0\ngnupg 2.5.24_1\ngnutls 3.8.13_2\ngo 1.27.3\njson-c 0.19\nlibassuan 3.0.2\nlibgcrypt 1.12.4\nlibgpg-error 1.61\nlibidn2 2.3.8\nlibksba 1.8.1\nlibnghttp2 1.70.0\nlibnghttp3 1.18.0\nlibngtcp2 1.25.0_1\nlibplist 2.8.0\nlibpsl 0.23.3\nlibssh2 1.11.1_7\nlibtasn1 4.21.0\nlibtool 2.6.2\nlibunistring 1.5 1.4.2\nlibusb 1.0.30\nlz4 1.10.0\nm4 1.4.21\nmeson 1.12.1\nmpdecimal 4.0.1\nnettle 4.0\nninja 1.13.2\nnpth 1.8\nopenssl@4 4.1.0 4.0.3\np11-kit 0.26.5\npcre2 10.49\npinentry 1.3.3\npinentry-mac 1.3.1.1\npkgconf 3.0.8 3.0.10\npython@3.15 3.15.2\nreadline 8.3.6\nsqlite 3.54.1\nwget 1.25.0_2\nxz 5.8.4\nzstd 1.5.7_1\ngithub 3.6.10-ffeefe5d"
+  },
+  "lab_python_packages": {
+    "exit_code": 0,
+    "output": "av==19.0.2\ncertifi==2026.10.23\ncffi==2.1.1\nmaturin==1.15.0\nninja==1.13.2\npycparser==3.12\nPySide6==6.12.0\nPySide6_Essentials==6.12.0\nqtpip==0.2.0\nsetuptools==84.2.1\nshiboken6==6.12.0\nshiboken6_generator @ file:///Users/asuna/ios-lab/device/artifacts/shiboken6_generator-6.12.0-cp310-abi3-macosx_14_0_universal2.whl#sha256=d93fb47e8f071855f9b92edea24c331d88461c5b94c0ef656eb5efe157bf0abf\ntqdm==4.70.1"
+  },
+  "build_python_packages": {
+    "exit_code": 0,
+    "output": "build==1.2.2.post1\ncertifi==2026.10.23\nJinja2==3.1.6\nMarkupSafe==3.0.4\npackaging==24.2\npyproject_hooks==1.3.3\nsetuptools==78.1.0\nwheel==0.46.3"
+  },
+  "host_python": {
+    "exit_code": 0,
+    "output": "Python 3.13.16"
+  }
+}

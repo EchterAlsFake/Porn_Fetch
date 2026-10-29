@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>graphics/settings/video.svg</file>
+        <file>graphics/settings/gauge.svg</file>
+        <file>graphics/settings/settings.svg</file>
+        <file>graphics/settings/shield.svg</file>
+        <file>graphics/settings/palette.svg</file>
+        <file>graphics/settings/trash.svg</file>
+        <file>graphics/download.svg</file>
+        <file>graphics/download.png</file>
+        <file>graphics/information.svg</file>
+        <file>graphics/information.png</file>
+        <file>graphics/settings.svg</file>
+        <file>graphics/settings.png</file>
+        <file>graphics/logo_transparent.png</file>
+        <file>graphics/account.svg</file>
+        <file>graphics/account.png</file>
+        <file>graphics/database.svg</file>
+        <file>graphics/database.png</file>
+        <file>graphics/logo.png</file>
+        <file>graphics/lock.png</file>
+    </qresource>
+    <qresource prefix="/credits">
+        <file>../../docs/CREDITS.md</file>
+    </qresource>
+    <qresource prefix="/legal">
+        <file alias="LICENSE">../../LICENSE</file>
+        <file alias="THIRD_PARTY_NOTICES.md">../../THIRD_PARTY_NOTICES.md</file>
+        <file alias="Lucide.txt">../../LICENSES/Lucide.txt</file>
+        <file alias="Provider-permission.txt">../../LICENSES/Provider-permission.txt</file>
+    </qresource>
+    <qresource prefix="/updates">
+        <file alias="root.json">../cli/update_root.json</file>
+    </qresource>
+    <qresource prefix="/licensing">
+        <file alias="production.json">../licensing/production.json</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file>translations/qm/de_DE.qm</file>
+        <file>translations/qm/zh_CN.qm</file>
+        <file>translations/qm/fr.qm</file>
+        <file>translations/qm/it.qm</file>
+    </qresource>
+</RCC>

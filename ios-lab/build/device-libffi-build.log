@@ -1,0 +1,255 @@
+checking build system type... x86_64-apple-darwin24.6.0
+checking host system type... aarch64-apple-darwin
+checking target system type... aarch64-apple-darwin
+checking for gsed... sed
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for aarch64-apple-darwin-strip... no
+checking for strip... strip
+checking for a race-free mkdir -p... /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/install-sh -c -d
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for aarch64-apple-darwin-gcc... /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang accepts -g... yes
+checking for /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang option to enable C11 features... none needed
+checking whether /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... gcc3
+checking for aarch64-apple-darwin-g++... no
+checking for aarch64-apple-darwin-c++... no
+checking for aarch64-apple-darwin-gpp... no
+checking for aarch64-apple-darwin-aCC... no
+checking for aarch64-apple-darwin-CC... no
+checking for aarch64-apple-darwin-cxx... no
+checking for aarch64-apple-darwin-cc++... no
+checking for aarch64-apple-darwin-cl.exe... no
+checking for aarch64-apple-darwin-FCC... no
+checking for aarch64-apple-darwin-KCC... no
+checking for aarch64-apple-darwin-RCC... no
+checking for aarch64-apple-darwin-xlC_r... no
+checking for aarch64-apple-darwin-xlC... no
+checking for aarch64-apple-darwin-clang++... no
+checking for g++... g++
+configure: WARNING: using cross tools not prefixed with host triplet
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... gcc3
+checking dependency style of /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... gcc3
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking for BSD- or MS-compatible name lister (nm)... no
+checking for aarch64-apple-darwin-dumpbin... no
+checking for aarch64-apple-darwin-link... no
+checking for dumpbin... no
+checking for link... link -dump
+checking the name lister (nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 786432
+checking how to convert x86_64-apple-darwin24.6.0 file names to aarch64-apple-darwin format... func_convert_file_noop
+checking how to convert x86_64-apple-darwin24.6.0 file names to toolchain format... func_convert_file_noop
+checking for /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld option to reload object files... -r
+checking for aarch64-apple-darwin-file... no
+checking for file... file
+checking for aarch64-apple-darwin-objdump... no
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-apple-darwin-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-apple-darwin-ar... no
+checking for ar... ar
+checking for archiver @FILE support... no
+checking for aarch64-apple-darwin-strip... strip
+checking for aarch64-apple-darwin-ranlib... no
+checking for ranlib... ranlib
+checking command to parse nm output from /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for aarch64-apple-darwin-mt... no
+checking for mt... no
+checking if : is a manifest tool... no
+checking for aarch64-apple-darwin-dsymutil... no
+checking for dsymutil... dsymutil
+checking for aarch64-apple-darwin-nmedit... no
+checking for nmedit... nmedit
+checking for aarch64-apple-darwin-lipo... no
+checking for lipo... lipo
+checking for aarch64-apple-darwin-otool... no
+checking for otool... otool
+checking for aarch64-apple-darwin-otool64... no
+checking for otool64... no
+checking for -single_module linker flag... ld: warning: -single_module is obsolete
+no
+checking for -exported_symbols_list linker flag... yes
+checking for -force_load linker flag... yes
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -fno-rtti -fno-exceptions... yes
+checking for /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang option to produce PIC... -fno-common -DPIC
+checking if /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang PIC flag -fno-common -DPIC works... yes
+checking if /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang static flag -static works... no
+checking if /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -c -o file.o... yes
+checking if /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -c -o file.o... (cached) yes
+checking whether the /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang linker (/Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin dyld
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking whether the g++ linker (/Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking for g++ option to produce PIC... -fno-common -DPIC
+checking if g++ PIC flag -fno-common -DPIC works... yes
+checking if g++ static flag -static works... no
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin dyld
+checking how to hardcode library paths into programs... immediate
+checking for aarch64-apple-darwin-readelf... no
+checking for aarch64-apple-darwin-greadelf... no
+checking for readelf... no
+checking for greadelf... no
+checking size of size_t... 8
+checking for C compiler vendor... clang
+checking CFLAGS for most reasonable warnings... -Wall
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for sys/memfd.h... no
+checking for memfd_create... no
+checking for memcpy... yes
+checking for alloca.h... yes
+checking size of double... 8
+checking size of long double... 8
+checking for __int128_t... yes
+checking whether byte ordering is bigendian... no
+checking assembler .cfi pseudo-op support... yes
+checking whether compiler supports pointer authentication... no
+checking for _ prefix in compiled symbols... yes
+checking whether the C compiler accepts -fno-lto... yes
+checking whether .eh_frame section should be read-only... yes
+checking for __attribute__((visibility("hidden")))... yes
+configure: versioning on shared library symbols is no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating include/Makefile
+config.status: creating include/ffi.h
+config.status: creating Makefile
+config.status: creating testsuite/Makefile
+config.status: creating man/Makefile
+config.status: creating doc/Makefile
+config.status: creating libffi.pc
+config.status: creating fficonfig.h
+config.status: executing buildir commands
+config.status: skipping top_srcdir/Makefile - not created
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing include commands
+config.status: executing src commands
+/Users/asuna/Downloads/Xcode.app/Contents/Developer/usr/bin/make  all-recursive
+Making all in include
+make[2]: Nothing to be done for `all'.
+Making all in testsuite
+make[2]: Nothing to be done for `all'.
+Making all in man
+make[2]: Nothing to be done for `all'.
+depbase=`echo src/prep_cif.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/prep_cif.lo -MD -MP -MF $depbase.Tpo -c -o src/prep_cif.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/prep_cif.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo src/types.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/types.lo -MD -MP -MF $depbase.Tpo -c -o src/types.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/types.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/types.lo -MD -MP -MF src/.deps/types.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/types.c -o src/types.o
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/prep_cif.lo -MD -MP -MF src/.deps/prep_cif.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/prep_cif.c -o src/prep_cif.o
+depbase=`echo src/raw_api.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/raw_api.lo -MD -MP -MF $depbase.Tpo -c -o src/raw_api.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/raw_api.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo src/java_raw_api.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/java_raw_api.lo -MD -MP -MF $depbase.Tpo -c -o src/java_raw_api.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/java_raw_api.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/raw_api.lo -MD -MP -MF src/.deps/raw_api.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/raw_api.c -o src/raw_api.o
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/java_raw_api.lo -MD -MP -MF src/.deps/java_raw_api.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/java_raw_api.c -o src/java_raw_api.o
+/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/java_raw_api.c:329:46: warning: 'ffi_java_raw_size' is deprecated [-Wdeprecated-declarations]
+  329 |   ffi_java_raw *raw = (ffi_java_raw*)alloca (ffi_java_raw_size (cif));
+      |                                              ^
+include/ffi.h:323:56: note: 'ffi_java_raw_size' has been explicitly marked deprecated here
+  323 | size_t ffi_java_raw_size (ffi_cif *cif) __attribute__((deprecated));
+      |                                                        ^
+/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/java_raw_api.c:332:3: warning: 'ffi_java_ptrarray_to_raw' is deprecated [-Wdeprecated-declarations]
+  332 |   ffi_java_ptrarray_to_raw (cif, avalue, raw);
+      |   ^
+include/ffi.h:319:93: note: 'ffi_java_ptrarray_to_raw' has been explicitly marked deprecated here
+  319 | void ffi_java_ptrarray_to_raw (ffi_cif *cif, void **args, ffi_java_raw *raw) __attribute__((deprecated));
+      |                                                                                             ^
+depbase=`echo src/closures.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/closures.lo -MD -MP -MF $depbase.Tpo -c -o src/closures.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/closures.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+2 warnings generated.
+depbase=`echo src/tramp.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/tramp.lo -MD -MP -MF $depbase.Tpo -c -o src/tramp.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/tramp.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/closures.lo -MD -MP -MF src/.deps/closures.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/closures.c -o src/closures.o
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/tramp.lo -MD -MP -MF src/.deps/tramp.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/tramp.c -o src/tramp.o
+depbase=`echo src/aarch64/ffi.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src   -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/aarch64/ffi.lo -MD -MP -MF $depbase.Tpo -c -o src/aarch64/ffi.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/aarch64/ffi.c &&\
+	mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo src/aarch64/sysv.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+	/bin/sh ./libtool  --tag=CC   --mode=compile /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0  -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src  '-I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src' -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -MT src/aarch64/sysv.lo -MD -MP -MF $depbase.Tpo -c -o src/aarch64/sysv.lo /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/aarch64/sysv.S &&\
+	mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -MT src/aarch64/ffi.lo -MD -MP -MF src/aarch64/.deps/ffi.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/aarch64/ffi.c -o src/aarch64/ffi.o
+libtool: compile:  /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DHAVE_CONFIG_H -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0 -I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src "-I. -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/include -Iinclude -I/Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src" -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -MT src/aarch64/sysv.lo -MD -MP -MF src/aarch64/.deps/sysv.Tpo -c /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/src/aarch64/sysv.S -o src/aarch64/sysv.o
+/bin/sh ./libtool  --tag=CC   --mode=link /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang  -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions  -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -o libffi_convenience.la  src/prep_cif.lo src/types.lo src/raw_api.lo src/java_raw_api.lo src/closures.lo src/tramp.lo   src/aarch64/ffi.lo src/aarch64/sysv.lo 
+/bin/sh ./libtool  --tag=CC   --mode=link /Users/asuna/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang  -Wall -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -O2 -fPIC -fexceptions -no-undefined -version-info `grep -v '^#' /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/libtool-version`   '-target' 'arm64-apple-ios15.0' '-isysroot' '/Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'  -target arm64-apple-ios15.0 -isysroot /Users/asuna/Downloads/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk -o libffi.la -rpath /Users/asuna/ios-lab/device/native/libffi-ios/lib src/prep_cif.lo src/types.lo src/raw_api.lo src/java_raw_api.lo src/closures.lo src/tramp.lo  src/aarch64/ffi.lo src/aarch64/sysv.lo 
+libtool: link: ar cr .libs/libffi_convenience.a  src/prep_cif.o src/types.o src/raw_api.o src/java_raw_api.o src/closures.o src/tramp.o src/aarch64/ffi.o src/aarch64/sysv.o
+libtool: link: ar cr .libs/libffi.a  src/prep_cif.o src/types.o src/raw_api.o src/java_raw_api.o src/closures.o src/tramp.o src/aarch64/ffi.o src/aarch64/sysv.o
+libtool: link: ranlib .libs/libffi_convenience.a
+libtool: link: ranlib .libs/libffi.a
+libtool: link: ( cd ".libs" && rm -f "libffi_convenience.la" && ln -s "../libffi_convenience.la" "libffi_convenience.la" )
+libtool: link: ( cd ".libs" && rm -f "libffi.la" && ln -s "../libffi.la" "libffi.la" )
+Making install in include
+make[2]: Nothing to be done for `install-exec-am'.
+ /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/install-sh -c -d '/Users/asuna/ios-lab/device/native/libffi-ios/include'
+ /usr/bin/install -c -m 644 ffi.h ffitarget.h '/Users/asuna/ios-lab/device/native/libffi-ios/include'
+Making install in testsuite
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in man
+make[2]: Nothing to be done for `install-exec-am'.
+ /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/install-sh -c -d '/Users/asuna/ios-lab/device/native/libffi-ios/share/man/man3'
+ /usr/bin/install -c -m 644 /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/man/ffi.3 /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/man/ffi_call.3 /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/man/ffi_prep_cif.3 /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/man/ffi_prep_cif_var.3 '/Users/asuna/ios-lab/device/native/libffi-ios/share/man/man3'
+ /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/install-sh -c -d '/Users/asuna/ios-lab/device/native/libffi-ios/lib'
+ /bin/sh ./libtool   --mode=install /usr/bin/install -c   libffi.la '/Users/asuna/ios-lab/device/native/libffi-ios/lib'
+libtool: install: /usr/bin/install -c .libs/libffi.lai /Users/asuna/ios-lab/device/native/libffi-ios/lib/libffi.la
+libtool: install: /usr/bin/install -c .libs/libffi.a /Users/asuna/ios-lab/device/native/libffi-ios/lib/libffi.a
+libtool: install: chmod 644 /Users/asuna/ios-lab/device/native/libffi-ios/lib/libffi.a
+libtool: install: ranlib /Users/asuna/ios-lab/device/native/libffi-ios/lib/libffi.a
+ /Users/asuna/ios-lab/device/../pornfetch/native/libffi-3.8.0/install-sh -c -d '/Users/asuna/ios-lab/device/native/libffi-ios/lib/pkgconfig'
+ /usr/bin/install -c -m 644 libffi.pc '/Users/asuna/ios-lab/device/native/libffi-ios/lib/pkgconfig'

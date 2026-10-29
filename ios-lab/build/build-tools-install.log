@@ -1,0 +1,17 @@
+Collecting cffi==2.1.1
+  Downloading cffi-2.1.1-cp313-cp313-macosx_10_15_x86_64.whl.metadata (2.5 kB)
+Collecting setuptools
+  Downloading setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting maturin
+  Downloading maturin-1.15.0-py3-none-macosx_10_12_x86_64.whl.metadata (17 kB)
+Collecting pycparser (from cffi==2.1.1)
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Downloading cffi-2.1.1-cp313-cp313-macosx_10_15_x86_64.whl (184 kB)
+Downloading setuptools-84.2.1-py3-none-any.whl (876 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 876.3/876.3 kB 1.2 MB/s  0:00:00
+Downloading maturin-1.15.0-py3-none-macosx_10_12_x86_64.whl (10.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.0/10.0 MB 1.9 MB/s  0:00:05
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+Installing collected packages: setuptools, pycparser, maturin, cffi
+
+Successfully installed cffi-2.1.1 maturin-1.15.0 pycparser-3.12 setuptools-84.2.1

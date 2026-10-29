@@ -1,0 +1,307 @@
+diff --git a/src/corelib/CMakeLists.txt b/src/corelib/CMakeLists.txt
+index 7a1a3359..9c0ef755 100644
+--- a/src/corelib/CMakeLists.txt
++++ b/src/corelib/CMakeLists.txt
+@@ -868,6 +868,12 @@ qt_internal_extend_target(Core CONDITION APPLE AND QT_FEATURE_thread
+         thread/qfutex_mac_p.h
+ )
+ 
++if(IOS AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "17.4")
++    qt_internal_extend_target(Core CONDITION QT_FEATURE_thread
++        SOURCES thread/qmutex_mac.cpp
++    )
++endif()
++
+ qt_internal_extend_target(Core CONDITION QT_FEATURE_thread AND UNIX AND NOT APPLE AND NOT LINUX
+     SOURCES
+         thread/qmutex_unix.cpp
+@@ -1633,6 +1639,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_ctf
+ # This file is included by qmutex.cpp
+ set_source_files_properties(
+     thread/qmutex_unix.cpp
++    thread/qmutex_mac.cpp
+     PROPERTIES HEADER_FILE_ONLY ON)
+ 
+ # Remove QT_NO_CAST_TO_ASCII to ensure that the symbols are included in the library.
+diff --git a/src/corelib/platform/darwin/qdarwinpermissionplugin_calendar.mm b/src/corelib/platform/darwin/qdarwinpermissionplugin_calendar.mm
+index db0231d8..676ee14e 100644
+--- a/src/corelib/platform/darwin/qdarwinpermissionplugin_calendar.mm
++++ b/src/corelib/platform/darwin/qdarwinpermissionplugin_calendar.mm
+@@ -57,10 +57,15 @@
+         callback([self checkPermission:permission]);
+     };
+ 
+-    if (accessMode == QCalendarPermission::WriteOnly)
+-        [self.eventStore requestWriteOnlyAccessToEventsWithCompletion:completionHandler];
+-    else
+-        [self.eventStore requestFullAccessToEventsWithCompletion:completionHandler];
++    if (@available(iOS 17.0, macOS 14.0, *)) {
++        if (accessMode == QCalendarPermission::WriteOnly)
++            [self.eventStore requestWriteOnlyAccessToEventsWithCompletion:completionHandler];
++        else
++            [self.eventStore requestFullAccessToEventsWithCompletion:completionHandler];
++    } else {
++        // Earlier systems have a single calendar permission level.
++        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:completionHandler];
++    }
+ }
+ 
+ @end
+diff --git a/src/corelib/thread/qfutex_p.h b/src/corelib/thread/qfutex_p.h
+index b193811d..bf32f2c9 100644
+--- a/src/corelib/thread/qfutex_p.h
++++ b/src/corelib/thread/qfutex_p.h
+@@ -34,7 +34,12 @@ namespace QtDummyFutex {
+ 
+ QT_END_NAMESPACE
+ 
+-#if defined(Q_OS_DARWIN)
++#if defined(Q_OS_IOS) && __IPHONE_OS_VERSION_MIN_REQUIRED < 170400
++// iOS 15 compatibility: use Qt's semaphore-backed mutex implementation.
++QT_BEGIN_NAMESPACE
++namespace QtFutex = QtDummyFutex;
++QT_END_NAMESPACE
++#elif defined(Q_OS_DARWIN)
+ #  include "qfutex_mac_p.h"
+ #elif defined(Q_OS_FREEBSD)
+ #  include "qfutex_freebsd_p.h"
+diff --git a/src/corelib/thread/qmutex.cpp b/src/corelib/thread/qmutex.cpp
+index 5f920224..85532884 100644
+--- a/src/corelib/thread/qmutex.cpp
++++ b/src/corelib/thread/qmutex.cpp
+@@ -950,6 +950,8 @@ QT_END_NAMESPACE
+ 
+ #if defined(QT_ALWAYS_USE_FUTEX)
+ // nothing
++#elif defined(Q_OS_DARWIN)
++#  include "qmutex_mac.cpp"
+ #else
+ #  include "qmutex_unix.cpp"
+ #endif
+diff --git a/src/corelib/thread/qmutex.h b/src/corelib/thread/qmutex.h
+index f76cc48e..822bb3b0 100644
+--- a/src/corelib/thread/qmutex.h
++++ b/src/corelib/thread/qmutex.h
+@@ -25,7 +25,8 @@ class QT6_ONLY(Q_CORE_EXPORT) QBasicMutex
+     Q_DISABLE_COPY_MOVE(QBasicMutex)
+ protected:
+     static constexpr bool FutexAlwaysAvailable =
+-#if defined(Q_OS_FREEBSD) || defined(Q_OS_LINUX) || defined(Q_OS_WIN) || defined(Q_OS_APPLE) // these platforms use futex
++#if defined(Q_OS_FREEBSD) || defined(Q_OS_LINUX) || defined(Q_OS_WIN) \
++    || (defined(Q_OS_APPLE) && (!defined(Q_OS_IOS) || __IPHONE_OS_VERSION_MIN_REQUIRED >= 170400))
+             true
+ #else
+             false
+diff --git a/src/corelib/thread/qmutex_p.h b/src/corelib/thread/qmutex_p.h
+index de04ba68..e3561953 100644
+--- a/src/corelib/thread/qmutex_p.h
++++ b/src/corelib/thread/qmutex_p.h
+@@ -26,7 +26,9 @@
+ 
+ #include "qplatformdefs.h" // _POSIX_VERSION
+ 
+-#if defined(Q_OS_UNIX)
++#if defined(Q_OS_DARWIN)
++#  include <mach/semaphore.h>
++#elif defined(Q_OS_UNIX)
+ #  include <semaphore.h>
+ #endif
+ 
+@@ -82,7 +84,9 @@ public:
+     void derefWaiters(int value) noexcept;
+ 
+     //platform specific stuff
+-#if defined(Q_OS_UNIX)
++#if defined(Q_OS_DARWIN)
++    semaphore_t mach_semaphore;
++#elif defined(Q_OS_UNIX)
+     sem_t semaphore;
+ #endif
+ };
+diff --git a/src/gui/rhi/qrhimetal.mm b/src/gui/rhi/qrhimetal.mm
+index f9ba46f0..f5d54a02 100644
+--- a/src/gui/rhi/qrhimetal.mm
++++ b/src/gui/rhi/qrhimetal.mm
+@@ -675,9 +675,13 @@ bool QRhiMetal::create(QRhi::Flags flags)
+             caps.supportedSampleCounts.append(sampleCount);
+     }
+ 
+-    caps.indirectCommandBuffers = ([d->dev supportsFamily:MTLGPUFamilyApple5]
+-        || [d->dev supportsFamily:MTLGPUFamilyMac2])
+-        && [d->dev supportsFamily:MTLGPUFamilyMetal3];
++    if (@available(iOS 16.0, macOS 13.0, *)) {
++        caps.indirectCommandBuffers = ([d->dev supportsFamily:MTLGPUFamilyApple5]
++            || [d->dev supportsFamily:MTLGPUFamilyMac2])
++            && [d->dev supportsFamily:MTLGPUFamilyMetal3];
++    } else {
++        caps.indirectCommandBuffers = false;
++    }
+ 
+     caps.shadingRateMap = [d->dev supportsRasterizationRateMapWithLayerCount: 1];
+     if (caps.shadingRateMap && caps.multiView)
+@@ -6948,15 +6952,17 @@ bool QMetalSwapChain::createOrResize()
+     if (d->colorFormat != d->layer.pixelFormat)
+         d->layer.pixelFormat = d->colorFormat;
+ 
+-    if (m_format == HDRExtendedSrgbLinear) {
+-        d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceExtendedLinearSRGB);
+-        d->layer.wantsExtendedDynamicRangeContent = YES;
+-    } else if (m_format == HDR10) {
+-        d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceITUR_2100_PQ);
+-        d->layer.wantsExtendedDynamicRangeContent = YES;
+-    } else if (m_format == HDRExtendedDisplayP3Linear) {
+-        d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceExtendedLinearDisplayP3);
+-        d->layer.wantsExtendedDynamicRangeContent = YES;
++    if (@available(iOS 16.0, *)) {
++        if (m_format == HDRExtendedSrgbLinear) {
++            d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceExtendedLinearSRGB);
++            d->layer.wantsExtendedDynamicRangeContent = YES;
++        } else if (m_format == HDR10) {
++            d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceITUR_2100_PQ);
++            d->layer.wantsExtendedDynamicRangeContent = YES;
++        } else if (m_format == HDRExtendedDisplayP3Linear) {
++            d->layer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceExtendedLinearDisplayP3);
++            d->layer.wantsExtendedDynamicRangeContent = YES;
++        }
+     }
+ 
+     if (m_flags.testFlag(UsedAsTransferSource))
+@@ -7080,12 +7086,12 @@ QRhiSwapChainHdrInfo QMetalSwapChain::hdrInfo()
+         info.limits.colorComponentValue.maxColorComponentValue = screen.maximumExtendedDynamicRangeColorComponentValue;
+         info.limits.colorComponentValue.maxPotentialColorComponentValue = screen.maximumPotentialExtendedDynamicRangeColorComponentValue;
+ #elif defined(Q_OS_IOS)
+-        UIView *view = reinterpret_cast<UIView *>(m_window->winId());
+-        UIScreen *screen = view.window.windowScene.screen;
+-        info.limits.colorComponentValue.maxColorComponentValue =
+-                view.window.windowScene.screen.currentEDRHeadroom;
+-        info.limits.colorComponentValue.maxPotentialColorComponentValue =
+-                screen.potentialEDRHeadroom;
++        if (@available(iOS 16.0, *)) {
++            UIView *view = reinterpret_cast<UIView *>(m_window->winId());
++            UIScreen *screen = view.window.windowScene.screen;
++            info.limits.colorComponentValue.maxColorComponentValue = screen.currentEDRHeadroom;
++            info.limits.colorComponentValue.maxPotentialColorComponentValue = screen.potentialEDRHeadroom;
++        }
+ #endif
+     }
+ 
+diff --git a/src/plugins/platforms/ios/qiosscreen.mm b/src/plugins/platforms/ios/qiosscreen.mm
+index 7bd4f734..75a14d09 100644
+--- a/src/plugins/platforms/ios/qiosscreen.mm
++++ b/src/plugins/platforms/ios/qiosscreen.mm
+@@ -208,8 +208,12 @@ QIOSScreen::QIOSScreen(UIScreen *screen)
+ 
+                 UIView *view = platformWindow->view();
+ 
+-                if (!view.layer.wantsExtendedDynamicRangeContent)
++                if (@available(iOS 17.0, *)) {
++                    if (!view.layer.wantsExtendedDynamicRangeContent)
++                        continue;
++                } else {
+                     continue;
++                }
+ 
+                 [view setNeedsDisplay];
+             }
+diff --git a/src/plugins/platforms/ios/quiaccessibilityelement.mm b/src/plugins/platforms/ios/quiaccessibilityelement.mm
+index a08b58ed..cde82857 100644
+--- a/src/plugins/platforms/ios/quiaccessibilityelement.mm
++++ b/src/plugins/platforms/ios/quiaccessibilityelement.mm
+@@ -182,7 +182,13 @@ QT_NAMESPACE_ALIAS_OBJC_CLASS(QMacAccessibilityElement);
+     } else if (accessibleRole == QAccessible::CheckBox
+                || accessibleRole == QAccessible::RadioButton
+                || accessibleRole == QAccessible::Switch) {
+-        traits |= UIAccessibilityTraitToggleButton;
++        if (@available(iOS 17.0, *)) {
++            traits |= UIAccessibilityTraitToggleButton;
++        } else {
++            traits |= UIAccessibilityTraitButton;
++            if (state.checked)
++                traits |= UIAccessibilityTraitSelected;
++        }
+     } else if (accessibleRole == QAccessible::EditableText) {
+         static auto defaultTextFieldTraits = []{
+             auto *textField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
+diff --git a/src/plugins/platforms/ios/quiview.mm b/src/plugins/platforms/ios/quiview.mm
+index 5f6976b6..85bb9e0b 100644
+--- a/src/plugins/platforms/ios/quiview.mm
++++ b/src/plugins/platforms/ios/quiview.mm
+@@ -670,11 +670,15 @@ inline ulong getTimeStamp(UIEvent *event)
+     qreal xTilt = qBound(-60.0, altitudeAngleDegrees * azimuth.dx, 60.0);
+     qreal yTilt = qBound(-60.0, altitudeAngleDegrees * azimuth.dy, 60.0);
+ 
+-    auto zOffset = qt_objc_cast<UIHoverGestureRecognizer*>(sender).zOffset;
++    CGFloat zOffset = 0;
++    if (@available(iOS 16.1, *))
++        zOffset = qt_objc_cast<UIHoverGestureRecognizer*>(sender).zOffset;
+     auto pressure = [self pressureForTouch:qt_objc_cast<UITouch*>(sender)];
+ 
+     // Apple Pencil models that don’t support barrel-roll angle data will return 0
+-    auto rotation = -qRadiansToDegrees(sender.rollAngle);
++    qreal rotation = 0;
++    if ([(NSObject *)sender respondsToSelector:@selector(rollAngle)])
++        rotation = -qRadiansToDegrees(sender.rollAngle);
+ 
+     // Apple Pencils do not have the concept of tangential pressure, which
+     // is commonly found on Wacom tablet pens with a dedicated finger wheel.
+diff --git a/src/corelib/thread/qmutex_mac.cpp b/src/corelib/thread/qmutex_mac.cpp
+new file mode 100644
+index 00000000..7849133e
+--- /dev/null
++++ b/src/corelib/thread/qmutex_mac.cpp
+@@ -0,0 +1,55 @@
++// Copyright (C) 2016 The Qt Company Ltd.
++// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
++
++#include "qplatformdefs.h"
++#include "qmutex.h"
++#include "qmutex_p.h"
++
++#include "private/qcore_unix_p.h"
++
++#include <mach/mach.h>
++#include <mach/task.h>
++
++#include <errno.h>
++
++QT_BEGIN_NAMESPACE
++
++QMutexPrivate::QMutexPrivate()
++{
++    kern_return_t r = semaphore_create(mach_task_self(), &mach_semaphore, SYNC_POLICY_FIFO, 0);
++    if (r != KERN_SUCCESS)
++        qWarning("QMutex: failed to create semaphore, error %d", r);
++}
++
++QMutexPrivate::~QMutexPrivate()
++{
++    kern_return_t r = semaphore_destroy(mach_task_self(), mach_semaphore);
++    if (r != KERN_SUCCESS)
++        qWarning("QMutex: failed to destroy semaphore, error %d", r);
++}
++
++bool QMutexPrivate::wait(QDeadlineTimer timeout)
++{
++    kern_return_t r;
++    if (timeout.isForever()) {
++        do {
++            r = semaphore_wait(mach_semaphore);
++        } while (r == KERN_ABORTED);
++        Q_ASSERT(r == KERN_SUCCESS);
++    } else {
++        timespec tv = durationToTimespec(timeout.remainingTimeAsDuration());
++        mach_timespec_t ts;
++        ts.tv_nsec = tv.tv_nsec;
++        ts.tv_sec = tv.tv_sec;
++        r = semaphore_timedwait(mach_semaphore, ts);
++    }
++    return (r == KERN_SUCCESS);
++}
++
++void QMutexPrivate::wakeUp() noexcept
++{
++    semaphore_signal(mach_semaphore);
++}
++
++
++QT_END_NAMESPACE

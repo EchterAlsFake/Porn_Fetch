@@ -1,0 +1,3 @@
+make: Nothing to be done for `all'.
+ld: warning: -undefined dynamic_lookup is deprecated on iOS
+Built /Users/asuna/ios-lab/device/native/packages/_ios_ffmpeg.cpython-315-iphoneos.so: 1.68 MiB

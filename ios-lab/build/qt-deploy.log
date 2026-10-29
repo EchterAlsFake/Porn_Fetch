@@ -1,0 +1,6 @@
+WARNING:root:[DEPLOY] Unable to resolve a valid project file. Proceeding without a project file. Details:
+No project file found in the current directory.
+[DEPLOY] Xcode project created for x86_64 simulator   /Users/asuna/ios-lab/qt/deployment/ios_x86_64_simulator/HelloPySide.xcodeproj
+
+Open it with:
+  open /Users/asuna/ios-lab/qt/deployment/ios_x86_64_simulator/HelloPySide.xcodeproj

@@ -1,0 +1,16 @@
+{
+  "target": "x86_64-apple-ios18.0-simulator",
+  "embedded_python": "3.15.0rc2",
+  "qt": "6.12.0",
+  "repository_commit": "b38c98e27b9318da374c1cf3a639b3e813b436e6",
+  "archives": {
+    "native/chompjs-1.4.1.tar.gz": "fc1a6d7f03fa6381351306a8cefaa5e0946e841c25fba919c726f35f1a3fc614",
+    "native/libffi-3.8.0.tar.gz": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4",
+    "native/cryptography-50.0.2.tar.gz": "7b46165bb56eb4704e2eaaf86f3c940d19154535d9b0ca7d6d590b04060e00d5",
+    "native/openssl-3.5.9.tar.gz": "603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a",
+    "native/selectolax-1.0.2.tar.gz": "f0508ad927aa426425d4aa7a2bb2f8b21c01412534465bd227e241d4d0a6a418",
+    "native/cffi-2.1.1.tar.gz": "dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be",
+    "native/curl_cffi-0.17.0.tar.gz": "31ee8500d06d6502ce1ec0b7ded1c5aa8e8f3401bbe37ccd78d6153d859d8f3c",
+    "libcurl-ios-simulator.tar.gz": "2c221bf3b440e155acc4f9402702021a426b49f751cb5ecc63cf3164e67742e5"
+  }
+}

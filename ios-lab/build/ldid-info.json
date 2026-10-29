@@ -1,0 +1,90 @@
+{
+  "formulae": [
+    {
+      "name": "ldid",
+      "full_name": "ldid",
+      "tap": "homebrew/core",
+      "oldnames": [],
+      "aliases": [],
+      "versioned_formulae": [],
+      "desc": "Lets you manipulate the signature block in a Mach-O binary",
+      "license": "AGPL-3.0-or-later",
+      "homepage": "https://cydia.saurik.com/info/ldid/",
+      "versions": {
+        "stable": "2.1.5",
+        "head": "HEAD",
+        "bottle": false
+      },
+      "urls": {
+        "stable": {
+          "url": "git://git.saurik.com/ldid.git",
+          "tag": "v2.1.5",
+          "revision": "a23f0faadd29ec00a6b7fb2498c3d15af15a7100",
+          "using": null,
+          "checksum": null
+        },
+        "head": {
+          "url": "git://git.saurik.com/ldid.git",
+          "branch": "master",
+          "using": null
+        }
+      },
+      "patches": [],
+      "revision": 2,
+      "version_scheme": 0,
+      "compatibility_version": null,
+      "autobump": true,
+      "no_autobump_message": null,
+      "skip_livecheck": false,
+      "bottle": {},
+      "pour_bottle_only_if": null,
+      "keg_only": false,
+      "keg_only_reason": null,
+      "options": [],
+      "build_dependencies": [],
+      "dependencies": [
+        "libplist",
+        "openssl@3"
+      ],
+      "test_dependencies": [],
+      "recommended_dependencies": [],
+      "optional_dependencies": [],
+      "uses_from_macos": [],
+      "uses_from_macos_bounds": [],
+      "requirements": [],
+      "conflicts_with": [
+        "ldid-procursus"
+      ],
+      "conflicts_with_reasons": [
+        "ldid-proucursus installs a conflicting ldid binary"
+      ],
+      "link_overwrite": [],
+      "caveats": null,
+      "installed": [],
+      "linked_keg": null,
+      "pinned": false,
+      "outdated": false,
+      "deprecated": false,
+      "deprecation_date": null,
+      "deprecation_reason": null,
+      "deprecation_replacement_formula": null,
+      "deprecation_replacement_cask": null,
+      "deprecate_args": null,
+      "disabled": false,
+      "disable_date": null,
+      "disable_reason": null,
+      "disable_replacement_formula": null,
+      "disable_replacement_cask": null,
+      "disable_args": null,
+      "post_install_steps": [],
+      "post_install_defined": false,
+      "service": null,
+      "tap_git_head": "96c457277e52d9fa16e37873c7b7994fa64b57a8",
+      "ruby_source_path": "Formula/l/ldid.rb",
+      "ruby_source_checksum": {
+        "sha256": "5055e110ddec01fb954b344be3fab0230de6b968555f4c9b7a728bfa36ae5d23"
+      }
+    }
+  ],
+  "casks": []
+}

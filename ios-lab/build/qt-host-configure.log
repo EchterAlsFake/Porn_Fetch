@@ -1,0 +1,34 @@
+-- The CXX compiler identification is AppleClang 17.0.0.17000604
+-- The C compiler identification is AppleClang 17.0.0.17000604
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- The ASM compiler identification is AppleClang
+-- Found assembler: /usr/bin/cc
+-- CMAKE_BUILD_TYPE was already explicitly set to: 'Release'
+
+-- Configuration summary has been written to /Users/asuna/ios-lab/device/qt-host-build/config.summary
+
+-- 
+
+Qt is now configured for building. Just run 'cmake --build . --parallel'
+
+Once everything is built, you must run 'cmake --install .'
+Qt will be installed into '/Users/asuna/ios-lab/device/qt-host'
+
+To configure and build other Qt modules, you can use the following convenience script:
+        /Users/asuna/ios-lab/device/qt-host/bin/qt-configure-module
+
+If reconfiguration fails for some reason, try removing 'CMakeCache.txt' from the build directory
+Alternatively, you can add the --fresh flag to your CMake flags.
+
+-- Configuring done (60.2s)
+-- Generating done (1.6s)
+-- Build files have been written to: /Users/asuna/ios-lab/device/qt-host-build

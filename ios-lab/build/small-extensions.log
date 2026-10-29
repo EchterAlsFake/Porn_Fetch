@@ -1,0 +1,32 @@
+ld: warning: -undefined dynamic_lookup is deprecated on iOS-simulator
+/Users/asuna/ios-lab/pornfetch/native/cffi-src/cffi-2.1.1/src/c/_cffi_backend.c:878:17: warning: '_PyLong_Sign' is deprecated [-Wdeprecated-declarations]
+  878 |             if (_PyLong_Sign(ob) < 0)
+      |                 ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/cpython/longobject.h:38:1: note: '_PyLong_Sign' has been explicitly marked deprecated here
+   38 | Py_DEPRECATED(3.14) PyAPI_FUNC(int) _PyLong_Sign(PyObject *v);
+      | ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/pyport.h:261:54: note: expanded from macro 'Py_DEPRECATED'
+  261 | #define Py_DEPRECATED(VERSION_UNUSED) __attribute__((__deprecated__))
+      |                                                      ^
+/Users/asuna/ios-lab/pornfetch/native/cffi-src/cffi-2.1.1/src/c/_cffi_backend.c:3964:16: warning: '_PyLong_Sign' is deprecated [-Wdeprecated-declarations]
+ 3964 |         return _PyLong_Sign(ob) != 0;
+      |                ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/cpython/longobject.h:38:1: note: '_PyLong_Sign' has been explicitly marked deprecated here
+   38 | Py_DEPRECATED(3.14) PyAPI_FUNC(int) _PyLong_Sign(PyObject *v);
+      | ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/pyport.h:261:54: note: expanded from macro 'Py_DEPRECATED'
+  261 | #define Py_DEPRECATED(VERSION_UNUSED) __attribute__((__deprecated__))
+      |                                                      ^
+/Users/asuna/ios-lab/pornfetch/native/cffi-src/cffi-2.1.1/src/c/_cffi_backend.c:4522:22: warning: 'Py_FileSystemDefaultEncoding' is deprecated [-Wdeprecated-declarations]
+ 4522 |                      Py_FileSystemDefaultEncoding, &filename_or_null, &flags))
+      |                      ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/fileobject.h:22:1: note: 'Py_FileSystemDefaultEncoding' has been explicitly marked deprecated here
+   22 | Py_DEPRECATED(3.12) PyAPI_DATA(const char *) Py_FileSystemDefaultEncoding;
+      | ^
+/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64_x86_64-simulator/Python.framework/Headers/pyport.h:261:54: note: expanded from macro 'Py_DEPRECATED'
+  261 | #define Py_DEPRECATED(VERSION_UNUSED) __attribute__((__deprecated__))
+      |                                                      ^
+3 warnings generated.
+ld: warning: -undefined dynamic_lookup is deprecated on iOS-simulator
+/Users/asuna/ios-lab/pornfetch/native/packages/_cffi_backend.cpython-315-iphonesimulator.so: Mach-O 64-bit dynamically linked shared library x86_64
+/Users/asuna/ios-lab/pornfetch/native/packages/_chompjs.cpython-315-iphonesimulator.so:      Mach-O 64-bit dynamically linked shared library x86_64

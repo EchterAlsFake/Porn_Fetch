@@ -1,0 +1,35 @@
+{
+  "repository": "EchterAlsFake/Porn_Fetch",
+  "branch": "ios/iphone7-port-snapshot-2026-10-28",
+  "tag": "ios-iphone7-snapshot-2026-10-28",
+  "base_commit": "b38c98e27b9318da374c1cf3a639b3e813b436e6",
+  "archive": "ios-lab-full-snapshot.tar.zst",
+  "archive_bytes": 7430625431,
+  "archive_sha256": "459a5d7840fa96c19a1e1b6c841e39d220545446b46c72231211d569b284726b",
+  "archive_format": "tar compressed with zstd; concatenate all parts in numbered order",
+  "uncompressed_file_bytes": 21160272613,
+  "entries": 312140,
+  "signing_fingerprint": "7082BBFF855D47C6BB13C3BF6AC58B8CA26D1C5F",
+  "parts": [
+    {
+      "name": "ios-lab-full-snapshot.tar.zst.part-000",
+      "bytes": 1900000000,
+      "sha256": "c42751ed9e2652792fff884bca390e3f7fd1548af0f3f95b54235cc1e663e9cd"
+    },
+    {
+      "name": "ios-lab-full-snapshot.tar.zst.part-001",
+      "bytes": 1900000000,
+      "sha256": "01301f8eb943c3e4c3b957a012e4af70711ff9d1015aca4f7e9bb6fdbcab7af5"
+    },
+    {
+      "name": "ios-lab-full-snapshot.tar.zst.part-002",
+      "bytes": 1900000000,
+      "sha256": "fad0c555e11f71081d6f7f545902ac5cfc360516ad5754eb80c9767c0895720e"
+    },
+    {
+      "name": "ios-lab-full-snapshot.tar.zst.part-003",
+      "bytes": 1730625431,
+      "sha256": "e43e5a946a7c999f5c1ae923f46aed9d90da938cbe2687f7a21f697937f6ab98"
+    }
+  ]
+}

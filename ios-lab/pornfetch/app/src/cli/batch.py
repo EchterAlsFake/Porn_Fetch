@@ -1,0 +1,528 @@
+"""Argument parsing and headless CLI execution."""
+from __future__ import annotations
+
+import argparse
+import asyncio
+import sys
+from contextlib import aclosing
+from pathlib import Path
+from typing import Any
+
+from src.licensing.service import create_license_service, rejection_notice
+from src.shared.error_reporting import report_exception
+from src.shared.legal import legal_document
+from src.shared.media import select_allowed_quality
+
+from .beta_disclaimer import prompt_beta_disclaimer
+from .concurrency import bounded_map
+from .downloads import DownloadController, PausedStore, download_gallery, download_video
+from .media import prepare_video
+from .model_store import ModelStore
+from .output import output_path_for
+from .providers import PROVIDER_MODULES, ClientPool, ContentKind, route_url
+from .settings import CliSettings, SettingsStore, prompt_error_reporting_consent
+from .tracker import close_cli_tracker, record_cli_download
+
+ACTION_DESTINATIONS = {
+    "url", "model", "playlist", "add_model_to_database", "remove_model_from_database",
+    "update_pending_urls", "update_models", "test_mode", "test_downloads", "resume",
+    "info", "quality", "output", "stats",
+}
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="Porn_Fetch_CLI.py",
+        description="Porn Fetch terminal application and batch downloader. Keyword search is unavailable for legal reasons.",
+    )
+    parser.add_argument("command", nargs="?", choices=["self-update"], help="update a standalone CLI build")
+    parser.add_argument("--check", action="store_true", help="check for a signed CLI update without installing it")
+    parser.add_argument("--yes", action="store_true", help="install a CLI update without a confirmation prompt")
+    parser.add_argument("--batch", action="store_true", help="force headless compatibility mode")
+    parser.add_argument("--interactive", "-i", action="store_true", help="launch interactive terminal wizard")
+    parser.add_argument("--info", action="store_true", help="show CLI usage and supported content types")
+    parser.add_argument("--license", action="store_true", help="show the application source license")
+    parser.add_argument("--third-party-notices", action="store_true", help="show the bundled third-party notice inventory")
+    parser.add_argument("--test-mode", action="store_true", help="run comprehensive CLI self-test with every URL across all supported sites")
+    parser.add_argument("--test-downloads", action="store_true", help="opt-in to a live sample download during test mode; the test helper offers separate pause/resume and cleanup workflows")
+    parser.add_argument("--resume", action="store_true", help="resume all paused downloads from previous sessions")
+    parser.add_argument("--stats", action="store_true", help="display PocketBase download statistics and exit")
+    parser.add_argument(
+        "--track-downloads", "--track-videos",
+        dest="track_videos",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="enable or disable PocketBase download tracking",
+    )
+    parser.add_argument("--pocketbase-data", dest="pocketbase_data", help="custom PocketBase data directory path")
+    parser.add_argument("--pocketbase-binary", dest="pocketbase_binary", help="custom PocketBase binary path")
+    parser.add_argument(
+        "--install-pocketbase",
+        action="store_true",
+        help="auto-detect PATH or download and install PocketBase binary",
+    )
+    parser.add_argument("--filter", help="filter specific test names or URLs when running in test mode")
+    parser.add_argument("--url", action="append", default=[], help="video or album URL (repeatable)")
+    parser.add_argument("--model", "--profile", dest="model", action="append", default=[], help="profile URL (repeatable)")
+    parser.add_argument("--playlist", "--collection", dest="playlist", action="append", default=[], help="collection URL (repeatable)")
+    parser.add_argument("--quality", help="quality override for this invocation")
+    parser.add_argument("--output", help="output directory override for this invocation")
+    parser.add_argument("--auto-process", "--auto_process", dest="auto_process", action="store_true", help="download every discovered item")
+    parser.add_argument("--ignore-errors", "--ignore_errors", dest="ignore_errors", action="store_true", help="continue after a failed item")
+    parser.add_argument(
+        "--error-reporting",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="enable or disable redacted error reports and remember the choice",
+    )
+    parser.add_argument("--add-model-to-database", action="append", default=[], metavar="URL")
+    parser.add_argument("--remove-model-from-database", action="append", default=[], metavar="URL")
+    parser.add_argument("--update-pending-urls", action="store_true")
+    parser.add_argument("--update-models", action="store_true")
+    return parser
+
+
+def has_action(args: argparse.Namespace) -> bool:
+    return bool(args.batch or any(getattr(args, name, None) for name in ACTION_DESTINATIONS))
+
+
+def main(argv: list[str] | None = None) -> int:
+    raw_args = sys.argv[1:] if argv is None else argv
+    if raw_args[:1] == ["--apply-update"]:
+        if len(raw_args) != 3:
+            return 2
+        from .self_update import apply_from_helper
+        return apply_from_helper(raw_args[1], raw_args[2])
+    parser = build_parser()
+    args = parser.parse_args(raw_args)
+    if args.command == "self-update":
+        from .self_update import run_self_update
+        return run_self_update(check_only=args.check, assume_yes=args.yes)
+    if args.check or args.yes:
+        parser.error("--check and --yes require self-update")
+    if args.info:
+        parser.print_help()
+        return 0
+    if args.license:
+        print(legal_document("LICENSE"))
+        return 0
+    if args.third_party_notices:
+        print(legal_document("THIRD_PARTY_NOTICES.md"))
+        return 0
+    if args.test_mode:
+        from .selftest import run_cli_self_test
+        return asyncio.run(run_cli_self_test(
+            filter_pattern=getattr(args, "filter", None),
+            include_downloads=getattr(args, "test_downloads", False),
+        ))
+    if getattr(args, "stats", False):
+        return asyncio.run(run_stats(args))
+
+    is_interactive = getattr(args, "interactive", False) or len(raw_args) == 0
+
+    if is_interactive:
+        from .wizard import run_wizard
+        return asyncio.run(run_wizard(args))
+
+    return asyncio.run(run_batch(args))
+
+
+async def run_stats(args: argparse.Namespace) -> int:
+    """Display PocketBase download statistics and exit."""
+    store = SettingsStore()
+    persisted = store.load()
+    persisted = await prompt_beta_disclaimer(persisted, store)
+    if persisted is None:
+        return 1
+    overrides: dict[str, Any] = {}
+    if getattr(args, "pocketbase_data", None):
+        overrides["pocketbase_data_path"] = args.pocketbase_data
+    if getattr(args, "pocketbase_binary", None):
+        overrides["pocketbase_binary"] = args.pocketbase_binary
+    if overrides:
+        persisted = persisted.overridden(**overrides)
+
+    from src.database import PocketBaseError, PocketBaseTracker
+
+    from .tracker import print_dashboard_stats
+    tracker = PocketBaseTracker(
+        data_path=persisted.pocketbase_data_path,
+        enabled=True,
+        binary_path=persisted.pocketbase_binary or None,
+        legacy_sqlite_path=persisted.legacy_database_path,
+    )
+    try:
+        await tracker.start()
+        stats = tracker.get_dashboard_stats()
+        print_dashboard_stats(stats)
+        return 0
+    except PocketBaseError as exc:
+        print(f"PocketBase error: {exc}", file=sys.stderr)
+        if "binary was not found" in str(exc).lower():
+            print("Tip: Run with --install-pocketbase to automatically install PocketBase.", file=sys.stderr)
+        return 1
+    finally:
+        await tracker.close()
+
+
+def offline_self_test() -> int:
+    """Packaged-build smoke test: no sessions, DNS, credentials or downloads."""
+    examples = {
+        "pornhub": "https://www.pornhub.com/view_video.php?viewkey=test",
+        "eporner": "https://www.eporner.com/hd-porn/test/title/",
+        "xnxx": "https://www.xnxx.com/video-test/title",
+        "xvideos": "https://www.xvideos.com/video.test/title",
+        "xhamster": "https://xhamster.com/videos/title-test",
+        "spankbang": "https://spankbang.com/test/video/title",
+        "youporn": "https://www.youporn.com/watch/test/title/",
+        "beeg": "https://beeg.com/-test",
+        "porntrex": "https://www.porntrex.com/video/test/title/",
+        "xfreehd": "https://xfreehd.com/video/test/title",
+        "redtube": "https://www.redtube.com/test",
+        "thumbzilla": "https://www.thumbzilla.com/video/test/title",
+        "tube8": "https://www.tube8.com/test/test/test/",
+    }
+    assert set(PROVIDER_MODULES) == set(examples)
+    assert all(route_url(url).provider == provider for provider, url in examples.items())
+    settings = CliSettings()
+    settings.validate()
+    assert select_allowed_quality("best", [360, 720, 1080], False) == "720"
+    assert route_url("https://xfreehd.com/album/123/example").kind == ContentKind.GALLERY
+    print("Porn Fetch CLI offline self-test passed")
+    return 0
+
+
+async def run_batch(args: argparse.Namespace) -> int:
+    store = SettingsStore()
+    persisted = store.load()
+    persisted = await prompt_beta_disclaimer(persisted, store)
+    if persisted is None:
+        return 1
+    explicit_reporting_choice = getattr(args, "error_reporting", None)
+    if explicit_reporting_choice is not None:
+        persisted = persisted.overridden(
+            error_reporting=explicit_reporting_choice,
+            error_reporting_decided=True,
+        )
+        store.save(persisted)
+    elif not persisted.error_reporting_decided:
+        if sys.stdin.isatty() and sys.stderr.isatty():
+            persisted = await prompt_error_reporting_consent(persisted, store)
+        else:
+            print(
+                "Error reporting is disabled because no consent choice has been saved. "
+                "Use --error-reporting or --no-error-reporting to save a choice.",
+                file=sys.stderr,
+            )
+
+    if getattr(args, "install_pocketbase", False):
+        from src.database.installer import install_pocketbase, verify_pocketbase_binary
+        try:
+            print("Checking and installing PocketBase...")
+            binary_path, source = install_pocketbase()
+            version = verify_pocketbase_binary(binary_path)
+            print(f"PocketBase ready ({source}): {binary_path} ({version})")
+            persisted = persisted.overridden(pocketbase_binary=str(binary_path))
+            store.save(persisted)
+            has_other_actions = bool(
+                getattr(args, "url", None)
+                or getattr(args, "model", None)
+                or getattr(args, "playlist", None)
+                or getattr(args, "resume", False)
+                or getattr(args, "stats", False)
+            )
+            if not has_other_actions:
+                return 0
+        except Exception as exc:
+            print(f"Failed to install PocketBase: {exc}", file=sys.stderr)
+            return 1
+
+    overrides: dict[str, Any] = {
+        "quality": args.quality,
+        "output_path": args.output,
+    }
+    if getattr(args, "track_videos", None) is not None:
+        overrides["track_videos"] = args.track_videos
+    if getattr(args, "pocketbase_data", None):
+        overrides["pocketbase_data_path"] = args.pocketbase_data
+    if getattr(args, "pocketbase_binary", None):
+        overrides["pocketbase_binary"] = args.pocketbase_binary
+    settings = persisted.overridden(**{k: v for k, v in overrides.items() if v is not None})
+    models = ModelStore()
+    for url in args.add_model_to_database:
+        models.add(url)
+    for url in args.remove_model_from_database:
+        models.remove(url)
+
+    from src.shared.tor_transport import configure as configure_tor_transport
+    configure_tor_transport(settings)
+    pool = ClientPool(settings.to_runtime_config())
+    license_service = create_license_service(settings.to_runtime_config())
+    failures = 0
+    try:
+        license_status = await license_service.check(force=True)
+        if license_status.server_rejected:
+            print(f"License rejected: {rejection_notice(license_status.state)}", file=sys.stderr)
+
+        if getattr(args, "resume", False):
+            paused_items = PausedStore().load()
+            if paused_items:
+                print(f"Found {len(paused_items)} paused download(s). Resuming...")
+                for item in paused_items:
+                    url = item.get("url")
+                    target = item.get("target")
+                    quality = item.get("quality", settings.quality)
+                    if url:
+                        ok = await _download_url(
+                            pool, url, settings, license_status.allowed,
+                            target_override=target, quality_override=quality,
+                        )
+                        if not ok:
+                            failures += 1
+            else:
+                print("No paused downloads found to resume.")
+
+        if args.update_pending_urls:
+            for model_url, _ in models.models():
+                failures += await _scan_model(pool, models, model_url, settings, args.ignore_errors)
+        if args.update_models:
+            for model_url, state in models.models():
+                pending = list(state["pending"])
+                outcomes = await _download_many(pool, pending, settings, license_status.allowed)
+                await asyncio.to_thread(
+                    models.mark_downloaded_many, model_url,
+                    [url for url, outcome in zip(pending, outcomes) if outcome],
+                )
+                failures += sum(not outcome for outcome in outcomes)
+
+        direct_outcomes = await _download_many(pool, args.url, settings, license_status.allowed)
+        for outcome in direct_outcomes:
+            if not outcome:
+                failures += 1
+                if not args.ignore_errors:
+                    break
+        for source_url in [*args.model, *args.playlist]:
+            try:
+                prepared = []
+                provider = route_url(source_url).provider
+                stream = pool.media_stream(source_url, pages=5)
+                async with aclosing(stream):
+                    async for source in stream:
+                        prepared.append(await prepare_video(source, provider))
+                        if len(prepared) >= settings.result_limit:
+                            break
+                async def dispatch(media):
+                    if settings.processing_delay:
+                        await asyncio.sleep(settings.processing_delay)
+                    return await _download_prepared(media, settings, license_status.allowed)
+                for outcome in await bounded_map(prepared, dispatch, settings.parallel_downloads):
+                    if not outcome:
+                        failures += 1
+                        if not args.ignore_errors:
+                            break
+            except Exception as error:
+                failures += 1
+                report_id = await report_exception(
+                    error,
+                    operation="scrape profile or collection",
+                    location="src.cli.batch.run_batch",
+                    context={"source_url": source_url},
+                    enabled=settings.error_reporting,
+                )
+                print(f"Failed: {source_url}: {error} [error {report_id}]", file=sys.stderr)
+                if not args.ignore_errors:
+                    break
+    finally:
+        await license_service.close()
+        await pool.close()
+        await close_cli_tracker()
+    return 1 if failures else 0
+
+
+async def _download_many(
+    pool: ClientPool, urls: list[str], settings: CliSettings, premium: bool,
+) -> list[bool]:
+    async def dispatch(url: str) -> bool:
+        if settings.processing_delay:
+            await asyncio.sleep(settings.processing_delay)
+        return await _download_url(pool, url, settings, premium)
+
+    return await bounded_map(urls, dispatch, settings.parallel_downloads)
+
+
+async def _scan_model(
+    pool: ClientPool, store: ModelStore, model_url: str,
+    settings: CliSettings, ignore_errors: bool,
+) -> int:
+    urls: list[str] = []
+    try:
+        async for video in pool.media_stream(model_url, pages=5):
+            url = getattr(video, "url", None)
+            if url:
+                urls.append(str(url))
+            if len(urls) >= settings.result_limit:
+                break
+        store.update_pending(model_url, urls)
+        return 0
+    except Exception as error:
+        report_id = await report_exception(
+            error,
+            operation="scan tracked model",
+            location="src.cli.batch._scan_model",
+            context={"model_url": model_url},
+            enabled=settings.error_reporting,
+        )
+        print(f"Failed to scan {model_url}: {error} [error {report_id}]", file=sys.stderr)
+        if not ignore_errors:
+            raise
+        return 1
+
+
+async def _download_url(
+    pool: ClientPool,
+    url: str,
+    settings: CliSettings,
+    premium: bool,
+    *,
+    target_override: Path | str | None = None,
+    quality_override: str | int | None = None,
+    controller: DownloadController | None = None,
+) -> bool:
+    try:
+        route, source = await pool.resolve(url)
+        if route.kind == ContentKind.GALLERY:
+            ctrl = controller or DownloadController(
+                url=url, target=target_override or settings.output_path, kind="gallery", provider=route.provider,
+            )
+            try:
+                result = await download_gallery(
+                    source, target_override or settings.output_path, concurrency=settings.videos_concurrency,
+                    controller=ctrl,
+                    progress=lambda value: _print_progress(url, value),
+                )
+            except (KeyboardInterrupt, asyncio.CancelledError):
+                ctrl.pause()
+                print(f"\nPaused gallery: {url} (resume later with --resume)")
+                return False
+
+            if result.status not in {"completed", "cancelled", "paused"}:
+                await report_exception(
+                    RuntimeError(f"Gallery downloader returned status {result.status}"),
+                    operation="download gallery",
+                    location="src.cli.batch._download_url",
+                    context={"source_url": url, "provider": route.provider},
+                    enabled=settings.error_reporting,
+                )
+            await record_cli_download(
+                settings,
+                video=source,
+                outcome=result,
+                target=target_override or settings.output_path,
+                origin_url=url,
+            )
+            return result.status == "completed"
+        media = await prepare_video(source, route.provider)
+        return await _download_prepared(
+            media, settings, premium,
+            target_override=target_override,
+            quality_override=quality_override,
+            controller=controller,
+        )
+    except Exception as error:
+        report_id = await report_exception(
+            error,
+            operation="resolve and download URL",
+            location="src.cli.batch._download_url",
+            context={"video_url": url},
+            enabled=settings.error_reporting,
+        )
+        print(f"Failed: {url}: {error} [error {report_id}]", file=sys.stderr)
+        return False
+
+
+async def _download_prepared(
+    media,
+    settings: CliSettings,
+    premium: bool,
+    *,
+    target_override: Path | str | None = None,
+    quality_override: str | int | None = None,
+    controller: DownloadController | None = None,
+) -> bool:
+    pref_quality = quality_override or settings.quality
+    quality = select_allowed_quality(pref_quality, media.qualities, premium)
+    if not quality:
+        quality = pref_quality if premium else select_allowed_quality("720", media.qualities, False)
+    if not quality:
+        print(f"No permitted quality is available for {media.title}", file=sys.stderr)
+        return False
+    target = Path(target_override) if target_override else output_path_for(media, settings)
+
+    ctrl = controller or DownloadController(
+        url=getattr(media, "url", None),
+        target=target,
+        title=media.title,
+        quality=quality,
+        kind="video",
+    )
+    try:
+        result = await download_video(
+            media.source_video, target, quality, settings, has_premium=premium,
+            available_qualities=media.qualities,
+            controller=ctrl,
+            progress=lambda value: _print_progress(media.title, value),
+            metadata=media,
+        )
+    except (KeyboardInterrupt, asyncio.CancelledError):
+        ctrl.pause()
+        print(f"\nPaused: {media.title} (resume later with --resume)")
+        return False
+
+    if (
+        result.status == "completed"
+        and settings.write_metadata
+        and not result.skipped
+        and not getattr(result, "metadata_written", False)
+    ):
+        try:
+            from src.shared.metadata import write_tags
+            await asyncio.to_thread(write_tags, str(result.path), media)
+        except Exception as error:
+            report_id = await report_exception(
+                error,
+                operation="write downloaded video metadata",
+                location="src.cli.batch._download_prepared",
+                context={
+                    "video_url": getattr(media, "url", None),
+                    "provider": type(getattr(media, "source_video", None)).__module__,
+                },
+                enabled=settings.error_reporting,
+            )
+            print(f"Metadata warning for {media.title}: {error} [error {report_id}]", file=sys.stderr)
+    print(f"\n{result.status}: {media.title}")
+    await record_cli_download(
+        settings,
+        video=media,
+        outcome=result,
+        target=target,
+        quality=quality,
+        origin_url=getattr(media, "origin_iterator_url", None) or getattr(media, "url", None),
+    )
+    if result.status not in {"completed", "cancelled", "paused"}:
+        await report_exception(
+            RuntimeError(f"Downloader returned status {result.status}"),
+            operation="download prepared video",
+            location="src.cli.batch._download_prepared",
+            context={
+                "video_url": getattr(media, "url", None),
+                "provider": type(getattr(media, "source_video", None)).__module__,
+                "quality": quality,
+            },
+            enabled=settings.error_reporting,
+        )
+    return result.status == "completed"
+
+
+def _print_progress(label: str, value: int | None) -> None:
+    shown = "…" if value is None else f"{value}%"
+    print(f"\r{label}: {shown}", end="", flush=True)

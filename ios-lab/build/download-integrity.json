@@ -1,0 +1,96 @@
+{
+  "path": "<local-download>.mp4",
+  "size_bytes": 398679164,
+  "pyav_version": "19.0.2",
+  "ffmpeg_libraries": {
+    "libavutil": [
+      61,
+      1,
+      102
+    ],
+    "libavcodec": [
+      63,
+      1,
+      102
+    ],
+    "libavformat": [
+      63,
+      1,
+      102
+    ],
+    "libavdevice": [
+      63,
+      1,
+      102
+    ],
+    "libavfilter": [
+      12,
+      1,
+      102
+    ],
+    "libswscale": [
+      10,
+      1,
+      102
+    ],
+    "libswresample": [
+      7,
+      1,
+      102
+    ]
+  },
+  "streams": [
+    {
+      "index": 0,
+      "type": "video",
+      "codec": "h264",
+      "time_base": "1/90000",
+      "duration_seconds": 2035.868,
+      "width": 1280,
+      "height": 720,
+      "frame_rate": "30/1",
+      "pixel_format": "yuv420p"
+    },
+    {
+      "index": 1,
+      "type": "audio",
+      "codec": "aac",
+      "time_base": "1/90000",
+      "duration_seconds": 2035.868,
+      "sample_rate": 44100,
+      "channels": 2
+    }
+  ],
+  "decode_errors": [],
+  "corrupt_packets": 0,
+  "timestamp_regressions": {},
+  "decoded_frames": {
+    "audio:1": 87678,
+    "video:0": 61073
+  },
+  "sha256": "795cd5c9f398971aac6398a1524518afa048e6734d86448c9099a010c90580ca",
+  "container_boxes": {
+    "ftyp": 1,
+    "moov": 1,
+    "moof": 113,
+    "mdat": 113
+  },
+  "container_box_lengths_valid": true,
+  "format": "mov,mp4,m4a,3gp,3g2,mj2",
+  "duration_seconds": 2035.934667,
+  "decoded_time_ranges": {
+    "audio:1": {
+      "first_seconds": 0.0,
+      "last_end_seconds": 2035.8791866213153
+    },
+    "video:0": {
+      "first_seconds": 0.06666666666666667,
+      "last_end_seconds": 2035.8333333333333
+    }
+  },
+  "ffmpeg_log_count": 0,
+  "ffmpeg_logs": [],
+  "elapsed_seconds": 38.34,
+  "file_unchanged_during_check": true,
+  "decode_integrity_passed": true
+}

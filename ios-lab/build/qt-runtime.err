@@ -1,0 +1,161 @@
+2026-10-28 13:10:29.951 HelloPySide_bin[6598:109984] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+qt.qpa.application: Application loaded - moving from Qt::ApplicationInactive to Qt::ApplicationActive
+qt.qpa.application: no platform integration yet, setting state directly
+2026-10-28 13:10:52.049 HelloPySide_bin[6701:110884] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+qt.qpa.plugin: init_platform called with pluginNamesWithArguments "ios" platformPluginPath "" platformThemeName ""
+qt.qpa.plugin: Attempting to load Qt platform plugin "ios" with arguments QList()
+qt.qpa.application: Application launched - moving from Qt::ApplicationActive to Qt::ApplicationSuspended
+qt.qpa.application: no platform integration yet, setting state directly
+qt.qpa.plugin: Successfully loaded Qt platform plugin "ios"
+qt.qpa.theme: Adding platform integration's theme names to list of theme names: QList("ios")
+qt.qpa.theme: Attempting to create platform theme "ios" via QPlatformThemeFactory::create
+qt.qpa.theme: Attempting to create platform theme "ios" via createPlatformTheme
+qt.qpa.theme: Successfully created platform theme "ios" via createPlatformTheme
+qt.qpa.input.devices: Registered QInputDevice(QPointingDevice("touchscreen" TouchScreen id=8589934592 ptrType=Finger maxPts=10)
+qt.qpa.input.devices: Registered QInputDevice(QPointingDevice("Apple Pencil" Stylus id=8589934593 ptrType=Pen caps=Position|Pressure|Hover|Rotation|XTilt|YTilt|ZPosition)
+qt.qpa.window.scene: Replacing application delegate <QIOSDynamicSceneDelegate: 0x600000018670> with QIOSApplicationDelegate
+qt.scenegraph.general: Loading backend software
+qt.qpa.fonts: Populating theme fonts...
+qt.qpa.fonts: Got unseen family ".AppleSystemUIFont" for QPlatformTheme::SystemFont
+qt.qpa.fonts: Enumerating font variants based on UICTFontDescriptor <0x600002615b00> = {
+    NSCTFontTraitsAttribute =     {
+        NSCTFontUIFontDesignTrait = NSCTFontUIFontDesignDefault;
+    };
+} resulted in 29 matching descriptors (
+    "UICTFontDescriptor <0x600002614a20> = {\n    NSFontNameAttribute = \".AppleSystemUIFont\";\n}",
+    "UICTFontDescriptor <0x600002616e80> = {\n    NSFontNameAttribute = \".AppleSystemUIFontItalic\";\n}",
+    "UICTFontDescriptor <0x600002614a80> = {\n    NSFontNameAttribute = \".AppleSystemUIFontUltraLight\";\n}",
+    "UICTFontDescriptor <0x600002617360> = {\n    NSFontNameAttribute = \".AppleSystemUIFontUltraLightItalic\";\n}",
+    "UICTFontDescriptor <0x600002615020> = {\n    NSFontNameAttribute = \".AppleSystemUIFontThin\";\n}",
+    "UICTFontDescriptor <0x600002617000> = {\n    NSFontNameAttribute = \".AppleSystemUIFontThinItalic\";\n}",
+    "UICTFontDescriptor <0x600002614900> = {\n    NSFontNameAttribute = \".AppleSystemUIFontLight\";\n}",
+    "UICTFontDescriptor <0x600002617240> = {\n    NSFontNameAttribute = \".AppleSystemUIFontLightItalic\";\n}",
+    "UICTFontDescriptor <0x600002614fc0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontMedium\";\n}",
+    "UICTFontDescriptor <0x6000026174e0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontMediumItalic\";\n}",
+    "UICTFontDescriptor <0x600002614c60> = {\n    NSFontNameAttribute = \".AppleSystemUIFontEmphasized\";\n}",
+    "UICTFontDescriptor <0x600002615620> = {\n    NSFontNameAttribute = \".AppleSystemUIFontDemi\";\n}",
+    "UICTFontDescriptor <0x600002616fa0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontEmphasizedItalic\";\n}",
+    "UICTFontDescriptor <0x600002617600> = {\n    NSFontNameAttribute = \".AppleSystemUIFontDemiItalic\";\n}",
+    "UICTFontDescriptor <0x6000026163a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBold\";\n}",
+    "UICTFontDescriptor <0x600002617720> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBoldItalic\";\n}",
+    "UICTFontDescriptor <0x600002616a60> = {\n    NSFontNameAttribute = \".AppleSystemUIFontHeavy\";\n}",
+    "UICTFontDescriptor <0x600002617840> = {\n    NSFontNameAttribute = \".AppleSystemUIFontHeavyItalic\";\n}",
+    "UICTFontDescriptor <0x600002616e20> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBlack\";\n}",
+    "UICTFontDescriptor <0x600002617960> = {\n    NSFontNameAttribute = \".AppleSystemUIFontBlackItalic\";\n}",
+    "UICTFontDescriptor <0x600002617a80> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Regular\";\n}",
+    "UICTFontDescriptor <0x600002617f00> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-UltraLight\";\n}",
+    "UICTFontDescriptor <0x600002617cc0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Thin\";\n}",
+    "UICTFontDescriptor <0x600002617de0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Light\";\n}",
+    "UICTFontDescriptor <0x600002620060> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Medium\";\n}",
+    "UICTFontDescriptor <0x600002620180> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Semibold\";\n}",
+    "UICTFontDescriptor <0x600002617ba0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Bold\";\n}",
+    "UICTFontDescriptor <0x6000026202a0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Heavy\";\n}",
+    "UICTFontDescriptor <0x6000026203c0> = {\n    NSFontNameAttribute = \".AppleSystemUIFontCondensed-Black\";\n}"
+)
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MenuItemFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MessageBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::LabelFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TipLabelFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::StatusBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TitleBarFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MdiSubWindowTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::DockWidgetTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::PushButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::CheckBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::RadioButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ToolButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ItemViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ListViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::HeaderViewFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ListBoxFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ComboMenuItemFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::ComboLineEditFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::SmallFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::MiniFont
+qt.qpa.fonts: Got unseen family "Menlo" for QPlatformTheme::FixedFont
+qt.qpa.fonts: Enumerating font variants based on UICTFontDescriptor <0x600002611080> = {
+    NSFontFamilyAttribute = Menlo;
+} resulted in 4 matching descriptors (
+    "UICTFontDescriptor <0x600002610fc0> = {\n    NSFontNameAttribute = \"Menlo-Regular\";\n}",
+    "UICTFontDescriptor <0x600002611200> = {\n    NSFontNameAttribute = \"Menlo-Italic\";\n}",
+    "UICTFontDescriptor <0x6000026110e0> = {\n    NSFontNameAttribute = \"Menlo-Bold\";\n}",
+    "UICTFontDescriptor <0x600002610900> = {\n    NSFontNameAttribute = \"Menlo-BoldItalic\";\n}"
+)
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::GroupBoxTitleFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::TabButtonFont
+qt.qpa.fonts: Got already registered family ".AppleSystemUIFont" for QPlatformTheme::EditorFont
+qt.qpa.fonts: Populating theme fonts took 23 ms
+qt.qpa.fonts: Populating font database...
+qt.qpa.fonts: Populating available families took 0 ms
+qt.qpa.fonts: Populating system descriptors took 78 ms
+qt.qpa.fonts: Resolved font smoothing algorithm. Defaults = {
+    AppleFontSmoothing = "<null>";
+    CGFontRenderingFontSmoothingDisabled = "<null>";
+} Result = QCoreTextFontEngine::Disabled
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateUnattached> did update properties
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateUnattached> did update properties
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateUnattached> did update properties
+qt.qpa.window.scene: Connecting <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateUnattached> to <UISceneSession: 0x60000213fe80; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; scene: (nil); configuration: <UISceneConfiguration: 0x60000213fe30>; userInfo: (nil)>
+qt.qpa.window: View controller <QIOSViewController: 0x10f0ab200> moved from QObject(0x0) to QIOSScreen(0x60000290cd90)
+qt.qpa.window: Starting display link for QScreen(0x600000020420, name="iPhone built-in display") because Main_QMLTYPE_0(0x600003e1fa00) needs update
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateUnattached> did update properties
+qt.qpa.application: ApplicationWillEnterForeground - moving from Qt::ApplicationSuspended to Qt::ApplicationInactive
+qt.qpa.window: QIOSWindow(0x60000176b040, window=Main_QMLTYPE_0(0x600003e1fa00)) QRegion(0,0 390x844) isExposed true
+qt.qpa.input.devices: no mouse-like devices registered for seat "" The platform plugin should have provided one via QWindowSystemInterface::registerInputDevice(). Creating a default mouse for now.
+qt.qpa.input.devices: Registered QInputDevice(QPointingDevice("core pointer" Mouse id=1 buttonCount=3)
+qt.scenegraph.softwarecontext.abstractrenderer: nodeAdded 0x600002607000
+qt.scenegraph.softwarecontext.abstractrenderer: nodeAdded 0x60000391cdd0
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x844) old dirtyRegion:  QRegion(63,397 265x54) new dirtyRegion:  QRegion(63,397 265x54)
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x844) old dirtyRegion:  QRegion(0,0 390x844) new dirtyRegion:  QRegion(0,0 390x844)
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x844) old dirtyRegion:  QRegion(63,397 265x54) new dirtyRegion:  QRegion(63,397 265x54)
+qt.scenegraph.softwarecontext.renderer: render QRegion(0,0 390x844) 0 0 8
+qt.scenegraph.time.renderer: time in renderer: total=17ms, preprocess=0, updates=0, rendering=17
+qt.qpa.backingstore: Setting up RHI support in 0x600000c367f0 for Main_QMLTYPE_0(0x600003e1fa00) with QSurface::MetalSurface and requested API QPlatformBackingStoreRhiConfig::Metal
+qt.qpa.backingstore: Metal does not seem to be supported
+qt.scenegraph.time.renderloop: Frame rendered with 'software' renderloop in 19ms, polish=0, sync=0, render=17, swap=1, frameDelta=0
+qt.qpa.window: triggering root VC layout when coming out of suspended state
+qt.qpa.input.methods: Updating input context ImInputItemClipRectangle with last reported focus object QObject(0x0) but qGuiApp reports QQuickRootItem(0x60000023d1a0) which means someone failed to call QPlatformInputContext::setFocusObject()
+qt.qpa.application: done moving to Qt::ApplicationInactive
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateForegroundInactive> did update properties
+qt.qpa.window: QIOSWindow(0x60000176b040, window=Main_QMLTYPE_0(0x600003e1fa00)) new geometry is QRect(0,47 390x763)
+qt.qpa.window: QIOSWindow(0x60000176b040, window=Main_QMLTYPE_0(0x600003e1fa00)) QRegion(0,0 390x763) isExposed true
+qt.scenegraph.softwarecontext.abstractrenderer: nodeMaterialUpdated
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x763) old dirtyRegion:  QRegion(63,357 265x54) new dirtyRegion:  QRegion(63,357 265x54)
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x763) old dirtyRegion:  QRegion(0,0 390x763) new dirtyRegion:  QRegion(0,0 390x763)
+qt.scenegraph.softwarecontext.renderable: addDirtyRegion:  QRegion(0,0 390x763) old dirtyRegion:  QRegion(63,357 265x54) new dirtyRegion:  QRegion(63,357 265x54)
+qt.scenegraph.softwarecontext.renderer: render QRegion(0,0 390x763) 0 0 7
+qt.scenegraph.time.renderer: time in renderer: total=16ms, preprocess=0, updates=0, rendering=16
+qt.qpa.backingstore: Setting up RHI support in 0x600000c367f0 for Main_QMLTYPE_0(0x600003e1fa00) with QSurface::MetalSurface and requested API QPlatformBackingStoreRhiConfig::Metal
+qt.qpa.backingstore: Metal does not seem to be supported
+qt.scenegraph.time.renderloop: Frame rendered with 'software' renderloop in 17ms, polish=0, sync=0, render=16, swap=1, frameDelta=49
+qt.scenegraph.softwarecontext.renderer: render QRegion(null) 0 0 0
+qt.scenegraph.time.renderer: time in renderer: total=0ms, preprocess=0, updates=0, rendering=0
+qt.scenegraph.time.renderloop: Frame rendered with 'software' renderloop in 0ms, polish=0, sync=0, render=0, swap=0, frameDelta=20
+qt.qpa.window.scene: Scene <UIWindowScene: 0x10b00fa00; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: A0312104-7577-4E7C-A57C-B9C8740FA243; activationState: UISceneActivationStateForegroundInactive> did update properties
+qt.qpa.application: ApplicationDidBecomeActive - moving from Qt::ApplicationInactive to Qt::ApplicationActive
+qt.qpa.application: done moving to Qt::ApplicationActive
+2026-10-28 13:11:26.980 HelloPySide_bin[6856:112147] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+qt.scenegraph.general: Loading backend software
+qt.qpa.backingstore: Setting up RHI support in 0x600000c4a6d0 for Main_QMLTYPE_0(0x600003e1a200) with QSurface::MetalSurface and requested API QPlatformBackingStoreRhiConfig::Metal
+qt.qpa.backingstore: Metal does not seem to be supported
+qt.qpa.backingstore: Setting up RHI support in 0x600000c4a6d0 for Main_QMLTYPE_0(0x600003e1a200) with QSurface::MetalSurface and requested API QPlatformBackingStoreRhiConfig::Metal
+qt.qpa.backingstore: Metal does not seem to be supported
+2026-10-28 13:11:51.317 HelloPySide_bin[6906:112629] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+qt.scenegraph.general: basic render loop
+qt.scenegraph.general: Using sg animation driver
+qt.scenegraph.general: Creating QRhi with backend OpenGL for window 0x600003e1b900 (wflags 0x1)
+  Graphics API debug/validation layers: 0
+  Debug markers: 0
+  Timestamps: 0
+  Prefer software device: 0
+  Shader/pipeline cache collection: 1
+qt.rhi.general: Created OpenGL context QSurfaceFormat(version 3.0, options QFlags<QSurfaceFormat::FormatOption>(), depthBufferSize 24, redBufferSize -1, greenBufferSize -1, blueBufferSize -1, alphaBufferSize -1, stencilBufferSize 8, samples -1, swapBehavior QSurfaceFormat::DoubleBuffer, swapInterval 1, colorSpace QColorSpace(), profile  QSurfaceFormat::NoProfile)
+qt.rhi.general: OpenGL VENDOR: Apple Inc. RENDERER: Apple Software Renderer VERSION: OpenGL ES 3.0 APPLE-23.0.2
+qt.scenegraph.general: Created QRhi 0x6000000202b0 for window 0x600003e1b900
+qt.scenegraph.general: rhi texture atlas dimensions: 2048x4096
+qt.scenegraph.general: MSAA sample count for the swapchain is 1. Alpha channel requested = no
+2026-10-28 13:13:08.778 HelloPySide_bin[7968:115925] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+2026-10-28 13:42:43.563 HelloPySide_bin[2072:14184] Python 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:22:08) [Clang 15.0.0 (clang-1500.3.9.4)] initialized
+qt.qpa.glcontext: explicitly glFinishing and deactivating QOpenGLContext(0x60000003a200, format=QSurfaceFormat(version 3.0, options QFlags<QSurfaceFormat::FormatOption>(), depthBufferSize 24, redBufferSize -1, greenBufferSize -1, blueBufferSize -1, alphaBufferSize -1, stencilBufferSize 8, samples -1, swapBehavior QSurfaceFormat::DoubleBuffer, swapInterval 1, colorSpace QColorSpace(), profile  QSurfaceFormat::NoProfile), surface=0x600003e0c810, screen="iPhone built-in display")

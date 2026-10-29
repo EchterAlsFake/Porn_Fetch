@@ -30,6 +30,8 @@ is_android = (
     or "ANDROID_BOOTSTRAP" in os.environ
     or "--android" in sys.argv
 )
+is_ios = sys.platform == "ios"
+is_mobile = is_android or is_ios
 is_main_process = mp.current_process().name == 'MainProcess' and "unittest" not in sys.modules and not os.environ.get("PORN_FETCH_TEST_ENV")
 
 app = None
@@ -47,7 +49,7 @@ if is_main_process:
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     app.setWindowIcon(QIcon(":/images/graphics/logo.png"))
     engine = QQmlApplicationEngine()
-    if not is_android and "--android" not in sys.argv:
+    if not is_mobile:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
         splash = SplashController(engine, str(splash_qml_path))
         splash.splash_window.show()
@@ -168,7 +170,7 @@ FORCE_DISABLE_AV = not has_ffmpeg()
 
 stop_flag = asyncio.Event()
 configure_tor_transport(app_settings)
-sni_proxy_manager = None if is_android or "--android" in sys.argv else SNIProxyManager(app_settings)
+sni_proxy_manager = None if is_mobile else SNIProxyManager(app_settings)
 log_level = app_settings.log_level_map.get(app_settings.log_level)
 
 
@@ -1602,11 +1604,11 @@ def main() -> None:
 
     # Loads the theme e.g., Material UI / Fusion + dark / light theme
     saved_style = app_settings.core_style
-    QQuickStyle.setStyle("Material" if is_android or args.android else saved_style)
+    QQuickStyle.setStyle("Material" if is_mobile or args.android else saved_style)
     theme_manager = ThemeManager(parent=engine)
 
     # The backend instance handles the main logic, see class above
-    backend_instance = Backend(parent=engine, mobile_layout=is_android or args.android)
+    backend_instance = Backend(parent=engine, mobile_layout=is_mobile or args.android)
 
     # The test mode runs an automated test with the real QML / Backend environment, it tests basically everything
     if test_mode:
@@ -1630,13 +1632,13 @@ def main() -> None:
         raise SystemExit(exit_code)
 
 
-    database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_android)
+    database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_mobile)
     backend_instance.bind_database_bridge(database_bridge)
 
     license_service = create_license_service(
         app_settings,
         Path.cwd() / "licensing" if args.smoke_test else (
-            Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_android else shared_data_dir()
+            Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_mobile else shared_data_dir()
         ),
         production_config=load_production_config(),
     )
@@ -1656,7 +1658,7 @@ def main() -> None:
     engine.rootContext().setContextProperty("torStatus", tor_status)
     beta_disclaimer = BetaDisclaimerBridge(app_settings, parent=engine)
     engine.rootContext().setContextProperty("betaDisclaimer", beta_disclaimer)
-    engine.rootContext().setContextProperty("androidLayout", is_android or args.android)
+    engine.rootContext().setContextProperty("androidLayout", is_mobile or args.android)
     from src.backend.android_display import AndroidDisplay
     display_geometry = AndroidDisplay(os.environ.get("ANDROID_PRIVATE", "") if is_android else "", parent=engine)
     engine.rootContext().setContextProperty("androidDisplay", display_geometry)
@@ -1674,7 +1676,7 @@ def main() -> None:
 
     # 3. Choose the native layout, or open the Android layout as a desktop preview.
     qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / (
-        "AndroidMain.qml" if is_android or args.android else "Main.qml"
+        "AndroidMain.qml" if is_mobile or args.android else "Main.qml"
     )
 
 

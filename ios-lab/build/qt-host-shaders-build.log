@@ -1,0 +1,153 @@
+[1/78] Running syncqt.cpp for module: QtShaderTools
+[2/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/Logger.cpp.o
+[3/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/InReadableOrder.cpp.o
+[4/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/SpvPostProcess.cpp.o
+[5/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/SpvTools.cpp.o
+[6/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/SPVRemapper.cpp.o
+[7/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/doc.cpp.o
+[8/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Osdependent.dir/__/3rdparty/glslang/glslang/OSDependent/Unix/ossource.cpp.o
+[9/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/disassemble.cpp.o
+[10/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/GenericCodeGen/CodeGen.cpp.o
+[11/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/GenericCodeGen/Link.cpp.o
+[12/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/SpvBuilder.cpp.o
+[13/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/InfoSink.cpp.o
+[14/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/IntermTraverse.cpp.o
+[15/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/Constant.cpp.o
+[16/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Spirv.dir/__/3rdparty/glslang/SPIRV/GlslangToSpv.cpp.o
+[17/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/ParseContextBase.cpp.o
+[18/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/Initialize.cpp.o
+[19/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/Intermediate.cpp.o
+[20/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/PoolAlloc.cpp.o
+[21/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/RemoveTree.cpp.o
+[22/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/Scan.cpp.o
+[23/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/SpirvIntrinsics.cpp.o
+[24/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/ShaderLang.cpp.o
+[25/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/ParseHelper.cpp.o
+[26/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/SymbolTable.cpp.o
+[27/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/Versions.cpp.o
+[28/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/attribute.cpp.o
+[29/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/intermOut.cpp.o
+[30/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/limits.cpp.o
+[31/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/glslang_tab.cpp.o
+[32/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/parseConst.cpp.o
+[33/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/iomapper.cpp.o
+[34/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/preprocessor/Pp.cpp.o
+[35/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/linkValidate.cpp.o
+[36/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/preprocessor/PpAtom.cpp.o
+[37/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/preprocessor/PpContext.cpp.o
+[38/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/preprocessor/PpTokens.cpp.o
+[39/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/preprocessor/PpScanner.cpp.o
+[40/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/propagateNoContraction.cpp.o
+[41/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/ResourceLimits/ResourceLimits.cpp.o
+[42/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cfg.cpp.o
+[43/78] Building CXX object src/glslang/CMakeFiles/BundledGlslang_Glslang.dir/__/3rdparty/glslang/glslang/MachineIndependent/reflection.cpp.o
+[44/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cpp.cpp.o
+[45/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cross_util.cpp.o
+[46/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cross_c.cpp.o
+[47/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cross_parsed_ir.cpp.o
+[48/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_cross.cpp.o
+[49/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_parser.cpp.o
+[50/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_hlsl.cpp.o
+[51/78] Generating ../../lib/QtShaderTools.framework/Versions/A/Headers, ShaderTools_fw_sync_headers_marker_file
+[52/78] Linking CXX static library lib/libQt6BundledGlslang_Spirv.a
+[53/78] Linking CXX static library lib/libQt6BundledGlslang_Osdependent.a
+[54/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_reflect.cpp.o
+[55/78] Copy the ShaderTools header files to the framework directory
+[56/78] Generating ../../mkspecs/modules/qt_lib_shadertools_private.pri
+[57/78] Copying OS X Content lib/QtShaderTools.framework/Versions/A/Resources/PrivacyInfo.xcprivacy
+[58/78] Linking CXX static library lib/libQt6BundledGlslang_Glslang.a
+[59/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_glsl.cpp.o
+[60/78] Building CXX object src/SPIRV-Cross/CMakeFiles/BundledSpirv_Cross.dir/__/3rdparty/SPIRV-Cross/spirv_msl.cpp.o
+[61/78] Linking CXX static library lib/libQt6BundledSpirv_Cross.a
+[62/78] Automatic MOC for target ShaderTools
+[63/78] Running AUTOMOC file extraction for target ShaderTools
+[64/78] Generating pc file for target Qt6::ShaderTools
+[65/78] Generating prl file for target ShaderTools
+[66/78] Running moc --collect-json for target ShaderTools
+[67/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/cmake_pch.hxx.pch
+[68/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/ShaderTools_autogen/mocs_compilation.cpp.o
+[69/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/qshaderrewriter.cpp.o
+[70/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/qspirvcompiler.cpp.o
+[71/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/qshaderbaker.cpp.o
+[72/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/qspirvshaderremap.cpp.o
+[73/78] Building CXX object src/shadertools/CMakeFiles/ShaderTools.dir/qspirvshader.cpp.o
+[74/78] Linking CXX shared library lib/QtShaderTools.framework/Versions/A/QtShaderTools
+[75/78] Automatic MOC for target qsb
+[76/78] Building CXX object tools/qsb/CMakeFiles/qsb.dir/qsb_autogen/mocs_compilation.cpp.o
+[77/78] Building CXX object tools/qsb/CMakeFiles/qsb.dir/qsb.cpp.o
+[78/78] Linking CXX executable bin/qsb
+-- Install configuration: "Release"
+-- Installing: /Users/asuna/ios-lab/device/qt-host/metatypes/qt6shadertools_metatypes.json
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsConfig.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsConfigVersion.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsConfigVersionImpl.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsTargetsPrecheck.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateConfig.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateConfigVersion.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateConfigVersionImpl.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateTargetsPrecheck.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Resources
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Resources
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Resources/QtShaderTools.prl
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Resources/PrivacyInfo.xcprivacy
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Resources/Info.plist
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/rhi
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/rhi/qshaderbaker.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private/qshaderrewriter_p.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private/qspirvshader_p.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private/qtshadertoolsglobal_p.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private/qspirvshaderremap_p.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/6.12.0/QtShaderTools/private/qspirvcompiler_p.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/QtShaderToolsVersion
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/qtshadertoolsversion.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/QtShaderToolsDepends
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/qtshadertoolsexports.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/qtshadertoolsglobal.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/Headers/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/A/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Versions/Current
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/Headers
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/QtShaderTools.framework/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsTargets-release.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsVersionlessAliasTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsVersionlessTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateVersionlessAliasTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateVersionlessTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/modules/ShaderTools.json
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsAdditionalTargetInfo.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateAdditionalTargetInfo.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/QtShaderToolsVersion
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/qtshadertoolsversion.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/QtShaderToolsDepends
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/qtshadertoolsexports.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/qtshadertoolsglobal.h
+-- Installing: /Users/asuna/ios-lab/device/qt-host/include/QtShaderTools/QtShaderTools
+-- Installing: /Users/asuna/ios-lab/device/qt-host/mkspecs/modules/qt_lib_shadertools.pri
+-- Installing: /Users/asuna/ios-lab/device/qt-host/mkspecs/modules/qt_lib_shadertools_private.pri
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/pkgconfig/Qt6ShaderTools.pc
+-- Installing: /Users/asuna/ios-lab/device/qt-host/bin/qsb
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderTools/Qt6ShaderToolsDependencies.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsPrivate/Qt6ShaderToolsPrivateDependencies.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6BuildInternals/StandaloneTests/QtShaderToolsTestsConfig.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsDependencies.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsMacros.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsConfig.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsConfigVersion.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsConfigVersionImpl.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsTargetsPrecheck.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsTargets.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsTargets-release.cmake
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsVersionlessTargets.cmake
+-- Starting SPDX SBOM generation in build dir: /Users/asuna/ios-lab/device/qt-host-shaders-build/qt_sbom/staging-qtshadertools.spdx.in
+-- Finalizing SBOM generation in install dir: /Users/asuna/ios-lab/device/qt-host/sbom/qtshadertools-6.12.0.spdx
+-- Installing: /Users/asuna/ios-lab/device/qt-host/lib/cmake/Qt6ShaderToolsTools/Qt6ShaderToolsToolsAdditionalTargetInfo.cmake

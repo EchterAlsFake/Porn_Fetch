@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.iokit-user-client-class</key>
+    <array>
+        <string>AGXDeviceUserClient</string>
+        <string>AGXSharedUserClient</string>
+        <string>AGXGLContext</string>
+        <string>AGXCommandQueue</string>
+        <string>AGXDevice</string>
+        <string>IOSurfaceRootUserClient</string>
+        <string>IOAccelContext</string>
+        <string>IOAccelContext2</string>
+        <string>IOAccelDevice</string>
+        <string>IOAccelDevice2</string>
+        <string>IOAccelSharedUserClient</string>
+        <string>IOAccelSharedUserClient2</string>
+    </array>
+</dict>
+</plist>

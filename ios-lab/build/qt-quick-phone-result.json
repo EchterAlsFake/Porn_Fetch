@@ -1,0 +1,10 @@
+{
+    "graphics_api": 6,
+    "image_height": 1294,
+    "image_width": 750,
+    "metal": true,
+    "qml_window_visible": true,
+    "qt_version": "6.12.0",
+    "rendered_snapshot_saved": true,
+    "taps": 5
+}

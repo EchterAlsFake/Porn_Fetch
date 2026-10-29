@@ -1,0 +1,77 @@
+"""
+This file basically offloads all translatable strings from the main GUI, so that I can re-use them if needed, but also
+mark them translatable here, and it's just better for overall
+
+"""
+from src.backend.config import __version__
+
+
+class TRANSLATE_MAIN:
+    title = f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026"
+
+class TRANSLATE_PAGE_DOWNLOAD:
+    download_url_placeholder = "Enter a Video URL or an XHamster Short"
+    download_playlist_placeholder = "Enter a PornHub / XVideos Playlist URL"
+    download_model_placeholder = "Enter a Model / Channel / Actress / Creator URL"
+
+
+class TRANSLATE_PAGE_LOGIN:
+    login_email_placeholder = "Enter your PornHub E-Mail address"
+    login_email_password = "Enter your PornHub Password (Your account data will never be saved nor shared) "
+
+
+class TRANSLATE_PAGE_SETTINGS:
+    settings_button_reset_pf = "Reset Porn Fetch to default settings"
+    settings_button_install_pf = "Install Porn Fetch"
+    settings_button_uninstall_pf = "Uninstall Porn Fetch"
+
+
+class TRANSLATE_ERRORS:
+    invalid_input = """
+The URL / Input you provided seems to be invalid. You either did a mistake while copy-pasting the URL e.g., missing
+https://, or the website is not yet supported. 
+
+You can create a GitHub Issue to ask for a site to be added, but specific conditions apply to that:
+https://pornfetch.to/add_site_conditions"""
+    cookies_not_found = """
+I could not extract the cookies for your requested page. This can happen to multiple reasons:
+1) You are not authenticated in your OS
+2) You are not actually logged in at the target website
+3) The browser_cookie3 library had an error
+4) Your browser is currently open and the database is therefore locked (try to close your browser)
+5) My regular expression failed (unlikely cuz I don't do mistakes)"""
+    installation_file_not_found = """
+I could not find the actual Porn Fetch executable that Nuitka extracts. This is a serious issue! 
+Please report it immediately on GitHub.
+
+The only fix is, to run Porn Fetch in portable mode. """
+    installation_copy_failed = """
+Could not copy the Porn Fetch executable to the target installation directory.
+This should not happen, please report it!"""
+    installation_unsupported = """
+You are likely trying to install Porn Fetch on an unsupported platform e.g., macOS / Android! 
+If you think this is an error, please report it!
+"""
+    something_stupid_happened = """
+If you see this error, then you somehow managed to trigger an error that should logically be impossible
+to happen.
+
+Please report this with the exact things you did to trigger this on GitHub!"""
+    metadata_write_error = "Couldn't write metadata into the file. Please report this error!"
+    update_failed = "Couldn't check for updates. Server is probably down and I am already working on it :)"
+    sni_leak = """
+Porn Fetch tried to protect your privacy by modifying the SNI packet in the encrypted TLS layer. This packet tells
+where the request goes. This means that your ISP or any middleman in your network can see the domain you are reaching.
+Porn Fetch tries to hide this by obfuscating the packet into multiple packets with the domain name split.
+
+However, while verifying if this actually worked I saw that it failed. The request will be dropped and not retried.
+This is a very specific error. If you want to help, please enable the debug_mode in Porn Fetch settings, do the exact
+same thing you just did again (after restarting) and send an error report along with the .log files to:
+
+EchterAlsFakeBS@proton.me
+Thank you :) 
+
+If this happens frequently, disable the SNI Obfuscation feature and use a Proxy / VPN instead. 
+This feature is only relevant to prevent MiTM attacks and to prevent state firewall blocks.
+    
+"""

@@ -1,0 +1,29 @@
+WARNING: The directory '/Users/asuna/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Collecting setuptools==78.1.0
+  Downloading setuptools-78.1.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting packaging==24.2
+  Downloading packaging-24.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting build==1.2.2.post1
+  Downloading build-1.2.2.post1-py3-none-any.whl.metadata (6.5 kB)
+Collecting wheel==0.46.3
+  Downloading wheel-0.46.3-py3-none-any.whl.metadata (2.4 kB)
+Collecting jinja2
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting pyproject_hooks (from build==1.2.2.post1)
+  Downloading pyproject_hooks-1.3.3-py3-none-any.whl.metadata (1.3 kB)
+Collecting MarkupSafe>=2.0 (from jinja2)
+  Downloading markupsafe-3.0.4-cp313-cp313-macosx_10_13_x86_64.whl.metadata (2.7 kB)
+Downloading setuptools-78.1.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 16.7 MB/s  0:00:00
+Downloading packaging-24.2-py3-none-any.whl (65 kB)
+Downloading build-1.2.2.post1-py3-none-any.whl (22 kB)
+Downloading wheel-0.46.3-py3-none-any.whl (30 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading markupsafe-3.0.4-cp313-cp313-macosx_10_13_x86_64.whl (11 kB)
+Downloading pyproject_hooks-1.3.3-py3-none-any.whl (10 kB)
+Installing collected packages: setuptools, pyproject_hooks, packaging, MarkupSafe, wheel, jinja2, build
+
+Successfully installed MarkupSafe-3.0.4 build-1.2.2.post1 jinja2-3.1.6 packaging-24.2 pyproject_hooks-1.3.3 setuptools-78.1.0 wheel-0.46.3
+
+[notice] A new release of pip is available: 26.2.1 -> 26.2.2
+[notice] To update, run: /Users/asuna/ios-lab/device/build-venv/bin/python3.13 -m pip install --upgrade pip

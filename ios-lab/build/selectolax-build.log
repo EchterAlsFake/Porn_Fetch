@@ -1,0 +1,2 @@
+ld: warning: -undefined dynamic_lookup is deprecated on iOS-simulator
+Built selectolax from 214 source files

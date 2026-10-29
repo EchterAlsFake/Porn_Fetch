@@ -1,0 +1,7 @@
+WARNING:root:[DEPLOY] Unable to resolve a valid project file. Proceeding without a project file. Details:
+No project file found in the current directory.
+WARNING:root:[DEPLOY] Found 'import PySide6' in file 0. Use 'from PySide6 import <module>' or pass the module needed using --extra-modules command line argument
+[DEPLOY] Xcode project created for arm64 device   /Users/asuna/ios-lab/device/python-qt-hello/deployment/ios_arm64/PythonQtPhoneHello.xcodeproj
+
+Open it with:
+  open /Users/asuna/ios-lab/device/python-qt-hello/deployment/ios_arm64/PythonQtPhoneHello.xcodeproj

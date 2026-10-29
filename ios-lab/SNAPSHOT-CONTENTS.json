@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "source_roots": [
+    "/Users/asuna/ios-lab",
+    "/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2"
+  ],
+  "entries": 312140,
+  "uncompressed_file_bytes": 21160272613,
+  "source_view_files": 529,
+  "exclusions": [
+    {
+      "path": "ios-lab/ssh",
+      "reason": "private SSH identity and host configuration"
+    },
+    {
+      "path": "ios-lab/build/phone-original.ts",
+      "reason": "downloaded media"
+    },
+    {
+      "path": "ios-lab/build/phone-remuxed.mp4",
+      "reason": "downloaded media"
+    },
+    {
+      "path": "ios-lab/build/pornfetch-screenshot.png",
+      "reason": "application screenshot may contain media thumbnails"
+    },
+    {
+      "path": "ios-lab/device/qt-src/pyside-setup/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/device/qt-src/qt5compat/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/device/qt-src/qtbase/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/device/qt-src/qtdeclarative/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/device/qt-src/qtshadertools/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/device/qt-src/qtsvg/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    },
+    {
+      "path": "ios-lab/pornfetch/native/selectolax-src/selectolax-1.0.2/lexbor/.git",
+      "reason": "Git internals, per-user Xcode state or platform noise"
+    }
+  ],
+  "sanitized_text_files": [
+    "ios-lab/build/download-integrity.json",
+    "ios-lab/build/phone-remuxed-integrity.json",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtNetwork/mjb_rejected_fields.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtNetwork/mjb_rejected_functions.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQml/mjb_rejected_fields.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQml/mjb_rejected_functions.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQuick/mjb_rejected_fields.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQuick/mjb_rejected_functions.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQuickControls2/mjb_rejected_fields.log",
+    "ios-lab/device/qt-src/pyside-setup/build/qfp-py3.15-qt6.12.0-ios_arm64-release/build/pyside6/PySide6/QtQuickControls2/mjb_rejected_functions.log",
+    "ios-lab/device/qt-src/qtbase/tests/auto/corelib/serialization/qtextstream/rfc3261.txt"
+  ]
+}
