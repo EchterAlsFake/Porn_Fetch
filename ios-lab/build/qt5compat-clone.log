@@ -1,20 +1,0 @@
-Cloning into '/Users/asuna/ios-lab/device/qt-src/qt5compat'...
-warning: refs/tags/v6.12.0 f8652aa114fafe317b64480a56c43f0ba9e81536 is not a commit!
-Note: switching to '9c2a1b4c8298c750f8632e2fd19f7a1a539c5f09'.
-
-You are in 'detached HEAD' state. You can look around, make experimental
-changes and commit them, and you can discard any commits you make in this
-state without impacting any branches by switching back to a branch.
-
-If you want to create a new branch to retain commits you create, you may
-do so (now or later) by using -c with the switch command. Example:
-
-  git switch -c <new-branch-name>
-
-Or undo this operation with:
-
-  git switch -
-
-Turn off this advice by setting config variable advice.detachedHead to false
-
-Updating files:  75% (1095/1448)Updating files:  76% (1101/1448)Updating files:  77% (1115/1448)Updating files:  78% (1130/1448)Updating files:  79% (1144/1448)Updating files:  80% (1159/1448)Updating files:  81% (1173/1448)Updating files:  82% (1188/1448)Updating files:  83% (1202/1448)Updating files:  84% (1217/1448)Updating files:  85% (1231/1448)Updating files:  86% (1246/1448)Updating files:  87% (1260/1448)Updating files:  88% (1275/1448)Updating files:  89% (1289/1448)Updating files:  90% (1304/1448)Updating files:  91% (1318/1448)Updating files:  92% (1333/1448)Updating files:  93% (1347/1448)Updating files:  94% (1362/1448)Updating files:  95% (1376/1448)Updating files:  96% (1391/1448)Updating files:  97% (1405/1448)Updating files:  98% (1420/1448)Updating files:  99% (1434/1448)Updating files: 100% (1448/1448)Updating files: 100% (1448/1448), done.

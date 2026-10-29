@@ -1,12 +1,15 @@
 """Resolve the checked-in runtime graph for iOS, keeping native builds separate."""
 from pathlib import Path
+import os
 import subprocess
 import sys
 import tomllib
 from pip._vendor.packaging.markers import Marker, default_environment
 
 port = Path(__file__).resolve().parent
-repo = Path('/Users/asuna/Porn_Fetch')
+lab = port.parent
+repo = Path(os.environ.get('PORN_FETCH_SOURCE',
+    lab.parent if (lab.parent / 'pyproject.toml').is_file() else lab.parent / 'Porn_Fetch'))
 lock = tomllib.loads((repo / 'uv.lock').read_text())
 packages = {p['name']: p for p in lock['package']}
 root = packages['porn-fetch']

@@ -10,9 +10,11 @@ import sys
 
 device = Path(__file__).resolve().parent
 lab = device.parent
-repo = Path("/Users/asuna/Porn_Fetch")
+repo = Path(os.environ.get('PORN_FETCH_SOURCE',
+    lab.parent if (lab.parent / 'pyproject.toml').is_file() else lab.parent / 'Porn_Fetch'))
 app = device / "app"
 vendor = device / "vendor"
+shutil.rmtree(app / 'src', ignore_errors=True)
 shutil.copytree(repo / "src", app / "src", dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "tests", "screenshots", "resources.py"))
 shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
@@ -41,7 +43,7 @@ cache = output / "_wheels"
 if cache.exists():
     shutil.rmtree(cache)
 env = os.environ.copy()
-env["DEVELOPER_DIR"] = "/Users/asuna/Downloads/Xcode.app/Contents/Developer"
+env.setdefault("DEVELOPER_DIR", "/Users/asuna/Downloads/Xcode.app/Contents/Developer")
 env["PATH"] = str(lab / ".venv/bin") + ":/usr/local/bin:/usr/bin:/bin"
 subprocess.run([str(lab / ".venv/bin/pyside6-ios-deploy"), "-c", str(config_path)],
                cwd=app, env=env, check=True)

@@ -1,8 +1,0 @@
-   Compiling cryptography-cffi v0.50.2 (/Users/asuna/ios-lab/pornfetch/native/cryptography-src/cryptography-50.0.2/src/rust/cryptography-cffi)
-   Compiling cryptography-rust v0.50.2 (/Users/asuna/ios-lab/pornfetch/native/cryptography-src/cryptography-50.0.2/src/rust)
-warning: linker stderr: ld: -undefined dynamic_lookup is deprecated on iOS-simulator
-  |
-  = note: `#[warn(linker_messages)]` on by default
-
-warning: `cryptography-rust` (lib) generated 1 warning
-    Finished `release` profile [optimized] target(s) in 43.82s

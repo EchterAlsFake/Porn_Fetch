@@ -1,3 +1,0 @@
-ld: warning: -undefined dynamic_lookup is deprecated on iOS-simulator
-generating /Users/asuna/ios-lab/pornfetch/native/curl-wrapper-build/wrapper.c
-Built curl-cffi wrapper for the Intel iOS simulator

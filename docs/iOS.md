@@ -1,110 +1,42 @@
-# iOS support before GTA6? 
-Maybe...
+# iOS port
 
-# CLI
-The CLI of Porn Fetch is able to run on iOS. I have just managed to get it working.
-I bought an old iPhone 7 and jailbroken it rootless using [palera1n](https://github.com/palera1n/palera1n).
-The way was hard but it works. After installing Python3.12.5 from kitty-xz's repositories.
-This way I was able to clone the repository, install the requirements and run Porn Fetch.
-The base CLI worked, downloading did not. However, downloading with the pure PHUB module did
-work and produced a .mp4 file. 
+Porn Fetch has an experimental GUI port verified on an **iPhone 7 (arm64),
+iOS 15.8.8, with palera1n rootless**, on 2026-10-28. The user confirmed the
+interface, downloads, automatic MP4 remuxing, and video/audio playback in Files.
+An Intel iOS simulator build was also verified.
 
-This proves: **IT CAN BE DONE**
+There is no public iOS installer or iOS CI release target. The device build uses
+jailbreak signing and a patched Qt kit; ordinary iPhone installation and App Store
+distribution have not been established. Other devices have not been tested.
 
-Over the next weeks I will search for ways and try all possible ways to get that working.
-In version 3.8, maybe we have iOS support for the CLI. Maybe even a native binary you can 
-just run without the Python stuff. We'll see.
+- [Build and deploy](ios/BUILDING.md): restore the build inputs, generate an Xcode
+  project, build the app, and install it on the tested device; separate simulator
+  and dependency rebuild instructions.
+- [Implementation and validation](ios/ARCHITECTURE.md): platform handling, Qt
+  compatibility patches, native extensions, FFmpeg, evidence, and remaining work.
+- [Original build snapshot](ios/SNAPSHOT.md): authenticated download, integrity
+  verification, and restoration of the preserved macOS lab.
+- [Build sources](../ios-lab/README.md): scripts, patches, probes, and manifests.
 
-Okay Edit:
-I don't know what I changed, but yeah downloading works just fine now :) 
+## Verified scope
 
-# GUI
-While the above process produces the CLI, but only works on jailbroken iPhones, the GUI
-could maybe even by half of 2026 be running officially on iOS with native support using
-the official Apple way.
+| Capability | Physical iPhone 7 | Intel simulator |
+| --- | --- | --- |
+| Real backend and mobile QML interface | Confirmed by user | Confirmed |
+| Qt Quick rendering and touch | Metal rendering; five recorded button taps | OpenGL CPU rendering in the tested VM |
+| Native parsers, CFFI, verified HTTPS, asynchronous HTTPS, cryptography | Passed dependency probes | Passed dependency probes |
+| Real media download | Confirmed by user | User download independently decoded |
+| Automatic FFmpeg remux to playable MP4 | Confirmed by user | Adapter not integrated |
+| Metadata and PNG cover art | Passed device check | Not validated |
 
-This depends on two things:
+The device build embeds **CPython 3.15.0rc2 and Qt/PySide 6.12.0**. The repository's
+normal Python requirement remains `>=3.14,<3.15`; the lab stages dependencies
+separately. A successful port experiment does not extend that supported range.
 
-1) Code signing (big Apple L moment)
-2) PySide6 for iOS
+Background transfers, memory-pressure behavior, account flows, and the complete
+application regression suite remain unverified on iOS. Desktop tracking, browser
+cookie extraction, installer/updater, and Tor workflows are not provided as
+validated iOS features. See the implementation notes for the precise limits.
 
-Qt has stated in their PySide6 6.10.0 blogpost, that they have started initial support
-for iOS with their core Qt modules. This means, that the base of Qt works.
-They need to get the graphical stuff working and enable full UI rendering, and then we
-can build full PySide6 apps for iOS. Yes, really.
-
-The problem is: **Signing.**
-
-I don't own an Apple developer account nor will I pay for one. So, maybe you can install
-the app through some unofficial methods if you live in the EU, I don't know, we will see.
-But there's always a way. I will find it. 
-
-
-If all this works, Porn Fetch would be running on all major platforms. 
-This would be a huge milestone, not only for me, but actually to show the
-true power of Python. Sure Python isn't Java where you can say: 
-
-"Compile once, run everywhere"
-<br>or like Fireship likes to say: 
-<br>"Compile once, debug everywhere" xD
-
-But it's possible with enough time.
-
-
-
-# Installation (Jailbreak)
-#### Supported iPhones (theoretical)
-- iPhone 6s
-- iPhone 6s Plus
-- iPhone SE
-- iPhone 7
-- iPhone 7 Plus
-- iPhone 8
-- iPhone 8 Plus
-- iPhone X
-
-You can maybe also run on iPad, iPod or Apple TV,
-however, I can't test it and I can't provide any guide on how
-to do it. You are absolutely on your own, but feel free to do it.
-
-> [!IMPORTANT]
-> If you haven't already, jailbreak your iPhone using: [Paler1n](https://palera.in/). This can destroy your
-> device, some apps may stop working, you (probably) lose Apple's warranty, and Apple may even sue you for breaking
-> into their system. Usage is on your risk. I can't help you if something goes wrong!
-
-# Installation Tutorial
-#### Jailbreaking your device
-
-> [!IMPORTANT]
-> Use a USB-A to Lightning Cable. The USB-C variants usually don't work well. 
-
-1) Run: `sudo palera1n -l -V -vvv` to jailbreak your device
-
-If you get this error: `UaF race: heuristic strategy failed, setup packet was not accepted`
-<br>Use an Intel CPU based system (yes seriously)
-
-If you get stuck in the Pongo OS screen and nothing happens,
-disconnect and reconnect cable and it will boot fine. 
-
-If your iPhone breaks, buy a Google Pixel instead 🔥
-
-2) Open Sileo and Install the CyPwn repository
-3) Install Python 3.12.5-1 by kitty-xz (or compile yourself if you have no life LMAO)
-4) Install some terminal e.g., NewTerm
-
-Now everything wors as usual on Linux
-
-5) Clone the repository, cd into the project, create a virtual environment, install the CLI requirements 
-
-You need to install all the requirements and every API manually. Do NOT try
-to install from pyproject.toml, that won't work. Just run the CLI and install each missing package
-until it works.
-
-
-
-
-
-
-
-
-
+The old jailbreak CLI experiment used Python 3.12 and an earlier dependency stack.
+It is superseded by this GUI port and is not a build method for the current source.

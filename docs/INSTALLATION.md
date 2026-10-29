@@ -1,5 +1,9 @@
 # Installation & Build Guide
 
+For the experimental iPhone GUI port, use the separate
+[iOS build and deployment guide](ios/BUILDING.md). It requires the preserved
+macOS lab inputs and currently targets a jailbroken iPhone 7.
+
 > [!CAUTION]
 > **This guide is for the 3.9 source tree and the upcoming 3.9 beta.**
 > The published 3.8 download is an older GPL release with a different architecture,

@@ -1,6 +1,0 @@
-2026-10-28 23:39:50,664 - Porn Fetch - [Clients] - DEBUG - clients.py:214 <module> - Successfully initialized all clients and!
-<frozen importlib._bootstrap>:549: Warning: OpenSSL 3's legacy provider failed to load. Legacy algorithms will not be available. If you need those algorithms, check your OpenSSL configuration.
-PORN_FETCH_IPHONE_BACKEND_IMPORTED 3.15.0rc2 (tags/v3.15.0rc2-dirty:435c9e5, Sep  1 2026, 09:19:21) [Clang 15.0.0 (clang-1500.3.9.4)]
-2026-10-28 23:39:51,354 - Porn Fetch - [Clients] - INFO - clients.py:259 refresh_clients - Refreshing all clients!
-2026-10-28 23:39:51,358 - Porn Fetch - [Clients] - DEBUG - clients.py:321 refresh_clients - Applied in-place clients!
- 1493 /private/preboot/3A15D1E0856BB7764841BCDC9F1DCE70CAEEA567676EEB0CD63044291CF0EDE4C318A31D590D6C519D94DA985E375782/jb-NBdf7GMH/procursus/Applications/PornFetch.app/PornFetch_bin

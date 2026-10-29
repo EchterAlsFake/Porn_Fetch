@@ -84,6 +84,10 @@ reads it into package metadata, so releases only update that one file.
 
 Desktop builds use the platform specification in `packaging/pysidedeploy_*.spec`. The headless binary uses `packaging/pyinstaller_cli.spec`. The cross-platform build workflow is `.github/workflows/build_all.yml`.
 
+The experimental iOS build uses the separate recipes in `ios-lab/`. See
+[iOS build and deployment](ios/BUILDING.md) for the preserved macOS toolchain,
+device and simulator targets, signing, and dependency rebuild order.
+
 ## Implementation notes
 
 - Use asyncio rather than QThread worker code.

@@ -11,14 +11,16 @@ import sys
 
 port = Path(__file__).resolve().parent
 lab = port.parent
-repo = Path('/Users/asuna/Porn_Fetch')
+repo = Path(os.environ.get('PORN_FETCH_SOURCE',
+    lab.parent if (lab.parent / 'pyproject.toml').is_file() else lab.parent / 'Porn_Fetch'))
 app = port / 'app'
 env = os.environ.copy()
-env['DEVELOPER_DIR'] = '/Users/asuna/Downloads/Xcode.app/Contents/Developer'
+env.setdefault('DEVELOPER_DIR', '/Users/asuna/Downloads/Xcode.app/Contents/Developer')
 env['PATH'] = str(lab / '.venv/bin') + ':/usr/local/bin:/usr/bin:/bin'
 
 # Preserve the repository's generated resources.py; the binary resource file
 # is generated independently for this bundle.
+shutil.rmtree(app / 'src', ignore_errors=True)
 shutil.copytree(repo / 'src', app / 'src', dirs_exist_ok=True,
                 ignore=shutil.ignore_patterns('__pycache__', 'tests', 'screenshots', 'resources.py'))
 subprocess.run([str(lab / '.venv/bin/pyside6-rcc'), '--binary',

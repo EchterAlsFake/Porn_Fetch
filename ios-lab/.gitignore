@@ -1,6 +1,36 @@
-# This branch intentionally tracks the small source/diagnostic view, including
-# selected files normally ignored by the parent project. Full build state is in
-# the associated draft release. Avoid accidental future credential/media adds.
+# First-party recipes and selected results are tracked. Restore generated build
+# inputs from the snapshot; keep them out of the maintained source tree.
+/build/
+/wheels/
+/toolchains/
+**/deployment/
+/device/artifacts/
+/device/build-venv/
+/device/qt-src/
+/device/qt-host/
+/device/qt-host-build/
+/device/qt-host-*-build/
+/device/qt-ios15/
+/device/*-build/
+/device/*-derived/
+/device/tools/
+/device/vendor/
+/device/native/*
+!/device/native/packages/
+/device/native/packages/*
+!/device/native/packages/ios_ffmpeg.py
+!/device/native/packages/ios_remux_check.py
+/device/ffmpeg/build/
+/device/ffmpeg/ffmpeg-*/
+/device/app/src/
+/device/app/pysidedeploy.spec
+/pornfetch/app/src/
+/pornfetch/app/pysidedeploy.spec
+/pornfetch/native/
+/pornfetch/vendor/
+*.tar.gz
+*.tar.xz
+*.tar.zst*
 /ssh/
 **/id_ed25519*
 **/id_rsa*
@@ -10,6 +40,3 @@
 **/cookies.json
 **/.gnupg/
 **/.ssh/
-/build/phone-original.ts
-/build/phone-remuxed.mp4
-/build/pornfetch-screenshot.png

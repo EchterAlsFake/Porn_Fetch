@@ -1,7 +1,0 @@
-WARNING:root:[DEPLOY] Unable to resolve a valid project file. Proceeding without a project file. Details:
-No project file found in the current directory.
-[DEPLOY] Xcode project created for arm64 device   /Users/asuna/ios-lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj
-
-Open it with:
-  open /Users/asuna/ios-lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj
-/Users/asuna/ios-lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj/project.pbxproj

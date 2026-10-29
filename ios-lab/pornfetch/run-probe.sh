@@ -5,7 +5,8 @@ if [ "$(id -u)" = 0 ]; then exec sudo -H -u asuna "$PORT_DIR/run-probe.sh" "$@";
 LAB_DIR=$(dirname "$PORT_DIR")
 . "$LAB_DIR/env.sh"
 export PATH="$LAB_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin"
-SIM_ID=7DFE048D-AB3D-453F-AE58-D474EF4C4569
+: "${SIM_ID:?Export SIM_ID from xcrun simctl list devices available}"
+mkdir -p "$LAB_DIR/build"
 PROJECT="$PORT_DIR/probe/deployment/ios_x86_64_simulator/NativeProbe.xcodeproj"
 if ! xcodebuild -project "$PROJECT" -scheme NativeProbe -configuration Debug \
     -destination "id=$SIM_ID" -derivedDataPath "$LAB_DIR/build/probe-derived" \

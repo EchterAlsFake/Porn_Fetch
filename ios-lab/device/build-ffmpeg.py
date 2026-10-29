@@ -17,10 +17,13 @@ if not source.exists():
         bundle.extractall(root, filter="data")
 build = root / "build"
 build.mkdir(exist_ok=True)
-developer = Path("/Users/asuna/Downloads/Xcode.app/Contents/Developer")
+developer = Path(os.environ.get("DEVELOPER_DIR", "/Users/asuna/Downloads/Xcode.app/Contents/Developer"))
 tools = developer / "Toolchains/XcodeDefault.xctoolchain/usr/bin"
 sdk = developer / "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
-flags = Path("/Users/asuna/Porn_Fetch/packaging/ffmpeg_configure_flags.txt").read_text().splitlines()
+repo = Path(os.environ.get("PORN_FETCH_SOURCE",
+    device.parent.parent if (device.parent.parent / "pyproject.toml").is_file()
+    else device.parent.parent / "Porn_Fetch"))
+flags = (repo / "packaging/ffmpeg_configure_flags.txt").read_text().splitlines()
 flags.remove("--enable-ffmpeg")
 flags += ["--disable-avfilter", "--enable-cross-compile", "--target-os=darwin", "--arch=aarch64",
           f"--cc={tools / 'clang'}", f"--ar={tools / 'ar'}", f"--ranlib={tools / 'ranlib'}",
