@@ -1,0 +1,68 @@
+{
+  "platform": "ios",
+  "passed": true,
+  "version": "9.0.2",
+  "license": "LGPL version 2.1 or later",
+  "library": "/private/preboot/3A15D1E0856BB7764841BCDC9F1DCE70CAEEA567676EEB0CD63044291CF0EDE4C318A31D590D6C519D94DA985E375782/jb-NBdf7GMH/procursus/Applications/PornFetch.app/packages/_ios_ffmpeg.cpython-315-iphoneos.fwork",
+  "input_bytes": 445108800,
+  "input_is_mpegts": true,
+  "apple_before": {
+    "playable": false,
+    "tracks": [],
+    "decoded_samples": {},
+    "duration_seconds": 0,
+    "readable": false
+  },
+  "remux_seconds": 4.893,
+  "output_bytes": 431414383,
+  "apple_after": {
+    "playable": true,
+    "tracks": [
+      {
+        "frame_rate": 30,
+        "type": "vide",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "frame_rate": 43.06640625,
+        "type": "soun",
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "decoded_samples": {
+      "vide": true,
+      "soun": true
+    },
+    "duration_seconds": 1034.7333333333333,
+    "readable": true
+  },
+  "original_unchanged": true,
+  "metadata_and_cover": true,
+  "apple_final": {
+    "playable": true,
+    "tracks": [
+      {
+        "frame_rate": 30,
+        "type": "vide",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "frame_rate": 43.06640625,
+        "type": "soun",
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "decoded_samples": {
+      "vide": true,
+      "soun": true
+    },
+    "duration_seconds": 1034.7333333333333,
+    "readable": true
+  },
+  "application_remux_enabled": true,
+  "elapsed_seconds": 8.572
+}

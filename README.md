@@ -227,8 +227,10 @@ Linux 32-bit (x32 artifact) and riscv64 CLI builds are available as experimental
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
 > [!NOTE]
-> Older Android and iOS information is in the project history. I have not
-> included mobile GUI artifacts in the current desktop build workflow.
+> The [experimental iOS port](docs/iOS.md) has been verified on a jailbroken
+> iPhone 7, including downloads and automatic MP4 remuxing. See its
+> [build instructions](docs/ios/BUILDING.md). Mobile GUI artifacts are not
+> included in the current desktop build workflow.
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)

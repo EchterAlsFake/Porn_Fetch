@@ -1,0 +1,70 @@
+{
+  "source_revisions": {
+    "pyside-setup": "f50facb83fc3dc5f3240c854668c7a6dd93871b2",
+    "qtdeclarative": "4332fbbb4c340463dc8cee36dda0c85d932122d8",
+    "qtbase": "025bdad181de241e81bf853c8a2d7bf3d19261a9",
+    "qtsvg": "883a58532078d003cefef0a549bfe9f885ce41f5",
+    "qt5compat": "9c2a1b4c8298c750f8632e2fd19f7a1a539c5f09",
+    "qtshadertools": "bccd516b990a6396900051470ac86cc27a7042ea"
+  },
+  "qtbase_patch_sha256": "1a7a858d30f616d84e0b17c510fe64f88c449c932c0db776ae61ea0e9881ad63",
+  "proven_core_wheels": {
+    "pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl": "62ab704e6bdf614db29d4f1015281c4d11b8e0b9b78c5fb7c947a8420f00dcd0",
+    "shiboken6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl": "ba5d21aa4c3e9de3ff29e5f8bc782fa6d54e8d30ac66e5325c99a402dc2ff02b"
+  },
+  "python": "3.15.0rc2",
+  "target": "arm64-apple-ios15.0",
+  "sdk": "iPhoneOS 26.2",
+  "device": "iPhone7 / iPhone9,1 / iOS15.8.8 / palera1n rootless",
+  "qt_quick_phone": {
+    "metal": true,
+    "snapshot": [
+      750,
+      1294
+    ],
+    "touch_counter": 5,
+    "user_confirmed_screen_and_touch": true
+  },
+  "full_device_wheels": {
+    "pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl": "f653d1c4415ee5a95b82aa1141450948dc0b203b84d653cad1b55adbe0877eb7",
+    "shiboken6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl": "ded7491b5fcb3d06b71135b2e9a8d7ebfffb94c7ae0684dc811e6c0d333e513d"
+  },
+  "app_build": {
+    "source_commit": "b38c98e",
+    "bundle_id": "local.asuna.PornFetch",
+    "minimum_ios": "15.0",
+    "native_arch": "arm64",
+    "python": "3.15.0rc2",
+    "qt": "6.12.0",
+    "pyside": "6.12.0",
+    "user_confirmed_interface": true,
+    "data_container": "/private/var/mobile/Containers/Data/Application/DD69C8B2-BD02-4B6B-9822-06794E9B17D8",
+    "remaining": [
+      "background transfer behavior",
+      "memory-pressure behavior"
+    ],
+    "user_confirmed_download": true
+  },
+  "app_archive_sha256": "2b3a51e4a156b5013510d912d085bf94fc9a88b46201e216b70e07a6e05d0b6c",
+  "ffmpeg": {
+    "version": "9.0.2",
+    "source_sha256": "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e",
+    "target": "arm64-apple-ios15.0",
+    "source_url": "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz",
+    "implementation": "in-process libavformat/libavcodec/libavutil Python extension",
+    "native_extension_sha256": "b4324fb1c075d47d36c187e1f1d2b6c89171a04e351ef94a25ad8f4e8d2e8f7e",
+    "native_extension_bytes": 1757520,
+    "base_api_patch_sha256": "c717283ba62010a3a2ee30b6d8bd588e4da682f8e27c1dd2976e0544b05c5252",
+    "device_remux_passed": true,
+    "apple_audio_video_decoding_passed": true,
+    "metadata_and_cover_passed": true,
+    "remux_seconds": 4.893,
+    "full_decode_integrity_passed": true,
+    "faststart_verified": true,
+    "decoded_video_frames": 31040,
+    "decoded_audio_frames": 44562,
+    "remuxed_file_sha256": "d58e4a194eac8a08136c6af72b22f721da7f5075d42b1bb14da843bde531b5d5",
+    "user_confirmed_video_and_sound": true,
+    "user_confirmed_fresh_download_automatic_remux": true
+  }
+}
