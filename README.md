@@ -1,7 +1,12 @@
-# This project is currently not in a functional state. Please wait a few more days, I am actively working on it 🙏
 
-# Security Notice regarding PHP
-The Porn Fetch server is NOT affected by the recent PHP security vulnerability. The server will remain functioning and your data stays safe :) 
+# Security Warning v3.8 (DO NOT USE!)
+Porn Fetch v3.8 is affected by the recently discovered Brotli vulnerability. An attacker can theoretically execute code on your machine through a compromised CDN, DNS or website that Porn Fetch requests.
+
+The attack surface is very theoretical, however it is possible. I strongly advice you to use the beta v3.8.2
+instead. You can get it from https://pornfetch.to/download 
+
+The beta is still unstable and being tested, but I would rather give you a broken app, than a working app with a backdoor!
+
 
 > [!CAUTION]
 > **This README describes the current 3.9 source code and the planned first beta.**
