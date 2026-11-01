@@ -126,6 +126,7 @@ jobs:
           file "$IOS_DEPLOY_VENV/lib/python3.13/site-packages/PySide6/Qt/libexec/rcc"
           HELPERS="$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts"
           "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/patch-ios-deploy.py" --python "$IOS_DEPLOY_VENV/bin/python"
+          "$IOS_DEPLOY_VENV/bin/python" scripts/patch_ios_deploy.py
           "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/check-ios-wheels.py" "$IOS_WORK_ROOT/downloads" --target ios_arm64 --max-ios 15.0
           mkdir -p "$IOS_WORK_ROOT/lab/device/wheels" "$IOS_WORK_ROOT/lab/pornfetch/vendor" "$IOS_WORK_ROOT/lab/device/native/packages"
           rsync -a ios-lab/ "$IOS_WORK_ROOT/lab/"
