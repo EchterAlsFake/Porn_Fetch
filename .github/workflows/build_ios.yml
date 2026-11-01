@@ -29,7 +29,13 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        id: native-cache
+        with:
+          path: ${{ runner.temp }}/ios-inputs/ios-lab
+          key: ios-device-inputs-${{ hashFiles('ios-lab/snapshot-assets.json') }}
       - name: Extract device dependencies from the archived lab
+        if: steps.native-cache.outputs.cache-hit != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash packaging/restore_ios_dependencies.sh "$RUNNER_TEMP/ios-inputs"
@@ -102,11 +108,11 @@ jobs:
           import os
           from pathlib import Path
           root = Path(os.environ["IOS_WORK_ROOT"])
-          frameworks = list((root / "runtime").rglob("Python.xcframework"))
-          if len(frameworks) != 1:
-              raise SystemExit("Expected exactly one published Python.xcframework")
+          framework = root / "runtime/Python.xcframework"
+          if not framework.is_dir():
+              raise SystemExit("Published Python.xcframework is missing")
           with open(os.environ["GITHUB_ENV"], "a") as stream:
-              stream.write(f"IOS_PYTHON_XCFRAMEWORK={frameworks[0]}\n")
+              stream.write(f"IOS_PYTHON_XCFRAMEWORK={framework}\n")
               stream.write(f"IOS_DEPLOY_VENV={root / 'deploy-venv'}\n")
           PY
 
