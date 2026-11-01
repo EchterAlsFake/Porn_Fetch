@@ -20,7 +20,8 @@ archived lab release. `packaging/restore_ios_dependencies.sh` verifies each
 archive part against the tracked `ios-lab/snapshot-assets.json`, then streams
 only the selected trees out of the archive. It retains one compressed part at
 a time, rather than extracting the entire 21 GB lab. The selected inputs occupy
-about 72 MB before packaging. The Ubuntu job's `GITHUB_TOKEN` needs `contents: write` because GitHub exposes
+about 72 MB before packaging and are cached using the snapshot manifest hash.
+The Ubuntu job's `GITHUB_TOKEN` needs `contents: write` because GitHub exposes
 draft releases only to identities with push access; the job only reads assets.
 The macOS build retains `contents: read`. No personal access token or additional
 signing secret is configured by this workflow.

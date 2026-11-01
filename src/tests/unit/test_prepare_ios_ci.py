@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[3]
 class IOSPreparationTests(unittest.TestCase):
     def test_staging_uses_published_device_pair_runtime_and_release_version(self):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             device = root / "lab/device"
             source = root / "source"
             ui = source / "src/frontend/UI"
