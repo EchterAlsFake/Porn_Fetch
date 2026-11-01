@@ -160,15 +160,26 @@ jobs:
             --output "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa" \
             --display-name 'Porn Fetch' --share-documents
 
-      - name: Upload re-signable IPA and validation report
+      - name: Upload re-signable IPA
         uses: ./.github/actions/upload-artifact
         with:
-          name: PornFetch_ios_GUI_arm64
+          archive: false
           if-no-files-found: error
-          path: |
-            ${{ env.IOS_WORK_ROOT }}/output/*.ipa
-            ${{ env.IOS_WORK_ROOT }}/output/*.ipa.sha256
-            ${{ env.IOS_WORK_ROOT }}/output/*.json
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.ipa
+
+      - name: Upload IPA checksum
+        uses: ./.github/actions/upload-artifact
+        with:
+          archive: false
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.ipa.sha256
+
+      - name: Upload IPA validation report
+        uses: ./.github/actions/upload-artifact
+        with:
+          archive: false
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.json
 
       - name: Upload build diagnostics
         if: always() && env.IOS_WORK_ROOT != ''

@@ -47,6 +47,8 @@ instead of letting PySide6's base configuration clear it and scan diagnostics.
 The job checks portable staging, stamps the requested version and original run
 timestamp, generates the device project, runs Xcode, and uploads
 `PornFetch_ios_GUI_arm64_resign.ipa`, its checksum and the packaging audit report.
+Each is uploaded separately with `archive: false`; downloading the IPA artifact
+returns the literal `.ipa` file.
 The IPA helper verifies nested signatures, device platform, native minimum OS,
 extension markers and ZIP integrity. It uses empty entitlements and ad-hoc
 signatures; provision/re-sign it with your sideloading tool before installation.

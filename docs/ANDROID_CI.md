@@ -12,8 +12,13 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
 
 ## Toolchain and patches
 
-- Host Python 3.14 and PySide6 6.12.0, with the virtual environment outside the
+- Host Python 3.15 and PySide6 6.12.0, with the virtual environment outside the
   project to avoid Qt's QML scanner traversing installed packages.
+- Buildozer 1.6.0 and Cython 3.3.0 for Python 3.15 host compatibility.
+- Target Python and hostpython are both pinned to 3.15.2. Updating the host
+  interpreter alone does not update python-for-android's embedded runtime.
+  The wrapper rebuilds compiled caches when the target Python version changes,
+  retaining downloaded archives.
 - JDK 21, SDK Platform 36, Build Tools 36.0.0, NDK r28c / 28.2.13676358. This
   follows the companion guide's tested NDK choice; it does not rebuild Qt.
 - The runner's `cmdline-tools/latest` directory is exposed at SDK `tools` for
@@ -21,12 +26,24 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
   before compilation. APK builds use Bash with `pipefail` so logging through
   `tee` preserves compilation failures and prevents subsequent signing steps.
 - Minimum Android API 28, retained from the application's working Buildozer spec.
-- Matching PySide6 and Shiboken6 `cp314-cp314` wheels from
-  <https://github.com/EchterAlsFake/PySide6-to-Android/releases/tag/6.12.0>.
+- Matching PySide6 and Shiboken6 `cp315-cp315` wheels from
+  <https://github.com/EchterAlsFake/PySide6-to-Android/releases/tag/6.12.0-api28>.
   CI verifies the pinned SHA256SUMS digest and both wheel checksums before the
   application's intentional wheel modifications.
+  The release and manifest digest are pinned together in the workflow; no
+  `ANDROID_WHEELS_RELEASE` or `ANDROID_WHEELS_SHA256SUMS_SHA256` environment
+  variables are needed. The manifest SHA-256 is
+  `fb07ca10c763a41b14a226f7c160498b0f63452b046f664d96f088f0b64aa0c2`.
+  Wheel names remain
+  `pyside6-6.12.0-6.12.0-cp315-cp315-android_<arch>.whl` and
+  `shiboken6-6.12.0-6.12.0-cp315-cp315-android_<arch>.whl` for the four ABIs.
+  These bindings target native API 28, matching `android.minapi` and
+  `android.ndk_api`; SDK 36 remains the Java compilation target. Do not substitute
+  the API 35 Python runtime archives from the older `6.12.0` release.
 - QtAsyncio patch, verification, Android deploy patch, verification, then the
   existing Android build script. The wrapper patches the target wheel too.
+  Host and target PySide6 initializers preload the executor before Qt installs
+  its module attribute hook, preserving Python 3.15 `asyncio.to_thread` calls.
 - Generated Qt recipes and JARs are recreated from the selected wheel. The
   checked-in developer cache must not supply another ABI's absolute wheel paths.
 - The wrapper extracts the wheel's JARs and writes `android.add_jars` before
@@ -106,6 +123,9 @@ The publisher waits for all four Android matrix jobs. It receives signed
 `PornFetch_android_GUI_<ABI>.apk` files, SHA-256 sidecars and legal archives. An
 Android-only release can be published without replacing existing desktop variants.
 Desktop updater feeds remain controlled by their existing workflow inputs.
+
+Workflow artifacts upload each APK directly, with `archive: false`, so the
+download is the `.apk` itself. Checksums and legal archives are separate downloads.
 
 ## First build and troubleshooting
 
