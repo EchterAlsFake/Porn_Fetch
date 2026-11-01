@@ -12,7 +12,8 @@ FFmpeg remuxing, and playback on the phone with both video and audio.
 The manual **iOS Build** workflow produces a device IPA for re-signing using the
 published `6.12.0-ios15-cp315` wheels on GitHub's ARM64 `macos-15` runner.
 It automatically restores the archived lab's device dependencies; see
-[CI setup](ios/BUILDING.md#github-actions).
+[CI setup](ios/BUILDING.md#github-actions). The hosted ARM64 build and IPA audit
+passed on 2026-11-01; the generated IPA requires re-signing and a device check.
 There is no public iOS installer. The preserved device build uses
 jailbreak signing in the preserved recipes and a patched Qt kit. The later
 non-jailbroken device check is user-confirmed; its signing/install procedure is

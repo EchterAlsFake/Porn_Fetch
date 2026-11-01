@@ -17,7 +17,8 @@ This file is maintained as a concise map of the current development tree. Read i
   `6.12.0-ios15-cp315` wheels and matching runtime on GitHub's ARM64 `macos-15`
   runner with native host tools. An Ubuntu job selectively restores the pinned
   snapshot's device dependencies automatically. It produces an IPA requiring
-  re-signing; device launch remains a separate validation step.
+  re-signing. Hosted ARM64 compile/link and IPA audit passed on 2026-11-01
+  (run 41343140198); device launch remains a separate validation step.
 - GUI: PySide6 / Qt 6 with QML
 - CLI: Questionary and Rich, with no Qt dependency
 - Networking: asynchronous `curl-cffi` through `eaf_base_api`

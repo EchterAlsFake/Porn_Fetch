@@ -40,7 +40,9 @@ and deployment/IPA helpers. The workflow pins the release's `SHA256SUMS` digest 
 and verifies every downloaded asset before extracting or executing it. Target
 wheels are deployment inputs; the separate host environment installs native
 macOS PySide6 tools. The Python 3.10–3.14 release cannot supply matching wheels
-for this runtime.
+for this runtime. The host tool receives the release's static-support patch
+and `scripts/patch_ios_deploy.py`, which preserves the explicit Qt module list
+instead of letting PySide6's base configuration clear it and scan diagnostics.
 
 The job checks portable staging, stamps the requested version and original run
 timestamp, generates the device project, runs Xcode, and uploads
@@ -50,6 +52,12 @@ extension markers and ZIP integrity. It uses empty entitlements and ad-hoc
 signatures; provision/re-sign it with your sideloading tool before installation.
 The workflow does not install on a phone or publish a release. Diagnostics are
 uploaded separately. Device launch remains a separate validation step.
+
+The hosted ARM64 compile/link and IPA packaging audit passed on 2026-11-01 in
+[workflow run 41343140198](https://github.com/EchterAlsFake/Porn_Fetch/actions/runs/41343140198),
+using source commit `218d00eea2b56fd876691ec7cff1b77bc92d4352`. This is a device
+build and packaging result; install and launch that IPA separately to validate
+it on a phone.
 
 For local lab preparation, `IOS_DEPLOY_VENV`, `IOS_PYTHON_XCFRAMEWORK` and
 `IOS_APP_VERSION` override the deployment environment, embedded runtime path
