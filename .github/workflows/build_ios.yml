@@ -23,6 +23,9 @@ jobs:
   restore-native:
     name: Restore pinned iOS device dependencies
     runs-on: ubuntu-24.04
+    # GitHub exposes draft releases only to identities with push access.
+    permissions:
+      contents: write
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

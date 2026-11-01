@@ -6,6 +6,57 @@ simulator target. Start with the [support status](../iOS.md).
 
 ## Build environment
 
+### GitHub Actions
+
+The separate **iOS Build** workflow (`.github/workflows/build_ios.yml`) runs on
+GitHub's standard `macos-15` ARM64 machine, with native Python 3.13/PySide6
+6.12.0 host tools and Xcode 26.3. No self-hosted runner, Intel host Qt kit or
+Rosetta is required. Dispatch it with a full `release_version`. Pushes to
+`codex/ios-arm64-build` also run a development build without publishing a release.
+
+An Ubuntu preparation job automatically restores the application-specific
+`pornfetch/vendor` and `device/native/packages` trees from the repository's
+archived lab release. `packaging/restore_ios_dependencies.sh` verifies each
+archive part against the tracked `ios-lab/snapshot-assets.json`, then streams
+only the selected trees out of the archive. It retains one compressed part at
+a time, rather than extracting the entire 21 GB lab. The selected inputs occupy
+about 72 MB before packaging. The Ubuntu job's `GITHUB_TOKEN` needs `contents: write` because GitHub exposes
+draft releases only to identities with push access; the job only reads assets.
+The macOS build retains `contents: read`. No personal access token or additional
+signing secret is configured by this workflow.
+
+These are **iOS device binaries**, so their ARM64 iPhone target remains valid
+when the Mac host changes architecture. The archived Intel executables and
+virtual environments are never restored. The dependency stack is reused, not
+recompiled; keep its Python overlay, native libraries and package metadata in
+sync when updating application dependencies.
+
+Qt/PySide inputs come from the
+[Python 3.15 release](https://github.com/EchterAlsFake/PySide6-to-iOS/releases/tag/6.12.0-ios15-cp315):
+the exact `cp315-cp315-ios_arm64` wheel pair, Python 3.15.0rc2 XCFramework,
+and deployment/IPA helpers. The workflow pins the release's `SHA256SUMS` digest to
+`6b8d8de1e6bd31b2c6e7b8d458eae9c6b4032a58a668f7d12cfb4eed64ca3c56`
+and verifies every downloaded asset before extracting or executing it. Target
+wheels are deployment inputs; the separate host environment installs native
+macOS PySide6 tools. The Python 3.10–3.14 release cannot supply matching wheels
+for this runtime.
+
+The job checks portable staging, stamps the requested version and original run
+timestamp, generates the device project, runs Xcode, and uploads
+`PornFetch_ios_GUI_arm64_resign.ipa`, its checksum and the packaging audit report.
+The IPA helper verifies nested signatures, device platform, native minimum OS,
+extension markers and ZIP integrity. It uses empty entitlements and ad-hoc
+signatures; provision/re-sign it with your sideloading tool before installation.
+The workflow does not install on a phone or publish a release. Diagnostics are
+uploaded separately. Device launch remains a separate validation step.
+
+For local lab preparation, `IOS_DEPLOY_VENV`, `IOS_PYTHON_XCFRAMEWORK` and
+`IOS_APP_VERSION` override the deployment environment, embedded runtime path
+and app bundle version respectively. Without overrides, the preserved lab
+defaults below remain available.
+
+### Preserved local environment
+
 The recorded environment is Intel macOS 15.7.2, Xcode 26.3 with iPhoneOS SDK 26.2,
 host Python 3.13.16, CMake, Ninja, Git, Rust, and the lab's two virtual
 environments. Exact installed versions are in
@@ -13,9 +64,10 @@ environments. Exact installed versions are in
 Builds and signing require macOS; Linux can inspect the sources and archives.
 
 The app embeds CPython **3.15.0rc2**. Host Python runs deployment tools; it is
-not the interpreter shipped in the app. Do not use the desktop `uv sync` recipe
-to populate the iOS bundle: its Python range and native wheels target a
-different environment.
+not the interpreter shipped in the app. The repository now also targets Python
+3.15. Do not use the desktop `uv sync` recipe to populate the iOS bundle:
+desktop native wheels target a different platform, and the preserved lab still
+requires its matching 3.15.0rc2 framework and native artifacts.
 
 The recipes require inputs that are deliberately absent from Git:
 

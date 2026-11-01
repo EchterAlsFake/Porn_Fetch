@@ -5,9 +5,18 @@ iOS 15.8.8, with palera1n rootless**, on 2026-10-28. The user confirmed the
 interface, downloads, automatic MP4 remuxing, and video/audio playback in Files.
 An Intel iOS simulator build was also verified.
 
-There is no public iOS installer or iOS CI release target. The device build uses
-jailbreak signing and a patched Qt kit; ordinary iPhone installation and App Store
-distribution have not been established. Other devices have not been tested.
+On 2026-10-30 the user additionally confirmed successful operation on a
+**non-jailbroken iPhone 7**: license activation, a video download, automatic
+FFmpeg remuxing, and playback on the phone with both video and audio.
+
+The manual **iOS Build** workflow produces a device IPA for re-signing using the
+published `6.12.0-ios15-cp315` wheels on GitHub's ARM64 `macos-15` runner.
+It automatically restores the archived lab's device dependencies; see
+[CI setup](ios/BUILDING.md#github-actions).
+There is no public iOS installer. The preserved device build uses
+jailbreak signing in the preserved recipes and a patched Qt kit. The later
+non-jailbroken device check is user-confirmed; its signing/install procedure is
+not yet documented here. App Store distribution and other devices have not been tested.
 
 - [Build and deploy](ios/BUILDING.md): restore the build inputs, generate an Xcode
   project, build the app, and install it on the tested device; separate simulator
@@ -27,11 +36,13 @@ distribution have not been established. Other devices have not been tested.
 | Native parsers, CFFI, verified HTTPS, asynchronous HTTPS, cryptography | Passed dependency probes | Passed dependency probes |
 | Real media download | Confirmed by user | User download independently decoded |
 | Automatic FFmpeg remux to playable MP4 | Confirmed by user | Adapter not integrated |
+| License activation | Confirmed by user on non-jailbroken phone | Not validated |
 | Metadata and PNG cover art | Passed device check | Not validated |
 
-The device build embeds **CPython 3.15.0rc2 and Qt/PySide 6.12.0**. The repository's
-normal Python requirement remains `>=3.14,<3.15`; the lab stages dependencies
-separately. A successful port experiment does not extend that supported range.
+The preserved device build embeds **CPython 3.15.0rc2 and Qt/PySide 6.12.0**.
+The repository now targets Python **3.15** (`>=3.15,<3.16`) on all platforms.
+The lab still stages platform-specific dependencies separately; archived
+frameworks and wheels retain their original versions until deliberately replaced.
 
 Background transfers, memory-pressure behavior, account flows, and the complete
 application regression suite remain unverified on iOS. Desktop tracking, browser
