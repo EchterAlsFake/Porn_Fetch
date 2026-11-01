@@ -165,7 +165,10 @@ jobs:
         with:
           name: PornFetch_ios_GUI_arm64
           if-no-files-found: error
-          path: ${{ env.IOS_WORK_ROOT }}/output/*
+          path: |
+            ${{ env.IOS_WORK_ROOT }}/output/*.ipa
+            ${{ env.IOS_WORK_ROOT }}/output/*.ipa.sha256
+            ${{ env.IOS_WORK_ROOT }}/output/*.json
 
       - name: Upload build diagnostics
         if: always() && env.IOS_WORK_ROOT != ''
