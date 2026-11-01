@@ -15,8 +15,8 @@ Rectangle {
         start: Qt.point(0, 0)
         end: Qt.point(width, height)
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#1a1a2e" }
-            GradientStop { position: 1.0; color: "#16213e" }
+            GradientStop { position: 0.0; color: (appSettings.high_contrast ? "#000000" : "#1a1a2e") }
+            GradientStop { position: 1.0; color: (appSettings.high_contrast ? "#000000" : "#16213e") }
         }
     }
 
@@ -46,6 +46,12 @@ Rectangle {
             y: 30
             spacing: 25
 
+            Button {
+                text: qsTr("Help translate")
+                Layout.fillWidth: true
+                implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
+                onClicked: Qt.openUrlExternally(appSettings.translation_help_url)
+            }
             // Header Section
             Item {
                 Layout.fillWidth: true
@@ -54,9 +60,9 @@ Rectangle {
                 Rectangle {
                     anchors.fill: parent
                     radius: 16
-                    color: "#2a2a4a"
+                    color: (appSettings.high_contrast ? "#000000" : "#2a2a4a")
                     opacity: 0.8
-                    border.color: "#3a3a6a"
+                    border.color: (appSettings.high_contrast ? "#ffffff" : "#3a3a6a")
                     border.width: 1
                 }
 
@@ -67,31 +73,31 @@ Rectangle {
                     spacing: 8
                     
                     Text {
-                        text: "Porn Fetch"
-                        font.pixelSize: 36
+                        text: qsTr("Porn Fetch")
+                        font.pixelSize: 36 * appSettings.font_size / 12
                         font.bold: true
                         font.family: "Inter, sans-serif"
-                        color: "#ffffff"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
                     }
                     
                     Text {
-                        text: "Version " + Qt.application.version
-                        font.pixelSize: 18
+                        text: qsTr("Version %1").arg(Qt.application.version)
+                        font.pixelSize: 18 * appSettings.font_size / 12
                         font.family: "Inter, sans-serif"
-                        color: "#00f2fe"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#00f2fe")
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
                     }
                     
                     Text {
-                        text: "Copyright © 2023-2026 Johannes Habel (EchterAlsFake)"
-                        font.pixelSize: 14
+                        text: qsTr("Copyright © 2023-2026 Johannes Habel (EchterAlsFake)")
+                        font.pixelSize: 14 * appSettings.font_size / 12
                         font.family: "Inter, sans-serif"
-                        color: "#a0a0c0"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#a0a0c0")
                         width: parent.width
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
@@ -101,19 +107,19 @@ Rectangle {
 
             // Notice Card
             CreditCard {
-                title: "Special Notice"
+                title: qsTr("Special Notice")
                 icon: "⭐"
-                content: "This project was only possible because Egsagon made the PHUB API that interacts with PornHub and which Porn Fetch uses. Although I now have ownership, without him, this project wouldn't be possible in the first place."
+                content: qsTr("This project was only possible because Egsagon made the PHUB API that interacts with PornHub and which Porn Fetch uses. Although I now have ownership, without him, this project wouldn't be possible in the first place.")
             }
 
             CreditCard {
-                title: "Application License"
+                title: qsTr("Application License")
                 icon: "📄"
-                content: "Porn Fetch Source-Available License 1.0. You may inspect and modify the code and share builds privately. Public forks must keep premium licensing operational. Older GPL copies keep their GPL rights. See the full license below."
+                content: qsTr("Porn Fetch Source-Available License 1.0. You may inspect and modify the code and share builds privately. Public forks must keep premium licensing operational. Older GPL copies keep their GPL rights. See the full license below.")
             }
 
             Button {
-                text: "Show application license"
+                text: qsTr("Show application license")
                 onClicked: {
                     legalDialog.showNotices = false
                     legalDialog.open()
@@ -121,7 +127,7 @@ Rectangle {
             }
 
             Button {
-                text: "Show third-party notices"
+                text: qsTr("Show third-party notices")
                 onClicked: {
                     legalDialog.showNotices = true
                     legalDialog.open()
@@ -130,23 +136,23 @@ Rectangle {
 
             // Development Card
             CreditCard {
-                title: "Development Stack"
+                title: qsTr("Development Stack")
                 icon: "💻"
-                content: "Language: Python\nIDE: JetBrains PyCharm Professional\nPlatform: GitHub\nGUI: PySide6\n\nThanks to Qt for the Python GUI toolkit used by this project. Qt components have their own license terms."
+                content: qsTr("Language: Python\nIDE: JetBrains PyCharm Professional\nPlatform: GitHub\nGUI: PySide6\n\nThanks to Qt for the Python GUI toolkit used by this project. Qt components have their own license terms.")
             }
 
             // Contributors Card
             CreditCard {
-                title: "Amazing Contributors"
+                title: qsTr("Amazing Contributors")
                 icon: "👥"
-                content: "Egsagon (PHUB API & French)\nRSDCFGVHBJNKML\nJoshua-auhsoj (Chinese 3.0)\nRonLar1132\nxxIndirect\nefraxs\nomar-st\nSShattered\njourneym\nJoly0\nFatalPuppet (Italian)\nHeathenSkwerl"
+                content: qsTr("Egsagon (PHUB API & French)\nRSDCFGVHBJNKML\nJoshua-auhsoj (Chinese 3.0)\nRonLar1132\nxxIndirect\nefraxs\nomar-st\nSShattered\njourneym\nJoly0\nFatalPuppet (Italian)\nHeathenSkwerl")
             }
 
             // Third-party components
             CreditCard {
-                title: "Third-party components"
+                title: qsTr("Third-party components")
                 icon: "📚"
-                content: "Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, and Python packages. Use the third-party notices button for the current inventory and license information."
+                content: qsTr("Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, and Python packages. Use the third-party notices button for the current inventory and license information.")
             }
 
             // Other Tech
@@ -158,30 +164,30 @@ Rectangle {
                 
                 CreditCard {
                     Layout.preferredWidth: 1
-                    title: "Android"
+                    title: qsTr("Android")
                     icon: "📱"
-                    content: "Buildozer\nCython\nChaquopy"
+                    content: qsTr("Buildozer\nCython\nChaquopy")
                 }
 
                 CreditCard {
                     Layout.preferredWidth: 1
-                    title: "Applications"
+                    title: qsTr("Applications")
                     icon: "⚙️"
-                    content: "FFMPEG (via pyav)\n\nUsed for processing\nmedia streams."
+                    content: qsTr("FFMPEG (via pyav)\n\nUsed for processing\nmedia streams.")
                 }
 
                 CreditCard {
                     Layout.preferredWidth: 1
-                    title: "macOS Build"
+                    title: qsTr("macOS Build")
                     icon: "🍎"
-                    content: "OneClick-macOS-Simple-KVM\n\nMakes macOS builds possible."
+                    content: qsTr("OneClick-macOS-Simple-KVM\n\nMakes macOS builds possible.")
                 }
 
                 CreditCard {
                     Layout.preferredWidth: 1
-                    title: "iOS Testing"
+                    title: qsTr("iOS Testing")
                     icon: "📱"
-                    content: "palera1n\nKitty-XZ\n\nJailbreak testing."
+                    content: qsTr("palera1n\nKitty-XZ\n\nJailbreak testing.")
                 }
             }
         }
@@ -211,7 +217,7 @@ Rectangle {
         id: card
         objectName: "creditCard"
         property string title: ""
-        property string content: ""
+        property string content: qsTr("")
         property string icon: ""
 
         Layout.fillWidth: true
@@ -220,9 +226,9 @@ Rectangle {
         implicitWidth: 320
         implicitHeight: cardColumn.implicitHeight + 40
         radius: 12
-        color: "#252545"
+        color: (appSettings.high_contrast ? "#000000" : "#252545")
         opacity: 0.9
-        border.color: "#3a3a6a"
+        border.color: (appSettings.high_contrast ? "#ffffff" : "#3a3a6a")
         border.width: 1
 
         ColumnLayout {
@@ -239,17 +245,17 @@ Rectangle {
 
                 Text {
                     text: card.icon
-                    font.pixelSize: 24
+                    font.pixelSize: 24 * appSettings.font_size / 12
                 }
 
                 Text {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 0
                     text: card.title
-                    font.pixelSize: 20
+                    font.pixelSize: 20 * appSettings.font_size / 12
                     font.bold: true
                     font.family: "Inter, sans-serif"
-                    color: "#ffffff"
+                    color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
                     wrapMode: Text.Wrap
                 }
             }
@@ -257,16 +263,16 @@ Rectangle {
             Rectangle {
                 Layout.fillWidth: true
                 implicitHeight: 1
-                color: "#3a3a6a"
+                color: (appSettings.high_contrast ? "#000000" : "#3a3a6a")
             }
 
             Text {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 0
                 text: card.content
-                font.pixelSize: 14
+                font.pixelSize: 14 * appSettings.font_size / 12
                 font.family: "Inter, sans-serif"
-                color: "#c0c0d0"
+                color: (appSettings.high_contrast ? "#ffffff" : "#c0c0d0")
                 textFormat: Text.PlainText
                 wrapMode: Text.Wrap
                 lineHeight: 1.4

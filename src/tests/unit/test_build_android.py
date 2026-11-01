@@ -196,7 +196,7 @@ class AndroidConfig(Config):
         for arch, abi in (("armv7a", "armeabi-v7a"), ("i686", "x86"),
                           ("aarch64", "arm64-v8a"), ("x86_64", "x86_64")):
             with self.subTest(arch=arch):
-                config.wheel_pyside = Path(f"pyside6-6.12.0-cp314-cp314-android_{arch}.whl")
+                config.wheel_pyside = Path(f"pyside6-6.12.0-cp315-cp315-android_{arch}.whl")
                 detected = config._find_arch()
                 self.assertEqual(detected, arch)
                 self.assertEqual(namespace["platform_map"][detected], abi)
@@ -389,19 +389,19 @@ class AndroidConfig:
     def test_detect_arch_from_filename(self) -> None:
         """Wheel filename inspection should identify canonical architectures."""
         self.assertEqual(
-            detect_arch_from_filename("pyside6-6.11.2-cp314-cp314-android_aarch64.whl"),
+            detect_arch_from_filename("pyside6-6.11.2-cp315-cp315-android_aarch64.whl"),
             "aarch64",
         )
         self.assertEqual(
-            detect_arch_from_filename("pyside6-6.11.2-cp314-cp314-android_armv7a.whl"),
+            detect_arch_from_filename("pyside6-6.11.2-cp315-cp315-android_armv7a.whl"),
             "armv7a",
         )
         self.assertEqual(
-            detect_arch_from_filename("pyside6-6.11.2-cp314-cp314-android_x86_64.whl"),
+            detect_arch_from_filename("pyside6-6.11.2-cp315-cp315-android_x86_64.whl"),
             "x86_64",
         )
         self.assertEqual(
-            detect_arch_from_filename("pyside6-6.11.2-cp314-cp314-android_i686.whl"),
+            detect_arch_from_filename("pyside6-6.11.2-cp315-cp315-android_i686.whl"),
             "i686",
         )
         self.assertIsNone(detect_arch_from_filename("unknown_package.whl"))
@@ -410,7 +410,7 @@ class AndroidConfig:
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             for package in ("pyside6", "shiboken6"):
-                (directory / f"{package}-6.11.2-cp314-cp314-android_x86_64.whl").touch()
+                (directory / f"{package}-6.11.2-cp315-cp315-android_x86_64.whl").touch()
             self.assertEqual(find_wheels_for_arch("i686", [directory], None, None), (None, None))
 
     def test_dry_run_does_not_patch_host(self) -> None:
@@ -522,7 +522,7 @@ mode = onefile
             self.assertEqual(config["app"]["package.domain"], "to.pornfetch")
             self.assertEqual(config["app"]["version"], "3.9")
             self.assertEqual(config["app"]["requirements"],
-                             "python3,shiboken6,PySide6,certifi,cffi,curl_cffi")
+                             "python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cffi,curl_cffi")
             self.assertEqual(config["app"]["p4a.branch"], "develop")
             self.assertEqual(config["app"]["p4a.commit"], "HEAD")
             self.assertEqual(config["buildozer"]["log_level"], "2")
@@ -595,7 +595,7 @@ mode = onefile
         """Mock wheel containing unpatched assets should be patched and verified."""
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_root = Path(tmpdir)
-            whl_path = tmp_root / "test-1.0-cp314-android_aarch64.whl"
+            whl_path = tmp_root / "test-1.0-cp315-android_aarch64.whl"
 
             # Create inner jar with unpatched pattern
             inner_jar_buf = io.BytesIO()
@@ -608,6 +608,7 @@ mode = onefile
 
             # Create mock wheel
             with zipfile.ZipFile(whl_path, "w") as wz:
+                wz.writestr("PySide6/__init__.py", "import sys\n__version__ = '6.12.0'\n")
                 wz.writestr("PySide6/QtAsyncio/events.py", "unpatched events code\n")
                 wz.writestr("PySide6/jar/Qt6Android.jar", inner_jar_bytes)
                 wz.writestr(
@@ -616,7 +617,7 @@ mode = onefile
                 )
 
             # Create mock host venv with patched QtAsyncio
-            venv_asyncio = tmp_root / "venv" / "lib" / "python3.14" / "site-packages" / "PySide6" / "QtAsyncio"
+            venv_asyncio = tmp_root / "venv" / "lib" / "python3.15" / "site-packages" / "PySide6" / "QtAsyncio"
             venv_asyncio.mkdir(parents=True, exist_ok=True)
             (venv_asyncio / "events.py").write_text("# qtasyncio-compat-v2\nclass Ev: pass\n")
             (venv_asyncio / "futures.py").write_text("# futures\n")
@@ -627,6 +628,9 @@ mode = onefile
 
             # Verify contents
             with zipfile.ZipFile(whl_path, "r") as rz:
+                init_code = rz.read("PySide6/__init__.py").decode("utf-8")
+                self.assertIn("qtasyncio-compat-v2:executor-bootstrap", init_code)
+                compile(init_code, "__init__.py", "exec")
                 events_code = rz.read("PySide6/QtAsyncio/events.py").decode("utf-8")
                 self.assertIn("qtasyncio-compat-v2", events_code)
 

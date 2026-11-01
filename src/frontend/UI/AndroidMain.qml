@@ -10,17 +10,27 @@ ApplicationWindow {
     width: 400
     height: 800
     title: qsTr("Porn Fetch")
+    LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
+    palette.window: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
+    palette.windowText: appSettings.high_contrast ? "#ffffff" : (appSettings.dark_mode ? "#ffffff" : "#202431")
+    palette.text: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
+    palette.base: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
+    palette.button: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#303030" : "#eeeeee")
+    palette.buttonText: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
+    palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
     font.pointSize: Math.max(12, appSettings.font_size)
     Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
     Material.accent: appSettings.accent_color
     Material.primary: appSettings.accent_color
 
-    readonly property color backgroundColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color surfaceColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color navigationColor: appSettings.dark_mode ? "#171b23" : "#eef0f7"
-    readonly property color primaryTextColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color secondaryTextColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.accent_color
+    readonly property color backgroundColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color surfaceColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color navigationColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#171b23" : "#eef0f7"
+    readonly property color primaryTextColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color secondaryTextColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     background: Rectangle { color: window.backgroundColor }
 
     property bool safeToClose: false
@@ -31,7 +41,7 @@ ApplicationWindow {
         parent: Overlay.overlay
         anchors.fill: parent
         z: 100
-        enabled: appSettings.activity_glow_enabled
+        enabled: appSettings.activity_glow_enabled && !appSettings.reduced_motion
         active: backend.activityActive
         accentColor: appSettings.accent_color || "#6366f1"
         animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden
@@ -167,7 +177,7 @@ ApplicationWindow {
                     text: backend.errorReportDisclosure
                     wrapMode: Text.Wrap
                     color: window.secondaryTextColor
-                    font.pixelSize: 13
+                    font.pixelSize: 13 * appSettings.font_size / 12
                 }
             }
             Button {
@@ -235,7 +245,7 @@ ApplicationWindow {
                             visible: window.expanded
                             text: qsTr("Porn Fetch")
                             color: window.primaryTextColor
-                            font.pixelSize: 18
+                            font.pixelSize: 18 * appSettings.font_size / 12
                             font.bold: true
                         }
                     }
@@ -309,13 +319,13 @@ ApplicationWindow {
                             Layout.preferredWidth: visible ? 48 : 0
                             Layout.preferredHeight: 48
                             text: "←"
-                            font.pixelSize: 25
+                            font.pixelSize: 25 * appSettings.font_size / 12
                             Accessible.name: qsTr("Back")
                             onClicked: window.goBack()
                             contentItem: Label {
                                 text: "←"
                                 color: window.accentColor
-                                font.pixelSize: 28
+                                font.pixelSize: 28 * appSettings.font_size / 12
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -330,7 +340,7 @@ ApplicationWindow {
                             text: window.settingsDetail ? settingsPage.titles[settingsPage.section]
                                   : window.pageNames[window.pageIndex]
                             color: window.primaryTextColor
-                            font.pixelSize: 18
+                            font.pixelSize: 18 * appSettings.font_size / 12
                             font.bold: true
                             elide: Text.ElideRight
                         }
@@ -406,7 +416,7 @@ ApplicationWindow {
                                         elide: Text.ElideRight
                                         color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
                                                ? window.accentColor : window.secondaryTextColor
-                                        font.pixelSize: 11
+                                        font.pixelSize: 11 * appSettings.font_size / 12
                                         font.bold: window.pageIndex === index
                                     }
                                 }

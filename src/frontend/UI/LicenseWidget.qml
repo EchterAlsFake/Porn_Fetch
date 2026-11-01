@@ -12,16 +12,16 @@ Item {
     implicitHeight: card.implicitHeight + 48
 
     // ── Colour tokens ──────────────────────────────────────────────
-    readonly property color bgBase:     "#1f1f21"
-    readonly property color bgCard:     "#262628"
-    readonly property color bgInput:    "#2a2b2e"
-    readonly property color border:     "#333437"
-    readonly property color textPri:    "#EAEAEA"
-    readonly property color textSec:    "#9B9CA1"
-    readonly property color accent:     "#3b82f6"
-    readonly property color accentGlow: "#5b9bff"
-    readonly property color success:    "#22c55e"
-    readonly property color danger:     "#ef4444"
+    readonly property color bgBase:     appSettings.high_contrast ? "#000000" : "#1f1f21"
+    readonly property color bgCard:     appSettings.high_contrast ? "#000000" : "#262628"
+    readonly property color bgInput:    appSettings.high_contrast ? "#000000" : "#2a2b2e"
+    readonly property color border:     appSettings.high_contrast ? "#ffffff" : "#333437"
+    readonly property color textPri:    appSettings.high_contrast ? "#ffffff" : "#EAEAEA"
+    readonly property color textSec:    appSettings.high_contrast ? "#ffffff" : "#9B9CA1"
+    readonly property color accent:     appSettings.high_contrast ? "#ffffff" : "#3b82f6"
+    readonly property color accentGlow: appSettings.high_contrast ? "#ffffff" : "#5b9bff"
+    readonly property color success:    appSettings.high_contrast ? "#ffffff" : "#22c55e"
+    readonly property color danger:     appSettings.high_contrast ? "#ffffff" : "#ef4444"
 
     // ── The bridge is injected via rootContext().setContextProperty() ─
     // Do NOT declare `property QtObject bridge` here — it would shadow
@@ -54,8 +54,8 @@ Item {
     // ── Native file dialog (lives in QML, avoids QWidgets conflicts) ─
     FileDialog {
         id: fileDialog
-        title: "Select license file"
-        nameFilters: ["All files (*)", "License files (*.license *.lic *.json)"]
+        title: qsTr("Select license file")
+        nameFilters: [qsTr("All files (*)"), qsTr("License files (*.license *.lic *.json)")]
         onAccepted: {
             console.log("[LicenseWidget] FileDialog accepted, selectedFile:", fileDialog.selectedFile)
             console.log("[LicenseWidget] bridge:", bridge)
@@ -107,9 +107,11 @@ Item {
             visible: root.hasValidBridge
 
             SequentialAnimation on pulse {
+                running: !appSettings.reduced_motion
+
                 loops: Animation.Infinite
-                NumberAnimation { to: 0.6;  duration: 1800; easing.type: Easing.InOutSine }
-                NumberAnimation { to: 0.15; duration: 1800; easing.type: Easing.InOutSine }
+                NumberAnimation { to: 0.6;  duration: appSettings.reduced_motion ? 0 : 1800; easing.type: Easing.InOutSine }
+                NumberAnimation { to: 0.15; duration: appSettings.reduced_motion ? 0 : 1800; easing.type: Easing.InOutSine }
             }
         }
 
@@ -141,17 +143,17 @@ Item {
                                   : Qt.rgba(danger.r, danger.g, danger.b, 0.25)
 
                     // scale-pop on change
-                    Behavior on border.color { ColorAnimation { duration: 400 } }
+                    Behavior on border.color { ColorAnimation { duration: appSettings.reduced_motion ? 0 : 400 } }
                     scale: 1.0
-                    Behavior on scale { NumberAnimation { duration: 300; easing.type: Easing.OutBack } }
+                    Behavior on scale { NumberAnimation { duration: appSettings.reduced_motion ? 0 : 300; easing.type: Easing.OutBack } }
 
                     Text {
                         anchors.centerIn: parent
                         text: root.hasValidBridge ? "✓" : "✕"
-                        font.pixelSize: 32
+                        font.pixelSize: 32 * appSettings.font_size / 12
                         font.weight: Font.Bold
                         color: root.hasValidBridge ? success : danger
-                        Behavior on color { ColorAnimation { duration: 350 } }
+                        Behavior on color { ColorAnimation { duration: appSettings.reduced_motion ? 0 : 350 } }
                     }
 
                     // trigger pop on status change
@@ -165,16 +167,16 @@ Item {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: root.hasValidBridge ? "License Active" : "No Valid License"
-                    font.pixelSize: 20
+                    font.pixelSize: 20 * appSettings.font_size / 12
                     font.weight: Font.DemiBold
                     font.letterSpacing: 0.4
                     color: textPri
 
                     Behavior on text {
                         SequentialAnimation {
-                            NumberAnimation { target: headingFade; property: "opacity"; to: 0; duration: 120 }
+                            NumberAnimation { target: headingFade; property: "opacity"; to: 0; duration: appSettings.reduced_motion ? 0 : 120 }
                             PropertyAction  {}
-                            NumberAnimation { target: headingFade; property: "opacity"; to: 1; duration: 200 }
+                            NumberAnimation { target: headingFade; property: "opacity"; to: 1; duration: appSettings.reduced_motion ? 0 : 200 }
                         }
                     }
                     id: headingFade
@@ -183,7 +185,7 @@ Item {
                 Text {
                     Layout.alignment: Qt.AlignHCenter
                     text: (typeof bridge !== "undefined" && bridge && bridge.reason) ? String(bridge.reason) : ""
-                    font.pixelSize: 13
+                    font.pixelSize: 13 * appSettings.font_size / 12
                     color: textSec
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
@@ -193,6 +195,7 @@ Item {
                 TextField {
                     id: pastedLicense
                     Layout.fillWidth: true
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("Paste signed license key or license JSON")
                     echoMode: TextInput.Password
                     enabled: !root.isBridgeBusy
@@ -225,20 +228,20 @@ Item {
                         columnSpacing: 12
 
                         Text {
-                            text: "Premium version entitlement ends:"
-                            font.pixelSize: 12
+                            text: qsTr("Premium version entitlement ends:")
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.DemiBold
                             color: textSec
                         }
                         Text {
                             Layout.fillWidth: true
-                            text: (typeof bridge !== "undefined" && bridge && bridge.licenseExpiresAt) ? bridge.licenseExpiresAt : "Lifetime / Never"
-                            font.pixelSize: 12
+                            text: (typeof bridge !== "undefined" && bridge && bridge.licenseExpiresAt) ? bridge.licenseExpiresAt : qsTr("Lifetime / Never")
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.Bold
                             color: success
                             horizontalAlignment: Text.AlignRight
                             ToolTip.visible: expiryMa.containsMouse
-                            ToolTip.text: "Premium features are covered in releases for 1 year after first activation. App updates are free for everyone."
+                            ToolTip.text: qsTr("Premium features are covered in releases for 1 year after first activation. App updates are free for everyone.")
                             MouseArea {
                                 id: expiryMa
                                 anchors.fill: parent
@@ -247,20 +250,20 @@ Item {
                         }
 
                         Text {
-                            text: "Machine Limit:"
-                            font.pixelSize: 12
+                            text: qsTr("Machine Limit:")
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.DemiBold
                             color: textSec
                         }
                         Text {
                             Layout.fillWidth: true
-                            text: "10 Devices"
-                            font.pixelSize: 12
+                            text: qsTr("10 Devices")
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.Medium
                             color: textPri
                             horizontalAlignment: Text.AlignRight
                             ToolTip.visible: limitMa.containsMouse
-                            ToolTip.text: "Up to 10 active machines per license simultaneously"
+                            ToolTip.text: qsTr("Up to 10 active machines per license simultaneously")
                             MouseArea {
                                 id: limitMa
                                 anchors.fill: parent
@@ -269,15 +272,15 @@ Item {
                         }
 
                         Text {
-                            text: "Offline Permit Expires:"
-                            font.pixelSize: 12
+                            text: qsTr("Offline Permit Expires:")
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.DemiBold
                             color: textSec
                         }
                         Text {
                             Layout.fillWidth: true
                             text: (typeof bridge !== "undefined" && bridge && bridge.nextCheckAt) ? bridge.nextCheckAt : "—"
-                            font.pixelSize: 12
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.Medium
                             color: textPri
                             horizontalAlignment: Text.AlignRight
@@ -293,11 +296,11 @@ Item {
 
                     Text {
                         text: "ℹ️"
-                        font.pixelSize: 13
+                        font.pixelSize: 13 * appSettings.font_size / 12
                     }
                     Text {
-                        text: "How do premium entitlement & 10-machine limits work?"
-                        font.pixelSize: 12
+                        text: qsTr("How do premium entitlement & 10-machine limits work?")
+                        font.pixelSize: 12 * appSettings.font_size / 12
                         font.underline: helpMa.containsMouse
                         color: helpMa.containsMouse ? accentGlow : accent
 
@@ -316,18 +319,18 @@ Item {
                 Layout.fillWidth: true
                 Button {
                     Layout.fillWidth: true
-                    text: "Refresh"
+                    text: qsTr("Refresh")
                     enabled: (typeof bridge !== "undefined" && bridge) && !root.isBridgeBusy
                     ToolTip.visible: hovered
-                    ToolTip.text: "Re-verifies license and renews the 7-day offline check-in permit"
+                    ToolTip.text: qsTr("Re-verifies license and renews the 7-day offline check-in permit")
                     onClicked: bridge.refresh()
                 }
                 Button {
                     Layout.fillWidth: true
-                    text: "Deactivate"
+                    text: qsTr("Deactivate")
                     enabled: root.hasValidBridge && !root.isBridgeBusy
                     ToolTip.visible: hovered
-                    ToolTip.text: "Unlinks this device to free up 1 of your 10 machine seats"
+                    ToolTip.text: qsTr("Unlinks this device to free up 1 of your 10 machine seats")
                     onClicked: bridge.deactivate()
                 }
             }
@@ -343,14 +346,23 @@ Item {
             // ── Import button ──────────────────────────────────────
             Rectangle {
                 id: importBtn
+                activeFocusOnTab: true
+                enabled: !root.isBridgeBusy
+                Accessible.role: Accessible.Button
+                Accessible.name: bridge && bridge.isValid ? qsTr("Replace license") : qsTr("Import license")
+                Accessible.onPressAction: fileDialog.open()
+                Keys.onSpacePressed: fileDialog.open()
+                Keys.onReturnPressed: fileDialog.open()
+                border.width: activeFocus ? 2 : 0
+                border.color: "white"
                 Layout.fillWidth: true
-                height: 44
+                height: 48
                 radius: 12
                 color: importMa.containsMouse
                        ? Qt.lighter(accent, 1.12)
                        : accent
 
-                Behavior on color { ColorAnimation { duration: 180 } }
+                Behavior on color { ColorAnimation { duration: appSettings.reduced_motion ? 0 : 180 } }
 
                 // subtle shimmer overlay
                 Rectangle {
@@ -366,10 +378,10 @@ Item {
 
                 Text {
                     anchors.centerIn: parent
-                    text: bridge && bridge.isValid ? "↻  Replace License…" : "⬆  Import License…"
-                    font.pixelSize: 14
+                    text: bridge && bridge.isValid ? qsTr("Replace license…") : qsTr("Import license…")
+                    font.pixelSize: 14 * appSettings.font_size / 12
                     font.weight: Font.DemiBold
-                    color: "white"
+                    color: appSettings.high_contrast ? "#000000" : "white"
                 }
 
                 MouseArea {
@@ -383,7 +395,7 @@ Item {
 
                 // press effect
                 scale: importMa.pressed ? 0.97 : 1.0
-                Behavior on scale { NumberAnimation { duration: 100 } }
+                Behavior on scale { NumberAnimation { duration: appSettings.reduced_motion ? 0 : 100 } }
             }
         }
     }
@@ -411,16 +423,16 @@ Item {
             id: toastText
             anchors.centerIn: parent
             text: (toast.isSuccess ? "✓  " : "✕  ") + toast.text
-            font.pixelSize: 13
+            font.pixelSize: 13 * appSettings.font_size / 12
             font.weight: Font.Medium
             color: toast.isSuccess ? success : danger
         }
 
         SequentialAnimation {
             id: toastAnim
-            NumberAnimation { target: toast; property: "opacity"; to: 1; duration: 200; easing.type: Easing.OutCubic }
-            PauseAnimation  { duration: 3000 }
-            NumberAnimation { target: toast; property: "opacity"; to: 0; duration: 600; easing.type: Easing.InCubic }
+            NumberAnimation { target: toast; property: "opacity"; to: 1; duration: appSettings.reduced_motion ? 0 : 200; easing.type: Easing.OutCubic }
+            PauseAnimation { duration: 3000 }
+            NumberAnimation { target: toast; property: "opacity"; to: 0; duration: appSettings.reduced_motion ? 0 : 600; easing.type: Easing.InCubic }
         }
     }
 
@@ -493,20 +505,20 @@ Item {
 
                     Text {
                         text: "🔑"
-                        font.pixelSize: 20
+                        font.pixelSize: 20 * appSettings.font_size / 12
                     }
 
                     Text {
                         Layout.fillWidth: true
-                        text: "License & Activation Guide"
-                        font.pixelSize: 15
+                        text: qsTr("License & Activation Guide")
+                        font.pixelSize: 15 * appSettings.font_size / 12
                         font.bold: true
                         color: textPri
                     }
 
                     ToolButton {
                         text: "✕"
-                        font.pixelSize: 14
+                        font.pixelSize: 14 * appSettings.font_size / 12
                         contentItem: Text {
                             text: parent.text
                             font: parent.font
@@ -543,10 +555,10 @@ Item {
 
                         RowLayout {
                             spacing: 8
-                            Text { text: "📅"; font.pixelSize: 15 }
+                            Text { text: "📅"; font.pixelSize: 15 * appSettings.font_size / 12 }
                             Text {
-                                text: "Premium Version Entitlement & Free App Updates"
-                                font.pixelSize: 14
+                                text: qsTr("Premium Version Entitlement & Free App Updates")
+                                font.pixelSize: 14 * appSettings.font_size / 12
                                 font.bold: true
                                 color: textPri
                             }
@@ -555,11 +567,11 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             wrapMode: Text.WordWrap
-                            font.pixelSize: 12
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             lineHeight: 1.25
                             color: textSec
                             textFormat: Text.RichText
-                            text: "• <b>Premium version entitlement ends:</b> The release deadline for licensed premium features. App updates are free for everyone, including without a license. A <b>Permanent License</b> provides perpetual premium access to versions released during the <b>first year after activation</b>. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.<br><br>• <b>Offline Permit:</b> Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately."
+                            text: qsTr("• <b>Premium version entitlement ends:</b> The release deadline for licensed premium features. App updates are free for everyone, including without a license. A <b>Permanent License</b> provides perpetual premium access to versions released during the <b>first year after activation</b>. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.<br><br>• <b>Offline Permit:</b> Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately.")
                         }
                     }
 
@@ -572,10 +584,10 @@ Item {
 
                         RowLayout {
                             spacing: 8
-                            Text { text: "🔄"; font.pixelSize: 15 }
+                            Text { text: "🔄"; font.pixelSize: 15 * appSettings.font_size / 12 }
                             Text {
-                                text: "The \"Refresh\" Button"
-                                font.pixelSize: 14
+                                text: qsTr("The \"Refresh\" Button")
+                                font.pixelSize: 14 * appSettings.font_size / 12
                                 font.bold: true
                                 color: textPri
                             }
@@ -584,11 +596,11 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             wrapMode: Text.WordWrap
-                            font.pixelSize: 12
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             lineHeight: 1.25
                             color: textSec
                             textFormat: Text.RichText
-                            text: "Clicking <b>Refresh</b> manually connects to the licensing server to re-validate your license and extends your 7-day offline check-in period immediately."
+                            text: qsTr("Clicking <b>Refresh</b> manually connects to the licensing server to re-validate your license and extends your 7-day offline check-in period immediately.")
                         }
                     }
 
@@ -601,10 +613,10 @@ Item {
 
                         RowLayout {
                             spacing: 8
-                            Text { text: "💻"; font.pixelSize: 15 }
+                            Text { text: "💻"; font.pixelSize: 15 * appSettings.font_size / 12 }
                             Text {
-                                text: "The \"Deactivate\" Button & 10-Machine Limit"
-                                font.pixelSize: 14
+                                text: qsTr("The \"Deactivate\" Button & 10-Machine Limit")
+                                font.pixelSize: 14 * appSettings.font_size / 12
                                 font.bold: true
                                 color: textPri
                             }
@@ -613,11 +625,11 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             wrapMode: Text.WordWrap
-                            font.pixelSize: 12
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             lineHeight: 1.25
                             color: textSec
                             textFormat: Text.RichText
-                            text: "Each license includes a <b>10-machine limit</b> (up to 10 active devices simultaneously). Clicking <b>Deactivate</b> unlinks this device from Keygen on the server, <b>freeing up a seat out of your 10-machine limit</b> so you can activate and use Porn Fetch on another computer or after reinstalling your OS."
+                            text: qsTr("Each license includes a <b>10-machine limit</b> (up to 10 active devices simultaneously). Clicking <b>Deactivate</b> unlinks this device from Keygen on the server, <b>freeing up a seat out of your 10-machine limit</b> so you can activate and use Porn Fetch on another computer or after reinstalling your OS.")
                         }
                     }
 
@@ -644,7 +656,7 @@ Item {
                     anchors.centerIn: parent
                     implicitWidth: 140
                     implicitHeight: 34
-                    text: "Got It"
+                    text: qsTr("Got It")
                     highlighted: true
                     onClicked: activationDialog.close()
                 }

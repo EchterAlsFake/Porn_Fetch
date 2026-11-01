@@ -21,10 +21,10 @@ icon = /Users/asuna/ios-lab/.venv/lib/python3.13/site-packages/PySide6/scripts/d
 [python]
 
 # python packages to install
-packages = Nuitka==4.1.1
+packages = Nuitka==4.3.3
 
 # buildozer = for deploying Android application
-android_packages = buildozer==1.6.0,cython==0.29.33
+android_packages = buildozer==1.6.0,cython==3.3.0
 
 [qt]
 

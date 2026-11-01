@@ -92,6 +92,7 @@ Pane {
                 focus: true // This automatically focuses the element when the app starts cuz you probably gotta download a video xD
                 Layout.fillWidth: true
 
+                Accessible.name: placeholderText
                 placeholderText: qsTr("Enter a video URL")
                 selectByMouse: true
 
@@ -125,6 +126,7 @@ Pane {
 
                 Layout.fillWidth: true
 
+                Accessible.name: placeholderText
                 placeholderText: qsTr("Enter a model or channel URL")
                 selectByMouse: true
 
@@ -159,6 +161,7 @@ Pane {
 
                 Layout.fillWidth: true
 
+                Accessible.name: placeholderText
                 placeholderText: qsTr("Enter a playlist URL")
                 selectByMouse: true
 
@@ -429,6 +432,7 @@ Pane {
 
                                             CheckBox {
                                                 objectName: "downloadSelectCheck"
+                                                Accessible.name: qsTr("Select video")
                                                 checked: downloadRow.selected
                                                 enabled: !downloadRow.downloadActive
                                                 onToggled: backend.set_video_selected(
@@ -453,7 +457,7 @@ Pane {
                                             Layout.fillWidth: true
                                             Layout.preferredWidth: 60
                                             Layout.minimumWidth: 100
-                                            text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.title
+                                            text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? qsTr("[redacted]") : downloadRow.title
                                             textFormat: Text.PlainText
                                             clip: true
                                             maximumLineCount: 1
@@ -476,7 +480,7 @@ Pane {
                                             Layout.fillWidth: true
                                             Layout.preferredWidth: 40
                                             Layout.minimumWidth: 80
-                                            text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? "[redacted]" : downloadRow.author
+                                            text: (appSettings.anonymous_mode === true || appSettings.anonymous_mode === "true" || appSettings.anonymous_mode === 1) ? qsTr("[redacted]") : downloadRow.author
                                             textFormat: Text.PlainText
                                             clip: true
                                             maximumLineCount: 1
@@ -502,6 +506,7 @@ Pane {
 
                                         ComboBox {
                                             id: qualityCombo
+                                            Accessible.name: qsTr("Video quality")
                                             objectName: "downloadQualityCombo"
                                             Layout.preferredWidth: 100
                                             Layout.minimumWidth: 100
@@ -614,6 +619,7 @@ Pane {
                                             ProgressBar {
                                                 id: rowProgress
                                                 objectName: "downloadProgressBar"
+                                                Accessible.name: qsTr("Download progress")
                                                 anchors.fill: parent
 
                                                 from: 0
@@ -623,7 +629,7 @@ Pane {
 
                                             Label {
                                                 anchors.centerIn: parent
-                                                text: Math.round(downloadRow.progress) + "%"
+                                                text: qsTr("%1%").arg(Math.round(downloadRow.progress).toLocaleString(Qt.locale(), "f", 0))
                                                 color: "white"
                                                 font.bold: true
                                             }
@@ -638,7 +644,10 @@ Pane {
                                             Accessible.name: qsTr("Remove video from list")
                                             ToolTip.visible: hovered
                                             ToolTip.text: qsTr("Remove from list. An active download will stop first.")
-                                            onClicked: backend.remove_video(downloadRow.jobId)
+                                            onClicked: {
+                                                videoUrlField.forceActiveFocus()
+                                                backend.remove_video(downloadRow.jobId)
+                                            }
                                         }
                                     }
                                 }
@@ -782,6 +791,7 @@ Pane {
                                 id: titleRegexField
                                 objectName: "downloadTitleRegex"
                                 Layout.fillWidth: true
+                                Accessible.name: placeholderText
                                 placeholderText: qsTr("e.g., ^Step.*")
                             }
 
@@ -798,6 +808,7 @@ Pane {
                                 id: tagsRegexField
                                 objectName: "downloadTagsRegex"
                                 Layout.fillWidth: true
+                                Accessible.name: placeholderText
                                 placeholderText: qsTr("e.g., pov|amateur")
                             }
 
@@ -832,6 +843,7 @@ Pane {
                                     id: afterDateField
                                     objectName: "downloadAfterDate"
                                     Layout.fillWidth: true
+                                    Accessible.name: placeholderText
                                     placeholderText: qsTr("After (YYYY-MM-DD)")
                                     // Forces the user to type a valid date format
                                     validator: RegularExpressionValidator { regularExpression: /^\d{4}-\d{2}-\d{2}$/ }
@@ -870,7 +882,8 @@ Pane {
                                 TextField {
                                     id: customOptions
                                     objectName: "downloadTitlePattern"
-                                    placeholderText: "$title"
+                                    Accessible.name: placeholderText
+                                    placeholderText: qsTr("$title")
                                     Layout.fillWidth: true
                                 }
                                 Button {

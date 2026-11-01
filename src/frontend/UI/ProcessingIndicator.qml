@@ -8,7 +8,7 @@ import QtQuick.Layouts
 Pane {
     id: control
     property bool running: false
-    readonly property color accentColor: appSettings.core_style === "Material"
+    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.core_style === "Material"
                                          ? Material.accent : palette.highlight
     visible: running
     implicitHeight: 56

@@ -6,11 +6,11 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 0
-    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.accent_color
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     readonly property var providers: ["PornHub", "XHamster", "XVideos"]
     property int providerIndex: 0
     readonly property string provider: providers[providerIndex]
@@ -36,7 +36,7 @@ Pane {
                 Layout.fillWidth: true
                 text: qsTr("Choose a website")
                 color: root.textColor
-                font.pixelSize: 20
+                font.pixelSize: 20 * appSettings.font_size / 12
                 font.bold: true
             }
             GridLayout {
@@ -81,7 +81,7 @@ Pane {
                         text: root.loggedIn ? qsTr("Connected to %1").arg(root.provider)
                                             : qsTr("Connect to %1").arg(root.provider)
                         color: root.textColor
-                        font.pixelSize: 19
+                        font.pixelSize: 19 * appSettings.font_size / 12
                         font.bold: true
                         wrapMode: Text.Wrap
                     }
@@ -89,6 +89,7 @@ Pane {
                         id: identityField
                         Layout.fillWidth: true
                         visible: !root.tokenLogin
+                        Accessible.name: placeholderText
                         placeholderText: root.provider === "XHamster" ? qsTr("Username") : qsTr("Email address")
                         inputMethodHints: root.provider === "PornHub" ? Qt.ImhEmailCharactersOnly : Qt.ImhNoPredictiveText
                     }
@@ -103,6 +104,7 @@ Pane {
                         id: tokenField
                         Layout.fillWidth: true
                         visible: root.tokenLogin
+                        Accessible.name: placeholderText
                         placeholderText: qsTr("session_token")
                         echoMode: TextInput.Password
                     }
@@ -144,7 +146,7 @@ Pane {
                         Layout.fillWidth: true
                         text: qsTr("Your collections")
                         color: root.textColor
-                        font.pixelSize: 19
+                        font.pixelSize: 19 * appSettings.font_size / 12
                         font.bold: true
                     }
                     Label {
@@ -186,6 +188,7 @@ Pane {
                         id: playlistField
                         Layout.fillWidth: true
                         visible: root.provider === "XHamster"
+                        Accessible.name: placeholderText
                         placeholderText: qsTr("Account playlist URL")
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                     }

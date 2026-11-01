@@ -1,21 +1,2551 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="it" sourcelanguage="en">
-  <context>
+<context>
+    <name>AccountLoginHelp</name>
+    <message>
+        <location filename="../../UI/AccountLoginHelp.qml" line="+7"/>
+        <source>How to login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>XHamster: enter your username and password, then press Login. You can retrieve liked videos or paste an account playlist URL. Browser login does not require a username here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site&apos;s cookies from local browser profiles and passes them to the site&apos;s client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AccountPage</name>
+    <message>
+        <location filename="../../UI/AccountPage.qml" line="+66"/>
+        <source>PornHub</source>
+        <translation type="unfinished">PornHub</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>XHamster</source>
+        <translation type="unfinished">xHamster</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>XVideos</source>
+        <translation type="unfinished">XVideos</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Username:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Email:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Enter your username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter your email address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Password:</source>
+        <translation type="unfinished">Password:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter your password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Session token:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Enter session_token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Session token auth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Enter session_token_auth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Login with Session Tokens</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Login</source>
+        <translation type="unfinished">Login</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <location line="+15"/>
+        <source>Get Watch History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Get Watch Later Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Get Recommended Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Get Subscription Feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Get Favorite Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Get Liked Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>PornHub username for browser cookies (not email)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Login with Browser Cookies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Logged in to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Not logged in to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Account playlist URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>https://xhamster.com/my/playlists/...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Get Playlist Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Loading account videos...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Retrieved videos are added to the Downloads page</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidAccountPage</name>
+    <message>
+        <location filename="../../UI/AndroidAccountPage.qml" line="+37"/>
+        <source>Choose a website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Connected to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Connect to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Email address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>session_token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>session_token_auth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Connecting…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Sign in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Your collections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Videos you retrieve appear in Downloads.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <location line="+8"/>
+        <source>Watch history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <source>Watch later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Recommended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Subscription feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Liked videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Account playlist URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Get playlist videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Loading account videos…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidDownloadsPage</name>
+    <message>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="+24"/>
+        <source>App storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Selected folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Choose where to save videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <location line="+193"/>
+        <location line="+264"/>
+        <source>Add videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-452"/>
+        <source>Close</source>
+        <translation type="unfinished">Chiudi</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Video URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Model URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Playlist URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Paste a video, model or playlist URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Get Video</source>
+        <translation type="unfinished">Ottieni Video</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Get Videos</source>
+        <translation type="unfinished">Ottieni Video</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Save to: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Choose folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Hide filters and options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Filters and options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Cleanup on stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Duration in minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Title regex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Author regex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tags regex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Quality range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Published after (YYYY-MM-DD)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Published before (YYYY-MM-DD)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Custom options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Title formatting options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>%1 videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+39"/>
+        <source>Save downloaded video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Remove video from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Select %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Video details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <location line="+9"/>
+        <source>[redacted]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Hide details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Show details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Download progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Queued</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Downloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Stopping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Download</source>
+        <translation type="unfinished">Download</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Video quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Your downloads start here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Add a video, model or playlist link. Choose a quality, then download when you’re ready.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Select all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Clear selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Download selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidInfoPage</name>
+    <message>
+        <location filename="../../UI/AndroidInfoPage.qml" line="+22"/>
+        <source>Help translate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Copyright © 2023–2026 Johannes Habel (EchterAlsFake)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location line="+34"/>
+        <source>Application license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-31"/>
+        <source>Porn Fetch Source-Available License 1.0. See the full license for terms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Show application license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Show third-party notices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Thanks to Egsagon for the original PHUB API and to all contributors and translators.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Third-party notices</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidMain</name>
+    <message>
+        <location filename="../../UI/AndroidMain.qml" line="+12"/>
+        <location line="+234"/>
+        <source>Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-192"/>
+        <location line="+324"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-324"/>
+        <location line="+324"/>
+        <source>Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-324"/>
+        <location line="+324"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-323"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Supported websites</source>
+        <translation type="unfinished">Siti supportati</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <location line="+323"/>
+        <source>More</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-288"/>
+        <source>License rejected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>License imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>License import failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License imported successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed to import license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Help improve Porn Fetch after errors?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Automatic error reporting is disabled until you choose to enable it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>No, keep disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Yes, enable reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+130"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+118"/>
+        <source>Porn Fetch update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Version %1 is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>App updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Download and install update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Preparing verified download…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidMorePage</name>
+    <message>
+        <location filename="../../UI/AndroidMorePage.qml" line="+35"/>
+        <source>About Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Version, licenses and credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Supported websites</source>
+        <translation type="unfinished">Siti supportati</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>See where downloads work</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidSettingsPage</name>
+    <message>
+        <location filename="../../UI/AndroidSettingsPage.qml" line="+18"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Performance</source>
+        <translation type="unfinished">Performance</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Privacy &amp; network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>System &amp; data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Quality, sources and files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Speed and reliability</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Privacy and connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Theme and language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>App behavior and maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Premium access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+191"/>
+        <location line="+424"/>
+        <source>Import license file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-423"/>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>License files (*.license *.lic *.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Choose where to save videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>App storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Selected folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>Video preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Choose how links and model pages are processed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Default quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Model videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Both</source>
+        <translation type="unfinished">Entrambi</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Uploaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Featured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Maximum results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Strict quality selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use only the quality you selected when available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Write metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Skip existing files</source>
+        <translation type="unfinished">Salta file esistenti</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Folder access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location line="+18"/>
+        <source>Choose folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <source>Save completed videos to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Use app storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Completed videos are saved to this folder automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Download speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Parallel downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download workers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Speed limit (MB/s, 0 for unlimited)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Requests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Retries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Timeout in seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Delay between requests</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Processing delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Video requests at once</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Page requests at once</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Privacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Anonymous mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Hide titles and private information in the app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Automatic error reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Connection protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>DNS over HTTPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Encrypted Client Hello</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Configure proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Set up proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A Material look designed for your phone and tablet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Dark mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Activity glow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show a glowing border while the app is busy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Text size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Accent color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Indigo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Purple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reduce motion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>High contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Interface language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Content language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>App behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Suppress error dialogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use system proxy settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Debug mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Check for app updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear temporary files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Premium active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>No active license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Premium version entitlement ends: %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>covers premium features in releases for 1 year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Machine Limit: 10 devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Next Online Check: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Refresh license (renews 7-day check-in)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Deactivate license (frees 1 of 10 machine seats)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Production license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The beta checkout is a test. No real transaction takes place.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Purchase / renew license</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AppStrings</name>
+    <message>
+        <location filename="../../UI/AppStrings.qml" line="+7"/>
+        <source>If a download is stopped before it finishes, Cleanup on stop deletes its downloaded segments and temporary files so they do not waste storage space. This makes resuming that partial download impossible; starting it again downloads it from the beginning.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use these placeholders in the output filename or path:
+
+$title — video title
+$video_id — video identifier
+$author — author or channel
+$index — position in this fetch, padded to two digits (01, 02, …)
+$publish_date — publication date, when available
+$length — duration in minutes, when available
+$output_path — configured output folder
+
+Example: $author/$index - $title
+Example: ${title}_$video_id
+
+Leave the field empty to use the default filename. Relative paths are saved inside your configured output folder. Use $$ for a literal dollar sign. Only these placeholders are supported; date format expressions and video-object attribute access are not supported. Publication dates use YYYY-MM-DD; missing dates or lengths become unknown. Original titles stay visible and are used for filtering. Characters unsafe in filenames, including / and |, are replaced only in the generated filename. Template separators can create folders. Use $index or $video_id to distinguish titles that produce the same filename.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The Video quality that you apply here is the preference meaning all videos fetched will try to be downloaded in the specified quality.
+        If the quality is not available the next &apos;best&apos; quality will be picked.
+        IMPORTANT: https://eporner.com does not support downloading &gt;720p even for paid users. This is a website restriction!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Affects only PornHub! A Pornstar may have his own uploaded videos on his PornHub Account but also be featured in other videos from
+        different Channels. With this setting you can control whether model videos will include both, only uploaded or only featured videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>This setting affects the language of the website itself. E.g., if you set this to french then all video titles will be auto-translated to French by PornHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This setting affects how many videos will be loaded into the list view down below. For example if you want to get the videos
+        from a channel and the result limit is 50, then only 50 videos will be fetched, even if the channel has 100 videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>This (unfortunately) disables API data fetching and it will be a bit slower. Sites that do not support HTML scraping yet like beeg.com will
+        fallback to English titles. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>After downloading the video Porn Fetch will write the title, thumbnail, publish date and author directly into the MP4 container.
+        This can help organizing files and is a feature for advanced users. Requires remuxing to be enabled!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>If enabled Porn Fetch will skip downloading already existing files otherwise the files will be replaced.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This feature tracks videos in a local PocketBase data store. Porn Fetch starts the bundled PocketBase service only while
+        the application is running. If you don&apos;t need download history and statistics, you can leave it disabled.
+
+        For Advanced Users see: https:// #TODO
+        </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>This setting defines how many videos can be downloaded at the same time. Please do not raise this to a high number (5+).
+        This will make downloads unstable and timeout more frequently and the website may block your IP!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>How many seconds to wait before each network requests.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>How many videos to scrape at the same time from the webpage and load its HTML / API data and process the page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>How many pages to scrape at the same time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>How many network requests at the same time to fetch an HLS Segment (1 Worker = ~2-5 MB)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The maximum time to wait for a response from a website. If you have a bad internet connection higher values like
+        30 seconds can help a lot. Please note that Porn Fetch will retry a request if it fails due to a timeout!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The limit for retrying a failed network request e.g., a timeout.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The Global Speed Limit for Porn Fetch in Megabyte/s. I have tried implementing this in a good way, but there could
+        still be edge cases especially when using parallel downloads where the speed limit is NOT applied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>In seconds how many seconds to wait before processing each video into the List View AND before starting a new download.
+        I don&apos;t know why you would want to use this, but here you go.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Whether to enable automated update checks. It is HIGHLY recommended to TURN THIS ON. Update checking uses my own server
+        which is hosted offshore in Sweden. The application source is available under its published license. Your IP address is NOT logged nor stored.
+
+        Tor: If you enable Tor in Porn Fetch, the .onion domain of my server will be used (also hosted in Sweden).
+        See: https://github.com/EchterAlsFake/Server for the full source code.
+
+        Installed Qt Installer Framework builds can use the maintenance tool for updates. Standalone builds can check for a newer version, but you need to download and install it yourself.
+        </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>This will basically skip all errors, you will not be notified about anything and if nothing works you will not know why.
+        Why did I make this setting? I absolutely don&apos;t remember. I think it was from a GitHub issue where someone requested it lol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>
+If you enable ths, Porn Fetch will trust your local Proxy options and other advanced configuration
+that have been applied through environment variables.
+
+This is not recommended to turn on, unless you have a specific reason to.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>
+Please only enable the debug mode if you have opened an issue on GitHub and I told you to enable it!
+
+The debug mode will essentially print out anything that Porn Fetch does. Each individual network request, each
+processing step and create log files on your computer for all seperate API modules that Porn Fetch uses aswell as for the
+main application.
+
+Those log files can instantly pin-point to me what went wrong, but they create unnecessary bloat on your PC and slow things down.
+Please only enable if you are a developer and you have an actual reason to do so.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>This defines the internal logging level of Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>
+Warning: This setting can conflict with the SNI Proxy, an own proxy set and the Tor routing and those edge cases have
+not been tested. Please keep that in mind when binding to an interface!
+
+Windows:
+Enter the IP address of the network interface you want to bind Porn Fetch&apos;s network traffic too. Do not use the name
+of your physical adapters. This is not supported.
+
+Linux:
+Enter the interface name e.g., &apos;wlan0&apos; or &apos;eth0&apos;. Use commands like &apos;iwconfig&apos; or &apos;ifconfig&apos; to find it out.
+
+macOS:
+I have no idea if this works
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>
+Available options: v3, v2, v1
+
+Ask ChatGPT what this is and if you need to change this or not.
+
+The SNI Fragmentation Proxy is not compatible with HTTP/3!
+If you enable HTTP/3, SNI will automatically be disabled!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>This defines the browser profile that Porn Fetch tries to emulate in order to
+send regular and correct TLS headers.
+
+See: https://curl-cffi.readthedocs.io/en/v0.6.1/impersonate.html
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>This topic is so complex not even I can tell you anything.
+So you might just want to read: https://medium.com/cu-cyber/impersonating-ja3-fingerprints-b9f555880e42</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>
+This will basically hide sensitive video titles, author names and sensitive text in general in Porn Fetch.
+If someone looks over your shoulder while you use this app they will not be able to see you are using
+a Porn Downloader right now.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>
+This will enable encrypted Client Hello packets. Basically, when you reach out to a website there&apos;s a little packet
+called SNI (Server Name Identification). This contains the entire server name you are trying to reach e.g.,
+pornhub.com. Your Internet Service Provider or anyone in between your connection can see this.
+
+You probably want to hide it and that is what encrypted Client Hello does. However, basically NO site on the Internet
+except sites for cloudflare support this yet. If a site doesn&apos;t support it, it breaks the entire connection.
+This is for future proofing!
+
+However, my web-server (if you enable update checks / logging) actually DOES support it and will use it.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>
+A (D)omain (N)ame (S)erver is a service that basically translates a URL like https://pornhub.com to its IP address.
+Usually a DNS server is not encrypted. So your internet provider can actually see the domains you are visiting.
+They can&apos;t see the exact video, but they can see pornhub.com. With a DNS over HTTPS this is encrypted and they can&apos;t see it.
+I highly recommend turning this on.
+
+Porn Fetch by default uses a Mullvad DNS Server. Mullvad has a decade long reputation for zero logging policies and strict anonymity.
+However, you can also enter your own DNS.
+       </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>This DNS Server will be the primary one used for connecting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>
+If DNS acts like Deutsche Bahn and the packets don&apos;t arrive, this will be used as a fallback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>
+What SNI reveals
+
+Server Name Indication, or SNI, is a field inside the TLS ClientHello. It usually contains the hostname Porn Fetch is
+connecting to and is normally visible before the encrypted HTTPS session begins. A network provider or other observer
+may therefore learn the hostname even though the later request and response are encrypted.
+
+What this feature does
+
+Porn Fetch sends its own HTTP/2-over-TCP connections through a local loopback proxy. The proxy divides the TLS
+ClientHello inside the SNI hostname so the complete name is not present in one TCP payload. If another proxy is
+configured, the local SNI proxy connects through it. Unrelated applications are not routed through this proxy.
+
+Lite mode
+
+Lite mode splits the ClientHello into separate socket writes with a short delay. It needs no Administrator or root
+rights and uses no packet driver. The operating system or network hardware may combine those writes again, so Lite
+mode cannot guarantee separate packets on the wire.
+
+Strict mode
+
+Strict mode intercepts only the exact outbound TCP flows created by the local proxy and emits genuine TCP segments with
+correct sequence numbers and checksums. It requires root on Linux or Run as Administrator on Windows.
+For a Linux source run, start the app with sudo -E .venv/bin/python3 test.py so it retains your user settings. Plain
+sudo normally reads root&apos;s separate settings profile and can make your saved mode appear to reset.
+
+Strict Fragmentation sends the genuine segments in their normal order.
+Strict Reverse sends the later segment first; the destination TCP stack can reorder and reassemble it.
+Strict Desync first sends a harmless fake ClientHello with deliberately invalid sequence and acknowledgement values,
+then sends the genuine fragments in reverse order. The destination should discard the fake packet, while some
+stateless inspection systems may parse it.
+
+Supported strict platforms:
+Windows x86-64 using WinDivert
+Linux x86-64 or aarch64 using PyDivert, eBPF and TC; kernel 5.8 or newer and libbpf are required
+macOS, Windows ARM64 and other platforms are not currently supported
+
+Important limitations
+
+This is obfuscation, not encryption, a VPN or an anonymity system. A stateful observer can buffer and reassemble the TCP
+stream and recover an unencrypted SNI. DNS traffic and the destination IP address can also reveal or suggest the site.
+Encrypted ClientHello, when supported by both client and server, protects SNI more directly. Results depend on the
+network path and inspection system, and no mode guarantees that a hostname will remain hidden.
+
+Porn Fetch forces HTTP/2 over TCP while this feature is active; it does not modify HTTP/3 or other UDP traffic. Verify
+the behavior on your own network and make sure using traffic-obfuscation tools complies with the laws and policies that
+apply to you.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+50"/>
+        <source>Porn Fetch starts its bundled Tor client when needed. Choose Updates + licensing only to route those requests through the Porn Fetch onion service, or All app traffic to also route website requests and video downloads through Tor. If Tor cannot connect, routed requests fail without a direct fallback.
+
+The license key and installation ID are randomly generated values. They contain no personal information and do not identify you as a person.
+
+All app traffic overrides custom proxy, network interface, DNS over HTTPS and HTTP/3 settings for Internet requests. Local app services stay on your device. Links opened in an external browser use that browser&apos;s settings. Tor does not guarantee anonymity or safety.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Use Tor for all app traffic only if you live in a censored country where consuming pornography is illegal and can lead to jail time or other punishments.
+
+Video downloads use substantial bandwidth and slow the Tor network down for everyone else. Using Tor for downloads is morally discouraged unless it is strictly necessary.
+
+This routes Porn Fetch&apos;s Internet requests through Tor. It does not route other apps or links opened in your external browser, and it does not guarantee anonymity or safety.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>
+A Proxy is basically just a service that routes your internet traffic. It is similar to a VPN. You can find free proxies
+on the internet, although I absolutely do not recommend you doing that.
+
+Instead, buy yourself a simple and cheap proxy and use the authentication form below. You can also start the Tor service
+on your machine and route through tor.       </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>This defines the language of Porn Fetch&apos;s user interace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This sets the point size of the text in the UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Material UI looks like Android, Fusion like the native OS, Universal looks just bad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+3"/>
+        <source>You really need an explanation for this xD</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Backend</name>
+    <message>
+        <location filename="../../../backend/application.py" line="+605"/>
+        <source>
+        Important: 
+
+        Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
+        and the main file.
+
+        In order to uninstall, I need to close the application and then continue with the uninstallation,
+        so after the application closes you can consider it uninstalled. 
+
+        If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
+        Thank you for using Porn Fetch ^^
+        </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+148"/>
+        <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The SSL connection failed even with certificate verification disabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Could not connect through this proxy. Check the address and credentials.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+85"/>
+        <source>No permitted quality is available for this video.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+228"/>
+        <location line="+50"/>
+        <source>The video download failed. Error ID: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+188"/>
+        <source>Your %s login is no longer valid. Please log in again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Could not fetch the account videos. Please check the log for details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>The selected login provider is not supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>You have successfully logged in.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The login failed. Please verify your account details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>%s rejected the login. Please verify your account details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>You are already logged in.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>An unexpected login error occurred. Please check the log for details.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BetaDisclaimerDialog</name>
+    <message>
+        <location filename="../../UI/BetaDisclaimerDialog.qml" line="+25"/>
+        <source>Porn Fetch v3.9 BETA disclaimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Please read the disclaimer. OK will be available in %1 seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click OK to consent and continue, or Exit to close Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>OK (%1 s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DownloadListModel</name>
+    <message>
+        <location filename="../../../backend/download_manager.py" line="+108"/>
+        <location line="+79"/>
+        <source>%d min</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DownloadsPage</name>
+    <message>
+        <location filename="../../UI/DownloadsPage.qml" line="+15"/>
+        <location line="+431"/>
+        <source>Download</source>
+        <translation type="unfinished">Download</translation>
+    </message>
+    <message>
+        <location line="-429"/>
+        <location line="+343"/>
+        <source>Stop / Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-342"/>
+        <location line="+355"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-348"/>
+        <source>Title formatting options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+867"/>
+        <source>Keyboard shortcuts</source>
+        <translation type="unfinished">Scorciatoie da tastiera</translation>
+    </message>
+    <message>
+        <location line="-866"/>
+        <source>Enter in a video, model or playlist URL field starts that fetch.
+
+Tab and Shift+Tab move between controls.
+Space activates a focused button or checkbox.
+Arrow keys change a focused quality selection or number input.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Video URL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter a video URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Get Video</source>
+        <translation type="unfinished">Ottieni Video</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Model URL:</source>
+        <translation type="unfinished">URL Modello/a:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter a model or channel URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location line="+35"/>
+        <source>Get Videos</source>
+        <translation type="unfinished">Ottieni Video</translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <source>Playlist URL:</source>
+        <translation type="unfinished">URL Playlist:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter a playlist URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Advanced Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Cancel Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+41"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Clear Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Download Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Select / Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Author</source>
+        <translation type="unfinished">Autore</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <source>Select video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <location line="+23"/>
+        <source>[redacted]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Video quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>License required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+61"/>
+        <source>Stop download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Resume download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Download progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>%1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Remove video from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Remove from list. An active download will stop first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>No downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>General Operations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Cleanup on stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Start video:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>End video:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Video positions are inclusive and start at 1. Use 0 for the first video or no end limit. Positions are applied before filters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Video Filters (Applied during fetch)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Duration (Minutes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location line="+10"/>
+        <source>Any</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <location line="+10"/>
+        <source> min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Title Regex:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>e.g., ^Step.*</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Author Regex:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>e.g., .*Studio$</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Tags Regex:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>e.g., pov|amateur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Quality Range:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Publish Date:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>After (YYYY-MM-DD)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Before (YYYY-MM-DD)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>All filters must match. Regexes ignore case; a tag regex may match any single tag. Quality range checks the highest available resolution. Date limits include the whole selected day.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Custom Title formatting:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>$title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HelpButton</name>
+    <message>
+        <location filename="../../UI/HelpButton.qml" line="+9"/>
+        <location line="+33"/>
+        <source>Help</source>
+        <translation type="unfinished">Aiuto</translation>
+    </message>
+</context>
+<context>
+    <name>InfoPage</name>
+    <message>
+        <location filename="../../UI/InfoPage.qml" line="+50"/>
+        <source>Help translate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Copyright © 2023-2026 Johannes Habel (EchterAlsFake)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Special Notice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This project was only possible because Egsagon made the PHUB API that interacts with PornHub and which Porn Fetch uses. Although I now have ownership, without him, this project wouldn&apos;t be possible in the first place.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Application License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Porn Fetch Source-Available License 1.0. You may inspect and modify the code and share builds privately. Public forks must keep premium licensing operational. Older GPL copies keep their GPL rights. See the full license below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show application license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Show third-party notices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Development Stack</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Language: Python
+IDE: JetBrains PyCharm Professional
+Platform: GitHub
+GUI: PySide6
+
+Thanks to Qt for the Python GUI toolkit used by this project. Qt components have their own license terms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Amazing Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Egsagon (PHUB API &amp; French)
+RSDCFGVHBJNKML
+Joshua-auhsoj (Chinese 3.0)
+RonLar1132
+xxIndirect
+efraxs
+omar-st
+SShattered
+journeym
+Joly0
+FatalPuppet (Italian)
+HeathenSkwerl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Third-party components</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, and Python packages. Use the third-party notices button for the current inventory and license information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Android</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Buildozer
+Cython
+Chaquopy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>FFMPEG (via pyav)
+
+Used for processing
+media streams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>macOS Build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>OneClick-macOS-Simple-KVM
+
+Makes macOS builds possible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>iOS Testing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>palera1n
+Kitty-XZ
+
+Jailbreak testing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InstallDialog</name>
+    <message>
+        <location filename="../../UI/InstallDialog.qml" line="+9"/>
+        <source>User Input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>App Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Leave empty for &apos;Porn Fetch&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LicenseWidget</name>
+    <message>
+        <location filename="../../UI/LicenseWidget.qml" line="+44"/>
+        <source>An incorrect device clock can cause activation to fail. Check your date, time and time zone, enable automatic time synchronization, then try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Select license file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>License files (*.license *.lic *.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>Paste signed license key or license JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Activate pasted license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Premium version entitlement ends:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Lifetime / Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Premium features are covered in releases for 1 year after first activation. App updates are free for everyone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Machine Limit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>10 Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Up to 10 active machines per license simultaneously</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Offline Permit Expires:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>How do premium entitlement &amp; 10-machine limits work?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Re-verifies license and renews the 7-day offline check-in permit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deactivate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Unlinks this device to free up 1 of your 10 machine seats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Replace license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Import license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Replace license…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Import license…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>License activation failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>License &amp; Activation Guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Premium Version Entitlement &amp; Free App Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>• &lt;b&gt;Premium version entitlement ends:&lt;/b&gt; The release deadline for licensed premium features. App updates are free for everyone, including without a license. A &lt;b&gt;Permanent License&lt;/b&gt; provides perpetual premium access to versions released during the &lt;b&gt;first year after activation&lt;/b&gt;. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.&lt;br&gt;&lt;br&gt;• &lt;b&gt;Offline Permit:&lt;/b&gt; Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The &quot;Refresh&quot; Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Clicking &lt;b&gt;Refresh&lt;/b&gt; manually connects to the licensing server to re-validate your license and extends your 7-day offline check-in period immediately.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The &quot;Deactivate&quot; Button &amp; 10-Machine Limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Each license includes a &lt;b&gt;10-machine limit&lt;/b&gt; (up to 10 active devices simultaneously). Clicking &lt;b&gt;Deactivate&lt;/b&gt; unlinks this device from Keygen on the server, &lt;b&gt;freeing up a seat out of your 10-machine limit&lt;/b&gt; so you can activate and use Porn Fetch on another computer or after reinstalling your OS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Got It</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LicenseWindow</name>
+    <message>
+        <location filename="../../UI/LicenseWindow.qml" line="+11"/>
+        <source>Manage License</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Main</name>
+    <message>
+        <location filename="../../UI/Main.qml" line="+30"/>
+        <source>Video Downloader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+105"/>
+        <source>License rejected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>Help improve Porn Fetch after errors?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Synthetic example of a stored report:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>No, keep disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Yes, enable reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>🚀 New Update Available!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Purchase / renew license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Download:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>View GitHub releases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Important Info:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Changelog:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Updating…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Auto Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Starting update…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>SUPPORTED WEBSITES</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>Widget is hidden due to your privacy settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-      <location filename="../UI/form_main_window.ui" line="19"/>
-      <source>MainWindow</source>
-      <translation>PaginaPrincipale</translation>
+        <source>MainWindow</source>
+        <translation type="vanished">PaginaPrincipale</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="331"/>
-      <source>Supported websites</source>
-      <translation>Siti supportati</translation>
+        <source>Supported websites</source>
+        <translation type="vanished">Siti supportati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2968"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -73,7 +2603,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;License details: &lt;a href=&quot;https://scripts.sil.org/OFL&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://scripts.sil.org/OFL&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Thank you for using &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; responsibly!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -81,11 +2611,11 @@ li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;JetBrainsMono Nerd Font Propo&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;GPL License Agreement for Porn Fetch&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo programma e' software gratuito: puo essere redistribuito e/o modificato secondo i termini del GNU General Public License come pubblicati su Free Software Foundation, sia in versione 3 della licenza, o (a proprio discapito) in qualunque versione successiva.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo programma e' distribuito nella speranza che possa essere di alcuna utilita', ma viene fornito &lt;span style=&quot; font-weight:700;&quot;&gt;&amp;quot;COSI' COM'E'&amp;quot; SENZA ALCUNA GARANZIA&lt;/span&gt;; senza le garanzie implicite di &lt;span style=&quot; font-weight:700;&quot;&gt;COMMERCIABILITA'&lt;/span&gt; o &lt;span style=&quot; font-weight:700;&quot;&gt;IDONEITA' PER UNO SCOPO SPECIFICO&lt;/span&gt;. Per maggiori dettagli, vedere la GNU General Public License.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo programma e&apos; software gratuito: puo essere redistribuito e/o modificato secondo i termini del GNU General Public License come pubblicati su Free Software Foundation, sia in versione 3 della licenza, o (a proprio discapito) in qualunque versione successiva.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo programma e&apos; distribuito nella speranza che possa essere di alcuna utilita&apos;, ma viene fornito &lt;span style=&quot; font-weight:700;&quot;&gt;&amp;quot;COSI&apos; COM&apos;E&apos;&amp;quot; SENZA ALCUNA GARANZIA&lt;/span&gt;; senza le garanzie implicite di &lt;span style=&quot; font-weight:700;&quot;&gt;COMMERCIABILITA&apos;&lt;/span&gt; o &lt;span style=&quot; font-weight:700;&quot;&gt;IDONEITA&apos; PER UNO SCOPO SPECIFICO&lt;/span&gt;. Per maggiori dettagli, vedere la GNU General Public License.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dovreste aver ricevuto una copia della GNU General Public License insieme al programma. Altrimenti, visitare &lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;hr /&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Limitazioni di Responsabilita'&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Limitazioni di Responsabilita&apos;&lt;/span&gt;&lt;/h2&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Secondo alcuna circostanza e senza teoria legale - sia in torto, contratto, o altrimenti - il proprietario del copyright o i suoi collaboratori potranno essere resi responsabili per ogni danno diretto, indirettom speciale, incidente, consequente, e esemplare, di alcun tipo. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo include, ma non si limita a:&lt;/p&gt;
 &lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
@@ -94,8 +2624,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Malfunzionamento o danneggiamento del computer &lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Perdita di dati &lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Qualunque altro tipo di danni, o perdita, commerciale &lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Anche se le parti erano informate della possibilita' di tali danni.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Queste limitazioni non si applicano alla responsabilita' di morte, o danni personali, risulatatni dalla negligenza di tali parti, dove l'applicazione di tale leggi proibishe tali limitazioni. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Anche se le parti erano informate della possibilita&apos; di tali danni.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Queste limitazioni non si applicano alla responsabilita&apos; di morte, o danni personali, risulatatni dalla negligenza di tali parti, dove l&apos;applicazione di tale leggi proibishe tali limitazioni. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Nota:&lt;/span&gt; In alcune giurisdizioni, le esclusioni o limitazioni di danni consequenti o incidenti non sono ammesse. Pertanto, queste esclusioni possono non essere applicate.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Questo Accordo costituisce la completa ed esclusiva comprensione tra le parti riguardo il soggetto in materia contenuto al suo interno.&lt;/p&gt;
 &lt;hr /&gt;
@@ -111,19 +2641,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006fff;&quot;&gt;xhamster.com&lt;/span&gt;&lt;/li&gt;
 &lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;missav.ws&lt;/li&gt;&lt;/ul&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Usage Warning&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;L'uitilizzo di &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; puo' risultare in &lt;span style=&quot; font-weight:700;&quot;&gt;azioni legali&lt;/span&gt; prese contro di Voi. Il creatore di qesto software non e' responsabile per alcun danno o conseguenza legale risultante dal suo uso.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; e' stato creato solamente per la funzione di abilitare l'accesso offline a video in scenari in cui l'accesso ad internet non e' disponibile. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;L&apos;uitilizzo di &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; puo&apos; risultare in &lt;span style=&quot; font-weight:700;&quot;&gt;azioni legali&lt;/span&gt; prese contro di Voi. Il creatore di qesto software non e&apos; responsabile per alcun danno o conseguenza legale risultante dal suo uso.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; e&apos; stato creato solamente per la funzione di abilitare l&apos;accesso offline a video in scenari in cui l&apos;accesso ad internet non e&apos; disponibile. &lt;/p&gt;
 &lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La ridistribuzione di material protetto da copyright ottenuto tramite Porn Fetch e' &lt;span style=&quot; font-weight:700;&quot;&gt;strettamente proibita&lt;/span&gt;. &lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Qualsiasi uso improprio di questo software per rubare e ridistribuire material con copyright e' contro il suo scopo previsto e non e' approvato dal suo creatore. &lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La &lt;span style=&quot; font-weight:700;&quot;&gt;funzione di processo in batch&lt;/span&gt; in Porn Fetch e' intesa ad assistere gli utenti senza interfaccia grafica a scaricaree contenuto per uso personale, e non for furto in larga scala di video o redistribuzione.&lt;/p&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La ridistribuzione di material protetto da copyright ottenuto tramite Porn Fetch e&apos; &lt;span style=&quot; font-weight:700;&quot;&gt;strettamente proibita&lt;/span&gt;. &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Qualsiasi uso improprio di questo software per rubare e ridistribuire material con copyright e&apos; contro il suo scopo previsto e non e&apos; approvato dal suo creatore. &lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La &lt;span style=&quot; font-weight:700;&quot;&gt;funzione di processo in batch&lt;/span&gt; in Porn Fetch e&apos; intesa ad assistere gli utenti senza interfaccia grafica a scaricaree contenuto per uso personale, e non for furto in larga scala di video o redistribuzione.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Software di Terza-PArti&lt;/span&gt;&lt;/h2&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; usa i seguenti tool e risorse di terza-parti:&lt;/p&gt;
 &lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
 &lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;FFmpeg&lt;/span&gt; &lt;/li&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Usato per elaborazione e conversione video. &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;FFmpeg e' software libero sotto licenza GPL. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;FFmpeg e&apos; software libero sotto licenza GPL. &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Per maggiori informazioni, visitare &lt;a href=&quot;https://ffmpeg.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://ffmpeg.org&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;JetBrains Mono Font&lt;/span&gt; &lt;/li&gt;&lt;/ol&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Copyright © 2019 JetBrains. Tutti i Diritti Riservatri. &lt;/p&gt;
@@ -133,360 +2663,267 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Grazie per usare &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; responsabilmente!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="354"/>
-      <source>Total:</source>
-      <translation>Totale:</translation>
+        <source>Total:</source>
+        <translation type="vanished">Totale:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="383"/>
-      <source>Converting:</source>
-      <translation>Conversione:</translation>
+        <source>Converting:</source>
+        <translation type="vanished">Conversione:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="706"/>
-      <source>Download</source>
-      <translation>Download</translation>
+        <source>Download</source>
+        <translation type="vanished">Download</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="719"/>
-      <source>PornHub</source>
-      <translation>PornHub</translation>
+        <source>PornHub</source>
+        <translation type="vanished">PornHub</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="681"/>
-      <source>Search for Videos. Select Website below</source>
-      <translation>Ricerca Video. Selezione il Sito sotto</translation>
+        <source>Search for Videos. Select Website below</source>
+        <translation type="vanished">Ricerca Video. Selezione il Sito sotto</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="659"/>
-      <source>Playlist URL:</source>
-      <translation>URL Playlist:</translation>
+        <source>Playlist URL:</source>
+        <translation type="vanished">URL Playlist:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="870"/>
-      <source>File:</source>
-      <translation>File:</translation>
+        <source>File:</source>
+        <translation type="vanished">File:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="794"/>
-      <source>Model URL:</source>
-      <translation>URL Modello/a:</translation>
+        <source>Model URL:</source>
+        <translation type="vanished">URL Modello/a:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="892"/>
-      <source>Start</source>
-      <translation>Avvia</translation>
+        <source>Start</source>
+        <translation type="vanished">Avvia</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="714"/>
-      <location filename="../UI/form_main_window.ui" line="1248"/>
-      <source>HQPorner</source>
-      <translation>HQPorner</translation>
+        <source>HQPorner</source>
+        <translation type="vanished">HQPorner</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="615"/>
-      <source>URL:</source>
-      <translation>URL:</translation>
+        <source>URL:</source>
+        <translation type="vanished">URL:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="917"/>
-      <source>URLs in the file must be separated with new lines!</source>
-      <translation>Gli URL nel file devono essere separati su nuove linee!</translation>
+        <source>URLs in the file must be separated with new lines!</source>
+        <translation type="vanished">Gli URL nel file devono essere separati su nuove linee!</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="729"/>
-      <source>XVideos</source>
-      <translation>XVideos</translation>
+        <source>XVideos</source>
+        <translation type="vanished">XVideos</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="558"/>
-      <location filename="../UI/form_main_window.ui" line="640"/>
-      <location filename="../UI/form_main_window.ui" line="1311"/>
-      <location filename="../UI/form_main_window.ui" line="1494"/>
-      <location filename="../UI/form_main_window.ui" line="1535"/>
-      <location filename="../UI/form_main_window.ui" line="1607"/>
-      <source>Get Videos</source>
-      <translation>Ottieni Video</translation>
+        <source>Get Videos</source>
+        <translation type="vanished">Ottieni Video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="851"/>
-      <source>Enter a PornHub Playlist URL</source>
-      <translation>Inserisci URL di una Playlist PornHub</translation>
+        <source>Enter a PornHub Playlist URL</source>
+        <translation type="vanished">Inserisci URL di una Playlist PornHub</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="813"/>
-      <location filename="../UI/form_main_window.ui" line="1965"/>
-      <location filename="../UI/form_main_window.ui" line="2009"/>
-      <location filename="../UI/form_main_window.ui" line="2016"/>
-      <location filename="../UI/form_main_window.ui" line="2026"/>
-      <location filename="../UI/form_main_window.ui" line="2033"/>
-      <location filename="../UI/form_main_window.ui" line="2040"/>
-      <location filename="../UI/form_main_window.ui" line="2159"/>
-      <location filename="../UI/form_main_window.ui" line="2200"/>
-      <location filename="../UI/form_main_window.ui" line="2383"/>
-      <location filename="../UI/form_main_window.ui" line="2418"/>
-      <location filename="../UI/form_main_window.ui" line="2539"/>
-      <location filename="../UI/form_main_window.ui" line="2598"/>
-      <location filename="../UI/form_main_window.ui" line="2619"/>
-      <location filename="../UI/form_main_window.ui" line="2665"/>
-      <location filename="../UI/form_main_window.ui" line="2699"/>
-      <location filename="../UI/form_main_window.ui" line="2730"/>
-      <location filename="../UI/form_main_window.ui" line="2773"/>
-      <location filename="../UI/form_main_window.ui" line="2816"/>
-      <source>Help</source>
-      <translation>Aiuto</translation>
+        <source>Help</source>
+        <translation type="vanished">Aiuto</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="739"/>
-      <source>XNXX</source>
-      <translation>XNXX</translation>
+        <source>XNXX</source>
+        <translation type="vanished">XNXX</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="596"/>
-      <source>Enter video URL</source>
-      <translation>Inserisci URL video</translation>
+        <source>Enter video URL</source>
+        <translation type="vanished">Inserisci URL video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="832"/>
-      <source>Enter Model / Channel / Actress URL</source>
-      <translation>Inserisci URL Modella / Canale / Attrice</translation>
+        <source>Enter Model / Channel / Actress URL</source>
+        <translation type="vanished">Inserisci URL Modella / Canale / Attrice</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="577"/>
-      <source>Search Query:</source>
-      <translation>Query di ricerca:</translation>
+        <source>Search Query:</source>
+        <translation type="vanished">Query di ricerca:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="775"/>
-      <source>Open File</source>
-      <translation>Apri File</translation>
+        <source>Open File</source>
+        <translation type="vanished">Apri File</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="724"/>
-      <location filename="../UI/form_main_window.ui" line="1547"/>
-      <source>EPorner</source>
-      <translation>EPorner</translation>
+        <source>EPorner</source>
+        <translation type="vanished">EPorner</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="971"/>
-      <source>Get Liked videos</source>
-      <translation>Ottieni Video collegati</translation>
+        <source>Get Liked videos</source>
+        <translation type="vanished">Ottieni Video collegati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1107"/>
-      <source>Get watched videos</source>
-      <translation>Ottieni Video guardati</translation>
+        <source>Get watched videos</source>
+        <translation type="vanished">Ottieni Video guardati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1028"/>
-      <source>E-Mail:</source>
-      <translation>E-Mail:</translation>
+        <source>E-Mail:</source>
+        <translation type="vanished">E-Mail:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1047"/>
-      <source>Login</source>
-      <translation>Login</translation>
+        <source>Login</source>
+        <translation type="vanished">Login</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1088"/>
-      <source>Enter your PornHub E-Mail address (not your username, pornhub changed it) </source>
-      <translation>Inserisci il tuo indirizzo E-Mail di PornHub (non il tuo Username, PornHub ha cambiato)</translation>
+        <source>Enter your PornHub E-Mail address (not your username, pornhub changed it) </source>
+        <translation type="vanished">Inserisci il tuo indirizzo E-Mail di PornHub (non il tuo Username, PornHub ha cambiato)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="990"/>
-      <source>Get recommended videos</source>
-      <translation>Ottieni video raccomandati</translation>
+        <source>Get recommended videos</source>
+        <translation type="vanished">Ottieni video raccomandati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="734"/>
-      <source>XHamster</source>
-      <translation>xHamster</translation>
+        <source>XHamster</source>
+        <translation type="vanished">xHamster</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="744"/>
-      <source>Spankbang</source>
-      <translation>Spankbang</translation>
+        <source>Spankbang</source>
+        <translation type="vanished">Spankbang</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="749"/>
-      <source>Missav</source>
-      <translation>Missav</translation>
+        <source>Missav</source>
+        <translation type="vanished">Missav</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1009"/>
-      <source>Password:</source>
-      <translation>Password:</translation>
+        <source>Password:</source>
+        <translation type="vanished">Password:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1069"/>
-      <source>Enter your PornHub Password</source>
-      <translation>Inserisci la tua Password PornHub</translation>
+        <source>Enter your PornHub Password</source>
+        <translation type="vanished">Inserisci la tua Password PornHub</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1190"/>
-      <source>Info:</source>
-      <translation>Info:</translation>
+        <source>Info:</source>
+        <translation type="vanished">Info:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1286"/>
-      <source>Week</source>
-      <translation>Settimana</translation>
+        <source>Week</source>
+        <translation type="vanished">Settimana</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1330"/>
-      <location filename="../UI/form_main_window.ui" line="1648"/>
-      <source>Get videos by category</source>
-      <translation>Ottieni video per categoria</translation>
+        <source>Get videos by category</source>
+        <translation type="vanished">Ottieni video per categoria</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1349"/>
-      <source>Get Top Porn:</source>
-      <translation>Ottieni Porno Top:</translation>
+        <source>Get Top Porn:</source>
+        <translation type="vanished">Ottieni Porno Top:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1371"/>
-      <source>Month</source>
-      <translation>Mese</translation>
+        <source>Month</source>
+        <translation type="vanished">Mese</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1390"/>
-      <source>Get random video</source>
-      <translation>Ottieni video random</translation>
+        <source>Get random video</source>
+        <translation type="vanished">Ottieni video random</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1412"/>
-      <source>All Time</source>
-      <translation>Tutti i tempi</translation>
+        <source>All Time</source>
+        <translation type="vanished">Tutti i tempi</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1434"/>
-      <location filename="../UI/form_main_window.ui" line="1629"/>
-      <source>List of all categories</source>
-      <translation>Lista delle categorie</translation>
+        <source>List of all categories</source>
+        <translation type="vanished">Lista delle categorie</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1456"/>
-      <source>Get Video</source>
-      <translation>Ottieni Video</translation>
+        <source>Get Video</source>
+        <translation type="vanished">Ottieni Video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1513"/>
-      <source>Get Brazzers videos</source>
-      <translation>Ottieni video Brazzers</translation>
+        <source>Get Brazzers videos</source>
+        <translation type="vanished">Ottieni video Brazzers</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1712"/>
-      <source>Show videos in reverse</source>
-      <translation>Mostra video al contrario</translation>
+        <source>Show videos in reverse</source>
+        <translation type="vanished">Mostra video al contrario</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1719"/>
-      <source>Do not clear videos</source>
-      <translation>Non filtrare video</translation>
+        <source>Do not clear videos</source>
+        <translation type="vanished">Non filtrare video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1732"/>
-      <source>Automated selection tool</source>
-      <translation>Tool di selezione automatica</translation>
+        <source>Automated selection tool</source>
+        <translation type="vanished">Tool di selezione automatica</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1739"/>
-      <source>Keyboard shortcuts</source>
-      <translation>Scorciatoie da tastiera</translation>
+        <source>Keyboard shortcuts</source>
+        <translation type="vanished">Scorciatoie da tastiera</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1758"/>
-      <source>Does not stop downloading videos</source>
-      <translation>Non ferma i download dei video</translation>
+        <source>Does not stop downloading videos</source>
+        <translation type="vanished">Non ferma i download dei video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1761"/>
-      <source>Stop loading videos</source>
-      <translation>Ferma il caricamentro dei video</translation>
+        <source>Stop loading videos</source>
+        <translation type="vanished">Ferma il caricamentro dei video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1793"/>
-      <source>Download Selected Videos</source>
-      <translation>Scarica i video Selezionati</translation>
+        <source>Download Selected Videos</source>
+        <translation type="vanished">Scarica i video Selezionati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1818"/>
-      <source>Author</source>
-      <translation>Autore</translation>
+        <source>Author</source>
+        <translation type="vanished">Autore</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1823"/>
-      <source>Duration (minutes)</source>
-      <translation>Durata (minuti):</translation>
+        <source>Duration (minutes)</source>
+        <translation type="vanished">Durata (minuti):</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2099"/>
-      <source>Quality (advanced):</source>
-      <translation>Qualita' (avanzato):</translation>
+        <source>Quality (advanced):</source>
+        <translation type="vanished">Qualita&apos; (avanzato):</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2186"/>
-      <source>Directly Download videos (bypass tree widget)</source>
-      <translation>Scarica video direttamente (bypass del tree widget)</translation>
+        <source>Directly Download videos (bypass tree widget)</source>
+        <translation type="vanished">Scarica video direttamente (bypass del tree widget)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2193"/>
-      <source>Track downloaded videos</source>
-      <translation>Traccia download video</translation>
+        <source>Track downloaded videos</source>
+        <translation type="vanished">Traccia download video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2214"/>
-      <source>Graphical User Interface</source>
-      <translation>Interfaccia Grafica Utente</translation>
+        <source>Graphical User Interface</source>
+        <translation type="vanished">Interfaccia Grafica Utente</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2252"/>
-      <source>System default</source>
-      <translation>Default di Sistema</translation>
+        <source>System default</source>
+        <translation type="vanished">Default di Sistema</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2265"/>
-      <source>Graphical User Interface Language:</source>
-      <translation>Lingua Interfaccia Grafica Utente</translation>
+        <source>Graphical User Interface Language:</source>
+        <translation type="vanished">Lingua Interfaccia Grafica Utente</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2275"/>
-      <source>English</source>
-      <translation>Inglese</translation>
+        <source>English</source>
+        <translation type="vanished">Inglese</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2285"/>
-      <source>French</source>
-      <translation>Francese</translation>
+        <source>French</source>
+        <translation type="vanished">Francese</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2295"/>
-      <source>Chinese (simplified)</source>
-      <translation>Cinese (semplificato)</translation>
+        <source>Chinese (simplified)</source>
+        <translation type="vanished">Cinese (semplificato)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2305"/>
-      <source>German</source>
-      <translation>Tedesco</translation>
+        <source>German</source>
+        <translation type="vanished">Tedesco</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2312"/>
-      <source>Enable custom font (Jetbrains Mono)</source>
-      <translation>Abilitia font Custom (Jetbrains Mono)</translation>
+        <source>Enable custom font (Jetbrains Mono)</source>
+        <translation type="vanished">Abilitia font Custom (Jetbrains Mono)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2334"/>
-      <source>System / Porn Fetch</source>
-      <translation>Sistema / Porn Fetch</translation>
+        <source>System / Porn Fetch</source>
+        <translation type="vanished">Sistema / Porn Fetch</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2438"/>
-      <source>Startup:</source>
-      <translation>Avvio:</translation>
+        <source>Startup:</source>
+        <translation type="vanished">Avvio:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3078"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -505,16 +2942,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;End: 20&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;And click Apply.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Imposta l'intervallo dei video selezionati autoamaticamente.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Imposta l&apos;intervallo dei video selezionati autoamaticamente.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Per esempio, se imposti l'inizio a 5 e la fine a 20, allora tutti i video tra 5-20 verranno marcati per essere scaricati :)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Per esempio, se imposti l&apos;inizio a 5 e la fine a 20, allora tutti i video tra 5-20 verranno marcati per essere scaricati :)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Oppure imposta per intervallo di tempo:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -526,8 +2963,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;Clicka su Applica.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3252"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -546,7 +2982,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Z     Unchecks all items in the tree widget&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -555,10 +2991,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Scorciatoie da tastiera&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Q     Chiude l'applicazione&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Q     Chiude l&apos;applicazione&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + E      Esporta gli URL di tutti i video dal widget tree in un file .txt &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + T      Scarica tutti i video nel widget tree (uguale a clickare il bottone)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + A     Abilita velocemente la modalita' anonima (temporaneamente)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + A     Abilita velocemente la modalita&apos; anonima (temporaneamente)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + S     Salva le impostazioni di Porn Fetch&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + X     Imposta tutti gli oggetti del widget tree come selezionati&lt;/span&gt;&lt;/p&gt;
@@ -567,279 +3003,219 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2390"/>
-      <source>Supress errors silently</source>
-      <translation>Blocca errori silenziosamente</translation>
+        <source>Supress errors silently</source>
+        <translation type="vanished">Blocca errori silenziosamente</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2397"/>
-      <source>Internet checks</source>
-      <translation>Verifica connessione Internet</translation>
+        <source>Internet checks</source>
+        <translation type="vanished">Verifica connessione Internet</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2411"/>
-      <source>Update checks</source>
-      <translation>Verifica aggiornamenti</translation>
+        <source>Update checks</source>
+        <translation type="vanished">Verifica aggiornamenti</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2425"/>
-      <source>Install Porn Fetch</source>
-      <translation>Installa Porn Fetch</translation>
+        <source>Install Porn Fetch</source>
+        <translation type="vanished">Installa Porn Fetch</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2451"/>
-      <source>Privacy:</source>
-      <translation>Privacy:</translation>
+        <source>Privacy:</source>
+        <translation type="vanished">Privacy:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2369"/>
-      <source>Enable Anonymous mode</source>
-      <translation>Abilita modalita' Anonima:</translation>
+        <source>Enable Anonymous mode</source>
+        <translation type="vanished">Abilita modalita&apos; Anonima:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2404"/>
-      <source>Activate Proxy</source>
-      <translation>Attiva Proxy</translation>
+        <source>Activate Proxy</source>
+        <translation type="vanished">Attiva Proxy</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2376"/>
-      <source>Enable Network Logging</source>
-      <translation>Abilita Log di Rete</translation>
+        <source>Enable Network Logging</source>
+        <translation type="vanished">Abilita Log di Rete</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1930"/>
-      <source>Videos</source>
-      <translation>Video</translation>
+        <source>Videos</source>
+        <translation type="vanished">Video</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2116"/>
-      <source>Worst</source>
-      <translation>Peggiori</translation>
+        <source>Worst</source>
+        <translation type="vanished">Peggiori</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2050"/>
-      <source>Best</source>
-      <translation>Migliori</translation>
+        <source>Best</source>
+        <translation type="vanished">Migliori</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2106"/>
-      <source>Use directory system</source>
-      <translation>Usa cartelle di sistema</translation>
+        <source>Use directory system</source>
+        <translation type="vanished">Usa cartelle di sistema</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2092"/>
-      <source>Output path:</source>
-      <translation>Percorso Output:</translation>
+        <source>Output path:</source>
+        <translation type="vanished">Percorso Output:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2085"/>
-      <source>Write metadata tags</source>
-      <translation>Scrivi tag metadati</translation>
+        <source>Write metadata tags</source>
+        <translation type="vanished">Scrivi tag metadati</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2064"/>
-      <source>Model videos (PornHub)</source>
-      <translation>Video Modella (PornHub)</translation>
+        <source>Model videos (PornHub)</source>
+        <translation type="vanished">Video Modella (PornHub)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1975"/>
-      <source>Open</source>
-      <translation>Apri</translation>
+        <source>Open</source>
+        <translation type="vanished">Apri</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1982"/>
-      <source>Result Limit:</source>
-      <translation>Limita risultati:</translation>
+        <source>Result Limit:</source>
+        <translation type="vanished">Limita risultati:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2172"/>
-      <source>Quality:</source>
-      <translation>Qualita':</translation>
+        <source>Quality:</source>
+        <translation type="vanished">Qualita&apos;:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2057"/>
-      <source>Both</source>
-      <translation>Entrambi</translation>
+        <source>Both</source>
+        <translation type="vanished">Entrambi</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2078"/>
-      <source>Featured videos</source>
-      <translation>Video in evidenza</translation>
+        <source>Featured videos</source>
+        <translation type="vanished">Video in evidenza</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2129"/>
-      <source>Enter &quot;./&quot; for current directory</source>
-      <translation>Inserisci &quot;./&quot; per la cartella locale</translation>
+        <source>Enter &quot;./&quot; for current directory</source>
+        <translation type="vanished">Inserisci &quot;./&quot; per la cartella locale</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2149"/>
-      <source>Half</source>
-      <translation>Meta'</translation>
+        <source>Half</source>
+        <translation type="vanished">Meta&apos;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2071"/>
-      <source>User uploads</source>
-      <translation>Caricamenti utente</translation>
+        <source>User uploads</source>
+        <translation type="vanished">Caricamenti utente</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1989"/>
-      <source>Skip existing files</source>
-      <translation>Salta file esistenti</translation>
+        <source>Skip existing files</source>
+        <translation type="vanished">Salta file esistenti</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2484"/>
-      <source>Performance</source>
-      <translation>Performance</translation>
+        <source>Performance</source>
+        <translation type="vanished">Performance</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2710"/>
-      <source>Simultaneous downloads:</source>
-      <translation>Download simultanei:</translation>
+        <source>Simultaneous downloads:</source>
+        <translation type="vanished">Download simultanei:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2796"/>
-      <source>Maximal workers:</source>
-      <translation>Task massimi:</translation>
+        <source>Maximal workers:</source>
+        <translation type="vanished">Task massimi:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2642"/>
-      <source>Maximal timeout:</source>
-      <translation>Timeout massimo:</translation>
+        <source>Maximal timeout:</source>
+        <translation type="vanished">Timeout massimo:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2753"/>
-      <source>Maximal retries:</source>
-      <translation>Tentativi massimi:</translation>
+        <source>Maximal retries:</source>
+        <translation type="vanished">Tentativi massimi:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2519"/>
-      <source>Network delay (per Request, in seconds):</source>
-      <translation>Delay </translation>
+        <source>Network delay (per Request, in seconds):</source>
+        <translation type="vanished">Delay </translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2322"/>
-      <source>Font Size:</source>
-      <translation>Dimensioni font:</translation>
+        <source>Font Size:</source>
+        <translation type="vanished">Dimensioni font:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2458"/>
-      <source>Proxy Kill Switch</source>
-      <translation>Kill Switch Proxy</translation>
+        <source>Proxy Kill Switch</source>
+        <translation type="vanished">Kill Switch Proxy</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2465"/>
-      <source>Help (anonymous mode)</source>
-      <translation>Aiuto (modalita' anonima)</translation>
+        <source>Help (anonymous mode)</source>
+        <translation type="vanished">Aiuto (modalita&apos; anonima)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2472"/>
-      <source>Help / Explanation (Proxy Kill Switch) </source>
-      <translation>Aiuto / Spiegazioni (Kill Switch del Proxy)</translation>
+        <source>Help / Explanation (Proxy Kill Switch) </source>
+        <translation type="vanished">Aiuto / Spiegazioni (Kill Switch del Proxy)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2179"/>
-      <source>Use Video ID as filename</source>
-      <translation>Usa ID Video come nome file</translation>
+        <source>Use Video ID as filename</source>
+        <translation type="vanished">Usa ID Video come nome file</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2568"/>
-      <source>Download Mode:</source>
-      <translation>Modalita' Download</translation>
+        <source>Download Mode:</source>
+        <translation type="vanished">Modalita&apos; Download</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2578"/>
-      <source>High Performance</source>
-      <translation>Alte performance</translation>
+        <source>High Performance</source>
+        <translation type="vanished">Alte performance</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2588"/>
-      <source>Default</source>
-      <translation>Default</translation>
+        <source>Default</source>
+        <translation type="vanished">Default</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2609"/>
-      <source>Speed Limit (MB/s):</source>
-      <translation>Limite Velocita' (MB/s)</translation>
+        <source>Speed Limit (MB/s):</source>
+        <translation type="vanished">Limite Velocita&apos; (MB/s)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1888"/>
-      <source>Apply  (needs restart)</source>
-      <translation>Applica (necessita di riavvio)</translation>
+        <source>Apply  (needs restart)</source>
+        <translation type="vanished">Applica (necessita di riavvio)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="1917"/>
-      <source>Reset Porn Fetch to default settings</source>
-      <translation>Ripristina Porn Fetch alle impostazioni di default</translation>
+        <source>Reset Porn Fetch to default settings</source>
+        <translation type="vanished">Ripristina Porn Fetch alle impostazioni di default</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2676"/>
-      <source>Processing Delay (each Video, in seconds):</source>
-      <translation>Delay elaborazione (ogni Video, in secondi):</translation>
+        <source>Processing Delay (each Video, in seconds):</source>
+        <translation type="vanished">Delay elaborazione (ogni Video, in secondi):</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2928"/>
-      <location filename="../UI/form_main_window.ui" line="3669"/>
-      <source>Accept</source>
-      <translation>Accetta</translation>
+        <source>Accept</source>
+        <translation type="vanished">Accetta</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="2954"/>
-      <source>Deny and Exit</source>
-      <translation>Nega ed Esci</translation>
+        <source>Deny and Exit</source>
+        <translation type="vanished">Nega ed Esci</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3103"/>
-      <location filename="../UI/form_main_window.ui" line="3148"/>
-      <location filename="../UI/form_main_window.ui" line="3169"/>
-      <source>Apply</source>
-      <translation>Applica</translation>
+        <source>Apply</source>
+        <translation type="vanished">Applica</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3110"/>
-      <source>Apply by time:</source>
-      <translation>Applica al tempo:</translation>
+        <source>Apply by time:</source>
+        <translation type="vanished">Applica al tempo:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3117"/>
-      <location filename="../UI/form_main_window.ui" line="3179"/>
-      <source>0</source>
-      <translation>0</translation>
+        <source>0</source>
+        <translation type="vanished">0</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3124"/>
-      <source>Enter the author&apos;s name</source>
-      <translation>Inserisci il nome dell&apos;autore</translation>
+        <source>Enter the author&apos;s name</source>
+        <translation type="vanished">Inserisci il nome dell&apos;autore</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3134"/>
-      <source>Apply by Index:</source>
-      <translation>Applica all'indice:</translation>
+        <source>Apply by Index:</source>
+        <translation type="vanished">Applica all&apos;indice:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3141"/>
-      <location filename="../UI/form_main_window.ui" line="3155"/>
-      <source>End:</source>
-      <translation>Fine:</translation>
+        <source>End:</source>
+        <translation type="vanished">Fine:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3162"/>
-      <location filename="../UI/form_main_window.ui" line="3186"/>
-      <source>Start:</source>
-      <translation>Inizio</translation>
+        <source>Start:</source>
+        <translation type="vanished">Inizio</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3193"/>
-      <source>Apply by author:</source>
-      <translation>Applica da autore:</translation>
+        <source>Apply by author:</source>
+        <translation type="vanished">Applica da autore:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3290"/>
-      <source>OK</source>
-      <translation>OK</translation>
+        <source>OK</source>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3335"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -866,11 +3242,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#aa0000;&quot;&gt;NOTE:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;) &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>;</translation>
+        <translation type="vanished">;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3591"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -888,7 +3263,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[This message won&apos;t be shown again, except if you update to a new version]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -897,43 +3272,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;Se hai un momento per leggere, lo apprezzerei molto...&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Ho iniziato a sviluppare Porn Fetch circa 2 anni fa come progetto simpatico per imparare le interfacce grafiche utente. Nel corso degli anni Porn Fetch e' diventato piu' professionale, insieme alle mie capacita' di programmazione sono migliorate, e piu' persona hanno iniziato ad usarlo. Il fatto che abbia raggiunto anche solo 1000 download e' qualcosa che non avrei mai considerato possibile, e ora siamo ad oltre 20.000 xD&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Nonostante io ami assolutamente quello che sto facendo, e fino a che ricevo una lettera di Cessa e Desisti (cease &amp; desist), non loi fermero' mai, non ho guadagnato molto da questo progetto ad eccezione di alcune persone che mi hanno donato qualcosa (Grazie mille!).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Se hai qualche centesimo da parte in tasca, lo apprezzerei immensamente. So che non sembra molto, ma 'e un ringraziamento e mi tiene motivato. Inoltre dato che st oandando ancora a scuola, una piccola somma di soldi sono molti in rapporta tra me e qualcuno che ha gia' un lavoro.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Ma anche se non dovessi donare, non ti sentire in colpa. Non mi aspetto che tu lo faccia. Lo chiedo solamente con cortesia, ma e' perfettamente OK se non lo fai.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Ho iniziato a sviluppare Porn Fetch circa 2 anni fa come progetto simpatico per imparare le interfacce grafiche utente. Nel corso degli anni Porn Fetch e&apos; diventato piu&apos; professionale, insieme alle mie capacita&apos; di programmazione sono migliorate, e piu&apos; persona hanno iniziato ad usarlo. Il fatto che abbia raggiunto anche solo 1000 download e&apos; qualcosa che non avrei mai considerato possibile, e ora siamo ad oltre 20.000 xD&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Nonostante io ami assolutamente quello che sto facendo, e fino a che ricevo una lettera di Cessa e Desisti (cease &amp; desist), non loi fermero&apos; mai, non ho guadagnato molto da questo progetto ad eccezione di alcune persone che mi hanno donato qualcosa (Grazie mille!).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Se hai qualche centesimo da parte in tasca, lo apprezzerei immensamente. So che non sembra molto, ma &apos;e un ringraziamento e mi tiene motivato. Inoltre dato che st oandando ancora a scuola, una piccola somma di soldi sono molti in rapporta tra me e qualcuno che ha gia&apos; un lavoro.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Ma anche se non dovessi donare, non ti sentire in colpa. Non mi aspetto che tu lo faccia. Lo chiedo solamente con cortesia, ma e&apos; perfettamente OK se non lo fai.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; color:#0000ff;&quot;&gt;Opzioni per la Donazione&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#27bf73;&quot;&gt;1) PayPal (https://paypal.me/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[Questo messaggio non verra' ,pstratp amcpra, tranne se aggiorni ad una nuova versione]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[Questo messaggio non verra&apos; ,pstratp amcpra, tranne se aggiorni ad una nuova versione]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3643"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;While some countries or regions may allow downloading content for strictly &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;personal, non-commercial use&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;, I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly discourage&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;IMPORTANT NOTE&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly recommend&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; that you do &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; use this software for:&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Unauthorized redistribution of content&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Commercial use of downloaded materials&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any activity that could result in legal liability for yourself or others&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Although the GPL license grants you broad rights, &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;continued misuse&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This software is provided &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; as described in the GPLv3. I am &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not liable&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; for any damages, legal consequences, or misuse resulting from your use of this software.&lt;br /&gt;You are solely responsible for ensuring your actions are lawful and ethical. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation/>
-    </message>
-    <message>
-      <location filename="../UI/form_main_window.ui" line="3707"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -958,7 +3308,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
 &lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;If you see a white page with &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Success&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, you have IPv6. If not, you do not. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;You can also verify your IP addresses by visiting: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -966,57 +3316,50 @@ li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Questa applicazione ora usa un mio server personale per il controllo degli aggiornamenti e il report degli errori, invece di basarsi su GitHub. Questo mi da un controllo maggiore sul procedimento e i dati trasmessi. Comunque, il mio server e' &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. Questo significa che solamente il 50% degli utenti di internet potranno collegarvisi. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Questa applicazione ora usa un mio server personale per il controllo degli aggiornamenti e il report degli errori, invece di basarsi su GitHub. Questo mi da un controllo maggiore sul procedimento e i dati trasmessi. Comunque, il mio server e&apos; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. Questo significa che solamente il 50% degli utenti di internet potranno collegarvisi. &lt;/span&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Riguardo al Server&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Il server e' un piccolo, vecchio Acer Swift 3 laptop che funziona 24/7 nella mia stanza. Il codice sorgente completo del server e' disponibile pubblicamente qui':&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Il server e&apos; un piccolo, vecchio Acer Swift 3 laptop che funziona 24/7 nella mia stanza. Il codice sorgente completo del server e&apos; disponibile pubblicamente qui&apos;:&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
 &lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
 &lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;La versione di Porn Fetch che stai usando&lt;/span&gt;&lt;/li&gt;
 &lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Il tuo Sistema Operativo (Windows, Linux, o macOS)&lt;/li&gt;
 &lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Data e ora attuali&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dettagli dell'errore (Python traceback completo)&lt;/li&gt;&lt;/ul&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dettagli dell&apos;errore (Python traceback completo)&lt;/li&gt;&lt;/ul&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Importante:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; Il Python traceback potrebbe, in alcuni casi, includere incidentalmente informazioni personali — per esempio il tuo username di sistema se appare nel path del file. Nessun altro dato personale viene ottenuto intenzionalmente. &lt;/span&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Storage &amp; Security&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Rapporti Errore sono salvati in testo semplice sul mio server. Lo staorage del server e' criptato con LUKS e protetto da una password forte (oltre 40 caratteri). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;L'Indirizzo IP non 'e mai registrato, salvato, o mostrato&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Rapporti Errore sono salvati in testo semplice sul mio server. Lo staorage del server e&apos; criptato con LUKS e protetto da una password forte (oltre 40 caratteri). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;L&apos;Indirizzo IP non &apos;e mai registrato, salvato, o mostrato&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Che tu abiliti o meno il report errori non avra' impatto sulla funzionalita' dell'applicazione. Mi aiuta semplicemente ad identificare e risolvere i problemi piu' velocemente. Puoi verificare gli aggiornamenti manualmente su GitHub, ma la maggior parte degli utenti non lo fa. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Che tu abiliti o meno il report errori non avra&apos; impatto sulla funzionalita&apos; dell&apos;applicazione. Mi aiuta semplicemente ad identificare e risolvere i problemi piu&apos; velocemente. Puoi verificare gli aggiornamenti manualmente su GitHub, ma la maggior parte degli utenti non lo fa. &lt;/span&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Per verificare se hai connettivita' IPv6, visita:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Se vedi una pagina bianca con &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Successo&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, hai IPv6. Se non la vedi, no. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Per verificare se hai connettivita&apos; IPv6, visita:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Se vedi una pagina bianca con &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Successo&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, hai IPv6. Se non la vedi, no. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Puoi verificare il tuo indirizzo IP visitando: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Esempio di formato:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3741"/>
-      <source>I have IPv6 :) (and want to enable it)</source>
-      <translation>Ho un IPv6 :) (e voglio abilitarlo)</translation>
+        <source>I have IPv6 :) (and want to enable it)</source>
+        <translation type="vanished">Ho un IPv6 :) (e voglio abilitarlo)</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3748"/>
-      <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
-      <translation>Non ho un IPv6 / Non voglio usare questa funzione</translation>
+        <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
+        <translation type="vanished">Non ho un IPv6 / Non voglio usare questa funzione</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3370"/>
-      <source>Custom App Name:</source>
-      <translation>Nome personalizzato applicazione:</translation>
+        <source>Custom App Name:</source>
+        <translation type="vanished">Nome personalizzato applicazione:</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3380"/>
-      <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
-      <translation>Inserisci il tuo nome applicazione personalizzato. Lascia vuoto per tenere Porn Fetch</translation>
+        <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
+        <translation type="vanished">Inserisci il tuo nome applicazione personalizzato. Lascia vuoto per tenere Porn Fetch</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3391"/>
-      <source>Install</source>
-      <translation>Installa</translation>
+        <source>Install</source>
+        <translation type="vanished">Installa</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3398"/>
-      <source>Portable</source>
-      <translation>Portable</translation>
+        <source>Portable</source>
+        <translation type="vanished">Portable</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3447"/>
-      <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -1058,7 +3401,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -1102,46 +3445,66 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3541"/>
-      <source>Ko-Fi</source>
-      <translation>Ko-Fi</translation>
+        <source>Ko-Fi</source>
+        <translation type="vanished">Ko-Fi</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3551"/>
-      <source>Already Donated</source>
-      <translation>Hi gia' Donato</translation>
+        <source>Already Donated</source>
+        <translation type="vanished">Hi gia&apos; Donato</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3561"/>
-      <source>PayPal</source>
-      <translation>PayPal</translation>
+        <source>PayPal</source>
+        <translation type="vanished">PayPal</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3571"/>
-      <source>Copy XMR</source>
-      <translation>Copia XMR</translation>
+        <source>Copy XMR</source>
+        <translation type="vanished">Copia XMR</translation>
     </message>
     <message>
-      <location filename="../UI/form_main_window.ui" line="3581"/>
-      <source>Close</source>
-      <translation>Chiudi</translation>
+        <source>Close</source>
+        <translation type="vanished">Chiudi</translation>
     </message>
-  </context>
-  <context>
+</context>
+<context>
+    <name>MessageBox</name>
+    <message>
+        <location filename="../../UI/MessageBox.qml" line="+23"/>
+        <source>Notice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+92"/>
+        <source>Copied to Clipboard!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+86"/>
+        <source>Close dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>Copy Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+</context>
+<context>
     <name>PornFetch</name>
     <message>
-      <location filename="../../../main.py" line="1379"/>
-      <source>Porn Fetch installation failed, because of: {result[1]}</source>
-      <translation>Installazione di Porn Fetch fallita, a causa di {result[1]}</translation>
+        <source>Porn Fetch installation failed, because of: {result[1]}</source>
+        <translation type="vanished">Installazione di Porn Fetch fallita, a causa di {result[1]}</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1694"/>
-      <source>Saved User Settings, please restart Porn Fetch!</source>
-      <translation>Impostazioni utente salvate, cortesemente riavvia Porn Fetch!</translation>
+        <source>Saved User Settings, please restart Porn Fetch!</source>
+        <translation type="vanished">Impostazioni utente salvate, cortesemente riavvia Porn Fetch!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1735"/>
-      <source>
+        <source>
 Please read this before setting proxies:
 
 I am not a genius in programming and I can NOT guarantee for your safety. However, I did everything possible (in my abilities)
@@ -1179,18 +3542,18 @@ This is all for your safety!
 Warning:
 Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YOU HAVE PROXIES ENABLED!!!
         </source>
-      <translation>
+        <translation type="vanished">
 Leggere attentamente prima di impostare i proxy:
 
-Non sono un genio della programmazione e NON posso garantire per la tua sicurezza. Comunque, ho fatto tutto il possibile (nelle mie abilita') per assicurarmi che questo funzioni. Quando applichi i proxy devi assicurarti che siano nel formato corretto. Ci sono esempi sotto.
+Non sono un genio della programmazione e NON posso garantire per la tua sicurezza. Comunque, ho fatto tutto il possibile (nelle mie abilita&apos;) per assicurarmi che questo funzioni. Quando applichi i proxy devi assicurarti che siano nel formato corretto. Ci sono esempi sotto.
 
-Inoltre, se usi proxy PUBLICI, allora potrebbe essere una scommessa se funzionano oppure no. Solitamente sono molto lenti e inconsistenti, ma si puo' avere fortuna.
+Inoltre, se usi proxy PUBLICI, allora potrebbe essere una scommessa se funzionano oppure no. Solitamente sono molto lenti e inconsistenti, ma si puo&apos; avere fortuna.
 
 Riguardo alla crittografia SSL:
 
 Se il tuo proxy NON supporta SSL / TLS o assegna certificati self-signed incorretti, puoi scegliere di ignorerlo disabilitando la verifica SSL. Comunque, questo riduce la tua sicurezza e un sacco di persone nella tua rete possono intercettare il tuo traffico.
 
-Questo non e' un mio errore, e' semplicemente come funziona internet. Quindi, prenditi un buon proxy, e sei pronto a partire :)
+Questo non e&apos; un mio errore, e&apos; semplicemente come funziona internet. Quindi, prenditi un buon proxy, e sei pronto a partire :)
 
 Ecco alcuni esempi di proxy validi:
 
@@ -1203,128 +3566,1209 @@ Anche se il tuo proxy supporta https, lo devi inserire come &apos;http://&apos;.
 Non so se proxy autenticati, ossia autenticati con utente + password, funzionino.
 Non lo posso provare, dato che io non uso questo tipo di proxy.
 
-Provero' il tuo proxy prima di poterlo usare facendo richiesta a httpbin.org per ottenere il tuo indirizzo IP. Una richiesta con ed una senza il proxy. Se gli IP sono differenti, allora ha funzionato, altrimenti devi trovare un'altro proxy!
+Provero&apos; il tuo proxy prima di poterlo usare facendo richiesta a httpbin.org per ottenere il tuo indirizzo IP. Una richiesta con ed una senza il proxy. Se gli IP sono differenti, allora ha funzionato, altrimenti devi trovare un&apos;altro proxy!
 
-Questo e' per la tua sicurezza!
+Questo e&apos; per la tua sicurezza!
 
 Attenzione:
 Se non usi un proxy ELITE, NON FARE REPORT DI ALCUN ERRORE CHE AVVIENE QUANDO HAI I PROXY ABILITATI!!!
         </translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1910"/>
-      <source>The model URL you entered seems to be invalid. Please check your input</source>
-      <translation>Lo URL modella inserito sembra non essere valido. Controlla il tuo input</translation>
+        <source>The model URL you entered seems to be invalid. Please check your input</source>
+        <translation type="vanished">Lo URL modella inserito sembra non essere valido. Controlla il tuo input</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1995"/>
-      <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
-      <translation>Impossibile determinare su quale sito si voglia fare la ricerca. Cortesemente fai reprot immediatamente!</translation>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation type="vanished">Impossibile determinare su quale sito si voglia fare la ricerca. Cortesemente fai reprot immediatamente!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1374"/>
-      <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
-      <translation>Porn Fetch e' stato installato. L'applicazione verra' ora chiusa! Per piacere avvia nuovamente Porn Fetch dal menu.</translation>
+        <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
+        <translation type="vanished">Porn Fetch e&apos; stato installato. L&apos;applicazione verra&apos; ora chiusa! Per piacere avvia nuovamente Porn Fetch dal menu.</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1768"/>
-      <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
-      <translation>Hai scelto di non disabilitare la Verifica SSL. Ritorno al GUI senza applicare il proxy, ora...</translation>
+        <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
+        <translation type="vanished">Hai scelto di non disabilitare la Verifica SSL. Ritorno al GUI senza applicare il proxy, ora...</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1772"/>
-      <source>Your proxy seems to be invalid, please try again...</source>
-      <translation>Il tuo proxy non sembra essere valido, riprova...</translation>
+        <source>Your proxy seems to be invalid, please try again...</source>
+        <translation type="vanished">Il tuo proxy non sembra essere valido, riprova...</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1779"/>
-      <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
-      <translation>IP Proxy: {ip_masked} Il tuo IP: {ip} sono lo stesso! Contolla il proxy usato!, cancellazione...</translation>
+        <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
+        <translation type="vanished">IP Proxy: {ip_masked} Il tuo IP: {ip} sono lo stesso! Contolla il proxy usato!, cancellazione...</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="1797"/>
-      <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
-      <translation>Impossibile abilitare il Kill Switch se il proxy non e' stato ancora abilitato!</translation>
+        <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
+        <translation type="vanished">Impossibile abilitare il Kill Switch se il proxy non e&apos; stato ancora abilitato!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2359"/>
-      <source>Those credentials don&apos;t seem to be valid...</source>
-      <translation>Quelle credenziali non sembrano valide...</translation>
+        <source>Those credentials don&apos;t seem to be valid...</source>
+        <translation type="vanished">Quelle credenziali non sembrano valide...</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2366"/>
-      <source>Login Successful!</source>
-      <translation>Login Effettuato!</translation>
+        <source>Login Successful!</source>
+        <translation type="vanished">Login Effettuato!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2371"/>
-      <source>Login Failed, please check your credentials and try again!</source>
-      <translation>Login Fallito, controlla le credenziali e prova ancora!</translation>
+        <source>Login Failed, please check your credentials and try again!</source>
+        <translation type="vanished">Login Fallito, controlla le credenziali e prova ancora!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2375"/>
-      <source>You are already logged in!</source>
-      <translation>Hai gia' fatto il login!</translation>
+        <source>You are already logged in!</source>
+        <translation type="vanished">Hai gia&apos; fatto il login!</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2387"/>
-      <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
-      <translation>C'e' un problema con il login. Assicurarsi di aver fatto prima il login e poi provare ad ottenere i video nel proprio account.</translation>
+        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
+        <translation type="vanished">C&apos;e&apos; un problema con il login. Assicurarsi di aver fatto prima il login e poi provare ad ottenere i video nel proprio account.</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2444"/>
-      <location filename="../../../main.py" line="2463"/>
-      <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
-      <translation>Categoria non valida. Scegli &apos;lista categorie&apos; per vedere quelle disponibili.</translation>
+        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
+        <translation type="vanished">Categoria non valida. Scegli &apos;lista categorie&apos; per vedere quelle disponibili.</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2570"/>
-      <source>Full Thumbnail</source>
-      <translation>Icona completa</translation>
+        <source>Full Thumbnail</source>
+        <translation type="vanished">Icona completa</translation>
     </message>
     <message>
-      <location filename="../../../main.py" line="2690"/>
-      <source>
+        <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 ------------------------------------------------------------
 {formatted_results}</source>
-      <translation>
+        <translation type="vanished">
 ! ATTENZIONE !
-Alcuni siti non possono essere raggiunti. Qui' e' presente un rapporto dettagliato:
+Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto dettagliato:
 ------------------------------------------------------------
 {formatted_results}</translation>
     </message>
-  </context>
-  <context>
-    <name>main</name>
+</context>
+<context>
+    <name>ProcessingIndicator</name>
     <message>
-      <location filename="../../../main.py" line="2764"/>
-      <source>No URLs in the current session...</source>
-      <translation>Nessun URL nella sessione corrente...</translation>
+        <location filename="../../UI/ProcessingIndicator.qml" line="+17"/>
+        <location line="+16"/>
+        <source>Processing videos</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-      <location filename="strings.py" line="121"/>
-      <source>
+        <location line="+6"/>
+        <source>Preparing your download list…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ProxyWindow</name>
+    <message>
+        <location filename="../../UI/ProxyWindow.qml" line="+17"/>
+        <source>Proxy connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <location line="+108"/>
+        <source>Enter the proxy details below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-78"/>
+        <source>Enter a proxy host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The host cannot contain whitespace.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Enter a port between 1 and 65535.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Enter the authentication username.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Format looks valid. Waiting to test…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Connecting through the proxy…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Connecting without SSL certificate verification…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Proxy connection successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Proxy connection successful, but SSL verification is disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Format looks valid. The proxy will be tested automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>Configure proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Connection details are checked as you type. The network test runs after a short pause and uses curl-cffi.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Proxy Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Proxy Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter the proxy hostname or IP address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>proxy.example.com or 127.0.0.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Proxy Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter the proxy port number from 1 to 65535</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>8080</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+1"/>
+        <source>Proxy requires authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Proxy Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Proxy Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+1"/>
+        <source>Show password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+41"/>
+        <source>Response time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Connection time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Transfer speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>SSL status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>HTTP status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Remote IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location line="+1"/>
+        <source>Disable proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <location line="+2"/>
+        <source>Ignore SSL and retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location line="+1"/>
+        <source>Test again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+1"/>
+        <source>Use proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceTorFailureDialog</name>
+    <message>
+        <location filename="../../UI/ServiceTorFailureDialog.qml" line="+14"/>
+        <source>Porn Fetch over Tor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Turn off Tor for Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Keep Tor enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPage</name>
+    <message>
+        <location filename="../../UI/SettingsPage.qml" line="+48"/>
+        <location line="+408"/>
+        <source>Choose video output folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-393"/>
+        <source>Choose a PocketBase data folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Performance</source>
+        <translation type="unfinished">Performance</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Privacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location line="+1228"/>
+        <location line="+6"/>
+        <source>Purchase / renew license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1233"/>
+        <location line="+14"/>
+        <location line="+1227"/>
+        <location line="+2"/>
+        <source>Import License File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1242"/>
+        <source>Reset settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear temporary files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Settings sections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+94"/>
+        <location line="+5"/>
+        <source>Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+64"/>
+        <location line="+4"/>
+        <source>Model Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <location line="+5"/>
+        <source>Content Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>🇨🇿 Čeština</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇩🇪 Deutsch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇺🇸 English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇪🇸 Español</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇵🇭 Filipino</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇫🇷 Français</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇮🇹 Italiano</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇳🇱 Nederlands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>🇵🇱 Polski</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>🇵🇹 Português</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+4"/>
+        <source>Strict Enforcement for content language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location line="+4"/>
+        <source>Max Result Limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location line="+9"/>
+        <source>Output Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directory where downloaded videos are saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter the output path for the videos...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <location line="+82"/>
+        <source>Choose Folder…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-70"/>
+        <location line="+4"/>
+        <source>Write metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location line="+4"/>
+        <source>Skip existing files</source>
+        <translation type="unfinished">Salta file esistenti</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+4"/>
+        <source>Track Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <source>Track Videos in PocketBase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Track Videos (PocketBase)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>History Data Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <location line="+9"/>
+        <source>PocketBase Data Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directory where PocketBase data files are stored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter the PocketBase data directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Choose PocketBase data folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Download workers:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Download workers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Network delay (requests/sec):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Network delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Parallel Downloads:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Parallel Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Maximum retries:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Maximum retries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Maximum timeout:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Maximum timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Processing Delay (videos/sec):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Processing Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Speed Limit (MB/s):</source>
+        <translation type="unfinished">Limite Velocita&apos; (MB/s)</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Speed Limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Videos Concurrency:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Videos Concurrency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Pages concurrency:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Pages Concurrency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location line="+4"/>
+        <source>Response Cache Size (MB/s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+4"/>
+        <source>Response Cache TTL (Seconds)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+4"/>
+        <source>Segment Cache Size (MB/s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+4"/>
+        <source>Segment Cache TTL (Seconds)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+4"/>
+        <source>Request Initial Retry Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+4"/>
+        <source>Request Retry Max Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+4"/>
+        <source>Request Retry Multiplier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+4"/>
+        <source>Request Retry Jitter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <location line="+2"/>
+        <source>Search for Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+2"/>
+        <source>Ignore Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+3"/>
+        <source>Allow redacted error reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Trust Environment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Trust Environment (Advanced)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Enable Debug Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Enable Debug Mode (Not recommended)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Log Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>HTTP Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>HTTP Version may be: v1; v2; v3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Browser Impersonation Target</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>e.g., &apos;chrome&apos;, &apos;safari&apos;, &apos;edge&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <location line="+2"/>
+        <source>Custom JA3 String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Network Interface or IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>e.g., eth0, wlan0, tun0, 10.6.3.20</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+39"/>
+        <location line="+2"/>
+        <source>Anonymous Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location line="+2"/>
+        <source>Encrypted Client Hello</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location line="+2"/>
+        <source>DNS over HTTPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Primary DNS over HTTPS Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Enter Primary DNS (Must support DNS over HTTPS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Fallback DNS over HTTPS Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Enter Fallback DNS (Must support DNS over HTTPS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <location line="+2"/>
+        <source>SNI Obfuscation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <location line="+1"/>
+        <source>Lite SNI Obfuscation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Strict SNI Obfuscation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Strict SNI Obfuscation (Requires Admin / root rights)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Strict SNI Obfuscation Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Proxy Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Configure or test proxy…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Set up proxy…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Graphical User Interface language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Graphical User Interface Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Accessibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reduce motion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>High contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Font Size:</source>
+        <translation type="unfinished">Dimensioni font:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Application Style (Requires Restart):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Application Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Dark Mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Dark Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+6"/>
+        <source>Show a glowing border while the app is busy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <location line="+3"/>
+        <source>Activity glow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Accent Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Application Accent Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Indigo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Purple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+71"/>
+        <source>Purchase a license on the website, then paste the signed key or import your license file. Automatic app updates are free for everyone. Licenses provide premium features for entitled versions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+5"/>
+        <source>Reset Porn Fetch to default settings</source>
+        <translation type="unfinished">Ripristina Porn Fetch alle impostazioni di default</translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <source>Restores all application settings to their default values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+2"/>
+        <source>Clear Temporary Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <location line="+4"/>
+        <source>Install Porn Fetch</source>
+        <translation type="unfinished">Installa Porn Fetch</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+4"/>
+        <source>Uninstall Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SplashScreen</name>
+    <message>
+        <location filename="../../UI/SplashScreen.qml" line="+8"/>
+        <source>PornFetch-Splash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Initializing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StatisticsPage</name>
+    <message>
+        <location filename="../../UI/StatisticsPage.qml" line="+51"/>
+        <source>No downloads recorded yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Download insights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>PREVIEW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>A quick look at your local download history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Download tracking is disabled. Enable it in Settings and restart the app to start building this dashboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Tracked videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>all database records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+130"/>
+        <source>Successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-128"/>
+        <source>completed downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+128"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-126"/>
+        <source>downloads to revisit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Success rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>finished attempts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Download outcomes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+75"/>
+        <source>attempts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Other / pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>At a glance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Last activity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Recorded file size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Statistics stay on this device in your configured PocketBase data folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Downloads by source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Iterator names · not URLs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Hidden source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>%1 videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Source activity will appear here after tracked downloads.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TorRouting</name>
+    <message>
+        <location filename="../../UI/TorRouting.qml" line="+17"/>
+        <source>Route connections through the Tor network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Tor routing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Off — connect directly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Tor — updates and licensing only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Tor — all app traffic, including downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Finish active work before changing Tor routing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Using Tor for video downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>No URLs in the current session...</source>
+        <translation type="vanished">Nessun URL nella sessione corrente...</translation>
+    </message>
+    <message>
+        <source>
 The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).
 </source>
-      <translation>
-I limiti ai risultati definiscono quanti video devono essere mostrati quando si effettua una ricerca o facendo altre operazioni in cui e' necessario il caricamento di video multipli. Questo puo'  influenzare i modelli / canali e i video piaciuti. Il limite ai risultati e' basicamente il numero di video che verra' caricato nel widget tree (questa cosa dove i video sono mostrati).</translation>
+        <translation type="vanished">
+I limiti ai risultati definiscono quanti video devono essere mostrati quando si effettua una ricerca o facendo altre operazioni in cui e&apos; necessario il caricamento di video multipli. Questo puo&apos;  influenzare i modelli / canali e i video piaciuti. Il limite ai risultati e&apos; basicamente il numero di video che verra&apos; caricato nel widget tree (questa cosa dove i video sono mostrati).</translation>
     </message>
     <message>
-      <location filename="strings.py" line="73"/>
-      <source>
+        <source>
 The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn&apos;t required for most users!
 </source>
-      <translation>
-Il timeout gestisce il tempo per recuperare i segmenti quando si usa il metodo di download threaded. Se si ha una connessione internet scadente si puo' impostare ad un valore piu' alto di 10. Ma quest non e' richiesto per la maggior parte degli utenti!</translation>
+        <translation type="vanished">
+Il timeout gestisce il tempo per recuperare i segmenti quando si usa il metodo di download threaded. Se si ha una connessione internet scadente si puo&apos; impostare ad un valore piu&apos; alto di 10. Ma quest non e&apos; richiesto per la maggior parte degli utenti!</translation>
     </message>
     <message>
-      <location filename="strings.py" line="15"/>
-      <source>
+        <source>
 By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
 However, if you want more precise quality control, you can enter a custom integer here. For example:
 
@@ -1333,34 +4777,32 @@ However, if you want more precise quality control, you can enter a custom intege
 If the video does not support your chosen quality, it will pick the next best if available and if not the next worst.
 Set the value to 0 to disable advanced quality control.
 </source>
-      <translation>
-Di default, Porn Fetch seleziona la qualita' video migliore disponibile. Puoi anche decidere tra meta' e peggiore.
-Comunque, se vuoi maggior precisione nel controllo della qualita', puoi inserire in valore custom qui. Per esempio:
+        <translation type="vanished">
+Di default, Porn Fetch seleziona la qualita&apos; video migliore disponibile. Puoi anche decidere tra meta&apos; e peggiore.
+Comunque, se vuoi maggior precisione nel controllo della qualita&apos;, puoi inserire in valore custom qui. Per esempio:
 
 2160,1440,1080,720,480,360,240,144
 
-Se il video non supporta la qualita' scelta, scegliera' la prossima migliore se disponibile, altrimenti la peggiore successiva.
-Imposta il valore a 0 per disabilitare il controllo avanzato della qualita'.</translation>
+Se il video non supporta la qualita&apos; scelta, scegliera&apos; la prossima migliore se disponibile, altrimenti la peggiore successiva.
+Imposta il valore a 0 per disabilitare il controllo avanzato della qualita&apos;.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="40"/>
-      <source>
+        <source>
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
 For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
 If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
 you have a really good internet connection and a good system.
 </source>
-      <translation>
-Il Semaforo e' un tool per limitare il numero di azioni / download simultanei.
+        <translation type="vanished">
+Il Semaforo e&apos; un tool per limitare il numero di azioni / download simultanei.
 
-Per esempio: se il semaforo e' impostato a 1, solamente 1 video verra scaricato allo stesso tempo.
-Se il semaforo e' impostato a 4, 4 video verranno scaricati allo stesso tempo.
+Per esempio: se il semaforo e&apos; impostato a 1, solamente 1 video verra scaricato allo stesso tempo.
+Se il semaforo e&apos; impostato a 4, 4 video verranno scaricati allo stesso tempo.
 Cambiare questo valore e; utile solamente se si ha una buona connessino internet e un buon sistema.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="29"/>
-      <source>
+        <source>
 The different threading modes are used for different scenarios. 
 
 1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
@@ -1370,17 +4812,16 @@ have a very strong internet connection. Maybe not great for low end systems.
 timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
 </source>
-      <translation>
-I differenti modalita' do threading sono usate in scenari differenti.
+        <translation type="vanished">
+I differenti modalita&apos; do threading sono usate in scenari differenti.
 
-1) Alte Performance: Usa una classe di lavoro per scaricare segmenti video multipli allo stesso tempo. Puo' essere molto veloce se si ha una connesione internet stabile. Forse non ottimo per sistemi base.
+1) Alte Performance: Usa una classe di lavoro per scaricare segmenti video multipli allo stesso tempo. Puo&apos; essere molto veloce se si ha una connesione internet stabile. Forse non ottimo per sistemi base.
 
-2) Default: La modalita' download di default scarica un segmento video dopo l'altro. Se si ricevono molti timeout questo puo' ridurre molto il procedimento, dato che bisogna aspettare che i siti Porno rendano il segmento video.
-Con il metodo Alte Performance, possiamo scaricare altri segmenti mentre si aspetta il che lo rende piu' veloce.</translation>
+2) Default: La modalita&apos; download di default scarica un segmento video dopo l&apos;altro. Se si ricevono molti timeout questo puo&apos; ridurre molto il procedimento, dato che bisogna aspettare che i siti Porno rendano il segmento video.
+Con il metodo Alte Performance, possiamo scaricare altri segmenti mentre si aspetta il che lo rende piu&apos; veloce.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="53"/>
-      <source>
+        <source>
 You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
 errors, you should enable a delay. By default the delay is turned off with the value 0
 
@@ -1389,16 +4830,15 @@ A good starting point is between 0.5 - 1.5
 The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
 really affect the high performance download mode.
 </source>
-      <translation>
-Puoi impostare un ritardo tra te e il sito. Se stai scaricando molti video, o avendo errori, dovresti abilitare il ritardo. Di default il ritardo e' disabilitato con valore 0
+        <translation type="vanished">
+Puoi impostare un ritardo tra te e il sito. Se stai scaricando molti video, o avendo errori, dovresti abilitare il ritardo. Di default il ritardo e&apos; disabilitato con valore 0
 
-Un buon punto di partenza e' tra 0.5 - 1.5
+Un buon punto di partenza e&apos; tra 0.5 - 1.5
 
-Piu' lungo e' il ritardo, piu' a lungo ci vorra' per scaricare i video, caricaricare video, e fare cose in generale. Questo non impatta reallmente sulla modalita' di download ad Alte PRestazioni.</translation>
+Piu&apos; lungo e&apos; il ritardo, piu&apos; a lungo ci vorra&apos; per scaricare i video, caricaricare video, e fare cose in generale. Questo non impatta reallmente sulla modalita&apos; di download ad Alte PRestazioni.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="65"/>
-      <source>
+        <source>
 The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
 One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
 This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
@@ -1406,54 +4846,50 @@ Android, you should set this to a lower value.
 
 I recommend &apos;3&apos; for Android and 5 for low bandwidth connections &lt; 15000 kbit/s
 </source>
-      <translation>
-Il numero massimo di lavori definisce il numero di thread massimi che possono essere avviati quando si usa la modalita' di download threaded.
+        <translation type="vanished">
+Il numero massimo di lavori definisce il numero di thread massimi che possono essere avviati quando si usa la modalita&apos; di download threaded.
 On thread gestisce il download di un segmento, quindi (in teoria) 20 thread possono scaricare 20 segmenti allo stesso tempo.
-Questo puo' essere utile quando si ha una connessione internet molto veloce, ma se si ha un PC scadente, o si usa Android, bisognerebbe lasciarlo a d un valore basso.
+Questo puo&apos; essere utile quando si ha una connessione internet molto veloce, ma se si ha un PC scadente, o si usa Android, bisognerebbe lasciarlo a d un valore basso.
 
-Si suggerisce &apos;3&apos; per Android e 5 per connessioni a bassa velocita' &lt; 15000 kbit/s</translation>
+Si suggerisce &apos;3&apos; per Android e 5 per connessioni a bassa velocita&apos; &lt; 15000 kbit/s</translation>
     </message>
     <message>
-      <location filename="strings.py" line="100"/>
-      <source>
+        <source>
 The processing delay sets a delay before every video gets downloaded.
 Let&apos;s assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
 This does not apply if you have a value of simultaneous downloads greater than 1.
 </source>
-      <translation>
+        <translation type="vanished">
 Il ritardo di elaborazione imposta un ritardo prima che ogni video venga scaricato.
 Assumendo che si imposti un delay di 30 (30 secondi), allora ci vorranno 30 secondi prima che ogni video venga scaricato.
 Questo non si applica se sia ha un valore di download simultanei superiore a 1.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="130"/>
-      <source>
+        <source>
 Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
 Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
 Porn Fetch will by default save those tags inside of your video files. 
 </source>
-      <translation>
-I tag metadati sono salvati all'interno del file stesso. Questi sono tag che possono essere letti dai player video e forniscono informazioni.
-Alcuni visualizzatori di cartelle danno l'abilita' di cercare tag metadati specifici. Quei tag possono aiutare ad organizzare e strutturare i file.
-Porn Fetch salva di default quei tag all'interno dei tuoi file video.</translation>
+        <translation type="vanished">
+I tag metadati sono salvati all&apos;interno del file stesso. Questi sono tag che possono essere letti dai player video e forniscono informazioni.
+Alcuni visualizzatori di cartelle danno l&apos;abilita&apos; di cercare tag metadati specifici. Quei tag possono aiutare ad organizzare e strutturare i file.
+Porn Fetch salva di default quei tag all&apos;interno dei tuoi file video.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="141"/>
-      <source>
+        <source>
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
 5 into the other. (This will still apply with your selected output path)
 
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won&apos;t use it probably
 </source>
-      <translation>
-Il sistema directory salva i video in maniera intelligente. Se si scaricano 3 video di una Pornostar e 5 da un'altra, Porn Fetch creera' automaticamente cartelle dedicate e spostera' i primi 3 in una cartella, e gli altri 5 nell'altra. (Questo si applica anche quando si seleziona un path finale diverso)
+        <translation type="vanished">
+Il sistema directory salva i video in maniera intelligente. Se si scaricano 3 video di una Pornostar e 5 da un&apos;altra, Porn Fetch creera&apos; automaticamente cartelle dedicate e spostera&apos; i primi 3 in una cartella, e gli altri 5 nell&apos;altra. (Questo si applica anche quando si seleziona un path finale diverso)
 
-Questo puo' essere utile per organizzare, ma e' una feature avanzata, quindi la maggior parte degli utenti probabilmente non la usera'.</translation>
+Questo puo&apos; essere utile per organizzare, ma e&apos; una feature avanzata, quindi la maggior parte degli utenti probabilmente non la usera&apos;.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="222"/>
-      <source>
+        <source>
 I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
 that I don&apos;t know of, or that I need your help to fix them, to my server using a simple JSON post request.
 
@@ -1471,26 +4907,25 @@ Like literally only if you use Windows, Linux or Mac. Nothing else.
 You can see that yourself, as mentioned before on the source code.
 You&apos;d help me a lot by enabling network logging :) 
 </source>
-      <translation>
+        <translation type="vanished">
 Ho creato in server personale che gira 24/7 a casa. Porn Fetch (SOLAMENTE se lo si abilita) registra specifici tipi di errori, di cui io non so nulla, o che io necessiti per aiutarvi a risolverli, nel mio server utilizzando una semplice richiesta JSON.
 
 Potete vedere il Codice del serve pubblicamente qui --&gt;: https://github.com/EchterAlsFake/Server
 Porn Ferch gestisce i suoi meccanismi di controllo aggiornamenti attraverso quel server.
 
 IMPORTANTE:
-Il server e' solamente IPv6. Se il tuo ISP non ti assegna un indirizzo IP IPv5 funzionante, allora non mi puoi raggiungere.
+Il server e&apos; solamente IPv6. Se il tuo ISP non ti assegna un indirizzo IP IPv5 funzionante, allora non mi puoi raggiungere.
 Puoi controllare personalmente su &apos;https://ipleak.net&apos;. Dovrebbe mostrare qualcosa simile a questo: &apos;2a02:810a:186:b400::5c51&apos;
 
 Il mio server NON salva nessuno delle tue informazioni personali. Nessun indirizzo IP, nessuna informazione del PC, nessuna altra informazione di identificazione.
-L'unica cosa salvata sono le eccezioni Python che vengono catturate, la versione che si sta' usando, a il tuo sistema.
-Letteralmente solo se si sta usando Windows, Linux, o Mac. Nient'altro.
+L&apos;unica cosa salvata sono le eccezioni Python che vengono catturate, la versione che si sta&apos; usando, a il tuo sistema.
+Letteralmente solo se si sta usando Windows, Linux, o Mac. Nient&apos;altro.
 
-Lo si puo' vedere di persona, come menzionato prima, nel codice sorgente.
+Lo si puo&apos; vedere di persona, come menzionato prima, nel codice sorgente.
 Mi aiuteresti molto abilitando il log di rete.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="242"/>
-      <source>
+        <source>
 Create a .txt file and add URLs like this:
 
 video#&lt;url&gt;
@@ -1506,7 +4941,7 @@ video#https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
 video#https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
 model#https://de.pornhub.com/pornstar/nancy-a
 </source>
-      <translation>
+        <translation type="vanished">
 Crea un file .txt e aggiungi gli URL in questo modo:
 
 video#&lt;url&gt;
@@ -1524,17 +4959,15 @@ model#https://de.pornhub.com/pornstar/nancy-a
 </translation>
     </message>
     <message>
-      <location filename="strings.py" line="81"/>
-      <source>
+        <source>
 The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.
 </source>
-      <translation>
+        <translation type="vanished">
 I tentativi massimi definiscono quanti tentativi verranno usati per la richiesta network. Per esempio se una chiamata API richiede un URL da un sito ci saranno &lt;AMOUNT&gt; tentativi fino a che un errore non viene ricevuto.</translation>
     </message>
     <message>
-      <location filename="strings.py" line="112"/>
-      <source>
+        <source>
 User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
 by the model and the featured videos are videos the model is part or featured in.
 
@@ -1542,12 +4975,35 @@ For example the model Nancy Ace has like 10 self uploaded which she made by hers
 of videos from other studios.
 
 If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetched, and the other way around :)</source>
-      <translation>
-Caricamenti utente e video in evidenza sono due cose differenti. I caricamenti utente sono video che sono stati caricati realmente dal modello/a a i video in evidenza sono video in cui il modello/a fa parte, o ne e' presente.
+        <translation type="vanished">
+Caricamenti utente e video in evidenza sono due cose differenti. I caricamenti utente sono video che sono stati caricati realmente dal modello/a a i video in evidenza sono video in cui il modello/a fa parte, o ne e&apos; presente.
 
-Per esempio la modella Nancy Ace ha 10 video caricati personalmente che ha fatto da se, ma e' anche parte di qualcosa come un migliaio di video da altri studi.
+Per esempio la modella Nancy Ace ha 10 video caricati personalmente che ha fatto da se, ma e&apos; anche parte di qualcosa come un migliaio di video da altri studi.
 
-Se scegli &quot;Caricamenti utente&quot;, solo i video caricati personalmente verranno considerati, e all'opposto anche.</translation>
+Se scegli &quot;Caricamenti utente&quot;, solo i video caricati personalmente verranno considerati, e all&apos;opposto anche.</translation>
     </message>
-  </context>
+    <message>
+        <location filename="../../../backend/shared_gui.py" line="+120"/>
+        <source>Done! Please restart.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>
+Debug mode is only intended for developing with Porn Fetch or for very specific error traceback. It will print a lot of things,
+that are going on into your Terminal and will save VERY detailed log files that can contain sensitive information.
+
+If you are using only the GUI this will not affect your user experience, but may slow down your system.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>model</name>
+    <message>
+        <location filename="../../../backend/account_diagnostics.py" line="+375"/>
+        <location filename="../../../backend/profile_diagnostics.py" line="+216"/>
+        <source>%d min</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

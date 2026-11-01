@@ -52,6 +52,9 @@ ApplicationWindow {
  Material.accent: "#6366f1"
  Material.primary: "#6366f1"
  property QtObject appSettings: QtObject {
+ property int font_size: 12
+ property bool high_contrast: false
+ property bool reduced_motion: false
  property bool dark_mode: false
  property string android_output_folder: ""
  property bool anonymous_mode: false

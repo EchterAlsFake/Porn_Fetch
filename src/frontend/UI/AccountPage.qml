@@ -90,6 +90,7 @@ Pane {
                     id: identityField
 
                     Layout.fillWidth: true
+                    Accessible.name: placeholderText
                     placeholderText: root.selectedProvider === "XHamster"
                                      ? qsTr("Enter your username")
                                      : qsTr("Enter your email address")
@@ -109,6 +110,7 @@ Pane {
                     Layout.fillWidth: true
 
                     echoMode: TextInput.Password
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("Enter your password")
                     selectByMouse: true
 
@@ -132,6 +134,7 @@ Pane {
                     id: sessionTokenField
                     Layout.fillWidth: true
                     echoMode: TextInput.Password
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("Enter session_token")
                     selectByMouse: true
                 }
@@ -248,6 +251,7 @@ Pane {
                     id: browserUsernameField
                     Layout.fillWidth: true
                     visible: root.selectedProvider === "PornHub"
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("PornHub username for browser cookies (not email)")
                     selectByMouse: true
                 }
@@ -289,6 +293,7 @@ Pane {
                 TextField {
                     id: accountPlaylistField
                     Layout.fillWidth: true
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("https://xhamster.com/my/playlists/...")
                     selectByMouse: true
 

@@ -52,7 +52,7 @@ Dialog {
                 textFormat: Text.PlainText
                 color: root.textColor
                 wrapMode: Text.Wrap
-                font.pixelSize: 15
+                font.pixelSize: 15 * appSettings.font_size / 12
             }
         }
 

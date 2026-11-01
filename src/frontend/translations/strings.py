@@ -68,7 +68,7 @@ However, while verifying if this actually worked I saw that it failed. The reque
 This is a very specific error. If you want to help, please enable the debug_mode in Porn Fetch settings, do the exact
 same thing you just did again (after restarting) and send an error report along with the .log files to:
 
-EchterAlsFakeBS@proton.me
+support@echteralsfake.me
 Thank you :) 
 
 If this happens frequently, disable the SNI Obfuscation feature and use a Proxy / VPN instead. 

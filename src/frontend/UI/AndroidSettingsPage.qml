@@ -10,11 +10,11 @@ Pane {
     property int section: -1
     readonly property bool tablet: width >= 740
     readonly property int activeSection: section < 0 ? 0 : section
-    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.accent_color
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     readonly property var titles: [qsTr("Downloads"), qsTr("Performance"), qsTr("Privacy & network"),
                                    qsTr("Appearance"), qsTr("System & data"), qsTr("License")]
     readonly property var subtitles: [qsTr("Quality, sources and files"), qsTr("Speed and reliability"),
@@ -51,7 +51,7 @@ Pane {
                 Layout.fillWidth: true
                 text: card.heading
                 color: root.textColor
-                font.pixelSize: 17
+                font.pixelSize: 17 * appSettings.font_size / 12
                 font.bold: true
                 wrapMode: Text.Wrap
             }
@@ -60,7 +60,7 @@ Pane {
                 visible: card.description !== ""
                 text: card.description
                 color: root.mutedColor
-                font.pixelSize: 13
+                font.pixelSize: 13 * appSettings.font_size / 12
                 wrapMode: Text.Wrap
             }
         }
@@ -88,7 +88,7 @@ Pane {
                 visible: row.detail !== ""
                 text: row.detail
                 color: root.mutedColor
-                font.pixelSize: 12
+                font.pixelSize: 12 * appSettings.font_size / 12
                 wrapMode: Text.Wrap
             }
         }
@@ -304,7 +304,7 @@ Pane {
                                     Layout.fillWidth: true
                                     text: root.subtitles[index]
                                     color: root.mutedColor
-                                    font.pixelSize: 11
+                                    font.pixelSize: 11 * appSettings.font_size / 12
                                     elide: Text.ElideRight
                                 }
                             }
@@ -312,7 +312,7 @@ Pane {
                                 visible: !root.tablet
                                 text: "›"
                                 color: root.mutedColor
-                                font.pixelSize: 26
+                                font.pixelSize: 26 * appSettings.font_size / 12
                             }
                         }
                     }
@@ -338,7 +338,7 @@ Pane {
                         Layout.fillWidth: true
                         text: root.titles[root.activeSection]
                         color: root.textColor
-                        font.pixelSize: 21
+                        font.pixelSize: 21 * appSettings.font_size / 12
                         font.bold: true
                         elide: Text.ElideRight
                     }
@@ -346,7 +346,7 @@ Pane {
                         Layout.fillWidth: true
                         text: root.subtitles[root.activeSection]
                         color: root.mutedColor
-                        font.pixelSize: 12
+                        font.pixelSize: 12 * appSettings.font_size / 12
                         elide: Text.ElideRight
                     }
                 }
@@ -458,7 +458,7 @@ Pane {
                     text: qsTr("Completed videos are saved to this folder automatically.")
                     color: root.mutedColor
                     wrapMode: Text.Wrap
-                    font.pixelSize: 12
+                    font.pixelSize: 12 * appSettings.font_size / 12
                 }
             }
             Item { Layout.preferredHeight: 14 }
@@ -555,9 +555,19 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Language")
+                CheckBox {
+                    text: qsTr("Reduce motion")
+                    checked: appSettings.reduced_motion
+                    onToggled: appSettings.reduced_motion = checked
+                }
+                CheckBox {
+                    text: qsTr("High contrast")
+                    checked: appSettings.high_contrast
+                    onToggled: appSettings.high_contrast = checked
+                }
                 ChoiceRow {
                     label: qsTr("Interface language")
-                    choices: [qsTr("System"), qsTr("English"), qsTr("German"), qsTr("Chinese"), qsTr("French")]
+                    choices: appSettings.ui_languages
                     selected: appSettings.language
                     onChosen: function(index) { appSettings.language = index }
                 }
@@ -645,7 +655,7 @@ Pane {
                     visible: bridge.isValid
                     text: qsTr("Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.")
                     color: root.mutedColor
-                    font.pixelSize: 11
+                    font.pixelSize: 11 * appSettings.font_size / 12
                     wrapMode: Text.Wrap
                 }
             }

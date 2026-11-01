@@ -10,6 +10,7 @@ import sys
 
 device = Path(__file__).resolve().parent
 lab = device.parent
+deploy_venv = Path(os.environ.get('IOS_DEPLOY_VENV', lab / '.venv'))
 repo = Path(os.environ.get('PORN_FETCH_SOURCE',
     lab.parent if (lab.parent / 'pyproject.toml').is_file() else lab.parent / 'Porn_Fetch'))
 app = device / "app"
@@ -21,7 +22,7 @@ shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "*.so", "*.fwork"))
 shutil.copytree(device / "native/packages", vendor, dirs_exist_ok=True)
 subprocess.run([sys.executable, str(device / "patch-ios-ffmpeg.py")], check=True)
-subprocess.run([str(lab / ".venv/bin/pyside6-rcc"), "--binary", str(repo / "src/frontend/resources.qrc"),
+subprocess.run([str(deploy_venv / "bin/pyside6-rcc"), "--binary", str(repo / "src/frontend/resources.qrc"),
                 "-o", str(app / "src/frontend/resources.rcc")], check=True)
 if "--stage-only" in sys.argv:
     print("Staged real app source, resources, patched QtAsyncio, and ARM64 native extensions")
@@ -30,11 +31,19 @@ if "--stage-only" in sys.argv:
 config = configparser.ConfigParser()
 config.read(device / "python-qt-hello/pysidedeploy.spec")
 config["app"].update(title="PornFetch", input_file=str(app / "main.py"), project_dir=str(app))
+config["app"]["icon"] = ""
 config["qt"]["modules"] = "Core,Gui,Network,Qml,Quick,QuickControls2,OpenGL,Svg"
 config["qt"]["qml_files"] = ",".join(str(p.relative_to(app)) for p in (app / "src/frontend/UI").rglob("*.qml"))
 config["ios"].update(bundle_id="local.asuna.PornFetch", deployment_target="15.0",
-    wheel_pyside=str(next((device / "wheels").glob("pyside6-*.whl"))),
-    wheel_shiboken=str(next((device / "wheels").glob("shiboken6-*.whl"))))
+    wheel_pyside=str(device / "wheels/pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl"),
+    wheel_shiboken=str(device / "wheels/shiboken6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl"))
+for key in ("wheel_pyside", "wheel_shiboken"):
+    if not Path(config["ios"][key]).is_file():
+        raise SystemExit(f"Missing Python 3.15 device wheel: {config['ios'][key]}")
+if os.environ.get("IOS_PYTHON_XCFRAMEWORK"):
+    config["ios"]["xcframework_path"] = os.environ["IOS_PYTHON_XCFRAMEWORK"]
+if os.environ.get("IOS_APP_VERSION"):
+    config["ios"]["version"] = os.environ["IOS_APP_VERSION"]
 config_path = app / "pysidedeploy.spec"
 with config_path.open("w") as stream:
     config.write(stream)
@@ -43,9 +52,10 @@ cache = output / "_wheels"
 if cache.exists():
     shutil.rmtree(cache)
 env = os.environ.copy()
-env.setdefault("DEVELOPER_DIR", "/Users/asuna/Downloads/Xcode.app/Contents/Developer")
-env["PATH"] = str(lab / ".venv/bin") + ":/usr/local/bin:/usr/bin:/bin"
-subprocess.run([str(lab / ".venv/bin/pyside6-ios-deploy"), "-c", str(config_path)],
+if not env.get("DEVELOPER_DIR"):
+    env["DEVELOPER_DIR"] = subprocess.check_output(["xcode-select", "-p"], text=True).strip()
+env["PATH"] = str(deploy_venv / "bin") + os.pathsep + env.get("PATH", "")
+subprocess.run([str(deploy_venv / "bin/pyside6-ios-deploy"), "-c", str(config_path)],
                cwd=app, env=env, check=True)
 project = output / "PornFetch.xcodeproj/project.pbxproj"
 text = project.read_text()

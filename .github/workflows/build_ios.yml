@@ -1,0 +1,168 @@
+name: iOS Build
+run-name: iOS ARM64 build (${{ inputs.release_version || 'development' }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Full release version (e.g. 3.9.66)"
+        type: string
+        required: true
+  push:
+    branches: [codex/ios-arm64-build]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  restore-native:
+    name: Restore pinned iOS device dependencies
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Extract device dependencies from the archived lab
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash packaging/restore_ios_dependencies.sh "$RUNNER_TEMP/ios-inputs"
+      - uses: ./.github/actions/upload-artifact
+        with:
+          name: ios-native-inputs
+          if-no-files-found: error
+          path: ${{ runner.temp }}/ios-inputs/ios-lab
+
+  build-ios:
+    needs: restore-native
+    runs-on: macos-15
+    timeout-minutes: 120
+    environment: beta
+    defaults:
+      run:
+        shell: bash
+    env:
+      GH_TOKEN: ${{ github.token }}
+      IOS_APP_VERSION: ${{ inputs.release_version || '3.9' }}
+      IOS_WHEELS_RELEASE: "6.12.0-ios15-cp315"
+      IOS_MANIFEST_SHA256: "6b8d8de1e6bd31b2c6e7b8d458eae9c6b4032a58a668f7d12cfb4eed64ca3c56"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.13"
+          architecture: arm64
+
+      - name: Configure native ARM64 tools and Xcode
+        run: |
+          test "$(uname -m)" = arm64
+          test -d /Applications/Xcode_26.3.app/Contents/Developer
+          export DEVELOPER_DIR=/Applications/Xcode_26.3.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-path
+          for tool in python3.13 gh rsync; do command -v "$tool"; done
+          {
+            echo "IOS_WORK_ROOT=$RUNNER_TEMP/ios-ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+            echo "PORN_FETCH_SOURCE=$GITHUB_WORKSPACE"
+            echo "DEVELOPER_DIR=$DEVELOPER_DIR"
+          } >> "$GITHUB_ENV"
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: ios-native-inputs
+          path: ${{ env.IOS_WORK_ROOT }}/restored
+
+      - name: Download and verify published iOS inputs
+        run: |
+          mkdir -p "$IOS_WORK_ROOT/downloads"
+          gh release download "$IOS_WHEELS_RELEASE" --repo EchterAlsFake/PySide6-to-iOS \
+            --dir "$IOS_WORK_ROOT/downloads" \
+            --pattern 'pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl' \
+            --pattern 'shiboken6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl' \
+            --pattern python-3.15.0rc2-iOS-XCframework.tar.gz \
+            --pattern PySide6-to-iOS-build-scripts.tar.gz --pattern SHA256SUMS
+          cd "$IOS_WORK_ROOT/downloads"
+          echo "$IOS_MANIFEST_SHA256  SHA256SUMS" | shasum -a 256 --check --strict
+          for asset in *.whl *.tar.gz; do
+            awk -v name="$asset" '$2 == name { print }' SHA256SUMS
+          done > selected.sha256
+          test "$(wc -l < selected.sha256)" -eq 4
+          shasum -a 256 --check --strict selected.sha256
+          mkdir -p "$IOS_WORK_ROOT/helpers" "$IOS_WORK_ROOT/runtime"
+          tar -xzf PySide6-to-iOS-build-scripts.tar.gz -C "$IOS_WORK_ROOT/helpers"
+          tar -xzf python-3.15.0rc2-iOS-XCframework.tar.gz -C "$IOS_WORK_ROOT/runtime"
+          python3.13 - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path(os.environ["IOS_WORK_ROOT"])
+          frameworks = list((root / "runtime").rglob("Python.xcframework"))
+          if len(frameworks) != 1:
+              raise SystemExit("Expected exactly one published Python.xcframework")
+          with open(os.environ["GITHUB_ENV"], "a") as stream:
+              stream.write(f"IOS_PYTHON_XCFRAMEWORK={frameworks[0]}\n")
+              stream.write(f"IOS_DEPLOY_VENV={root / 'deploy-venv'}\n")
+          PY
+
+      - name: Prepare native host tools and stage device dependencies
+        run: |
+          python3.13 -m venv "$IOS_DEPLOY_VENV"
+          "$IOS_DEPLOY_VENV/bin/python" -m pip install 'PySide6-Essentials==6.12.0'
+          REQUIREMENTS=$("$IOS_DEPLOY_VENV/bin/python" -c 'from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent / "scripts/requirements-ios.txt")')
+          "$IOS_DEPLOY_VENV/bin/python" -m pip install -r "$REQUIREMENTS"
+          "$IOS_DEPLOY_VENV/bin/python" -c 'import platform; assert platform.machine() == "arm64"'
+          file "$IOS_DEPLOY_VENV/lib/python3.13/site-packages/PySide6/Qt/libexec/rcc"
+          HELPERS="$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts"
+          "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/patch-ios-deploy.py" --python "$IOS_DEPLOY_VENV/bin/python"
+          "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/check-ios-wheels.py" "$IOS_WORK_ROOT/downloads" --target ios_arm64 --max-ios 15.0
+          mkdir -p "$IOS_WORK_ROOT/lab/device/wheels" "$IOS_WORK_ROOT/lab/pornfetch/vendor" "$IOS_WORK_ROOT/lab/device/native/packages"
+          rsync -a ios-lab/ "$IOS_WORK_ROOT/lab/"
+          rsync -a "$IOS_WORK_ROOT/restored/pornfetch/vendor/" "$IOS_WORK_ROOT/lab/pornfetch/vendor/"
+          rsync -a "$IOS_WORK_ROOT/restored/device/native/packages/" "$IOS_WORK_ROOT/lab/device/native/packages/"
+          rsync -a ios-lab/device/native/packages/ "$IOS_WORK_ROOT/lab/device/native/packages/"
+          cp "$IOS_WORK_ROOT/downloads/"*.whl "$IOS_WORK_ROOT/lab/device/wheels/"
+          echo "$IOS_DEPLOY_VENV/bin" >> "$GITHUB_PATH"
+
+      - name: Check portable staging
+        run: python3.13 -m unittest src.tests.unit.test_prepare_ios_ci
+
+      - name: Stamp version and generate the app project
+        run: |
+          CREATED_AT=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq .created_at)
+          TIMESTAMP=$(python3.13 -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$CREATED_AT")
+          python3.13 packaging/write_build_version.py "$IOS_APP_VERSION" --release-timestamp "$TIMESTAMP"
+          python3.13 "$IOS_WORK_ROOT/lab/device/prepare-application.py"
+
+      - name: Build device app and package IPA for re-signing
+        run: |
+          mkdir -p "$IOS_WORK_ROOT/output"
+          xcodebuild -project "$IOS_WORK_ROOT/lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj" \
+            -scheme PornFetch -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath "$IOS_WORK_ROOT/derived" -jobs 4 \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=- \
+            EXPANDED_CODE_SIGN_IDENTITY=- EXPANDED_CODE_SIGN_IDENTITY_NAME=ad-hoc build \
+            2>&1 | tee "$IOS_WORK_ROOT/xcodebuild.log"
+          python3.13 "$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts/package-ipa.py" \
+            --app "$IOS_WORK_ROOT/derived/Build/Products/Release-iphoneos/PornFetch.app" \
+            --output "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa" \
+            --display-name 'Porn Fetch' --share-documents
+
+      - name: Upload re-signable IPA and validation report
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: PornFetch_ios_GUI_arm64
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/*
+
+      - name: Upload build diagnostics
+        if: always() && env.IOS_WORK_ROOT != ''
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: ios-build-diagnostics
+          path: |
+            ${{ env.IOS_WORK_ROOT }}/xcodebuild.log
+            ${{ env.IOS_WORK_ROOT }}/lab/device/app/pysidedeploy.spec
+            ${{ env.IOS_WORK_ROOT }}/downloads/SHA256SUMS

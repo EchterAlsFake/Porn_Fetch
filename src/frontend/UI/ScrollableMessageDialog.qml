@@ -4,6 +4,7 @@ import QtQuick.Controls
 Dialog {
     id: dialog
     property alias message: messageLabel.text
+    property var previousFocus: null
     property real preferredTextHeight: 0
     parent: Overlay.overlay
     anchors.centerIn: parent
@@ -16,7 +17,11 @@ Dialog {
     function measureText() {
         preferredTextHeight = messageLabel.implicitHeight
     }
-    onAboutToShow: measureText()
+    onAboutToShow: {
+        previousFocus = dialog.parent && dialog.parent.Window.window ? dialog.parent.Window.window.activeFocusItem : null
+        measureText()
+    }
+    onClosed: { if (previousFocus) previousFocus.forceActiveFocus() }
 
     contentItem: SmoothScrollView {
         id: messageScroll
