@@ -9,7 +9,7 @@ icon = src/frontend/graphics/logo.png
 [python]
 python_path =
 packages =
-android_packages = buildozer,cython
+android_packages = buildozer==1.6.0,cython==3.3.0
 
 [qt]
 qml_files = src/frontend/UI/BetaDisclaimerDialog.qml,src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidMorePage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/AccountLoginHelp.qml,src/frontend/UI/ScrollableMessageDialog.qml,src/frontend/UI/TorRouting.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/Theme.qml

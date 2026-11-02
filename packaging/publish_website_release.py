@@ -137,9 +137,9 @@ def prepare(artifact_root, output, version, channel, timestamp, commit, notes, s
                 add_file(path, attributes, output, artifacts)
                 if attributes["kind"] != "notices":
                     found = True
-        if not found:
+        if not found and not (target and target["kind"] == "notices"):
             raise ValueError(f"No recognized application package in {directory.name}")
-    if not artifacts:
+    if not any(item["kind"] != "notices" for item in artifacts):
         raise ValueError("No built application artifacts to publish")
     if source_root:
         source = source_bundle(source_root, output, version, timestamp)

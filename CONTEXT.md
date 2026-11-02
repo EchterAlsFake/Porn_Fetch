@@ -9,7 +9,16 @@ This file is maintained as a concise map of the current development tree. Read i
 - Current release notes: root `CHANGELOG_STATIC.md`; full history: `docs/CHANGELOG.md`.
 - Manual builds take a full `release_version` in the workflow; CI stamps that version
   and one workflow timestamp into all binaries and release metadata.
-- Python: 3.14 (the repository default)
+- Python: 3.15 (the repository default)
+- Desktop compilation: Nuitka 4.3.3; Android target/hostpython: 3.15.2.
+- iOS: the user confirmed non-jailbroken iPhone 7 operation, license activation,
+  video download, FFmpeg remuxing, and audio/video playback on 2026-10-30.
+  The preserved lab still embeds 3.15.0rc2. `build_ios.yml` uses the published
+  `6.12.0-ios15-cp315` wheels and matching runtime on GitHub's ARM64 `macos-15`
+  runner with native host tools. An Ubuntu job selectively restores the pinned
+  snapshot's device dependencies automatically. It produces an IPA requiring
+  re-signing. Hosted ARM64 compile/link and IPA audit passed on 2026-11-01
+  (run 41343140198); device launch remains a separate validation step.
 - GUI: PySide6 / Qt 6 with QML
 - CLI: Questionary and Rich, with no Qt dependency
 - Networking: asynchronous `curl-cffi` through `eaf_base_api`
@@ -108,10 +117,20 @@ public User-feed limitations.
 - `docs/`: user/developer docs, release history, and project history.
 - `packaging/`: PyInstaller and PySide/Nuitka build specifications. Release payload inventories and optional IFW compression benchmarks are documented in `docs/RELEASE_SIZE.md`.
 - `scripts/`: install, maintenance, QtAsyncio, and macOS bundle scripts.
+- Windows GUI/CLI (x64/ARM64) and manual translation previews use Certum `ssign`
+  via environment `signing` (`CERTUM_EMAIL`, `CERTUM_OTP` TOTP seed). Native
+  payloads are signed before packaging; the x64 IFW installer also ships a signed
+  mandatory maintenance component. See `docs/WINDOWS_SIGNING.md`.
 - `.github/workflows/`: offline CI and platform build pipelines.
 - Android CI: `build_all.yml` builds all four ABIs using the existing patch/build
-  scripts and Python 3.14 wheels. See `docs/ANDROID_CI.md` for signing secrets,
+  scripts and Python 3.15 wheels from `6.12.0-api28`. See `docs/ANDROID_CI.md` for signing secrets,
   Android-only runs and website publication.
+  `packaging/android_wheels.sha256` pins the eight selected wheels independently
+  of upstream manifest additions. The assembly hook renames Qt preload copies
+  to `libQt*.abi3.so` and updates loader resources for Android 13 extraction.
+  On 2026-11-02 a separately installed repack of the Teclast T50 Pro's existing
+  Python 3.14 APK reached QML after this fix; new Python 3.15 matrix builds remain
+  to be verified. The original app/data were preserved.
 - Tor: app-owned service routing and runtime are in `src/shared/service_transport.py`
   and `tor_runtime.py`; `tor_transport.py` routes provider pages and downloads for
   the optional All app traffic scope. See `docs/TOR_SUPPORT.md`. Android updates use the separate
@@ -264,3 +283,15 @@ visible. Installed XHamster 2.6.3 lacks the local account JSON parser fix; repor
 show the actual source and whether the known fix is present.
 The user reports the complete account suite passing after these fixes and considers
 the Account page complete for the current release; Android device checks are deferred.
+
+## GUI translations and accessibility
+
+- `src/backend/ui_languages.py` is the shared supported locale registry. GUI settings
+  persist `UI/language_locale`, migrating the former numeric language preference.
+- `scripts/translations.py extract|check|build` handles TS extraction, validation and
+  QM/resource builds. The frontend update scripts delegate to it.
+- Translation contributions use self-hosted Weblate and reviewed preview builds;
+  see `docs/TRANSLATING.md`. Deployment is not yet provisioned.
+- Both layouts expose reduced motion and high contrast. `scripts/audit_gui.py`
+  inventories components; `docs/ACCESSIBILITY.md` defines the native manual checks.
+  Screen-reader and physical Android acceptance remain unverified.

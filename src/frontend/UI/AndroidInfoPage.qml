@@ -5,10 +5,10 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 8
-    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
     ScrollView {
@@ -18,7 +18,13 @@ Pane {
         ColumnLayout {
             width: parent.width
             spacing: 12
-            Label { text: qsTr("Porn Fetch"); color: root.textColor; font.pixelSize: 28; font.bold: true }
+            Button {
+                text: qsTr("Help translate")
+                Layout.fillWidth: true
+                implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
+                onClicked: Qt.openUrlExternally(appSettings.translation_help_url)
+            }
+            Label { text: qsTr("Porn Fetch"); color: root.textColor; font.pixelSize: 28 * appSettings.font_size / 12; font.bold: true }
             Label { text: qsTr("Version %1").arg(Qt.application.version); color: root.mutedColor }
             Label {
                 Layout.fillWidth: true
@@ -26,7 +32,7 @@ Pane {
                 color: root.mutedColor
                 wrapMode: Text.Wrap
             }
-            Label { text: qsTr("Application license"); color: root.textColor; font.bold: true; font.pixelSize: 18 }
+            Label { text: qsTr("Application license"); color: root.textColor; font.bold: true; font.pixelSize: 18 * appSettings.font_size / 12 }
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Porn Fetch Source-Available License 1.0. See the full license for terms.")
@@ -43,7 +49,7 @@ Pane {
                 text: qsTr("Show third-party notices")
                 onClicked: { legalDialog.showNotices = true; legalDialog.open() }
             }
-            Label { text: qsTr("Credits"); color: root.textColor; font.bold: true; font.pixelSize: 18 }
+            Label { text: qsTr("Credits"); color: root.textColor; font.bold: true; font.pixelSize: 18 * appSettings.font_size / 12 }
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Thanks to Egsagon for the original PHUB API and to all contributors and translators.")

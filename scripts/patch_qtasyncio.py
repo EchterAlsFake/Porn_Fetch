@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Safely patch PySide6 6.11/6.12 QtAsyncio for Python 3.14, descriptor-based I/O,
+Safely patch PySide6 6.11/6.12 QtAsyncio for Python 3.15, descriptor-based I/O,
 and nested Qt event loops.
 
 The patch adds QSocketNotifier-backed implementations of:
 
     add_reader / remove_reader / add_writer / remove_writer
 
-and, when required, adds QAsyncioTask._make_cancelled_error() for Python 3.14.
+and, when required, adds QAsyncioTask._make_cancelled_error() for Python 3.14+.
+On Python 3.15 it also resolves ThreadPoolExecutor before Shiboken installs its
+module attribute hook, which otherwise exposes CPython's lazy import proxy.
 It makes each task capture its creation context so ContextVar values survive
 across awaits, and makes futures retain the context registered with each done
 callback, matching asyncio Task and Future semantics.
@@ -84,6 +86,7 @@ class EnvironmentInfo:
     events_path: Path
     futures_path: Path
     tasks_path: Path
+    pyside_init_path: Path | None = None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -441,6 +444,7 @@ print(json.dumps({
     "events_path": events.__file__,
     "futures_path": futures.__file__,
     "tasks_path": tasks.__file__,
+    "pyside_init_path": PySide6.__file__,
 }))
 '''
     process = subprocess.run(
@@ -472,6 +476,7 @@ print(json.dumps({
         events_path=Path(data["events_path"]).resolve(),
         futures_path=Path(data["futures_path"]).resolve(),
         tasks_path=Path(data["tasks_path"]).resolve(),
+        pyside_init_path=Path(data["pyside_init_path"]).resolve(),
     )
 
 
@@ -804,7 +809,7 @@ def patch_tasks_source(
                         description="replace _make_cancelled_error",
                     ))
                     descriptions.append(
-                        "added Python 3.14 cancellation compatibility"
+                        "added Python 3.14+ cancellation compatibility"
                     )
         else:
             get_coro = class_method(task_class, "get_coro")
@@ -823,7 +828,7 @@ def patch_tasks_source(
                 replacement=CANCELLED_ERROR_METHOD,
                 description="add _make_cancelled_error",
             ))
-            descriptions.append("added Python 3.14 cancellation compatibility")
+            descriptions.append("added Python 3.14+ cancellation compatibility")
 
     reentrancy_markers = (
         TASKS_REENTRANCY_GUARD_MARKER in source,
@@ -968,7 +973,7 @@ def build_changes(environment: EnvironmentInfo, *, force: bool) -> list[SourceCh
         force=force,
     )
 
-    return [
+    changes = [
         SourceChange(
             environment.events_path,
             events_original,
@@ -988,6 +993,21 @@ def build_changes(environment: EnvironmentInfo, *, force: bool) -> list[SourceCh
             tasks_descriptions,
         ),
     ]
+    if environment.python_version >= (3, 15, 0) and environment.pyside_init_path is not None:
+        original = environment.pyside_init_path.read_text(encoding="utf-8")
+        marker = f"{PATCH_ID}:executor-bootstrap"
+        modified = original
+        if marker not in original:
+            anchor = "import sys\n"
+            if anchor not in original:
+                raise PatchError("Cannot locate PySide6 initializer imports")
+            modified = original.replace(anchor, anchor + (
+                f"# {marker}: resolve before Shiboken overrides module attribute access.\n"
+                "from concurrent.futures import ThreadPoolExecutor as _ThreadPoolExecutor\n"
+            ), 1)
+        changes.append(SourceChange(environment.pyside_init_path, original, modified,
+                                    ("resolved Python 3.15's executor before Qt initialization",)))
+    return changes
 
 
 def default_backup_root(environment: EnvironmentInfo) -> Path:
@@ -1121,6 +1141,10 @@ def verify_sources(environment: EnvironmentInfo) -> list[str]:
     futures = environment.futures_path.read_text(encoding="utf-8")
     tasks = environment.tasks_path.read_text(encoding="utf-8")
     problems: list[str] = []
+    if environment.python_version >= (3, 15, 0) and environment.pyside_init_path is not None:
+        initializer = environment.pyside_init_path.read_text(encoding="utf-8")
+        if f"{PATCH_ID}:executor-bootstrap" not in initializer:
+            problems.append("PySide6 initializer lacks the Python 3.15 executor bootstrap")
 
     try:
         compile(events, str(environment.events_path), "exec")
@@ -1202,6 +1226,11 @@ if REQUIRE_PATCH:
             raise RuntimeError("QAsyncioTask leaked ContextVar state")
 
     QtAsyncio.run(verify_context_across_await(), keep_running=False)
+
+    async def verify_standard_executor():
+        assert await asyncio.to_thread(lambda: 315) == 315
+
+    asyncio.run(verify_standard_executor())
 
 print("ok")
 '''.replace("REQUIRE_PATCH", repr(require_patch))

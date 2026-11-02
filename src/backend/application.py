@@ -632,7 +632,7 @@ class Backend(QObject):
     
             Thank you for using Porn Fetch :)
             If you have Feedback, you can write an E-Mail to:
-            EchterAlsFake@proton.me <3""")
+            support@echteralsfake.me <3""")
 
             except UnsupportedPlatform:
                 ui_popup(TRANSLATE_ERRORS.installation_unsupported)

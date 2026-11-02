@@ -1,4 +1,4 @@
-"""Repair the Qt activity's SAF result handling before Gradle builds the package.
+"""Prepare native libraries and repair Qt platform bridges before Gradle packaging.
 
 Loaded by python-for-android through p4a.hook, including on clean builds.
 """
@@ -7,9 +7,34 @@ from __future__ import annotations
 import configparser
 import re
 import shutil
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 MARKER = "porn-fetch-storage-results-v1"
+
+
+def prepare_native_libraries(native: Path, resources: Path) -> None:
+    """Give Qt's preload copies Android-extractable names, keeping wheel modules intact."""
+    renamed = {}
+    for library in native.glob("*/*.so"):
+        if library.name.startswith("lib"):
+            # A subsequent build regenerates libs.xml but can reuse the already
+            # renamed files in the distribution's native directory.
+            renamed[(library.parent.name, library.name[3:])] = library.name
+        else:
+            name = "lib" + library.name
+            renamed[(library.parent.name, library.name)] = name
+            library.replace(library.with_name(name))
+    for resource in resources.glob("values*/*.xml"):
+        xml = ET.parse(resource)
+        changed = False
+        for item in xml.iter("item"):
+            abi, separator, name = (item.text or "").strip().partition(";")
+            if separator and (abi, name) in renamed:
+                item.text = abi + ";" + renamed[(abi, name)]
+                changed = True
+        if changed:
+            xml.write(resource, encoding="utf-8", xml_declaration=True)
 
 
 def patch_activity(source: str) -> str:
@@ -66,7 +91,11 @@ def before_apk_build(toolchain) -> None:
 
 def before_apk_assemble(toolchain) -> None:
     """p4a invokes this for APK and AAB builds, after generating Java sources."""
-    activity = (Path(toolchain._dist.dist_dir) / "src/main/java/org/kivy/android/PythonActivity.java")
+    dist_dir = Path(toolchain._dist.dist_dir)
+    # Android 13 extracts lib*.so only. QtCore.abi3.so in APK/lib is silently
+    # skipped, so QtLoader cannot preload it from nativeLibraryDir on tablets.
+    prepare_native_libraries(dist_dir / "libs", dist_dir / "src/main/res")
+    activity = dist_dir / "src/main/java/org/kivy/android/PythonActivity.java"
     project = Path(__file__).resolve().parents[1]
     tor = project / "src/shared/tor/libTor.so"
     if tor.is_file():

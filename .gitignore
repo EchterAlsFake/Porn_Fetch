@@ -61,6 +61,7 @@ model_database.json
 # Generated media and local test artifacts
 brag-output/
 src/tests/manual/geneva_runs/
+/src/tests.zip
 *.pcap
 *.pcapng
 

@@ -4,7 +4,7 @@
 # ============================
 # PornFetch Windows Builder
 # - Select latest commit OR stable release tag (last 5)
-# - Uses uv + Python 3.14 + pyside6-deploy
+# - Uses uv + Python 3.15 + pyside6-deploy
 # ============================
 
 # Ensure the script is running with elevated privileges
@@ -301,8 +301,8 @@ if (Test-Path $venvDir) { Remove-Item -Recurse -Force $venvDir }
 
 Info "Using temporary uv environment: $venvDir"
 
-Run uv "--color" "always" "python" "install" "3.14"
-Run uv "--color" "always" "venv" $venvDir "--python" "3.14"
+Run uv "--color" "always" "python" "install" "3.15"
+Run uv "--color" "always" "venv" $venvDir "--python" "3.15"
 
 $env:UV_PROJECT_ENVIRONMENT = $venvDir
 

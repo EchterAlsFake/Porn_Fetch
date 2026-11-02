@@ -59,6 +59,7 @@ def prepare_staging_directory(
     target_arch: str,
     version: str,
     ffmpeg_binary: Path | None = None,
+    maintenance_tool: Path | None = None,
 ) -> tuple[Path, Path]:
     """Prepare config/ and packages/ directories for binarycreator and repogen."""
     template_config = PROJECT_ROOT / "packaging" / "installer" / "config" / "config.xml.template"
@@ -90,16 +91,30 @@ def prepare_staging_directory(
     config_dest.write_text(config_xml_text, encoding="utf-8")
 
     # 2. Copy meta files (package.xml, installscript.qs)
-    for template in package_templates.iterdir():
-        meta_dest = packages_dir / template.name / "meta"
+    templates = list(package_templates.iterdir())
+    if maintenance_tool is not None:
+        if target_platform != "windows" or not maintenance_tool.is_file():
+            raise ValueError("--maintenance-tool requires an existing Windows installerbase.exe")
+        templates.append(PROJECT_ROOT / "packaging/installer/maintenance")
+    for template in templates:
+        component_name = "to.pornfetch.echteralsfake.maintenance" if template.name == "maintenance" else template.name
+        meta_dest = packages_dir / component_name / "meta"
         meta_dest.mkdir(parents=True, exist_ok=True)
         for f in (template / "meta").iterdir():
             content = f.read_text(encoding="utf-8")
             if f.name == "package.xml":
                 content = content.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
+                if maintenance_tool is not None and template.name == "to.pornfetch.echteralsfake":
+                    content = content.replace("</Package>",
+                                              "    <Dependencies>to.pornfetch.echteralsfake.maintenance</Dependencies>\n</Package>")
                 release_date = datetime.fromtimestamp(RELEASE_TIMESTAMP, timezone.utc).strftime("%Y-%m-%d")
                 content = re.sub(r"<ReleaseDate>.*?</ReleaseDate>", f"<ReleaseDate>{release_date}</ReleaseDate>", content)
             (meta_dest / f.name).write_text(content, encoding="utf-8")
+
+    if maintenance_tool is not None:
+        maintenance_data = packages_dir / "to.pornfetch.echteralsfake.maintenance/data"
+        maintenance_data.mkdir(parents=True)
+        shutil.copy2(maintenance_tool, maintenance_data / "installerbase.exe")
 
     # 3. Copy application distribution files into data/
     logger.info("Copying standalone distribution files from %s to %s...", dist_dir, data_dest)
@@ -211,6 +226,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Explicit path to FFmpeg executable",
     )
     parser.add_argument(
+        "--maintenance-tool",
+        type=Path,
+        help="Signed Windows installerbase.exe to ship as the mandatory maintenance component",
+    )
+    parser.add_argument(
         "--output-repo",
         type=Path,
         default=None,
@@ -258,6 +278,7 @@ def main(argv: list[str] | None = None) -> int:
         target_arch=raw_arch,
         version=args.version,
         ffmpeg_binary=args.ffmpeg_binary.resolve() if args.ffmpeg_binary else None,
+        maintenance_tool=args.maintenance_tool.resolve() if args.maintenance_tool else None,
     )
 
     if raw_os == "darwin":

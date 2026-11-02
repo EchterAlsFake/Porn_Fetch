@@ -1,0 +1,49 @@
+# Run behind an HTTPS reverse proxy; set required values in an untracked .env.
+services:
+  database:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: weblate
+      POSTGRES_USER: weblate
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+    volumes: [database:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U weblate']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  cache:
+    image: valkey/valkey:8.1
+    restart: unless-stopped
+    command: [valkey-server, --appendonly, 'yes']
+    volumes: [cache:/data]
+  weblate:
+    image: weblate/weblate:${WEBLATE_VERSION:?Set a supported pinned Weblate version}
+    restart: unless-stopped
+    depends_on:
+      database: {condition: service_healthy}
+      cache: {condition: service_started}
+    ports: ['127.0.0.1:8088:8080']
+    volumes: [weblate:/app/data]
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_DATABASE: weblate
+      POSTGRES_USER: weblate
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+      REDIS_HOST: cache
+      WEBLATE_SITE_DOMAIN: ${TRANSLATION_DOMAIN:?Set TRANSLATION_DOMAIN}
+      WEBLATE_ENABLE_HTTPS: '1'
+      WEBLATE_ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL}
+      WEBLATE_ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD}
+      WEBLATE_EMAIL_HOST: ${SMTP_HOST:?Set SMTP_HOST}
+      WEBLATE_EMAIL_PORT: '587'
+      WEBLATE_EMAIL_USE_TLS: '1'
+      WEBLATE_EMAIL_HOST_USER: ${SMTP_USER:?Set SMTP_USER}
+      WEBLATE_EMAIL_HOST_PASSWORD: ${SMTP_PASSWORD:?Set SMTP_PASSWORD}
+      WEBLATE_SERVER_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL}
+      WEBLATE_DEFAULT_FROM_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL}
+volumes:
+  database:
+  cache:
+  weblate:

@@ -1,0 +1,23 @@
+name: Set up Certum Windows signing
+description: Install a checksum-pinned ssign release for x64 and ARM64 Windows runners.
+runs:
+  using: composite
+  steps:
+    - shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        # Windows 11 ARM64 runs the upstream x64 executable through emulation.
+        $destination = Join-Path $env:RUNNER_TEMP 'pornfetch-signing'
+        New-Item -ItemType Directory -Force -Path $destination | Out-Null
+        $archive = Join-Path $destination 'ssign.zip'
+        Invoke-WebRequest 'https://github.com/Le-Syl21/ssign/releases/download/v0.1.8/ssign-windows-x86_64.zip' -OutFile $archive
+        $expected = '89cbac647d19819a1a82645d2254ac51d2b34050835421294584385dadde1298'
+        if ((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) {
+          throw 'ssign archive does not match its pinned SHA256'
+        }
+        Expand-Archive -LiteralPath $archive -DestinationPath $destination -Force
+        $executable = Get-ChildItem -LiteralPath $destination -Recurse -Filter ssign.exe | Select-Object -First 1
+        if (!$executable) { throw 'ssign.exe is missing from the release archive' }
+        $executable.DirectoryName >> $env:GITHUB_PATH
+        # Keep the short-lived cloud session outside every artifact/cache path.
+        "XDG_RUNTIME_DIR=$destination" >> $env:GITHUB_ENV

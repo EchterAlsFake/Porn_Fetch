@@ -24,12 +24,13 @@ Item {
     property real pulse: 0.35
     property bool showing: false
 
+    Accessible.ignored: true
     clip: true
     opacity: showing ? 1 : 0
     visible: enabled && opacity > 0
 
     Behavior on opacity {
-        NumberAnimation { duration: 240; easing.type: Easing.InOutSine }
+        NumberAnimation { duration: appSettings.reduced_motion ? 0 : 240; easing.type: Easing.InOutSine }
     }
 
     onActiveChanged: {

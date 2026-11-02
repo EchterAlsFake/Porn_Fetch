@@ -152,20 +152,20 @@ To automatically install dependencies, clone, and build the latest code on your 
   ```
 
 ### 3. Building & Running from Source
-The source tree targets Python 3.14 and uses [`uv`](https://docs.astral.sh/uv/) for dependency management.
+The source tree targets Python 3.15 and uses [`uv`](https://docs.astral.sh/uv/) for dependency management.
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/EchterAlsFake/Porn_Fetch.git
 cd Porn_Fetch
 
-# 2. Sync dependencies (uv automatically provisions Python 3.14)
+# 2. Sync dependencies (uv automatically provisions Python 3.15)
 uv sync --extra gui --group dev
 
 # 3. Fetch PocketBase (required for database and queue persistence)
 uv run python scripts/fetch_pocketbase.py
 
-# 4. Patch QtAsyncio (required for the GUI under Python 3.14)
+# 4. Patch QtAsyncio (required for the GUI under Python 3.15)
 uv run python scripts/patch_qtasyncio.py .venv
 
 # 5. Launch the application!

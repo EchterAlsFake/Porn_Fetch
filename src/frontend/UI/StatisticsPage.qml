@@ -20,7 +20,7 @@ Pane {
         "sources": []
     })
 
-    readonly property color accentColor: (typeof appSettings !== "undefined" && appSettings)
+    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : (typeof appSettings !== "undefined" && appSettings)
                                          ? appSettings.accent_color : "#7c5cff"
     readonly property bool materialStyle: (typeof appSettings !== "undefined" && appSettings)
                                           && appSettings.core_style === "Material"
@@ -28,14 +28,14 @@ Pane {
                                      ? Material.theme === Material.Dark
                                      : ((typeof appSettings !== "undefined" && appSettings)
                                         ? appSettings.dark_mode : false)
-    readonly property color successColor: darkMode ? "#35d07f" : "#168352"
-    readonly property color failureColor: darkMode ? "#ff627d" : "#c62845"
-    readonly property color pendingColor: darkMode ? "#f5b942" : "#9a6500"
-    readonly property color foregroundColor: materialStyle ? Material.foreground : palette.text
-    readonly property color cardColor: materialStyle
+    readonly property color successColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#35d07f" : "#168352"
+    readonly property color failureColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#ff627d" : "#c62845"
+    readonly property color pendingColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#f5b942" : "#9a6500"
+    readonly property color foregroundColor: appSettings.high_contrast ? "#ffffff" : materialStyle ? Material.foreground : palette.text
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : materialStyle
                                        ? Material.dialogColor
                                        : (darkMode ? Qt.lighter(palette.window, 1.18) : palette.base)
-    readonly property color subtleTextColor: Qt.rgba(foregroundColor.r,
+    readonly property color subtleTextColor: appSettings.high_contrast ? "#ffffff" : Qt.rgba(foregroundColor.r,
                                                      foregroundColor.g,
                                                      foregroundColor.b, 0.62)
     readonly property bool privacyMode: (typeof appSettings !== "undefined" && appSettings)
@@ -101,7 +101,7 @@ Pane {
 
                         Label {
                             text: qsTr("Download insights")
-                            font.pixelSize: 28
+                            font.pixelSize: 28 * appSettings.font_size / 12
                             font.bold: true
                         }
 
@@ -116,7 +116,7 @@ Pane {
                                 anchors.centerIn: parent
                                 text: qsTr("PREVIEW")
                                 color: root.accentColor
-                                font.pixelSize: 11
+                                font.pixelSize: 11 * appSettings.font_size / 12
                                 font.bold: true
                             }
                         }
@@ -219,7 +219,7 @@ Pane {
 
                         Label {
                             text: qsTr("Download outcomes")
-                            font.pixelSize: 18
+                            font.pixelSize: 18 * appSettings.font_size / 12
                             font.bold: true
                         }
 
@@ -287,7 +287,7 @@ Pane {
                                     Label {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: root.outcomeTotal
-                                        font.pixelSize: 28
+                                        font.pixelSize: 28 * appSettings.font_size / 12
                                         font.bold: true
                                     }
 
@@ -295,7 +295,7 @@ Pane {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: qsTr("attempts")
                                         color: root.subtleTextColor
-                                        font.pixelSize: 12
+                                        font.pixelSize: 12 * appSettings.font_size / 12
                                     }
                                 }
                             }
@@ -341,7 +341,7 @@ Pane {
 
                         Label {
                             text: qsTr("At a glance")
-                            font.pixelSize: 18
+                            font.pixelSize: 18 * appSettings.font_size / 12
                             font.bold: true
                         }
 
@@ -357,7 +357,7 @@ Pane {
                                 Layout.fillWidth: true
                                 text: root.formattedDate(root.statistics.lastDownloaded)
                                 objectName: "statisticsLastActivity"
-                                font.pixelSize: 16
+                                font.pixelSize: 16 * appSettings.font_size / 12
                                 font.bold: true
                                 elide: Text.ElideRight
                             }
@@ -374,7 +374,7 @@ Pane {
                             Label {
                                 text: root.statistics.totalSizeMb.toLocaleString(Qt.locale(), "f", 1) + " MB"
                                 objectName: "statisticsFileSize"
-                                font.pixelSize: 22
+                                font.pixelSize: 22 * appSettings.font_size / 12
                                 font.bold: true
                             }
                         }
@@ -415,7 +415,7 @@ Pane {
                         Label {
                             Layout.fillWidth: true
                             text: qsTr("Downloads by source")
-                            font.pixelSize: 18
+                            font.pixelSize: 18 * appSettings.font_size / 12
                             font.bold: true
                         }
 
@@ -542,14 +542,14 @@ Pane {
 
             Label {
                 text: parent.parent.value
-                font.pixelSize: 27
+                font.pixelSize: 27 * appSettings.font_size / 12
                 font.bold: true
             }
 
             Label {
                 text: parent.parent.detail
                 color: root.subtleTextColor
-                font.pixelSize: 11
+                font.pixelSize: 11 * appSettings.font_size / 12
             }
         }
     }
@@ -576,7 +576,7 @@ Pane {
 
         Label {
             text: parent.value
-            font.pixelSize: 17
+            font.pixelSize: 17 * appSettings.font_size / 12
             font.bold: true
         }
     }

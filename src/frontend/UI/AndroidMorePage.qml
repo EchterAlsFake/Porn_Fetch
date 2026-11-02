@@ -6,10 +6,10 @@ Pane {
     id: root
     signal openPage(int index)
     padding: 8
-    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
     ColumnLayout {
@@ -35,7 +35,7 @@ Pane {
                     Label { text: qsTr("About Porn Fetch"); color: root.textColor; font.bold: true }
                     Label { text: qsTr("Version, licenses and credits"); color: root.mutedColor }
                 }
-                Label { text: "›"; color: root.mutedColor; font.pixelSize: 26 }
+                Label { text: "›"; color: root.mutedColor; font.pixelSize: 26 * appSettings.font_size / 12 }
             }
         }
         ItemDelegate {
@@ -56,7 +56,7 @@ Pane {
                     Label { text: qsTr("Supported websites"); color: root.textColor; font.bold: true }
                     Label { text: qsTr("See where downloads work"); color: root.mutedColor }
                 }
-                Label { text: "›"; color: root.mutedColor; font.pixelSize: 26 }
+                Label { text: "›"; color: root.mutedColor; font.pixelSize: 26 * appSettings.font_size / 12 }
             }
         }
     }

@@ -7,6 +7,16 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: window
+    LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
+    palette.window: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
+    palette.windowText: appSettings.high_contrast ? "#ffffff" : (appSettings.dark_mode ? "#ffffff" : "#202431")
+    palette.text: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
+    palette.base: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
+    palette.button: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#303030" : "#eeeeee")
+    palette.buttonText: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
+    palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
     font.pointSize: appSettings.font_size
     Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
     Material.accent: appSettings.accent_color
@@ -28,7 +38,7 @@ ApplicationWindow {
         parent: Overlay.overlay
         anchors.fill: parent
         z: 100
-        enabled: appSettings.activity_glow_enabled
+        enabled: appSettings.activity_glow_enabled && !appSettings.reduced_motion
         active: backend.activityActive
         accentColor: appSettings.accent_color || "#6366f1"
         animationAllowed: window.visibility !== Window.Minimized && window.visibility !== Window.Hidden
@@ -128,12 +138,12 @@ ApplicationWindow {
         contentItem: Label {
             id: licenseRejectedText
             wrapMode: Text.Wrap
-            color: "#f1f5f9"
+            color: (appSettings.high_contrast ? "#ffffff" : "#f1f5f9")
         }
         background: Rectangle {
             radius: 12
-            color: "#1e1e24"
-            border.color: "#ef4444"
+            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
+            border.color: (appSettings.high_contrast ? "#ffffff" : "#ef4444")
         }
     }
 
@@ -150,8 +160,8 @@ ApplicationWindow {
 
         background: Rectangle {
             radius: 12
-            color: "#1e1e24"
-            border.color: "#383b48"
+            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
+            border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
             border.width: 1
         }
 
@@ -161,8 +171,8 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Help improve Porn Fetch after errors?")
-                color: "#4da6ff"
-                font.pixelSize: 24
+                color: (appSettings.high_contrast ? "#ffffff" : "#4da6ff")
+                font.pixelSize: 24 * appSettings.font_size / 12
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -170,7 +180,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.")
-                color: "#f1f5f9"
+                color: (appSettings.high_contrast ? "#ffffff" : "#f1f5f9")
                 font.bold: true
                 wrapMode: Text.Wrap
             }
@@ -190,14 +200,14 @@ ApplicationWindow {
                     Label {
                         Layout.fillWidth: true
                         text: backend.errorReportDisclosure
-                        color: "#d7dce5"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#d7dce5")
                         wrapMode: Text.Wrap
                     }
 
                     Label {
                         Layout.fillWidth: true
                         text: qsTr("Synthetic example of a stored report:")
-                        color: "#5dade2"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
                         font.bold: true
                     }
 
@@ -205,8 +215,8 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         implicitHeight: exampleText.contentHeight + 24
                         radius: 6
-                        color: "#111318"
-                        border.color: "#383b48"
+                        color: (appSettings.high_contrast ? "#000000" : "#111318")
+                        border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
 
                         TextEdit {
                             id: exampleText
@@ -216,9 +226,9 @@ ApplicationWindow {
                             anchors.margins: 12
                             height: contentHeight
                             text: backend.errorReportExample
-                            color: "#d7dce5"
+                            color: (appSettings.high_contrast ? "#000000" : "#d7dce5")
                             font.family: "monospace"
-                            font.pixelSize: 12
+                            font.pixelSize: 12 * appSettings.font_size / 12
                             readOnly: true
                             selectByMouse: true
                             wrapMode: TextEdit.Wrap
@@ -288,8 +298,8 @@ ApplicationWindow {
 
         background: Rectangle {
             radius: 12
-            color: "#1e1e24"
-            border.color: "#383b48"
+            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
+            border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
             border.width: 1
         }
 
@@ -299,8 +309,8 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("🚀 New Update Available!")
-                color: "#4da6ff"
-                font.pixelSize: 26
+                color: (appSettings.high_contrast ? "#ffffff" : "#4da6ff")
+                font.pixelSize: 26 * appSettings.font_size / 12
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -309,7 +319,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 text: updateDialog.entitlementMessage
                 wrapMode: Text.WordWrap
-                color: "#EAEAEA"
+                color: (appSettings.high_contrast ? "#ffffff" : "#EAEAEA")
             }
             Button {
                 text: qsTr("Purchase / renew license")
@@ -332,14 +342,14 @@ ApplicationWindow {
 
                         Label {
                             text: qsTr("Version:")
-                            color: "#5dade2"
+                            color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
                             font.bold: true
                         }
 
                         Label {
                             Layout.fillWidth: true
                             text: updateDialog.version
-                            color: "#e0e0e0"
+                            color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
                         }
                     }
 
@@ -348,7 +358,7 @@ ApplicationWindow {
 
                         Label {
                             text: qsTr("Download:")
-                            color: "#5dade2"
+                            color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
                             font.bold: true
                         }
 
@@ -366,7 +376,7 @@ ApplicationWindow {
                     Label {
                         visible: updateDialog.importantInfo !== ""
                         text: qsTr("Important Info:")
-                        color: "#5dade2"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
                         font.bold: true
                     }
 
@@ -374,7 +384,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         visible: updateDialog.importantInfo !== ""
                         text: updateDialog.importantInfo
-                        color: "#e0e0e0"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
                         textFormat: Text.RichText
                         wrapMode: Text.Wrap
                         onLinkActivated: (link) => Qt.openUrlExternally(link)
@@ -382,7 +392,7 @@ ApplicationWindow {
 
                     Label {
                         text: qsTr("Changelog:")
-                        color: "#5dade2"
+                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
                         font.bold: true
                     }
 
@@ -390,8 +400,8 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         implicitHeight: changelogText.contentHeight + 20
                         radius: 6
-                        color: "#2a2a2a"
-                        border.color: "#444444"
+                        color: (appSettings.high_contrast ? "#000000" : "#2a2a2a")
+                        border.color: (appSettings.high_contrast ? "#ffffff" : "#444444")
                         border.width: 1
 
                         Text {
@@ -400,7 +410,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             anchors.margins: 10
                             text: updateDialog.changelog
-                            color: "#e0e0e0"
+                            color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
                             textFormat: updateDialog.changelogFormat === "markdown" ? Text.MarkdownText : Text.RichText
                             wrapMode: Text.Wrap
                             onLinkActivated: (link) => Qt.openUrlExternally(link)
@@ -431,7 +441,7 @@ ApplicationWindow {
                 visible: updateDialog.totalBytes > 0
                 text: updateDialog.formatBytes(updateDialog.downloadedBytes)
                       + " / " + updateDialog.formatBytes(updateDialog.totalBytes)
-                color: "#94a3b8"
+                color: (appSettings.high_contrast ? "#ffffff" : "#94a3b8")
                 horizontalAlignment: Text.AlignRight
             }
 

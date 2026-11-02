@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 Dialog {
     id: inputDialog
-    title: "User Input"
+    title: qsTr("User Input")
     modal: true
     anchors.centerIn: Overlay.overlay
     width: 320
@@ -19,13 +19,14 @@ Dialog {
         spacing: 10
 
         Label {
-            text: "App Name:"
+            text: qsTr("App Name:")
         }
 
         TextField {
             id: appNameInput
             Layout.fillWidth: true
-            placeholderText: "Leave empty for 'Porn Fetch'"
+            Accessible.name: placeholderText
+            placeholderText: qsTr("Leave empty for 'Porn Fetch'")
             focus: true
         }
     }

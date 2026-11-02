@@ -399,11 +399,11 @@ VENV_DIR="/tmp/porn_fetch_uv_venv_${USER:-user}_$$"
 info "Using temporary uv environment: ${VENV_DIR}"
 rm -rf "${VENV_DIR}" || true
 
-# Install Python 3.14
-run uv --color always python install 3.14
+# Install Python 3.15
+run uv --color always python install 3.15
 
-# Create the venv with Python 3.14
-run uv --color always venv "${VENV_DIR}" --python 3.14
+# Create the venv with Python 3.15
+run uv --color always venv "${VENV_DIR}" --python 3.15
 
 export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 

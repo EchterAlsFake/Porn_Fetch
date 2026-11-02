@@ -20,10 +20,10 @@ container as the working directory. The device finalizer enables Files sharing
 and opening documents in place. Original licensing and beta-consent behavior
 are retained.
 
-The normal desktop Python constraint stays `>=3.14,<3.15`. The lab uses an official
-embedded CPython **3.15.0rc2** framework and independently staged dependencies.
-The successful experiment does not establish full application compatibility with
-Python 3.15 or change the supported desktop environment.
+The repository now targets Python **3.15** (`>=3.15,<3.16`) on all platforms.
+The preserved lab uses an official embedded CPython **3.15.0rc2** framework and
+independently staged dependencies. Its archived runtime and matching native
+artifacts retain those versions; the Python migration does not rebuild them.
 
 ## Device and simulator kits
 
@@ -54,7 +54,9 @@ Without those GPU permissions, the early jailbreak-signed probes could not obtai
 Metal/GLES contexts and displayed black. The finalizer signs frameworks and the
 executable with Procursus `ldid`; the executable receives that entitlement.
 No JIT entitlement or system-wide sandbox change was required. This is distinct
-from normal Apple developer signing and has not established an App Store path.
+from normal Apple developer signing. The user subsequently confirmed the app
+working on a non-jailbroken iPhone 7; the original signing recipes and recorded
+GPU diagnostics describe the earlier jailbreak setup. No App Store path is established.
 
 ## Native Python dependencies
 
@@ -117,20 +119,30 @@ automated provider coverage. The full device file check retained one PyAV
 timescale warning with attached cover art; native playback and full decoding
 still passed.
 
+On 2026-10-30 the user confirmed a separate non-jailbroken iPhone 7 check:
+successful license activation, a video download, automatic FFmpeg remuxing,
+and playback on the phone with both audio and video. This is manual validation;
+the signing/install procedure and new machine-readable reports were not supplied.
+
 ## Remaining work
 
 - Background transfers, screen-lock transitions and memory-pressure behavior
   have not been validated.
-- Account/browser-session flows, license activation and the full GUI/provider
+- Account/browser-session flows and the full GUI/provider
   regression suite have not been repeated on iOS.
 - Desktop updater, Tor, installer and Android export/install paths have not been
   ported as validated iOS workflows.
 - OpenSSL logged a failure to load its legacy provider. Modern Ed25519/AES-GCM
   and certificate-verified HTTPS passed; legacy cipher features remain unverified.
-- Other iPhones/iPads, Apple Silicon simulator builds and ordinary Apple signing
-  remain unverified. There is no iOS release pipeline or public installable IPA.
-- The scripts still depend on preserved lab inputs and absolute macOS toolchain
-  paths. A clean bootstrap and portable build configuration remain future work.
+- Other iPhones/iPads and Apple Silicon simulator builds remain unverified.
+  Non-jailbroken operation and license activation are user-confirmed; repeatable
+  provisioned signing and public release automation are still pending. The manual
+  `build_ios.yml` workflow packages an IPA for re-signing on GitHub's ARM64
+  `macos-15` runner; device validation remains a separate step.
+- The local rebuild scripts retain historical macOS toolchain paths. The hosted
+  workflow uses portable staging and automatically restores the pinned device
+  dependency subset; rebuilding that entire native stack from source remains
+  separate work.
 
 Generated source duplicates, raw build logs, crash dumps, host-specific download
 checkers and superseded handoff notes were removed from the maintained tree.

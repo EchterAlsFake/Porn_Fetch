@@ -44,7 +44,7 @@ def prepare(project: Path, venv: Path, version: str) -> None:
         "version": version,
         "requirements": ",".join(
             item for item in app["requirements"].split(",")
-            if item.strip().lower() not in {"python3", "shiboken6", "pyside6"}
+            if item.strip().split("==", 1)[0].lower() not in {"python3", "hostpython3", "shiboken6", "pyside6"}
         ),
     })
     with (project / "pysidedeploy.spec").open("w", encoding="utf-8") as destination:

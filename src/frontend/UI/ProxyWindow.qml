@@ -220,7 +220,7 @@ Window {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Configure proxy")
-                font.pixelSize: 22
+                font.pixelSize: 22 * appSettings.font_size / 12
                 font.bold: true
             }
 

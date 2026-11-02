@@ -44,4 +44,4 @@ Let's be honest: 99% of people do not want a contribution to a project named *Po
 
 **To protect your privacy:**
 * **Before contributing:** I strongly recommend submitting PRs using a secondary GitHub account or using GitHub's [Keep my email addresses private](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address) setting.
-* **Requesting removal:** If you contribute and later want your PR deleted or your commit history anonymized, you can comment directly in the PR or email me at: `EchterAlsFakeBS@proton.me`.
+* **Requesting removal:** If you contribute and later want your PR deleted or your commit history anonymized, you can comment directly in the PR or email me at: `support@echteralsfake.me`.

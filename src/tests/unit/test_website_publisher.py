@@ -98,7 +98,9 @@ class WebsitePublisherTests(unittest.TestCase):
     def test_all_android_abis_are_published_with_matching_notices(self):
         for abi in ("arm64-v8a", "armeabi-v7a", "x86_64", "x86"):
             name = f"PornFetch_android_GUI_{abi}"
-            self.artifact(name, {name + ".apk": b"apk", name + "_LEGAL.zip": b"notices"})
+            self.artifact(name + ".apk", {name + ".apk": b"apk"})
+            self.artifact(name + ".apk.sha256", {name + ".apk.sha256": b"checksum"})
+            self.artifact(name + "_LEGAL.zip", {name + "_LEGAL.zip": b"notices"})
         manifest = self.publisher.prepare(self.artifacts, self.output, "3.9.66", "beta", 1792833600, "a" * 40, "notes")
         for kind in ("apk", "notices"):
             self.assertEqual({a["arch"] for a in manifest["artifacts"] if a["kind"] == kind},

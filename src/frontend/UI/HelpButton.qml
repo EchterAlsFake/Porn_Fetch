@@ -9,6 +9,8 @@ Button {
     Accessible.name: qsTr("Help")
     Accessible.description: helpText
 
+    implicitWidth: Math.max(48, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
     clip: true
     icon.source: "qrc:/images/graphics/information.svg"
     palette.buttonText: "white"
@@ -29,6 +31,7 @@ Button {
 
     ScrollableMessageDialog {
         id: helpDialog
+        objectName: "helpDialog"
 
         // Keep the settings page interactive so an open help message reflects
         // font changes immediately.

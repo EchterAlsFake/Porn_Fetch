@@ -13,7 +13,7 @@ STATIC_CHANGELOG_NAME = "CHANGELOG_STATIC.md"
 def validate_ifw_packages(xml, version, release_timestamp):
     """Bind every supported IFW component to the same authenticated release."""
     core = "to.pornfetch.echteralsfake"
-    allowed = {core, f"{core}.ffmpeg", f"{core}.pocketbase"}
+    allowed = {core, f"{core}.ffmpeg", f"{core}.pocketbase", f"{core}.maintenance"}
     packages = xml.findall("PackageUpdate")
     names = [package.findtext("Name") for package in packages]
     date = datetime.fromtimestamp(release_timestamp, timezone.utc).strftime("%Y-%m-%d")

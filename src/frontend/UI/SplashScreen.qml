@@ -5,7 +5,7 @@ Window {
     id: splashWindow
     width: 600
     height: 400
-    title: "PornFetch-Splash"
+    title: qsTr("PornFetch-Splash")
     visible: true
     // 1. Window Flags
     flags: Qt.SplashScreen | Qt.FramelessWindowHint
@@ -37,7 +37,7 @@ Window {
         // 5. Text Widget (Status)
         Text {
             id: statusText
-            text: "Initializing..."
+            text: qsTr("Initializing...")
             color: "#ffffff"
             font.pointSize: 10
             anchors.horizontalCenter: parent.horizontalCenter

@@ -2,6 +2,7 @@
 import os
 import json
 import runpy
+import sys
 from pathlib import Path
 from PyInstaller.config import CONF
 from PyInstaller.utils.hooks import collect_data_files
@@ -35,6 +36,15 @@ analysis = Analysis(
     excludes=["PySide6", "pydivert", "src.database.bridge", "src.backend", "src.frontend"],
     noarchive=False,
 )
+# Copy and sign every native dependency (including Tor) before onefile packing.
+# Never modify installed wheels or the PyInstaller cache in place.
+if sys.platform == "win32" and os.environ.get("PORN_FETCH_WINDOWS_SIGNING") == "1":
+    sign_payload = runpy.run_path(str(Path(project_root) / "packaging/sign_pyinstaller_payload.py"))["sign_payload"]
+    binary_count = len(analysis.binaries)
+    signed_payload = sign_payload([*analysis.binaries, *analysis.datas], CONF["workpath"])
+    analysis.binaries = signed_payload[:binary_count]
+    analysis.datas = signed_payload[binary_count:]
+
 # Preserve an inventory outside the release payload to explain onefile size.
 Path(CONF["workpath"], "payload-inventory.json").write_text(json.dumps({
     kind: [{"name": name, "bytes": Path(source).stat().st_size if Path(source).is_file() else 0}
@@ -52,6 +62,7 @@ executable = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    # UPX rewrites PE files and would invalidate embedded Authenticode signatures.
+    upx=sys.platform != "win32",
     console=True,
 )

@@ -11,14 +11,16 @@ Window {
     minimumWidth: 320
     minimumHeight: 160
     flags: Qt.Dialog | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    color: "#1e1e24"
+    color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
     visible: true
     visibility: Window.Windowed
+
+    Shortcut { sequence: "Escape"; onActivated: closeDialog() }
 
     signal closed()
     signal accepted()
 
-    property string dialogTitle: "Notice"
+    property string dialogTitle: qsTr("Notice")
     property string messageText: ""
     property string customIcon: "" // optional override
 
@@ -36,12 +38,12 @@ Window {
     }
 
     // Color tokens matching Porn Fetch dark theme palette
-    readonly property color bgCard:      "#1e1e24"
-    readonly property color borderColor: "#383b48"
-    readonly property color textPrimary: "#f1f5f9"
-    readonly property color textSubtle:  "#94a3b8"
+    readonly property color bgCard:      appSettings.high_contrast ? "#000000" : "#1e1e24"
+    readonly property color borderColor: appSettings.high_contrast ? "#ffffff" : "#383b48"
+    readonly property color textPrimary: appSettings.high_contrast ? "#ffffff" : "#f1f5f9"
+    readonly property color textSubtle:  appSettings.high_contrast ? "#ffffff" : "#94a3b8"
     
-    readonly property color accentColor:  effectiveType === "error"   ? "#ef4444" :
+    readonly property color accentColor:  appSettings.high_contrast ? "#ffff00" : effectiveType === "error"   ? "#ef4444" :
                                           effectiveType === "warning" ? "#f59e0b" :
                                           effectiveType === "success" ? "#10b981" : "#3b82f6"
 
@@ -67,15 +69,15 @@ Window {
     ParallelAnimation {
         id: enterAnim
         running: true
-        NumberAnimation { target: mainCard; property: "scale"; from: 0.96; to: 1.0; duration: 160; easing.type: Easing.OutCubic }
-        NumberAnimation { target: mainCard; property: "opacity"; from: 0.0; to: 1.0; duration: 160; easing.type: Easing.OutCubic }
+        NumberAnimation { target: mainCard; property: "scale"; from: 0.96; to: 1.0; duration: appSettings.reduced_motion ? 0 : 160; easing.type: Easing.OutCubic }
+        NumberAnimation { target: mainCard; property: "opacity"; from: 0.0; to: 1.0; duration: appSettings.reduced_motion ? 0 : 160; easing.type: Easing.OutCubic }
     }
 
     ParallelAnimation {
         id: exitAnim
         running: false
-        NumberAnimation { target: mainCard; property: "scale"; from: 1.0; to: 0.96; duration: 120; easing.type: Easing.InCubic }
-        NumberAnimation { target: mainCard; property: "opacity"; from: 1.0; to: 0.0; duration: 120; easing.type: Easing.InCubic }
+        NumberAnimation { target: mainCard; property: "scale"; from: 1.0; to: 0.96; duration: appSettings.reduced_motion ? 0 : 120; easing.type: Easing.InCubic }
+        NumberAnimation { target: mainCard; property: "opacity"; from: 1.0; to: 0.0; duration: appSettings.reduced_motion ? 0 : 120; easing.type: Easing.InCubic }
         onFinished: finalizeClose()
     }
 
@@ -104,23 +106,23 @@ Window {
             visible: opacity > 0
             height: 24
             radius: 12
-            color: "#10b981"
+            color: (appSettings.high_contrast ? "#000000" : "#10b981")
             implicitWidth: toastText.implicitWidth + 22
 
             Text {
                 id: toastText
                 anchors.centerIn: parent
-                text: "Copied to Clipboard!"
-                color: "#ffffff"
-                font.pixelSize: 11
+                text: qsTr("Copied to Clipboard!")
+                color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
+                font.pixelSize: 11 * appSettings.font_size / 12
                 font.bold: true
             }
 
             SequentialAnimation {
                 id: toastAnim
-                NumberAnimation { target: copyToast; property: "opacity"; from: 0.0; to: 1.0; duration: 140; easing.type: Easing.OutCubic }
+                NumberAnimation { target: copyToast; property: "opacity"; from: 0.0; to: 1.0; duration: appSettings.reduced_motion ? 0 : 140; easing.type: Easing.OutCubic }
                 PauseAnimation { duration: 1200 }
-                NumberAnimation { target: copyToast; property: "opacity"; from: 1.0; to: 0.0; duration: 180; easing.type: Easing.InCubic }
+                NumberAnimation { target: copyToast; property: "opacity"; from: 1.0; to: 0.0; duration: appSettings.reduced_motion ? 0 : 180; easing.type: Easing.InCubic }
             }
         }
 
@@ -149,7 +151,7 @@ Window {
                         anchors.centerIn: parent
                         text: iconSymbol
                         color: accentColor
-                        font.pixelSize: 16
+                        font.pixelSize: 16 * appSettings.font_size / 12
                         font.bold: true
                     }
 
@@ -174,7 +176,7 @@ Window {
                         anchors.fill: parent
                         text: dialogTitle
                         color: textPrimary
-                        font.pixelSize: 15
+                        font.pixelSize: 15 * appSettings.font_size / 12
                         font.weight: Font.DemiBold
                         elide: Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
@@ -194,8 +196,16 @@ Window {
 
                 // Close (X) Button
                 Rectangle {
-                    width: 26
-                    height: 26
+                    activeFocusOnTab: true
+                    Accessible.role: Accessible.Button
+                    Accessible.name: qsTr("Close dialog")
+                    Accessible.onPressAction: closeDialog()
+                    Keys.onSpacePressed: closeDialog()
+                    Keys.onReturnPressed: closeDialog()
+                    border.width: activeFocus ? 2 : 0
+                    border.color: "white"
+                    width: 48
+                    height: 48
                     radius: 13
                     color: closeBtnArea.containsMouse ? "#333b4d" : "transparent"
 
@@ -203,7 +213,7 @@ Window {
                         anchors.centerIn: parent
                         text: "✕"
                         color: closeBtnArea.containsMouse ? "#ffffff" : textSubtle
-                        font.pixelSize: 12
+                        font.pixelSize: 12 * appSettings.font_size / 12
                     }
 
                     MouseArea {
@@ -220,7 +230,7 @@ Window {
             Rectangle {
                 Layout.fillWidth: true
                 height: 1
-                color: "#2a2d3a"
+                color: (appSettings.high_contrast ? "#000000" : "#2a2d3a")
             }
 
             // Body Message Container (Freely scalable)
@@ -235,7 +245,7 @@ Window {
                     width: bodyScrollView.width - 12
                     text: messageText
                     color: textPrimary
-                    font.pixelSize: 13
+                    font.pixelSize: 13 * appSettings.font_size / 12
                     font.family: "Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, sans-serif"
                     wrapMode: Text.Wrap
                     readOnly: true
@@ -253,7 +263,7 @@ Window {
                 // Copy Button (Secondary)
                 Button {
                     id: copyBtn
-                    text: "Copy Text"
+                    text: qsTr("Copy Text")
                     flat: true
                     onClicked: {
                         bodyTextEdit.selectAll()
@@ -265,7 +275,7 @@ Window {
                     contentItem: Text {
                         text: copyBtn.text
                         color: copyBtn.hovered ? textPrimary : textSubtle
-                        font.pixelSize: 12
+                        font.pixelSize: 12 * appSettings.font_size / 12
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -285,13 +295,13 @@ Window {
                 // OK Button (Primary)
                 Button {
                     id: okBtn
-                    text: "OK"
+                    text: qsTr("OK")
                     onClicked: acceptDialog()
 
                     contentItem: Text {
                         text: okBtn.text
-                        color: "#ffffff"
-                        font.pixelSize: 12
+                        color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
+                        font.pixelSize: 12 * appSettings.font_size / 12
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter

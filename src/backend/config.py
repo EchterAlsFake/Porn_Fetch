@@ -37,6 +37,7 @@ class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
     languageChanged = Signal(int)
+    accessibilityChanged = Signal()
     sniProxyChanged = Signal(str)
     fontSizeChanged = Signal(int)
     themeChanged = Signal(int)
@@ -134,13 +135,8 @@ class SettingsManager(QObject):
             11: 240,
             12: 144
         }
-        self.mappings_ui_language = {
-            0: "system",
-            1: "english",
-            2: "german",
-            3: "chinese",
-            4: "french"
-        }
+        from src.backend.ui_languages import LANGUAGES
+        self.mappings_ui_language = {index: code for index, (code, _, _) in enumerate(LANGUAGES)}
 
     def set_settings_storage(self, settings: QSettings) -> None:
         self._custom_settings = settings
@@ -918,15 +914,54 @@ class SettingsManager(QObject):
 
     # UI Settings
 
+    @Property("QVariantList", constant=True)
+    def ui_languages(self):
+        from src.backend.ui_languages import LANGUAGES
+        return [label for _, label, _ in LANGUAGES]
+
+    @Property(str, constant=True)
+    def translation_help_url(self):
+        from src.backend.ui_languages import TRANSLATION_HELP_URL
+        return TRANSLATION_HELP_URL
+
     @Property(int, notify=languageChanged)
     def language(self) -> int:
-        return self.get_int("UI/language", 0)
+        from src.backend.ui_languages import LANGUAGES
+        code = self._settings.value("UI/language_locale", None)
+        if code is not None:
+            return next((i for i, item in enumerate(LANGUAGES) if item[0] == code), 0)
+        index = self.get_int("UI/language", 0)
+        index = index if 0 <= index < len(LANGUAGES) else 0
+        self._settings.setValue("UI/language_locale", LANGUAGES[index][0])
+        return index
 
     @language.setter
     def language(self, val):
+        from src.backend.ui_languages import LANGUAGES
+        if not 0 <= val < len(LANGUAGES):
+            return
         if val != self.language:
+            self._settings.setValue("UI/language_locale", LANGUAGES[val][0])
             self._settings.setValue("UI/language", val)
             self.languageChanged.emit(val)
+
+    @Property(bool, notify=accessibilityChanged)
+    def reduced_motion(self):
+        return self._settings.value("UI/reduced_motion", False, type=bool)
+
+    @reduced_motion.setter
+    def reduced_motion(self, value):
+        self._settings.setValue("UI/reduced_motion", bool(value))
+        self.accessibilityChanged.emit()
+
+    @Property(bool, notify=accessibilityChanged)
+    def high_contrast(self):
+        return self._settings.value("UI/high_contrast", False, type=bool)
+
+    @high_contrast.setter
+    def high_contrast(self, value):
+        self._settings.setValue("UI/high_contrast", bool(value))
+        self.accessibilityChanged.emit()
 
     @Property(int, notify=fontSizeChanged)
     def font_size(self) -> int:

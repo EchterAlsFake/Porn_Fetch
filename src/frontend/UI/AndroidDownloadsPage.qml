@@ -10,10 +10,10 @@ Pane {
     property bool showFilters: false
     property bool selectionMode: false
     property string expandedJob: ""
-    readonly property color pageColor: appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle {
         color: root.pageColor
     }
@@ -95,7 +95,7 @@ Pane {
                     Layout.fillWidth: true
                     text: qsTr("Add videos")
                     font.bold: true
-                    font.pixelSize: 22
+                    font.pixelSize: 22 * appSettings.font_size / 12
                 }
                 ToolButton {
                     text: qsTr("Close")
@@ -122,6 +122,7 @@ Pane {
                         id: urlField
                         implicitHeight: 56
                         Layout.fillWidth: true
+                        Accessible.name: placeholderText
                         placeholderText: qsTr("Paste a video, model or playlist URL")
                         inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                         onAccepted: fetchButton.clicked()
@@ -214,6 +215,7 @@ Pane {
                         TextField {
                             id: titleRegex
                             Layout.fillWidth: true
+                            Accessible.name: placeholderText
                             placeholderText: qsTr("Title regex")
                         }
                         TextField {
@@ -245,6 +247,7 @@ Pane {
                         TextField {
                             id: afterDate
                             Layout.fillWidth: true
+                            Accessible.name: placeholderText
                             placeholderText: qsTr("Published after (YYYY-MM-DD)")
                         }
                         TextField {
@@ -278,7 +281,7 @@ Pane {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Downloads")
-                font.pixelSize: 24
+                font.pixelSize: 24 * appSettings.font_size / 12
                 font.bold: true
                 elide: Text.ElideRight
             }
@@ -367,7 +370,10 @@ Pane {
                             icon.source: "qrc:/images/graphics/settings/trash.svg"
                             display: AbstractButton.IconOnly
                             Accessible.name: qsTr("Remove video from list")
-                            onClicked: backend.remove_video(card.jobId)
+                            onClicked: {
+                                downloadList.forceActiveFocus()
+                                backend.remove_video(card.jobId)
+                            }
                         }
                         Layout.fillWidth: true
                         spacing: 4

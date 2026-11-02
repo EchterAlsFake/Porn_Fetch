@@ -195,7 +195,7 @@ Pane {
                     delegate: ItemDelegate {
                         Accessible.role: Accessible.ListItem
                         Accessible.name: qsTr(modelData + " settings")
-                        font.pixelSize: 15
+                        font.pixelSize: 15 * appSettings.font_size / 12
                         // Make font bold if this item is currently selected
                         font.weight: ListView.isCurrentItem ? Font.Bold : Font.Normal
                         height: 50
@@ -264,7 +264,7 @@ Pane {
                                 }
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "Quality"
+                                    text: qsTr("Quality")
                                 }
                                 ComboBox {
                                     id: defaultQualityCombo
@@ -333,7 +333,7 @@ Pane {
                                 }
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "Model Videos"
+                                    text: qsTr("Model Videos")
                                 }
                                 ComboBox {
                                     objectName: "modelVideosCombo"
@@ -352,7 +352,7 @@ Pane {
                                 }
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "Content Language"
+                                    text: qsTr("Content Language")
                                 }
                                 ComboBox {
                                     id: contentLanguageComboBox
@@ -363,17 +363,17 @@ Pane {
                                     textRole: "label"
                                     valueRole: "locale"
                                     model: ListModel {
-                                        ListElement { label: "🇨🇿 Čeština"; locale: "cs-CZ" }
-                                        ListElement { label: "🇩🇪 Deutsch"; locale: "de-DE" }
-                                        ListElement { label: "🇺🇸 English"; locale: "en-US" }
-                                        ListElement { label: "🇪🇸 Español"; locale: "es-ES" }
-                                        ListElement { label: "🇵🇭 Filipino"; locale: "fil-PH" }
-                                        ListElement { label: "🇫🇷 Français"; locale: "fr-FR" }
-                                        ListElement { label: "🇮🇹 Italiano"; locale: "it-IT" }
-                                        ListElement { label: "🇳🇱 Nederlands"; locale: "nl-NL" }
+                                        ListElement { label: qsTr("🇨🇿 Čeština"); locale: "cs-CZ" }
+                                        ListElement { label: qsTr("🇩🇪 Deutsch"); locale: "de-DE" }
+                                        ListElement { label: qsTr("🇺🇸 English"); locale: "en-US" }
+                                        ListElement { label: qsTr("🇪🇸 Español"); locale: "es-ES" }
+                                        ListElement { label: qsTr("🇵🇭 Filipino"); locale: "fil-PH" }
+                                        ListElement { label: qsTr("🇫🇷 Français"); locale: "fr-FR" }
+                                        ListElement { label: qsTr("🇮🇹 Italiano"); locale: "it-IT" }
+                                        ListElement { label: qsTr("🇳🇱 Nederlands"); locale: "nl-NL" }
                                         ListElement { label: "🇯🇵 日本語"; locale: "ja-JP" }
-                                        ListElement { label: "🇵🇱 Polski"; locale: "pl-PL" }
-                                        ListElement { label: "🇵🇹 Português"; locale: "pt-PT" }
+                                        ListElement { label: qsTr("🇵🇱 Polski"); locale: "pl-PL" }
+                                        ListElement { label: qsTr("🇵🇹 Português"); locale: "pt-PT" }
                                         ListElement { label: "🇷🇺 Русский"; locale: "ru-RU" }
                                         ListElement { label: "🇺🇦 Українська"; locale: "uk-UA" }
                                         ListElement { label: "🇨🇳 中文"; locale: "zh-CN" }
@@ -400,7 +400,7 @@ Pane {
                                     Accessible.description: AppStrings.strictEnforcementHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: "Strict Enforcement for content language"
+                                    text: qsTr("Strict Enforcement for content language")
                                     checked: appSettings.strict_enforcement
                                     onToggled: appSettings.strict_enforcement = checked
                                 }
@@ -412,7 +412,7 @@ Pane {
                                 }
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "Max Result Limit"
+                                    text: qsTr("Max Result Limit")
                                 }
                                 SpinBox {
                                     objectName: "resultLimitSpinBox"
@@ -429,7 +429,7 @@ Pane {
                                 Item { Layout.fillWidth: false } // Empty spacer for 1st column alignment
                                 Label {
                                     Layout.fillWidth: false
-                                    text: "Output Path"
+                                    text: qsTr("Output Path")
                                 }
                                 RowLayout {
                                     Layout.fillWidth: true
@@ -440,7 +440,7 @@ Pane {
                                         objectName: "outputPathInput"
                                         Accessible.name: qsTr("Output Path")
                                         Accessible.description: qsTr("Directory where downloaded videos are saved")
-                                        placeholderText: "Enter the output path for the videos..."
+                                        placeholderText: qsTr("Enter the output path for the videos...")
                                         Layout.fillWidth: true
                                         readOnly: window.androidLayoutMode
                                         text: appSettings.output_path
@@ -472,7 +472,7 @@ Pane {
                                     Accessible.description: AppStrings.writeMetadataHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: "Write metadata"
+                                    text: qsTr("Write metadata")
                                     checked: appSettings.write_metadata
                                     onToggled: appSettings.write_metadata = checked
                                 }
@@ -488,7 +488,7 @@ Pane {
                                     Accessible.description: AppStrings.skipExistingFilesHelp
                                     Layout.columnSpan: 2
                                     Layout.fillWidth: true
-                                    text: "Skip existing files"
+                                    text: qsTr("Skip existing files")
                                     checked: appSettings.skip_existing_files
                                     onToggled: appSettings.skip_existing_files = checked
                                 }
@@ -522,7 +522,7 @@ Pane {
                                         objectName: "databasePathInput"
                                         Accessible.name: qsTr("PocketBase Data Folder")
                                         Accessible.description: qsTr("Directory where PocketBase data files are stored")
-                                        placeholderText: "Enter the PocketBase data directory"
+                                        placeholderText: qsTr("Enter the PocketBase data directory")
                                         Layout.fillWidth: true
                                         readOnly: window.androidLayoutMode
                                         text: appSettings.pocketbase_data_path
@@ -564,7 +564,7 @@ Pane {
                             HelpButton {Layout.fillWidth: false; helpText: AppStrings.downloadWorkersHelp}
                             Label {
                                 Layout.fillWidth: false
-                                text: "Download workers:"
+                                text: qsTr("Download workers:")
                             }
                             SpinBox {
                                 objectName: "downloadWorkersSpinBox"
@@ -578,7 +578,7 @@ Pane {
                             }
                             HelpButton {Layout.fillWidth: false; helpText: AppStrings.networkDelayHelp}
                             Label {
-                                text: "Network delay (requests/sec):"
+                                text: qsTr("Network delay (requests/sec):")
                             }
                             SpinBox {
                                 objectName: "networkDelaySpinBox"
@@ -595,7 +595,7 @@ Pane {
                                 helpText: AppStrings.parallelDownloadsHelp
                             }
                             Label {
-                                text: "Parallel Downloads:"
+                                text: qsTr("Parallel Downloads:")
                             }
                             SpinBox {
                                 objectName: "parallelDownloadsSpinBox"
@@ -612,7 +612,7 @@ Pane {
                                 helpText: AppStrings.retriesHelp
                             }
                             Label {
-                                text: "Maximum retries:"
+                                text: qsTr("Maximum retries:")
                             }
                             SpinBox {
                                 objectName: "retriesSpinBox"
@@ -629,7 +629,7 @@ Pane {
                                 helpText: AppStrings.timeoutHelp
                             }
                             Label {
-                                text: "Maximum timeout:"
+                                text: qsTr("Maximum timeout:")
                             }
                             SpinBox {
                                 objectName: "timeoutSpinBox"
@@ -646,7 +646,7 @@ Pane {
                                 helpText: AppStrings.processingDelay
                             }
                             Label {
-                                text: "Processing Delay (videos/sec):"
+                                text: qsTr("Processing Delay (videos/sec):")
                             }
                             SpinBox {
                                 objectName: "processingDelaySpinBox"
@@ -663,7 +663,7 @@ Pane {
                                 helpText: AppStrings.speedLimitHelp
                             }
                             Label {
-                                text: "Speed Limit (MB/s):"
+                                text: qsTr("Speed Limit (MB/s):")
                             }
                             DecimalSpinBox {
                                 objectName: "speedLimitSpinBox"
@@ -680,7 +680,7 @@ Pane {
                                 helpText: AppStrings.videosConcurrencyHelp
                             }
                             Label {
-                                text: "Videos Concurrency:"
+                                text: qsTr("Videos Concurrency:")
                             }
                             SpinBox {
                                 objectName: "videosConcurrencySpinBox"
@@ -697,7 +697,7 @@ Pane {
                                 helpText: AppStrings.pagesConcurrencyHelp
                             }
                             Label {
-                                text: "Pages concurrency:"
+                                text: qsTr("Pages concurrency:")
                             }
                             SpinBox {
                                 objectName: "pagesConcurrencySpinBox"
@@ -719,7 +719,7 @@ Pane {
                                 rowSpacing: 15
 
                                 Label {
-                                    text: "Response Cache Size (MB/s)"
+                                    text: qsTr("Response Cache Size (MB/s)")
                                 }
                                 SpinBox {
                                     objectName: "responseCacheSizeSpinBox"
@@ -732,7 +732,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Response Cache TTL (Seconds)"
+                                    text: qsTr("Response Cache TTL (Seconds)")
                                 }
                                 SpinBox {
                                     objectName: "responseCacheTTLSpinBox"
@@ -745,7 +745,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Segment Cache Size (MB/s)"
+                                    text: qsTr("Segment Cache Size (MB/s)")
                                 }
                                 SpinBox {
                                     objectName: "segmentCacheSizeSpinBox"
@@ -758,7 +758,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Segment Cache TTL (Seconds)"
+                                    text: qsTr("Segment Cache TTL (Seconds)")
                                 }
                                 SpinBox {
                                     objectName: "segmentCacheTTLSpinBox"
@@ -771,7 +771,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Request Initial Retry Delay"
+                                    text: qsTr("Request Initial Retry Delay")
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestInitialRetryDelaySpinBox"
@@ -783,7 +783,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Request Retry Max Delay"
+                                    text: qsTr("Request Retry Max Delay")
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryMaxDelaySpinBox"
@@ -795,7 +795,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Request Retry Multiplier"
+                                    text: qsTr("Request Retry Multiplier")
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryMultiplierSpinBox"
@@ -807,7 +807,7 @@ Pane {
                                 }
 
                                 Label {
-                                    text: "Request Retry Jitter"
+                                    text: qsTr("Request Retry Jitter")
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryJitterSpinBox"
@@ -851,7 +851,7 @@ Pane {
                                 objectName: "updateChecksCheckBox"
                                 Accessible.name: qsTr("Search for Updates")
                                 Accessible.description: AppStrings.updateChecks
-                                text: "Search for Updates"
+                                text: qsTr("Search for Updates")
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
                                 onToggled: appSettings.update_checks = checked
@@ -864,7 +864,7 @@ Pane {
                                 objectName: "supressErrorsCheckBox"
                                 Accessible.name: qsTr("Ignore Errors")
                                 Accessible.description: AppStrings.supressErrors
-                                text: "Ignore Errors"
+                                text: qsTr("Ignore Errors")
                                 Layout.fillWidth: true
                                 checked: appSettings.supress_errors
                                 onToggled: appSettings.supress_errors = checked
@@ -878,7 +878,7 @@ Pane {
                                 Accessible.name: qsTr("Allow redacted error reports")
                                 Accessible.description: backend.errorReportDisclosure
                                 // Use \n for multi-line text
-                                text: "Allow redacted error reports"
+                                text: qsTr("Allow redacted error reports")
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_logging
                                 onToggled: appSettings.enable_logging  = checked
@@ -892,7 +892,7 @@ Pane {
                                 Accessible.name: qsTr("Trust Environment")
                                 Accessible.description: AppStrings.trustEnvironmentHelp
                                 // Use \n for multi-line text
-                                text: "Trust Environment (Advanced)"
+                                text: qsTr("Trust Environment (Advanced)")
                                 Layout.fillWidth: true
                                 checked: appSettings.trust_environment
                                 onToggled: appSettings.trust_environment  = checked
@@ -905,7 +905,7 @@ Pane {
                                 objectName: "debugModeCheckBox"
                                 Accessible.name: qsTr("Enable Debug Mode")
                                 Accessible.description: AppStrings.debugModeHelp
-                                text: "Enable Debug Mode (Not recommended)"
+                                text: qsTr("Enable Debug Mode (Not recommended)")
                                 Layout.fillWidth: true
                                 checked: appSettings.debug_mode
                                 onToggled: appSettings.debug_mode = checked
@@ -934,7 +934,7 @@ Pane {
                                 objectName: "httpVersionInput"
                                 Accessible.name: qsTr("HTTP Version")
                                 Accessible.description: AppStrings.httpVersionHelp
-                                placeholderText: "HTTP Version may be: v1; v2; v3"
+                                placeholderText: qsTr("HTTP Version may be: v1; v2; v3")
                                 Layout.fillWidth: true
                                 text: appSettings.http_version
                                 validator: RegularExpressionValidator {
@@ -957,7 +957,7 @@ Pane {
                                 objectName: "impersonationInput"
                                 Accessible.name: qsTr("Browser Impersonation Target")
                                 Accessible.description: AppStrings.impersonationHelp
-                                placeholderText: "e.g., 'chrome', 'safari', 'edge'"
+                                placeholderText: qsTr("e.g., 'chrome', 'safari', 'edge'")
                                 Layout.fillWidth: true
                                 text: appSettings.impersonation
                                 validator: RegularExpressionValidator {
@@ -980,7 +980,7 @@ Pane {
                                 objectName: "customJA3Input"
                                 Accessible.name: qsTr("Custom JA3 String")
                                 Accessible.description: AppStrings.customJA3Help
-                                placeholderText: "Custom JA3 String"
+                                placeholderText: qsTr("Custom JA3 String")
                                 Layout.fillWidth: true
                                 text: appSettings.custom_ja3
                                 validator: RegularExpressionValidator {
@@ -1003,7 +1003,7 @@ Pane {
                                 objectName: "interfaceInput"
                                 Accessible.name: qsTr("Network Interface or IP")
                                 Accessible.description: AppStrings.interfaceHelp
-                                placeholderText: "e.g., eth0, wlan0, tun0, 10.6.3.20"
+                                placeholderText: qsTr("e.g., eth0, wlan0, tun0, 10.6.3.20")
                                 Layout.fillWidth: true
                                 text: appSettings.interface
                                 validator: RegularExpressionValidator {
@@ -1044,7 +1044,7 @@ Pane {
                                 objectName: "anonymousModeCheckBox"
                                 Accessible.name: qsTr("Anonymous Mode")
                                 Accessible.description: AppStrings.anonymousModeHelp
-                                text: "Anonymous Mode"
+                                text: qsTr("Anonymous Mode")
                                 Layout.fillWidth: true
                                 checked: appSettings.anonymous_mode
                                 onToggled: appSettings.anonymous_mode = checked
@@ -1058,7 +1058,7 @@ Pane {
                                 objectName: "encryptedCHCheckBox"
                                 Accessible.name: qsTr("Encrypted Client Hello")
                                 Accessible.description: AppStrings.encryptedCHHelp
-                                text: "Encrypted Client Hello"
+                                text: qsTr("Encrypted Client Hello")
                                 Layout.fillWidth: true
                                 checked: appSettings.encrypted_ch
                                 onToggled: appSettings.encrypted_ch = checked
@@ -1072,7 +1072,7 @@ Pane {
                                 objectName: "dnsOverHTTPSCheckBox"
                                 Accessible.name: qsTr("DNS over HTTPS")
                                 Accessible.description: AppStrings.dnsOverHTTPSHelp
-                                text: "DNS over HTTPS"
+                                text: qsTr("DNS over HTTPS")
                                 Layout.fillWidth: true
                                 checked: appSettings.dns_over_https
                                 onToggled: appSettings.dns_over_https = checked
@@ -1093,7 +1093,7 @@ Pane {
                                 objectName: "dnsPrimaryInput"
                                 Accessible.name: qsTr("Primary DNS over HTTPS Server")
                                 Accessible.description: AppStrings.dnsPrimaryHelp
-                                placeholderText: "Enter Primary DNS (Must support DNS over HTTPS)"
+                                placeholderText: qsTr("Enter Primary DNS (Must support DNS over HTTPS)")
                                 Layout.fillWidth: true
                                 text: appSettings.dns_server
                                 validator: RegularExpressionValidator {
@@ -1117,7 +1117,7 @@ Pane {
                                 objectName: "dnsFallbackInput"
                                 Accessible.name: qsTr("Fallback DNS over HTTPS Server")
                                 Accessible.description: AppStrings.fallbackDNSHelp
-                                placeholderText: "Enter Fallback DNS (Must support DNS over HTTPS)"
+                                placeholderText: qsTr("Enter Fallback DNS (Must support DNS over HTTPS)")
                                 Layout.fillWidth: true
                                 text: appSettings.fallback_dns
                                 validator: RegularExpressionValidator {
@@ -1140,7 +1140,7 @@ Pane {
                                     objectName: "sniObfuscationCheckBox"
                                     Accessible.name: qsTr("SNI Obfuscation")
                                     Accessible.description: AppStrings.sniObfuscationHelp
-                                    text: "SNI Obfuscation"
+                                    text: qsTr("SNI Obfuscation")
                                     Layout.fillWidth: true
                                     checked: appSettings.sni_obfuscation
                                     onToggled: appSettings.sni_obfuscation = checked
@@ -1160,7 +1160,7 @@ Pane {
                                 RadioButton {
                                     objectName: "sniLiteRadio"
                                     Accessible.name: qsTr("Lite SNI Obfuscation")
-                                    text: "Lite SNI Obfuscation"
+                                    text: qsTr("Lite SNI Obfuscation")
                                     Layout.fillWidth: false
                                     enabled: appSettings.sni_obfuscation
                                     ButtonGroup.group: sniModeGroup
@@ -1170,7 +1170,7 @@ Pane {
                                 RadioButton {
                                     objectName: "sniStrictRadio"
                                     Accessible.name: qsTr("Strict SNI Obfuscation")
-                                    text: "Strict SNI Obfuscation (Requires Admin / root rights)"
+                                    text: qsTr("Strict SNI Obfuscation (Requires Admin / root rights)")
                                     Layout.fillWidth: false
                                     visible: !window.androidLayoutMode
                                     enabled: appSettings.sni_obfuscation
@@ -1229,23 +1229,34 @@ Pane {
                                 helpText: AppStrings.guiLanguageHelp
                             }
                             Label {
-                                text: "Graphical User Interface language:"
+                                text: qsTr("Graphical User Interface language:")
                             }
                             ComboBox {
                                 objectName: "guiLanguageComboBox"
                                 Accessible.name: qsTr("Graphical User Interface Language")
                                 Accessible.description: AppStrings.guiLanguageHelp
                                 Layout.fillWidth: true
-                                model: ["System", "English", "German", "Chinese", "French"]
+                                model: appSettings.ui_languages
                                 currentIndex: appSettings.language
                                 onActivated: appSettings.language = currentIndex
+                            }
+                            Label { text: qsTr("Accessibility") }
+                            CheckBox {
+                                text: qsTr("Reduce motion")
+                                checked: appSettings.reduced_motion
+                                onToggled: appSettings.reduced_motion = checked
+                            }
+                            CheckBox {
+                                text: qsTr("High contrast")
+                                checked: appSettings.high_contrast
+                                onToggled: appSettings.high_contrast = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.fontSizeHelp
                             }
                             Label {
-                                text: "Font Size:"
+                                text: qsTr("Font Size:")
                             }
                             SpinBox {
                                 objectName: "fontSizeSpinBox"
@@ -1258,7 +1269,7 @@ Pane {
                                 onValueModified: appSettings.font_size = value
                             }
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.appStyleHelp }
-                            Label { text: "Application Style (Requires Restart):" }
+                            Label { text: qsTr("Application Style (Requires Restart):") }
                             ComboBox {
                                 objectName: "coreStyleComboBox"
                                 Accessible.name: qsTr("Application Style")
@@ -1271,7 +1282,7 @@ Pane {
 
                             // 2. Dark/Light Mode
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.darkModeHelp }
-                            Label { text: "Dark Mode:" }
+                            Label { text: qsTr("Dark Mode:") }
                             Switch {
                                 objectName: "darkModeSwitch"
                                 Accessible.name: qsTr("Dark Mode")
@@ -1297,7 +1308,7 @@ Pane {
 
                             // 3. Accent Color
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.accentColorHelp }
-                            Label { text: "Accent Color:" }
+                            Label { text: qsTr("Accent Color:") }
                             ComboBox {
                                 objectName: "accentColorComboBox"
                                 Accessible.name: qsTr("Application Accent Color")
@@ -1306,11 +1317,11 @@ Pane {
                                 textRole: "text"
                                 valueRole: "value"
                                 model: ListModel {
-                                    ListElement { text: "Indigo"; value: "#6366f1" }
-                                    ListElement { text: "Red"; value: "#f44336" }
-                                    ListElement { text: "Green"; value: "#4caf50" }
-                                    ListElement { text: "Orange"; value: "#ff9800" }
-                                    ListElement { text: "Purple"; value: "#9c27b0" }
+                                    ListElement { text: qsTr("Indigo"); value: "#6366f1" }
+                                    ListElement { text: qsTr("Red"); value: "#f44336" }
+                                    ListElement { text: qsTr("Green"); value: "#4caf50" }
+                                    ListElement { text: qsTr("Orange"); value: "#ff9800" }
+                                    ListElement { text: qsTr("Purple"); value: "#9c27b0" }
                                 }
                                 currentIndex: Math.max(0, indexOfValue(appSettings.accent_color))
                                 onActivated: appSettings.accent_color = currentValue
@@ -1363,7 +1374,7 @@ Pane {
                 Button {
                     Accessible.name: qsTr("Import License File")
                     Layout.fillWidth: true
-                    text: "Import License File"
+                    text: qsTr("Import License File")
                     // No custom colors here, defaults to normal Material dark button
                     onClicked: {
                         var component = Qt.createComponent("LicenseWindow.qml")
@@ -1397,13 +1408,13 @@ Pane {
                     Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"
-                    text: "Reset Porn Fetch to default settings"
+                    text: qsTr("Reset Porn Fetch to default settings")
                     onClicked: {backend.reset_pornfetch()}
                 }
                 Button {
                     Accessible.name: qsTr("Clear Temporary Files")
                     Layout.fillWidth: true
-                    text: "Clear Temporary Files"
+                    text: qsTr("Clear Temporary Files")
                     onClicked: {backend.clear_temporary_files()}
                 }
 
@@ -1423,7 +1434,7 @@ Pane {
                     Layout.fillWidth: true
                     Material.background: "#10b981" // Success Green color
                     Material.foreground: "white"
-                    text: "Install Porn Fetch"
+                    text: qsTr("Install Porn Fetch")
                     onClicked: {
                         dialogLoader.source = "InstallDialog.qml"
                         dialogLoader.item.acceptedInput.connect(function(inputValue) {backend.install_pornfetch(inputValue)})
@@ -1436,7 +1447,7 @@ Pane {
                     Layout.fillWidth: true
                     Material.background: "#ef4444" // Danger Red color
                     Material.foreground: "white"
-                    text: "Uninstall Porn Fetch"
+                    text: qsTr("Uninstall Porn Fetch")
                     onClicked: {backend.uninstall_pornfetch()}
                 }
 

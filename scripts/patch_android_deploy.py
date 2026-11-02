@@ -266,6 +266,12 @@ def patch_buildozer_source(source: str) -> str:
         )
         source = replace_once(source, old_reqs, new_reqs)
 
+    source = source.replace(
+        'f"python3,shiboken6,PySide6,{extra_reqs}" if extra_reqs else "python3,shiboken6,PySide6"',
+        'f"python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,{extra_reqs}" '
+        'if extra_reqs else "python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6"',
+    )
+
     if "qt_priority" not in source:
         old = (
             '        # extra arguments specific to Qt\n'

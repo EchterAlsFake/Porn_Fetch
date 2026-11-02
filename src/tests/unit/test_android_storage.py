@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from PySide6.QtCore import QUrl
 
-from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity
+from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity, prepare_native_libraries
 from src.backend.android_storage import copy_download_file, folder_destination
 
 ACTIVITY = '''public class PythonActivity extends QtActivity {
@@ -20,6 +20,36 @@ ACTIVITY = '''public class PythonActivity extends QtActivity {
 
 
 class AndroidActivityTests(unittest.TestCase):
+    def test_qt_preloads_use_extractable_names_for_every_android_abi(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            libraries = root / "libs"
+            resources = root / "res/values"
+            resources.mkdir(parents=True)
+            abis = ("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+            entries = []
+            for abi in abis:
+                native = libraries / abi
+                native.mkdir(parents=True)
+                (native / "QtCore.abi3.so").write_bytes(b"qt binding")
+                (native / "libpyside6.abi3.so").write_bytes(b"pyside")
+                entries.append(f"<item>{abi};QtCore.abi3.so</item><item>{abi};libpyside6.abi3.so</item>")
+            loader = resources / "libs.xml"
+            original = '<resources><array name="load_local_libs">' + ''.join(entries) + '</array></resources>'
+            loader.write_text(original)
+            prepare_native_libraries(libraries, resources.parent)
+            for abi in abis:
+                self.assertEqual((libraries / abi / "libQtCore.abi3.so").read_bytes(), b"qt binding")
+                self.assertFalse((libraries / abi / "QtCore.abi3.so").exists())
+                self.assertIn(f"{abi};libQtCore.abi3.so", loader.read_text())
+                self.assertEqual((libraries / abi / "libpyside6.abi3.so").read_bytes(), b"pyside")
+            first = loader.read_bytes()
+            prepare_native_libraries(libraries, resources.parent)
+            self.assertEqual(loader.read_bytes(), first)
+            loader.write_text(original)  # p4a regenerates resources on an incremental build.
+            prepare_native_libraries(libraries, resources.parent)
+            self.assertEqual(loader.read_bytes(), first)
+
     def test_result_forwarded_before_listener_early_return_and_write_grant_retained(self):
         source = patch_activity(ACTIVITY)
         self.assertLess(source.index('super.onActivityResult('), source.index('if (this.activityResultListeners'))

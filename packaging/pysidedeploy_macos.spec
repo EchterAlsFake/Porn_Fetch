@@ -28,10 +28,10 @@ python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==4.1.1,zstandard,ordered-set
+packages = Nuitka==4.3.3,zstandard,ordered-set
 
 # buildozer = for deploying Android application
-android_packages = buildozer==1.6.0,cython==0.29.33
+android_packages = buildozer==1.6.0,cython==3.3.0
 
 [qt]
 
@@ -68,13 +68,13 @@ macos.permissions =
 mode = standalone
 
 # (str) specify any extra nuitka arguments
-# Qt QML directories contain static archives; Nuitka 4.1.1 treats them as DLLs.
+# Qt QML directories contain static archives; Nuitka can treat them as DLLs.
 # Exclude them before macOS dynamic library dependency analysis.
 # PySide also includes every top-level directory as data. Development files
 # contain symlinks whose targets are absent from the bundle and break signing.
 # Generate the final spec with prepare_macos_deploy.py to exclude unused QML modules.
 # QWidget style/printing/media plugins and the PDF image reader are unused.
-extra_args = --lto=yes --python-flag=no_docstrings --python-flag=no_asserts --noinclude-dlls=*.a --noinclude-dlls=*/plugins/imageformats/libqpdf.* --noinclude-qt-plugins=styles --noinclude-qt-plugins=printsupport --noinclude-qt-plugins=mediaservice --noinclude-qt-translations --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --include-data-files=src/frontend/UI/*.qmlc=src/frontend/UI/ --include-data-files=src/frontend/resources.rcc=src/frontend/resources.rcc --include-data-files=docs/url-routing-audit/profile-fixtures.json=src/backend/profile_fixtures.json --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --noinclude-data-files=deployment/** --noinclude-data-files=*.app/** --noinclude-data-files=scripts/** --noinclude-data-files=packaging/** --noinclude-data-files=docs/** --noinclude-data-files=.github/** --noinclude-data-files=src/tests/** --noinclude-data-files=demos/** --noinclude-data-files=src/frontend/screenshots/** --noinclude-data-files=src/frontend/translations/ts/** --noinclude-data-files=p4a-recipes/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
+extra_args = --lto=yes --python-flag=no_docstrings --python-flag=no_asserts --noinclude-dlls=*.a --noinclude-dlls=*/plugins/imageformats/libqpdf.* --noinclude-qt-plugins=styles --noinclude-qt-plugins=printsupport --noinclude-qt-plugins=mediaservice --assume-yes-for-downloads --include-data-files=src/frontend/UI/*.qml=src/frontend/UI/ --include-data-files=src/frontend/UI/*.qmlc=src/frontend/UI/ --include-data-files=src/frontend/resources.rcc=src/frontend/resources.rcc --include-data-files=docs/url-routing-audit/profile-fixtures.json=src/backend/profile_fixtures.json --noinclude-data-files=.private/** --noinclude-data-files=.venv/** --noinclude-data-files=.buildozer/** --noinclude-data-files=deployment/** --noinclude-data-files=*.app/** --noinclude-data-files=scripts/** --noinclude-data-files=packaging/** --noinclude-data-files=docs/** --noinclude-data-files=.github/** --noinclude-data-files=src/tests/** --noinclude-data-files=demos/** --noinclude-data-files=src/frontend/screenshots/** --noinclude-data-files=src/frontend/translations/ts/** --noinclude-data-files=p4a-recipes/** --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.9 --product-version=3.9 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 

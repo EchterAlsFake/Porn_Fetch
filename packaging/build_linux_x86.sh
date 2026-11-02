@@ -2,7 +2,7 @@
 set -euo pipefail
 
 project_dir=$PWD
-python_version=3.14.7
+python_version=3.15.2
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y build-essential ca-certificates curl git libbz2-dev libffi-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config zlib1g-dev
@@ -11,13 +11,13 @@ cd /tmp
 curl -fsSLo Python.tgz "https://www.python.org/ftp/python/$python_version/Python-$python_version.tgz"
 tar -xzf Python.tgz
 cd "Python-$python_version"
-./configure --prefix=/opt/python-3.14 --enable-shared
+./configure --prefix=/opt/python-3.15 --enable-shared
 make -j2
 make altinstall
 
-export LD_LIBRARY_PATH=/opt/python-3.14/lib
-export PATH="/opt/python-3.14/bin:/root/.local/bin:/root/.cargo/bin:$PATH"
-python3.14 -c 'import struct; assert struct.calcsize("P") == 4'
+export LD_LIBRARY_PATH=/opt/python-3.15/lib
+export PATH="/opt/python-3.15/bin:/root/.local/bin:/root/.cargo/bin:$PATH"
+python3.15 -c 'import struct; assert struct.calcsize("P") == 4'
 curl -fsSLo /tmp/rustup-init https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init
 chmod +x /tmp/rustup-init
 /tmp/rustup-init -y --profile minimal --default-host i686-unknown-linux-gnu
@@ -28,7 +28,7 @@ tar -xzf /tmp/uv.tar.gz -C /tmp
 install -m 755 /tmp/uv-i686-unknown-linux-gnu/uv /usr/local/bin/uv
 
 cd "$project_dir"
-uv sync --locked --no-dev --extra build --python /opt/python-3.14/bin/python3.14
+uv sync --locked --no-dev --extra build --python /opt/python-3.15/bin/python3.15
 uv run --no-sync python -c 'import struct; assert struct.calcsize("P") == 4'
 uv run --no-sync python packaging/write_build_version.py "$BUILD_RELEASE_VERSION" --release-timestamp "$BUILD_RELEASE_TIMESTAMP"
 uv run --no-sync python packaging/write_cli_build_version.py linux x32

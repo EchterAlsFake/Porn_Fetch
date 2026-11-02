@@ -3,7 +3,7 @@
 > [!CAUTION]
 > The latest published binary release is massively outdated. This guide describes the in-development 3.9 source tree; it may not match the current 3.8 download.
 
-Porn Fetch uses Python 3.14, `uv`, an asynchronous backend, a PySide6/QML desktop frontend, and a separate headless CLI built with Questionary and Rich.
+Porn Fetch uses Python 3.15, `uv`, an asynchronous backend, a PySide6/QML desktop frontend, and a separate headless CLI built with Questionary and Rich.
 
 ## Set up a development checkout
 
@@ -13,7 +13,16 @@ Install `uv`, then run:
 uv sync --extra gui --group dev
 ```
 
-The repository's `.python-version` selects Python 3.14. Video remuxing and metadata writing use a separate, minimal LGPL-only FFmpeg executable in `third_party/` (or system PATH). See [FFmpeg builds](FFMPEG.md) for the pinned source, capabilities, and toolchains.
+The repository's `.python-version` selects Python 3.15. Video remuxing and metadata writing use a separate, minimal LGPL-only FFmpeg executable in `third_party/` (or system PATH). See [FFmpeg builds](FFMPEG.md) for the pinned source, capabilities, and toolchains.
+
+Desktop builds pin Nuitka 4.3.3, whose Python 3.15 support is still experimental.
+Some native dependencies currently build from source on Python 3.15; use the
+platform compiler/toolchain installed by CI or the installation scripts.
+Android builds pin Python and hostpython 3.15.2 and require the new `cp315`
+Qt wheels. See [Android CI](ANDROID_CI.md) for the pending wheel inputs.
+After syncing, apply and verify `scripts/patch_qtasyncio.py .venv`. Besides the
+event-loop fixes, it preloads the executor before PySide6's module attribute
+hook can expose Python 3.15's deferred import object to `asyncio.to_thread`.
 
 ## Run the application
 
@@ -83,6 +92,10 @@ reads it into package metadata, so releases only update that one file.
 ## Build files
 
 Desktop builds use the platform specification in `packaging/pysidedeploy_*.spec`. The headless binary uses `packaging/pyinstaller_cli.spec`. The cross-platform build workflow is `.github/workflows/build_all.yml`.
+
+Windows builds use Certum SimplySign through the `signing` environment, including
+the Qt maintenance tool. See [Windows signing](WINDOWS_SIGNING.md) for secrets,
+signing order and verification.
 
 The experimental iOS build uses the separate recipes in `ios-lab/`. See
 [iOS build and deployment](ios/BUILDING.md) for the preserved macOS toolchain,

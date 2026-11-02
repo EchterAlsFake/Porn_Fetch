@@ -13,6 +13,12 @@ had tracking enabled. Desktop tracking continues to use PocketBase. Licensing's
 private storage is separate and unchanged; existing Android history files are left
 untouched but are no longer read or updated.
 
+The Android assembly hook gives Qt's native preload libraries `lib*.so` names
+and updates the Qt loader resources. This is required for Android 13 devices
+such as the Teclast T50 Pro; otherwise startup can fail with a missing
+`QtCore.abi3.so` before Python starts. See [Android CI](ANDROID_CI.md) for the
+confirmed device test and APK checks.
+
 ## Preview the layout on desktop
 
 Run `uv run main.py --android` from the repository root. The window opens at
@@ -46,7 +52,7 @@ Use `--build-mode=debug` only when a debug APK is wanted. Release APKs use
 Buildozer's existing signing configuration; without signing credentials the
 result is an unsigned release APK.
 
-The current source requires Python 3.14 and uses native packages, including
+The current source requires Python 3.15 and uses native packages, including
 `curl-cffi` and `cryptography`. Their Android compatibility must be resolved for
 the target architecture before the APK can be built. The desktop deployment
 specs and Python wheels cannot stand in for Android wheels. The build should
@@ -94,4 +100,4 @@ folder access after an app restart, save elsewhere through the document picker,
 license import through the picker, and account login. Confirm that the Android
 layout has no history/statistics tab or tracking toggle.
 Automatic desktop installation and desktop update flows are not exposed in the
-Android layout. CI setup is intentionally deferred.
+Android layout. The four-ABI build pipeline is documented in [Android CI](ANDROID_CI.md).

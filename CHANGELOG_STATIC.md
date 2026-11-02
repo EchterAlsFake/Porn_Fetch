@@ -1,8 +1,15 @@
 # Porn Fetch 3.9 beta
 
-These notes cover the current 3.9 development tree and changes since 3.8, updated through 28 October 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below.
+These notes cover the current 3.9 development tree and changes since 3.8, updated through 30 October 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below.
 
 The checkout remains a free sandbox simulation for this beta. These application changes do not enable real payments.
+
+### Python 3.15 and mobile builds
+
+- Moved project requirements, dependency locking, installers, validation and all platform build workflows to Python 3.15. Updated desktop compilation to Nuitka 4.3.3.
+- Extended the Qt compatibility patch to preload Python 3.15's executor before Qt initialization, preventing deferred import objects from breaking asynchronous work.
+- Android now targets Python/hostpython 3.15.2 and matching `cp315` PySide6/Shiboken6 wheels. Builds await the replacement wheels and their checksum manifest.
+- The user confirmed license activation, video download, automatic FFmpeg remuxing and audio/video playback on a non-jailbroken iPhone 7. Public iOS build automation remains pending.
 
 ### Free automatic updates
 

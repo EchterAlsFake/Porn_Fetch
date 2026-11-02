@@ -23,6 +23,8 @@ def _get_qml_engine():
     global _qml_engine
     if _qml_engine is None:
         _qml_engine = QQmlEngine()
+        from src.backend.config import app_settings
+        _qml_engine.rootContext().setContextProperty("appSettings", app_settings)
     return _qml_engine
 
 

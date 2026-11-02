@@ -1,8 +1,15 @@
-## The Reason
-The reason for this is, that Porn Fetch isn't signed. Signing is the process of digitally verifying that a file is from a 
-respective author. For example if you start Porn Fetch the Windows Smart Screen will tell you that it is from an unknown source.
-The problem is, that signing costs money. If I want to go with a respected and established CA I need to pay estimated 300 dollars / euros
-a year. You can probably guess that I don't have the money for this and this is not worth it.
+## Windows signing
+
+Current Windows build workflows sign the GUI, CLI, bundled native dependencies,
+Qt installer and maintenance tool using a Certum Individual Cloud Signing
+certificate. Older published releases can still be unsigned. Signing identifies
+the publisher and detects changes to the signed file. It does not guarantee that
+SmartScreen or antivirus warnings disappear. Build details are documented in
+[Windows signing](WINDOWS_SIGNING.md).
+
+## Historical antivirus notes
+
+The following notes describe older releases and their distribution process.
 
 Porn Fetch sends a request at startup to the porn sites, to check your internet connection, and it also checks for updates.
 Some antivirus software think that it may send data from your device, which is why it gets flagged as a trojan.
@@ -39,6 +46,8 @@ Now what if a hacker hacks into my account and publishes his own file?
 My files are also signed using a PGP key. Now I won't explain what this is, but basically you can do:
 
 gpg --verify "filename.sig" "filename"
+
+For current app or privacy support, contact support@echteralsfake.me. The email in the historical signing identity below is not a current contact address.
 
 If it says something like signed by "Johannes Habel <EchterAlsFake@proton.me>" with this key ID: 1E04D0A679846BC0
 then you know it was me who published it. 

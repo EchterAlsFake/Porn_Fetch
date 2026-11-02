@@ -89,20 +89,20 @@ Or from an existing clone:
 ```bash
 bash scripts/install.sh
 ```
-*What it does:* Detects your package manager (apt, pacman, dnf, zypper, brew), installs required build dependencies, sets up `uv` and Python 3.14, downloads the matching PocketBase binary, applies the QtAsyncio patch, and builds or starts the app.
+*What it does:* Detects your package manager (apt, pacman, dnf, zypper, brew), installs required build dependencies, sets up `uv` and Python 3.15, downloads the matching PocketBase binary, applies the QtAsyncio patch, and builds or starts the app.
 
 ### Windows (PowerShell)
 Open PowerShell as **Administrator** and run:
 ```powershell
 irm https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 | iex
 ```
-*What it does:* Checks prerequisites, installs `uv`, configures the Python 3.14 environment, fetches PocketBase, and compiles the Windows binary using `pyside6-deploy`.
+*What it does:* Checks prerequisites, installs `uv`, configures the Python 3.15 environment, fetches PocketBase, and compiles the Windows binary using `pyside6-deploy`.
 
 ---
 
 ## 3. Building & Running from Source
 
-Porn Fetch targets Python 3.14 and uses [`uv`](https://docs.astral.sh/uv/) for fast, deterministic dependency management.
+Porn Fetch targets Python 3.15 and uses [`uv`](https://docs.astral.sh/uv/) for fast, deterministic dependency management.
 
 ### Prerequisites
 
@@ -140,7 +140,7 @@ cd Porn_Fetch
 ```
 
 #### Step 2: Install Python dependencies
-`uv` will automatically fetch and manage Python 3.14 for you.
+`uv` will automatically fetch and manage Python 3.15 for you.
 
 - **To run both Desktop GUI and CLI:**
   ```bash
@@ -169,8 +169,8 @@ The commands detect your OS and architecture and place the executables in
 a C compiler, GNU make, Bash, and zlib development files. Windows builds use
 MSYS2 CLANG64 or CLANGARM64. See [FFmpeg build instructions](FFMPEG.md).
 
-#### Step 4: Patch QtAsyncio (Desktop GUI on Python 3.14)
-Python 3.14 + PySide6 requires an event loop descriptor patch for non-blocking networking and async task cancellation. Run this once after syncing:
+#### Step 4: Patch QtAsyncio (Desktop GUI on Python 3.15)
+Python 3.15 + PySide6 requires an event loop descriptor patch for non-blocking networking and async task cancellation. Run this once after syncing:
 ```bash
 uv run python scripts/patch_qtasyncio.py .venv
 ```

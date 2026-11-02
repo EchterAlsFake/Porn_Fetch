@@ -27,6 +27,9 @@ ApplicationWindow {
     property string applicationLicenseText: "License"
     property string thirdPartyNoticesText: "Notices"
     property QtObject appSettings: QtObject {
+        property int font_size: 12
+        property bool high_contrast: false
+        property bool reduced_motion: false
         property bool dark_mode: true
         property bool anonymous_mode: false
         property string core_style: "Material"
