@@ -1,12 +1,18 @@
 # Translate Porn Fetch
 
 Translations use Qt TS files, edited in a browser with self-hosted Weblate.
-Qt Linguist and programming experience are not required. The translation service
-has not been deployed yet; the maintainer will add its public link here after setup.
-Until then, translation file contributions can be submitted through GitHub.
+Qt Linguist and programming experience are not required. Porn Fetch's translation
+service is available at [translations.echteralsfake.me](https://translations.echteralsfake.me/).
+Create a Weblate account there to translate the app or suggest improvements.
+
+> [!IMPORTANT]
+> **The Weblate setup is not finished yet.** The service is self-hosted, but setup
+> and integration are still in progress. Translation file contributions can also
+> be submitted through GitHub.
 
 1. Install the GUI to understand the screen you are translating.
-2. Open **Info → Help translate**, follow the service link, and create an account.
+2. Visit [translations.echteralsfake.me](https://translations.echteralsfake.me/),
+   create a Weblate account, and open the Porn Fetch project.
 3. Select your language and translate or suggest improvements. Read the context,
    developer notes and screenshots. Leave product names, URLs and placeholders
    such as `%1`, `%n`, `$title` and `${title}` intact. Translate whole sentences;
@@ -49,6 +55,10 @@ Glossary: **fetch** prepares a list; **download** saves media; **cleanup** remov
 partial data; **resume** continues partial data. Technical protocol names stay intact.
 
 ## Self-hosted Weblate
+
+The public instance is hosted at <https://translations.echteralsfake.me/>.
+The setup is not finished yet; the following configuration describes the intended
+maintainer workflow.
 
 Use `deployment/weblate/compose.yaml` on a host with at least 2 CPUs / 3 GB RAM.
 See https://docs.weblate.org/en/latest/admin/install/docker.html for supported image

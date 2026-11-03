@@ -291,7 +291,9 @@ the Account page complete for the current release; Android device checks are def
 - `scripts/translations.py extract|check|build` handles TS extraction, validation and
   QM/resource builds. The frontend update scripts delegate to it.
 - Translation contributions use self-hosted Weblate and reviewed preview builds;
-  see `docs/TRANSLATING.md`. Deployment is not yet provisioned.
+  see `docs/TRANSLATING.md`. The public instance is
+  `https://translations.echteralsfake.me/`; contributors can create an account
+  to translate. Weblate setup and integration are not finished yet.
 - Both layouts expose reduced motion and high contrast. `scripts/audit_gui.py`
   inventories components; `docs/ACCESSIBILITY.md` defines the native manual checks.
   Screen-reader and physical Android acceptance remain unverified.
