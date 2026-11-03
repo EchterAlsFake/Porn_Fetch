@@ -128,6 +128,10 @@ public User-feed limitations.
 - Android CI: `build_all.yml` builds all four ABIs using the existing patch/build
   scripts and Python 3.15 wheels from `6.12.0-api28`. See `docs/ANDROID_CI.md` for signing secrets,
   Android-only runs and website publication.
+  The local Python recipe skips the two obsolete 3.14 ARM/sysconfig and remote
+  debugging patches for Python 3.15, retaining upstream recipe assets and other patches.
+  CLI publication checks the signed feed's versions before platform compilation;
+  build-only runs do not require a version newer than published targets.
   `packaging/android_wheels.sha256` pins the eight selected wheels independently
   of upstream manifest additions. The assembly hook renames Qt preload copies
   to `libQt*.abi3.so` and updates loader resources for Android 13 extraction.

@@ -4,7 +4,7 @@ Copyright (C) 2023-2026 Johannes Habel (EchterAlsFake)
 
 # Notice
 This project was only possible, because a guy named [Egsagon](https://github.com/Egsagon) made the PHUB
-API that interacts with PornHub and which Porn Fetch uses.
+API that earlier Porn Fetch versions used to interact with PornHub.
 
 Although I now have ownership, without him, this project wouldn't be possible in the
 first place. If you need someone who will do web-scraping on a high level, feel free to reach out to
@@ -104,11 +104,10 @@ and the actual artifact inventory.
 - [Cython](https://github.com/cython/cython) (Apache 2.0)
 - [Chaquopy](https://github.com/chaquo/chaquopy) (MIT)
 
-# Applications
-- [FFMPEG](https://ffmpeg.org/) (GPL)
-- Porn Fetch uses FFmpeg through the pyav library
-
-** All other libraries are built in to Python.
+# Media processing
+Current builds invoke a separate minimal LGPL-only FFmpeg executable, without
+PyAV. See [FFmpeg builds](FFMPEG.md) and the
+[current third-party notices](../THIRD_PARTY_NOTICES.md) for the shipped profile.
 
 Some libraries may not be used in the current release, but have been used in an older release.
 For the fairness to these authors, I will still list them here, although they don't play a role anymore.
