@@ -14,7 +14,11 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
 
 - Host Python 3.15 and PySide6 6.12.0, with the virtual environment outside the
   project to avoid Qt's QML scanner traversing installed packages.
-- Buildozer 1.6.0 and Cython 3.3.0 for Python 3.15 host compatibility.
+- Buildozer is pinned to upstream commit
+  `fe2a18cfedd28d45329d47eae8545c81c6e8fe9a` (Cython 3 support), with Cython
+  3.3.0 for Python 3.15 host compatibility. Released Buildozer 1.6.0 requires
+  Cython <3 and cannot resolve alongside Cython 3.3.0. The Android deployment
+  spec preserves the Buildozer version installed by CI.
 - Target Python and hostpython are both pinned to 3.15.2. Updating the host
   interpreter alone does not update python-for-android's embedded runtime.
   The wrapper rebuilds compiled caches when the target Python version changes,

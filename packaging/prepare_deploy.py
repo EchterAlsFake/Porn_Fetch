@@ -5,6 +5,7 @@ import argparse
 import configparser
 import json
 import os
+import platform
 import shlex
 import subprocess
 import sys
@@ -86,6 +87,9 @@ def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> N
     config = configparser.ConfigParser()
     config.read(template, encoding="utf-8")
     arguments = shlex.split(config.get("nuitka", "extra_args"))
+    # Avoid costly ARM64 link-time optimization in the hosted build.
+    if sys.platform == "win32" and platform.machine().lower() in {"arm64", "aarch64"}:
+        arguments = ["--lto=no" if argument.startswith("--lto=") else argument for argument in arguments]
     arguments.extend(["--nofollow-import-to=src.frontend.UI.resources",
                       "--report=deployment/compilation-report.xml"])
     for module in excluded:

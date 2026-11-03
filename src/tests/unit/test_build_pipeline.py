@@ -6,8 +6,10 @@ import json
 import os
 import shlex
 import subprocess
+import sys
 import tarfile
 import tempfile
+import textwrap
 import tomllib
 import unittest
 from pathlib import Path
@@ -27,6 +29,45 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class WindowsBuildDependencyTests(unittest.TestCase):
+    def test_ifw_workflow_passes_optional_arguments_without_empty_array_expansion(self):
+        workflow = (PROJECT_ROOT / ".github/workflows/build_all.yml").read_text()
+        step = workflow.split("      - name: Build IFW installer and repository\n", 1)[1].split(
+            "      - name:", 1)[0]
+        script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+        for target in ("macos", "windows"):
+            with self.subTest(target=target), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                (root / "Porn Fetch.app").mkdir()
+                (root / "Porn Fetch.dist").mkdir()
+                (root / "Porn Fetch.dist/main.exe").touch()
+                (root / f"PornFetch_{target}_GUI_x64_LEGAL.zip").touch()
+                uv = root / "uv"
+                uv.write_text(f"#!{sys.executable}\n" + textwrap.dedent('''\
+                    import json, os, sys
+                    from pathlib import Path
+                    if sys.argv[4] == "-c":
+                        print("3.9.123")
+                    else:
+                        Path(os.environ["CAPTURE"]).write_text(json.dumps(sys.argv[5:]))
+                    '''))
+                uv.chmod(0o755)
+                command = script.replace("${{ matrix.platform }}", target).replace(
+                    "${{ matrix.arch }}", "x64").replace("${{ inputs.benchmark_compression }}", "false")
+                capture = root / "arguments.json"
+                subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", command], cwd=root, check=True,
+                               env={**os.environ, "PATH": f"{root}{os.pathsep}{os.environ['PATH']}",
+                                    "CAPTURE": str(capture), "RUNNER_TEMP": str(root / "runner temp"),
+                                    "GITHUB_ENV": str(root / "github-env")})
+                arguments = json.loads(capture.read_text())
+                self.assertEqual(arguments[arguments.index("--platform") + 1],
+                                 "darwin" if target == "macos" else "windows")
+                self.assertNotIn("--benchmark-compression", arguments)
+                if target == "windows":
+                    self.assertEqual(arguments[arguments.index("--maintenance-tool") + 1],
+                                     str(root / "runner temp/pornfetch-maintenance/installerbase.exe"))
+                else:
+                    self.assertNotIn("--maintenance-tool", arguments)
+
     def test_workflow_assembles_normal_and_long_command_windows_distributions(self):
         workflow = (PROJECT_ROOT / ".github/workflows/build_all.yml").read_text()
         assembly = workflow.split('# Standalone Layout & Assembly', 1)[1].split(
@@ -121,12 +162,16 @@ class QmlPackagingTests(unittest.TestCase):
                 return json.dumps([{"type": "module", "path": str(qml / module)} for module in required])
 
             output = project / "windows.spec"
-            with patch.object(desktop_preparer.subprocess, "check_output", side_effect=scan):
+            with patch.object(desktop_preparer.subprocess, "check_output", side_effect=scan), \
+                    patch.object(desktop_preparer.sys, "platform", "win32"), \
+                    patch.object(desktop_preparer.platform, "machine", return_value="ARM64"):
                 desktop_preparer.prepare_spec(PROJECT_ROOT / "packaging/pysidedeploy_windows.spec",
                                              output, project, pyside)
             config = configparser.ConfigParser()
             config.read(output)
             arguments = shlex.split(config.get("nuitka", "extra_args"))
+            self.assertIn("--lto=no", arguments)
+            self.assertNotIn("--lto=yes", arguments)
             self.assertIn("--noinclude-dlls=*/qml/QtWebEngine/*", arguments)
             self.assertIn("--noinclude-data-files=PySide6/qml/QtWebEngine/**", arguments)
             self.assertNotIn("--noinclude-dlls=*/qml/QtQuick/*", arguments)

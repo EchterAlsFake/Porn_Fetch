@@ -3,6 +3,7 @@ import os
 import json
 import runpy
 import sys
+import sysconfig
 from pathlib import Path
 from PyInstaller.config import CONF
 from PyInstaller.utils.hooks import collect_data_files
@@ -17,10 +18,25 @@ tor_data = [(str(tor_root / "notices"), "src/shared/tor/notices"),
 providers = runpy.run_path(str(Path(project_root) / "src/shared/provider_routing.py"))["PROVIDER_MODULES"]
 hiddenimports = list(providers.values())
 
+# Python 3.15 abi3t extensions also need python3t.dll on a GIL-enabled host.
+# The legacy Windows installer puts the GIL-compatible forwarder in abi3t-compat;
+# the root copy may belong to a separately installed free-threaded interpreter.
+# Collect the matching DLL before dependency scanning and payload signing.
+python_binaries = []
+if sys.platform == "win32" and sys.version_info >= (3, 15):
+    runtime_dir = Path(sys.base_prefix)
+    compatibility_dir = runtime_dir / "abi3t-compat"
+    if not sysconfig.get_config_var("Py_GIL_DISABLED") and compatibility_dir.is_dir():
+        runtime_dir = compatibility_dir
+    forwarder = runtime_dir / "python3t.dll"
+    if not forwarder.is_file():
+        raise FileNotFoundError(f"Python's abi3t runtime is missing: {forwarder}")
+    python_binaries.append((str(forwarder), "."))
+
 analysis = Analysis(
     [os.path.join(project_root, "Porn_Fetch_CLI.py")],
     pathex=[project_root],
-    binaries=tor_binaries,
+    binaries=tor_binaries + python_binaries,
     datas=tor_data + collect_data_files("certifi") + [
         (os.path.join(project_root, "src", "licensing", "production.json"), "src/licensing"),
         (os.path.join(project_root, "docs", "CREDITS.md"), "docs"),

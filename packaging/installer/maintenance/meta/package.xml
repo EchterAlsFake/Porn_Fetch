@@ -4,7 +4,6 @@
     <Description>Signed installer maintenance and uninstall tool.</Description>
     <Version>3.9.0</Version>
     <ReleaseDate>2026-10-06</ReleaseDate>
-    <Default>true</Default>
     <ForcedInstallation>true</ForcedInstallation>
     <Essential>true</Essential>
     <Virtual>true</Virtual>

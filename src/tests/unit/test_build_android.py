@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import configparser
 import io
+import os
 import subprocess
 import sys
 import tempfile
@@ -578,7 +579,10 @@ mode = onefile
                     path = cache / relative
                     path.parent.mkdir(parents=True, exist_ok=True)
                     path.write_bytes(b"rebuilt")
-                (root / "app-arm64-v8a-release.apk").write_bytes(b"new")
+                apk = root / "app-arm64-v8a-release.apk"
+                apk.write_bytes(b"new")
+                # Simulate a completed build even on filesystems with coarse timestamps.
+                os.utime(apk, ns=((iteration + 1) * 1_000_000_000,) * 2)
                 return type("Result", (), {"returncode": 0})()
 
             with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \

@@ -109,7 +109,7 @@ jobs:
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     environment: ${{ matrix.platform == 'windows' && 'signing' || 'build' }}
-    timeout-minutes: ${{ ((matrix.platform == 'windows' && matrix.arch == 'arm64') || (matrix.platform == 'macos' && matrix.arch == 'x64')) && 120 || 75 }}
+    timeout-minutes: ${{ (matrix.platform == 'windows' && matrix.arch == 'arm64') && 180 || (matrix.platform == 'macos' && matrix.arch == 'x64') && 120 || 75 }}
     strategy:
       fail-fast: false
       matrix:
@@ -443,7 +443,8 @@ jobs:
           mkdir -p ifw_payload ifw_output/installers
           IFW_OS="${{ matrix.platform }}"
           IFW_ARCH="${{ matrix.arch }}"
-          MAINTENANCE_ARGS=()
+          # Keep every argument in one nonempty array for macOS Bash 3.2 + nounset.
+          REPOSITORY_ARGS=()
           if [ "$IFW_OS" = "macos" ]; then
             IFW_OS="darwin"
             cp -R "Porn Fetch.app" ifw_payload/
@@ -452,7 +453,7 @@ jobs:
             INSTALLER_EXT=".dmg"
           elif [ "$IFW_OS" = "windows" ]; then
             IFW_ARCH="amd64"
-            MAINTENANCE_ARGS+=(--maintenance-tool "$RUNNER_TEMP/pornfetch-maintenance/installerbase.exe")
+            REPOSITORY_ARGS+=(--maintenance-tool "$RUNNER_TEMP/pornfetch-maintenance/installerbase.exe")
             cp -R "Porn Fetch.dist"/* ifw_payload/
             POCKETBASE_BINARY="third_party/pocketbase.exe"
             FFMPEG_BINARY="third_party/ffmpeg.exe"
@@ -471,9 +472,8 @@ jobs:
           REPO_TAG="${IFW_OS}_${IFW_ARCH}"
           INSTALLER="ifw_output/installers/PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}_Setup${INSTALLER_EXT}"
           APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
-          COMPRESSION_ARGS=()
-          if [ "${{ inputs.benchmark_compression }}" = "true" ]; then COMPRESSION_ARGS+=(--benchmark-compression); fi
-          uv run --no-sync python packaging/generate_repository.py "${COMPRESSION_ARGS[@]}" "${MAINTENANCE_ARGS[@]}" \
+          if [ "${{ inputs.benchmark_compression }}" = "true" ]; then REPOSITORY_ARGS+=(--benchmark-compression); fi
+          REPOSITORY_ARGS+=( \
             --dist-dir ifw_payload \
             --platform "$IFW_OS" --arch "$IFW_ARCH" \
             --pocketbase-binary "$POCKETBASE_BINARY" \
@@ -481,7 +481,8 @@ jobs:
             --staging-dir "ifw_output/staging/$REPO_TAG" \
             --output-repo "ifw_output/repository/$REPO_TAG" \
             --output-installer "$INSTALLER" \
-            --version "$APP_VERSION"
+            --version "$APP_VERSION" )
+          uv run --no-sync python packaging/generate_repository.py "${REPOSITORY_ARGS[@]}"
           echo "IFW_INSTALLER=$INSTALLER" >> "$GITHUB_ENV"
 
       - name: Sign completed Windows installer
@@ -625,7 +626,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential git zip unzip autoconf automake libtool pkg-config cmake ninja-build zlib1g-dev libffi-dev libssl-dev libltdl-dev gettext libncurses-dev libtinfo6 libegl1 libgl1 libxkbcommon0 libdbus-1-3
           uv sync --locked --no-dev --extra gui --extra android-build
-          uv pip install --python "$VIRTUAL_ENV/bin/python" "PySide6==6.12.0" pip "buildozer==1.6.0" "cython==3.3.0"
+          # Upstream's Cython 3 support; released Buildozer 1.6.0 still requires Cython <3.
+          uv pip install --python "$VIRTUAL_ENV/bin/python" "PySide6==6.12.0" pip \
+            "buildozer @ git+https://github.com/kivy/buildozer.git@fe2a18cfedd28d45329d47eae8545c81c6e8fe9a" "cython==3.3.0"
           echo "$VIRTUAL_ENV/bin" >> "$GITHUB_PATH"
 
       - name: Configure JDK 21, Android SDK 36 and NDK r28c

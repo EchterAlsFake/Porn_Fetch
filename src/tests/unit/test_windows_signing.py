@@ -71,7 +71,9 @@ class WindowsSigningTests(unittest.TestCase):
             component = packages / f"{core}.maintenance"
             self.assertEqual((component / "data/installerbase.exe").read_bytes(), b"signed installerbase.exe")
             metadata = ET.parse(component / "meta/package.xml")
-            for setting in ("Default", "ForcedInstallation", "Essential", "Virtual"):
+            # IFW rejects Default and Virtual together, even when both are true.
+            self.assertIsNone(metadata.find("Default"))
+            for setting in ("ForcedInstallation", "Essential", "Virtual"):
                 self.assertEqual(metadata.findtext(setting), "true")
             self.assertEqual(metadata.findtext("Version"), "3.9.123")
             self.assertEqual(metadata.findtext("ReleaseDate"),
