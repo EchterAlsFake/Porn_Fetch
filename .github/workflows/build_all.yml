@@ -48,6 +48,10 @@ on:
         description: "Compare IFW compression levels 5/7/9 (slower)"
         type: boolean
         default: false
+      verbose_build:
+        description: "Stream full compiler and patch output"
+        type: boolean
+        default: false
       experimental_builds:
         description: "Also build Linux 32-bit and RISC-V CLI artifacts"
         type: boolean
@@ -69,6 +73,7 @@ concurrency:
 env:
   PYTHONUNBUFFERED: "1"
   UV_NO_SYNC: "1"
+  PORN_FETCH_BUILD_VERBOSE: ${{ inputs.verbose_build && '1' || '0' }}
 
 jobs:
   validate:
@@ -292,7 +297,8 @@ jobs:
             --template "packaging/pysidedeploy_${{ matrix.platform }}.spec" \
             --output "$SPEC_FILE"
           NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
-          uv run --no-sync -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
+          uv run --no-sync python scripts/build_output.py --label "Compile desktop GUI" -- \
+            uv run --no-sync -- pyside6-deploy -c "$SPEC_FILE" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
           
           # Standalone Layout & Assembly
           if [ "${{ matrix.platform }}" = "windows" ]; then
@@ -589,6 +595,13 @@ jobs:
         shell: pwsh
         run: Remove-Item -LiteralPath (Join-Path $env:RUNNER_TEMP 'pornfetch-signing') -Recurse -Force -ErrorAction SilentlyContinue
 
+      - name: Preserve complete build logs
+        if: always()
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: build-gui-logs-${{ matrix.platform }}-${{ matrix.arch }}
+          path: ${{ runner.temp }}/porn-fetch-build-logs/
+
   build-android:
     name: Android (${{ matrix.arch }})
     needs: [validate, release-metadata]
@@ -804,6 +817,7 @@ jobs:
           name: android-build-diagnostics-${{ matrix.arch }}
           path: |
             ${{ runner.temp }}/android-build.log
+            ${{ runner.temp }}/porn-fetch-build-logs/
             buildozer.spec
             pysidedeploy.spec
             ${{ runner.temp }}/android-manifest.txt
@@ -916,7 +930,8 @@ jobs:
         run: |
           uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
           uv run --no-sync python packaging/write_cli_build_version.py ${{ matrix.platform }} ${{ matrix.arch }}
-          uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
+          uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
+            uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
           
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
@@ -985,6 +1000,13 @@ jobs:
         shell: pwsh
         run: Remove-Item -LiteralPath (Join-Path $env:RUNNER_TEMP 'pornfetch-signing') -Recurse -Force -ErrorAction SilentlyContinue
 
+      - name: Preserve complete build logs
+        if: always()
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: build-cli-logs-${{ matrix.platform }}-${{ matrix.arch }}
+          path: ${{ runner.temp }}/porn-fetch-build-logs/
+
   # ==========================================
   # 3. LINUX 32-BIT CLI BUILD
   # ==========================================
@@ -999,11 +1021,13 @@ jobs:
 
       - name: Build and smoke test in 32-bit Linux
         run: |
-          docker run --rm --platform linux/386 \
+          python3 scripts/build_output.py --label "Build Linux 32-bit CLI" -- \
+            docker run --rm --platform linux/386 \
             --mount type=bind,source="$GITHUB_WORKSPACE",target=/workspace \
             --workdir /workspace \
             --env BUILD_RELEASE_VERSION="${{ needs.release-metadata.outputs.version }}" \
             --env BUILD_RELEASE_TIMESTAMP="${{ needs.release-metadata.outputs.timestamp }}" \
+            --env PORN_FETCH_BUILD_VERBOSE \
             debian:bookworm bash packaging/build_linux_x86.sh
 
       - name: Report release sizes
@@ -1022,6 +1046,13 @@ jobs:
             PornFetch_Linux_CLI_x32.sha256
             PornFetch_Linux_CLI_x32_LEGAL.zip
           if-no-files-found: error
+
+      - name: Preserve complete build logs
+        if: always()
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: build-cli-logs-linux-x32
+          path: ${{ runner.temp }}/porn-fetch-build-logs/
 
   # ==========================================
   # 4. RISC-V CLI BUILD (QEMU)
@@ -1042,6 +1073,8 @@ jobs:
           distro: ubuntu24.04
           run: |
             set -eu
+            export PORN_FETCH_BUILD_VERBOSE="${{ inputs.verbose_build && '1' || '0' }}"
+            export PORN_FETCH_BUILD_LOG_DIR="$PWD/build/riscv64-logs"
             apt-get update
             apt-get install -y build-essential ca-certificates curl git libffi-dev libssl-dev pkg-config zlib1g-dev
             curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal
@@ -1052,6 +1085,7 @@ jobs:
             uv sync --locked --no-dev --extra build --python 3.15
             uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
             uv run --no-sync python packaging/write_cli_build_version.py linux riscv64
+            uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
             uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
             readelf -h dist/Porn_Fetch_CLI | grep -q 'Machine:.*RISC-V'
             mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_riscv64
@@ -1075,6 +1109,13 @@ jobs:
             PornFetch_Linux_CLI_riscv64.sha256
             PornFetch_Linux_CLI_riscv64_LEGAL.zip
           if-no-files-found: error
+
+      - name: Preserve complete build logs
+        if: always()
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: build-cli-logs-linux-riscv64
+          path: build/riscv64-logs/
 
   # ==========================================
   # 5. MACOS UNIVERSAL BINARY (FUSION)

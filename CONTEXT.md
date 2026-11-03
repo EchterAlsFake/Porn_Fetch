@@ -136,8 +136,9 @@ public User-feed limitations.
   of upstream manifest additions. The assembly hook renames Qt preload copies
   to `libQt*.abi3.so` and updates loader resources for Android 13 extraction.
   On 2026-11-02 a separately installed repack of the Teclast T50 Pro's existing
-  Python 3.14 APK reached QML after this fix; new Python 3.15 matrix builds remain
-  to be verified. The original app/data were preserved.
+  Python 3.14 APK reached QML after this fix. All four Python 3.15 matrix builds
+  passed in run 41615367303 on 2026-11-03; device startup of these new APKs remains
+  unverified. The original app/data were preserved.
 - Tor: app-owned service routing and runtime are in `src/shared/service_transport.py`
   and `tor_runtime.py`; `tor_transport.py` routes provider pages and downloads for
   the optional All app traffic scope. See `docs/TOR_SUPPORT.md`. Android updates use the separate

@@ -8,6 +8,10 @@ on:
         description: "Full release version (e.g. 3.9.66)"
         type: string
         required: true
+      verbose_build:
+        description: "Stream full compiler and patch output"
+        type: boolean
+        default: false
   push:
     branches: [codex/ios-arm64-build]
 
@@ -18,6 +22,9 @@ permissions:
 concurrency:
   group: ios-build-${{ github.ref }}
   cancel-in-progress: false
+
+env:
+  PORN_FETCH_BUILD_VERBOSE: ${{ inputs.verbose_build && '1' || '0' }}
 
 jobs:
   restore-native:
@@ -149,12 +156,12 @@ jobs:
       - name: Build device app and package IPA for re-signing
         run: |
           mkdir -p "$IOS_WORK_ROOT/output"
-          xcodebuild -project "$IOS_WORK_ROOT/lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj" \
+          python3.13 scripts/build_output.py --label "Compile iOS app" --log-file "$IOS_WORK_ROOT/xcodebuild.log" -- \
+            xcodebuild -project "$IOS_WORK_ROOT/lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj" \
             -scheme PornFetch -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
             -derivedDataPath "$IOS_WORK_ROOT/derived" -jobs 4 \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=- \
-            EXPANDED_CODE_SIGN_IDENTITY=- EXPANDED_CODE_SIGN_IDENTITY_NAME=ad-hoc build \
-            2>&1 | tee "$IOS_WORK_ROOT/xcodebuild.log"
+            EXPANDED_CODE_SIGN_IDENTITY=- EXPANDED_CODE_SIGN_IDENTITY_NAME=ad-hoc build
           python3.13 "$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts/package-ipa.py" \
             --app "$IOS_WORK_ROOT/derived/Build/Products/Release-iphoneos/PornFetch.app" \
             --output "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa" \

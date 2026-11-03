@@ -7,10 +7,16 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
 import urllib.request
 from pathlib import Path
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
 
 SOURCES = Path(__file__).with_name("tor_sources.json")
 ARCH = {"x64": "x86_64", "arm64": "aarch64", "x86": "i686", "x32": "i686",
@@ -51,10 +57,10 @@ def build_linux_arm64(config, destination, work):
             if not (directory / name).is_file():
                 raise FileNotFoundError(f"Missing static Tor dependency: {directory / name}")
         library_options.append(f"--with-{package}-dir={directory}")
-    subprocess.run(["./configure", "--enable-static-tor", *library_options, "--disable-asciidoc",
+    build_output.run(["./configure", "--enable-static-tor", *library_options, "--disable-asciidoc",
                     "--disable-manpage", "--disable-html-manual", "--disable-unittests",
-                    "--disable-system-torrc", "--disable-lzma", "--disable-zstd"], cwd=build, check=True)
-    subprocess.run(["make", "-j", str(min(os.cpu_count() or 2, 4))], cwd=build, check=True)
+                    "--disable-system-torrc", "--disable-lzma", "--disable-zstd"], cwd=build, label="Configure Tor")
+    build_output.run(["make", "-j", str(min(os.cpu_count() or 2, 4))], cwd=build, label="Compile Tor")
     destination.mkdir(parents=True, exist_ok=True)
     shutil.copy2(build / "src/app/tor", destination / "tor")
     (destination / "notices").mkdir(exist_ok=True)
@@ -104,7 +110,7 @@ def fetch(platform, architecture, destination, work):
     for path in destination.rglob("*"):
         if path.is_file() and path.name in {"tor", "libTor.so"}:
             path.chmod(0o755)
-    print(f"Prepared Tor runtime: {destination}")
+    build_output.message(f"Prepared Tor runtime: {destination}", "ok")
 
 
 if __name__ == "__main__":
@@ -113,5 +119,7 @@ if __name__ == "__main__":
     parser.add_argument("--arch", required=True)
     parser.add_argument("--dest", type=Path, default=Path(__file__).resolve().parents[1] / "src/shared/tor")
     parser.add_argument("--work-dir", type=Path, required=True)
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
     fetch(args.platform, args.arch, args.dest, args.work_dir)

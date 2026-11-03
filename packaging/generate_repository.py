@@ -18,6 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from scripts import build_output  # noqa: E402
 from src.database.installer import resolve_platform  # noqa: E402
 from src.shared.version import RELEASE_TIMESTAMP, __version__  # noqa: E402
 
@@ -28,7 +29,7 @@ logger = logging.getLogger("qt_ifw_builder")
 def run_archive_tool(command: list[str], output: Path, compression: int, benchmark: bool) -> None:
     """Compare IFW compression using identical staged inputs; retain the smallest result."""
     if not benchmark:
-        subprocess.run([*command[:-1], "--compression", str(compression), command[-1]], check=True)
+        build_output.run([*command[:-1], "--compression", str(compression), command[-1]], label=f"Package {output.name}")
         return
     if output.exists():
         raise FileExistsError(f"Benchmark output already exists: {output}")
@@ -38,7 +39,8 @@ def run_archive_tool(command: list[str], output: Path, compression: int, benchma
             candidate = Path(temporary) / str(level) / output.name
             candidate.parent.mkdir()
             started = time.monotonic()
-            subprocess.run([*command[:-1], "--compression", str(level), str(candidate)], check=True)
+            build_output.run([*command[:-1], "--compression", str(level), str(candidate)],
+                             label=f"Benchmark {output.name} (compression {level})")
             size = (candidate.stat().st_size if candidate.is_file() else
                     sum(path.stat().st_size for path in candidate.rglob("*")
                         if path.is_file() and not path.is_symlink()))
@@ -258,7 +260,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--benchmark-compression", action="store_true",
                         help="Compare IFW levels 5/7/9 and retain the smallest output (slower)")
 
+    build_output.add_arguments(parser)
     args = parser.parse_args(argv)
+    build_output.configure(args)
+    logger.setLevel(logging.INFO if args.verbose else logging.WARNING)
 
     raw_os = "windows" if args.platform in {"win32", "windows"} else "darwin" if args.platform in {"darwin", "macos"} else "linux"
     raw_arch = "amd64" if args.arch in {"x86_64", "amd64", "x64"} else "arm64" if args.arch in {"aarch64", "arm64"} else args.arch

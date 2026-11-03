@@ -146,14 +146,15 @@ download is the `.apk` itself. Checksums and legal archives are separate downloa
 
 Start with `build_target: android`, with publishing disabled. Inspect each ABI's
 job log and `android-build-diagnostics-<architecture>` artifact, which contains
-the deployment specs and build log when available. Diagnostics are excluded from
+the deployment specs, concise build output, and full compiler logs when available.
+Enable `verbose_build` to stream full output in Actions, or pass `--verbose` to
+`build_android.sh` locally. Diagnostics are excluded from
 public release assets. No device or emulator run is performed by this workflow.
 
-The companion wheels and application dependency recipes still need a real CI
-build and device testing. Native dependency compilation, ABI-specific runtime
-issues and SDK/Gradle compatibility may need follow-up fixes. The matrix builds
-the APKs; passing workflow lint or offline packaging tests alone does not prove
-that an APK starts successfully on Android.
+The four Python 3.15 APK builds passed in [run 41615367303](https://github.com/EchterAlsFake/Porn_Fetch/actions/runs/41615367303)
+on 2026-11-03. Device startup and ABI-specific runtime behavior still require
+device testing; successful compilation alone does not prove that an APK starts
+successfully on Android.
 
 After changing build scripts or workflow files, start a new workflow run from
 the updated commit. Re-running failed jobs uses the original commit, although

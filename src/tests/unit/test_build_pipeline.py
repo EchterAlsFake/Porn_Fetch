@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -524,16 +525,16 @@ class InstallerTests(unittest.TestCase):
             }
             for name, body in commands.items():
                 command = base / name
-                command.write_text("#!/bin/bash\n" + body)
+                command.write_text(f"#!{shutil.which('bash')}\n" + body)
                 command.chmod(0o755)
             result = subprocess.run(
                 ["bash"], input=script, text=True, cwd=base,
-                env={"PATH": f"{base}:/usr/bin:/bin"},
+                env={**os.environ, "PATH": f"{base}:{os.environ['PATH']}"},
                 capture_output=True, timeout=10,
             )
             self.assertEqual(result.returncode, 42, result.stdout + result.stderr)
             self.assertIn("macOS build deps installed", result.stdout)
-            self.assertIn("Reached project fetch", result.stdout)
+            self.assertIn("Reached project fetch", result.stderr)
 
 
 if __name__ == "__main__":

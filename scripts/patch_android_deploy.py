@@ -26,6 +26,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
+
 MARKER = "porn-fetch-buildozer-file-v1"
 BUILDOZER_MARKER = "porn-fetch-qt-priority-v1"
 CONFIG_MARKER = "porn-fetch-custom-recipes-v1"
@@ -623,7 +628,9 @@ def main() -> int:
     actions.add_argument("--dry-run", action="store_true")
     actions.add_argument("--verify", action="store_true")
     actions.add_argument("--restore", action="store_true")
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
 
     try:
         venv = args.venv.expanduser().resolve()
@@ -672,7 +679,8 @@ def main() -> int:
                 target.verify_fn(content)
                 if target.is_python:
                     ast.parse(content)
-                print(f"Verified {target.path}")
+                build_output.detail(f"Verified {target.path}")
+            build_output.message(f"Android deployment patches verified ({len(targets)} files).", "ok")
             return 0
 
         if args.restore:
@@ -685,10 +693,11 @@ def main() -> int:
                 if target.is_python:
                     ast.parse(restored_data.decode("utf-8"))
                 write_atomic(target.path, restored_data)
-                print(f"Restored {target.path} from {backups[0]}")
+                build_output.detail(f"Restored {target.path} from {backups[0]}")
                 restored_any = True
             if not restored_any:
                 raise ValueError(f"No backups found in {backup_dir}")
+            build_output.message("Android deployment patches restored.", "ok")
             return 0
 
         patches: list[tuple[PatchTarget, str, str]] = []
@@ -701,12 +710,12 @@ def main() -> int:
 
         changed_targets = [p for p in patches if p[1] != p[2]]
         if not changed_targets:
-            print("All targets are already patched.")
+            build_output.message("Android deployment patches already installed.", "ok")
             return 0
 
         if args.dry_run:
             for target, _, _ in changed_targets:
-                print(f"Would patch {target.path}")
+                build_output.message(f"Would patch {target.path}")
             return 0
 
         backup_dir.mkdir(exist_ok=True)
@@ -721,10 +730,11 @@ def main() -> int:
             except Exception:
                 write_atomic(target.path, backup.read_bytes())
                 raise
-            print(f"Patched {target.path}\nBackup: {backup}")
+            build_output.detail(f"Patched {target.path}\nBackup: {backup}")
+        build_output.message(f"Android deployment patched ({len(changed_targets)} files). Backups: {backup_dir}", "ok")
         return 0
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
-        print(f"ERROR: {error}", file=sys.stderr)
+        build_output.message(str(error), "error")
         return 1
 
 

@@ -39,6 +39,11 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
+
 # Architecture definitions & mappings
 ARCH_MAP: dict[str, dict[str, object]] = {
     "aarch64": {
@@ -177,17 +182,17 @@ def patch_pyside_wheel_if_needed(wheel_path: Path, venv_dir: Path) -> bool:
                         needs_jar = True
 
     if not needs_asyncio and not needs_jar and not needs_executor:
-        print(f"[*] Wheel {wheel_path.name} is already patched.")
+        build_output.detail(f"[*] Wheel {wheel_path.name} is already patched.")
         return False
 
-    print(f"[*] Patching wheel {wheel_path.name} (QtAsyncio: {needs_asyncio}, "
+    build_output.message(f"Patching wheel {wheel_path.name} (QtAsyncio: {needs_asyncio}, "
           f"executor: {needs_executor}, QtContentFileEngine: {needs_jar})...")
 
     # Create backup if not present
     backup = wheel_path.with_suffix(".whl.orig")
     if not backup.exists():
         shutil.copy2(wheel_path, backup)
-        print(f"    Created backup: {backup.name}")
+        build_output.detail(f"Created backup: {backup}")
 
     # Discover host QtAsyncio files
     new_contents: dict[str, bytes] = {}
@@ -268,7 +273,7 @@ def patch_pyside_wheel_if_needed(wheel_path: Path, venv_dir: Path) -> bool:
                     zout.writestr(item, zin.read(item.filename))
 
         tmp_path.replace(wheel_path)
-        print(f"[✓] Successfully patched {wheel_path.name}")
+        build_output.detail(f"[✓] Successfully patched {wheel_path.name}")
         return True
     finally:
         tmp_path.unlink(missing_ok=True)
@@ -287,7 +292,7 @@ def patch_p4a_adaptive_icon(project_root: Path) -> None:
             if target in txt and patch not in txt:
                 txt = txt.replace(target, target + patch, 1)
                 build_py.write_text(txt, encoding="utf-8")
-                print(f"[✓] Patched adaptive icon directory in {build_py.relative_to(project_root)}")
+                build_output.detail(f"[✓] Patched adaptive icon directory in {build_py.relative_to(project_root)}")
         except Exception:
             pass
 
@@ -496,14 +501,14 @@ def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
         # Verify first
         proc = subprocess.run([sys.executable, str(patch_deploy), str(venv_dir), "--verify"], capture_output=True, text=True)
         if proc.returncode != 0:
-            print("[*] Applying PySide6 android_deploy patch to virtual environment...")
+            build_output.detail("[*] Applying PySide6 android_deploy patch to virtual environment...")
             subprocess.run([sys.executable, str(patch_deploy), str(venv_dir)], check=True)
         else:
-            print("[✓] PySide6 android_deploy is properly patched.")
+            build_output.detail("[✓] PySide6 android_deploy is properly patched.")
 
     if not patch_qtasyncio.is_file():
         raise FileNotFoundError(f"Required QtAsyncio patch script missing: {patch_qtasyncio}")
-    print("[*] Applying and verifying QtAsyncio patch to virtual environment...")
+    build_output.detail("[*] Applying and verifying QtAsyncio patch to virtual environment...")
     subprocess.run([sys.executable, str(patch_qtasyncio), str(venv_dir)], check=True)
     subprocess.run(
         [sys.executable, str(patch_qtasyncio), str(venv_dir), "--verify"], check=True
@@ -519,8 +524,8 @@ def ensure_android_deploy_deps(venv_dir: Path) -> None:
         except subprocess.CalledProcessError:
             missing_deps.append(pkg)
     if missing_deps:
-        print(f"[*] Installing required Android deployment dependencies: {', '.join(missing_deps)}...")
-        subprocess.run(["uv", "pip", "install", *missing_deps], check=True)
+        build_output.message(f"Installing Android deployment dependencies: {', '.join(missing_deps)}...")
+        build_output.run(["uv", "pip", "install", *missing_deps], label="Install Android deployment dependencies")
 
 
 def find_wheels_for_arch(
@@ -565,7 +570,7 @@ def restore_buildozer_cache(project_root: Path) -> None:
                 f"Both {build_dir} and {previous_cache} exist. "
                 "Move one aside before building so neither cache is deleted."
             )
-        print(f"[*] Restoring Buildozer cache from {previous_cache}")
+        build_output.message(f"Restoring Buildozer cache from {previous_cache}")
         shutil.move(str(previous_cache), str(build_dir))
 
 
@@ -585,16 +590,9 @@ def build_single_arch(
     """Build Android APK for a single canonical architecture."""
     arch_info = ARCH_MAP[canon_arch]
     buildozer_arch = str(arch_info["buildozer_arch"])
-    pyside_arch = str(arch_info["pyside_arch"])
 
-    print("\n" + "=" * 70)
-    print(f"  BUILDING ARCHITECTURE: {canon_arch.upper()} (buildozer: {buildozer_arch}, pyside: {pyside_arch})")
-    print("=" * 70)
-    print(f"  PySide6 wheel:  {wheel_pyside}")
-    print(f"  Shiboken wheel: {wheel_shiboken}")
-    print(f"  Android SDK:    {sdk_path}")
-    print(f"  Android NDK:    {ndk_path}")
-    print(f"  Build mode:     {build_mode}")
+    build_output.message(f"Build Android {canon_arch} ({build_mode})")
+    build_output.detail(f"PySide6: {wheel_pyside}\nShiboken: {wheel_shiboken}\nSDK: {sdk_path}\nNDK: {ndk_path}")
 
     # Patch wheel if necessary
     if not dry_run:
@@ -611,14 +609,14 @@ def build_single_arch(
     if (cached_ndk != ANDROID_NDK_REVISION or cached_python != ANDROID_PYTHON_VERSION) and any(
         directory.exists() for directory in (arch_build_dir / "build", arch_build_dir / "dists")
     ):
-        print(f"[*] Rebuilding native cache for Python {ANDROID_PYTHON_VERSION} / "
+        build_output.message(f"Rebuilding native cache for Python {ANDROID_PYTHON_VERSION} / "
               f"NDK r{ANDROID_NDK_VERSION}; keeping downloaded archives")
         clean = True
     if clean:
         # p4a keeps downloaded archives in packages/ beside these directories.
         for directory in (arch_build_dir / "build", arch_build_dir / "dists"):
             if directory.exists():
-                print(f"[*] Cleaning build directory: {directory}")
+                build_output.detail(f"[*] Cleaning build directory: {directory}")
                 if not dry_run:
                     shutil.rmtree(directory)
 
@@ -627,9 +625,9 @@ def build_single_arch(
     pysidedeploy_spec = project_root / "pysidedeploy.spec"
 
     if dry_run:
-        print("[*] (dry-run) Would configure buildozer.spec and pysidedeploy.spec")
-        print("[*] (dry-run) Would inject templates into build trees")
-        print(f"[*] (dry-run) Would run pyside6-android-deploy for {canon_arch}")
+        build_output.message("(dry-run) Would configure buildozer.spec and pysidedeploy.spec")
+        build_output.detail("[*] (dry-run) Would inject templates into build trees")
+        build_output.message(f"(dry-run) Would run pyside6-android-deploy for {canon_arch}")
         return None
 
     arch_build_dir.mkdir(parents=True, exist_ok=True)
@@ -680,8 +678,7 @@ def build_single_arch(
         "--keep-deployment-files",
     ])
 
-    print(f"[*] Running deployment command:\n    {' '.join(deploy_cmd)}\n")
-    proc = subprocess.run(deploy_cmd, cwd=project_root, env=env)
+    proc = build_output.run(deploy_cmd, label=f"Compile Android {canon_arch}", cwd=project_root, env=env)
     if proc.returncode != 0:
         raise RuntimeError(f"pyside6-android-deploy failed with exit code {proc.returncode}")
 
@@ -706,13 +703,13 @@ def build_single_arch(
 
     # Pick the newest candidate
     apk_path = max(candidates, key=lambda p: p.stat().st_mtime)
-    print(f"[✓] Successfully built package: {apk_path} ({apk_path.stat().st_size / (1024*1024):.2f} MB)")
+    build_output.detail(f"Built package: {apk_path} ({apk_path.stat().st_size / (1024*1024):.2f} MB)")
 
     if output_dir:
         output_dir.mkdir(parents=True, exist_ok=True)
         dest_apk = output_dir / f"Porn_Fetch-3.9-{buildozer_arch}-{build_mode}{apk_path.suffix}"
         shutil.copy2(apk_path, dest_apk)
-        print(f"[✓] Copied to output destination: {dest_apk}")
+        build_output.detail(f"Copied to output destination: {dest_apk}")
         return dest_apk
 
     return apk_path
@@ -742,7 +739,7 @@ def sign_apk(apk: Path, output_dir: Path, keystore: Path, key_alias: str,
             signature.replace(destination_signature)
         else:
             destination_signature.unlink(missing_ok=True)
-    print(f"[✓] Signed and verified APK: {signed}")
+    build_output.message(f"Signed and verified APK: {signed}", "ok")
     return signed
 
 
@@ -816,7 +813,9 @@ def main() -> int:
     parser.add_argument("--key-alias", default="my-key-alias", help="Signing key alias (default: my-key-alias)")
     parser.add_argument("--unsigned", action="store_true", help="Skip automatic release APK signing")
 
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
 
     # Determine project root
     project_root = Path(__file__).resolve().parent.parent
@@ -825,11 +824,11 @@ def main() -> int:
     keystore = args.keystore if args.keystore.is_absolute() else project_root / args.keystore
     if signing and not args.dry_run:
         if not keystore.is_file():
-            print(f"ERROR: Signing keystore not found: {keystore}. Use --keystore or --unsigned.", file=sys.stderr)
+            build_output.message(f"Signing keystore not found: {keystore}. Use --keystore or --unsigned.", "error")
             return 1
         for tool in ("zipalign", "apksigner"):
             if not shutil.which(tool):
-                print(f"ERROR: {tool} not found on PATH; required for release signing.", file=sys.stderr)
+                build_output.message(f"{tool} not found on PATH; required for release signing.", "error")
                 return 1
 
     # Determine virtual environment
@@ -841,7 +840,7 @@ def main() -> int:
         venv_dir = (project_root / ".venv").resolve()
 
     if not venv_dir.is_dir():
-        print(f"ERROR: Virtual environment not found at {venv_dir}", file=sys.stderr)
+        build_output.message(f"Virtual environment not found at {venv_dir}", "error")
         return 1
 
     # Verify and apply host patches
@@ -854,14 +853,14 @@ def main() -> int:
     try:
         ndk_path = find_android_ndk(args.ndk_path)
     except ValueError as error:
-        print(f"ERROR: {error}", file=sys.stderr)
+        build_output.message(f"{error}", "error")
         return 1
 
     if not sdk_path:
-        print("ERROR: Android SDK not found. Specify --sdk-path or set $ANDROID_SDK_ROOT.", file=sys.stderr)
+        build_output.message("Android SDK not found. Specify --sdk-path or set $ANDROID_SDK_ROOT.", "error")
         return 1
     if not ndk_path:
-        print("ERROR: Android NDK r28c not found. Specify --ndk-path or set $ANDROID_NDK_HOME.", file=sys.stderr)
+        build_output.message("Android NDK r28c not found. Specify --ndk-path or set $ANDROID_NDK_HOME.", "error")
         return 1
 
     # Target architectures
@@ -889,12 +888,12 @@ def main() -> int:
             if not shiboken_whl:
                 msg += " (Shiboken6 wheel not found)"
             if target_arch == "all":
-                print(f"[!] {msg} - Skipping.")
+                build_output.message(f"{msg} Skipping.", "warn")
                 skipped_archs.append(arch)
                 continue
             else:
-                print(f"ERROR: {msg}", file=sys.stderr)
-                print(f"Checked directories: {', '.join(str(d) for d in search_dirs)}", file=sys.stderr)
+                build_output.message(f"{msg}", "error")
+                build_output.message(f"Checked directories: {', '.join(str(d) for d in search_dirs)}", "error")
                 return 1
 
         planned_archs.append(arch)
@@ -915,37 +914,39 @@ def main() -> int:
             signing_output = args.output_dir.resolve() if args.output_dir else project_root
             suffix = arch if target_arch == "all" else None
             if args.dry_run:
-                print(f"[*] (dry-run) Would zipalign, sign with {keystore} (alias {args.key_alias}), "
+                build_output.message(f"(dry-run) Would zipalign, sign with {keystore} (alias {args.key_alias}), "
                       f"and verify app-signed{'-' + suffix if suffix else ''}.apk in {signing_output}")
             elif apk:
                 try:
                     apk = sign_apk(apk, signing_output, keystore, args.key_alias, suffix)
                 except (OSError, subprocess.CalledProcessError) as error:
-                    print(f"ERROR: APK signing failed: {error}", file=sys.stderr)
+                    build_output.message(f"APK signing failed: {error}", "error")
                     return 1
         if apk:
             built_apks.append((arch, apk))
 
-    print("\n" + "=" * 70)
-    print("  BUILD SUMMARY")
-    print("=" * 70)
     if args.dry_run:
-        print("  Dry-run completed successfully. Planned architectures:")
-        for arch in planned_archs:
-            print(f"  - {arch} ({ARCH_MAP[arch]['buildozer_arch']})")
+        build_output.message(f"Dry run complete: {', '.join(planned_archs)}", "ok")
     else:
-        if built_apks:
-            print(f"  Successfully built {len(built_apks)} package(s):")
-            for arch, apk in built_apks:
-                print(f"  - [{arch}] {apk} ({apk.stat().st_size / (1024*1024):.2f} MB)")
+        for arch, apk in built_apks:
+            build_output.message(f"{arch}: {apk} ({apk.stat().st_size / 1024**2:.2f} MiB)", "ok")
         if skipped_archs:
-            print(f"  Skipped (no wheels found): {', '.join(skipped_archs)}")
+            build_output.message(f"Skipped (missing wheels): {', '.join(skipped_archs)}", "warn")
 
     if not planned_archs:
-        print("ERROR: No architectures had a complete wheel pair.", file=sys.stderr)
+        build_output.message("No architectures had a complete wheel pair.", "error")
         return 1
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        raise SystemExit(main())
+    except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as error:
+        if build_output.verbose():
+            raise
+        if isinstance(error, subprocess.CalledProcessError):
+            build_output.message(f"Build step failed (exit {error.returncode}); see diagnostics above.", "error")
+        else:
+            build_output.message(str(error), "error")
+        raise SystemExit(1) from None

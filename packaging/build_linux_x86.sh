@@ -1,26 +1,59 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+for argument in "$@"; do
+  case "$argument" in
+    -v|--verbose) export PORN_FETCH_BUILD_VERBOSE=1 ;;
+    -h|--help) echo "Usage: bash $0 [--verbose]"; exit 0 ;;
+    *) echo "Unknown option: $argument" >&2; exit 2 ;;
+  esac
+done
+build_status() {
+  local label="$1" color=36; shift
+  case "$label" in FAIL) color=31 ;; OK) color=32 ;; WARN) color=33 ;; esac
+  if [[ -z "${NO_COLOR+x}" ]] && { [[ -t 2 || "${GITHUB_ACTIONS:-}" == true || "${FORCE_COLOR:-0}" != 0 ]]; }; then
+    printf '\033[1;%sm[%s]\033[0m %s\n' "$color" "$label" "$*" >&2
+  else
+    printf '[%s] %s\n' "$label" "$*" >&2
+  fi
+}
+run() {
+  local label="$1" command_log result; shift
+  command_log=$(mktemp "${TMPDIR:-/tmp}/pornfetch-build.XXXXXX")
+  build_status INFO "$label — log: $command_log"
+  case "${PORN_FETCH_BUILD_VERBOSE:-0}" in
+    1|true|yes)
+      if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi ;;
+    *)
+      if "$@" >"$command_log" 2>&1; then result=0; else result=$?; fi ;;
+  esac
+  if [[ "$result" != 0 ]]; then
+    tail -n 25 "$command_log" >&2
+    build_status FAIL "$label failed (exit $result). Full log: $command_log"
+    return "$result"
+  fi
+}
+
 project_dir=$PWD
 python_version=3.15.2
 export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y build-essential ca-certificates curl git libbz2-dev libffi-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config zlib1g-dev
+run "Update packages" apt-get update
+run "Install build tools" apt-get install -y build-essential ca-certificates curl git libbz2-dev libffi-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev libzstd-dev pkg-config zlib1g-dev
 
 cd /tmp
 curl -fsSLo Python.tgz "https://www.python.org/ftp/python/$python_version/Python-$python_version.tgz"
 tar -xzf Python.tgz
 cd "Python-$python_version"
-./configure --prefix=/opt/python-3.15 --enable-shared
-make -j2
-make altinstall
+run "Configure Python" ./configure --prefix=/opt/python-3.15 --enable-shared
+run "Compile Python" make -j2
+run "Install Python" make altinstall
 
 export LD_LIBRARY_PATH=/opt/python-3.15/lib
 export PATH="/opt/python-3.15/bin:/root/.local/bin:/root/.cargo/bin:$PATH"
 python3.15 -c 'import struct; assert struct.calcsize("P") == 4'
 curl -fsSLo /tmp/rustup-init https://static.rust-lang.org/rustup/dist/i686-unknown-linux-gnu/rustup-init
 chmod +x /tmp/rustup-init
-/tmp/rustup-init -y --profile minimal --default-host i686-unknown-linux-gnu
+run "Install Rust" /tmp/rustup-init -y --profile minimal --default-host i686-unknown-linux-gnu
 rustc -vV > /tmp/rust-version.txt
 grep -q 'host: i686-unknown-linux-gnu' /tmp/rust-version.txt
 curl -fsSLo /tmp/uv.tar.gz https://github.com/astral-sh/uv/releases/latest/download/uv-i686-unknown-linux-gnu.tar.gz
@@ -28,11 +61,12 @@ tar -xzf /tmp/uv.tar.gz -C /tmp
 install -m 755 /tmp/uv-i686-unknown-linux-gnu/uv /usr/local/bin/uv
 
 cd "$project_dir"
-uv sync --locked --no-dev --extra build --python /opt/python-3.15/bin/python3.15
+run "Install dependencies" uv sync --locked --no-dev --extra build --python /opt/python-3.15/bin/python3.15
 uv run --no-sync python -c 'import struct; assert struct.calcsize("P") == 4'
 uv run --no-sync python packaging/write_build_version.py "$BUILD_RELEASE_VERSION" --release-timestamp "$BUILD_RELEASE_TIMESTAMP"
 uv run --no-sync python packaging/write_cli_build_version.py linux x32
-uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
+uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
+  uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
 readelf -h dist/Porn_Fetch_CLI > /tmp/cli-elf-header.txt
 grep -q 'Machine:.*Intel 80386' /tmp/cli-elf-header.txt
 

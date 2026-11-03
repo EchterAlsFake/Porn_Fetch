@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from scripts import build_output  # noqa: E402
 from src.backend.ui_languages import LANGUAGES  # noqa: E402
 
 FRONTEND = ROOT / "src/frontend"
@@ -19,7 +20,11 @@ TOKENS = re.compile(r"%L?\d+|%Ln|%n|%(?:\([^)]+\))?[sdif]|\$\{?[a-z_]+\}?")
 
 def run(tool, *args):
     executable = Path(sys.executable).parent / (tool + (".exe" if sys.platform == "win32" else ""))
-    subprocess.run([str(executable), *map(str, args)], cwd=ROOT, check=True)
+    result = subprocess.run([str(executable), *map(str, args)], cwd=ROOT, capture_output=True, text=True)
+    if build_output.verbose() or result.returncode:
+        print(result.stdout, end="", file=sys.stderr)
+        print(result.stderr, end="", file=sys.stderr)
+    result.check_returncode()
 
 
 def validate():
@@ -43,7 +48,7 @@ def validate():
                 if not target.strip() or Counter(TOKENS.findall(source)) != Counter(TOKENS.findall(target)):
                     errors.append(f"{path.name}: empty translation or changed placeholders: {source[:70]}")
             finished += 1
-        print(f"{path.name}: {finished}/{total} finished")
+        build_output.detail(f"{path.name}: {finished}/{total} finished")
     if errors:
         raise SystemExit("\n".join(errors))
     # Compilation is deliberately temporary in check mode: CI must not rewrite catalogs.
@@ -82,5 +87,9 @@ def build():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["extract", "check", "build"])
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
+    build_output.message(f"Translations: {args.command}")
     {"extract": extract, "check": validate, "build": build}[args.command]()
+    build_output.message(f"Translations {args.command} complete.", "ok")

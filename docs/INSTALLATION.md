@@ -104,6 +104,41 @@ irm https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/in
 ```
 *What it does:* Checks prerequisites, installs `uv`, configures the Python 3.15 environment, fetches PocketBase, and compiles the Windows binary using `pyside6-deploy`.
 
+### Build output and diagnostics
+
+Build and patch tools show short progress messages by default. Important results,
+warnings and failures are highlighted in color in terminals and GitHub Actions;
+redirected output is plain text. Set `NO_COLOR=1` to disable highlighting.
+
+Use `--verbose` (or `-v`) on Python build/patch tools and the Unix/Termux installers,
+or `-Verbose` on the PowerShell installer and frontend updater, for full output:
+
+```bash
+bash scripts/install.sh --verbose
+python scripts/patch_qtasyncio.py .venv --verify --verbose
+./build_android.sh --verbose --architecture aarch64 --wheels-dir /path/to/wheels
+```
+
+`PORN_FETCH_BUILD_VERBOSE=1` also enables full output in child build tools.
+The Cross-Platform Build Pipeline and iOS workflow expose a **verbose_build**
+checkbox with the same behavior.
+
+Native compiler and packaging commands retain complete logs even in quiet mode.
+Each stage prints its log path, reports progress once a minute while running,
+and shows the last 25 log lines on failure. CI uploads these logs as diagnostic
+artifacts. Local native logs default to the system temporary directory under
+`porn-fetch-build-logs`; override that directory with `PORN_FETCH_BUILD_LOG_DIR`.
+Bootstrap installer commands use individual `pornfetch-build.*` (Unix) or
+`pornfetch-build-*.log` (Windows) files in the temporary directory and print the
+path on failure. Password prompts and source-selection menus stay interactive.
+
+For direct compiler commands, use the same console wrapper:
+
+```bash
+uv run python scripts/build_output.py --label "Compile CLI" -- \
+  uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
+```
+
 ---
 
 ## 3. Building & Running from Source

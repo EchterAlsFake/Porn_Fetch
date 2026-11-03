@@ -65,7 +65,7 @@ class ReleaseSizeTests(unittest.TestCase):
                 level = int(command[command.index("--compression") + 1])
                 Path(command[-1]).write_bytes(b"x" * {5: 100, 7: 80, 9: 90}[level])
 
-            with patch.object(repository.subprocess, "run", side_effect=build):
+            with patch.object(repository.build_output, "run", side_effect=build):
                 repository.run_archive_tool(["binarycreator", "--hybrid", str(output)], output, 5, True)
             self.assertEqual(output.stat().st_size, 80)
             results = json.loads(output.with_name("setup.exe.compression.json").read_text())

@@ -1,4 +1,7 @@
 # update_ui.ps1
+[CmdletBinding()]
+param()
+if ($VerbosePreference -eq 'Continue') { $env:PORN_FETCH_BUILD_VERBOSE = '1' }
 $ErrorActionPreference = "Stop"
 Write-Output "Updating UI components, resource files, and translations..."
 
@@ -14,5 +17,6 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 # QML Bytecode compilation
 Write-Output "Compiling QML to bytecode..."
 uv run python ../../scripts/compile_qml.py
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Output "UI update completed successfully!"

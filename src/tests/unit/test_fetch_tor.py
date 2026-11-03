@@ -25,7 +25,7 @@ class TorBuildTests(unittest.TestCase):
             with patch.object(builder, "download", return_value=root / "tor.tar.gz"), \
                     patch.object(builder.tarfile, "open"), \
                     patch.object(builder.subprocess, "check_output", return_value=f"{library_dir}\n") as pkg_config, \
-                    patch.object(builder.subprocess, "run", side_effect=RuntimeError("configure reached")) as configure:
+                    patch.object(builder.build_output, "run", side_effect=RuntimeError("configure reached")) as configure:
                 with self.assertRaisesRegex(RuntimeError, "configure reached"):
                     builder.build_linux_arm64(
                         {"linux_arm64_source": {"url": "fixture", "sha256": "fixture"}}, root / "output", root)
@@ -36,4 +36,4 @@ class TorBuildTests(unittest.TestCase):
                 pkg_config.assert_any_call(["pkg-config", "--variable=libdir", package], text=True)
                 self.assertIn(f"--with-{package}-dir={library_dir}", arguments)
                 self.assertNotIn(f"--with-{package}-dir=/usr", arguments)
-            self.assertEqual(configure.call_args.kwargs, {"cwd": build, "check": True})
+            self.assertEqual(configure.call_args.kwargs, {"cwd": build, "label": "Configure Tor"})

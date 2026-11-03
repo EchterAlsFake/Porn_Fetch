@@ -5,8 +5,14 @@ import argparse
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
 
 # PyCryptodome loads these only when the CPU supports AES-NI or CLMUL.
 # ARM uses _raw_aes and _ghash_portable, which must still have both slices.
@@ -30,7 +36,7 @@ def openssl_source(bundle: Path, relative: Path) -> Path:
         return source
     fallback = source.with_name(OPENSSL_ALIASES[relative])
     if fallback.is_file() and is_macho(fallback):
-        print(f"Using {fallback.relative_to(bundle)} for missing {relative}")
+        build_output.detail(f"Using {fallback.relative_to(bundle)} for missing {relative}")
         return fallback
     return source
 
@@ -74,7 +80,7 @@ def repair_openssl_references(binary: Path, output: Path) -> bool:
     subprocess.run([*command, str(binary)], check=True)
     # --deep does not reliably visit native extensions under Contents/MacOS.
     subprocess.run(["codesign", "--force", "--sign", "-", str(binary)], check=True)
-    print(f"Repaired OpenSSL references: {binary.relative_to(output)}")
+    build_output.detail(f"Repaired OpenSSL references: {binary.relative_to(output)}")
     return True
 
 
@@ -112,11 +118,11 @@ def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
                     else:
                         subprocess.run(["lipo", str(source), "-thin", architecture, "-output", str(thin)], check=True)
                     slices.append(str(thin))
-                print(f"Fusing: {relative}")
+                build_output.detail(f"Fusing: {relative}")
                 # Separate slices avoid duplicate architectures and in-place lipo input/output.
                 subprocess.run(["lipo", "-create", *slices, "-output", str(destination)], check=True)
             elif relative in INTEL_ONLY_ACCELERATORS and not (arm / relative).exists():
-                print(f"Keeping Intel-only accelerator: {relative}")
+                build_output.detail(f"Keeping Intel-only accelerator: {relative}")
                 required_architectures = ("x86_64",)
             subprocess.run(["lipo", str(destination), "-verify_arch", *required_architectures], check=True)
 
@@ -130,5 +136,9 @@ if __name__ == "__main__":
     parser.add_argument("intel", type=Path)
     parser.add_argument("arm", type=Path)
     parser.add_argument("output", type=Path)
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
+    build_output.message("Merge macOS architectures")
     merge_bundles(args.intel, args.arm, args.output)
+    build_output.message(f"Universal macOS bundle: {args.output}", "ok")

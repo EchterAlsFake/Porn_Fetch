@@ -2,10 +2,16 @@
 """Ahead-of-time bytecode compilation of QML files using pyside6-qmlcachegen."""
 from __future__ import annotations
 
+import argparse
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 UI_DIR = PROJECT_ROOT / "src" / "frontend" / "UI"
@@ -50,31 +56,38 @@ def compile_all_qml() -> int:
     try:
         cachegen = find_qmlcachegen()
     except FileNotFoundError as err:
-        print(f"Warning: {err} Skipping QML AOT bytecode compilation.", file=sys.stderr)
+        build_output.message(f"{err} Skipping QML bytecode compilation.", "warn")
         return 0
 
     qml_files = sorted(UI_DIR.glob("*.qml"))
     if not qml_files:
-        print("No QML files found to compile.", file=sys.stderr)
+        build_output.message("No QML files found to compile.", "warn")
         return 0
 
-    print(f"Compiling {len(qml_files)} QML files to .qmlc bytecode using {cachegen.name}...")
+    build_output.message(f"Compile {len(qml_files)} QML files")
     failures = 0
     for qml in qml_files:
         cache_path = qml.with_suffix(".qmlc")
         cmd = [str(cachegen), "-I", str(UI_DIR), str(qml), "-o", str(cache_path)]
         res = subprocess.run(cmd, capture_output=True, text=True)
+        if build_output.verbose():
+            build_output.detail(res.stdout)
+            build_output.detail(res.stderr)
         if res.returncode != 0:
-            print(f"  [FAIL] {qml.name}: {res.stderr.strip()}", file=sys.stderr)
+            build_output.message(f"{qml.name}: {res.stderr.strip()}", "error")
             failures += 1
 
     if failures == 0:
-        print(f"[OK] Successfully compiled all {len(qml_files)} QML files to .qmlc.")
+        build_output.message(f"Compiled {len(qml_files)} QML files.", "ok")
     else:
-        print(f"[!] Warning: {failures}/{len(qml_files)} QML files failed to compile.", file=sys.stderr)
+        build_output.message(f"{failures}/{len(qml_files)} QML files failed to compile.", "warn")
 
     return 0 if failures == 0 else 1
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    build_output.add_arguments(parser)
+    args = parser.parse_args()
+    build_output.configure(args)
     raise SystemExit(compile_all_qml())

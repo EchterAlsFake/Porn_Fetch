@@ -573,7 +573,7 @@ mode = onefile
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \
-                 patch("scripts.build_android.subprocess.run", side_effect=deploy):
+                 patch("scripts.build_android.build_output.run", side_effect=deploy):
                 result = build_single_arch("aarch64", root / "pyside.whl", root / "shiboken.whl",
                                            root, root / "venv", root / "sdk", root / "ndk",
                                            build_mode="release", output_dir=root / "output")
@@ -616,7 +616,7 @@ mode = onefile
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \
-                 patch("scripts.build_android.subprocess.run", side_effect=deploy):
+                 patch("scripts.build_android.build_output.run", side_effect=deploy):
                 for iteration, clean in enumerate((False, False, True)):
                     build_single_arch("aarch64", root / "pyside.whl", root / "shiboken.whl",
                                       root, root / "venv", root / "sdk", root / "ndk", clean=clean)

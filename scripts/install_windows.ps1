@@ -7,11 +7,19 @@
 # - Uses uv + Python 3.15 + pyside6-deploy
 # ============================
 
+[CmdletBinding()]
+param()
+
+$buildVerbose = $VerbosePreference -eq 'Continue' -or $env:PORN_FETCH_BUILD_VERBOSE -in @('1', 'true', 'yes')
+$env:PORN_FETCH_BUILD_VERBOSE = if ($buildVerbose) { '1' } else { '0' }
+
 # Ensure the script is running with elevated privileges
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
     [Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to run this script as an Administrator!"
-    Start-Process powershell -ArgumentList "-noprofile -executionpolicy bypass -file `"$($myinvocation.mycommand)`"" -verb RunAs
+    $elevatedArguments = "-noprofile -executionpolicy bypass -file `"$($myinvocation.mycommand)`""
+    if ($buildVerbose) { $elevatedArguments += ' -Verbose' }
+    Start-Process powershell -ArgumentList $elevatedArguments -verb RunAs
     exit
 }
 
@@ -62,11 +70,28 @@ function Run {
         [Parameter(Mandatory=$true)][string]$Exe,
         [Parameter(ValueFromRemainingArguments=$true)]$Args
     )
-    Write-Host ">> $Exe $($Args -join ' ')" -ForegroundColor Magenta
-    & $Exe @Args
-    if ($LASTEXITCODE -ne 0) {
-        throw "Command failed: $Exe $($Args -join ' ')"
+    $commandLog = Join-Path ([IO.Path]::GetTempPath()) ("pornfetch-build-" + [guid]::NewGuid() + ".log")
+    if ($buildVerbose) { Write-Host ">> $Exe $($Args -join ' ')" -ForegroundColor Magenta }
+    $null = Get-Command $Exe -ErrorAction Stop
+    $previousPreference = $ErrorActionPreference
+    try {
+        # Windows PowerShell represents native stderr as non-terminating errors.
+        $ErrorActionPreference = 'Continue'
+        $global:LASTEXITCODE = 0
+        if ($buildVerbose) {
+            & $Exe @Args 2>&1 | Tee-Object -FilePath $commandLog | Out-Host
+        } else {
+            & $Exe @Args *> $commandLog
+        }
+        $commandExit = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
     }
+    if ($commandExit -ne 0) {
+        if (-not $buildVerbose) { Get-Content $commandLog -Tail 25 | Out-Host }
+        throw "Command failed (exit $commandExit). Full log: $commandLog"
+    }
+    Write-Verbose "Full log: $commandLog"
 }
 
 # ----------------------------
@@ -307,7 +332,7 @@ Run uv "--color" "always" "venv" $venvDir "--python" "3.15"
 $env:UV_PROJECT_ENVIRONMENT = $venvDir
 
 Info "Syncing dependencies using uv (with --extra gui)..."
-Run uv "--color" "always" "sync" "--locked" "--extra" "gui" "--extra" "build" "--extra" "desktop-build" "--extra" "av"
+Run uv "--color" "always" "sync" "--locked" "--extra" "gui" "--extra" "build" "--extra" "desktop-build"
 
 # Preserve the patched dependency sources for every subsequent uv command.
 $env:UV_NO_SYNC = "1"
@@ -360,7 +385,8 @@ Copy-Item -Force $deploySpec $deploySpecTmp
 Info "Building with pyside6-deploy..."
 $nuitkaVersion = uv run --no-sync python -c 'import sys; from importlib.metadata import version; print(version(sys.argv[1]))' Nuitka
 if ($LASTEXITCODE -ne 0) { throw "Could not read locked Nuitka version" }
-Run uv "--color" "always" "run" "--no-sync" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files" "--nuitka-version" $nuitkaVersion
+& uv run --no-sync python scripts/build_output.py --label "Compile Windows GUI" -- uv run --no-sync -- pyside6-deploy "-c" $deploySpecTmp "-f" "-v" "--keep-deployment-files" "--nuitka-version" $nuitkaVersion
+if ($LASTEXITCODE -ne 0) { throw "Desktop compilation failed." }
 
 # Find output exe
 $finalExe = Join-Path $projectDir "Porn Fetch.exe"

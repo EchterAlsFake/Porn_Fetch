@@ -56,6 +56,11 @@ import tempfile
 from pathlib import Path
 from typing import Sequence
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
+
 PATCH_ID = "qtasyncio-compat-v2"
 SUPPORTED_PYSIDE_MAJOR_MINORS = ((6, 11), (6, 12))
 
@@ -1305,7 +1310,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         type=Path,
         help="custom backup directory (default: <venv>/.qtasyncio-patch-backups)",
     )
+    build_output.add_arguments(parser)
     args = parser.parse_args(argv)
+    build_output.configure(args)
 
     try:
         environment = inspect_environment(args.target)
@@ -1316,24 +1323,25 @@ def main(argv: Sequence[str] | None = None) -> int:
             else default_backup_root(environment)
         )
 
-        print_environment(environment)
+        if build_output.verbose():
+            print_environment(environment)
 
         if args.restore:
             backup_dir = latest_backup(backup_root)
             restore_backup(backup_dir, force=args.force)
             verify_imports(environment, require_patch=False)
-            print(f"\nRestored backup: {backup_dir}")
+            build_output.message(f"QtAsyncio restored. Backup: {backup_dir}", "ok")
             return 0
 
         if args.verify:
             problems = verify_sources(environment)
             if problems:
-                print("\nVerification failed:", file=sys.stderr)
+                build_output.message("QtAsyncio verification failed:", "error")
                 for problem in problems:
                     print(f"  - {problem}", file=sys.stderr)
                 return 1
             verify_imports(environment)
-            print("\nQtAsyncio compatibility patch verified successfully.")
+            build_output.message("QtAsyncio compatibility patch verified.", "ok")
             return 0
 
         changes = build_changes(environment, force=args.force)
@@ -1347,11 +1355,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                     + "\n  - ".join(problems)
                 )
             verify_imports(environment)
-            print("\nNothing to do; the compatibility patch is already installed.")
+            build_output.message("QtAsyncio compatibility patch already installed.", "ok")
             return 0
 
-        print("\nPlanned changes:")
-        for change in changed:
+        if args.dry_run or build_output.verbose():
+            print("\nPlanned changes:")
+        for change in changed if args.dry_run or build_output.verbose() else ():
             print(f"  {change.path.name}:")
             for description in change.descriptions:
                 print(f"    - {description}")
@@ -1359,7 +1368,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                   f"{sha256_text(change.modified)[:12]}")
 
         if args.dry_run:
-            print("\nDry run only; no files were modified.")
+            build_output.message("Dry run complete; no files modified.", "ok")
             return 0
 
         backup_dir = apply_changes(environment, changes, backup_root)
@@ -1376,15 +1385,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 restore_backup(backup_dir, force=True)
             raise
 
-        print(f"\nPatched successfully. Backup: {backup_dir}")
-        print("Run again with --verify after any PySide6 upgrade.")
+        build_output.message(f"QtAsyncio patched and verified ({len(changed)} files). Backup: {backup_dir}", "ok")
         return 0
 
     except PatchError as error:
-        print(f"ERROR: {error}", file=sys.stderr)
+        build_output.message(str(error), "error")
         return 2
     except OSError as error:
-        print(f"ERROR: {error}", file=sys.stderr)
+        build_output.message(str(error), "error")
         return 3
 
 

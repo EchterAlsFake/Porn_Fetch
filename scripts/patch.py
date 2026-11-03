@@ -1,33 +1,34 @@
-"""
-This file is a patch for the GitHub actions that will replace the 'IS_SOURCE_RUN = True' to False
-in the config.py file. This is needed to restrict the license features in the binary builds
-and additionally ensure that users who run from source get a warning that source builds may be
-unsafe due to random code changes that haven't been tested.
-"""
+"""Mark packaged GUI builds as binary installations."""
+import argparse
 import sys
 from pathlib import Path
 
-file_path = Path(__file__).resolve().parents[1] / "src" / "backend" / "config.py"
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-SEARCH = "IS_SOURCE_RUN = True"
-REPLACE = "IS_SOURCE_RUN = False"
+from scripts import build_output  # noqa: E402
 
-file = file_path
 
-if not file.exists() or not file.is_file():
-    print(f"Error: '{file_path}' is not a valid file path.", file=sys.stderr)
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    build_output.add_arguments(parser)
+    args = parser.parse_args()
+    build_output.configure(args)
+    path = Path(__file__).resolve().parents[1] / "src/backend/config.py"
+    try:
+        original = path.read_text(encoding="utf-8")
+        updated = original.replace("IS_SOURCE_RUN = True", "IS_SOURCE_RUN = False")
+        if updated != original:
+            path.write_text(updated, encoding="utf-8")
+            build_output.message("Binary build flag patched.", "ok")
+        else:
+            build_output.message("Binary build flag unchanged.", "ok")
+        build_output.detail(f"Target: {path}")
+    except OSError as error:
+        build_output.message(str(error), "error")
+        return 1
+    return 0
 
-original = file.read_text(encoding="utf-8")
 
-if SEARCH not in original:
-    print("No match found. File unchanged.")
-
-updated = original.replace(SEARCH, REPLACE)
-
-# Write back only if something actually changed
-if updated != original:
-    file.write_text(updated, encoding="utf-8")
-    count = original.count(SEARCH)
-    print(f"Replaced {count} occurrence(s).")
-else:
-    print("Nothing changed.")
+if __name__ == "__main__":
+    raise SystemExit(main())

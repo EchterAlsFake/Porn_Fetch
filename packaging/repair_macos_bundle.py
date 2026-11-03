@@ -10,6 +10,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
+
 MACHO_MAGIC = {
     b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",
     b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",
@@ -102,7 +107,7 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
     for target, source in frameworks_to_copy.items():
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(source, target, symlinks=True)
-        print(f"Bundled missing Qt framework: {target.relative_to(bundle)}")
+        build_output.detail(f"Bundled missing Qt framework: {target.relative_to(bundle)}")
 
     for binary, replacements in changes.items():
         command = ["install_name_tool"]
@@ -115,7 +120,7 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
             subprocess.run(command, check=True)
         finally:
             binary.chmod(mode)
-        print(f"Repaired Qt dependencies: {binary.relative_to(bundle)}")
+        build_output.detail(f"Repaired Qt dependencies: {binary.relative_to(bundle)}")
 
     if changes or frameworks_to_copy:
         # Mach-O edits invalidate the build's signature, including nested code.
@@ -136,14 +141,16 @@ def main() -> None:
         "--qt-lib-dir", type=Path,
         help="Qt/lib directory from the PySide6 environment used for this build (default: current PySide6)",
     )
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
     if sys.platform != "darwin":
         parser.error("Bundle repair requires macOS (otool, install_name_tool and codesign).")
     try:
         count = repair_bundle(args.bundle, args.qt_lib_dir)
     except (ImportError, OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Bundle repair failed: {error}\n")
-    print(f"Qt bundle repair complete: {count} binaries updated.")
+    build_output.message(f"Qt bundle repaired: {count} binaries updated.", "ok")
 
 
 if __name__ == "__main__":

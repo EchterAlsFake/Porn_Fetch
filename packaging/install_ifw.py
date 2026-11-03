@@ -5,11 +5,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import shutil
-import subprocess
 import sys
 import tempfile
 import urllib.request
 from pathlib import Path
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
 
 IFW_ARCHIVES = {
     "linux": (
@@ -58,7 +62,7 @@ def install(platform: str, destination: Path, archive: Path | None = None) -> Pa
         if actual_hash != expected_hash:
             raise ValueError(f"Qt IFW archive hash mismatch for {platform}: {actual_hash}")
 
-        subprocess.run([_extractor(), "x", "-y", f"-o{destination}", str(download)], check=True)
+        build_output.run([_extractor(), "x", "-y", f"-o{destination}", str(download)], label="Extract Qt IFW")
 
     suffix = ".exe" if platform == "windows" else ""
     binarycreator = destination / "bin" / f"binarycreator{suffix}"
@@ -77,7 +81,9 @@ def main() -> None:
     parser.add_argument("--platform", choices=IFW_ARCHIVES, required=True)
     parser.add_argument("--dest", type=Path, required=True)
     parser.add_argument("--archive", type=Path, help="Use a local archive, still verifying its pinned hash")
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
     print(install(args.platform, args.dest, args.archive))
 
 

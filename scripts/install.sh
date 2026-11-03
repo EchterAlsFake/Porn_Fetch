@@ -4,6 +4,20 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
+# One switch also reaches all Python build/patch children.
+for argument in "$@"; do
+  case "$argument" in
+    -v|--verbose) export PORN_FETCH_BUILD_VERBOSE=1 ;;
+    -h|--help) echo "Usage: bash scripts/install.sh [--verbose]"; exit 0 ;;
+    *) echo "Unknown option: $argument" >&2; exit 2 ;;
+  esac
+done
+case "${PORN_FETCH_BUILD_VERBOSE:-0}" in
+  1|true|yes) PORN_FETCH_BUILD_VERBOSE=1 ;;
+  *) PORN_FETCH_BUILD_VERBOSE=0 ;;
+esac
+export PORN_FETCH_BUILD_VERBOSE
+
 # ------------------------------------------------------------
 # Pretty colors (works in most terminals)
 # ------------------------------------------------------------
@@ -16,6 +30,9 @@ BLUE="\033[34m"
 MAGENTA="\033[35m"
 CYAN="\033[36m"
 RESET="\033[0m"
+if [[ -n "${NO_COLOR+x}" ]] || { [[ ! -t 1 && "${GITHUB_ACTIONS:-}" != true && "${FORCE_COLOR:-0}" == 0 ]]; }; then
+  BOLD=""; DIM=""; RED=""; GREEN=""; YELLOW=""; BLUE=""; MAGENTA=""; CYAN=""; RESET=""
+fi
 
 info()    { echo -e "${CYAN}${BOLD}[INFO]${RESET} $*"; }
 ok()      { echo -e "${GREEN}${BOLD}[ OK ]${RESET} $*"; }
@@ -24,8 +41,23 @@ error()   { echo -e "${RED}${BOLD}[ERR ]${RESET} $*" >&2; }
 cmd()     { echo -e "${MAGENTA}${BOLD}>>${RESET} ${DIM}$*${RESET}"; }
 
 run() {
-  cmd "$*"
-  "$@"
+  # Authenticate with sudo before hiding command output so its prompt is visible.
+  if [[ "$1" == sudo ]]; then sudo -v || return $?; fi
+  local command_log result
+  command_log=$(mktemp "${TMPDIR:-/tmp}/pornfetch-build.XXXXXX")
+  if [[ "$PORN_FETCH_BUILD_VERBOSE" == 1 ]]; then
+    cmd "$*"
+    if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi
+  else
+    if "$@" >"$command_log" 2>&1; then result=0; else result=$?; fi
+  fi
+  if [[ "$result" != 0 ]]; then
+    [[ "$PORN_FETCH_BUILD_VERBOSE" == 1 ]] || tail -n 25 "$command_log" >&2
+    error "Command failed (exit $result). Full log: $command_log"
+    return "$result"
+  fi
+  [[ "$PORN_FETCH_BUILD_VERBOSE" != 1 ]] || info "Full log: $command_log"
+  return 0
 }
 
 # ------------------------------------------------------------
@@ -408,7 +440,7 @@ run uv --color always venv "${VENV_DIR}" --python 3.15
 export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 
 # ------------------------------------------------------------
-# Sync dependencies (GUI extra) with verbose output
+# Sync dependencies (GUI extra)
 # ------------------------------------------------------------
 info "Syncing dependencies using uv (with --extra gui)..."
 run uv --color always sync --locked --extra gui --extra build --extra desktop-build
@@ -426,7 +458,7 @@ if [[ ! -f "third_party/pocketbase" ]]; then
   run uv run --no-sync python scripts/fetch_pocketbase.py --platform "${OS}" --arch "${ARCH}" --dest third_party || true
 fi
 info "Building the minimal LGPL-only FFmpeg executable..."
-run uv run --no-sync python packaging/build_ffmpeg.py --platform "${OS}" --arch "${ARCH}" --dest third_party
+uv run --no-sync python packaging/build_ffmpeg.py --platform "${OS}" --arch "${ARCH}" --dest third_party
 
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
@@ -475,8 +507,8 @@ run uv run --no-sync python packaging/prepare_deploy.py \
 
 info "Building with pyside6-deploy..."
 NUITKA_VERSION=$(uv run --no-sync python -c 'from importlib.metadata import version; print(version("Nuitka"))')
-run uv --color always run --no-sync -- \
-  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
+uv run --no-sync python scripts/build_output.py --label "Compile desktop GUI" -- \
+  uv run --no-sync -- pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v --keep-deployment-files --nuitka-version "$NUITKA_VERSION"
 
 # ------------------------------------------------------------
 # Assembly & Output

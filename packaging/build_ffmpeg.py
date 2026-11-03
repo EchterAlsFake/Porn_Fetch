@@ -15,6 +15,11 @@ import sys
 import tarfile
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts import build_output  # noqa: E402
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 VERSION = "9.0.2"
 SOURCE_URL = f"https://ffmpeg.org/releases/ffmpeg-{VERSION}.tar.xz"
@@ -108,7 +113,7 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
         flags.extend(["--cc=clang", "--extra-cflags=-mmacosx-version-min=11.0",
                       "--extra-ldflags=-mmacosx-version-min=11.0"])
     command = [bash, (source_dir / "configure").as_posix(), *flags]
-    subprocess.run(command, cwd=build_dir, env=environment, check=True)
+    build_output.run(command, label="Configure FFmpeg", cwd=build_dir, env=environment)
     config = (build_dir / "config.h").read_text(encoding="utf-8")
     for option in ("GPL", "VERSION3", "NONFREE"):
         if f"#define CONFIG_{option} 0" not in config:
@@ -117,7 +122,7 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
     if re.search(r"^#define CONFIG_\w+_ENCODER 1$", components, re.MULTILINE):
         raise ValueError("The remux-only FFmpeg build must not contain encoders")
     binary_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
-    subprocess.run([make, f"-j{jobs}", binary_name], cwd=build_dir, env=environment, check=True)
+    build_output.run([make, f"-j{jobs}", binary_name], label="Compile FFmpeg", cwd=build_dir, env=environment)
     executable = build_dir / binary_name
     license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
                                           stderr=subprocess.STDOUT, text=True)
@@ -151,7 +156,7 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
         "binary_sha256": hashlib.sha256(result.read_bytes()).hexdigest(),
         "configure_flags": flags,
     }, indent=2) + "\n", encoding="utf-8")
-    print(f"Built LGPL-only FFmpeg: {result} ({result.stat().st_size / 1024**2:.2f} MiB)")
+    build_output.message(f"Built LGPL-only FFmpeg: {result} ({result.stat().st_size / 1024**2:.2f} MiB)", "ok")
     return result
 
 
@@ -164,10 +169,21 @@ def main() -> int:
     parser.add_argument("--source-archive", type=Path)
     parser.add_argument("--msys2-root", type=Path, help="Windows: MSYS2 installation directory")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 2, 4))
+    build_output.add_arguments(parser)
     args = parser.parse_args()
+    build_output.configure(args)
     build(args.platform, args.arch, args.dest, args.work_dir, args.source_archive, args.jobs, args.msys2_root)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as error:
+        if build_output.verbose():
+            raise
+        if isinstance(error, subprocess.CalledProcessError):
+            build_output.message(f"Build step failed (exit {error.returncode}); see diagnostics above.", "error")
+        else:
+            build_output.message(str(error), "error")
+        raise SystemExit(1) from None
