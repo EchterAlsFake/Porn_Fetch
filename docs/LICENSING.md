@@ -31,8 +31,9 @@ Before publishing a source-available release:
 
 The related Server repository remains a separate project. Its Terms and Privacy
 Policy must describe the code and actual deployment at the time a service is
-offered. The payment deployment remains sandboxed as of the 6 October 2026 server handoff;
-this client change does not enable payments. The production client targets the new
+offered. Current operational progress belongs in the
+[server checklist](https://pornfetch.to/checklist), rather than a deployment
+status inferred from this checkout. The production client targets the new
 commercial policy and explicitly rejects older beta credentials. See
 [LICENSING_ARCHITECTURE.md](LICENSING_ARCHITECTURE.md) for protocol, privacy, update
 entitlement, installation paths, validation evidence, and release requirements.

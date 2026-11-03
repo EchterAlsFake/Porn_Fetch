@@ -78,6 +78,8 @@ jobs:
   release-metadata:
     name: Set release version and timestamp
     runs-on: ubuntu-24.04
+    env:
+      CHECK_CLI_RELEASE: ${{ inputs.build_target != 'gui' && inputs.build_target != 'android' && (inputs.deploy_cli_updates || inputs.create_release) }}
     permissions:
       actions: read
       contents: read
@@ -86,6 +88,18 @@ jobs:
       version: ${{ steps.release.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        if: env.CHECK_CLI_RELEASE == 'true'
+        with:
+          python-version: "3.15"
+
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        if: env.CHECK_CLI_RELEASE == 'true'
+
+      - name: Install CLI publication check dependencies
+        if: env.CHECK_CLI_RELEASE == 'true'
+        run: uv sync --locked --no-dev
 
       - name: Read the original workflow creation time
         id: release
@@ -99,6 +113,12 @@ jobs:
           python3 packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
           echo "timestamp=$RELEASE_TIMESTAMP" >> "$GITHUB_OUTPUT"
           echo "version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check CLI publication version before compiling
+        if: env.CHECK_CLI_RELEASE == 'true'
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: uv run --no-sync python packaging/check_cli_release_version.py "$RELEASE_VERSION"
 
   # ==========================================
   # 1. GUI BUILDS (PySide6)

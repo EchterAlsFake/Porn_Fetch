@@ -4,14 +4,29 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from src.tests.unit.test_cli_self_update import load_script
 
 writer = load_script("write_build_version")
 signer = load_script("sign_desktop_release")
+preflight = load_script("check_cli_release_version")
 
 
 class BuildVersionTests(unittest.TestCase):
+    def test_publication_preflight_rejects_older_version_and_accepts_newer(self):
+        targets = SimpleNamespace(signed=SimpleNamespace(targets={
+            "linux/arm64.zip": SimpleNamespace(custom={"version": "3.8.3"}),
+        }))
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "root.json"
+            root.write_bytes(b"public trust anchor")
+            with patch.object(preflight, "previous_metadata", return_value=(targets, None, None)):
+                with self.assertRaisesRegex(ValueError, "newer than published version 3.8.3"):
+                    preflight.check_version("3.8.2.2", "https://example.invalid/", root)
+                preflight.check_version("3.9.1", "https://example.invalid/", root)
+
     def test_workflow_version_and_timestamp_are_stable_on_rerun(self):
         with tempfile.TemporaryDirectory() as temporary:
             source = Path(temporary) / "version.py"

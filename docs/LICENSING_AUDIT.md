@@ -1,5 +1,10 @@
 # Commercial licensing implementation audit — 6 October 2026
 
+This is a historical audit, not the current release checklist. Some deployment
+and verification notes below describe the state on the audit date. Follow the
+[server checklist](https://pornfetch.to/checklist) for current release progress;
+use the source code for current application behavior.
+
 ## Outcome
 
 Implemented the client flow and offline regression coverage. This is not a claim
@@ -31,7 +36,7 @@ task started. Some listed files also had existing user edits, which were preserv
 | Release CI/deployment | `.github/workflows/build_all.yml`, `scripts/deploy_ifw_repositories.sh` |
 | Existing tests/fixtures | `src/tests/unit/test_license_client.py`, `test_update_service.py`; `src/tests/integration/test_license_integration.py`; `src/tests/license_fixtures.py` |
 | New tests/fixtures | `src/tests/unit/test_release_entitlement.py`, `test_licensing_paths.py`; `src/tests/integration/test_keygen_production_opt_in.py`; `src/tests/fixtures/keygen_ed25519_vector.json` |
-| Documentation | `README.md`, `docs/CLI_UPDATES.md`, `FAQ.md`, `INSTALLATION.md`, `LICENSING.md`, `QT_INSTALLER_FRAMEWORK.md`, `STATUS.md`; new `LICENSING_ARCHITECTURE.md`, `LICENSING_AUDIT.md` |
+| Documentation | `README.md`, `docs/CLI_UPDATES.md`, `FAQ.md`, `INSTALLATION.md`, `LICENSING.md`, `QT_INSTALLER_FRAMEWORK.md`; new `LICENSING_ARCHITECTURE.md`, `LICENSING_AUDIT.md` |
 
 ## Bugs found and corrected
 

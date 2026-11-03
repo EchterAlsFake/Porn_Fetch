@@ -19,7 +19,9 @@ Desktop builds pin Nuitka 4.3.3, whose Python 3.15 support is still experimental
 Some native dependencies currently build from source on Python 3.15; use the
 platform compiler/toolchain installed by CI or the installation scripts.
 Android builds pin Python and hostpython 3.15.2 and require the new `cp315`
-Qt wheels. See [Android CI](ANDROID_CI.md) for the pending wheel inputs.
+Qt wheels from the pinned `6.12.0-api28` release. See [Android CI](ANDROID_CI.md)
+for wheel checksums and build inputs. Current release progress is maintained in
+the [server checklist](https://pornfetch.to/checklist).
 After syncing, apply and verify `scripts/patch_qtasyncio.py .venv`. Besides the
 event-loop fixes, it preloads the executor before PySide6's module attribute
 hook can expose Python 3.15's deferred import object to `asyncio.to_thread`.

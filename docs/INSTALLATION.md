@@ -2,7 +2,8 @@
 
 For the experimental iPhone GUI port, use the separate
 [iOS build and deployment guide](ios/BUILDING.md). It requires the preserved
-macOS lab inputs and currently targets a jailbroken iPhone 7.
+macOS build inputs and produces an IPA requiring re-signing. Operation on a
+non-jailbroken iPhone 7 is also user-confirmed; see the iOS guide for its limits.
 
 > [!CAUTION]
 > **This guide is for the 3.9 source tree and the upcoming 3.9 beta.**
@@ -57,11 +58,16 @@ chmod +x PornFetch_linux_GUI_x64_Setup.run
 #### B. Standalone Portable Bundles (`.zip` / `.dmg`)
 If you prefer not to install anything into system directories, grab the portable ZIP bundle:
 - Extract the archive to any folder where your user account has write permissions.
-- **Important:** Ensure the `pocketbase` (or `pocketbase.exe`) executable remains right next to the main app binary. Porn Fetch needs PocketBase for persistent download queues, statistics, and history tracking.
-- On Linux, ensure both files are executable:
+- Keep the complete extracted application folder, including `third_party/`.
+  PocketBase supplies optional download history and statistics; disabling tracking
+  does not require PocketBase. Queue recovery metadata is stored separately.
+- Linux GUI bundles are named `PornFetch_linux_GUI_<arch>.tar.gz`. Extract the
+  archive and run the executable inside its directory:
   ```bash
-  chmod +x PornFetch_linux_GUI_x64.bin pocketbase
-  ./PornFetch_linux_GUI_x64.bin
+  tar -xzf PornFetch_linux_GUI_x64.tar.gz
+  cd PornFetch_linux_GUI_x64
+  chmod +x 'Porn Fetch'
+  './Porn Fetch'
   ```
 
 #### C. Standalone CLI Executables
@@ -244,7 +250,13 @@ Command Line Tools.
 
 ---
 
-## 5. Android / Termux (CLI Only)
+## 5. Android GUI and Termux CLI
+
+The cross-platform workflow has experimental Android GUI APK targets for
+arm64-v8a, armeabi-v7a, x86_64 and x86. Use only signed APKs intended for
+installation; `_unsigned.apk` files are build diagnostics. See
+[Android CI](ANDROID_CI.md) for the toolchain and signing requirements and the
+[live checklist](https://pornfetch.to/checklist) for development progress.
 
 The CLI has no PySide6/Qt dependencies and runs cleanly inside [Termux](https://termux.dev/) on Android:
 
@@ -291,5 +303,5 @@ download the matching checksum asset into the same directory:
 ## Need Help?
 
 If anything fails during building or installation:
-1. Check the [FAQ](FAQ.md) and [Known Antivirus Flags](ANTIVIRUS_FLAGS.md).
+1. Check the relevant build instructions above and [Known Antivirus Flags](ANTIVIRUS_FLAGS.md).
 2. Open an issue on [GitHub Issues](https://github.com/EchterAlsFake/Porn_Fetch/issues). Please include your operating system, CPU architecture, whether you used pre-built binaries or built from source, and the terminal output or log error.

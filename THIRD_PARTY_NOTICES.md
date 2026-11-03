@@ -15,7 +15,7 @@ is an inventory, not a substitute for those license texts.
 | FFmpeg executable | [LGPL-2.1-or-later](https://ffmpeg.org/legal.html), built from pinned FFmpeg 9.0.2 source | The minimal profile explicitly disables GPL, version-3, nonfree, and third-party codec features. FFmpeg runs as a separate executable. Its complete source archive, license texts, configure flags, configuration headers, and build hashes accompany it in `third_party/ffmpeg-legal` and release legal bundles. See [FFmpeg builds](docs/FFMPEG.md). |
 | zlib | [zlib license](https://zlib.net/zlib_license.html) | Used for PNG cover probing. Linux/macOS use the system library; Windows statically links the MSYS2 library and includes its `zlib.h` copyright/license text in `ffmpeg-legal`. |
 | Other Python packages | `uv.lock` and installed package metadata | Generate an artifact-specific list and include the packages' license and notice files; account for platform extras and transitive dependencies. |
-| Application graphics | [Asset provenance](docs/ASSET_PROVENANCE.md) | Newly drawn SVGs are part of the application. Preserve the documented provenance of the PNG logo and splash assets; replace or clear any uncertain asset before release. |
+| Application graphics | [Graphics source files](src/frontend/graphics/); Lucide settings-icon attribution below | Application-owned SVGs use the application license; Lucide icons retain their MIT notice. Preserve provenance records for the PNG logo and splash assets; replace or clear any uncertain asset before release. |
 
 The obsolete library list in `docs/CREDITS.md` is retained as historical
 acknowledgment. It does not establish the shipped dependency list or license

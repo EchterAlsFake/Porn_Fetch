@@ -23,6 +23,10 @@ specs. CLI-only runs skip Android. Each ABI runs in its own Ubuntu runner, with
   interpreter alone does not update python-for-android's embedded runtime.
   The wrapper rebuilds compiled caches when the target Python version changes,
   retaining downloaded archives.
+- The local `p4a-recipes/python3` recipe reuses upstream build logic and patch
+  assets, skipping only `3.14_armv7l_fix.patch` and `3.14_fix_remote_debug.patch`
+  on Python 3.15. Their fixes are already incorporated or superseded upstream;
+  applying the 3.14 patches to 3.15 sources fails before compilation.
 - JDK 21, SDK Platform 36, Build Tools 36.0.0, NDK r28c / 28.2.13676358. This
   follows the companion guide's tested NDK choice; it does not rebuild Qt.
 - The runner's `cmdline-tools/latest` directory is exposed at SDK `tools` for

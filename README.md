@@ -35,9 +35,9 @@ The beta is still unstable and being tested, but I would rather give you a broke
 **[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.8)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.8)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FAQ.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Installation Guide&nbsp;<br>&nbsp;</strong></kbd>](docs/INSTALLATION.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Changelog&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CHANGELOG.md)** 
-**[<kbd><strong>&nbsp;<br>&nbsp;Development Status&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/STATUS.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Development Checklist&nbsp;<br>&nbsp;</strong></kbd>](https://pornfetch.to/checklist)** 
 
 ---
 </div>
@@ -47,7 +47,8 @@ The beta is still unstable and being tested, but I would rather give you a broke
 This branch is where I am building the next version of Porn Fetch. It has a
 PySide6 desktop app, a Qt-free CLI, and a different licensing system from 3.8.
 The first beta is for finding problems, and I will keep working on them as
-quickly as I can. See the [development status](docs/STATUS.md) and the
+quickly as I can. Follow the [live development checklist](https://pornfetch.to/checklist)
+and its progress bar above for release readiness. See the
 [installation guide](docs/INSTALLATION.md) before trying it.
 
 # About the License
@@ -65,8 +66,9 @@ never for explicit rejection, HTTP errors, malformed responses or TLS trust fail
 Reimport/restart does not reset that period. Subsequent offline use is limited to
 seven days after successful validation. A rejection blocks access through later outages. Older beta credentials are rejected explicitly.
 
-**Payment deployment is still sandboxed as of 6 October 2026; Patreon is disabled.**
-Do not assume this client change enables real payments. See the
+Payment services are deployed separately from this application. Consult the
+[live checklist](https://pornfetch.to/checklist) for release progress; client source
+changes do not establish which payment methods are live. See the
 [licensing architecture and release requirements](docs/LICENSING_ARCHITECTURE.md).
 
 ### #FreeHongKong
@@ -219,23 +221,30 @@ All selections still run the shared validation suite.
 
 | Platform                   | App              | Architectures                                   |
 |----------------------------|------------------|-------------------------------------------------|
-| **Windows**                | GUI              | x64                                             |
+| **Windows**                | GUI              | x64, ARM64                                      |
 | **Windows**                | CLI              | x64, ARM64                                      |
 | **Linux (X11 / Wayland)**  | GUI              | x64, ARM64                                      |
 | **Linux (X11 / Wayland)**  | CLI              | x64, ARM64                                      |
 | **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
-| **Android**                | CLI from source  | Termux; no beta APK in the desktop build workflow |
+| **Android**                | GUI (experimental) | arm64-v8a, armeabi-v7a, x86_64, x86 APK build targets |
+| **Android**                | CLI from source  | Termux                                          |
 
-Linux 32-bit (x32 artifact) and riscv64 CLI builds are available as experimental workflow-dispatch targets. They use native target toolchains and must pass a CI build and smoke test before their artifacts are published. Linux s390x and ppc64le CLI builds are paused because `curl-cffi` does not support those architectures. Windows ARM64 GUI and Windows x86 CLI builds are paused after build and runtime failures in pipeline #43.
+This table describes configured build targets, not a guarantee that every target
+has a successful artifact for every release. Check the release's Actions run.
+Linux 32-bit (x32 artifact) and riscv64 CLI builds are optional experimental
+workflow-dispatch targets. Linux s390x/ppc64le and Windows x86 are not in the
+current build matrix. Android build and device limitations are tracked in the
+[Android CI guide](docs/ANDROID_CI.md) and [development checklist](https://pornfetch.to/checklist).
 
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
 > [!NOTE]
-> The [experimental iOS port](docs/iOS.md) has been verified on a jailbroken
-> iPhone 7, including downloads and automatic MP4 remuxing. See its
-> [build instructions](docs/ios/BUILDING.md). Mobile GUI artifacts are not
-> included in the current desktop build workflow.
+> The [experimental iOS port](docs/iOS.md) has user-confirmed downloads, MP4
+> remuxing and playback on both jailbroken and non-jailbroken iPhone 7 devices.
+> The separate **iOS Build** workflow produces an IPA requiring re-signing;
+> Android APK jobs are part of **Cross-Platform Build Pipeline**. See the
+> [iOS build instructions](docs/ios/BUILDING.md).
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -251,6 +260,8 @@ Linux 32-bit (x32 artifact) and riscv64 CLI builds are available as experimental
 - [redtube.com](https://redtube.com)
 - [thumbzilla.com](https://thumbzilla.com)
 - [tube8.com](https://tube8.com)
+- [empflix.com](https://empflix.com)
+- [tnaflix.com](https://tnaflix.com)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
@@ -286,9 +297,9 @@ Currently available in:
 
 
 ## 👏 Credits
-- API: [PHUB](https://github.com/EchterAlsFake/PHUB)
+- API/download engine: [eaf_base_api](https://github.com/EchterAlsFake/eaf_base_api) and the provider libraries listed in [pyproject.toml](pyproject.toml)
 - GUI: [Qt](https://qt.io) for Python
-- Media processing: [PyAV / FFmpeg](https://pyav.org/) (license depends on the bundled FFmpeg build; see third-party notices)
+- Media processing: a separate minimal LGPL-only [FFmpeg build](docs/FFMPEG.md); see third-party notices
 
 ### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
@@ -297,8 +308,8 @@ Current development snapshots marked with the [Porn Fetch Source-Available Licen
 <br>Copyright (C) 2023–2026 Johannes Habel 
 
 # Sponsoring / Donations
-The payment deployment remains in sandbox mode as of 6 October 2026. The donation
-links below are separate and optional; they are not needed to use the beta.
+The donation links below are separate from Premium purchases and optional;
+they are not needed to use the beta.
 
 However, I kindly ask every one of you to donate a small amount of money. If you have Monero (crypto)
 or PayPal, you can donate me here:

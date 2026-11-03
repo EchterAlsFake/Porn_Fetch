@@ -141,7 +141,7 @@ I hope that most issues are now fixed.
 ### New Features:
 - Added support for HQPorner.com.
 - Introduced dynamic colors for CLI.
-- Created STATUS.md for tracking upcoming releases.
+- Added release progress tracking, now maintained in the [server checklist](https://pornfetch.to/checklist).
 - Implemented help buttons for threading and "high speed" (previously known as Delay).
 - Added user metadata and info functionality.
 - Included a new logo.
@@ -667,16 +667,20 @@ to be refactored.
 
 # V 3.9 (in development)
 
-These notes cover the current 3.9 development tree and changes since 3.8, updated through 30 October 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below.
+These notes cover the current 3.9 development tree and changes since 3.8, updated through 3 November 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below. Current release readiness is tracked in the [development checklist](https://pornfetch.to/checklist).
 
-The checkout remains a free sandbox simulation for this beta. These application changes do not enable real payments.
+Payment deployment is maintained separately from the application; these notes do not establish whether a checkout or payment method is live.
 
 ### Python 3.15 and mobile builds
 
 - Moved project requirements, dependency locking, installers, validation and all platform build workflows to Python 3.15. Updated desktop compilation to Nuitka 4.3.3.
 - Extended the Qt compatibility patch to preload Python 3.15's executor before Qt initialization, preventing deferred import objects from breaking asynchronous work.
-- Android now targets Python/hostpython 3.15.2 and matching `cp315` PySide6/Shiboken6 wheels. Builds await the replacement wheels and their checksum manifest.
-- The user confirmed license activation, video download, automatic FFmpeg remuxing and audio/video playback on a non-jailbroken iPhone 7. Public iOS build automation remains pending.
+- Android targets Python/hostpython 3.15.2 and matching `cp315` PySide6/Shiboken6 wheels from the pinned `6.12.0-api28` release, with per-wheel checksums. The local Python recipe skips two obsolete Python 3.14 patches already incorporated or superseded in 3.15.
+- The user confirmed license activation, video download, automatic FFmpeg remuxing and audio/video playback on a non-jailbroken iPhone 7. The separate iOS workflow builds and audits an IPA requiring re-signing; its hosted ARM64 build passed on 1 November. Installing each new IPA remains a separate device check.
+
+### Free automatic updates
+
+- Automatic updates are free for everyone on desktop, Android, and CLI, without a license or licensing-server check. Signed metadata and artifact verification remain required. Premium-feature licensing remains unchanged.
 
 ### Supported websites and URL handling
 
@@ -821,7 +825,7 @@ The checkout remains a free sandbox simulation for this beta. These application 
 #### Android
 
 - Added a separate signed Android TUF feed with APK architecture, package, version, release timestamp and hash metadata.
-- Verify the downloaded APK, update entitlement and signing identity before handing it to Android's installer through a read-only content URI.
+- Verify the downloaded APK and signing identity before handing it to Android's installer through a read-only content URI.
 - Let Android request installation permission and final confirmation; updates are not installed silently.
 - Preserve the installed application if an update is cancelled or verification/download fails.
 - Android update and installation flows still require validation on real devices and built APKs.
@@ -988,12 +992,13 @@ Added substantial offline and opt-in live coverage around the production GUI, CL
 
 - Replaced the old Kotlin Android app with an experimental QML layout featuring phone/tablet navigation, download cards, safe-area/layout work and file export through Android's picker.
 - Added GitHub Actions APK jobs for arm64-v8a, armeabi-v7a, x86_64 and x86. Android-only workflow selection is available alongside desktop GUI, CLI and combined builds.
-- Updated the Android build path for Python 3.14 and matching PySide6/Shiboken wheels, with checksum verification before deployment patches.
+- Updated the Android build path for Python 3.15.2 and matching PySide6/Shiboken wheels, with checksum verification before deployment patches.
 - Fixed native dependency recipes, target-ABI cryptography builds, Android command-line-tool discovery and clean-build registration of the Qt activity JARs.
 - Preserve maintained native recipes outside deployment cleanup, and keep build failures visible through shell pipelines and per-ABI diagnostic artifacts.
 - Added APK signing with a persistent signing identity, signature verification and checksum sidecars. Publishing requires signed APKs; unsigned build artifacts are explicitly diagnostic.
 - Added website release publication and the signed Android update feed, including publication-only retries from existing successful build artifacts without recompiling them.
 - Stamp one release version and original workflow timestamp into the binaries, update metadata and release assets; workflow reruns retain that timestamp.
+- Check the signed CLI feed before platform compilation when CLI publication is requested, rejecting release versions that would overwrite equal or newer published targets.
 - Allow separate GUI/CLI builds, and include only successful target artifacts in signed update repositories.
 - Add offline CI gates, compiled GUI/CLI smoke checks, platform bundle checks, and post-upload signature/hash/download verification before release publication.
 - Improved macOS runtime/plugin packaging and Intel/ARM64 bundle checks, and fixed installer archive handling for paths containing spaces.

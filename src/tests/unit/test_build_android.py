@@ -4,12 +4,14 @@ from __future__ import annotations
 import configparser
 import io
 import os
+import runpy
 import subprocess
 import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from scripts.build_android import (
@@ -38,6 +40,30 @@ from scripts.patch_android_deploy import (
     verify_android_utilities,
     verify_buildozer,
 )
+
+
+class TestPython315Recipe(unittest.TestCase):
+    def test_only_superseded_python314_patches_are_skipped(self):
+        class UpstreamRecipe:
+            major_minor_version_string = "3.15"
+
+            def __init__(self):
+                self.applied = []
+
+            def apply_patch(self, filename, arch, build_dir=None):
+                self.applied.append((filename, arch, build_dir))
+
+        source = Path(__file__).resolve().parents[3] / "p4a-recipes/python3/__init__.py"
+        namespace = {}
+        with patch.dict(sys.modules, {"pythonforandroid": SimpleNamespace(__file__="/upstream/__init__.py")}), \
+                patch.object(runpy, "run_path", return_value={"Python3Recipe": UpstreamRecipe}):
+            exec(compile(source.read_text(), str(source), "exec"), namespace)
+        recipe = namespace["recipe"]
+        for filename in ("3.14_armv7l_fix.patch", "3.14_fix_remote_debug.patch", "cpython-311-ctypes-find-library.patch"):
+            recipe.apply_patch("patches/" + filename, "arm64-v8a", "/build")
+        self.assertEqual(recipe.applied, [("patches/cpython-311-ctypes-find-library.patch", "arm64-v8a", "/build")])
+        self.assertEqual(recipe.version, "3.15.2")
+        self.assertEqual(recipe.get_recipe_dir(), "/upstream/recipes/python3")
 
 
 class TestApkSigning(unittest.TestCase):

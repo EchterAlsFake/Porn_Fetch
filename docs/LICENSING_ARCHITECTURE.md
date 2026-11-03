@@ -2,8 +2,9 @@
 
 This document describes the commercial client implementation, with backend facts
 from the operator's 6 October 2026 Keygen CE 1.8 handoff. It does not declare a
-commercial launch. NOWPayments remains sandboxed and Patreon disabled. The server's
-customer renewal selection UI still needs wiring, according to that handoff.
+commercial launch or establish current payment/renewal deployment status.
+Operational release progress is maintained in the
+[server checklist](https://pornfetch.to/checklist); the source code defines client behavior.
 
 ## Public configuration and migration
 

@@ -45,6 +45,10 @@ Repeat with a newer version (for example `3.9.2`), then run `self-update` from
 the older executable. Creating a GitHub Release also deploys updates for the
 selected frontend(s); it requires successful builds and deployment for those
 frontends. Publishing rejects a target whose version does not increase.
+When CLI publication is requested, the release-metadata job checks the signed
+public feed before starting platform builds. Choose a `release_version` newer
+than its published target versions; build-only runs do not need a newer version.
+Do not reuse an older release version to replace an existing target.
 **Refresh CLI Update Metadata** renews signed metadata every three days between
 releases and can also be run manually. A failed refresh needs attention before
 the timestamp expires after seven days.
@@ -83,12 +87,15 @@ root keys.
 
 The online signing key is `.private/cli-updates/online.pem`. GitHub Actions reads it from the beta environment secret `CLI_UPDATE_SIGNING_KEY`; set the entire PEM file as the secret value and restrict access to the beta environment. If this key is exposed, stop publishing, rotate the delegated signing keys with the offline root key, and publish a new signed root before resuming.
 
-### Recover the trust root before the first 3.9 release
+### Trust-root recovery reference
 
-The former `.private/cli-updates` directory, including `root.pem`, was lost.
-The existing public root cannot recover that private key. No 3.9 CLI build was
-distributed, so establish a fresh version-1 public root before building or
-releasing 3.9. This is a new trust bootstrap, not a rotation for installed clients.
+The following procedure was prepared after a local private-key directory was
+lost. It is a recovery reference, not a statement about current keys or deployed
+clients. Confirm the actual deployment and backups before using it; track
+release progress in the [server checklist](https://pornfetch.to/checklist).
+An existing public root cannot recover its private key. A fresh version-1 root
+is appropriate only before any clients using the previous root have been
+distributed. Existing clients require a planned root rotation instead.
 Production keys must be generated and backed up by an operator on a trusted
 machine; automated development sessions should use disposable test keys only.
 

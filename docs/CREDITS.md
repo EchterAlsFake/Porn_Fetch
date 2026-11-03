@@ -26,8 +26,9 @@ license terms; see the current third-party notices.**
 
 # Graphics
 The IconScout entries below acknowledge graphics used in earlier versions.
-The current six SVG navigation icons were redrawn for this application and are
-documented in [ASSET_PROVENANCE.md](ASSET_PROVENANCE.md).
+Current graphics are stored in [src/frontend/graphics](../src/frontend/graphics/).
+See the [third-party notices](../THIRD_PARTY_NOTICES.md) for current attributions,
+including the Lucide settings icons.
 - <a href="https://iconscout.com/icons/serveranalyse" class="text-underline font-size-sm" target="_blank">Serveranalyse</a> by <a href="https://iconscout.com/de/contributors/khulqi-dsgn/:assets" class="text-underline font-size-sm" target="_blank">Khulqi Design</a>
 - <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a> [*]
 - <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a> [*]

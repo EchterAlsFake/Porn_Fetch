@@ -9,6 +9,9 @@ This file is maintained as a concise map of the current development tree. Read i
 - Current release notes: root `CHANGELOG_STATIC.md`; full history: `docs/CHANGELOG.md`.
 - Manual builds take a full `release_version` in the workflow; CI stamps that version
   and one workflow timestamp into all binaries and release metadata.
+- Release readiness is tracked at `https://pornfetch.to/checklist`, including the
+  progress bar at `/checklist/progress.svg`. Do not recreate a local status document.
+  Source code defines application behavior; dated audits are historical evidence.
 - Python: 3.15 (the repository default)
 - Desktop compilation: Nuitka 4.3.3; Android target/hostpython: 3.15.2.
 - iOS: the user confirmed non-jailbroken iPhone 7 operation, license activation,
