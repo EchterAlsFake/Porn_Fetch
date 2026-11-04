@@ -268,11 +268,12 @@ class NativeMacOSSigningTests(unittest.TestCase):
             app = Path(temporary) / "SigningProbe.app"
             macos = app / "Contents/MacOS"
             macos.mkdir(parents=True)
-            shutil.copy2("/usr/bin/true", macos / "SigningProbe")
+            # System file flags cannot be copied by an unprivileged CI user.
+            shutil.copy("/usr/bin/true", macos / "SigningProbe")
             (macos / "LICENSES").mkdir()
             (macos / "LICENSES/notice.txt").write_text("Signing probe license")
             (macos / "package").mkdir()
-            shutil.copy2("/usr/bin/true", macos / "package/helper")
+            shutil.copy("/usr/bin/true", macos / "package/helper")
             (macos / "package/data.json").write_text("{}")
             with (app / "Contents/Info.plist").open("wb") as output:
                 plistlib.dump({"CFBundleExecutable": "SigningProbe", "CFBundleIdentifier": "to.pornfetch.signingprobe",
