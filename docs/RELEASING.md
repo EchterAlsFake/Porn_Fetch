@@ -10,6 +10,10 @@ numeric `release_version`, such as `3.9.77`, and a target: `cli`, `gui`, `both`,
 or `android`. GUI includes Android; CLI-only skips it. Optional experimental
 architectures have separate checks. A tag build uses the tag's version.
 
+The experimental RISC-V job uses GCC 14 explicitly. Ubuntu 24.04's default
+GCC 13 rejects the `-mno-omit-leaf-frame-pointer` flag inherited from Python 3.15
+when compiling native dependencies.
+
 CI resolves current compatible Python dependencies with `uv sync --upgrade`.
 It does not use a committed `uv.lock`. Each job keeps its environment unchanged
 after setup and records dependency information with its legal/build output.
