@@ -198,7 +198,9 @@ def prepare_staging_directory(
 
     tool_names = {"pocketbase", "pocketbase.exe", "ffmpeg", "ffmpeg.exe"}
     for path in data_dest.rglob("*"):
-        if path.is_file() and (path.name in tool_names or path.name.removesuffix(".sha256") in tool_names):
+        if (path.is_file() or path.is_symlink()) and (
+            path.name in tool_names or path.name.removesuffix(".sha256") in tool_names
+        ):
             path.unlink()
 
     return config_dest, packages_dir

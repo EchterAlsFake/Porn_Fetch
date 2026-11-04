@@ -110,7 +110,7 @@ class MacOSSigningTests(unittest.TestCase):
             path = macos / name
             self.assertTrue(path.is_symlink())
             self.assertEqual(path.read_text(), name)
-            self.assertEqual(path.resolve(), app / "Contents/Resources/runtime" / name)
+            self.assertEqual(path.resolve(), (app / "Contents/Resources/runtime" / name).resolve())
             self.assertFalse(path.readlink().is_absolute())
         self.assertFalse(main.is_symlink())
         self.assertFalse(library.is_symlink())
@@ -243,6 +243,8 @@ class MacOSSigningTests(unittest.TestCase):
         native(app / "Porn Fetch")
         native(app / "third_party/pocketbase")
         native(app / "third_party/ffmpeg")
+        (app / "third_party/ffmpeg.sha256").write_text("fixture checksum")
+        signing.relocate_resources(dist / "Porn Fetch.app")
         (app / "alias").symlink_to("Porn Fetch")
         pb, ff = native(self.root / "pocketbase"), native(self.root / "ffmpeg")
         config, packages = repository.prepare_staging_directory(
@@ -251,6 +253,7 @@ class MacOSSigningTests(unittest.TestCase):
         core = packages / "to.pornfetch.echteralsfake"
         self.assertTrue((core / "data/Porn Fetch.app/Contents/MacOS/alias").is_symlink())
         self.assertFalse((core / "data/Porn Fetch.app/Contents/MacOS/third_party/ffmpeg").exists())
+        self.assertEqual(list((core / "data").rglob("ffmpeg.sha256")), [])
         self.assertEqual(ET.parse(config).findtext("MaintenanceToolName"), "maintenancetool")
         self.assertEqual(
             ET.parse(core / "meta/package.xml").findtext("Dependencies"), "to.pornfetch.echteralsfake.maintenance"
