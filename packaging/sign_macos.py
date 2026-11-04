@@ -172,7 +172,8 @@ def verify(path):
         "anchor apple generic and certificate leaf[field.1.2.840.113635.100.6.1.13] exists "
         f'and certificate leaf[subject.OU] = "{team}"'
     )
-    command = ["codesign", "--verify", "--all-architectures", "--strict", "--verbose=2", "-R", requirement]
+    # Without '=', codesign treats the requirement text as a file path.
+    command = ["codesign", "--verify", "--all-architectures", "--strict", "--verbose=2", "-R", "=" + requirement]
     if path.suffix == ".app":
         command.append("--deep")
     run([*command, path])

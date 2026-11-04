@@ -43,6 +43,23 @@ class MacOSSigningTests(unittest.TestCase):
         self.environ.start()
         self.addCleanup(self.environ.stop)
 
+    def test_verification_uses_inline_requirement_for_developer_id_and_team(self):
+        for name in ("helper", "Example.app"):
+            with self.subTest(name=name):
+                path = self.root / name
+                result = subprocess.CompletedProcess([], 0, stdout="", stderr="")
+                with patch.object(signing.subprocess, "run", return_value=result) as execute:
+                    signing.verify(path)
+                command = execute.call_args.args[0]
+                self.assertEqual(command[:6], [
+                    "/usr/bin/codesign", "--verify", "--all-architectures", "--strict", "--verbose=2", "-R",
+                ])
+                self.assertEqual(command[6],
+                                 '=anchor apple generic and certificate leaf[field.1.2.840.113635.100.6.1.13] exists '
+                                 f'and certificate leaf[subject.OU] = "{TEAM}"')
+                self.assertEqual(command[-1], str(path))
+                self.assertEqual("--deep" in command, path.suffix == ".app")
+
     def test_signs_nested_code_inside_out_without_entitling_libraries(self):
         app = self.root / "Example.app"
         main = native(app / "Contents/MacOS/Example")
