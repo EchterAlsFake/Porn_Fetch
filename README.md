@@ -33,7 +33,7 @@ The beta is still unstable and being tested, but I would rather give you a broke
 ---
 </div>
 
-> [CAUTION]
+> [!CAUTION]
 > Porn Fetch is an unofficial project and is not endorsed, sponsored, nor explicitly approved by its supported Websites. 
 > Certain features of Porn Fetch are prohibited or restricted in [these countries](docs/PROHIBITED_COUNTRIES)
 
