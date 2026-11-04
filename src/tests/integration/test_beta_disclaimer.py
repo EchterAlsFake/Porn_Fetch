@@ -43,6 +43,7 @@ class BetaDisclaimerGuiTests(unittest.TestCase):
 
     def test_mobile_sized_dialog_blocks_enter_escape_and_early_ok(self):
         engine = QQmlApplicationEngine()
+        engine.rootContext().setContextProperty("appSettings", self.settings)
         engine.rootContext().setContextProperty("testDisclaimer", self.bridge)
         engine.loadData(b"""
             import QtQuick

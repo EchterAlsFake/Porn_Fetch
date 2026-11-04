@@ -13,15 +13,15 @@ jobs:
   catalogs:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.15'
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
-      - run: uv sync --locked --extra gui --group dev
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv sync --upgrade --extra gui --extra build --group dev
       - run: uv run --no-sync python scripts/translations.py check
   preview:
-    # Manual dispatch on the reviewed translation branch. Windows uses the signing environment.
+    # Manual dispatch on the reviewed translation branch. Desktop signing secrets are never used on PRs.
     if: github.event_name == 'workflow_dispatch'
     needs: catalogs
     strategy:
@@ -29,20 +29,30 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-2022, macos-14]
     runs-on: ${{ matrix.os }}
-    environment: ${{ matrix.os == 'windows-2022' && 'signing' || 'build' }}
+    environment: ${{ (matrix.os == 'windows-2022' || matrix.os == 'macos-14') && 'signing' || 'build' }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.15'
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
-      - run: uv sync --locked --extra gui --group dev
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv sync --upgrade --extra gui --extra build --group dev
       - run: uv run --no-sync python scripts/patch_qtasyncio.py .venv
       - run: uv run --no-sync python scripts/translations.py build
+      - name: Set up macOS Developer ID signing
+        if: runner.os == 'macOS'
+        uses: ./.github/actions/setup-macos-signing
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
       - name: Build desktop preview
         shell: bash
         run: >-
-          uv run --no-sync --with pyinstaller pyinstaller
+          uv run --no-sync pyinstaller
           --noconfirm --onedir --windowed --name PornFetch-translation-preview
           --collect-all PySide6 --collect-all certifi --collect-all curl_cffi
           --collect-submodules src --add-data "src:src" --add-data "docs:docs"
@@ -58,7 +68,17 @@ jobs:
           CERTUM_EMAIL: ${{ secrets.CERTUM_EMAIL }}
           CERTUM_OTP: ${{ secrets.CERTUM_OTP }}
         run: ./packaging/sign_windows.ps1 -Paths 'dist/PornFetch-translation-preview'
-      - uses: actions/upload-artifact@v4
+      - name: Sign and notarize macOS preview
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          uv run --no-sync python packaging/sign_macos.py sign dist/PornFetch-translation-preview.app --runtime python
+          uv run --no-sync python packaging/sign_macos.py notarize dist/PornFetch-translation-preview.app
+          # Distribute the notarized bundle once, preserving resource forks and symlinks.
+          ditto -c -k --sequesterRsrc --keepParent dist/PornFetch-translation-preview.app "$RUNNER_TEMP/macOS-translation-preview.zip"
+          rm -rf dist/PornFetch-translation-preview.app dist/PornFetch-translation-preview
+          mv "$RUNNER_TEMP/macOS-translation-preview.zip" dist/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: translation-preview-${{ matrix.os }}
           path: dist/
@@ -67,3 +87,14 @@ jobs:
         if: always() && runner.os == 'Windows'
         shell: pwsh
         run: Remove-Item -LiteralPath (Join-Path $env:RUNNER_TEMP 'pornfetch-signing') -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Remove macOS signing keychain
+        if: always() && runner.os == 'macOS'
+        run: python3 packaging/sign_macos.py cleanup
+
+      - name: Preserve macOS notarization logs
+        if: always() && runner.os == 'macOS'
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: translation-preview-macos-notarization-logs
+          path: ${{ runner.temp }}/porn-fetch-build-logs/

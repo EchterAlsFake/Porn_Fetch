@@ -13,13 +13,15 @@ from PySide6.QtQuick import QQuickItem
 from PySide6.QtQuickControls2 import QQuickStyle
 from PySide6.QtTest import QTest
 
+from src.frontend.UI import resources  # noqa: F401
+
 QQuickStyle.setStyle("Material")
 _app = QGuiApplication.instance() or QGuiApplication([])
 
 
 class QueueModel(QAbstractListModel):
     names = ["jobId", "title", "author", "duration", "availableQualities",
-             "selectedQuality", "progress", "selected", "status"]
+             "selectedQuality", "progress", "selected", "status", "errorId"]
     states = ["pending", "downloading", "completed", "failed", "queued", "stopping", "cancelled"]
 
     def roleNames(self):
@@ -31,7 +33,7 @@ class QueueModel(QAbstractListModel):
     def data(self, index, role):
         values = [f"job{index.row()}", "A longer example video title to verify wrapping on small screens",
                   "Example creator", "12 min 30 sec", ["480", "720", "1080"], "720", 42, False,
-                  self.states[index.row()]]
+                  self.states[index.row()], ""]
         offset = role - Qt.UserRole
         return values[offset] if 0 <= offset < len(values) else None
 

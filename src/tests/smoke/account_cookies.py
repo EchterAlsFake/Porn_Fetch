@@ -25,7 +25,7 @@ from src.cli.accounts import AccountService
 from src.cli.media import prepare_video
 from src.cli.providers import ClientPool
 from src.cli.settings import CliSettings
-from src.shared.provider_accounts import valid_xhamster_playlist_url, verify_account_session
+from src.shared.provider_accounts import AccountSessionError, valid_xhamster_playlist_url, verify_account_session
 from src.shared.provider_routing import ContentKind, route_url, unwrap_scrape_result
 from src.shared.tor_transport import MediaCore
 
@@ -126,7 +126,8 @@ async def run(args, *, password=None, usernames=None):
         except Exception as error:
             row["error_type"] = type(error).__name__
             # Upstream exception messages can contain signed URLs or session data.
-            row["error"] = str(error) if isinstance(error, CheckFailed) else "See error_type; upstream details omitted"
+            row["error"] = (str(error) if isinstance(error, (CheckFailed, AccountSessionError))
+                            else "See error_type; upstream details omitted")
         finally:
             row["elapsed_seconds"] = round(time.monotonic() - started, 2)
             report["checks"].append(row)

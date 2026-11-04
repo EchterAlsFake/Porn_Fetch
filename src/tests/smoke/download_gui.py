@@ -24,10 +24,10 @@ from unittest.mock import patch
 from src.cli.downloads import RAW_VIDEO_MODULES
 from src.shared.media import VideoObject
 from src.shared.provider_routing import PROVIDER_MODULES
+from src.tests.provider_cases import MANUAL_PROVIDERS
 from src.tests.smoke.download_lifecycle import lifecycle_fixtures, media_requests, require, validate_media
 
 SCENARIOS = ("pause-resume", "cleanup", "remove")
-MANUAL_PROVIDERS = {"spankbang": "Website/CDN playback issues; verify manually when playback works again"}
 
 
 def make_report(args, workspace=None):
@@ -79,7 +79,7 @@ def isolated_settings(directory):
 class DownloadWindow:
     """Render the production page and send actual mouse/keyboard events to it."""
 
-    def __init__(self, timeout, *, parallel=1, application_close=False):
+    def __init__(self, timeout, *, parallel=1, premium=False, application_close=False):
         from PySide6.QtCore import QUrl
         from PySide6.QtQml import QQmlApplicationEngine
 
@@ -88,7 +88,7 @@ class DownloadWindow:
         from src.frontend.UI import resources
 
         resources.qInitResources()
-        self.backend = make_account_backend()
+        self.backend = make_account_backend(premium=premium)
         self.backend.logger = logging.getLogger("desktop-download-test")
         self.backend._download_semaphore = asyncio.Semaphore(parallel)
         self.timeout = timeout
@@ -103,6 +103,7 @@ class DownloadWindow:
         self.engine.rootContext().setContextProperty("backend", self.backend)
         self.engine.rootContext().setContextProperty("appSettings", app_settings)
         self.engine.rootContext().setContextProperty("applicationClose", application_close)
+        self.engine.rootContext().setContextProperty("diagnosticPremium", premium)
         self.engine.loadData(b'''
 import QtQuick
 import QtQuick.Controls
@@ -110,7 +111,7 @@ ApplicationWindow {
     id: window
     visible: true; width: 1600; height: 1100
     property bool androidLayout: false
-    property QtObject bridge: QtObject { property bool isPremium: false }
+    property QtObject bridge: QtObject { property bool isPremium: diagnosticPremium }
     ApplicationShutdown { targetWindow: window; backendController: backend; active: applicationClose }
     DownloadsPage { anchors.fill: parent }
 }
@@ -396,7 +397,7 @@ async def check_case(args, provider, transport, url, scenario, directory, ffmpeg
                                 "Stopped download disappeared instead of offering Resume")
                         gui.pump()
                         require(gui.control("downloadStopResumeButton").isEnabled()
-                                and gui.control("downloadStopResumeButton").property("text") == "▶",
+                                and gui.control("downloadStopResumeButton").property("text") == "Resume",
                                 "Stopped row did not offer its Resume control")
                         retained = set()
                         checkpoint_bytes = 0

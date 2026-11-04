@@ -76,6 +76,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
 
         backend = SimpleNamespace(
             _license_bridge=None, updateAvailable=MagicMock(), updateStatus=MagicMock(), logger=MagicMock(),
+            _update_check_manual=False, notifications=MagicMock(), tr=lambda text: text,
         )
         for source in ("signed_repository", "signed_android", "http"):
             with self.subTest(source=source), patch.object(CheckUpdates, "check", AsyncMock(return_value={
@@ -83,6 +84,10 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
             })):
                 await Backend._check_for_updates(backend)
                 details = backend.updateAvailable.emit.call_args.args[0]
+                self.assertTrue(details["automatic"])
+                self.assertEqual(backend.notifications.publish.call_args.kwargs["action"], "updates")
+                Backend.review_update(backend)
+                self.assertFalse(backend.updateAvailable.emit.call_args.args[0]["automatic"])
                 self.assertEqual(details["install_allowed"], source != "http")
                 if details["install_allowed"]:
                     self.assertIn("free for everyone", details["entitlement_message"])
@@ -153,3 +158,46 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MaintenanceAndCleanupTests(unittest.TestCase):
+    def test_maintenance_opens_interactive_mode_with_space_in_path(self):
+        from src.backend.update_service import launch_maintenance_tool
+
+        tool = Path("/some folder/maintenancetool")
+        with patch("src.backend.update_service.subprocess.Popen") as launch:
+            launch_maintenance_tool(tool, "uninstall")
+        self.assertEqual(launch.call_args.args[0], [str(tool), "--start-uninstaller"])
+        self.assertEqual(launch.call_args.kwargs["cwd"], str(tool.parent))
+
+    def test_active_cleanup_waits_for_confirmation_but_acceptance_clears(self):
+        from src.backend.application import Backend
+
+        backend = SimpleNamespace(
+            _download_tasks={1: SimpleNamespace(done=lambda: False)},
+            notifications=MagicMock(), tr=lambda text: text, _clear_temporary_files=MagicMock(),
+        )
+        Backend.clear_temporary_files(backend)
+        backend._clear_temporary_files.assert_not_called()
+        self.assertEqual(backend.notifications.request_decision.call_args.args[0], "clear-temporary-files")
+        Backend._accept_decision(backend, "clear-temporary-files")
+        backend._clear_temporary_files.assert_called_once()
+
+    def test_idle_cleanup_does_not_prompt(self):
+        from src.backend.application import Backend
+
+        backend = SimpleNamespace(_download_tasks={}, notifications=MagicMock(), _clear_temporary_files=MagicMock())
+        Backend.clear_temporary_files(backend)
+        backend.notifications.request_decision.assert_not_called()
+        backend._clear_temporary_files.assert_called_once()
+
+    def test_failed_maintenance_launch_keeps_app_open(self):
+        from src.backend.application import Backend
+
+        backend = SimpleNamespace(notifications=MagicMock(), logger=MagicMock(), tr=lambda text: text,
+                                  initiate_shutdown=MagicMock())
+        with patch("src.backend.application.find_maintenance_tool", return_value=Path("/tool")), \
+             patch("src.backend.application.launch_maintenance_tool", side_effect=OSError("failed")):
+            Backend._accept_decision(backend, "maintenance-uninstall")
+        backend.initiate_shutdown.assert_not_called()
+        self.assertEqual(backend.notifications.publish.call_args.kwargs["severity"], "error")

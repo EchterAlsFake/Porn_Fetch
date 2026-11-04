@@ -21,6 +21,16 @@ class TestPerformanceTabGUI(SettingsGUITestBase):
         self.assertEqual(self.settings_manager.parallel_downloads, 4)
         self.assert_file_value("Performance/semaphore", 4)
 
+    def test_parallel_downloads_are_locked_to_one_without_premium(self) -> None:
+        self.bridge.set_premium(False)
+        control = self.find_control("parallelDownloadsSpinBox")
+        self.assertEqual(control.property("to"), 1)
+        self.simulate_spinbox("parallelDownloadsSpinBox", 2)
+        self.assertEqual(self.settings_manager.parallel_downloads, 1)
+        self.bridge.set_premium(True)
+        self.simulate_spinbox("parallelDownloadsSpinBox", 3)
+        self.assertEqual(self.settings_manager.parallel_downloads, 3)
+
     def test_retries_spinbox(self) -> None:
         self.simulate_spinbox("retriesSpinBox", 8)
         self.assertEqual(self.settings_manager.retries, 8)

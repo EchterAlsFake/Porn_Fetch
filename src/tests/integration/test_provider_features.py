@@ -30,7 +30,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
 
     def backend(self):
         return SimpleNamespace(
-            process_videos=AsyncMock(), showMessage=Mock(),
+            process_videos=AsyncMock(), showMessage=Mock(), has_premium_access=lambda: False, notifications=Mock(), tr=lambda text: text,
             _iterator_display_name=lambda target, url, fallback: fallback,
         )
 
@@ -77,7 +77,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, download_workers=1,
                                    timeout=30, retries=1, write_metadata=True)
         backend = SimpleNamespace(_download_semaphore=asyncio.Semaphore(1), _downloads_model=Mock(),
-                                  download_manager=Mock(), logger=Mock())
+                                  download_manager=Mock(), logger=Mock(), notifications=Mock())
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "video.mp4"
             output.write_bytes(b"downloaded")
@@ -106,7 +106,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, download_workers=1,
                                    timeout=30, retries=1, write_metadata=True)
         backend = SimpleNamespace(_download_semaphore=asyncio.Semaphore(1), _downloads_model=Mock(),
-                                  download_manager=Mock(), logger=Mock())
+                                  download_manager=Mock(), logger=Mock(), notifications=Mock())
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "hls_video.mp4"
             output.write_bytes(b"downloaded")
@@ -131,7 +131,8 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         def spawn(coroutine, **options):
             coroutine.close()
             return Mock()
-        media = SimpleNamespace(source_video=Video(), qualities=[], selected_quality=None)
+        media = SimpleNamespace(source_video=Video(), qualities=[], selected_quality=None,
+                                origin_iterator_url=None, is_from_account=False, index=1)
         for premium in (False, True):
             backend = SimpleNamespace(
                 _download_tasks={}, _download_stop_events={}, _is_shutting_down=False,

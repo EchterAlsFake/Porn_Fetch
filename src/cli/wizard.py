@@ -9,6 +9,8 @@ import questionary
 from rich.console import Console
 from rich.panel import Panel
 
+from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
+
 from .beta_disclaimer import prompt_beta_disclaimer
 from .downloads import PausedStore
 from .flows import (
@@ -68,6 +70,7 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
         settings = settings.overridden(
             error_reporting=explicit_reporting_choice,
             error_reporting_decided=True,
+            error_reporting_consent_version=ERROR_REPORT_CONSENT_VERSION,
         )
         store.save(settings)
     elif not settings.error_reporting_decided:

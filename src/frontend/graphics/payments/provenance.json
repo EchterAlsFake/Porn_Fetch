@@ -1,0 +1,49 @@
+{
+  "source": "https://github.com/simple-icons/simple-icons",
+  "license": "CC0-1.0 except Monero (CC-BY-SA-4.0)",
+  "modification": "Added fill colours for display on dark backgrounds.",
+  "icons": {
+    "bitcoin": {
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/bitcoin.svg",
+      "sha256": "f7ad321f097ea346067616362551262755d3256b35dd9094c7b817dea9ba6db2",
+      "metadata": {
+        "title": "Bitcoin",
+        "hex": "F7931A",
+        "source": "https://bitcoin.org"
+      }
+    },
+    "monero": {
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/monero.svg",
+      "sha256": "95e66c114b84058acf189765a62f615661577c7996956d7aecbadaaad4411a1b",
+      "metadata": {
+        "title": "Monero",
+        "hex": "FF6600",
+        "source": "https://www.getmonero.org/press-kit",
+        "license": {
+          "type": "CC-BY-SA-4.0"
+        }
+      },
+      "attribution": "Monero Project, https://www.getmonero.org/press-kit",
+      "license": "CC-BY-SA-4.0"
+    },
+    "ethereum": {
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/ethereum.svg",
+      "sha256": "3ba206148e7739d7f91530249aaba89abfbd6f8528b88bdfee12b623994723eb",
+      "metadata": {
+        "title": "Ethereum",
+        "hex": "3C3C3D",
+        "source": "https://ethereum.org/en/assets/"
+      }
+    },
+    "litecoin": {
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/litecoin.svg",
+      "sha256": "98388174a3ee2b29d1cbb95e7b0d6a5316f4ac387546dd0ebbf6a67f3d818363",
+      "metadata": {
+        "title": "Litecoin",
+        "hex": "A6A9AA",
+        "source": "https://litecoin-foundation.org/litecoin-branding-guidelines/",
+        "guidelines": "https://litecoin-foundation.org/litecoin-branding-guidelines/"
+      }
+    }
+  }
+}

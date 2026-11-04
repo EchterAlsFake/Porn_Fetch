@@ -71,11 +71,8 @@ class AccountService:
             client.account = account
             return account is not None
 
-        required = ("session_token", "session_token_auth")
         values = ({cookie.name: cookie.value for cookie in cookies}
                   if isinstance(cookies, http.cookiejar.CookieJar) else dict(cookies or {}))
-        if any(not values.get(name) for name in required):
-            raise ValueError("Both XVideos session tokens are required")
         return await connect_xvideos_cookies(client, values, browser_jar=cookies if browser else None)
 
     def collection(

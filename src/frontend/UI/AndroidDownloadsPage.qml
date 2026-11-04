@@ -7,6 +7,7 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: width >= 840 ? 24 : 12
+    readonly property var inputErrors: backend.inputErrors || ({})
     property bool showFilters: false
     property bool selectionMode: false
     property string expandedJob: ""
@@ -44,6 +45,22 @@ Pane {
         title: qsTr("Choose where to save videos")
         onAccepted: backend.set_android_output_folder(selectedFolder.toString())
     }
+
+    Connections {
+        target: backend.downloads
+        function onRowsAboutToBeRemoved(parentIndex, first, last) {
+            var item = downloadList.Window.window.activeFocusItem
+            while (item && item !== downloadList) {
+                if (item.objectName === "downloadCard" && item.index >= first && item.index <= last) {
+                    downloadList.forceActiveFocus()
+                    return
+                }
+                item = item.parent
+            }
+        }
+    }
+
+    ScrollableMessageDialog { id: downloadErrorDialog; title: qsTr("Download failed"); modal: true }
 
     function filterValue(field) {
         return field.text.trim() === "" ? null : field.text.trim();
@@ -118,8 +135,17 @@ Pane {
                         Layout.fillWidth: true
                         model: [qsTr("Video URL"), qsTr("Model URL"), qsTr("Playlist URL")]
                     }
+                    Label {
+                        Layout.fillWidth: true
+                        visible: sourceType.currentIndex > 0 && !bridge.isPremium
+                        text: qsTr("Free preview: first 5 videos. Activate a premium license to load the full model, channel or playlist.")
+                        wrapMode: Text.Wrap
+                        color: root.mutedColor
+                    }
                     TextField {
                         id: urlField
+                        Accessible.description: root.inputErrors[["video", "model", "playlist"][sourceType.currentIndex]] || ""
+                        onTextEdited: backend.clear_input_error(["video", "model", "playlist"][sourceType.currentIndex])
                         implicitHeight: 56
                         Layout.fillWidth: true
                         Accessible.name: placeholderText
@@ -143,23 +169,32 @@ Pane {
                             if (!enabled)
                                 return;
                             var url = urlField.text.trim();
+                            var accepted = false;
                             if (sourceType.currentIndex === 0)
-                                backend.process_single_url(url, customOptions.text, root.filters());
+                                accepted = backend.process_single_url(url, customOptions.text, root.filters());
                             else if (sourceType.currentIndex === 1)
-                                backend.process_model_url(url, customOptions.text, root.filters());
+                                accepted = backend.process_model_url(url, customOptions.text, root.filters());
                             else if (sourceType.currentIndex === 2)
-                                backend.process_playlist_url(url, customOptions.text, root.filters());
+                                accepted = backend.process_playlist_url(url, customOptions.text, root.filters());
+                            if (!accepted) return;
                             urlField.clear();
                             Qt.inputMethod.hide();
                             addSheet.close();
                         }
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: root.inputErrors[["video", "model", "playlist"][sourceType.currentIndex]] || root.inputErrors.filters || ""
+                        visible: text !== ""
+                        textFormat: Text.PlainText
+                        wrapMode: Text.Wrap
                     }
                     RowLayout {
                         Layout.fillWidth: true
                         visible: true
                         Label {
                             Layout.fillWidth: true
-                            text: qsTr("Save to: %1").arg(root.currentOutputFolderName)
+                            text: qsTr("Output folder: %1").arg(root.currentOutputFolderName)
                             color: root.mutedColor
                             elide: Text.ElideRight
                         }
@@ -306,23 +341,24 @@ Pane {
                 elide: Text.ElideRight
             }
             ToolButton {
+                visible: backend.busy
+                text: qsTr("Cancel loading")
+                implicitHeight: 48
+                onClicked: backend.cancel_fetching()
+            }
+            ToolButton {
+                objectName: "clearDownloadListButton"
+                text: qsTr("Clear list")
+                implicitHeight: 48
+                enabled: downloadList.count > 0 || backend.busy
+                Accessible.description: qsTr("Remove all video rows. Downloaded files and history are kept.")
+                onClicked: backend.clear_download_list()
+            }
+            ToolButton {
                 text: root.selectionMode ? qsTr("Done") : qsTr("Select")
                 implicitHeight: 48
                 enabled: downloadList.count > 0
                 onClicked: root.selectionMode = !root.selectionMode
-            }
-        }
-        RowLayout {
-            visible: backend.busy
-            Layout.fillWidth: true
-            ProcessingIndicator {
-                Layout.fillWidth: true
-                running: backend.busy
-            }
-            ToolButton {
-                text: qsTr("Cancel")
-                implicitHeight: 48
-                onClicked: backend.cancel_fetching()
             }
         }
         ListView {
@@ -338,6 +374,9 @@ Pane {
             ScrollBar.vertical: ScrollBar {}
             delegate: Frame {
                 id: card
+                objectName: "downloadCard"
+                required property int index
+                required property string errorId
                 required property string jobId
                 required property string title
                 required property string author
@@ -357,12 +396,7 @@ Pane {
                     border.width: card.selected && root.selectionMode ? 2 : 0
                     border.color: Material.accent
                 }
-                Dialogs.FileDialog {
-                    id: exportDialog
-                    title: qsTr("Save downloaded video")
-                    fileMode: Dialogs.FileDialog.SaveFile
-                    onAccepted: backend.export_download(card.jobId, selectedFile.toString())
-                }
+
                 contentItem: ColumnLayout {
                     spacing: 4
                     RowLayout {
@@ -438,7 +472,8 @@ Pane {
                         to: 100
                         value: card.progress
                         indeterminate: card.status === "queued"
-                        Accessible.name: qsTr("Download progress")
+                        Accessible.name: qsTr("Download %1 progress").arg(card.index + 1)
+                        Accessible.description: card.status
                     }
                     RowLayout {
                         Layout.fillWidth: true
@@ -462,19 +497,26 @@ Pane {
                         Button {
                             implicitHeight: 48
                             flat: true
-                            text: card.active ? qsTr("Stop") : card.resumable ? qsTr("Resume") : card.status === "completed" ? qsTr("Save") : qsTr("Download")
-                            enabled: card.status !== "stopping"
+                            Accessible.name: qsTr("Download %1: %2").arg(card.index + 1).arg(text)
+                            text: card.active ? qsTr("Stop") : card.status === "failed" ? qsTr("Retry") : card.resumable ? qsTr("Resume") : card.status === "completed" ? qsTr("Completed") : qsTr("Download")
+                            enabled: card.status !== "stopping" && card.status !== "completed"
                             onClicked: {
                                 if (card.active)
                                     backend.stop_download(card.jobId);
                                 else if (card.resumable)
                                     backend.resume_download(card.jobId, cleanupStop.checked);
-                                else if (card.status === "completed") {
-                                    exportDialog.selectedFile = backend.download_file_url(card.jobId);
-                                    exportDialog.open();
-                                } else
+                                else
                                     backend.download_video(card.jobId, cleanupStop.checked);
                             }
+                        }
+                    }
+                    Button {
+                        visible: card.status === "failed" && card.errorId !== ""
+                        text: qsTr("Error details")
+                        implicitHeight: 48
+                        onClicked: {
+                            downloadErrorDialog.message = qsTr("The download failed. Check your connection and output folder, then retry.\n\nError ID: %1").arg(card.errorId)
+                            downloadErrorDialog.open()
                         }
                     }
                     RowLayout {

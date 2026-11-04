@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/images">
+        <file>graphics/payments/bitcoin.svg</file>
+        <file>graphics/payments/monero.svg</file>
+        <file>graphics/payments/ethereum.svg</file>
+        <file>graphics/payments/litecoin.svg</file>
+        <file>graphics/payments/check.svg</file>
+        <file>graphics/ukraine_flag.svg</file>
         <file>graphics/settings/video.svg</file>
         <file>graphics/settings/gauge.svg</file>
         <file>graphics/settings/settings.svg</file>
@@ -24,6 +30,8 @@
         <file>../../docs/CREDITS.md</file>
     </qresource>
     <qresource prefix="/legal">
+        <file alias="Monero-CC-BY-SA-4.0.txt">../../LICENSES/Monero-CC-BY-SA-4.0.txt</file>
+        <file alias="SimpleIcons.txt">../../LICENSES/SimpleIcons.txt</file>
         <file alias="LICENSE">../../LICENSE</file>
         <file alias="THIRD_PARTY_NOTICES.md">../../THIRD_PARTY_NOTICES.md</file>
         <file alias="Lucide.txt">../../LICENSES/Lucide.txt</file>

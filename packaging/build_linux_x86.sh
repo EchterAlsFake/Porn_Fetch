@@ -61,7 +61,7 @@ tar -xzf /tmp/uv.tar.gz -C /tmp
 install -m 755 /tmp/uv-i686-unknown-linux-gnu/uv /usr/local/bin/uv
 
 cd "$project_dir"
-run "Install dependencies" uv sync --locked --no-dev --extra build --python /opt/python-3.15/bin/python3.15
+run "Install dependencies" uv sync --upgrade --no-dev --extra build --python /opt/python-3.15/bin/python3.15
 uv run --no-sync python -c 'import struct; assert struct.calcsize("P") == 4'
 uv run --no-sync python packaging/write_build_version.py "$BUILD_RELEASE_VERSION" --release-timestamp "$BUILD_RELEASE_TIMESTAMP"
 uv run --no-sync python packaging/write_cli_build_version.py linux x32

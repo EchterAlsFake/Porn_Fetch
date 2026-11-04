@@ -241,6 +241,22 @@ class TestSettingsManagerComprehensive(unittest.TestCase):
         self.manager.enable_logging = True
         self.assertTrue(self.manager.enable_logging)
 
+    def test_old_error_reporting_opt_in_requires_updated_consent(self) -> None:
+        self.qsettings.setValue("Misc/error_reporting_decided", True)
+        self.qsettings.setValue("Misc/network_logging", True)
+        self.assertFalse(self.manager.error_reporting_decided)
+        self.assertFalse(self.manager.enable_logging)
+
+        self.manager.set_error_reporting_consent(True)
+        reloaded = SettingsManager(self.qsettings)
+        self.assertTrue(reloaded.error_reporting_decided)
+        self.assertTrue(reloaded.enable_logging)
+
+        self.qsettings.remove("Misc/error_reporting_consent_version")
+        self.qsettings.setValue("Misc/network_logging", False)
+        self.assertTrue(self.manager.error_reporting_decided)
+        self.assertFalse(self.manager.enable_logging)
+
     def test_apply_proxy_settings_variations(self) -> None:
         # No-op when unchanged
         self.manager.apply_proxy_settings(self.manager.proxy, self.manager.proxy_ssl_verification)

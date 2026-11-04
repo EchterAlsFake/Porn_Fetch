@@ -1,0 +1,7 @@
+name: Set up macOS Developer ID signing
+description: Import the signing identity and notarization profile into a temporary keychain.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: python3 packaging/sign_macos.py setup

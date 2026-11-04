@@ -102,7 +102,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="eporner",
-        url="https://www.eporner.com/video-2MWhVhhsAfM/zz-olenade/"
+        url="https://www.eporner.com/video-5cgl1zr2c8b/"
     ),
     WebsiteTest(
         name="spankbang",

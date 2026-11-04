@@ -4,7 +4,7 @@ The real Porn Fetch backend and mobile QML interface ran in the iOS 26.3 simulat
 on the original Intel macOS VM. Native dependency probes and a complete decode
 of a user download passed. Reports are in `../results/`.
 
-Use the [simulator build instructions](../../docs/ios/BUILDING.md#intel-simulator)
+Use the [simulator build instructions](../../docs/iOS.md#intel-simulator)
 after restoring the lab inputs. This target uses official Qt/PySide wheels with
 an iOS 18 minimum and embedded Python 3.15.0rc2. It is separate from the patched
 arm64/iOS 15 device kit.

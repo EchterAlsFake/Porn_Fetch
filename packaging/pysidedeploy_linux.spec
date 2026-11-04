@@ -29,10 +29,10 @@ python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==4.3.3,zstandard,ordered-set
+packages = Nuitka,zstandard,ordered-set
 
 # buildozer = for deploying Android application
-android_packages = buildozer==1.6.0,cython==3.3.0
+android_packages = buildozer,cython
 
 [qt]
 
@@ -44,7 +44,7 @@ qml_files =
 excluded_qml_plugins =
 
 # qt modules used. comma separated
-modules = Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui
+modules = Network,QuickControls2,Quick,OpenGL,Core,Qml,Gui,Widgets
 
 # qt plugins used by the application
 plugins = qml,xcbglintegrations,iconengines,platformthemes,platforms,imageformats,platforminputcontexts

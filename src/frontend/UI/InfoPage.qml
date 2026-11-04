@@ -1,194 +1,110 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import Qt5Compat.GraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
-Rectangle {
+Pane {
     id: root
-    width: 800
-    height: 600
-    color: "transparent"
+    padding: 0
+    readonly property bool dark: appSettings.dark_mode || appSettings.high_contrast
+    readonly property color pageColor: appSettings.high_contrast ? "#000000" : dark ? "#17191f" : "#f5f6f8"
+    readonly property color cardColor: appSettings.high_contrast ? "#000000" : dark ? "#22252d" : "#ffffff"
+    readonly property color ink: dark ? "#f1f3f8" : "#202431"
+    readonly property color muted: appSettings.high_contrast ? ink : dark ? "#b9c0cf" : "#566176"
+    readonly property color outline: appSettings.high_contrast ? "#ffffff" : dark ? "#3a404d" : "#dce0e8"
+    readonly property real textScale: Math.max(1, appSettings.font_size / 12)
+    Material.theme: root.dark ? Material.Dark : Material.Light
+    Material.foreground: root.ink
+    palette.buttonText: root.ink
+    palette.text: root.ink
+    palette.button: root.cardColor
+    background: Rectangle { color: root.pageColor }
 
-    // Background Gradient
-    LinearGradient {
+    ScrollView {
+        id: scroll
         anchors.fill: parent
-        start: Qt.point(0, 0)
-        end: Qt.point(width, height)
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: (appSettings.high_contrast ? "#000000" : "#1a1a2e") }
-            GradientStop { position: 1.0; color: (appSettings.high_contrast ? "#000000" : "#16213e") }
-        }
-    }
-
-    Flickable {
-        id: infoFlickable
-        anchors.fill: parent
-        contentWidth: width
-        contentHeight: contentColumn.height + 60
+        contentWidth: availableWidth
         clip: true
-        boundsBehavior: Flickable.StopAtBounds
-
-        SmoothWheelHandler {
-            id: infoWheelHandler
-            flickable: infoFlickable
-        }
-
-        ScrollBar.vertical: ScrollBar {
-            policy: ScrollBar.AsNeeded
-            active: size < 1.0 || hovered || pressed
-                    || infoWheelHandler.scrolling
-        }
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
         ColumnLayout {
-            id: contentColumn
-            width: infoFlickable.width - 40
-            x: 20
-            y: 30
-            spacing: 25
-
-            Button {
-                text: qsTr("Help translate")
+            width: scroll.availableWidth
+            spacing: 16
+            Item { implicitHeight: 8 }
+            ColumnLayout {
                 Layout.fillWidth: true
-                implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
-                onClicked: Qt.openUrlExternally(appSettings.translation_help_url)
-            }
-            // Header Section
-            Item {
-                Layout.fillWidth: true
-                implicitHeight: Math.max(140, headerColumn.implicitHeight + 40)
-                
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 16
-                    color: (appSettings.high_contrast ? "#000000" : "#2a2a4a")
-                    opacity: 0.8
-                    border.color: (appSettings.high_contrast ? "#ffffff" : "#3a3a6a")
-                    border.width: 1
+                Layout.leftMargin: 24
+                Layout.rightMargin: 24
+                spacing: 8
+                Label {
+                    text: qsTr("ABOUT THE PROJECT")
+                    color: root.muted
+                    font.pixelSize: 11 * root.textScale
+                    font.letterSpacing: 1.5
                 }
-
-                Column {
-                    id: headerColumn
-                    anchors.centerIn: parent
-                    width: parent.width - 40
+                Label {
+                    Layout.fillWidth: true
+                    text: "Porn Fetch"
+                    color: root.ink
+                    font.pixelSize: 32 * root.textScale
+                    font.weight: Font.DemiBold
+                    wrapMode: Text.Wrap
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("Version %1 · By Johannes Habel (EchterAlsFake)").arg(Qt.application.version)
+                    color: root.muted
+                    wrapMode: Text.Wrap
+                }
+                Flow {
+                    Layout.fillWidth: true
                     spacing: 8
-                    
-                    Text {
-                        text: qsTr("Porn Fetch")
-                        font.pixelSize: 36 * appSettings.font_size / 12
-                        font.bold: true
-                        font.family: "Inter, sans-serif"
-                        color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
-                        width: parent.width
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.WordWrap
-                    }
-                    
-                    Text {
-                        text: qsTr("Version %1").arg(Qt.application.version)
-                        font.pixelSize: 18 * appSettings.font_size / 12
-                        font.family: "Inter, sans-serif"
-                        color: (appSettings.high_contrast ? "#ffffff" : "#00f2fe")
-                        width: parent.width
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.WordWrap
-                    }
-                    
-                    Text {
-                        text: qsTr("Copyright © 2023-2026 Johannes Habel (EchterAlsFake)")
-                        font.pixelSize: 14 * appSettings.font_size / 12
-                        font.family: "Inter, sans-serif"
-                        color: (appSettings.high_contrast ? "#ffffff" : "#a0a0c0")
-                        width: parent.width
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.WordWrap
-                    }
+                    Button { text: qsTr("Website"); onClicked: Qt.openUrlExternally("https://pornfetch.to/") }
+                    Button { text: qsTr("Source code"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch") }
+                    Button { text: qsTr("Report a problem"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch/issues") }
                 }
             }
 
-            // Notice Card
             CreditCard {
-                title: qsTr("Special Notice")
-                icon: "⭐"
-                content: qsTr("This project was only possible because Egsagon made the PHUB API that interacts with PornHub and which Porn Fetch uses. Although I now have ownership, without him, this project wouldn't be possible in the first place.")
+                title: qsTr("People behind Porn Fetch")
+                content: qsTr("Created and maintained by **Johannes Habel (EchterAlsFake)**.\n\nSpecial thanks to [Egsagon](https://github.com/Egsagon), whose original PHUB API helped make the early versions possible.")
             }
-
             CreditCard {
-                title: qsTr("Application License")
-                icon: "📄"
-                content: qsTr("Porn Fetch Source-Available License 1.0. You may inspect and modify the code and share builds privately. Public forks must keep premium licensing operational. Older GPL copies keep their GPL rights. See the full license below.")
+                title: qsTr("Contributors")
+                content: qsTr("Thank you for the code, bug reports, ideas and translations contributed to earlier versions. The current interface is English-only.\n\n[Egsagon](https://github.com/Egsagon) · [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) · [Joshua-auhsoj](https://github.com/Joshua-auhsoj) · [RonLar1132](https://github.com/RonLar1132) · [xxIndirect](https://github.com/xxIndirect) · [efraxs](https://github.com/efraxs) · [omar-st](https://github.com/omar-st) · [SShattered](https://github.com/SShattered) · [journeym](https://github.com/journeym) · [Joly0](https://github.com/Joly0) · [FatalPuppet](https://github.com/FatalPuppet) · [HeathenSkwerl](https://github.com/HeathenSkwerl)")
             }
-
-            Button {
-                text: qsTr("Show application license")
-                onClicked: {
-                    legalDialog.showNotices = false
-                    legalDialog.open()
-                }
-            }
-
-            Button {
-                text: qsTr("Show third-party notices")
-                onClicked: {
-                    legalDialog.showNotices = true
-                    legalDialog.open()
-                }
-            }
-
-            // Development Card
             CreditCard {
-                title: qsTr("Development Stack")
-                icon: "💻"
-                content: qsTr("Language: Python\nIDE: JetBrains PyCharm Professional\nPlatform: GitHub\nGUI: PySide6\n\nThanks to Qt for the Python GUI toolkit used by this project. Qt components have their own license terms.")
+                title: qsTr("Built with")
+                content: qsTr("**Interface** — Python, PySide6 and Qt Quick; Rich and Questionary for the CLI.\n\n**Downloads** — eaf_base_api, curl-cffi and the provider API libraries.\n\n**Media and storage** — a separate FFmpeg program for media processing; PocketBase for optional desktop history and statistics.\n\n**Builds** — Nuitka, PyInstaller, Qt Installer Framework, and the Android and iOS toolchains.\n\nEach component keeps its own license. The third-party notices contain the license information.")
             }
-
-            // Contributors Card
             CreditCard {
-                title: qsTr("Amazing Contributors")
-                icon: "👥"
-                content: qsTr("Egsagon (PHUB API & French)\nRSDCFGVHBJNKML\nJoshua-auhsoj (Chinese 3.0)\nRonLar1132\nxxIndirect\nefraxs\nomar-st\nSShattered\njourneym\nJoly0\nFatalPuppet (Italian)\nHeathenSkwerl")
+                title: qsTr("Licenses and attribution")
+                content: qsTr("Application-owned material uses the **Porn Fetch Source-Available License 1.0**. Earlier GPL copies retain their original rights.\n\nThanks to the authors of the libraries, icons and other assets used by Porn Fetch. Full contributor and asset credits are kept in the repository.")
             }
-
-            // Third-party components
-            CreditCard {
-                title: qsTr("Third-party components")
-                icon: "📚"
-                content: qsTr("Porn Fetch uses independently licensed provider APIs, PySide6/Qt, PocketBase, and Python packages. Use the third-party notices button for the current inventory and license information.")
-            }
-
-            // Other Tech
-            GridLayout {
+            Flow {
                 Layout.fillWidth: true
-                columns: width < 700 ? 1 : 2
-                columnSpacing: 20
-                rowSpacing: 20
-                
-                CreditCard {
-                    Layout.preferredWidth: 1
-                    title: qsTr("Android")
-                    icon: "📱"
-                    content: qsTr("Buildozer\nCython\nChaquopy")
+                Layout.leftMargin: 24
+                Layout.rightMargin: 24
+                spacing: 8
+                Button {
+                    text: qsTr("Application license")
+                    onClicked: { legalDialog.showNotices = false; legalDialog.open() }
                 }
-
-                CreditCard {
-                    Layout.preferredWidth: 1
-                    title: qsTr("Applications")
-                    icon: "⚙️"
-                    content: qsTr("FFMPEG (via pyav)\n\nUsed for processing\nmedia streams.")
+                Button {
+                    text: qsTr("Third-party notices")
+                    onClicked: { legalDialog.showNotices = true; legalDialog.open() }
                 }
-
-                CreditCard {
-                    Layout.preferredWidth: 1
-                    title: qsTr("macOS Build")
-                    icon: "🍎"
-                    content: qsTr("OneClick-macOS-Simple-KVM\n\nMakes macOS builds possible.")
+                Button {
+                    text: qsTr("Full credits")
+                    onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md")
                 }
-
-                CreditCard {
-                    Layout.preferredWidth: 1
-                    title: qsTr("iOS Testing")
-                    icon: "📱"
-                    content: qsTr("palera1n\nKitty-XZ\n\nJailbreak testing.")
-                }
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.margins: 24
+                text: qsTr("Copyright © 2023–2026 Johannes Habel")
+                color: root.muted
+                wrapMode: Text.Wrap
             }
         }
     }
@@ -196,13 +112,12 @@ Rectangle {
     Dialog {
         id: legalDialog
         property bool showNotices: false
-        title: showNotices ? "Third-party notices" : "Porn Fetch application license"
+        title: showNotices ? qsTr("Third-party notices") : qsTr("Porn Fetch application license")
         modal: true
         anchors.centerIn: parent
-        width: Math.min(root.width - 40, 720)
-        height: Math.min(root.height - 40, 520)
+        width: Math.min(root.width - 32, 720)
+        height: Math.min(root.height - 32, 520)
         standardButtons: Dialog.Close
-
         contentItem: ScrollView {
             TextArea {
                 readOnly: true
@@ -216,66 +131,38 @@ Rectangle {
     component CreditCard: Rectangle {
         id: card
         objectName: "creditCard"
-        property string title: ""
-        property string content: qsTr("")
-        property string icon: ""
-
+        property string title
+        property string content
         Layout.fillWidth: true
+        Layout.leftMargin: 24
+        Layout.rightMargin: 24
         Layout.minimumWidth: 0
-        Layout.alignment: Qt.AlignTop
-        implicitWidth: 320
-        implicitHeight: cardColumn.implicitHeight + 40
+        implicitHeight: body.implicitHeight + 40
+        color: root.cardColor
+        border.color: root.outline
         radius: 12
-        color: (appSettings.high_contrast ? "#000000" : "#252545")
-        opacity: 0.9
-        border.color: (appSettings.high_contrast ? "#ffffff" : "#3a3a6a")
-        border.width: 1
-
         ColumnLayout {
-            id: cardColumn
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.margins: 20
-            spacing: 10
-
-            RowLayout {
+            id: body
+            anchors { left: parent.left; right: parent.right; top: parent.top; margins: 20 }
+            spacing: 12
+            Label {
                 Layout.fillWidth: true
-                spacing: 10
-
-                Text {
-                    text: card.icon
-                    font.pixelSize: 24 * appSettings.font_size / 12
-                }
-
-                Text {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: 0
-                    text: card.title
-                    font.pixelSize: 20 * appSettings.font_size / 12
-                    font.bold: true
-                    font.family: "Inter, sans-serif"
-                    color: (appSettings.high_contrast ? "#ffffff" : "#ffffff")
-                    wrapMode: Text.Wrap
-                }
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: 1
-                color: (appSettings.high_contrast ? "#000000" : "#3a3a6a")
-            }
-
-            Text {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 0
-                text: card.content
-                font.pixelSize: 14 * appSettings.font_size / 12
-                font.family: "Inter, sans-serif"
-                color: (appSettings.high_contrast ? "#ffffff" : "#c0c0d0")
-                textFormat: Text.PlainText
+                text: card.title
+                color: root.ink
+                font.pixelSize: 19 * root.textScale
+                font.weight: Font.DemiBold
                 wrapMode: Text.Wrap
-                lineHeight: 1.4
+            }
+            Label {
+                Layout.fillWidth: true
+                text: card.content
+                color: root.muted
+                textFormat: Text.MarkdownText
+                wrapMode: Text.Wrap
+                font.pixelSize: 14 * root.textScale
+                lineHeight: 1.3
+                onLinkActivated: function(link) { Qt.openUrlExternally(link) }
+                HoverHandler { cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor }
             }
         }
     }

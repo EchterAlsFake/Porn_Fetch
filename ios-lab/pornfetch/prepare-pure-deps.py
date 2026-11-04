@@ -1,4 +1,4 @@
-"""Resolve the checked-in runtime graph for iOS, keeping native builds separate."""
+"""Resolve the current runtime graph for iOS, keeping native builds separate."""
 from pathlib import Path
 import os
 import subprocess
@@ -10,6 +10,7 @@ port = Path(__file__).resolve().parent
 lab = port.parent
 repo = Path(os.environ.get('PORN_FETCH_SOURCE',
     lab.parent if (lab.parent / 'pyproject.toml').is_file() else lab.parent / 'Porn_Fetch'))
+subprocess.run(['uv', 'lock', '--upgrade', '--project', str(repo)], check=True)
 lock = tomllib.loads((repo / 'uv.lock').read_text())
 packages = {p['name']: p for p in lock['package']}
 root = packages['porn-fetch']

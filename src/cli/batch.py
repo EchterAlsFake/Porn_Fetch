@@ -9,7 +9,8 @@ from pathlib import Path
 from typing import Any
 
 from src.licensing.service import create_license_service, rejection_notice
-from src.shared.error_reporting import report_exception
+from src.shared.access import download_parallelism, public_collection_items
+from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION, report_exception
 from src.shared.legal import legal_document
 from src.shared.media import select_allowed_quality
 
@@ -73,7 +74,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--error-reporting",
         action=argparse.BooleanOptionalAction,
         default=None,
-        help="enable or disable redacted error reports and remember the choice",
+        help="enable or disable automatic reports containing full Python tracebacks and video URLs; remember the choice",
     )
     parser.add_argument("--add-model-to-database", action="append", default=[], metavar="URL")
     parser.add_argument("--remove-model-from-database", action="append", default=[], metavar="URL")
@@ -203,6 +204,7 @@ async def run_batch(args: argparse.Namespace) -> int:
         persisted = persisted.overridden(
             error_reporting=explicit_reporting_choice,
             error_reporting_decided=True,
+            error_reporting_consent_version=ERROR_REPORT_CONSENT_VERSION,
         )
         store.save(persisted)
     elif not persisted.error_reporting_decided:
@@ -261,6 +263,7 @@ async def run_batch(args: argparse.Namespace) -> int:
     failures = 0
     try:
         license_status = await license_service.check(force=True)
+        settings.parallel_downloads = download_parallelism(settings.parallel_downloads, license_status.allowed)
         if license_status.server_rejected:
             print(f"License rejected: {rejection_notice(license_status.state)}", file=sys.stderr)
 
@@ -284,8 +287,11 @@ async def run_batch(args: argparse.Namespace) -> int:
 
         if args.update_pending_urls:
             for model_url, _ in models.models():
-                failures += await _scan_model(pool, models, model_url, settings, args.ignore_errors)
-        if args.update_models:
+                failures += await _scan_model(pool, models, model_url, settings, args.ignore_errors, license_status.allowed)
+        if args.update_models and not license_status.allowed:
+            print("Downloading tracked-model queues requires an active premium license. Use a model URL for a free 5-video preview.", file=sys.stderr)
+            failures += 1
+        if args.update_models and license_status.allowed:
             for model_url, state in models.models():
                 pending = list(state["pending"])
                 outcomes = await _download_many(pool, pending, settings, license_status.allowed)
@@ -305,7 +311,9 @@ async def run_batch(args: argparse.Namespace) -> int:
             try:
                 prepared = []
                 provider = route_url(source_url).provider
-                stream = pool.media_stream(source_url, pages=5)
+                if not license_status.allowed:
+                    print("Free bulk preview: loading only the first 5 videos. Activate a premium license for the full collection.")
+                stream = public_collection_items(pool.media_stream(source_url, pages=5), license_status.allowed)
                 async with aclosing(stream):
                     async for source in stream:
                         prepared.append(await prepare_video(source, provider))
@@ -347,21 +355,23 @@ async def _download_many(
             await asyncio.sleep(settings.processing_delay)
         return await _download_url(pool, url, settings, premium)
 
-    return await bounded_map(urls, dispatch, settings.parallel_downloads)
+    return await bounded_map(urls, dispatch, download_parallelism(settings.parallel_downloads, premium))
 
 
 async def _scan_model(
     pool: ClientPool, store: ModelStore, model_url: str,
-    settings: CliSettings, ignore_errors: bool,
+    settings: CliSettings, ignore_errors: bool, premium: bool = False,
 ) -> int:
     urls: list[str] = []
     try:
-        async for video in pool.media_stream(model_url, pages=5):
-            url = getattr(video, "url", None)
-            if url:
-                urls.append(str(url))
-            if len(urls) >= settings.result_limit:
-                break
+        stream = public_collection_items(pool.media_stream(model_url, pages=5), premium)
+        async with aclosing(stream):
+            async for video in stream:
+                url = getattr(video, "url", None)
+                if url:
+                    urls.append(str(url))
+                if len(urls) >= settings.result_limit:
+                    break
         store.update_pending(model_url, urls)
         return 0
     except Exception as error:

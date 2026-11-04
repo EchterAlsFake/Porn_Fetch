@@ -1,27 +1,50 @@
-// LicenseWidget.qml — Hyper-modern license panel
-// Matches the Porn Fetch dark theme (#1f1f21 base, #3b82f6 accent)
+// License management panel with explicit colours for every control state.
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material
 import QtQuick.Layouts 1.15
 import QtQuick.Dialogs
-import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
     implicitWidth: 460
     implicitHeight: card.implicitHeight + 48
 
-    // ── Colour tokens ──────────────────────────────────────────────
-    readonly property color bgBase:     appSettings.high_contrast ? "#000000" : "#1f1f21"
-    readonly property color bgCard:     appSettings.high_contrast ? "#000000" : "#262628"
-    readonly property color bgInput:    appSettings.high_contrast ? "#000000" : "#2a2b2e"
-    readonly property color border:     appSettings.high_contrast ? "#ffffff" : "#333437"
-    readonly property color textPri:    appSettings.high_contrast ? "#ffffff" : "#EAEAEA"
-    readonly property color textSec:    appSettings.high_contrast ? "#ffffff" : "#9B9CA1"
-    readonly property color accent:     appSettings.high_contrast ? "#ffffff" : "#3b82f6"
-    readonly property color accentGlow: appSettings.high_contrast ? "#ffffff" : "#5b9bff"
-    readonly property color success:    appSettings.high_contrast ? "#ffffff" : "#22c55e"
-    readonly property color danger:     appSettings.high_contrast ? "#ffffff" : "#ef4444"
+    readonly property bool dark: appSettings.dark_mode || appSettings.high_contrast
+    readonly property color bgBase: appSettings.high_contrast ? "#000000" : dark ? "#1f1f21" : "#f5f6f8"
+    readonly property color bgCard: appSettings.high_contrast ? "#000000" : dark ? "#262628" : "#ffffff"
+    readonly property color bgInput: appSettings.high_contrast ? "#000000" : dark ? "#303136" : "#f3f4f7"
+    readonly property color border: appSettings.high_contrast ? "#ffffff" : dark ? "#666976" : "#858b98"
+    readonly property color textPri: dark ? "#f3f3f5" : "#202431"
+    readonly property color textSec: appSettings.high_contrast ? "#ffffff" : dark ? "#c2c4cc" : "#565e70"
+    readonly property color accent: appSettings.high_contrast ? "#ffff00" : "#2563eb"
+    readonly property color accentGlow: appSettings.high_contrast ? "#ffff00" : dark ? "#9cc0ff" : "#1d4ed8"
+    readonly property color success: appSettings.high_contrast ? "#ffffff" : dark ? "#4ade80" : "#15803d"
+    readonly property color danger: appSettings.high_contrast ? "#ffffff" : dark ? "#ff676f" : "#b91c1c"
+    Material.theme: root.dark ? Material.Dark : Material.Light
+    Material.foreground: root.textPri
+    Material.background: root.bgCard
+    Material.accent: root.accent
+
+    component LicenseActionButton: Button {
+        id: action
+        implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
+        contentItem: Label {
+            text: action.text
+            font: action.font
+            color: action.enabled ? root.textPri : root.textSec
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.Wrap
+        }
+        background: Rectangle {
+            radius: 12
+            color: action.enabled && (action.down || action.hovered)
+                   ? (root.dark ? "#454853" : "#e0e4ec") : root.bgInput
+            border.width: action.activeFocus ? 2 : 1
+            border.color: action.activeFocus ? root.accentGlow : root.border
+        }
+    }
 
     // ── The bridge is injected via rootContext().setContextProperty() ─
     // Do NOT declare `property QtObject bridge` here — it would shadow
@@ -29,26 +52,27 @@ Item {
     readonly property bool hasValidBridge: Boolean(typeof bridge !== "undefined" && bridge && bridge.isValid)
     readonly property bool isBridgeBusy: Boolean(typeof bridge !== "undefined" && bridge && bridge.busy)
 
-    // ── Toast feedback ─────────────────────────────────────────────
+    property string feedback: ""
+
+    // ── Import feedback ─────────────────────────────────────────────
     Connections {
         target: (typeof bridge !== "undefined" && bridge) ? bridge : null
         ignoreUnknownSignals: true
         function onImportFinished(ok, msg) {
-            if (ok) {
-                toast.isSuccess = true
-                toast.text = msg
-                toastAnim.restart()
-            } else {
-                importErrorDialog.message = msg
-                if (bridge.state !== "clock_mismatch" && bridge.state !== "clock_invalid") {
-                    importErrorDialog.message += "\n\n" + qsTr("An incorrect device clock can cause activation to fail. Check your date, time and time zone, enable automatic time synchronization, then try again.")
-                }
-                importErrorDialog.open()
+            root.feedback = typeof noticeCenter !== "undefined" ? noticeCenter.safe_text(msg)
+                            : (ok ? qsTr("License imported.") : qsTr("License import failed. Check your device clock and try again."))
+            if (!ok && bridge.state !== "clock_mismatch" && bridge.state !== "clock_invalid") {
+                root.feedback += "\n\n" + qsTr("Check your device date, time and time zone, enable automatic time synchronization, then try again.")
             }
         }
         function onFirstActivation() {
             activationDialog.open()
         }
+    }
+
+    Connections {
+        target: appSettings
+        function onAnonymousModeChanged() { root.feedback = "" }
     }
 
     // ── Native file dialog (lives in QML, avoids QWidgets conflicts) ─
@@ -79,18 +103,8 @@ Item {
         radius: 20
         color: bgCard
         border.color: root.hasValidBridge ? Qt.rgba(success.r, success.g, success.b, 0.35)
-                                          : Qt.rgba(border.r, border.g, border.b, 1)
+                                          : root.border
         border.width: 1
-
-        // subtle inner shadow
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            radius: 32; samples: 65
-            color: root.hasValidBridge ? Qt.rgba(success.r, success.g, success.b, 0.10)
-                                       : Qt.rgba(0, 0, 0, 0.55)
-            verticalOffset: 8
-        }
 
         // ── Animated glow ring when valid ──────────────────────────
         Rectangle {
@@ -194,13 +208,26 @@ Item {
 
                 TextField {
                     id: pastedLicense
+                    objectName: "pastedLicenseInput"
                     Layout.fillWidth: true
+                    color: root.textPri
+                    placeholderTextColor: root.textSec
+                    selectionColor: root.accent
+                    selectedTextColor: appSettings.high_contrast ? "#000000" : "#ffffff"
+                    background: Rectangle {
+                        radius: 8
+                        color: root.bgInput
+                        border.width: pastedLicense.activeFocus ? 2 : 1
+                        border.color: pastedLicense.activeFocus ? root.accentGlow : root.border
+                    }
                     Accessible.name: placeholderText
                     placeholderText: qsTr("Paste signed license key or license JSON")
                     echoMode: TextInput.Password
                     enabled: !root.isBridgeBusy
                 }
-                Button {
+                LicenseActionButton {
+                    objectName: "activatePastedLicenseButton"
+                    Layout.fillWidth: true
                     text: qsTr("Activate pasted license")
                     enabled: !root.isBridgeBusy && pastedLicense.text.length > 0
                     onClicked: {
@@ -317,7 +344,8 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
-                Button {
+                LicenseActionButton {
+                    objectName: "refreshLicenseButton"
                     Layout.fillWidth: true
                     text: qsTr("Refresh")
                     enabled: (typeof bridge !== "undefined" && bridge) && !root.isBridgeBusy
@@ -325,7 +353,8 @@ Item {
                     ToolTip.text: qsTr("Re-verifies license and renews the 7-day offline check-in permit")
                     onClicked: bridge.refresh()
                 }
-                Button {
+                LicenseActionButton {
+                    objectName: "deactivateLicenseButton"
                     Layout.fillWidth: true
                     text: qsTr("Deactivate")
                     enabled: root.hasValidBridge && !root.isBridgeBusy
@@ -341,6 +370,19 @@ Item {
                 height: 1
                 color: border
                 opacity: 0.6
+            }
+
+            TextArea {
+                Layout.fillWidth: true
+                visible: text !== ""
+                text: root.feedback
+                textFormat: Text.PlainText
+                readOnly: true
+                selectByMouse: true
+                wrapMode: Text.Wrap
+                background: null
+                color: root.textPri
+                Accessible.name: qsTr("License import result")
             }
 
             // ── Import button ──────────────────────────────────────
@@ -400,61 +442,6 @@ Item {
         }
     }
 
-    // ─── TOAST NOTIFICATION ────────────────────────────────────────
-    Rectangle {
-        id: toast
-        property bool isSuccess: true
-        property string text: ""
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 24
-        width: toastText.implicitWidth + 40
-        height: 40
-        radius: 20
-        color: isSuccess ? Qt.rgba(success.r, success.g, success.b, 0.18)
-                         : Qt.rgba(danger.r, danger.g, danger.b, 0.18)
-        border.width: 1
-        border.color: isSuccess ? Qt.rgba(success.r, success.g, success.b, 0.40)
-                                : Qt.rgba(danger.r, danger.g, danger.b, 0.40)
-        opacity: 0
-        visible: opacity > 0
-
-        Text {
-            id: toastText
-            anchors.centerIn: parent
-            text: (toast.isSuccess ? "✓  " : "✕  ") + toast.text
-            font.pixelSize: 13 * appSettings.font_size / 12
-            font.weight: Font.Medium
-            color: toast.isSuccess ? success : danger
-        }
-
-        SequentialAnimation {
-            id: toastAnim
-            NumberAnimation { target: toast; property: "opacity"; to: 1; duration: appSettings.reduced_motion ? 0 : 200; easing.type: Easing.OutCubic }
-            PauseAnimation { duration: 3000 }
-            NumberAnimation { target: toast; property: "opacity"; to: 0; duration: appSettings.reduced_motion ? 0 : 600; easing.type: Easing.InCubic }
-        }
-    }
-
-    // ─── ACTIVATION & LICENSE INFO DIALOG ──────────────────────────
-    Dialog {
-        id: importErrorDialog
-        objectName: "licenseImportErrorDialog"
-        property string message: ""
-        parent: root.Overlay.overlay ? root.Overlay.overlay : root
-        anchors.centerIn: parent
-        width: Math.min(parent ? parent.width - 32 : 460, 460)
-        title: qsTr("License activation failed")
-        modal: true
-        closePolicy: Popup.NoAutoClose
-        standardButtons: Dialog.Ok
-        contentItem: Label {
-            text: importErrorDialog.message
-            textFormat: Text.PlainText
-            wrapMode: Text.WordWrap
-        }
-    }
-
     Dialog {
         id: activationDialog
         parent: root.Overlay.overlay ? root.Overlay.overlay : root
@@ -470,13 +457,7 @@ Item {
             border.color: Qt.rgba(accent.r, accent.g, accent.b, 0.45)
             border.width: 1
 
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 24; samples: 49
-                color: Qt.rgba(0, 0, 0, 0.7)
-                verticalOffset: 6
-            }
+
         }
 
         contentItem: ColumnLayout {

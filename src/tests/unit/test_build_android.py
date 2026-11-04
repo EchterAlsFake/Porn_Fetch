@@ -570,6 +570,7 @@ mode = onefile
 
             with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \
                  patch("scripts.build_android.extract_qt_jars"), \
+                 patch("scripts.build_android.prepare_android_settings"), \
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \
@@ -613,6 +614,7 @@ mode = onefile
 
             with patch("scripts.build_android.patch_pyside_wheel_if_needed"), \
                  patch("scripts.build_android.extract_qt_jars"), \
+                 patch("scripts.build_android.prepare_android_settings"), \
                  patch("scripts.build_android.update_buildozer_spec"), \
                  patch("scripts.build_android.update_pysidedeploy_spec"), \
                  patch("scripts.build_android.inject_android_templates"), \

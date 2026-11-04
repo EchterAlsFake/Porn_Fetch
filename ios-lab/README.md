@@ -1,7 +1,6 @@
 # iOS build sources
 
-Start with the [iOS overview](../docs/iOS.md) and
-[build guide](../docs/ios/BUILDING.md).
+Start with the [iOS build guide](../docs/iOS.md).
 
 | Location | Purpose |
 | --- | --- |
@@ -18,6 +17,6 @@ Start with the [iOS overview](../docs/iOS.md) and
 
 Generated application source copies, build logs, kits, vendor packages, wheels,
 and generated projects are excluded from the maintained tree. The
-[original snapshot](../docs/ios/SNAPSHOT.md) retains the full historical lab.
+[original snapshot](../docs/iOS.md) retains the full historical lab.
 The scripts still require that lab's macOS toolchain and dependency inputs;
 a clone alone does not contain a complete iOS SDK or bootstrap environment.

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import platform
 import re
 import shutil
@@ -62,6 +63,7 @@ def prepare_staging_directory(
     version: str,
     ffmpeg_binary: Path | None = None,
     maintenance_tool: Path | None = None,
+    macos_signed: bool = False,
 ) -> tuple[Path, Path]:
     """Prepare config/ and packages/ directories for binarycreator and repogen."""
     template_config = PROJECT_ROOT / "packaging" / "installer" / "config" / "config.xml.template"
@@ -89,6 +91,8 @@ def prepare_staging_directory(
     config_xml_text = template_config.read_text(encoding="utf-8")
     config_xml_text = config_xml_text.replace("@TARGET_REPO@", repo_tag)
     config_xml_text = config_xml_text.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
+    if macos_signed:
+        config_xml_text = config_xml_text.replace("</Installer>", "    <MaintenanceToolName>maintenancetool</MaintenanceToolName>\n</Installer>")
     config_dest = config_dir / "config.xml"
     config_dest.write_text(config_xml_text, encoding="utf-8")
 
@@ -98,15 +102,21 @@ def prepare_staging_directory(
         if target_platform != "windows" or not maintenance_tool.is_file():
             raise ValueError("--maintenance-tool requires an existing Windows installerbase.exe")
         templates.append(PROJECT_ROOT / "packaging/installer/maintenance")
+    elif macos_signed:
+        if target_platform != "darwin":
+            raise ValueError("Signed macOS maintenance tools require a Darwin target")
+        templates.append(PROJECT_ROOT / "packaging/installer/maintenance")
     for template in templates:
         component_name = "to.pornfetch.echteralsfake.maintenance" if template.name == "maintenance" else template.name
         meta_dest = packages_dir / component_name / "meta"
         meta_dest.mkdir(parents=True, exist_ok=True)
         for f in (template / "meta").iterdir():
-            content = f.read_text(encoding="utf-8")
+            source = (template / "installscript-macos.qs"
+                      if macos_signed and template.name == "maintenance" and f.name == "installscript.qs" else f)
+            content = source.read_text(encoding="utf-8")
             if f.name == "package.xml":
                 content = content.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
-                if maintenance_tool is not None and template.name == "to.pornfetch.echteralsfake":
+                if (maintenance_tool is not None or macos_signed) and template.name == "to.pornfetch.echteralsfake":
                     content = content.replace("</Package>",
                                               "    <Dependencies>to.pornfetch.echteralsfake.maintenance</Dependencies>\n</Package>")
                 release_date = datetime.fromtimestamp(RELEASE_TIMESTAMP, timezone.utc).strftime("%Y-%m-%d")
@@ -123,7 +133,7 @@ def prepare_staging_directory(
     for item in dist_dir.iterdir():
         dest = data_dest / item.name
         if item.is_dir():
-            shutil.copytree(item, dest, dirs_exist_ok=True)
+            shutil.copytree(item, dest, dirs_exist_ok=True, symlinks=target_platform == "darwin")
         else:
             shutil.copy2(item, dest)
 
@@ -274,6 +284,7 @@ def main(argv: list[str] | None = None) -> int:
 
     staging_dir = args.staging_dir.resolve()
     staging_dir.mkdir(parents=True, exist_ok=True)
+    macos_signed = raw_os == "darwin" and os.environ.get("PORN_FETCH_MACOS_SIGNING") == "1"
 
     config_xml, packages_dir = prepare_staging_directory(
         staging_dir=staging_dir,
@@ -284,13 +295,30 @@ def main(argv: list[str] | None = None) -> int:
         version=args.version,
         ffmpeg_binary=args.ffmpeg_binary.resolve() if args.ffmpeg_binary else None,
         maintenance_tool=args.maintenance_tool.resolve() if args.maintenance_tool else None,
+        macos_signed=macos_signed,
     )
 
     if raw_os == "darwin":
         # Removing the previously bundled tools changes the signed app resources.
         app = packages_dir / "to.pornfetch.echteralsfake" / "data" / "Porn Fetch.app"
-        subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(app)], check=True)
-        subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
+        if macos_signed:
+            signer = PROJECT_ROOT / "packaging/sign_macos.py"
+            subprocess.run([sys.executable, str(signer), "sign", str(app), "--runtime", "python"], check=True)
+            subprocess.run([sys.executable, str(signer), "notarize", str(app)], check=True)
+            # IFW 4.11 can install a pre-signed app bundle without mutating it.
+            maintenance_data = packages_dir / "to.pornfetch.echteralsfake.maintenance/data"
+            maintenance_data.mkdir(parents=True)
+            creator = Path(shutil.which("binarycreator") or "binarycreator").resolve()
+            subprocess.run([str(creator), "-c", str(config_xml), "--mt"], cwd=maintenance_data, check=True)
+            maintenance = maintenance_data / "maintenancetool.app"
+            updater = maintenance_data / "maintenanceToolUpdater"
+            shutil.copy2(creator.parent / "maintenanceToolUpdater", updater)
+            subprocess.run([sys.executable, str(signer), "sign", str(maintenance), "--runtime", "qt"], check=True)
+            subprocess.run([sys.executable, str(signer), "sign", str(updater)], check=True)
+            subprocess.run([sys.executable, str(signer), "notarize-files", str(maintenance), str(updater)], check=True)
+        else:
+            subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(app)], check=True)
+            subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
 
     # 1. Run repogen if --output-repo is specified
     if args.output_repo:

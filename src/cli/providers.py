@@ -59,7 +59,8 @@ class ClientPool:
             core = self._make_core()
             factory = self._factories.get(provider)
             if factory is None:
-                factory = import_module(PROVIDER_MODULES[provider]).Client
+                module = "src.shared.tube8" if provider == "tube8" else PROVIDER_MODULES[provider]
+                factory = import_module(module).Client
             try:
                 client = factory(core=core)
             except TypeError:

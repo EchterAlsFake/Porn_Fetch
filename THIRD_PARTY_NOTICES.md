@@ -12,9 +12,9 @@ is an inventory, not a substitute for those license texts.
 | PySide6 and Qt 6 | PySide6 metadata: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only; [Qt licensing](https://www.qt.io/development/open-source-lgpl-obligations) | Audit each bundled Qt module; preserve the LGPL notices and source availability, and verify that users can replace the LGPL libraries in the actual installer or one-file build. |
 | `browser-cookie3`, `pydivert` | Installed metadata: LGPL; LGPL-3.0-or-later OR GPL-2.0-or-later | Include the exact distribution licenses and comply with the chosen LGPL/GPL terms. |
 | PocketBase executable | [MIT](https://github.com/pocketbase/pocketbase/blob/master/LICENSE.md) | Installer and CI workflows download and bundle this executable; include its copyright and MIT text with each affected artifact. |
-| FFmpeg executable | [LGPL-2.1-or-later](https://ffmpeg.org/legal.html), built from pinned FFmpeg 9.0.2 source | The minimal profile explicitly disables GPL, version-3, nonfree, and third-party codec features. FFmpeg runs as a separate executable. Its complete source archive, license texts, configure flags, configuration headers, and build hashes accompany it in `third_party/ffmpeg-legal` and release legal bundles. See [FFmpeg builds](docs/FFMPEG.md). |
+| FFmpeg executable | [LGPL-2.1-or-later](https://ffmpeg.org/legal.html), built from pinned FFmpeg 9.0.2 source | The minimal profile explicitly disables GPL, version-3, nonfree, and third-party codec features. FFmpeg runs as a separate executable. Its complete source archive, license texts, configure flags, configuration headers, and build hashes accompany it in `third_party/ffmpeg-legal` and release legal bundles. See [FFmpeg builds](docs/INSTALLATION.md). |
 | zlib | [zlib license](https://zlib.net/zlib_license.html) | Used for PNG cover probing. Linux/macOS use the system library; Windows statically links the MSYS2 library and includes its `zlib.h` copyright/license text in `ffmpeg-legal`. |
-| Other Python packages | `uv.lock` and installed package metadata | Generate an artifact-specific list and include the packages' license and notice files; account for platform extras and transitive dependencies. |
+| Other Python packages | `pyproject.toml` and installed package metadata | Generate an artifact-specific list and include the packages' license and notice files; account for platform extras and transitive dependencies. |
 | Application graphics | [Graphics source files](src/frontend/graphics/); Lucide settings-icon attribution below | Application-owned SVGs use the application license; Lucide icons retain their MIT notice. Preserve provenance records for the PNG logo and splash assets; replace or clear any uncertain asset before release. |
 
 The obsolete library list in `docs/CREDITS.md` is retained as historical
@@ -30,3 +30,18 @@ https://github.com/lucide-icons/lucide/tree/main/icons (downloaded 2026-10-26).
 They are distributed under the ISC license, with the Feather-derived icons
 covered by the MIT notice included in [LICENSES/Lucide.txt](LICENSES/Lucide.txt).
 See https://lucide.dev/license. The SVG artwork is unmodified.
+
+### Payment logos
+
+The Bitcoin, Ethereum and Litecoin logo vectors in
+`src/frontend/graphics/payments/` come from [Simple Icons](https://github.com/simple-icons/simple-icons)
+under [CC0-1.0](LICENSES/SimpleIcons.txt). Display colours were added.
+
+The Monero logo is by the Monero Project, from its
+[press kit](https://www.getmonero.org/press-kit), obtained through Simple Icons.
+It uses [CC BY-SA 4.0](LICENSES/Monero-CC-BY-SA-4.0.txt). The SVG has an added
+orange fill; that modified vector remains under CC BY-SA 4.0. Its editable
+source is `src/frontend/graphics/payments/monero.svg`.
+
+These names and logos remain the marks of their respective owners; no
+endorsement is implied.

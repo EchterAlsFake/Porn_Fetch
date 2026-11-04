@@ -47,7 +47,7 @@ class TranslationTests(unittest.TestCase):
         self.assertIsNone(catalog_for_locale("zh_TW"))
         self.assertIsNone(catalog_for_locale("zh_Hant_HK"))
 
-    def test_live_qml_switch_and_english_fallback(self):
+    def test_old_language_preferences_still_render_english(self):
         engine = QQmlApplicationEngine()
         self.settings.language = 1
         translation = UiTranslation(self.settings, engine)
@@ -55,8 +55,9 @@ class TranslationTests(unittest.TestCase):
         root = engine.rootObjects()[0]
         self.assertEqual(root.property("label"), "Get Video")
         self.settings.language = 2
-        self.assertTrue(translation.catalog_loaded)
-        self.assertEqual(root.property("label"), "Video laden")
+        self.assertFalse(translation.catalog_loaded)
+        self.assertEqual(root.property("label"), "Get Video")
+        self.assertEqual(engine.uiLanguage(), "en_US")
         self.assertEqual(root.property("missing"), "Untranslated fixture")
         self.settings.language = 1
         self.assertEqual(root.property("label"), "Get Video")

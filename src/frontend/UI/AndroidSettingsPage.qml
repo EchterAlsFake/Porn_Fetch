@@ -69,6 +69,7 @@ Pane {
     component ToggleRow: RowLayout {
         id: row
         property string label: ""
+        property string helpText: ""
         property string detail: ""
         property bool value: false
         signal changed(bool selected)
@@ -97,11 +98,13 @@ Pane {
             Accessible.name: row.label
             onToggled: row.changed(checked)
         }
+        HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
     }
 
     component NumberRow: RowLayout {
         id: row
         property string label: ""
+        property string helpText: ""
         property int number: 0
         property int minimum: 0
         property int maximum: 9999
@@ -123,18 +126,24 @@ Pane {
             Accessible.name: row.label
             onValueModified: row.changed(value)
         }
+        HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
     }
 
     component ChoiceRow: ColumnLayout {
         id: row
         property string label: ""
+        property string helpText: ""
         property var choices: []
         property int selected: 0
         property var allowed: null
         signal chosen(int index)
         Layout.fillWidth: true
         spacing: 4
-        Label { text: row.label; color: root.textColor }
+        RowLayout {
+            Layout.fillWidth: true
+            Label { Layout.fillWidth: true; text: row.label; color: root.textColor; wrapMode: Text.Wrap }
+            HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
+        }
         ComboBox {
             id: choiceCombo
             Layout.fillWidth: true
@@ -178,12 +187,17 @@ Pane {
     component TextRow: ColumnLayout {
         id: row
         property string label: ""
+        property string helpText: ""
         property string value: ""
         property bool locked: false
         signal submitted(string value)
         Layout.fillWidth: true
         spacing: 4
-        Label { text: row.label; color: root.textColor }
+        RowLayout {
+            Layout.fillWidth: true
+            Label { Layout.fillWidth: true; text: row.label; color: root.textColor; wrapMode: Text.Wrap }
+            HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
+        }
         TextField {
             Layout.fillWidth: true
             text: row.value
@@ -377,7 +391,7 @@ Pane {
                 heading: qsTr("Video preferences")
                 description: qsTr("Choose how links and model pages are processed.")
                 ChoiceRow {
-                    label: qsTr("Default quality")
+                    label: qsTr("Default quality"); helpText: AppStrings.videoQualityHelp
                     choices: ["Best", "Half", "Worst", "2160p", "1440p", "1080p", "720p",
                               "540p", "480p", "360p", "250p", "240p", "144p"]
                     selected: appSettings.quality
@@ -387,20 +401,20 @@ Pane {
                     onChosen: function(index) { backend.set_default_quality(index) }
                 }
                 ChoiceRow {
-                    label: qsTr("Model videos")
+                    label: qsTr("Model videos"); helpText: AppStrings.modelVideosHelp
                     choices: [qsTr("Both"), qsTr("Uploaded"), qsTr("Featured")]
                     selected: appSettings.model_videos
                     onChosen: function(index) { appSettings.model_videos = index }
                 }
                 NumberRow {
-                    label: qsTr("Maximum results")
+                    label: qsTr("Maximum results"); helpText: AppStrings.resultLimitHelp
                     number: appSettings.result_limit
                     maximum: 5000
                     onChanged: function(number) { appSettings.result_limit = number }
                 }
                 ToggleRow {
-                    label: qsTr("Strict quality selection")
-                    detail: qsTr("Use only the quality you selected when available.")
+                    label: qsTr("Prefer content language"); helpText: AppStrings.strictEnforcementHelp
+                    detail: qsTr("Use website page text to request titles in your chosen language. This can be slower.")
                     value: appSettings.strict_enforcement
                     onChanged: function(selected) { appSettings.strict_enforcement = selected }
                 }
@@ -408,12 +422,12 @@ Pane {
             SettingCard {
                 heading: qsTr("Files")
                 ToggleRow {
-                    label: qsTr("Write metadata")
+                    label: qsTr("Write metadata"); helpText: AppStrings.writeMetadataHelp
                     value: appSettings.write_metadata
                     onChanged: function(selected) { appSettings.write_metadata = selected }
                 }
                 ToggleRow {
-                    label: qsTr("Skip existing files")
+                    label: qsTr("Skip existing files"); helpText: AppStrings.skipExistingFilesHelp
                     value: appSettings.skip_existing_files
                     onChanged: function(selected) { appSettings.skip_existing_files = selected }
                 }
@@ -472,10 +486,10 @@ Pane {
             spacing: 14
             SettingCard {
                 heading: qsTr("Download speed")
-                NumberRow { label: qsTr("Parallel downloads"); number: appSettings.parallel_downloads; minimum: 1; maximum: 20; onChanged: function(n) { appSettings.parallel_downloads = n } }
-                NumberRow { label: qsTr("Download workers"); number: appSettings.download_workers; minimum: 1; maximum: 64; onChanged: function(n) { appSettings.download_workers = n } }
+                NumberRow { label: qsTr("Parallel downloads"); helpText: AppStrings.parallelDownloadsHelp; number: appSettings.parallel_downloads; minimum: 1; maximum: bridge.isPremium ? 20 : 1; onChanged: function(n) { backend.set_parallel_downloads(n) } }
+                NumberRow { label: qsTr("Download workers"); helpText: AppStrings.downloadWorkersHelp; number: appSettings.download_workers; minimum: 1; maximum: 64; onChanged: function(n) { appSettings.download_workers = n } }
                 TextRow {
-                    label: qsTr("Speed limit (MB/s, 0 for unlimited)")
+                    label: qsTr("Speed limit (MB/s, 0 for unlimited)"); helpText: AppStrings.speedLimitHelp
                     value: String(appSettings.speed_limit)
                     onSubmitted: function(value) {
                         var speed = Number(value)
@@ -485,12 +499,12 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Requests")
-                NumberRow { label: qsTr("Retries"); number: appSettings.retries; maximum: 30; onChanged: function(n) { appSettings.retries = n } }
-                NumberRow { label: qsTr("Timeout in seconds"); number: appSettings.timeout; minimum: 1; maximum: 600; onChanged: function(n) { appSettings.timeout = n } }
-                NumberRow { label: qsTr("Delay between requests"); number: appSettings.network_delay; maximum: 120; onChanged: function(n) { appSettings.network_delay = n } }
-                NumberRow { label: qsTr("Processing delay"); number: appSettings.processing_delay; maximum: 100; onChanged: function(n) { appSettings.processing_delay = n } }
-                NumberRow { label: qsTr("Video requests at once"); number: appSettings.videos_concurrency; minimum: 1; maximum: 100; onChanged: function(n) { appSettings.videos_concurrency = n } }
-                NumberRow { label: qsTr("Page requests at once"); number: appSettings.pages_concurrency; minimum: 1; maximum: 100; onChanged: function(n) { appSettings.pages_concurrency = n } }
+                NumberRow { label: qsTr("Retries"); helpText: AppStrings.retriesHelp; number: appSettings.retries; maximum: 30; onChanged: function(n) { appSettings.retries = n } }
+                NumberRow { label: qsTr("Timeout in seconds"); helpText: AppStrings.timeoutHelp; number: appSettings.timeout; minimum: 1; maximum: 600; onChanged: function(n) { appSettings.timeout = n } }
+                NumberRow { label: qsTr("Delay between requests"); helpText: AppStrings.networkDelayHelp; number: appSettings.network_delay; maximum: 120; onChanged: function(n) { appSettings.network_delay = n } }
+                NumberRow { label: qsTr("Processing delay"); helpText: AppStrings.processingDelay; number: appSettings.processing_delay; maximum: 100; onChanged: function(n) { appSettings.processing_delay = n } }
+                NumberRow { label: qsTr("Video requests at once"); helpText: AppStrings.videosConcurrencyHelp; number: appSettings.videos_concurrency; minimum: 1; maximum: 100; onChanged: function(n) { appSettings.videos_concurrency = n } }
+                NumberRow { label: qsTr("Page requests at once"); helpText: AppStrings.pagesConcurrencyHelp; number: appSettings.pages_concurrency; minimum: 1; maximum: 100; onChanged: function(n) { appSettings.pages_concurrency = n } }
             }
             Item { Layout.preferredHeight: 14 }
         }
@@ -504,21 +518,23 @@ Pane {
             SettingCard {
                 heading: qsTr("Privacy")
                 ToggleRow {
-                    label: qsTr("Anonymous mode")
+                    label: qsTr("Anonymous mode"); helpText: AppStrings.anonymousModeHelp
                     detail: qsTr("Hide titles and private information in the app.")
                     value: appSettings.anonymous_mode
                     onChanged: function(selected) { appSettings.anonymous_mode = selected }
                 }
                 ToggleRow {
-                    label: qsTr("Automatic error reports")
+                    label: qsTr("Send tracebacks and video URLs")
+                    detail: qsTr("Stored securely by the developer, never shared and used only for debugging.")
+                    helpText: backend.errorReportDisclosure
                     value: appSettings.enable_logging
                     onChanged: function(selected) { appSettings.set_error_reporting_consent(selected) }
                 }
             }
             SettingCard {
                 heading: qsTr("Connection protection")
-                ToggleRow { label: qsTr("DNS over HTTPS"); value: appSettings.dns_over_https; onChanged: function(v) { appSettings.dns_over_https = v } }
-                ToggleRow { label: qsTr("Encrypted Client Hello"); value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
+                ToggleRow { label: qsTr("DNS over HTTPS"); helpText: AppStrings.dnsOverHTTPSHelp; value: appSettings.dns_over_https; onChanged: function(v) { appSettings.dns_over_https = v } }
+                ToggleRow { label: qsTr("Encrypted Client Hello"); helpText: AppStrings.encryptedCHHelp; value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
                 TorRouting { Layout.fillWidth: true }
                 Button {
                     Layout.fillWidth: true
@@ -538,16 +554,16 @@ Pane {
             SettingCard {
                 heading: qsTr("Theme")
                 description: qsTr("A Material look designed for your phone and tablet.")
-                ToggleRow { label: qsTr("Dark mode"); value: appSettings.dark_mode; onChanged: function(v) { appSettings.dark_mode = v } }
+                ToggleRow { label: qsTr("Dark mode"); helpText: AppStrings.darkModeHelp; value: appSettings.dark_mode; onChanged: function(v) { appSettings.dark_mode = v } }
                 ToggleRow {
                     label: qsTr("Activity glow")
                     detail: qsTr("Show a glowing border while the app is busy.")
                     value: appSettings.activity_glow_enabled
                     onChanged: function(v) { appSettings.activity_glow_enabled = v }
                 }
-                NumberRow { label: qsTr("Text size"); number: appSettings.font_size; minimum: 8; maximum: 32; onChanged: function(n) { appSettings.font_size = n } }
+                NumberRow { label: qsTr("Text size"); helpText: AppStrings.fontSizeHelp; number: appSettings.font_size; minimum: 8; maximum: 32; onChanged: function(n) { appSettings.font_size = n } }
                 ChoiceRow {
-                    label: qsTr("Accent color")
+                    label: qsTr("Accent color"); helpText: AppStrings.accentColorHelp
                     choices: [qsTr("Indigo"), qsTr("Red"), qsTr("Green"), qsTr("Orange"), qsTr("Purple")]
                     selected: Math.max(0, ["#6366f1", "#f44336", "#4caf50", "#ff9800", "#9c27b0"].indexOf(appSettings.accent_color))
                     onChosen: function(index) { appSettings.accent_color = ["#6366f1", "#f44336", "#4caf50", "#ff9800", "#9c27b0"][index] }
@@ -566,13 +582,13 @@ Pane {
                     onToggled: appSettings.high_contrast = checked
                 }
                 ChoiceRow {
-                    label: qsTr("Interface language")
-                    choices: appSettings.ui_languages
-                    selected: appSettings.language
-                    onChosen: function(index) { appSettings.language = index }
+                    label: qsTr("English only — translations are not available yet")
+                    choices: ["English"]
+                    selected: 0
+                    enabled: false
                 }
                 ChoiceRow {
-                    label: qsTr("Content language")
+                    label: qsTr("Content language"); helpText: AppStrings.contentLanguageHelp
                     choices: ["English", "Deutsch", "Français", "Italiano", "Español", "中文"]
                     selected: Math.max(0, ["en-US", "de-DE", "fr-FR", "it-IT", "es-ES", "zh-CN"].indexOf(appSettings.locale))
                     onChosen: function(index) { appSettings.locale = ["en-US", "de-DE", "fr-FR", "it-IT", "es-ES", "zh-CN"][index] }
@@ -589,9 +605,26 @@ Pane {
             spacing: 14
             SettingCard {
                 heading: qsTr("App behavior")
-                ToggleRow { label: qsTr("Suppress error dialogs"); value: appSettings.supress_errors; onChanged: function(v) { appSettings.supress_errors = v } }
-                ToggleRow { label: qsTr("Use system proxy settings"); value: appSettings.trust_environment; onChanged: function(v) { appSettings.trust_environment = v } }
-                ToggleRow { label: qsTr("Debug mode"); value: appSettings.debug_mode; onChanged: function(v) { appSettings.debug_mode = v } }
+                ToggleRow {
+                    label: qsTr("System notifications when the app is inactive"); helpText: AppStrings.systemNotificationsHelp
+                    value: appSettings.system_notifications
+                    onChanged: function(v) { appSettings.system_notifications = v }
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: typeof systemNotifier !== "undefined" ? systemNotifier.status : ""
+                    textFormat: Text.PlainText
+                    wrapMode: Text.Wrap
+                }
+                Button {
+                    text: qsTr("Open system notification settings")
+                    implicitHeight: 48
+                    visible: Qt.platform.os === "android" || Qt.platform.os === "ios"
+                    onClicked: systemNotifier.open_settings()
+                }
+                ToggleRow { label: qsTr("Reduce repeated error announcements"); helpText: AppStrings.supressErrors; value: appSettings.supress_errors; onChanged: function(v) { appSettings.supress_errors = v } }
+                ToggleRow { label: qsTr("Use system proxy settings"); helpText: AppStrings.trustEnvironmentHelp; value: appSettings.trust_environment; onChanged: function(v) { appSettings.trust_environment = v } }
+                ToggleRow { label: qsTr("Debug mode"); helpText: AppStrings.debugModeHelp; value: appSettings.debug_mode; onChanged: function(v) { appSettings.debug_mode = v } }
             }
             SettingCard {
                 heading: qsTr("Maintenance")

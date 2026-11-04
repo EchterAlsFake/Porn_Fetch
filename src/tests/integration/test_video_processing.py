@@ -57,6 +57,7 @@ class VideoProcessingTests(unittest.IsolatedAsyncioTestCase):
     def backend(self):
         backend = Backend.__new__(Backend)
         QObject.__init__(backend)
+        backend.notifications = Mock()
         backend._video_fetch_task = None
         backend._account_fetch_task = None
         backend._account_fetch_in_progress = False

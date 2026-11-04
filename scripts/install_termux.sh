@@ -35,14 +35,21 @@ run() {
 }
 
 run "Update packages" pkg update -y
-run "Install build tools" pkg install -y python git binutils libxml2 libxslt
-
-run "Fetch sources" git clone https://github.com/EchterAlsFake/Porn_Fetch
-cd Porn_Fetch
-run "Create environment" python -m venv venv
-source venv/bin/activate
-run "Install dependencies" python -m pip install '.[build]'
-run "Compile CLI" python -m PyInstaller --clean packaging/pyinstaller_cli.spec
-mv dist/Porn_Fetch_CLI Porn_Fetch
-chmod +x Porn_Fetch
-build_status OK "Porn Fetch installed: $(pwd)/Porn_Fetch"
+run "Install build tools" pkg install -y python git clang rust make pkg-config binutils libxml2 libxslt libffi openssl ffmpeg
+python -c 'import sys; assert (3, 15) <= sys.version_info < (3, 16), "Porn Fetch needs Python 3.15. Update Termux packages first."'
+if [[ -f pyproject.toml && -f Porn_Fetch_CLI.py ]]; then
+  project_dir="$PWD"
+elif [[ -f "$(dirname "${BASH_SOURCE[0]}")/../Porn_Fetch_CLI.py" ]]; then
+  project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+else
+  if [[ -e Porn_Fetch ]]; then
+    build_status FAIL "Porn_Fetch already exists. Run this script from your checkout, or choose an empty folder."
+    exit 1
+  fi
+  run "Fetch sources" git clone https://github.com/EchterAlsFake/Porn_Fetch
+  project_dir="$PWD/Porn_Fetch"
+fi
+cd "$project_dir"
+run "Create environment" python -m venv .venv-termux
+run "Install dependencies" .venv-termux/bin/python -m pip install --upgrade --upgrade-strategy eager -e .
+build_status OK "Ready. Start with: $project_dir/.venv-termux/bin/python $project_dir/Porn_Fetch_CLI.py"

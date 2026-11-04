@@ -32,6 +32,7 @@ import hashlib
 import io
 import os
 import re
+import runpy
 import shutil
 import subprocess
 import sys
@@ -492,6 +493,14 @@ def update_pysidedeploy_spec(
         config.write(destination)
 
 
+def prepare_android_settings(project_root: Path, venv_dir: Path) -> None:
+    """Regenerate deployment paths from the portable template on every build."""
+    from src.shared.version import BUILD_VERSION
+
+    prepare = runpy.run_path(str(project_root / "packaging/prepare_android_ci.py"))["prepare"]
+    prepare(project_root, venv_dir, BUILD_VERSION)
+
+
 def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
     """Verify and apply host deployment and QtAsyncio patches."""
     patch_deploy = project_root / "scripts" / "patch_android_deploy.py"
@@ -633,6 +642,7 @@ def build_single_arch(
     arch_build_dir.mkdir(parents=True, exist_ok=True)
     ndk_stamp.write_text(ANDROID_NDK_REVISION + "\n", encoding="utf-8")
     python_stamp.write_text(ANDROID_PYTHON_VERSION + "\n", encoding="utf-8")
+    prepare_android_settings(project_root, venv_dir)
     extract_qt_jars(wheel_pyside, project_root)
     update_buildozer_spec(buildozer_spec, buildozer_arch, sdk_path, ndk_path, project_root)
     update_pysidedeploy_spec(pysidedeploy_spec, wheel_pyside, wheel_shiboken, sdk_path, ndk_path, project_root, mode=build_mode)

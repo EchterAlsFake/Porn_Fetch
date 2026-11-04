@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Pane {
     id: root
     signal openPage(int index)
+    signal openActivity()
     padding: 8
     readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
     readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
@@ -17,6 +18,11 @@ Pane {
         anchors.right: parent.right
         anchors.top: parent.top
         spacing: 8
+        Button {
+            Layout.fillWidth: true
+            text: qsTr("Recent activity")
+            onClicked: root.openActivity()
+        }
         ItemDelegate {
             Layout.fillWidth: true
             Layout.preferredHeight: 88

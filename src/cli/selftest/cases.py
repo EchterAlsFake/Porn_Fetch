@@ -5,7 +5,7 @@ SINGLE_VIDEO_TESTS = [
     ("XHamster", "https://xhamster.com/videos/yoga-instructor-guides-us-during-hardcore-sex-xhLLvCd"),
     ("XNXX", "https://www.xnxx.com/video-1gav4l94/allein_im_seehaus_mit_meiner_stieftochter"),
     ("XVideos", "https://de.xvideos.com/video.omtdluc3e5f/52563166/0/"),
-    ("Eporner", "https://www.eporner.com/video-2MWhVhhsAfM/zz-olenade/"),
+    ("Eporner", "https://www.eporner.com/video-5cgl1zr2c8b/"),
     ("SpankBang", "https://spankbang.com/a4u5v/video/"),
     ("YouPorn", "https://www.youporn.com/watch/196323191/"),
     ("Beeg", "https://beeg.com/-0785353135636417"),

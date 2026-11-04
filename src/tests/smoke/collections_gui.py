@@ -215,6 +215,21 @@ class CollectionChecks:
         if first["items"] >= 3:
             require(len(baseline) == 3, "Result limit did not produce exactly three available rows")
         result["baseline"] = {"rows": len(baseline), "first_page_items": first["items"], "result_limit": 3}
+        if self.args.access == "free":
+            preview = await self.finish(await self.start("free-preview", limit=50))
+            require(0 < len(preview) <= 5, "Free collection exceeded its five-video preview")
+            if first["items"] >= 5:
+                require(len(preview) == 5, "Free preview omitted available first-page videos")
+            require(all(video.index <= 5 for video in preview), "Free preview contains a later source position")
+            beyond = await self.finish(await self.start("free-range", start=6, end=7))
+            require(not beyond, "A range bypassed the free collection preview")
+            rejected = await self.finish(await self.start("free-filter", title="(?!)", limit=50))
+            require(not rejected, "Rejecting filter retained free preview rows")
+            result["free_preview"] = {"rows": len(preview), "range_bypass_rejected": True,
+                                      "rejecting_filter_verified": True}
+            rows = await self.finish(await self.start("free-download"))
+            await self.download_selected(rows, result)
+            return
         # Exercise actual GUI filtering; calculate the expectation from unchanged
         # real candidates rather than calling the production matcher in the test.
         target = baseline[0]
@@ -366,10 +381,10 @@ async def run(args, directory):
                        "Performance/pages_concurrency": 1, "Performance/retries": 2, "Performance/timeout": 25}.items():
         disk.setValue(key, value)
     app_settings.set_settings_storage(disk)
-    gui = DownloadWindow(args.timeout)
+    gui = DownloadWindow(args.timeout, premium=args.access == "premium")
     gui.backend.load_clients()
     report = {"scope": "Actual public model/playlist GUI pagination, selected media and source history",
-              "planned_sources": args.cases, "results": []}
+              "access": args.access, "planned_sources": args.cases, "results": []}
     args.report.parent.mkdir(parents=True, exist_ok=True)
     active_timeout = None
     blocked_providers, rate_events = {}, []
@@ -551,6 +566,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--provider", action="append", help="Focus one or more supported providers")
     parser.add_argument("--kind", choices=("model", "playlist"))
+    parser.add_argument("--access", choices=("free", "premium"), default="premium",
+                        help="Synthetic feature entitlement; free checks the preview, premium checks pagination")
     parser.add_argument("--source", action="append", default=[], metavar="PROVIDER.KIND=URL", help="Override a public source fixture")
     parser.add_argument("--list", action="store_true")
     parser.add_argument("--offline-only", action="store_true", help="Actual source validation controls; HTTP is rejected")

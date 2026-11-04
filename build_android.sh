@@ -12,17 +12,14 @@ done
 PROJECT_ROOT="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
 # Prefer virtual environment python
-if [[ -x "$PROJECT_ROOT/.venv/bin/python" ]]; then
-    PYTHON_EXE="$PROJECT_ROOT/.venv/bin/python"
-elif [[ -n "${VIRTUAL_ENV:-}" && -x "$VIRTUAL_ENV/bin/python" ]]; then
+if [[ -n "${VIRTUAL_ENV:-}" && -x "$VIRTUAL_ENV/bin/python" ]]; then
     PYTHON_EXE="$VIRTUAL_ENV/bin/python"
+elif [[ -x "$PROJECT_ROOT/.venv/bin/python" ]]; then
+    PYTHON_EXE="$PROJECT_ROOT/.venv/bin/python"
 else
     PYTHON_EXE="$(command -v python3 || command -v python)"
 fi
 
-# Ensure .venv/bin is in PATH for tools like buildozer / pyside6-android-deploy
-if [[ -d "$PROJECT_ROOT/.venv/bin" ]]; then
-    export PATH="$PROJECT_ROOT/.venv/bin:$PATH"
-fi
+export PATH="$(dirname "$PYTHON_EXE"):$PATH"
 
 exec "$PYTHON_EXE" "$PROJECT_ROOT/scripts/build_android.py" "$@"

@@ -24,7 +24,6 @@ from PySide6.QtCore import QObject, Signal
 from src.backend import clients
 from src.backend.config import __version__, app_settings
 from src.backend.download_manager import DownloadManager, VideoFilters, VideoObject
-from src.backend.helper_functions import make_debug_log
 from src.shared.error_reporting import report_exception
 from src.shared.download_options import title_template, video_output_path
 from src.shared.errors import (
@@ -218,63 +217,37 @@ class ProcessVideos(QObject):
 
                         self.download_manager.add_video(video_object)
 
-                # General Errors
-                except AppNetworkError as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    A network error happened, I'll try retrying...""")
-                    continue  # Maybe it solves by itself ;)
-
-                except AppNotFoundError as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
-                    the correct URL.
-    
-                    If you are sure you did, please report this issue
-                    """)
-
-                    break  # If the resource is not there, it won't magically appear lmao
-
-                except (VideoDisabled, GifPendingReview) as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
-                    """)
+                except AppNetworkError as error:
+                    last_exception = error
+                    last_error = self.tr("A network error prevented this item from loading. Check your connection and submit the URL again. Continuing with the next item.")
+                    continue
+                except AppNotFoundError as error:
+                    last_exception = error
+                    last_error = self.tr("The item could not be found. Check that the URL is correct and the item is still available.")
                     break
-
-                except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
-                    fix this quickly!""")
+                except (VideoDisabled, GifPendingReview) as error:
+                    last_exception = error
+                    last_error = self.tr("This item is disabled or awaiting review and cannot be downloaded yet.")
                     break
-
-                except RateLimitError as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    You got rate limited by the server. I have already tried solving this, which didn't work. 
-                    Please use a (different) proxy or VPN.""")
+                except (SecurityAbort, ChallengeMathError) as error:
+                    last_exception = error
+                    last_error = self.tr("The website's verification challenge could not be completed. Try again later or contact support with the error ID.")
                     break
-
-                except DataNotLoadedError as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message=f"""
-                    If you see this I fucked up developing my API packages and you should immediately open an issue on 
-                    GitHub lol""")
+                except RateLimitError as error:
+                    last_exception = error
+                    last_error = self.tr("The website is limiting requests. Wait before trying again, or reduce request concurrency in Settings.")
                     break
-
-                except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
-                    last_exception = e
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="""
-                    The website denied access, probably because it detected you as a bot. Please report this, as I probably
-                    need to update the headers. 
-                    """)
-
-                except Exception as e:
-                    last_exception = e
-                    self.logger.error(f"UNHANDLED EXCEPTION in start_processing: {e}", exc_info=True)
-                    last_error = make_debug_log(e=e, video_url=video_url, function="start_processing", user_message="An unexpected error occurred.")
+                except DataNotLoadedError as error:
+                    last_exception = error
+                    last_error = self.tr("The website returned incomplete information. Try again later or contact support with the error ID.")
+                    break
+                except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as error:
+                    last_exception = error
+                    last_error = self.tr("The website denied access. Check your account or connection and try again later.")
+                except Exception as error:
+                    last_exception = error
+                    self.logger.exception("Could not prepare a video")
+                    last_error = self.tr("The item could not be loaded. Try again or contact support with the error ID.")
                     break
 
                 finally:
@@ -292,6 +265,6 @@ class ProcessVideos(QObject):
                             version=__version__,
                         )
                         if last_error is not None:
-                            last_error = f"{last_error.rstrip()}\n\nError ID: {report_id}"
+                            last_error = last_error.rstrip() + "\n\n" + self.tr("Error ID: %s") % report_id
                     if last_error is not None:
                         self.error_signal.emit(last_error)

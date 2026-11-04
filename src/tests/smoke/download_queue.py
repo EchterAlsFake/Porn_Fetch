@@ -23,7 +23,7 @@ from src.cli.settings import CliSettings
 from src.tests.smoke.download_gui import DownloadWindow, artifacts, isolated_settings, make_report, save_report
 from src.tests.smoke.download_lifecycle import ObservedCore, lifecycle_fixtures, media_requests, require, validate_media
 
-CASES = {"parallel-1": 1, "parallel-2": 2, "stop-remove": 2}
+CASES = {"parallel-1": 1, "premium-parallel-1": 1, "parallel-2": 2, "stop-remove": 2}
 REQUEST_JOB = ContextVar("desktop_queue_job", default="prepare")
 
 
@@ -116,7 +116,10 @@ async def check_case(args, case, limit, directory, ffmpeg, result):
                           segment_cache_mb=0).to_runtime_config()
     runtime.ffmpeg_path = str(ffmpeg)
     with isolated_settings(directory):
-        gui = DownloadWindow(args.timeout, parallel=limit)
+        premium = case != "parallel-1"
+        # Free access must remain serial even with a stale larger semaphore.
+        gui = DownloadWindow(args.timeout, parallel=limit if premium else 2, premium=premium)
+        result["access"] = "premium" if premium else "free"
         backend, model = gui.backend, gui.backend._downloads_model
         guard = AccountAccessGuard(on_wait=lambda seconds: extend_timeout_for_wait(gui.active_timeout, seconds))
         gui.check_access = guard.raise_if_blocked
@@ -323,6 +326,8 @@ async def run(args, workspace, ffmpeg):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", choices=("all", *CASES), action="append")
+    parser.add_argument("--access", choices=("free", "premium", "both"), default="both",
+                        help="Synthetic feature entitlement in the isolated test backend; no real license is read")
     parser.add_argument("--quality", type=int, help="Exact available resolution at or below 720p")
     parser.add_argument("--bandwidth", type=float, default=1, help="Native per-core HLS bandwidth limit in MiB/s")
     parser.add_argument("--timeout", type=float, default=600, help="Maximum seconds per preparation/download phase")
@@ -335,6 +340,10 @@ def parse_args(argv=None):
         parser.error("Timeout/bandwidth must be positive and quality must be between 1 and 720")
     selected = set(args.case or ("all",))
     args.cases = [(case, limit) for case, limit in CASES.items() if "all" in selected or case in selected]
+    args.cases = [(case, limit) for case, limit in args.cases
+                  if args.access == "both" or (case == "parallel-1") == (args.access == "free")]
+    if not args.cases:
+        parser.error("No queue cases match the requested access and case selection")
     args.fixtures = [fixture for fixture in lifecycle_fixtures() if fixture[0] in {"pornhub", "eporner"}]
     args.scenarios, args.manual_checks = (), []
     return args

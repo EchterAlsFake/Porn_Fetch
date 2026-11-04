@@ -113,12 +113,14 @@ async def run(args):
                                          "wait_seconds": round(access_guard.total_wait_seconds, 3),
                                          "request_delay_seconds": access_guard.request_delay}
         report["counts"] = {status: sum(check["status"] == status for check in report["checks"])
-                            for status in ("PASS", "FAIL", "UNVERIFIED", "BLOCKED", "INTERRUPTED")}
+                            for status in ("PASS", "EMPTY", "FAIL", "UNVERIFIED", "BLOCKED", "INTERRUPTED")}
         passed = {item["id"] for item in report["checks"] if item["status"] == "PASS"}
+        empty = {item["id"] for item in report["checks"] if item["status"] == "EMPTY"}
         report["action_coverage"] = {
             "metric": "Selected account GUI action checklist", "planned": len(planned),
             "passed": len(set(planned) & passed), "percent": round(100 * len(set(planned) & passed) / len(planned), 1),
             "not_passed": sorted(set(planned) - passed),
+            "empty": sorted(empty), "not_exercised": sorted(set(planned) - passed - empty),
         }
         fd = os.open(args.report, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
         with os.fdopen(fd, "w", encoding="utf-8") as file:
@@ -138,9 +140,11 @@ async def run(args):
             with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                 active_timeout = asyncio.timeout(args.timeout)
                 async with active_timeout:
-                    result.update(await operation() or {})
+                    evidence = await operation() or {}
+                    result.update(evidence)
             require(not model_errors, "QAbstractItemModelTester reported a model contract failure")
-            result["status"] = "PASS"
+            require(not pipeline_errors, "Account preparation reported provider errors")
+            result["status"] = evidence.get("status", "PASS")
         except asyncio.CancelledError:
             if access_guard.blocked is not None:
                 result["status"] = "BLOCKED"
@@ -210,6 +214,12 @@ async def run(args):
 
                         await check(f"{layout}.{provider}.help", help_dialog)
                         async def cookie_login():
+                            if provider == "XVideos":
+                                jar = await asyncio.to_thread(original_reader, "xvideos", browser_name=args.browser)
+                                names = {cookie.name for cookie in jar if cookie.value}
+                                missing = sorted({"session_token", "session_token_auth"} - names)
+                                require(not missing, f"{args.browser.title()} XVideos session is incomplete; missing "
+                                        + ", ".join(missing) + ". Sign in again in that browser and retry.")
                             if layout != "desktop":
                                 # Desktop browser sessions supply the mobile QML
                                 # data checks; Android has no cookie-import button.
@@ -326,7 +336,7 @@ async def run(args):
                                 report["private_playlist"]["verified"] = True
                                 return {"authenticated_rows_verified": True, "anonymous_video_access_denied": True}
                             await check("XVideos.private-playlist-authorization", private_authorization)
-                    report["list_roles"] = 9
+                    report["list_roles"] = len(backend._downloads_model.roleNames())
                 finally:
                     window.close()
     except asyncio.CancelledError:
@@ -342,8 +352,9 @@ async def run(args):
         application.stop_flag.clear()
         del tester
     counts = report["counts"]
-    print(f"{counts['PASS']} passed, {counts['FAIL']} failed. Report: {args.report}")
-    return int(bool(counts["FAIL"] or counts["UNVERIFIED"] or report["action_coverage"]["not_passed"]))
+    print(f"{counts['PASS']} passed, {counts['EMPTY']} empty, {counts['FAIL']} failed. Report: {args.report}")
+    return int(bool(counts["FAIL"] or counts["UNVERIFIED"] or counts["BLOCKED"]
+                    or report["action_coverage"]["not_exercised"]))
 
 
 def main():

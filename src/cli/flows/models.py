@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import asyncio
+from contextlib import aclosing
 
 import questionary
 from rich.panel import Panel
 from rich.table import Table
 
+from src.shared.access import public_collection_items
 from src.shared.media import select_allowed_quality
 
 from ..downloads import download_video
@@ -85,10 +87,12 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                 for model_url, _ in models:
                     found_urls: list[str] = []
                     try:
-                        async for video in ctx.pool.media_stream(model_url, pages=5):
-                            v_url = getattr(video, "url", None)
-                            if v_url:
-                                found_urls.append(str(v_url))
+                        stream = public_collection_items(ctx.pool.media_stream(model_url, pages=5), ctx.license_service.status.allowed)
+                        async with aclosing(stream):
+                            async for video in stream:
+                                v_url = getattr(video, "url", None)
+                                if v_url:
+                                    found_urls.append(str(v_url))
                         added = ctx.model_store.update_pending(model_url, found_urls)
                         scan_table.add_row(model_url, str(added))
                     except Exception as error:
@@ -100,6 +104,9 @@ async def handle_batch_management(ctx: WizardContext) -> None:
             ctx.console.print(scan_table)
 
         elif action == "download":
+            if not ctx.license_service.status.allowed:
+                ctx.console.print("[yellow]Downloading tracked-model queues requires an active premium license. Use a public profile or playlist URL for a free 5-video preview.[/]")
+                continue
             models = ctx.model_store.models()
             total_pending = sum(len(state["pending"]) for _, state in models)
             if total_pending == 0:

@@ -35,6 +35,22 @@ Pane {
         modal: true
     }
 
+    Connections {
+        target: backend.downloads
+        function onRowsAboutToBeRemoved(parentIndex, first, last) {
+            var item = downloadList.Window.window.activeFocusItem
+            while (item && item !== downloadList) {
+                if (item.objectName === "downloadRow" && item.index >= first && item.index <= last) {
+                    videoUrlField.forceActiveFocus()
+                    return
+                }
+                item = item.parent
+            }
+        }
+    }
+
+    ScrollableMessageDialog { id: downloadErrorDialog; title: qsTr("Download failed"); modal: true }
+
     function qualityRequiresLicense(quality) {
         var normalized = String(quality || "").trim().toLowerCase()
         if (["best", "half", "4k", "uhd", "2k", "qhd", "fullhd", "fhd"]
@@ -49,6 +65,8 @@ Pane {
         border.width: 2
         radius: 10
     }
+
+    readonly property var inputErrors: backend.inputErrors || ({})
 
     function getFilters() {
         return {
@@ -88,6 +106,8 @@ Pane {
 
             TextField {
                 id: videoUrlField
+                Accessible.description: root.inputErrors.video || ""
+                onTextEdited: backend.clear_input_error("video")
                 objectName: "videoUrlInput"
                 focus: true // This automatically focuses the element when the app starts cuz you probably gotta download a video xD
                 Layout.fillWidth: true
@@ -98,8 +118,8 @@ Pane {
 
                 onAccepted: {
                     if (backend.busy || !text.trim()) return
-                    backend.process_single_url(videoUrlField.text, customOptions.text, root.getFilters())
-                    videoUrlField.text = ""
+                    if (backend.process_single_url(videoUrlField.text, customOptions.text, root.getFilters()))
+                        videoUrlField.text = ""
                 }
             }
 
@@ -111,9 +131,18 @@ Pane {
                          && !backend.busy
 
                 onClicked: {
-                    backend.process_single_url(videoUrlField.text, customOptions.text, getFilters())
-                    videoUrlField.text = ""
+                    if (backend.process_single_url(videoUrlField.text, customOptions.text, getFilters()))
+                        videoUrlField.text = ""
                 }
+            }
+
+            Label {
+                Layout.columnSpan: 3
+                Layout.fillWidth: true
+                visible: text !== ""
+                text: root.inputErrors.video || ""
+                textFormat: Text.PlainText
+                wrapMode: Text.Wrap
             }
 
             Label {
@@ -122,6 +151,8 @@ Pane {
 
             TextField {
                 id: modelUrlField
+                Accessible.description: root.inputErrors.model || ""
+                onTextEdited: backend.clear_input_error("model")
                 objectName: "modelUrlInput"
 
                 Layout.fillWidth: true
@@ -132,8 +163,8 @@ Pane {
 
                 onAccepted: {
                     if (backend.busy || !text.trim()) return
-                    backend.process_model_url(text, customOptions.text, getFilters())
-                    modelUrlField.text = ""
+                    if (backend.process_model_url(text, customOptions.text, getFilters()))
+                        modelUrlField.text = ""
                 }
             }
 
@@ -145,11 +176,20 @@ Pane {
                          && !backend.busy
 
                 onClicked: {
-                    backend.process_model_url(modelUrlField.text, customOptions.text, getFilters())
-                    modelUrlField.text = ""
+                    if (backend.process_model_url(modelUrlField.text, customOptions.text, getFilters()))
+                        modelUrlField.text = ""
                 }
             }
 
+
+            Label {
+                Layout.columnSpan: 3
+                Layout.fillWidth: true
+                visible: text !== ""
+                text: root.inputErrors.model || ""
+                textFormat: Text.PlainText
+                wrapMode: Text.Wrap
+            }
 
             Label {
                 text: qsTr("Playlist URL:")
@@ -157,6 +197,8 @@ Pane {
 
             TextField {
                 id: playlistUrlField
+                Accessible.description: root.inputErrors.playlist || ""
+                onTextEdited: backend.clear_input_error("playlist")
                 objectName: "playlistUrlInput"
 
                 Layout.fillWidth: true
@@ -167,8 +209,8 @@ Pane {
 
                 onAccepted: {
                     if (backend.busy || !text.trim()) return
-                    backend.process_playlist_url(text, customOptions.text, getFilters())
-                    playlistUrlField.text = ""
+                    if (backend.process_playlist_url(text, customOptions.text, getFilters()))
+                        playlistUrlField.text = ""
                 }
             }
 
@@ -180,11 +222,26 @@ Pane {
                          && !backend.busy
 
                 onClicked: {
-                    backend.process_playlist_url(playlistUrlField.text, customOptions.text, getFilters())
-                    playlistUrlField.text = ""
+                    if (backend.process_playlist_url(playlistUrlField.text, customOptions.text, getFilters()))
+                        playlistUrlField.text = ""
                 }
             }
 
+        }
+
+        Label {
+            Layout.fillWidth: true
+            visible: text !== ""
+            text: root.inputErrors.playlist || root.inputErrors.filters || ""
+            textFormat: Text.PlainText
+            wrapMode: Text.Wrap
+        }
+
+        Label {
+            Layout.fillWidth: true
+            visible: !bridge.isPremium
+            text: qsTr("Free preview: model, channel and playlist URLs show their first 5 videos. Activate a premium license for bulk downloading.")
+            wrapMode: Text.Wrap
         }
 
         // ------------------------------------------
@@ -232,11 +289,6 @@ Pane {
             }
         }
 
-        ProcessingIndicator {
-            Layout.fillWidth: true
-            running: backend.busy
-        }
-
         StackLayout {
             id: contentStack
 
@@ -274,6 +326,16 @@ Pane {
                             objectName: "downloadClearSelectionButton"
                             enabled: downloadList.count > 0
                             onClicked: backend.select_all_videos(false)
+                        }
+
+                        Button {
+                            objectName: "clearDownloadListButton"
+                            text: qsTr("Clear list")
+                            enabled: downloadList.count > 0 || backend.busy
+                            Accessible.description: qsTr("Remove all video rows. Downloaded files and history are kept.")
+                            ToolTip.visible: hovered
+                            ToolTip.text: Accessible.description
+                            onClicked: backend.clear_download_list()
                         }
 
                         Item {
@@ -396,6 +458,8 @@ Pane {
                                     id: downloadRow
                                     objectName: "downloadRow"
 
+                                    required property int index
+                                    required property string errorId
                                     required property string jobId
                                     required property string title
                                     required property string author
@@ -406,6 +470,7 @@ Pane {
                                     required property bool selected
                                     required property string status
 
+                                    readonly property string stateText: ({pending: qsTr("Ready"), queued: qsTr("Queued"), downloading: qsTr("Downloading"), stopping: qsTr("Stopping"), cancelled: qsTr("Stopped"), failed: qsTr("Failed"), completed: qsTr("Completed")})[status] || status
                                     readonly property bool downloadActive: status === "queued"
                                                                            || status === "downloading"
                                                                            || status === "stopping"
@@ -443,7 +508,8 @@ Pane {
                                                 objectName: "downloadStartButton"
                                                 Layout.fillWidth: true
                                                 Layout.maximumWidth: root.downloadButtonMaximumWidth
-                                                text: qsTr("Download")
+                                                text: downloadRow.status === "failed" ? qsTr("Retry") : downloadRow.status === "cancelled" ? qsTr("Resume") : qsTr("Download")
+                                                Accessible.name: qsTr("Download %1: %2").arg(downloadRow.index + 1).arg(text)
                                                 enabled: !downloadRow.downloadActive
                                                 onClicked: backend.download_video(
                                                                downloadRow.jobId,
@@ -591,7 +657,8 @@ Pane {
                                             Layout.minimumWidth: root.stopColumnWidth
                                             Layout.maximumWidth: root.stopColumnWidth
 
-                                            text: downloadRow.downloadActive ? "■" : "▶"
+                                            text: downloadRow.downloadActive ? qsTr("Stop") : downloadRow.status === "failed" ? qsTr("Retry") : qsTr("Resume")
+                                            Accessible.name: qsTr("Download %1: %2").arg(downloadRow.index + 1).arg(text)
                                             enabled: downloadRow.downloadActive
                                                      || downloadRow.canResume
                                             ToolTip.visible: hovered
@@ -610,28 +677,36 @@ Pane {
                                             }
                                         }
 
-                                        Item {
+                                        ColumnLayout {
                                             Layout.preferredWidth: 180
                                             Layout.minimumWidth: 180
                                             Layout.maximumWidth: 180
-                                            implicitHeight: rowProgress.implicitHeight
-
+                                            spacing: 4
+                                            Label {
+                                                objectName: "downloadStatusLabel"
+                                                Layout.fillWidth: true
+                                                text: downloadRow.stateText + (downloadRow.status === "downloading" ? " · " + qsTr("%1%").arg(downloadRow.progress) : "")
+                                                textFormat: Text.PlainText
+                                                wrapMode: Text.Wrap
+                                            }
                                             ProgressBar {
                                                 id: rowProgress
                                                 objectName: "downloadProgressBar"
-                                                Accessible.name: qsTr("Download progress")
-                                                anchors.fill: parent
-
+                                                Layout.fillWidth: true
+                                                Accessible.name: qsTr("Download %1 progress").arg(downloadRow.index + 1)
+                                                Accessible.description: downloadRow.stateText
                                                 from: 0
                                                 to: 100
                                                 value: downloadRow.progress
+                                                indeterminate: downloadRow.status === "queued"
                                             }
-
-                                            Label {
-                                                anchors.centerIn: parent
-                                                text: qsTr("%1%").arg(Math.round(downloadRow.progress).toLocaleString(Qt.locale(), "f", 0))
-                                                color: "white"
-                                                font.bold: true
+                                            Button {
+                                                visible: downloadRow.status === "failed" && downloadRow.errorId !== ""
+                                                text: qsTr("Error details")
+                                                onClicked: {
+                                                    downloadErrorDialog.message = qsTr("The download failed. Check your connection and output folder, then retry.\n\nError ID: %1").arg(downloadRow.errorId)
+                                                    downloadErrorDialog.open()
+                                                }
                                             }
                                         }
                                         Button {

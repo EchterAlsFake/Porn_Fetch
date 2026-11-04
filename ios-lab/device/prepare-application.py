@@ -68,4 +68,31 @@ script = (f'set -e\nrsync -a --delete --exclude="__pycache__/" "{app}/src/" '
           f'cp "{app}/main.py" "$CODESIGNING_FOLDER_PATH/main.py"\n'
           f'/bin/bash "{device}/bundle-vendor.sh"\n')
 project.write_text(text[:match.start(2)] + json.dumps(script) + text[match.end(2):])
+
+# The notification bridge uses the existing Qt event loop and Apple's local
+# notifications framework. Compile the generated entry point as Objective-C++.
+notification_source = app / "src/backend/native/ios_notifications.mm"
+if notification_source.is_file():
+    candidates = [p for p in output.rglob("main.*") if p.suffix in {".cpp", ".mm"} and "_wheels" not in p.parts]
+    if len(candidates) != 1:
+        raise SystemExit("Cannot locate the generated iOS entry point for notifications")
+    entry = candidates[0]
+    entry.write_text(entry.read_text() + '\n#include "' + str(notification_source) + '"\n')
+    if entry.suffix != ".mm":
+        entry.rename(entry.with_suffix(".mm"))
+    text = project.read_text().replace("main.cpp", "main.mm")
+    text = text.replace("sourcecode.cpp.cpp", "sourcecode.cpp.objcpp")
+    # Inherit all deployment link flags while linking the native notification API.
+    def add_notification_framework(match):
+        value = match.group(2).strip()
+        if value.startswith("("):
+            value = '("-framework", "UserNotifications", ' + value[1:]
+        else:
+            value = '("$(inherited)", "-framework", "UserNotifications", ' + value + ')'
+        return match.group(1) + value + ";"
+    text = re.sub(r'(OTHER_LDFLAGS\s*=\s*)(\([^;]*\)|"(?:\\.|[^"\\])*"|[^;]+);',
+                  add_notification_framework, text)
+    if "UserNotifications" not in text:
+        text = text.replace("buildSettings = {", 'buildSettings = {\nOTHER_LDFLAGS = ("$(inherited)", "-framework", "UserNotifications");')
+    project.write_text(text)
 print(project)

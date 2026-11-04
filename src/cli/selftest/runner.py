@@ -12,7 +12,7 @@ from rich.table import Table
 from ..providers import ClientPool
 from ..settings import CliSettings
 from .cases import COLLECTION_TESTS, GALLERY_TESTS, PROFILE_TESTS, SHORTS_TESTS, SINGLE_VIDEO_TESTS
-from .downloads import test_active_download
+from .downloads import test_active_download, test_active_gallery_download
 from .models import TestResult
 from .offline import run_offline_tests
 from .online import test_gallery, test_stream, test_video
@@ -51,6 +51,8 @@ async def run_cli_self_test(
             results.extend(await asyncio.gather(*operations))
             if include_downloads:
                 results.append(await test_active_download(pool, settings))
+                for name, url in selected(GALLERY_TESTS):
+                    results.append(await test_active_gallery_download(name, url, pool))
         finally:
             await pool.close()
 

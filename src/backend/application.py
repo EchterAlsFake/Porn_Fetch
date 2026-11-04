@@ -1,3 +1,4 @@
+from contextlib import AsyncExitStack
 import os
 import sys
 import shutil
@@ -46,7 +47,11 @@ if is_main_process:
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
             ctypes.c_wchar_p("fi.echteralsfake.pornfetch")
         )
-    app = QGuiApplication.instance() or QGuiApplication(sys.argv)
+    if is_mobile:
+        app = QGuiApplication.instance() or QGuiApplication(sys.argv)
+    else:
+        from PySide6.QtWidgets import QApplication
+        app = QGuiApplication.instance() or QApplication(sys.argv)
     app.setWindowIcon(QIcon(":/images/graphics/logo.png"))
     engine = QQmlApplicationEngine()
     if not is_mobile:
@@ -96,7 +101,6 @@ def disable_nuitka_splash():
 update_splash("Importing (General).")
 import asyncio
 import argparse
-import traceback
 try:
     from rich_argparse import RichHelpFormatter
 except ImportError:
@@ -123,7 +127,8 @@ from src.shared.paths import shared_data_dir
 from src.shared.release import GITHUB_RELEASES_URL
 from src.backend.config import (__version__, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
-from src.backend.shared_gui import ui_popup, set_mobile_notice_handler, Signals
+from src.backend.shared_gui import ui_popup, set_notice_handler, Signals
+from src.backend.notifications import NotificationCenter
 from src.backend.helper_functions import safe_rmtree
 from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE, report_exception
 from src.shared.metadata import write_tags
@@ -138,12 +143,10 @@ from src.backend.login_manager import (
 from pornhub_api.modules.errors import LoginFailed as phLoginFailed
 from pornhub_api.modules.errors import ClientAlreadyLogged
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
-from src.backend.update_service import AutoUpdater, CheckUpdates
-from src.backend.installation import InstallPornFetch
-from src.backend.uninstallation import UninstallPornFetch
+from src.backend.update_service import AutoUpdater, CheckUpdates, find_maintenance_tool, launch_maintenance_tool
 from src.backend.sni_proxy_manager import SNIProxyManager
 from src.shared.tor_transport import configure as configure_tor_transport
-from src.shared.errors import UnsupportedPlatform, CookiesNotFound, LoginError
+from src.shared.errors import CookiesNotFound, LoginError
 from src.backend.download_manager import (
     DownloadManager,
     DownloadListModel,
@@ -152,17 +155,13 @@ from src.backend.download_manager import (
     quality_requires_premium,
     select_allowed_quality,
 )
+from src.shared.access import bulk_video_requires_premium, download_parallelism, public_collection_items
 from src.backend.video_processor import ProcessVideos
 from src.database.bridge import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
 from curl_cffi.requests.exceptions import SSLError
 
 update_splash("Importing (Frontend).")
-# Frontend imports
-from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
-                                              TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
-
-
 from src.shared.ffmpeg import has_ffmpeg
 
 FORCE_DISABLE_AV = not has_ffmpeg()
@@ -181,6 +180,10 @@ class DownloadStopEvent(asyncio.Event):
         return self
 
 
+class OutputFolderError(OSError):
+    """A completed private file could not be copied to the configured folder."""
+
+
 def custom_unraisable_hook(unraisable):
   # Check if the error originates from the cffi callback or your specific issue
   if unraisable.exc_type is NotImplementedError:
@@ -194,21 +197,23 @@ an issue.
 You have probably not executed the patch script in scripts/patch_qtasyncio.py
 and applied it to your virtual environment.
 
-You need to run this script, otherwise this application will NOT work!""")
+You need to run this script, otherwise this application will NOT work!""", severity="error", key="network-runtime")
 
 class Backend(QObject):
     showMessage = Signal(str)
-    mobileNotice = Signal(str, str)
     loginStateChanged = Signal()
     accountStateChanged = Signal()
     accountFetchStateChanged = Signal()
     downloadsChanged = Signal()
     busyChanged = Signal()
     activityChanged = Signal()
+    inputErrorsChanged = Signal()
+    preparationStatusChanged = Signal()
     updateAvailable = Signal("QVariantMap")
     updateProgress = Signal(int, int)
     updateStatus = Signal(str)
     updateFinished = Signal()
+    updateCheckStarted = Signal()
     proxyTestSucceeded = Signal(str, "QVariantMap")
     proxyTestFailed = Signal(str, str)
     proxySslError = Signal(str, str)
@@ -224,15 +229,21 @@ class Backend(QObject):
         self._account_fetch_task: asyncio.Task[object] | None = None
         self._account_fetch_in_progress = False
         self._video_fetch_task: asyncio.Task[object] | None = None
+        self._input_errors = {}
+        self._prepared_items = 0
+        self._preparation_had_errors = False
         self._proxy_test_task: asyncio.Task[object] | None = None
         self._update_check_task: asyncio.Task[object] | None = None
         self._update_check_requested = False
+        self._update_check_manual = False
+        self._available_update = None
         self._auto_update_task: asyncio.Task[object] | None = None
         self._shutdown_task: asyncio.Task[None] | None = None
         self._download_tasks: dict[str, asyncio.Task[object]] = {}
         self._download_stop_events: dict[str, asyncio.Event] = {}
         self._client_refresh_pending = False
-        self._download_semaphore = asyncio.Semaphore(max(1, int(app_settings.parallel_downloads)))
+        self._download_semaphore = asyncio.Semaphore(1)
+        self._free_download_semaphore = asyncio.Semaphore(1)
         self._license_bridge: LicenseBridge | None = None
         self._restart_warning_shown = False
         self.logger = configure_app_logging(logger_name="Porn Fetch - [Backend]", level=log_level, log_file="PornFetch.log")
@@ -243,9 +254,13 @@ class Backend(QObject):
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.auto_updater.finished.connect(self.updateFinished)
+        self.notifications = NotificationCenter(app_settings, self)
+        set_notice_handler(self.notifications.publish)
+        self.notifications.decisionAccepted.connect(self._accept_decision)
+        self.auto_updater.outcome.connect(
+            lambda severity, message: self.notifications.publish(message, self.tr("App updates"), severity,
+                                                                  key="update-install"))
         self.showMessage.connect(self.handle_message)
-        if is_android or mobile_layout:
-            set_mobile_notice_handler(self.mobileNotice.emit)
         app_settings.restartRequired.connect(self.setting_requires_restart)
         self.database_bridge: DatabaseBridge | None = None
         self._pending_pocketbase_move: tuple[Path, Path] | None = None
@@ -265,12 +280,12 @@ class Backend(QObject):
                 0,
                 lambda: ui_popup(
                     "SNI obfuscation failed to start and networking has been blocked.\n\n"
-                    + str(sni_proxy_manager.last_error)
+                    + str(sni_proxy_manager.last_error), severity="error", key="network-startup"
                 ),
             )
 
     def has_premium_access(self) -> bool:
-        return bool(self._license_bridge and self._license_bridge.isPremium)
+        return bool(getattr(self, "_license_bridge", None) and self._license_bridge.isPremium)
 
     @Property(str, constant=True)
     def errorReportDisclosure(self) -> str:
@@ -291,6 +306,19 @@ class Backend(QObject):
     @Property(bool, notify=busyChanged)
     def busy(self) -> bool:
         return self._video_fetch_task is not None
+
+    @Property("QVariantMap", notify=inputErrorsChanged)
+    def inputErrors(self):
+        return dict(self._input_errors)
+
+    @Slot(str)
+    def clear_input_error(self, field):
+        if self._input_errors.pop(field, None) is not None:
+            self.inputErrorsChanged.emit()
+
+    @Property(str, notify=preparationStatusChanged)
+    def preparationStatus(self):
+        return self.tr("Preparing your download list. Items added: %s") % self._prepared_items
 
     @Property(bool, notify=activityChanged)
     def activityActive(self) -> bool:
@@ -317,9 +345,17 @@ class Backend(QObject):
 
     def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
         self._license_bridge = license_bridge
+        license_bridge.licenseRejected.connect(
+            lambda message: self.notifications.publish(message, self.tr("License rejected"), "error", key="license"))
+        license_bridge.importFinished.connect(
+            lambda success, message: self.notifications.publish(
+                message, self.tr("License imported") if success else self.tr("License import failed"),
+                "success" if success else "error", key="license-import"))
         license_bridge.statusChanged.connect(self._enforce_quality_access)
+        license_bridge.statusChanged.connect(self._enforce_parallel_access)
         license_bridge.statusChanged.connect(self._update_activity)
         self._enforce_quality_access()
+        self._enforce_parallel_access()
         self._update_activity()
 
     def _enforce_quality_access(self) -> None:
@@ -353,6 +389,14 @@ class Backend(QObject):
     @Slot()
     def check_for_updates(self) -> None:
         """Request an update check, deferring it until QtAsyncio is running."""
+        self._update_check_manual = True
+        self._request_update_check()
+
+    @Slot()
+    def check_for_updates_background(self) -> None:
+        self._request_update_check()
+
+    def _request_update_check(self) -> None:
         self._update_check_requested = True
         try:
             asyncio.get_running_loop()
@@ -371,6 +415,9 @@ class Backend(QObject):
         if self._update_check_task is not None and not self._update_check_task.done():
             return
 
+        self._available_update = None
+        self.updateCheckStarted.emit()
+
         self._update_check_task = self._spawn(
             self._check_for_updates(),
             name="update-check",
@@ -379,11 +426,20 @@ class Backend(QObject):
     async def _check_for_updates(self) -> None:
         try:
             update = await CheckUpdates.check()
-        except Exception as error:
-            self.updateStatus.emit(f"Update check failed: {error}")
+        except Exception:
+            self.logger.exception("Update check failed")
+            message = self.tr("The update check failed. Check your connection and try again later.")
+            self.updateStatus.emit(message)
+            self.notifications.publish(message, self.tr("App updates"), "error", key="update-check",
+                                       quiet=not self._update_check_manual)
+            self._update_check_manual = False
             return
         if update is None:
-            self.updateStatus.emit("No update available.")
+            message = self.tr("No update available.")
+            self.updateStatus.emit(message)
+            if self._update_check_manual:
+                self.notifications.publish(message, self.tr("App updates"), "info", key="update-check")
+            self._update_check_manual = False
             return
 
         install_allowed = False
@@ -392,6 +448,7 @@ class Backend(QObject):
             install_allowed = True
             message = "Automatic updates are free for everyone."
         details = {
+            "automatic": not self._update_check_manual,
             "install_allowed": install_allowed,
             "entitlement_message": message,
             "version": str(update.get("version", "")),
@@ -400,8 +457,18 @@ class Backend(QObject):
             "changelog": str(update.get("changelog") or "Release notes are available on the GitHub releases page."),
             "changelog_format": str(update.get("changelog_format", "html")),
         }
+        self._update_check_manual = False
+        self._available_update = details
         self.logger.info("New update found: %s", details["version"])
         self.updateAvailable.emit(details)
+        if details["automatic"]:
+            self.notifications.publish(self.tr("A new version is available. Review it when you are ready."),
+                                       self.tr("App updates"), "info", key="update-check", action="updates")
+
+    @Slot()
+    def review_update(self):
+        if self._available_update:
+            self.updateAvailable.emit({**self._available_update, "automatic": False})
 
     @Slot()
     def cancel_update(self) -> None:
@@ -412,10 +479,10 @@ class Backend(QObject):
     def auto_update(self) -> None:
         """Download and install the available update without blocking QML."""
         if IS_SOURCE_RUN:
-            self.updateStatus.emit(
-                "Update failed: Automatic updates are only available in installed builds. "
-                "Use one of the download links instead."
-            )
+            message = self.tr("Automatic updates are only available in installed builds. Use the download link instead.")
+            self.updateStatus.emit(message)
+            self.notifications.publish(message, self.tr("App updates"), "warning", key="update-install")
+            self.updateFinished.emit()
             return
 
         if self._auto_update_task is not None and not self._auto_update_task.done():
@@ -426,38 +493,19 @@ class Backend(QObject):
             name="auto-update",
         )
 
-    @Slot(str, str)
-    def export_download(self, job_id: str, destination_url: str) -> None:
-        """Copy a completed private download to a user-selected Android document."""
-        video = self._downloads_model.get_video(job_id)
-        if video is None or self._downloads_model.get_status(job_id) != "completed":
-            self.handle_message("Only completed downloads can be exported.")
-            return
-        source = Path(video.output_path)
-        if not source.is_file():
-            self.handle_message("The downloaded file could not be found.")
-            return
-        destination = QUrl(destination_url)
-        if destination.scheme() not in ("content", "file"):
-            self.handle_message("The selected save location is not supported.")
-            return
+    @Slot()
+    def open_output_folder(self) -> None:
+        from PySide6.QtGui import QDesktopServices
+        folder = QUrl(app_settings.android_output_folder) if is_mobile and app_settings.android_output_folder else QUrl.fromLocalFile(str(Path(app_settings.output_path).expanduser().resolve()))
+        if not QDesktopServices.openUrl(folder):
+            self.notifications.publish(self.tr("Open the configured output folder using your file manager."),
+                                       self.tr("Output folder"), "info", key="output-folder")
 
-        async def export() -> None:
-            try:
-                await asyncio.to_thread(self._copy_download_file, source,
-                    destination.toString(QUrl.ComponentFormattingOption.FullyEncoded) if destination.scheme() == "content" else destination.toLocalFile())
-                self.handle_message("Download exported successfully.")
-            except Exception as error:
-                self.handle_message(f"Could not export download: {error}")
-
-        self._spawn(export(), name=f"export-{job_id}")
-
-    _copy_download_file = staticmethod(copy_download_file)
-
-    @Slot(str, result=QUrl)
-    def download_file_url(self, job_id: str) -> QUrl:
-        video = self._downloads_model.get_video(job_id)
-        return QUrl.fromLocalFile(str(Path(video.output_path).resolve())) if video and video.output_path else QUrl()
+    @Slot()
+    def retry_failed_downloads(self) -> None:
+        for item in tuple(self._downloads_model._items):
+            if item.get("status") == "failed":
+                self.download_video(item["jobId"])
 
     @Slot(str)
     def set_android_output_folder(self, folder_url: str) -> None:
@@ -475,7 +523,7 @@ class Backend(QObject):
         app_settings.android_output_folder = folder.toString(QUrl.ComponentFormattingOption.FullyEncoded)
         self.logger.info("Persisted android output folder: %r", app_settings.android_output_folder)
 
-    async def _auto_export_android_download(self, source: Path) -> None:
+    async def _save_to_output_folder(self, source: Path) -> None:
         folder_url = QUrl(app_settings.android_output_folder)
         if not folder_url.isValid() or folder_url.scheme() not in ("content", "file"):
             return
@@ -484,11 +532,12 @@ class Backend(QObject):
             def copy_to_folder() -> None:
                 if app_settings.skip_existing_files and QFile.exists(target_path):
                     return
-                self._copy_download_file(source, target_path)
+                copy_download_file(source, target_path)
 
             await asyncio.to_thread(copy_to_folder)
         except Exception as error:
-            self.handle_message(f"Could not save to the selected folder: {error}. Choose the folder again in Settings.")
+            self.logger.exception("Could not save download to the configured output folder")
+            raise OutputFolderError("Configured output folder is unavailable") from error
 
     async def _prepare_for_update(self) -> None:
         """Gracefully stop PocketBase and close sessions before the installer runs."""
@@ -510,11 +559,12 @@ class Backend(QObject):
     def setting_requires_restart(self) -> None:
         if not self._restart_warning_shown:
             self._restart_warning_shown = True
-            ui_popup("You have triggered an action that requires a restart before taking effect!")
+            self.notifications.require_restart()
 
     @Slot(str)
     def handle_message(self, message: str) -> None:
-        ui_popup(text=message)
+        self.notifications.publish(message, severity="error", key="operation-error",
+                                   quiet=app_settings.supress_errors)
 
     @Slot(bool)
     def toggle_network_logging(self, value: bool) -> None:
@@ -551,93 +601,63 @@ class Backend(QObject):
 
     @Slot()
     def clear_temporary_files(self):
+        if any(not task.done() for task in self._download_tasks.values()):
+            self.notifications.request_decision(
+                "clear-temporary-files", self.tr("Clear files during downloads?"),
+                self.tr("Downloads are still running. Clearing their temporary files can break them and erase saved progress. This is not recommended. Clear the files anyway?"))
+            return
+        self._clear_temporary_files()
+
+    def _clear_temporary_files(self):
         safe_rmtree(TEMP_DIRECTORY_STATES)
         safe_rmtree(TEMP_DIRECTORY_SEGMENTS)
         safe_rmtree(TEMP_DIRECTORY)
         self.ensure_temp()
-        ui_popup("Temporary files (segments, state files) have been deleted!")
+        ui_popup(self.tr("Temporary download files have been deleted."), self.tr("Cleanup complete"), severity="success", key="cleanup")
 
     @Slot()
     def reset_pornfetch(self):
         app_settings.reset()
-        ui_popup("Porn Fetch has been reset to its default values. Please restart the application immediately.")
+        self.notifications.require_restart()
+        ui_popup(self.tr("Settings have been reset to their defaults. Restart the application to apply them."), severity="info", key="settings-reset")
 
-    @Slot()
-    def handle_abort(self):
-        pass
+    @Property(bool, constant=True)
+    def maintenance_available(self) -> bool:
+        return not is_mobile and find_maintenance_tool() is not None
 
     @Slot(str)
-    def install_pornfetch(self, app_name: str) -> None:
-        if app_name:
-            config.__app_name__ = app_name
+    def open_maintenance(self, mode: str) -> None:
+        if mode not in {"components", "uninstall"} or self._is_shutting_down:
+            return
+        if not self.maintenance_available:
+            self.notifications.publish(
+                self.tr("This copy has no Qt Maintenance Tool. Use an official installer to manage an installation. For a portable or source copy, remove its application folder when it is no longer needed."),
+                self.tr("Installation"), "info", key="maintenance")
+            return
+        self.notifications.request_decision(
+            "maintenance-" + mode, self.tr("Open Qt Maintenance Tool?"),
+            self.tr("Porn Fetch will close and save download progress. The maintenance tool will let you choose what to change or remove."))
 
-        installer = InstallPornFetch()
-
-        async def run_installation():
+    @Slot(str)
+    def _accept_decision(self, action):
+        if action == "clear-temporary-files":
+            self._clear_temporary_files()
+        elif action == "clear-download-list":
+            self._clear_download_list()
+        elif action in {"maintenance-components", "maintenance-uninstall"}:
+            tool = find_maintenance_tool()
+            if tool is None:
+                self.notifications.publish(self.tr("The Qt Maintenance Tool could not be found."),
+                                           severity="error", key="maintenance")
+                return
             try:
-                await asyncio.to_thread(installer.install)
-                ui_popup("Installation Successful!")
-
-            except UnsupportedPlatform:
-                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
-
-            except FileNotFoundError as e:
-                ui_popup(f"{TRANSLATE_ERRORS.installation_file_not_found} ->: {e}")
-
-            except RuntimeError as e:
-                ui_popup(f"{TRANSLATE_ERRORS.installation_copy_failed} ->: {e}")
-
-            except Exception as e:
-                error = traceback.format_exc()
-                await report_exception(
-                    e,
-                    operation="install Porn Fetch",
-                    location="Backend.install_pornfetch.run_installation",
-                    enabled=app_settings.enable_logging,
-                    version=__version__,
-                )
-                ui_popup(f"""
-            During installation an unknown error happened, please report this!
-            ERROR: {error}""")
-
-        self._spawn(run_installation(), name="installer-")
-
-    @Slot()
-    def uninstall_pornfetch(self):
-        ui_popup(self.tr("""
-        Important: 
-
-        Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
-        and the main file.
-
-        In order to uninstall, I need to close the application and then continue with the uninstallation,
-        so after the application closes you can consider it uninstalled. 
-
-        If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
-        Thank you for using Porn Fetch ^^
-        """))
-
-        uninstaller = UninstallPornFetch()
-
-        async def run_uninstaller():
-            try:
-                await asyncio.to_thread(uninstaller.uninstall)
-
-                ui_popup("""
-            Porn Fetch has been successfully uninstalled, it will close itself now and after that no traces should be left.
-            This does NOT include:
-            - The database feature (if you enabled it) 
-            - Downloaded videos
-            - Temporary files from the extraction (restart PC / delete /tmp for this)
-    
-            Thank you for using Porn Fetch :)
-            If you have Feedback, you can write an E-Mail to:
-            support@echteralsfake.me <3""")
-
-            except UnsupportedPlatform:
-                ui_popup(TRANSLATE_ERRORS.installation_unsupported)
-
-        self._spawn(run_uninstaller(), name="uninstaller-")
+                launch_maintenance_tool(tool, action.removeprefix("maintenance-"))
+            except OSError:
+                self.logger.exception("Could not open Qt Maintenance Tool")
+                self.notifications.publish(self.tr("The Qt Maintenance Tool could not be opened. Try opening it from the installation folder."),
+                                           severity="error", key="maintenance")
+                return
+            self.initiate_shutdown()
 
     @Slot(object)
     def load_clients(self, _locale: str | None = None) -> None:
@@ -671,13 +691,27 @@ class Backend(QObject):
         self._download_recovery = DownloadRecovery(self, Path(TEMP_DIRECTORY) / "download-queue.json")
         self._download_recovery.restore()
 
+    def _enforce_parallel_access(self) -> None:
+        self.update_parallel_downloads(app_settings.parallel_downloads)
+
+    @Slot(int)
+    def set_parallel_downloads(self, limit: int) -> None:
+        if limit > 1 and not self.has_premium_access():
+            self.notifications.publish(
+                self.tr("Parallel downloads require an active premium license. Free use allows one download at a time."),
+                self.tr("Premium feature"), "info", key="parallel-license")
+        app_settings.parallel_downloads = download_parallelism(limit, self.has_premium_access())
+
     @Slot(int)
     def update_parallel_downloads(self, limit: int) -> None:
+        limit = download_parallelism(limit, self.has_premium_access())
+        if app_settings.parallel_downloads != limit:
+            app_settings.parallel_downloads = limit
         if any(not task.done() for task in self._download_tasks.values()):
-            self._pending_parallel_limit = max(1, int(limit))
+            self._pending_parallel_limit = limit
             return
         self._pending_parallel_limit = None
-        self._download_semaphore = asyncio.Semaphore(max(1, int(limit)))
+        self._download_semaphore = asyncio.Semaphore(limit)
 
     def _spawn(self, coro, *, name: str) -> asyncio.Task:
         task = asyncio.create_task(coro, name=name)
@@ -817,6 +851,23 @@ class Backend(QObject):
         self._downloads_model.remove_video(job_id)
         self.download_manager.remove_video(job_id)
 
+    @Slot()
+    def clear_download_list(self) -> None:
+        if self._is_shutting_down:
+            return
+        if any(not task.done() for task in self._download_tasks.values()):
+            self.notifications.request_decision(
+                "clear-download-list", self.tr("Stop downloads and clear the list?"),
+                self.tr("Running and queued downloads will stop, and all video rows will be removed. Completed files and download history will be kept."))
+            return
+        self._clear_download_list()
+
+    def _clear_download_list(self) -> None:
+        if self.busy:
+            self.cancel_fetching()
+        for job_id in self._downloads_model.job_ids():
+            self.remove_video(job_id)
+
     @Slot(str, bool)
     def set_video_selected(self, job_id: str, selected: bool) -> None:
         self._downloads_model.set_selected(job_id, selected)
@@ -843,6 +894,11 @@ class Backend(QObject):
         if video is None:
             self.logger.warning("Cannot download unknown video: %s", job_id)
             return
+        if bulk_video_requires_premium(video) and not self.has_premium_access():
+            self.notifications.publish(
+                self.tr("Downloading beyond the first 5 videos of a public model, channel or playlist requires an active premium license."),
+                self.tr("Bulk downloading"), "info", key="bulk-preview")
+            return
         allowed_quality = select_allowed_quality(
             video.selected_quality or "best",
             video.qualities or [],
@@ -865,6 +921,7 @@ class Backend(QObject):
         is_resume = self._downloads_model.get_status(job_id) in {"cancelled", "failed"}
         stop_event = DownloadStopEvent()
         self._download_stop_events[job_id] = stop_event
+        self._downloads_model.set_error(job_id, "")
         self._downloads_model.set_status(job_id, "queued")
         if not is_resume:
             self._downloads_model.update_progress(job_id, 0)
@@ -923,11 +980,26 @@ class Backend(QObject):
     ) -> None:
         download_started = False
         try:
-            async with self._download_semaphore:
+            async with AsyncExitStack() as slots:
+                await slots.enter_async_context(self._download_semaphore)
+                if not getattr(self, "has_premium_access", lambda: False)():
+                    # Also guard queued tasks using an older semaphore after a license change.
+                    if not hasattr(self, "_free_download_semaphore"):
+                        self._free_download_semaphore = asyncio.Semaphore(1)
+                    await slots.enter_async_context(self._free_download_semaphore)
                 if stop_event.is_set():
                     video.status = "cancelled"
                     self._downloads_model.set_status(job_id, "cancelled")
                     self.download_manager.update_status(job_id, "cancelled")
+                    return
+
+                if bulk_video_requires_premium(video) and not self.has_premium_access():
+                    video.status = "cancelled"
+                    self._downloads_model.set_status(job_id, "cancelled")
+                    self.download_manager.update_status(job_id, "cancelled")
+                    self.notifications.publish(
+                        self.tr("This public-collection download requires an active premium license. The free preview includes the first 5 videos."),
+                        self.tr("Bulk downloading"), "info", key="bulk-preview")
                     return
 
                 if video.source_video is None:
@@ -962,9 +1034,13 @@ class Backend(QObject):
                         and video.status not in {"cancelled", "failed"}
                         and not Path(f"{output_path}.raw-state.json").exists()
                         and not (Path(TEMP_DIRECTORY_STATES) / job_id).exists()):
+                    if is_mobile or "--android" in sys.argv:
+                        await self._save_to_output_folder(output_path)
                     self._downloads_model.update_progress(job_id, 100)
                     self._downloads_model.set_status(job_id, "completed")
                     self.download_manager.update_status(job_id, "completed")
+                    self.notifications.publish(self.tr("An existing file was kept in your output folder."),
+                                               self.tr("Download skipped"), "info", key="download-skipped")
                     self._downloads_model.remove_video(job_id)
                     self.download_manager.remove_video(job_id)
                     return
@@ -1082,10 +1158,8 @@ class Backend(QObject):
                         version=__version__,
                     )
                     self.logger.error("Download %s failed [error %s]", job_id, report_id)
-                    if not app_settings.supress_errors:
-                        self.showMessage.emit(
-                            self.tr("The video download failed. Error ID: %s") % report_id
-                        )
+                    self._downloads_model.set_error(job_id, report_id)
+                    self.notifications.download_failed(report_id)
                 if status == "completed":
                     metadata_written = bool(getattr(result, "metadata_written", False))
                     if (
@@ -1099,10 +1173,11 @@ class Backend(QObject):
                         except Exception:
                             self.logger.exception("Could not write metadata for download %s", job_id)
                     self._downloads_model.update_progress(job_id, 100)
-                    if is_android or "--android" in sys.argv:
-                        await self._auto_export_android_download(output_path)
+                    if is_mobile or "--android" in sys.argv:
+                        await self._save_to_output_folder(output_path)
                 self.download_manager.update_status(job_id, status)
                 if status == "completed":
+                    self.notifications.download_completed()
                     self._downloads_model.remove_video(job_id)
                     self.download_manager.remove_video(job_id)
         except DownloadCancelled:
@@ -1132,10 +1207,10 @@ class Backend(QObject):
                 enabled=app_settings.enable_logging,
                 version=__version__,
             )
-            if not app_settings.supress_errors:
-                self.showMessage.emit(
-                    self.tr("The video download failed. Error ID: %s") % report_id
-                )
+            self._downloads_model.set_error(job_id, report_id)
+            message = (self.tr("Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.")
+                       if isinstance(error, OutputFolderError) else "")
+            self.notifications.download_failed(report_id, message)
         finally:
             if download_started and cleanup_on_stop and stop_event.is_set():
                 # The provider has stopped and closed its writers before these
@@ -1161,6 +1236,8 @@ class Backend(QObject):
     def video_added_signal(self, video):
         quality = str(app_settings.mappings_quality.get(app_settings.quality))
         self._downloads_model.add_video(video=video, preferred_quality=quality)
+        self._prepared_items += 1
+        self.preparationStatusChanged.emit()
 
     def on_download_progress(self, video_id: str, percentage: int):
         self._downloads_model.update_progress(video_id, percentage)
@@ -1170,6 +1247,9 @@ class Backend(QObject):
             coroutine.close()
             return None
         stop_flag.clear()
+        self._prepared_items = 0
+        self._preparation_had_errors = False
+        self.preparationStatusChanged.emit()
         self._video_fetch_task = self._spawn(coroutine, name=name)
         self._video_fetch_task.add_done_callback(self._video_fetch_finished)
         self.busyChanged.emit()
@@ -1179,28 +1259,52 @@ class Backend(QObject):
         if self._video_fetch_task is task:
             self._video_fetch_task = None
             self.busyChanged.emit()
+            if not self._is_shutting_down:
+                message = (self.tr("Loading stopped. Items added: %s") if stop_flag.is_set()
+                           else self.tr("Loading finished. Items added: %s")) % self._prepared_items
+                self.notifications.publish(message, self.tr("Download list"), "info", key="preparation",
+                                           quiet=self._preparation_had_errors)
         if self._account_fetch_task is task and self._account_fetch_in_progress:
             self._account_fetch_in_progress = False
             self.accountFetchStateChanged.emit()
 
-    def _start_filtered_fetch(self, operation, url: str, custom_options: str, values: dict, name: str) -> None:
+    def _start_filtered_fetch(self, operation, url: str, custom_options: str, values: dict, name: str) -> bool:
         from src.shared.download_options import title_template
         try:
             filters = VideoFilters(**values)
             filters.validate()
             title_template(custom_options)
         except (ValueError, TypeError) as error:
+            self._input_errors["filters"] = str(error)
+            self.inputErrorsChanged.emit()
             self.showMessage.emit(str(error))
-            return
-        self._start_video_fetch(operation(url, custom_options, filters), name=name)
+            return False
+        field = "video" if name.startswith("single") else "model" if name.startswith("model") else "playlist"
+        try:
+            route = route_url(url)
+            allowed = {"video": {ContentKind.VIDEO, ContentKind.GALLERY}, "model": {ContentKind.PROFILE},
+                       "playlist": {ContentKind.COLLECTION}}
+            if route.kind not in allowed[field]:
+                raise ValueError("Wrong content type")
+        except ValueError:
+            message = {"video": self.tr("Enter a supported video URL."),
+                       "model": self.tr("Enter a supported profile or channel URL."),
+                       "playlist": self.tr("Enter a supported public playlist or collection URL.")}[field]
+            self._input_errors[field] = message
+            self.inputErrorsChanged.emit()
+            self.showMessage.emit(message)
+            return False
+        self._input_errors.clear()
+        self.inputErrorsChanged.emit()
+        return self._start_video_fetch(operation(url, custom_options, filters), name=name) is not None
 
-    @Slot(str, str, dict)
+    @Slot(str, str, dict, result=bool)
     def process_single_url(self, url: str, custom_options: str, filters: dict):
         """
         This function processes either a single Video or a Short depending on the platform.
         """
         print(f"Received Video / Short URL: {url}")
-        self._start_filtered_fetch(self._process_single_url, url, custom_options, filters, "single-video-processing")
+        return self._start_filtered_fetch(self._process_single_url, url, custom_options, filters, "single-video-processing")
 
     async def _process_single_url(self, url: str, custom_options: str, filters: VideoFilters):
         self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
@@ -1226,19 +1330,22 @@ class Backend(QObject):
                                        video_filters=filters, download_manager=self.download_manager, reverse_videos=False,
                                        stop_flag=stop_flag, origin_iterator_url=origin_iterator_url,
                                        origin_iterator_name=origin_iterator_name)
-        process_videos.error_signal.connect(self.showMessage.emit)
+        def preparation_error(message):
+            self._preparation_had_errors = True
+            self.showMessage.emit(message)
+        process_videos.error_signal.connect(preparation_error)
         await process_videos.start_processing()
 
         self.logger.info("Finished preparing videos for the download list")
 
-    @Slot(str, str, dict)
+    @Slot(str, str, dict, result=bool)
     def process_model_url(self, url: str, custom_options: str, filters: dict):
         """
         This function loads all the videos of a model, channel, creator or user object and loads them into the
         ListView to allow the user to individually select the videos for download
         """
         print(f"Received Model URL: {url}")
-        self._start_filtered_fetch(self._process_model_url, url, custom_options, filters, "model-video-processing")
+        return self._start_filtered_fetch(self._process_model_url, url, custom_options, filters, "model-video-processing")
 
     async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters,
                                  *, pages: int = 30, iterator_config: IteratorConfig | None = None):
@@ -1257,15 +1364,20 @@ class Backend(QObject):
         except ValueError as error:
             self.showMessage.emit(str(error))
             return
+        premium = self.has_premium_access()
+        if not premium:
+            self.notifications.publish(
+                self.tr("Free preview: only the first 5 videos from this model, channel or playlist can be loaded. Activate a premium license for bulk downloading. Account collections are not limited by this preview."),
+                self.tr("Bulk downloading"), "info", key="bulk-preview")
         await self.process_videos(
-            iterator=videos, custom_options=custom_options, filters=filters,
+            iterator=public_collection_items(videos, premium), custom_options=custom_options, filters=filters,
             origin_iterator_url=url,
             origin_iterator_name=self._iterator_display_name(target, url, "model / channel"),
         )
 
-    @Slot(str, str, dict)
+    @Slot(str, str, dict, result=bool)
     def process_playlist_url(self, url: str, custom_options: str, filters: dict):
-        self._start_filtered_fetch(self._process_playlist_url, url, custom_options, filters, "playlist-video-processing")
+        return self._start_filtered_fetch(self._process_playlist_url, url, custom_options, filters, "playlist-video-processing")
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
         try:
@@ -1277,8 +1389,13 @@ class Backend(QObject):
         except ValueError as error:
             self.showMessage.emit(str(error))
             return
+        premium = self.has_premium_access()
+        if not premium:
+            self.notifications.publish(
+                self.tr("Free preview: only the first 5 videos from this model, channel or playlist can be loaded. Activate a premium license for bulk downloading. Account collections are not limited by this preview."),
+                self.tr("Bulk downloading"), "info", key="bulk-preview")
         await self.process_videos(
-            iterator=videos, custom_options=custom_options, filters=filters,
+            iterator=public_collection_items(videos, premium), custom_options=custom_options, filters=filters,
             origin_iterator_url=url,
             origin_iterator_name=self._iterator_display_name(target, url, "playlist / collection"),
         )
@@ -1406,7 +1523,7 @@ class Backend(QObject):
                 return
 
             if succeeded:
-                self.showMessage.emit(self.tr("You have successfully logged in."))
+                self.notifications.publish(self.tr("You have successfully logged in."), self.tr("Login successful"), "success", key="account-login")
             else:
                 self.showMessage.emit(self.tr("The login failed. Please verify your account details."))
         except CookiesNotFound as error:
@@ -1416,7 +1533,7 @@ class Backend(QObject):
                 self.tr("%s rejected the login. Please verify your account details.") % provider
             )
         except ClientAlreadyLogged:
-            self.showMessage.emit(self.tr("You are already logged in."))
+            self.notifications.publish(self.tr("You are already logged in."), self.tr("Account"), "info", key="account-login")
         except LoginError as error:
             self.showMessage.emit(str(error))
         except Exception as error:
@@ -1469,6 +1586,7 @@ class Backend(QObject):
             return
 
         self._is_shutting_down = True
+        self.notifications.begin_shutdown()
         self._update_activity()
         self.logger.info("Application closing. Initiating async teardown...")
         self._shutdown_task = asyncio.create_task(
@@ -1647,6 +1765,11 @@ def main() -> None:
     # Gives some context to QML so that QML can directly access certain things
     engine.rootContext().setContextProperty("bridge", bridge_instance)
     engine.rootContext().setContextProperty("backend", backend_instance)
+    engine.rootContext().setContextProperty("noticeCenter", backend_instance.notifications)
+    from src.backend.system_notifications import SystemNotifications
+    system_notifier = SystemNotifications(app_settings, parent=engine)
+    backend_instance.notifications.systemRequested.connect(system_notifier.request)
+    engine.rootContext().setContextProperty("systemNotifier", system_notifier)
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
@@ -1717,9 +1840,14 @@ def main() -> None:
             await database_bridge.close()
             await clients.close_all_clients()
 
-        asyncio.run(close_smoke_services())
-        splash = None
-        engine = None
+        try:
+            asyncio.run(close_smoke_services())
+        finally:
+            from src.backend.qml_lifecycle import destroy_qml_engine
+            system_notifier.close()
+            destroy_qml_engine(engine)
+            splash = None
+            engine = None
         if qml_warnings:
             raise RuntimeError("GUI smoke test reported QML errors:\n" + "\n".join(qml_warnings))
         print("GUI smoke test passed: QML, legal notices, licensing configuration and update trust root loaded offline.")
@@ -1732,16 +1860,18 @@ def main() -> None:
         database_bridge.start()
         backend_instance.start_async_services()
 
-    # handle_sigint enables a clean shutdown when CTRL+C is pressed.
-    QtAsyncio.run(
-        start_async_services(),
-        handle_sigint=True,
-    )
-
-    # SplashController also retains the engine. Release it first, then destroy
-    # the QML object tree while all context properties are still alive.
-    splash = None
-    engine = None
+    # Finish async shutdown before destroying any QML context-property owners.
+    try:
+        QtAsyncio.run(
+            start_async_services(),
+            handle_sigint=True,
+        )
+    finally:
+        from src.backend.qml_lifecycle import destroy_qml_engine
+        system_notifier.close()
+        destroy_qml_engine(engine)
+        splash = None
+        engine = None
 
 
 

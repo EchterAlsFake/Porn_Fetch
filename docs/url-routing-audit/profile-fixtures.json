@@ -1474,30 +1474,27 @@
       "provider": "redtube",
       "profile_type": "amateur",
       "tier": "primary",
-      "url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+      "url": "https://www.redtube.com/amateur/hermiony-cringe-ph",
       "sources": [
         {
-          "kind": "upstream_network_test",
-          "repository": "unofficial-api-for-redtube",
-          "path": "redtube_api/tests/test_amatuer.py",
-          "line": 8,
-          "function": "test_all",
-          "factory_in_test": "get_amateur"
+          "kind": "website_or_prior_observation",
+          "location": "https://www.redtube.com/",
+          "observation": "Public amateur link discovered and native metadata verified on 2026-11-04"
         }
       ],
-      "note": "",
+      "note": "Replaces the removed littlereislin-ph-2 fixture; revalidated through the GUI profile runner.",
       "http": {
-        "checked_at_utc": "2026-10-17T14:40:16.473939+00:00",
+        "checked_at_utc": "2026-11-04T14:56:58.430970+00:00",
         "curl_exit": 0,
         "status": 200,
-        "final_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+        "final_url": "https://www.redtube.com/amateur/hermiony-cringe-ph",
         "redirects": 0,
         "response_chain": [
           200
         ],
         "content_type": "text/html; charset=UTF-8",
-        "canonical_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
-        "bytes": 467741,
+        "canonical_url": "https://www.redtube.com/amateur/hermiony-cringe-ph",
+        "bytes": 475562,
         "title_indicates_missing": false,
         "challenge_hint": false,
         "error": null
@@ -1515,24 +1512,70 @@
         "profile_mode": null
       },
       "expected_factory": "get_amateur",
+      "previous_fixture": {
+        "url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+        "last_gui_check": {
+          "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
+          "outcome": "passed",
+          "profile": "Amateur",
+          "profile_name": "Reislin",
+          "profile_metadata": {},
+          "rows": 2,
+          "streams": [
+            {
+              "kind": "hls",
+              "segments": 219
+            },
+            {
+              "kind": "hls",
+              "segments": 186
+            }
+          ],
+          "metadata_requests": 10
+        },
+        "retired_reason": "HTTP 404 during the 2026-11-04 live test audit",
+        "http": {
+          "checked_at_utc": "2026-10-17T14:40:16.473939+00:00",
+          "curl_exit": 0,
+          "status": 200,
+          "final_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+          "redirects": 0,
+          "response_chain": [
+            200
+          ],
+          "content_type": "text/html; charset=UTF-8",
+          "canonical_url": "https://de.redtube.com/amateur/littlereislin-ph-2",
+          "bytes": 467741,
+          "title_indicates_missing": false,
+          "challenge_hint": false,
+          "error": null
+        },
+        "sources": [
+          {
+            "kind": "upstream_network_test",
+            "repository": "unofficial-api-for-redtube",
+            "path": "redtube_api/tests/test_amatuer.py",
+            "line": 8,
+            "function": "test_all",
+            "factory_in_test": "get_amateur"
+          }
+        ]
+      },
       "last_gui_check": {
-        "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
-        "outcome": "passed",
         "profile": "Amateur",
-        "profile_name": "Reislin",
+        "profile_name": "Hermione Cringe",
         "profile_metadata": {},
-        "rows": 2,
+        "rows": 1,
         "streams": [
           {
             "kind": "hls",
-            "segments": 219
-          },
-          {
-            "kind": "hls",
-            "segments": 186
+            "segments": 48
           }
         ],
-        "metadata_requests": 10
+        "metadata_requests": 6,
+        "elapsed_seconds": 1.11,
+        "outcome": "passed",
+        "checked_at_utc": "2026-11-04T14:56:23.416508+00:00"
       }
     },
     {
@@ -2011,7 +2054,7 @@
           "location": "https://www.redtube.com/user/31618721"
         }
       ],
-      "note": "Numeric User ID candidate independently verified in current Tube8 HTML; identity emilscc. The named User URL in the HTML snippet test returns Unknown. Public identity exists; the website does not expose a public video feed here. Verify metadata and explicitly report restricted video coverage.",
+      "note": "Numeric User ID candidate independently verified in current Tube8 HTML; identity emilscc. The named User URL in the HTML snippet test returns Unknown. Public identity exists; the website does not expose a public video feed here. Verify metadata and explicitly report restricted video coverage. The 2026-11-04 Vue layout has its identity in #user_profile_container .banner img[alt]; the app adapter extends the upstream HTML source extractor.",
       "http": {
         "checked_at_utc": "2026-10-17T14:41:23.531448+00:00",
         "curl_exit": 0,
@@ -2056,14 +2099,15 @@
       "public_video_feed_unavailable": true,
       "public_feed_error": "Main video container not found",
       "last_gui_check": {
-        "checked_at_utc": "2026-10-17T18:22:14.774457+00:00",
-        "outcome": "skipped",
+        "skip_reason": "Public profile metadata verified; the public User page exposes no video listing",
         "profile": "User",
         "profile_name": "emilscc",
         "rows": 0,
-        "skip_reason": "Public profile metadata verified; the public User page exposes no video listing",
         "feed_attempted": true,
-        "feed_error": "Failed to process page 0 at https://www.tube8.com/user/31618721/?page=1 on attempt 1: Main video container not found"
+        "feed_error": "Failed to process page 0 at https://www.tube8.com/user/31618721/?page=1 on attempt 1: Main video container not found",
+        "elapsed_seconds": 0.35,
+        "outcome": "skipped",
+        "checked_at_utc": "2026-11-04T14:56:23.416524+00:00"
       }
     },
     {

@@ -233,8 +233,8 @@ def visual_items(item):
         yield from visual_items(child)
 
 
-def make_account_backend():
-    backend = make_test_backend()
+def make_account_backend(*, premium=False):
+    backend = make_test_backend(premium=premium)
     backend.logger = logging.getLogger("account-diagnostics")
     backend._background_tasks = set()
     backend._activity_active = False
@@ -243,7 +243,6 @@ def make_account_backend():
     backend._video_fetch_task = None
     backend._account_fetch_task = None
     backend._account_fetch_in_progress = False
-    backend._license_bridge = None
     backend.database_bridge = None
     backend._is_shutting_down = False
     backend._client_refresh_pending = False
@@ -347,18 +346,25 @@ ApplicationWindow {
                 await asyncio.gather(task, return_exceptions=True)
         require(not self.warnings, "The production QML pages emitted binding errors")
 
-    def verify_rows(self, *, before=0, limit=2):
+    def verify_rows(self, *, before=0, limit=2, allow_empty=False):
         model = self.backend._downloads_model
         count = model.rowCount() - before
-        require(1 <= count <= limit, "Expected bounded, nonempty account rows in the GUI model")
+        require((0 if allow_empty else 1) <= count <= limit, "Expected bounded, nonempty account rows in the GUI model")
         expected_roles = {b"jobId", b"title", b"author", b"duration", b"availableQualities", b"selectedQuality",
-                          b"progress", b"selected", b"status"}
+                          b"progress", b"selected", b"status", b"errorId"}
         require(set(bytes(role) for role in model.roleNames().values()) == expected_roles, "List role contract changed")
         view = next(item for item in visual_items(self.downloads) if item.inherits("QQuickListView"))
         view.setProperty("contentY", 0)
         QMetaObject.invokeMethod(view, "forceLayout")
         QTest.qWait(30)
         require(view.property("count") == model.rowCount(), "ListView count differs from its Qt model")
+        if count == 0:
+            expected = "No downloads" if self.layout == "desktop" else "Your downloads start here"
+            require(any(item.isVisible() and item.property("text") == expected for item in visual_items(self.downloads)),
+                    "Empty account list did not show the production empty-state message")
+            require(not self.warnings, "Empty account list emitted QML binding errors")
+            return {"status": "EMPTY", "rows": 0, "roles_verified": 0,
+                    "rendered_delegates_verified": 0, "empty_state_verified": True}
         for row in range(before, model.rowCount()):
             index = model.index(row, 0)
             job = model.data(index, model.JobIdRole)
@@ -375,6 +381,7 @@ ApplicationWindow {
                 "duration": model.tr("%d min") % video.length,
                 "availableQualities": [str(q) for q in video.qualities],
                 "selectedQuality": video.selected_quality, "progress": 0, "selected": False, "status": "pending",
+                "errorId": "",
             }
             # The model may choose another concrete free quality than the provider's preferred one.
             expected["selectedQuality"] = model.data(index, model.SelectedQualityRole)
@@ -435,4 +442,4 @@ async def test_account_collection(window, provider, collection, *, playlist_url=
     require(states.count() >= 2, "Loading notifications did not return to idle")
     require(errors.count() == 0, "The real account pipeline reported an error")
     require(inserted.count() == model.rowCount(), "Inserted rows were not signalled individually")
-    return window.verify_rows(limit=items)
+    return window.verify_rows(limit=items, allow_empty=True)

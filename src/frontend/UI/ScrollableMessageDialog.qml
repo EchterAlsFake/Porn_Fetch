@@ -21,23 +21,64 @@ Dialog {
         previousFocus = dialog.parent && dialog.parent.Window.window ? dialog.parent.Window.window.activeFocusItem : null
         measureText()
     }
-    onClosed: { if (previousFocus) previousFocus.forceActiveFocus() }
+    onClosed: {
+        var item = previousFocus
+        Qt.callLater(function() {
+            if (item) {
+                // Qt may already have restored focus with OtherFocusReason.
+                // Re-enter it so the keyboard focus indicator remains visible.
+                item.focus = false
+                item.forceActiveFocus(Qt.TabFocusReason)
+            }
+        })
+    }
+    onOpened: messageLabel.forceActiveFocus()
+
+    footer: DialogButtonBox {
+        standardButtons: dialog.standardButtons
+        onAccepted: dialog.accept()
+        onRejected: dialog.reject()
+        Button {
+            id: copyButton
+            property bool copied: false
+            text: copied ? qsTr("Copied") : qsTr("Copy text")
+            Accessible.name: qsTr("Copy text")
+            implicitHeight: 48
+            DialogButtonBox.buttonRole: DialogButtonBox.HelpRole
+            onClicked: {
+                messageLabel.selectAll()
+                messageLabel.copy()
+                messageLabel.deselect()
+                copied = true
+                copiedTimer.restart()
+                messageLabel.Accessible.announce(qsTr("Copied to clipboard."), Accessible.Polite)
+            }
+            Timer { id: copiedTimer; interval: 3000; onTriggered: copyButton.copied = false }
+        }
+    }
 
     contentItem: SmoothScrollView {
         id: messageScroll
         objectName: "messageScroll"
         clip: true
+        contentWidth: availableWidth
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         // Reserve the scrollbar gutter so wrapping does not change its visibility
         // and feed back into the dialog's preferred height.
         rightPadding: ScrollBar.vertical.width + 6
         implicitWidth: dialog.availableWidth
         implicitHeight: dialog.preferredTextHeight
 
-        Label {
+        TextArea {
             id: messageLabel
             objectName: "messageLabel"
             width: Math.max(1, dialog.availableWidth - messageScroll.leftPadding - messageScroll.rightPadding)
             font: dialog.font
+            padding: 0
+            background: null
+            readOnly: true
+            selectByMouse: true
+            Accessible.name: dialog.title
             textFormat: Text.PlainText
             wrapMode: Text.Wrap
             // Defer measurement until wrapping has settled, avoiding a sizing

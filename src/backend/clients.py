@@ -12,7 +12,7 @@ and the other Porn APIs and how they are working together, then you will definit
 """
 Current APIs:
 
-1) PHUB           -> https://pornhub.com (ph_client, ph_video)
+1) pornhub_api    -> https://pornhub.com (ph_client, ph_video)
 2) xnxx           -> https://xnxx.com (xn_client, xn_video)
 3) xvideos        -> https://xvideos.com (xv_client, xv_video)
 4) eporner        -> https://eporner.com (ep_client, ep_video)
@@ -25,6 +25,8 @@ Current APIs:
 11) tube8         -> https://tube8.com (tu_client, tu_video)
 12) xfreehd       -> https://xfreehd.com (xf_client, xv_video)
 13) porntrex      -> https://porntrex.com (pt_client, pt_video)
+14) empflix       -> https://empflix.com (ef_client, ef_video)
+15) tnaflix       -> https://tnaflix.com (tf_client, tf_video)
 """
 
 import os
@@ -50,7 +52,7 @@ from xvideos_api import Client as xv_Client, Video as xv_Video
 from xfreehd_api import Client as xf_Client, Video as xf_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
 from porntrex_api import Client as pt_Client, Video as pt_Video
-from tube8_api import Client as tu_Client, Video as tu_Video
+from tube8_api import Video as tu_Video
 from thumbzilla_api import Client as th_Client, Video as th_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from xhamster_api.api import Short as xh_Short
@@ -66,11 +68,12 @@ from src.shared.logging_setup import configure_app_logging
 from src.shared.media import VideoObject
 from src.shared.tor_transport import MediaCore, FAIL_CLOSED_PROXY, all_traffic_enabled
 from src.shared.provider_parsing import parse_length, parse_publish_date
+from src.shared.tube8 import Client as tu_Client
 from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, \
     normalize_quality_value
 from curl_cffi.const import CurlOpt
 
-# Note, the Video instances are mostly used in `shared_functions.py`
+# Native provider types consumed by the GUI preparation and download adapters.
 AllowedVideoType: TypeAlias = (
     ph_Video | xn_Video | xv_Video | yp_Video | tu_Video | ph_Short |
     xh_Video | xh_Short | sp_Video | bg_Video | rt_Video | th_Video

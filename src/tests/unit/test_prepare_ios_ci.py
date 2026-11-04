@@ -22,6 +22,9 @@ class IOSPreparationTests(unittest.TestCase):
             ui = source / "src/frontend/UI"
             ui.mkdir(parents=True)
             (ui / "Main.qml").write_text("import QtQuick\nItem {}\n")
+            notification_source = source / "src/backend/native/ios_notifications.mm"
+            notification_source.parent.mkdir(parents=True)
+            shutil.copyfile(ROOT / "src/backend/native/ios_notifications.mm", notification_source)
             vendor = root / "lab/pornfetch/vendor"
             vendor.mkdir(parents=True)
             (vendor / "dependency.py").write_text("value = 1\n")
@@ -44,7 +47,9 @@ class IOSPreparationTests(unittest.TestCase):
             def deploy(command, **kwargs):
                 if Path(command[0]).name == "pyside6-ios-deploy":
                     project.parent.mkdir(parents=True)
-                    project.write_text('/* Copy Python Packages */ = { shellScript = "original"; };')
+                    project.write_text('/* Copy Python Packages */ = { shellScript = "original"; };\n'
+                                       'main.cpp; lastKnownFileType = sourcecode.cpp.cpp; buildSettings = {};')
+                    (project.parent.parent / "main.cpp").write_text("int main() { return 0; }\n")
 
             environment = {
                 "PORN_FETCH_SOURCE": str(source), "IOS_DEPLOY_VENV": str(root / "venv"),
@@ -67,6 +72,11 @@ class IOSPreparationTests(unittest.TestCase):
                              b"device extension")
             self.assertTrue((device / "app/src/frontend/UI/Main.qml").is_file())
             self.assertIn(json.dumps(str(device / "bundle-vendor.sh"))[1:-1], project.read_text())
+            entry = project.parent.parent / "main.mm"
+            self.assertTrue(entry.is_file())
+            self.assertIn("ios_notifications.mm", entry.read_text())
+            self.assertIn('"UserNotifications"', project.read_text())
+            self.assertIn("sourcecode.cpp.objcpp", project.read_text())
 
 
 if __name__ == "__main__":

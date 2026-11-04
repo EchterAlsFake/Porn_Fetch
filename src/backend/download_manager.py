@@ -20,6 +20,7 @@ class DownloadListModel(QAbstractListModel):
     ProgressRole = Qt.ItemDataRole.UserRole + 7
     SelectedRole = Qt.ItemDataRole.UserRole + 8
     StatusRole = Qt.ItemDataRole.UserRole + 9
+    ErrorIdRole = Qt.ItemDataRole.UserRole + 10
 
     def __init__(self, parent=None, premium_access=None):
         super().__init__(parent)
@@ -62,6 +63,7 @@ class DownloadListModel(QAbstractListModel):
             self.ProgressRole: b"progress",
             self.SelectedRole: b"selected",
             self.StatusRole: b"status",
+            self.ErrorIdRole: b"errorId",
             # Creates the role names as bytes, so the underlying C++ Shiboken engine doesn't have to convert
             # this in each call. Looks weird I know, but this is more memory efficient and faster
         }
@@ -96,6 +98,9 @@ class DownloadListModel(QAbstractListModel):
         elif role == self.StatusRole:
             return item.get("status", "pending")
 
+        elif role == self.ErrorIdRole:
+            return item.get("errorId", "")
+
         return None
 
     def add_video(self, video: VideoObject, preferred_quality: str) -> str:
@@ -125,6 +130,7 @@ class DownloadListModel(QAbstractListModel):
             "progress": 0,  # Starts at 0%
             "selected": False,
             "status": "pending",
+            "errorId": "",
             "_video": video, # Stores the actual data from the video object
         }
 
@@ -195,6 +201,9 @@ class DownloadListModel(QAbstractListModel):
             return None
         return self._items[row].get("status", "pending")
 
+    def job_ids(self) -> list[str]:
+        return [item["jobId"] for item in self._items]
+
     def selected_job_ids(self) -> list[str]:
         return [item["jobId"] for item in self._items if item.get("selected", False)]
 
@@ -226,6 +235,13 @@ class DownloadListModel(QAbstractListModel):
             first = self.index(changed_rows[0], 0)
             last = self.index(changed_rows[-1], 0)
             self.dataChanged.emit(first, last, [self.SelectedRole])
+
+    def set_error(self, job_id: str, report_id: str) -> None:
+        row = self._row_by_id.get(str(job_id))
+        if row is not None:
+            self._items[row]["errorId"] = str(report_id)
+            index = self.index(row, 0)
+            self.dataChanged.emit(index, index, [self.ErrorIdRole])
 
     def set_status(self, job_id: str, status: str) -> None:
         row = self._row_by_id.get(str(job_id))

@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Dialog {
+ScrollableMessageDialog {
     id: root
     objectName: "serviceTorFailureDialog"
     parent: Overlay.overlay
@@ -12,14 +12,23 @@ Dialog {
     z: 200
     modal: true
     title: qsTr("Porn Fetch over Tor")
-    property string message: ""
+    property bool presentationBlocked: false
+    property bool pendingNotice: false
+    function showPending() {
+        if (pendingNotice && !presentationBlocked && appSettings.service_transport !== "direct") {
+            pendingNotice = false
+            open()
+        }
+    }
+    onPresentationBlockedChanged: showPending()
 
     Connections {
         target: torStatus
         function onFailure(message) {
             if (appSettings.service_transport !== "direct") {
                 root.message = message
-                root.open()
+                root.pendingNotice = true
+                root.showPending()
             }
         }
     }
@@ -28,18 +37,6 @@ Dialog {
         function onServiceTransportChanged(mode) {
             torStatus.resetFailureNotice()
             if (mode === "direct") root.close()
-        }
-    }
-    contentItem: ScrollView {
-        implicitHeight: notice.implicitHeight
-        clip: true
-        Label {
-            id: notice
-            objectName: "serviceTorFailureText"
-            width: parent.width
-            text: root.message
-            textFormat: Text.PlainText
-            wrapMode: Text.WordWrap
         }
     }
     footer: ColumnLayout {

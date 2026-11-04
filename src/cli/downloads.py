@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from enum import StrEnum
 from pathlib import Path
 from typing import Any, Callable
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 from src.shared.media import select_allowed_quality, xfreehd_quality
 from src.shared.paths import data_dir
@@ -421,6 +421,9 @@ async def download_gallery(
     concurrency: int = 5,
     controller: DownloadController | None = None,
 ) -> DownloadOutcome:
+    from selectolax.lexbor import LexborHTMLParser
+    from xfreehd_api import Album as XFreeHDAlbum
+
     await _load_album(album)
     fallback_title = "album-" + Path(urlparse(getattr(album, "url", "")).path).name
     title = _sanitize(str(getattr(album, "title", None) or fallback_title))
@@ -464,6 +467,18 @@ async def download_gallery(
         index, url = item
         if event.is_set():
             return
+        # XFreeHD's album iterator returns photo pages, not image bytes.
+        # Keep its native album discovery and resolve the full image on each page.
+        if isinstance(album, XFreeHDAlbum) and urlparse(url).path.startswith("/photo/"):
+            html = await album.core.fetch_text(url)
+            image = LexborHTMLParser(html).css_first("img.img-responsive-mw[src]")
+            if image is None:
+                raise ValueError("XFreeHD photo page contains no full-size image")
+            url = urljoin(url, image.attributes["src"])
+            if urlparse(url).scheme not in {"https", "http"}:
+                raise ValueError("XFreeHD photo page contains an invalid image URL")
+            if event.is_set():
+                return
         suffix = Path(urlparse(url).path).suffix.casefold()
         if suffix not in KNOWN_IMAGE_EXTENSIONS:
             suffix = ".jpg"

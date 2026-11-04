@@ -4,7 +4,7 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 ApplicationWindow {
-    ServiceTorFailureDialog {}
+    ServiceTorFailureDialog { presentationBlocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
     id: window
     visible: true
     width: 400
@@ -21,8 +21,8 @@ ApplicationWindow {
     palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
     font.pointSize: Math.max(12, appSettings.font_size)
-    Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
-    Material.accent: appSettings.accent_color
+    Material.theme: appSettings.high_contrast || appSettings.dark_mode ? Material.Dark : Material.Light
+    Material.accent: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     Material.primary: appSettings.accent_color
 
     readonly property color backgroundColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
@@ -72,29 +72,15 @@ ApplicationWindow {
     }
 
     Connections {
-        target: backend
-        function onMobileNotice(title, message) {
-            noticeDialog.title = title
-            noticeText.text = message
-            noticeDialog.open()
-        }
-        function onShutdown_complete() {
-            window.safeToClose = true
-            window.close()
-        }
+        target: typeof systemNotifier !== "undefined" ? systemNotifier : null
+        function onActivated() { window.pageIndex = 0 }
     }
 
     Connections {
-        target: bridge
-        function onLicenseRejected(message) {
-            noticeDialog.title = qsTr("License rejected")
-            noticeText.text = message
-            noticeDialog.open()
-        }
-        function onImportFinished(success, message) {
-            noticeDialog.title = success ? qsTr("License imported") : qsTr("License import failed")
-            noticeText.text = message && message.length > 0 ? message : (success ? qsTr("License imported successfully.") : qsTr("Failed to import license."))
-            noticeDialog.open()
+        target: backend
+        function onShutdown_complete() {
+            window.safeToClose = true
+            window.close()
         }
     }
 
@@ -106,24 +92,17 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
-        id: noticeDialog
-        parent: Overlay.overlay
-        anchors.centerIn: parent
-        width: Math.min(window.width - 24, 540)
-        height: Math.min(window.height - 24, 400)
-        modal: true
-        standardButtons: Dialog.Ok
-        contentItem: ScrollView {
-            Label {
-                id: noticeText
-                width: parent.width
-                wrapMode: Text.Wrap
-            }
-        }
+    function continueAfterBetaDisclaimer() {
+        if (!licenseOfferDialog.presentOnce())
+            continueAfterLicenseOffer()
     }
 
-    function continueAfterBetaDisclaimer() {
+    function continueAfterLicenseOffer() {
+        if (!ukraineMessageDialog.presentOnce())
+            continueAfterPersonalMessage()
+    }
+
+    function continueAfterPersonalMessage() {
         if (!appSettings.error_reporting_decided)
             Qt.callLater(function() { consentDialog.open() })
     }
@@ -133,6 +112,18 @@ ApplicationWindow {
             continueAfterBetaDisclaimer()
         else
             Qt.callLater(function() { betaDisclaimerDialog.open() })
+    }
+
+    LicenseOfferDialog {
+        id: licenseOfferDialog
+        settings: appSettings
+        onDismissed: window.continueAfterLicenseOffer()
+    }
+
+    UkraineMessageDialog {
+        id: ukraineMessageDialog
+        settings: appSettings
+        onDismissed: window.continueAfterPersonalMessage()
     }
 
     BetaDisclaimerDialog {
@@ -161,7 +152,7 @@ ApplicationWindow {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("Automatic error reporting is disabled until you choose to enable it.")
+                text: qsTr("Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.")
                 wrapMode: Text.Wrap
                 color: window.primaryTextColor
             }
@@ -175,6 +166,7 @@ ApplicationWindow {
                 Label {
                     width: disclosureScroll.width > 24 ? disclosureScroll.width - 16 : consentDialog.availableWidth - 16
                     text: backend.errorReportDisclosure
+                    textFormat: Text.PlainText
                     wrapMode: Text.Wrap
                     color: window.secondaryTextColor
                     font.pixelSize: 13 * appSettings.font_size / 12
@@ -197,6 +189,13 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    NotificationPanel {
+        id: feedback
+        visible: false
+        blocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
+        z: 150
     }
 
     Item {
@@ -358,6 +357,7 @@ ApplicationWindow {
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
                     Item {} // Keep existing page indices stable; website support opens in the browser.
                     AndroidMorePage {
+                        onOpenActivity: feedback.openActivity()
                         visible: !appSettings.anonymous_mode
                         onOpenPage: function(index) { window.pageIndex = index }
                     }
@@ -432,6 +432,8 @@ ApplicationWindow {
         id: androidUpdateDialog
         property var details: ({})
         property bool busy: false
+        property real downloadedBytes: 0
+        property real totalBytes: 0
         property string status: ""
         parent: Overlay.overlay
         anchors.centerIn: parent
@@ -451,7 +453,16 @@ ApplicationWindow {
                 clip: true
                 Label { width: parent.width; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.changelog || ""; textFormat: Text.PlainText }
             }
-            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status }
+            ProgressBar {
+                Layout.fillWidth: true
+                visible: androidUpdateDialog.busy || androidUpdateDialog.downloadedBytes > 0
+                from: 0
+                to: Math.max(1, androidUpdateDialog.totalBytes)
+                value: androidUpdateDialog.downloadedBytes
+                indeterminate: androidUpdateDialog.busy && androidUpdateDialog.totalBytes <= 0
+                Accessible.name: qsTr("Update download progress")
+            }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status; textFormat: Text.PlainText }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport !== "direct"; text: torStatus.text }
             Button {
                 Layout.fillWidth: true
@@ -463,8 +474,10 @@ ApplicationWindow {
     }
     Connections {
         target: backend
-        function onUpdateAvailable(details) { androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; androidUpdateDialog.open() }
-        function onUpdateStatus(status) { androidUpdateDialog.status = status; androidUpdateDialog.open() }
+        function onUpdateAvailable(details) { androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0; androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; if (!details.automatic) androidUpdateDialog.open() }
+        function onUpdateStatus(status) { androidUpdateDialog.status = status }
+        function onUpdateProgress(current, total) { androidUpdateDialog.downloadedBytes = current; androidUpdateDialog.totalBytes = total }
+        function onUpdateCheckStarted() { androidUpdateDialog.details = ({}); androidUpdateDialog.status = ""; androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0 }
         function onUpdateFinished() { androidUpdateDialog.busy = false }
     }
 

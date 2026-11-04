@@ -1,30 +1,52 @@
-"""Privacy-first, best-effort reporting to the public error-log relay."""
+"""Optional, best-effort exception reports to the private error-log receiver."""
 from __future__ import annotations
 
 import json
 import logging
 import platform
 import re
+import sys
+import traceback
 import uuid
 from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
+from base_api.modules.errors import MediaLoadErrors
 from curl_cffi.requests import AsyncSession
 
 from .version import __version__
 
 ERROR_REPORT_URL = "https://api.pornfetch.to/error_log"
-MAX_MESSAGE_CHARS = 2_000
-MAX_BODY_BYTES = 4_096
+MAX_BODY_BYTES = 1_048_576
+ERROR_REPORT_CONSENT_VERSION = 2
 _LOGGER = logging.getLogger(__name__)
 
-ERROR_REPORT_DISCLOSURE = """Optional automatic error reports are sent only after an operation fails and only if you enable them. Each report contains a random per-error correlation ID, UTC timestamp, Porn Fetch version, operating system and architecture, error class, and code function names. New reports omit video URLs, provider/context values, filenames, source lines, exception messages, browsing history and download records.
+ERROR_REPORT_DISCLOSURE = """Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a detailed report after an operation fails. You can decline and still use all app features.
 
-Reports are capped at 2,000 characters and the complete JSON request at 4 KiB. The HTTPS request to api.pornfetch.to/error_log contains only {\"message\": \"...\"}; it sends no application credentials, cookies or authorization header. This connection is separate from the media-provider proxy settings. The server necessarily receives connection metadata during transport and is configured not to log or store client IP addresses in diagnostic records. Delivery failures do not interrupt downloads.
+What a report contains
+- A random correlation ID to identify that error.
+- The UTC timestamp, app version, operating system and CPU architecture.
+- The full Python traceback, including chained exceptions, error messages, source-code lines, filenames and line numbers.
+- The video URL that caused the failure, including its path and query string, when available. Related playlist, model or source URLs may also be included.
+- The operation, code location and diagnostic context, such as the provider and selected quality.
 
-Reports are stored privately in PocketBase and deleted manually. The operator intends to delete reports with the next published version; there is currently no fixed retention period or automatic cleanup. Disabling reporting does not automatically delete reports already received. For deletion requests, send the correlation ID to support@echteralsfake.me. Older application versions may send URL paths and redacted tracebacks; query strings and named secrets are filtered, but redaction is not guaranteed anonymisation. You may decline without losing functionality and withdraw consent in Settings at any time. This stops future reports without changing the lawfulness of earlier processing. Privacy details: https://pornfetch.to/privacy_policy"""
+These details can reveal which adult content you accessed. URLs, error messages and file paths can contain sensitive or personal information, such as account details, URL tokens or your local username. Reports are not anonymous. Python local-variable dumps, browsing history and download records are not collected. The app does not attach account credentials, cookies or authorization headers, but sensitive values may appear in the traceback or URLs.
+
+How reports are sent
+Reports are sent over HTTPS directly to the developer's server at api.pornfetch.to/error_log. They are securely stored on that server, never shared with third parties and used only to reproduce, diagnose and fix application errors. Media-provider proxy settings do not control this connection; the app's All app traffic Tor setting applies separately.
+
+The server receives connection metadata while handling the request. It is configured not to log or store client IP addresses in diagnostic records. If sending a report fails, your download continues.
+
+Storage and deletion
+Reports are stored privately in PocketBase and deleted manually. The operator plans to delete them with the next published version. There is no fixed storage period or automatic cleanup.
+
+Turning this off stops future reports. It does not delete reports already sent or change the lawfulness of their earlier processing. To request deletion, send the correlation ID to support@echteralsfake.me.
+
+If you previously enabled reports containing only structural diagnostics, you must choose again before these more detailed reports can be sent.
+
+Privacy details: https://pornfetch.to/privacy_policy"""
 
 ERROR_REPORT_EXAMPLE = """Porn Fetch error report
 correlation_id=a1b2c3d4e5f6
@@ -32,7 +54,16 @@ timestamp=2026-10-14T12:00:00+00:00
 version=3.9
 platform=Linux-x86_64
 error_type=RuntimeError
-functions=load_fields,fetch_metadata"""
+operation=prepare scraped video
+location=ProcessVideos.start_processing
+context={"video_url":"https://example.com/watch?v=42","provider":"example"}
+
+Traceback (most recent call last):
+  File "video_processor.py", line 180, in start_processing
+    video = await get_video(video_url)
+  File "provider.py", line 42, in get_video
+    raise RuntimeError("Could not load video sources")
+RuntimeError: Could not load video sources"""
 
 _URL_RE = re.compile(r"https?://[^\s<>\"']+", re.IGNORECASE)
 _EMAIL_RE = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])")
@@ -67,7 +98,7 @@ def safe_url(value: str) -> str:
 
 
 def redact_log_text(value: object) -> str:
-    """Apply the application's reference redaction policy before transmission."""
+    """Hide sensitive details in local notification text, separate from reports."""
     text = _CONTROL_RE.sub("", str(value))
     text = _URL_RE.sub(lambda match: safe_url(match.group(0).rstrip(".,);]")), text)
     text = _HEADER_SECRET_RE.sub(
@@ -81,6 +112,14 @@ def redact_log_text(value: object) -> str:
     return text
 
 
+def _format_traceback(error: BaseException) -> str:
+    diagnostic = traceback.TracebackException.from_exception(
+        error, capture_locals=False,
+        max_group_width=sys.maxsize, max_group_depth=sys.maxsize,
+    )
+    return "".join(diagnostic.format(chain=True))
+
+
 def build_error_report(
     error: BaseException,
     *,
@@ -90,25 +129,33 @@ def build_error_report(
     correlation_id: str | None = None,
     version: str = __version__,
 ) -> tuple[str, str]:
-    """Use structural diagnostics only; never format exception text or user context."""
+    """Keep the complete exception chain and supplied reproduction context."""
     report_id = correlation_id or uuid.uuid4().hex[:12]
-    def identifier(value: str) -> str:
-        return value if re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", value) else "unknown"
-    frames = []
-    tb = error.__traceback__
-    while tb is not None and len(frames) < 12:
-        frames.append(identifier(tb.tb_frame.f_code.co_name))
-        tb = tb.tb_next
+    diagnostic = _format_traceback(error)
+    # The provider API keeps source tracebacks in a tuple rather than in the
+    # Python exception chain, so standard traceback formatting omits them.
+    current = error
+    seen = set()
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        if isinstance(current, MediaLoadErrors):
+            for index, source_error in enumerate(current.errors, start=1):
+                diagnostic += f"\nMedia source failure {index}:\n" + _format_traceback(source_error)
+        current = current.__cause__ or (None if current.__suppress_context__ else current.__context__)
     message = "\n".join([
         "Porn Fetch error report",
-        f"correlation_id={identifier(report_id)}",
+        f"correlation_id={report_id}",
         f"timestamp={datetime.now(timezone.utc).isoformat(timespec='seconds')}",
-        f"version={identifier(version)}",
-        f"platform={identifier(platform.system())}-{identifier(platform.machine())}",
-        f"error_type={identifier(type(error).__name__)}",
-        "functions=" + ",".join(frames),
+        f"version={version}",
+        f"platform={platform.system()}-{platform.machine()}",
+        f"error_type={type(error).__name__}",
+        f"operation={operation}",
+        f"location={location}",
+        "context=" + json.dumps(dict(context or {}), ensure_ascii=False, default=str),
+        "",
+        diagnostic,
     ])
-    return _fit_payload(message), report_id
+    return message, report_id
 
 
 def _payload_bytes(message: str) -> bytes:
@@ -117,24 +164,13 @@ def _payload_bytes(message: str) -> bytes:
     ).encode("utf-8")
 
 
-def _fit_payload(message: str) -> str:
-    message = message[:MAX_MESSAGE_CHARS]
-    if len(_payload_bytes(message)) <= MAX_BODY_BYTES:
-        return message
-    low, high = 0, len(message)
-    while low < high:
-        middle = (low + high + 1) // 2
-        if len(_payload_bytes(message[:middle])) <= MAX_BODY_BYTES:
-            low = middle
-        else:
-            high = middle - 1
-    return message[:low]
-
-
 async def report_public_error(message: str) -> bool:
     """Submit an already formatted diagnostic without propagating failures."""
-    safe_message = _fit_payload(redact_log_text(message))
-    if not safe_message.strip():
+    if not message.strip():
+        return False
+    body = _payload_bytes(message)
+    if len(body) > MAX_BODY_BYTES:
+        _LOGGER.warning("Error report exceeds the receiver's request limit; report was not sent")
         return False
     try:
         from src.shared.tor_transport import all_traffic_enabled, runtime, tor_options
@@ -155,7 +191,7 @@ async def report_public_error(message: str) -> bool:
     try:
         response = await session.post(
             ERROR_REPORT_URL,
-            content=_payload_bytes(safe_message),
+            content=body,
             timeout=5,
             allow_redirects=False,
         )
@@ -185,15 +221,15 @@ async def report_exception(
     """Report an exception when opted in and always return a local correlation ID."""
     report_id = uuid.uuid4().hex[:12]
     try:
-        message, report_id = build_error_report(
-            error,
-            operation=operation,
-            location=location,
-            context=context,
-            correlation_id=report_id,
-            version=version,
-        )
         if enabled:
+            message, report_id = build_error_report(
+                error,
+                operation=operation,
+                location=location,
+                context=context,
+                correlation_id=report_id,
+                version=version,
+            )
             await report_public_error(message)
     except Exception:
         _LOGGER.debug("Could not build error report", exc_info=True)

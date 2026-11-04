@@ -43,7 +43,7 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         modules = set(parser.get("qt", "modules").split(","))
         required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
-        self.assertNotIn("Widgets", modules)
+        self.assertIn("Widgets", modules)  # The desktop notification adapter uses QSystemTrayIcon.
 
         plugins = set(parser.get("qt", "plugins").split(","))
         self.assertIn("qml", plugins)
@@ -65,7 +65,7 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         modules = set(parser.get("qt", "modules").split(","))
         required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
-        self.assertNotIn("Widgets", modules)
+        self.assertIn("Widgets", modules)
 
         plugins = set(parser.get("qt", "plugins").split(","))
         self.assertIn("qml", plugins)
@@ -92,7 +92,7 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         modules = set(parser.get("qt", "modules").split(","))
         required = {"Core", "Gui", "Qml", "Quick", "QuickControls2", "Network", "OpenGL"}
         self.assertTrue(required.issubset(modules), f"Missing Qt modules: {required - modules}")
-        self.assertNotIn("Widgets", modules)
+        self.assertIn("Widgets", modules)
         self.assertNotIn("DBus", modules)
 
         plugins = set(parser.get("qt", "plugins").split(","))
@@ -104,19 +104,16 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         self.assertNotIn("windows-console-mode", extra_args)
         self.assertNotIn("windows-disable-console", extra_args)
 
-    def test_install_windows_script_spec_path_and_flags(self):
-        script_path = PROJECT_ROOT / "scripts" / "install_windows.ps1"
-        content = script_path.read_text(encoding="utf-8")
-        self.assertIn(r"packaging\pysidedeploy_windows.spec", content)
-        self.assertNotIn(r"src\build\pysidedeploy_windows.spec", content)
-        self.assertIn("--keep-deployment-files", content)
-
-    def test_install_sh_script_flags(self):
-        script_path = PROJECT_ROOT / "scripts" / "install.sh"
-        content = script_path.read_text(encoding="utf-8")
-        self.assertIn("--keep-deployment-files", content)
-        self.assertIn("read -rp \"Enter choice (0-${max_choice}) [${default_choice}]: \" choice </dev/tty", content)
-        self.assertIn("Non-interactive shell detected", content)
+    def test_local_installers_share_the_desktop_builder(self):
+        for name in ("install.sh", "install_windows.ps1"):
+            with self.subTest(name=name):
+                script = (PROJECT_ROOT / "scripts" / name).read_text()
+                self.assertIn("scripts/build_desktop.py", script)
+                self.assertIn("--upgrade", script)
+                self.assertNotIn("--locked", script)
+        builder = (PROJECT_ROOT / "scripts/build_desktop.py").read_text()
+        self.assertIn("--keep-deployment-files", builder)
+        self.assertIn("--no-install", builder)
 
     def test_ci_workflow_deploy_flags(self):
         workflow_path = PROJECT_ROOT / ".github" / "workflows" / "build_all.yml"
@@ -205,3 +202,45 @@ class QtIFWStagingTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LocalDesktopBuilderTests(unittest.TestCase):
+    def test_windows_fallback_keeps_dlls_and_renames_executable(self):
+        from scripts.build_desktop import gui_payload
+
+        with tempfile.TemporaryDirectory(prefix="build path ") as directory:
+            root = Path(directory)
+            fallback = root / "deployment/deploy_main.dist"
+            fallback.mkdir(parents=True)
+            (fallback / "deploy_main.exe").write_bytes(b"executable")
+            (fallback / "Qt6Core.dll").write_bytes(b"dependency")
+            with patch("scripts.build_desktop.sys.platform", "win32"):
+                executable = gui_payload(root / "output", root)
+            self.assertEqual(executable.name, "Porn Fetch.exe")
+            self.assertEqual(executable.read_bytes(), b"executable")
+            self.assertEqual((executable.parent / "Qt6Core.dll").read_bytes(), b"dependency")
+
+    def test_missing_compiler_output_is_an_error(self):
+        from scripts.build_desktop import gui_payload
+
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaises(FileNotFoundError):
+                gui_payload(Path(directory), Path(directory))
+
+    def test_existing_output_is_never_overwritten(self):
+        from types import SimpleNamespace
+
+        from scripts.build_desktop import build
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "existing"
+            output.mkdir()
+            marker = output / "user-file"
+            marker.write_text("keep")
+            with patch("scripts.build_desktop.sys.platform", "linux"), \
+                 patch("scripts.build_desktop.platform.machine", return_value="x86_64"), \
+                 patch("scripts.build_desktop.python") as command:
+                with self.assertRaises(FileExistsError):
+                    build(SimpleNamespace(output=output, target="gui"))
+            command.assert_not_called()
+            self.assertEqual(marker.read_text(), "keep")

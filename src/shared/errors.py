@@ -7,7 +7,6 @@ from base_api.modules.errors import MetadataWriteError as _BaseMetadataWriteErro
 class _Messages:
     invalid_input = "The URL or input is invalid or unsupported."
     cookies_not_found = "No matching browser cookies were found."
-    installation_unsupported = "This installation operation is not supported on this platform."
     something_stupid_happened = "An unexpected internal state was reached."
     metadata_write_error = "Could not write metadata into the downloaded file."
     update_failed = "The update check failed."
@@ -33,12 +32,6 @@ class CookiesNotFound(Exception):
 
 class LoginError(Exception):
     def __init__(self, msg: str):
-        super().__init__(msg)
-        self.msg = msg
-
-
-class UnsupportedPlatform(Exception):
-    def __init__(self, msg: str = TRANSLATE_ERRORS.installation_unsupported):
         super().__init__(msg)
         self.msg = msg
 

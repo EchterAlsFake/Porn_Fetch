@@ -6,6 +6,7 @@ import json
 import re
 import tempfile
 from contextlib import ExitStack, contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import SkipTest
@@ -247,15 +248,32 @@ async def test_profile_url(backend, model, case: dict, *, timeout: float = 90, i
     return result
 
 
-def make_test_backend():
+@dataclass(slots=True)
+class DiagnosticLicense:
+    """Feature entitlement for isolated diagnostics, with no licensing I/O."""
+    isPremium: bool = False
+    busy: bool = False
+
+    async def close(self):
+        pass
+
+
+def make_test_backend(*, premium=False):
     """Use real Qt objects/signals, without database/license/update startup."""
     from PySide6.QtCore import QObject
 
     from src.backend.application import Backend
     from src.backend.download_manager import DownloadListModel, DownloadManager
+    from src.backend.config import app_settings
+    from src.backend.notifications import NotificationCenter
 
     backend = Backend.__new__(Backend)
     QObject.__init__(backend)
+    backend._license_bridge = DiagnosticLicense(isPremium=premium)
+    backend._input_errors = {}
+    backend._prepared_items = 0
+    backend._preparation_had_errors = False
+    backend.notifications = NotificationCenter(app_settings, backend)
     backend.logger = SimpleNamespace(info=lambda *args: None)
     backend.download_manager = DownloadManager()
     backend._downloads_model = DownloadListModel(backend)

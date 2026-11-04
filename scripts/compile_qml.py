@@ -19,12 +19,8 @@ UI_DIR = PROJECT_ROOT / "src" / "frontend" / "UI"
 
 def find_qmlcachegen() -> Path:
     """Find the pyside6-qmlcachegen executable."""
-    # 1. PATH or venv scripts
-    for name in ("pyside6-qmlcachegen", "qmlcachegen"):
-        if found := shutil.which(name):
-            return Path(found)
-
-    # 2. Virtualenv location
+    # Prefer the tool matching the active Python/PySide environment. A generic
+    # qmlcachegen on PATH can belong to a different Qt version (including Qt 5).
     venv_dir = Path(sys.prefix)
     candidates = [
         venv_dir / "bin" / "pyside6-qmlcachegen",
@@ -36,7 +32,7 @@ def find_qmlcachegen() -> Path:
         if cand.is_file():
             return cand
 
-    # 3. Direct PySide6 inspection
+    # Direct PySide6 inspection
     try:
         import PySide6
         pyside_dir = Path(PySide6.__file__).resolve().parent
@@ -48,6 +44,10 @@ def find_qmlcachegen() -> Path:
                 return cand
     except ImportError:
         pass
+
+    for name in ("pyside6-qmlcachegen", "qmlcachegen"):
+        if found := shutil.which(name):
+            return Path(found)
 
     raise FileNotFoundError("pyside6-qmlcachegen executable could not be found.")
 

@@ -1,103 +1,114 @@
-# Android GUI development
+# Android
 
-The Android GUI uses `AndroidMain.qml` and shares the existing Python download and
-account backend with desktop. The phone layout has bottom navigation and download
-cards; wide tablet layouts use a navigation rail. Android downloads are staged in
-the app's private data directory. Downloads offers a destination folder picker
-until a folder is selected; later changes are available in Settings. Completed
-videos are then copied to the selected folder automatically.
-**Save elsewhere** on a completed card remains available for an individual copy.
-Download history, persistent tracking, and statistics are not available on Android.
-No tracking database or PocketBase process is started, even if an older installation
-had tracking enabled. Desktop tracking continues to use PocketBase. Licensing's
-private storage is separate and unchanged; existing Android history files are left
-untouched but are no longer read or updated.
+Porn Fetch has an Android GUI. Choose a destination folder before downloading;
+completed videos are copied there automatically. Change the folder in Settings.
+Android has no persistent download history or statistics. Notifications do not
+keep downloads running after Android stops the app.
 
-The Android assembly hook gives Qt's native preload libraries `lib*.so` names
-and updates the Qt loader resources. This is required for Android 13 devices
-such as the Teclast T50 Pro; otherwise startup can fail with a missing
-`QtCore.abi3.so` before Python starts. See [Android CI](ANDROID_CI.md) for the
-confirmed device test and APK checks.
+To preview the layout on desktop:
 
-## Preview the layout on desktop
-
-Run `uv run main.py --android` from the repository root. The window opens at
-phone size; resize it to at least 960 logical pixels wide to see the tablet
-navigation rail. This is a layout preview: Python services, paths, and file
-pickers still run on the desktop operating system. Use an APK on a device to
-check Android platform behavior. SNI proxy features are disabled in the Android
-layout, including the desktop preview. Download tracking is also disabled in this preview.
-
-## Build inputs
-
-The Android deployment configuration is
-`packaging/pysidedeploy_android.spec`. Build on Linux or macOS with the matching
-Android SDK/NDK and PySide6 and Shiboken6 Android wheels for the selected Qt
-version and architecture. With the dependencies installed in a dedicated build
-environment, start with:
-
-```bash
-pyside6-android-deploy --config-file packaging/pysidedeploy_android.spec \
-  --wheel-pyside /path/to/PySide6-android.whl \
-  --wheel-shiboken /path/to/shiboken6-android.whl \
-  --keep-deployment-files
+```sh
+uv run --no-sync main.py --android
 ```
 
-The build wrapper defaults to a **release APK** and requires **NDK r28c**
-(`28.2.13676358`). It checks `source.properties`, uses the same NDK path for
-PySide, Buildozer and python-for-android, and explicitly sets
-`android.release_artifact = apk`. Stale NDK environment variables are ignored
-during discovery; an explicit `--ndk-path` pointing to another revision fails.
-Use `--build-mode=debug` only when a debug APK is wanted. Release APKs use
-Buildozer's existing signing configuration; without signing credentials the
-result is an unsigned release APK.
+This checks the layout only. Android storage, signing and notifications need a
+real device. The interface is English-only.
 
-The current source requires Python 3.15 and uses native packages, including
-`curl-cffi` and `cryptography`. Their Android compatibility must be resolved for
-the target architecture before the APK can be built. The desktop deployment
-specs and Python wheels cannot stand in for Android wheels. The build should
-bundle the QML files under `src/frontend/UI`, the compiled Qt resources, and
-the legal and licensing resources.
+## Build an APK
 
-After updating the host PySide6 installation, apply and verify the deployment
-patch before invoking `pyside6-android-deploy` directly:
+Use Linux and a separate Python 3.15 environment. Install Git, a C/C++ compiler,
+make, CMake, Ninja, zip/unzip, autoconf, automake, libtool, pkg-config and JDK 21.
+The working toolchain uses SDK Platform 36, Build Tools 36.0.0 and
+**NDK r28c (28.2.13676358)**. The minimum Android version is API 28.
+See the [companion setup guide](https://github.com/EchterAlsFake/PySide6-to-Android#environment-setup-sdkndk)
+for SDK installation. Set `ANDROID_HOME` to your SDK directory, then install
+and accept the required packages:
 
-```bash
-uv run --no-sync python scripts/patch_android_deploy.py .venv
-uv run --no-sync python scripts/patch_android_deploy.py .venv --verify
+```sh
+"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+  'platform-tools' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358'
+"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+# Buildozer also looks for tools/bin/sdkmanager. Keep any existing tools folder.
+if [ ! -e "$ANDROID_HOME/tools" ]; then
+  ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
+fi
+"$ANDROID_HOME/tools/bin/sdkmanager" --version
 ```
 
-The patch keeps python-for-android on `develop` with `p4a.commit = HEAD`.
-PySide6 6.12 otherwise changes the toolchain to an older release on `master`,
-whose final pip install can bundle host Linux extensions into an Android APK.
-Setting the branch alone is insufficient while that release commit remains pinned.
+If the last command fails, fix the SDK tools path before continuing.
 
-The deployment patch leaves Buildozer's cache in the project's `.buildozer/`
-directory across runs, including failed builds. Buildozer and python-for-android
-can then reuse downloaded archives, hostpython, libffi, other compiled recipes,
-and compatible distributions. PySide's generated recipes and jars are still
-refreshed. `--keep-deployment-files` retains those generated deployment files;
-the Buildozer cache is retained regardless of that flag.
+From the repository root, create the host environment outside the checkout:
 
-The wrapper `./build_android.sh --architecture=aarch64 --wheels-dir=/path/to/wheels`
-applies and verifies the patch automatically. It also restores a cache left in
-`deployment/.buildozer/` by an older deployment before cleaning or building.
-Subsequent runs keep it at `.buildozer/` so compiled paths stay stable.
+```sh
+uv venv --python 3.15 ../pornfetch-android-env
+export VIRTUAL_ENV="$(cd ../pornfetch-android-env && pwd)"
+export UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV"
+export PATH="$VIRTUAL_ENV/bin:$PATH"
+uv sync --upgrade --extra gui --extra build --extra android-build
+uv pip install --python "$VIRTUAL_ENV/bin/python" 'PySide6==6.12.0' 'Cython==3.3.0' \
+  'buildozer @ git+https://github.com/kivy/buildozer.git@fe2a18cfedd28d45329d47eae8545c81c6e8fe9a'
+```
 
-Add `--clean` to the wrapper command after changing Qt wheels, native recipes,
-or the toolchain. This removes the selected architecture's compiled build and
-distribution cache while keeping downloaded dependency archives and other
-architectures' builds. Python/QML-only changes can use the normal incremental build.
-When first upgrading an existing cache to the pinned NDK, the wrapper rebuilds
-that architecture's native output once, preserving its downloaded archives.
+Buildozer's pinned commit supports Cython 3; the older release requires Cython 2.
+These host tools must match the selected target wheels. Do not install desktop
+wheels into the Android app.
 
-## Device checks
+Download the PySide6 and Shiboken6 wheels from
+[6.12.0-api28](https://github.com/EchterAlsFake/PySide6-to-Android/releases/tag/6.12.0-api28).
+Use the `cp315-cp315` pair for your architecture. Verify the original downloads
+against `packaging/android_wheels.sha256` before the wrapper patches them.
+To download and verify all four pairs with GitHub CLI:
 
-Use at least one narrow phone and one tablet in portrait and landscape. Check
-navigation, software keyboard and Back behavior, single and model URL fetching,
-quality licensing, pause/resume, automatic copies to a selected Android folder,
-folder access after an app restart, save elsewhere through the document picker,
-license import through the picker, and account login. Confirm that the Android
-layout has no history/statistics tab or tracking toggle.
-Automatic desktop installation and desktop update flows are not exposed in the
-Android layout. The four-ABI build pipeline is documented in [Android CI](ANDROID_CI.md).
+```sh
+mkdir -p android-wheels
+gh release download 6.12.0-api28 --repo EchterAlsFake/PySide6-to-Android \
+  --pattern '*cp315-cp315-android_*.whl' --dir android-wheels
+(cd android-wheels && sha256sum -c ../packaging/android_wheels.sha256)
+```
+
+Build a debug APK for your own device (replace the SDK paths):
+
+```sh
+./build_android.sh --architecture aarch64 --wheels-dir "$PWD/android-wheels" \
+  --sdk-path "$ANDROID_HOME" --ndk-path "$ANDROID_HOME/ndk/28.2.13676358" \
+  --build-mode debug --output-dir "$PWD/dist/android"
+```
+
+Architectures are `aarch64`, `armv7a`, `x86_64`, `i686`, or `all`.
+The wrapper regenerates machine paths from the tracked templates, patches Qt
+and QtAsyncio, extracts the required JARs and checks the APK. Use `--clean`
+after changing native recipes or Qt wheels. Downloaded archives are retained.
+The wrapper keeps `.buildozer/` between runs. Qt preload libraries must be named
+`libQt*.abi3.so` in the APK so Android 13 extracts them; the assembly hook does this.
+
+The default build mode is release. Supply your own keystore with `--keystore`
+and `--key-alias`, or use `--unsigned` to sign later. An unsigned release APK
+cannot be installed. A debug APK uses a development key. Neither has the
+publisher's signature, and neither can update an official installation signed
+with a different key. Keep your own key safe if you want to update your builds.
+Android or security software may warn about sideloaded or self-built APKs.
+
+The **Cross-Platform Build Pipeline** has an `android` target for all four ABIs.
+It uses the same wrapper. See [release operations](RELEASING.md) for signing
+secrets and publication. SDK, native recipes and target wheels are updated as a
+set; ordinary Python package resolution uses fresh compatible dependencies.
+
+## Termux CLI
+
+Termux runs the CLI without Qt. Its system Python must be 3.15. From this checkout:
+
+```sh
+bash scripts/install_termux.sh
+.venv-termux/bin/python Porn_Fetch_CLI.py
+```
+
+The script installs system build tools, FFmpeg and current compatible Python
+packages. Some native dependencies may need compilation. It runs from source;
+it does not promise a portable Android executable. Use current Termux packages.
+
+## Check on a device
+
+Check startup, touch and Back navigation, the keyboard, URL loading, license
+import, account login, pause/resume, and output-folder access after a restart.
+Try a phone and a tablet in both orientations. Confirm completed files play.
+Successful compilation alone does not show that these features work on a device.

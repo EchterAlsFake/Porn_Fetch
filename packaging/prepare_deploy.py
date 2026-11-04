@@ -84,7 +84,7 @@ def excluded_qml_modules(qml_root: Path, required: set[Path]) -> list[Path]:
 def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> None:
     required = required_qml_modules(project, pyside)
     excluded = excluded_qml_modules(find_qml_root(pyside), required)
-    config = configparser.ConfigParser()
+    config = configparser.ConfigParser(interpolation=None)
     config.read(template, encoding="utf-8")
     arguments = shlex.split(config.get("nuitka", "extra_args"))
     # Avoid costly ARM64 link-time optimization in the hosted build.
@@ -99,6 +99,11 @@ def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> N
             f"--noinclude-data-files=PySide6/qml/{relative}/**",
         ])
     config.set("nuitka", "extra_args", shlex.join(arguments))
+    config.set("python", "python_path", sys.executable)
+    icon = config.get("app", "icon", fallback="")
+    if icon and not Path(icon).is_absolute():
+        config.set("app", "icon", str(project / icon))
+    config.set("app", "exec_directory", str(project))
     config.set("app", "input_file", str(project / "main.py"))
     config.set("app", "project_dir", str(project))
     config.set("qt", "qml_files", ",".join(

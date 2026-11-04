@@ -584,22 +584,62 @@ async def errors(gui, lab):
             await change(gui, "supress_errors", suppress)
             await change(gui, "enable_logging", reporting)
             gui.errors.clear()
+            notices = gui.backend.notifications
+            notices.clear()
             before = sum(r["target"] == "/report" for r in lab.requests)
             job, video = await prepare(gui, filename="blocked.mp4")
             await transfer(gui, job)
             require(video.status == "failed", "A real filesystem failure was hidden")
-            require(bool(gui.errors) == (not suppress), "Ignore Errors did not control the actual GUI message")
+            failures = [entry for entry in notices.entries if entry["key"] == "download-failed"]
+            require(len(failures) == 1 and failures[0]["details"],
+                    "Failed download lost its notification or support error ID")
+            require((notices.latest.get("id") == failures[0]["id"]) == (not suppress),
+                    "Ignore Errors did not control the visible notification")
             received = [r for r in lab.requests if r["target"] == "/report"][before:]
             require(len(received) == int(reporting), "Error-report consent did not control real HTTP delivery")
             if received:
-                require(video.url not in received[0]["body"] and video.title not in received[0]["body"],
-                        "Error report leaked real media metadata")
+                message = json.loads(received[0]["body"])["message"]
+                require(video.url in message and "Traceback (most recent call last):" in message,
+                        "Consented error report omitted the video URL or traceback")
             deliveries.append(len(received))
             gui.errors.clear()
             await clear(gui)
     await change(gui, "enable_logging", False)
     return {"real_filesystem_fault": True, "messages_suppressed": True, "local_http_report_deliveries": deliveries,
             "production_telemetry_contacted": False}
+
+
+async def system_notifications(gui, lab):
+    """Exercise the QML setting and native bridge protocol without asking the OS for permission."""
+    from types import SimpleNamespace
+
+    from PySide6.QtCore import Qt
+
+    from src.backend.system_notifications import SystemNotifications
+
+    directory = gui.directory / "notification-bridge"
+    with patch("src.backend.system_notifications.sys.platform", "android"), \
+            patch.dict(os.environ, {"ANDROID_PRIVATE": str(directory)}):
+        notifier = SystemNotifications(gui.settings)
+    request = directory / "notifications-request.json"
+    try:
+        await change(gui, "system_notifications", False)
+        await change(gui, "system_notifications", True)
+        require(json.loads(request.read_text())["action"] == "enable", "QML opt-in did not enable the native bridge")
+        inactive = SimpleNamespace(applicationState=lambda: Qt.ApplicationInactive)
+        with patch("src.backend.system_notifications.QGuiApplication.instance", return_value=inactive):
+            notifier.request("failed")
+            notifier._deliver()
+        payload = json.loads(request.read_text())
+        require(payload["action"] == "notify" and "http" not in payload["message"],
+                "Native bridge did not receive a generic notification")
+        await change(gui, "system_notifications", False)
+        require(json.loads(request.read_text())["action"] == "disable", "QML opt-out did not disable the native bridge")
+    finally:
+        gui.settings.systemNotificationsChanged.disconnect(notifier.set_enabled)
+        notifier.close()
+    return {"qml_opt_in_and_out_verified": True, "native_bridge_protocol_verified": True,
+            "os_permission_and_delivery": "MANUAL"}
 
 
 async def logging_effect(gui, lab):
@@ -663,18 +703,6 @@ async def ui(gui, lab):
     await clear(gui)
     return {"rendered_privacy_masking": True, "global_font_and_color_scheme": True,
             "material_accent": True, "activity_visibility": True}
-
-
-async def translation(gui, lab):
-    from src.backend.account_diagnostics import visual_items
-    rendered = []
-    for index, expected in ((2, "Video-URL:"), (4, "URL de la vidéo :"), (3, "视频网址："), (1, "Video URL:")):
-        await change(gui, "language", index)
-        texts = [item.property("text") for item in visual_items(gui.window.contentItem())]
-        require(expected in texts, "GUI language did not retranslate a production label")
-        rendered.append(expected)
-    return {"live_production_labels": rendered,
-            "limitation": "Untranslated catalog entries retain their English fallback"}
 
 
 async def style(gui, lab):
@@ -858,9 +886,9 @@ async def run_effects(gui, args, report, save, log):
         ("live-parallel", ("parallel_downloads",), parallel),
         ("real-profiles", ("model_videos", "result_limit", "strict_enforcement", "pages_concurrency", "videos_concurrency"), profiles),
         ("error-controls", ("supress_errors", "enable_logging"), errors),
+        ("system-notification-controls", ("system_notifications",), system_notifications),
         ("actual-log-output", ("debug_mode", "log_level"), logging_effect),
         ("rendered-ui", ("anonymous_mode", "font_size", "dark_mode", "accent_color", "activity_glow_enabled"), ui),
-        ("live-translation", ("language",), translation),
         ("restart-style", ("core_style",), style),
         ("startup-update-gate", ("update_checks",), updates),
         ("real-pocketbase", ("track_videos", "pocketbase_data_path"), database),
@@ -947,7 +975,7 @@ async def auxiliary_controls(gui):
         target.mkdir(parents=True, exist_ok=True)
         (target / "settings-test-partial").write_bytes(b"owned diagnostic partial")
     notices = []
-    with patch.object(application, "ui_popup", lambda message: notices.append(message)):
+    with patch.object(application, "ui_popup", lambda message, *args, **kwargs: notices.append(message)):
         gui.backend.clear_temporary_files()
         require(not list(directory.rglob("settings-test-partial")), "Clear temporary files did not remove owned partials")
         gui.control("resetSettingsButton").clicked.emit()

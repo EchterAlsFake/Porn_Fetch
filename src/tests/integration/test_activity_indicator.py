@@ -22,6 +22,7 @@ class ActivityIndicatorTests(unittest.IsolatedAsyncioTestCase):
         self.backend._background_tasks = set()
         self.backend._activity_active = False
         self.backend._video_fetch_task = None
+        self.backend._download_tasks = {}
         self.backend._license_bridge = None
         self.backend.database_bridge = None
         self.backend._is_shutting_down = False

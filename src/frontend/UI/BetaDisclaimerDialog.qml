@@ -25,8 +25,15 @@ Dialog {
     title: qsTr("Porn Fetch v3.9 BETA disclaimer")
 
     // Begin only after the opening transition, when the notice is visible.
-    onOpened: disclaimer.startReading()
+    onOpened: { disclaimer.startReading(); noticeScroll.forceActiveFocus() }
     onClosed: disclaimer.stopReading()
+    Connections {
+        target: root.disclaimer
+        function onRemainingSecondsChanged() {
+            if (root.opened && root.disclaimer.remainingSeconds === 0)
+                noticeScroll.Accessible.announce(qsTr("You can now accept the disclaimer and continue."), Accessible.Polite)
+        }
+    }
 
     background: Rectangle {
         color: root.surfaceColor
@@ -63,6 +70,7 @@ Dialog {
                   : qsTr("Click OK to consent and continue, or Exit to close Porn Fetch.")
             color: root.textColor
             wrapMode: Text.Wrap
+            Accessible.ignored: true
         }
 
         RowLayout {
@@ -76,6 +84,9 @@ Dialog {
 
             Button {
                 objectName: "betaDisclaimerOkButton"
+                Accessible.name: qsTr("Accept disclaimer and continue")
+                Accessible.description: enabled ? qsTr("Accept and continue, or choose Exit to close the application.")
+                                                : qsTr("Read the disclaimer. This action becomes available when the reading timer finishes.")
                 enabled: root.disclaimer.remainingSeconds === 0
                 text: enabled ? qsTr("OK") : qsTr("OK (%1 s)").arg(root.disclaimer.remainingSeconds)
                 onClicked: {

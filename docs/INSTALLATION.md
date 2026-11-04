@@ -1,342 +1,242 @@
-# Installation & Build Guide
+# Install or build Porn Fetch
+This guide is for the 3.9 source tree. Older releases have different build steps.
 
-For the experimental iPhone GUI port, use the separate
-[iOS build and deployment guide](ios/BUILDING.md). It requires the preserved
-macOS build inputs and produces an IPA requiring re-signing. Operation on a
-non-jailbroken iPhone 7 is also user-confirmed; see the iOS guide for its limits.
+## Download an app
 
-> [!CAUTION]
-> **This guide is for the 3.9 source tree and the upcoming 3.9 beta.**
-> The published 3.8 download is an older GPL release with a different architecture,
-> UI, and installation process. I'm actively rewriting 3.9, so if you run into any
-> issues, please report them on GitHub along with your OS, the artifact name, and the commit ID or version.
+Use [pornfetch.to/download](https://pornfetch.to/download).
 
-You can run Porn Fetch in three ways depending on what you want:
-1. **Pre-built binaries and installers** (fastest if you just want to run it)
-2. **Automated install scripts** (builds from source for your system automatically)
-3. **Manual source build** (recommended for development and tweaking)
+- A desktop **Setup** installer installs the app and Qt Maintenance Tool.
+  In Settings, use **Manage installation** to add or remove components, or
+  **Uninstall Porn Fetch** to open the uninstaller. These actions close the app
+  after saving download progress. The maintenance tool asks what to change.
+- A **portable GUI** is a complete folder or macOS `.app`. Keep all its files.
+  Windows uses ZIP, Linux uses `.tar.gz`, and macOS uses DMG. Portable copies do
+  not have a maintenance tool. Replace the complete folder when updating.
+- A **CLI** runs in a terminal. Official standalone builds support
+  `self-update --check` and `self-update`. Source copies use their package manager.
+- [Android](ANDROID.md) and [iOS](iOS.md) have separate instructions.
 
----
+PocketBase is optional. It stores download history and statistics; it does not
+store the download queue. FFmpeg is used to make MP4 files and write metadata.
+Both are optional installer components. A compatible copy on `PATH` also works.
 
-## 1. Pre-built Binaries & Installers
+## Signatures and antivirus warnings
 
-Pre-built binaries for Windows, Linux, and macOS are available on the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases) page.
+Your own build does **not** have the Porn Fetch publisher's signature. Building
+from source does not give you access to the release signing keys.
 
-### Which version do you need?
-- **GUI (Desktop App):** Offers the full graphical interface built with PySide6/QML.
-- **CLI (Terminal):** Headless, lightweight command-line interface with interactive menus (Questionary/Rich). Requires no Qt libraries or display server.
+- Windows builds are unsigned unless you sign them yourself. SmartScreen or
+  antivirus software may flag a new or self-compiled executable.
+- Local macOS GUI builds have an **ad-hoc signature** so the bundle can run. This
+  does not identify a developer and is not Apple notarization. Gatekeeper can
+  still block the app, especially after it is copied or downloaded.
+- Linux builds do not receive a publisher code-signing certificate.
+- Android and iOS require your own device signing or sideloading setup.
 
-### Types of Release Packages
+A successful compilation does not prove a file is safe. If a security tool flags
+it, check the source commit, dependency list and build log. Do not disable your
+antivirus or add a broad exclusion. Report suspected false positives to the
+security vendor. A checksum checks file integrity; it is not a publisher signature.
+See [release signing](RELEASING.md) if you plan to distribute your builds.
 
-#### A. Qt Installer Framework (`*_Setup` packages)
-- **Windows:** `PornFetch_windows_GUI_x64_Setup.exe`
-- **Linux:** `PornFetch_linux_GUI_x64_Setup.run`
-- **macOS:** `PornFetch_macos_GUI_x64_Setup.dmg` / `PornFetch_macos_GUI_arm64_Setup.dmg`
+## Run from source
 
-These installers set up the application and bundle the Qt `maintenancetool`, which lets you check for and apply updates directly from the official repository.
+Install Git and [uv](https://docs.astral.sh/uv/getting-started/installation/).
+Use a normal user account. Python 3.15 is required; uv can install it for you.
 
-Download the installer directly; no ZIP extraction is needed. The installer uses
-a dark theme and offers two optional components, both unchecked by default:
-
-- **FFmpeg:** Video remuxing and MP4 metadata tagging. You can skip the bundled
-  copy if FFmpeg is already on your system `PATH` or you do not use these features.
-- **PocketBase:** Persistent download tracking, history, and statistics. You can
-  skip it if you do not need tracking or already have PocketBase on your system `PATH`.
-
-The core application is required. Use `maintenancetool` to add or remove optional
-components later. Skipping components saves installed disk space; the hybrid
-installer still includes their payloads for offline installation.
-
-*Note for Linux:* Make the downloaded `.run` installer executable before launching:
-```bash
-chmod +x PornFetch_linux_GUI_x64_Setup.run
-./PornFetch_linux_GUI_x64_Setup.run
+```sh
+git clone https://github.com/EchterAlsFake/Porn_Fetch.git
+cd Porn_Fetch
+uv sync --upgrade --extra gui --group dev
+uv run --no-sync python scripts/patch_qtasyncio.py .venv
+uv run --no-sync python main.py
 ```
 
-*Note for macOS:* The macOS builds are currently ad-hoc signed. If macOS Gatekeeper warns you about an unidentified developer, right-click the app (or installer) and select **Open**, or allow it under **System Settings > Privacy & Security**.
+For the headless CLI, no Qt packages or QtAsyncio patch are needed:
 
-#### B. Standalone Portable Bundles (`.zip` / `.dmg`)
-If you prefer not to install anything into system directories, grab the portable ZIP bundle:
-- Extract the archive to any folder where your user account has write permissions.
-- Keep the complete extracted application folder, including `third_party/`.
-  PocketBase supplies optional download history and statistics; disabling tracking
-  does not require PocketBase. Queue recovery metadata is stored separately.
-- Linux GUI bundles are named `PornFetch_linux_GUI_<arch>.tar.gz`. Extract the
-  archive and run the executable inside its directory:
-  ```bash
-  tar -xzf PornFetch_linux_GUI_x64.tar.gz
-  cd PornFetch_linux_GUI_x64
-  chmod +x 'Porn Fetch'
-  './Porn Fetch'
-  ```
-
-#### C. Standalone CLI Executables
-- Single portable binary (e.g. `PornFetch_linux_CLI_x64` or `PornFetch_windows_CLI_x64.exe`).
-- Includes a built-in cryptographically verified updater:
-  ```bash
-  # Check for updates
-  ./PornFetch_linux_CLI_x64 self-update --check
-
-  # Apply update
-  ./PornFetch_linux_CLI_x64 self-update
-  ```
-
----
-
-## 2. Automated Install & Build Scripts
-
-If you want to build and run the latest code without manually configuring Python or cloning repositories, run the setup script:
-
-### Linux & macOS
-```bash
-curl -sSL https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install.sh | bash
+```sh
+uv sync --upgrade
+uv run --no-sync python Porn_Fetch_CLI.py
 ```
-Or from an existing clone:
-```bash
+
+`--upgrade` resolves the newest packages allowed by `pyproject.toml`. The locally
+created `uv.lock` is not a release input. After syncing, use `--no-sync` during a
+build so a later command does not replace patched packages. Repeat the QtAsyncio
+patch after upgrading PySide6. If an update breaks a build, keep its log and
+report the installed package versions (`uv pip freeze`).
+
+For source runs, put FFmpeg on `PATH`, or build it as described below. To add
+PocketBase, run:
+
+```sh
+uv run --no-sync python scripts/fetch_pocketbase.py --dest third_party
+```
+
+## Desktop build tools
+
+Build on the same operating system and CPU architecture as the intended app.
+The shared desktop builder supports Linux, Windows and macOS on x64 and ARM64.
+It does not cross-compile. Python and all native libraries must use the same CPU.
+
+### Linux
+
+On Ubuntu/Debian:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y build-essential cmake git curl pkg-config zlib1g-dev \
+  libssl-dev libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 \
+  libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 \
+  libxcb-xinerama0 libxcb-xkb1
+```
+
+On Arch Linux:
+
+```sh
+sudo pacman -S --needed base-devel cmake git curl pkgconf zlib mesa libxkbcommon-x11 libxcb
+```
+
+On Fedora:
+
+```sh
+sudo dnf install gcc gcc-c++ make cmake git curl pkgconf-pkg-config zlib-devel \
+  openssl-devel mesa-libEGL libxkbcommon-x11 xcb-util-cursor xcb-util-wm \
+  xcb-util-image xcb-util-keysyms xcb-util-renderutil
+```
+
+The PySide6 wheel supplies Qt. You do not need Qt 5 development packages.
+Linux ARM64 builds that bundle Tor also need libevent, OpenSSL and zlib development
+packages; on Ubuntu add `libevent-dev libssl-dev zlib1g-dev`.
+
+### macOS
+
+Install Xcode Command Line Tools (`xcode-select --install`), Git, CMake and GNU
+make. With Homebrew, use `brew install git cmake make pkg-config`.
+Finish any Xcode license or first-launch prompts before building.
+
+### Windows
+
+Use native x64 or ARM64 Python through uv. Install Git for Windows and a C/C++
+compiler supported by Nuitka. Visual Studio Build Tools with **Desktop development
+with C++** is one option. Read Nuitka's compiler error if a toolchain is missing.
+
+To build the bundled FFmpeg, install [MSYS2](https://www.msys2.org/). In its shell:
+
+```sh
+pacman -Syu
+pacman -S --needed make diffutils pkgconf mingw-w64-clang-x86_64-toolchain mingw-w64-clang-x86_64-zlib
+```
+
+For Windows ARM64, use CLANGARM64 and replace `x86_64` with `aarch64` in those
+package names. Restart the MSYS2 shell if its update asks you to, then finish
+the update. Run the Porn Fetch build from PowerShell, not WSL.
+
+## Compile the desktop GUI
+
+From the repository root:
+
+```sh
+uv sync --upgrade --extra gui --extra build --extra desktop-build
+uv run --no-sync python scripts/build_desktop.py
+```
+
+On Windows, pass the MSYS2 installation path:
+
+```powershell
+uv run --no-sync python scripts/build_desktop.py --msys2-root C:/msys64
+```
+
+The builder patches QtAsyncio, builds resources, scans QML imports, compiles with
+Nuitka, adds helper programs and license files, and runs an offline startup check.
+It keeps the whole application folder. Default output:
+
+- Linux/Windows: `dist/local-gui/`
+- macOS: `dist/local-gui/Porn Fetch.app`
+
+Run `Porn Fetch` or `Porn Fetch.exe` inside that folder, or open the macOS app.
+An offscreen check on Linux/Windows does not replace testing your real desktop.
+The macOS check uses Cocoa.
+
+Existing output is never overwritten. Move the old build or choose a new path:
+
+```sh
+uv run --no-sync python scripts/build_desktop.py --output dist/my-gui
+```
+
+On macOS, the output name must end in `.app`. Other useful options:
+
+- `--without-ffmpeg`: use FFmpeg from `PATH` instead of bundling it.
+- `--without-pocketbase`: omit the bundled history/statistics server.
+- `--without-tor`: omit managed Tor. Use a fresh checkout without a staged
+  `src/shared/tor` folder for this option.
+
+Use `PORN_FETCH_BUILD_VERBOSE=1` for more output. Native compiler logs are saved
+under the system temporary directory in `porn-fetch-build-logs`.
+
+The convenience scripts use this same builder:
+
+```sh
 bash scripts/install.sh
 ```
-*What it does:* Detects your package manager (apt, pacman, dnf, zypper, brew), installs required build dependencies, sets up `uv` and Python 3.15, downloads the matching PocketBase binary, applies the QtAsyncio patch, and builds or starts the app.
 
-### Windows (PowerShell)
-Open PowerShell as **Administrator** and run:
 ```powershell
-irm https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 | iex
-```
-*What it does:* Checks prerequisites, installs `uv`, configures the Python 3.15 environment, fetches PocketBase, and compiles the Windows binary using `pyside6-deploy`.
-
-### Build output and diagnostics
-
-Build and patch tools show short progress messages by default. Important results,
-warnings and failures are highlighted in color in terminals and GitHub Actions;
-redirected output is plain text. Set `NO_COLOR=1` to disable highlighting.
-
-Use `--verbose` (or `-v`) on Python build/patch tools and the Unix/Termux installers,
-or `-Verbose` on the PowerShell installer and frontend updater, for full output:
-
-```bash
-bash scripts/install.sh --verbose
-python scripts/patch_qtasyncio.py .venv --verify --verbose
-./build_android.sh --verbose --architecture aarch64 --wheels-dir /path/to/wheels
+./scripts/install_windows.ps1 -Msys2Root C:/msys64
 ```
 
-`PORN_FETCH_BUILD_VERBOSE=1` also enables full output in child build tools.
-The Cross-Platform Build Pipeline and iOS workflow expose a **verbose_build**
-checkbox with the same behavior.
+The Unix script installs system packages and may ask for sudo. The Windows script
+expects the compiler and MSYS2 tools to be installed already. Both use the current
+checkout when available. They do not switch tags or overwrite local source changes.
 
-Native compiler and packaging commands retain complete logs even in quiet mode.
-Each stage prints its log path, reports progress once a minute while running,
-and shows the last 25 log lines on failure. CI uploads these logs as diagnostic
-artifacts. Local native logs default to the system temporary directory under
-`porn-fetch-build-logs`; override that directory with `PORN_FETCH_BUILD_LOG_DIR`.
-Bootstrap installer commands use individual `pornfetch-build.*` (Unix) or
-`pornfetch-build-*.log` (Windows) files in the temporary directory and print the
-path on failure. Password prompts and source-selection menus stay interactive.
+## Compile the CLI
 
-For direct compiler commands, use the same console wrapper:
-
-```bash
-uv run python scripts/build_output.py --label "Compile CLI" -- \
-  uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
+```sh
+uv sync --upgrade --extra build
+uv run --no-sync python scripts/build_desktop.py --target cli
 ```
 
----
+On Windows add `--msys2-root C:/msys64`, or `--without-ffmpeg` if you use a system
+FFmpeg. The result is in `dist/local-cli/`. Keep its `third_party` and `LEGAL`
+folders if you copy the binary. The CLI itself has no Qt dependency.
 
-## 3. Building & Running from Source
+For a bare PyInstaller binary without preparing helper programs:
 
-Porn Fetch targets Python 3.15 and uses [`uv`](https://docs.astral.sh/uv/) for fast, deterministic dependency management.
-
-### Prerequisites
-
-1. **Git:** To clone the repo.
-2. **uv:** If you don't have `uv` installed yet:
-   - **Linux / macOS:** `curl -LsSf https://astral.sh/uv/install.sh | sh`
-   - **Windows:** `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` (or `winget install --id=astral-sh.uv`)
-3. **System libraries (Linux GUI only):**
-   PySide6 requires basic graphics and window system libraries.
-   - **Debian / Ubuntu:**
-     ```bash
-     sudo apt-get update && sudo apt-get install -y \
-       build-essential cmake python3-dev libssl-dev libgl1 libegl1 \
-       libxkbcommon-x11-0 libdbus-1-3 git curl
-     ```
-   - **Arch Linux:**
-     ```bash
-     sudo pacman -S --needed base-devel git cmake curl qt6-base
-     ```
-   - **Fedora:**
-     ```bash
-     sudo dnf install -y gcc gcc-c++ make cmake git curl mesa-libGL mesa-libEGL
-     ```
-   - **macOS:** Install Xcode Command Line Tools:
-     ```bash
-     xcode-select --install
-     ```
-
-### Step-by-Step Build Instructions
-
-#### Step 1: Clone the repository
-```bash
-git clone https://github.com/EchterAlsFake/Porn_Fetch.git
-cd Porn_Fetch
+```sh
+uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
 ```
 
-#### Step 2: Install Python dependencies
-`uv` will automatically fetch and manage Python 3.15 for you.
+This writes `dist/Porn_Fetch_CLI` (`.exe` on Windows). It is a local build, not an
+official release update target. Do not publish it through the production updater.
 
-- **To run both Desktop GUI and CLI:**
-  ```bash
-  uv sync --extra gui
-  ```
+## FFmpeg
 
-- **For developers (includes test runners, linter, type checker):**
-  ```bash
-  uv sync --extra gui --group dev
-  ```
+The desktop builder compiles a small LGPL-only FFmpeg. Its source version and
+SHA-256 are in `packaging/build_ffmpeg.py`; features are in
+`packaging/ffmpeg_configure_flags.txt`. Changing the version requires updating the
+hash and checking the build. Do not replace it with an arbitrary GPL/nonfree bundle.
 
-- **Headless CLI only (no GUI / no Qt dependencies):**
-  ```bash
-  uv sync
-  ```
+It supports local MPEG-TS/MP4 remuxing, MP4 metadata and attached pictures. It does
+not encode video, download streams or provide general transcoding.
 
-#### Step 3: Prepare Dependencies (PocketBase & FFmpeg)
-Porn Fetch uses PocketBase for persistent download management and a minimal
-LGPL-only FFmpeg executable for video remuxing and metadata tagging:
-```bash
-uv run python scripts/fetch_pocketbase.py
-uv run python packaging/build_ffmpeg.py
-```
-The commands detect your OS and architecture and place the executables in
-`third_party/`. FFmpeg is compiled from pinned, hash-verified source; it requires
-a C compiler, GNU make, Bash, and zlib development files. Windows builds use
-MSYS2 CLANG64 or CLANGARM64. See [FFmpeg build instructions](FFMPEG.md).
+To build just FFmpeg:
 
-#### Step 4: Patch QtAsyncio (Desktop GUI on Python 3.15)
-Python 3.15 + PySide6 requires an event loop descriptor patch for non-blocking networking and async task cancellation. Run this once after syncing:
-```bash
-uv run python scripts/patch_qtasyncio.py .venv
-```
-*(Skip this step if you're only using the headless CLI).*
-
-#### Step 5: Launch the Application
-- **Run Desktop GUI:**
-  ```bash
-  uv run main.py
-  ```
-- **Run Headless CLI:**
-  ```bash
-  uv run Porn_Fetch_CLI.py
-  ```
-  Or using the installed script alias:
-  ```bash
-  uv run porn-fetch-cli
-  ```
-
----
-
-## 4. Compiling Standalone Executables from Source
-
-If you want to package the app into a standalone distributable binary:
-
-### Compile the CLI binary
-Uses PyInstaller to generate a single-file executable:
-```bash
-uv run pyinstaller --clean packaging/pyinstaller_cli.spec
-```
-The output binary is placed in `dist/`.
-
-### Compile the GUI application
-Uses `pyside6-deploy`:
-```bash
-# Linux
-uv run pyside6-deploy -c packaging/pysidedeploy_linux.spec
-
-# Windows
-uv run pyside6-deploy -c packaging/pysidedeploy_windows.spec
-
-# macOS
-uv run --no-sync python packaging/prepare_macos_deploy.py --output /tmp/pornfetch-macos.spec
-uv run pyside6-deploy -c /tmp/pornfetch-macos.spec
-uv run --no-sync python packaging/repair_macos_bundle.py "Porn Fetch.app"
-QT_QPA_PLATFORM=cocoa QT_DEBUG_PLUGINS=1 QT_QUICK_BACKEND=software "Porn Fetch.app/Contents/MacOS/main" --smoke-test
+```sh
+uv run --no-sync python packaging/build_ffmpeg.py --dest third_party
 ```
 
-The macOS spec preparation scans the application's QML imports and supported
-runtime styles. It excludes unused QML plugins and their data before compilation,
-preventing modules such as Multimedia, Sensors, WebEngine, Quick3D and StyleKit
-from pulling their frameworks into the application. Previous `.app` bundles and
-deployment output are excluded from project data. Python imports and native
-dependencies still determine the necessary Qt libraries; the current application
-also imports Qt Quick Controls, Widgets and QtTest.
+On Windows add `--msys2-root C:/msys64`. Other options are `--jobs`, `--work-dir`
+and `--source-archive`. Keep `ffmpeg-legal/` with the executable when distributing
+it: this contains the matching source, notices and build information.
 
-The macOS repair step copies missing Qt frameworks and their dependencies from
-the PySide6 environment used for the build, rewrites framework references to the
-binaries inside the application, and ad-hoc signs the modified bundle. The automated build
-script and CI run this step and test the Cocoa platform plugin before reporting
-success. An offscreen smoke test does not verify Cocoa startup.
+## Problems
 
-If an existing build reports `Library not loaded: @rpath/QtGui.framework/Versions/A/QtGui`,
-run the repair script with that `.app` path, then repeat the Cocoa smoke test. No
-recompile is needed when the matching Qt libraries are bundled or available in
-the original build environment. Run repair with that environment's Python, or
-pass `--qt-lib-dir /path/to/build-environment/site-packages/PySide6/Qt/lib`.
-If a source framework is unavailable or bundled libraries are ambiguous, repair
-stops with the relevant library path. Repair runs on macOS and requires the Xcode
-Command Line Tools.
+- **Missing Qt plugin or DLL:** copy the complete output folder. Do not copy only
+  the `.exe`. Rebuild after changing Python or PySide6.
+- **Old build output:** move it before retrying. In particular,
+  `deployment/deploy_main.dist` must not be reused as a new Windows build.
+- **QtAsyncio patch fails:** keep the failure visible. Report the PySide6 version
+  and patch log; do not continue with a partly patched runtime.
+- **macOS framework error:** run `packaging/repair_macos_bundle.py` with the same
+  Python environment used for that build, then repeat `--smoke-test`.
+- **Antivirus or Gatekeeper warning:** see the signature section above.
 
----
-
-## 5. Android GUI and Termux CLI
-
-The cross-platform workflow has experimental Android GUI APK targets for
-arm64-v8a, armeabi-v7a, x86_64 and x86. Use only signed APKs intended for
-installation; `_unsigned.apk` files are build diagnostics. See
-[Android CI](ANDROID_CI.md) for the toolchain and signing requirements and the
-[live checklist](https://pornfetch.to/checklist) for development progress.
-
-The CLI has no PySide6/Qt dependencies and runs cleanly inside [Termux](https://termux.dev/) on Android:
-
-```bash
-# In Termux:
-pkg update
-pkg install python git clang
-git clone https://github.com/EchterAlsFake/Porn_Fetch.git
-cd Porn_Fetch
-pip install -e .
-python Porn_Fetch_CLI.py
-```
-
----
-
-## 6. Verifying Download Checksums
-
-Official releases publish `.sha256` files as separate assets for optional integrity
-verification. You only need the installer to install the application. To verify it,
-download the matching checksum asset into the same directory:
-
-- **Linux / macOS:**
-  ```bash
-  sha256sum -c PornFetch_linux_GUI_x64_Setup.run.sha256
-  ```
-- **Windows (PowerShell):**
-  ```powershell
-  Get-FileHash PornFetch_windows_GUI_x64_Setup.exe -Algorithm SHA256
-  ```
-  Compare the resulting hash with the content of `PornFetch_windows_GUI_x64_Setup.exe.sha256`.
-
----
-
-## 7. License & Premium Features
-
-- The core downloader and features work without a license.
-- A commercial policy license from [pornfetch.to](https://pornfetch.to/) unlocks 1080p+ resolutions and concurrent downloads.
-- **GUI:** Click **Purchase / renew license** or **Import License File**.
-- **CLI:** Open **License Management** and paste your key or JSON license file.
-- Licenses remain valid offline for up to 7 days before needing a re-check.
-
----
-
-## Need Help?
-
-If anything fails during building or installation:
-1. Check the relevant build instructions above and [Known Antivirus Flags](ANTIVIRUS_FLAGS.md).
-2. Open an issue on [GitHub Issues](https://github.com/EchterAlsFake/Porn_Fetch/issues). Please include your operating system, CPU architecture, whether you used pre-built binaries or built from source, and the terminal output or log error.
+Include your OS, CPU, source commit, command and build log in a bug report.

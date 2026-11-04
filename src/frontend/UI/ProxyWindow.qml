@@ -3,17 +3,31 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
-Window {
+Dialog {
     id: root
     readonly property bool androidLayoutMode: Qt.platform.os === "android"
                                               || (typeof androidLayout !== "undefined" && androidLayout)
 
-    width: Qt.platform.os === "android" ? Screen.width : (androidLayoutMode ? 400 : 580)
-    height: Qt.platform.os === "android" ? Screen.height : (androidLayoutMode ? 800 : 700)
-    minimumWidth: androidLayoutMode ? 0 : 480
-    minimumHeight: androidLayoutMode ? 0 : 620
-    modality: Qt.ApplicationModal
-    flags: Qt.Dialog
+    parent: Overlay.overlay
+    anchors.centerIn: parent
+    width: Math.min(640, parent.width - 32)
+    height: Math.min(740, parent.height - 32)
+    modal: true
+    closePolicy: Popup.CloseOnEscape
+    property var previousFocus: null
+    onAboutToShow: previousFocus = root.parent.Window.window.activeFocusItem
+    onOpened: hostField.forceActiveFocus()
+    onClosed: {
+        automaticTest.stop()
+        var item = previousFocus
+        Qt.callLater(function() {
+            if (item) {
+                item.focus = false
+                item.forceActiveFocus(Qt.TabFocusReason)
+            }
+        })
+    }
+    standardButtons: Dialog.Close
     title: qsTr("Proxy connection")
 
     signal proxyTestRequested(string proxyUrl, bool verifySsl)
@@ -131,9 +145,7 @@ Window {
                 ? qsTr("Format looks valid. The proxy will be tested automatically.")
                 : qsTr("Enter the proxy details below.")
         loadingFields = false
-        show()
-        raise()
-        requestActivate()
+        open()
         if (inputValid)
             automaticTest.restart()
     }
@@ -205,8 +217,7 @@ Window {
         onTriggered: root.startTest()
     }
 
-    Pane {
-        anchors.fill: parent
+    contentItem: Pane {
         padding: root.androidLayoutMode ? 8 : 22
 
         ScrollView {
@@ -226,7 +237,7 @@ Window {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("Connection details are checked as you type. The network test runs after a short pause and uses curl-cffi.")
+                text: qsTr("Connection details are checked as you type. The connection test runs after a short pause.")
                 wrapMode: Text.WordWrap
                 opacity: 0.75
             }
@@ -328,13 +339,10 @@ Window {
                         Label {
                             Layout.fillWidth: true
                             text: root.statusMessage
+                            textFormat: Text.PlainText
                             wrapMode: Text.WordWrap
                             font.bold: root.testState === "success"
-                            color: root.testState === "success"
-                                   ? (root.stats.sslVerificationEnabled ? "#22c55e" : "#f59e0b")
-                                 : root.testState === "sslWarning" ? "#f59e0b"
-                                 : root.testState === "error" || root.testState === "invalid" ? "#ef4444"
-                                 : palette.text
+                            color: palette.text
                         }
                     }
 
@@ -365,7 +373,7 @@ Window {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: root.width < 700 ? 2 : 4
+                columns: 1
 
                 Button {
                     Accessible.name: qsTr("Disable proxy")

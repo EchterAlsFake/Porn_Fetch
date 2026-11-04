@@ -50,7 +50,7 @@ SUITES = {
         [sys.executable, "Porn_Fetch_CLI.py", "--test-mode", "--test-downloads"],
     ),
     "download_lifecycle": (
-        "Live pause/resume and cleanup (15 providers, 30 media workflows)",
+        "Live pause/resume and cleanup (14 providers, 28 workflows; SpankBang manual)",
         [sys.executable, "-m", "src.tests.smoke.download_lifecycle"],
     ),
     "download_gui": (

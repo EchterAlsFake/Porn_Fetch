@@ -7,15 +7,6 @@ instead. You can get it from https://pornfetch.to/download
 
 The beta is still unstable and being tested, but I would rather give you a broken app, than a working app with a backdoor!
 
-
-> [!CAUTION]
-> **This README describes the current 3.9 source code and the planned first beta.**
-> The downloadable 3.8 release is an older GPL release. Its app, license,
-> screenshots, install process, and supported platforms may be different. If
-> you need information about 3.8, use the documentation from its release tag.
-> I'm actively working on this rewrite. Some features and builds can still fail;
-> please report problems with the commit ID or beta version you used.
-
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
@@ -32,7 +23,7 @@ The beta is still unstable and being tested, but I would rather give you a broke
 
 ---
 
-**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.8)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.8)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9 BETA)&nbsp;<br>&nbsp;</strong></kbd>](https://pornfetch.to/download)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Installation Guide&nbsp;<br>&nbsp;</strong></kbd>](docs/INSTALLATION.md)** 
@@ -42,39 +33,10 @@ The beta is still unstable and being tested, but I would rather give you a broke
 ---
 </div>
 
-# The 3.9 rewrite
+> [CAUTION]
+> Porn Fetch is an unofficial project and is not endorsed, sponsored, nor explicitly approved by its supported Websites. 
+> Certain features of Porn Fetch are prohibited or restricted in [these countries](docs/PROHIBITED_COUNTRIES)
 
-This branch is where I am building the next version of Porn Fetch. It has a
-PySide6 desktop app, a Qt-free CLI, and a different licensing system from 3.8.
-The first beta is for finding problems, and I will keep working on them as
-quickly as I can. Follow the [live development checklist](https://pornfetch.to/checklist)
-and its progress bar above for release readiness. See the
-[installation guide](docs/INSTALLATION.md) before trying it.
-
-# About the License
-
-The 3.9 source is under the [Porn Fetch Source-Available License 1.0](LICENSE).
-Earlier GPL releases keep their GPL rights. The source license and a premium
-feature credential are separate things.
-
-Automatic app updates are free for everyone on desktop, Android, and CLI, without a license.
-Premium features require a signed license on the commercial policy. It covers premium features in builds released within
-31,556,952 seconds (approximately one year) from first activation, with permanent premium use of those builds
-on up to ten installations. First activation attempts online validation. A valid signed production license
-gets up to three days from first import only for connection failures/timeouts,
-never for explicit rejection, HTTP errors, malformed responses or TLS trust failures.
-Reimport/restart does not reset that period. Subsequent offline use is limited to
-seven days after successful validation. A rejection blocks access through later outages. Older beta credentials are rejected explicitly.
-
-Payment services are deployed separately from this application. Consult the
-[live checklist](https://pornfetch.to/checklist) for release progress; client source
-changes do not establish which payment methods are live. See the
-[licensing architecture and release requirements](docs/LICENSING_ARCHITECTURE.md).
-
-### #FreeHongKong
-
-> [!WARNING]
-> Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
 > [!IMPORTANT]
 > Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) for an explanation why this is.
@@ -84,10 +46,11 @@ changes do not establish which payment methods are live. See the
 ## 🚀 Quick Links
 - [Features](#-features)
 - [Installation & Building](#-installation--building-from-source)
-- [Donations](#sponsoring--donations)
+- [Premium License](#premium-license)
+- [GitHub Workflow Targets](#github-workflow-targets)
 - [Supported Websites](#-supported-websites)
+- [Translating](#-translating)
 - [Developer Guide](docs/FOR_DEVELOPERS.md)
-- [Qt installer work](docs/QT_INSTALLER_FRAMEWORK.md)
 - [Credits](#-credits)
 - [License](#-license)
 
@@ -198,8 +161,13 @@ To produce distributable single binaries yourself:
 
 A valid entitlement enables these features:
 
-- 1080+ downloads
-- parallel downloads
+- Downloads above 720p.
+- Bulk downloading from public models, channels and playlists.
+- Parallel downloads.
+
+Without an active premium license, public model, channel and playlist URLs show
+only their first five videos. Account collections are exempt from this preview
+limit. Free use supports up to 720p and one active download at a time.
 
 In the GUI, use **Purchase / renew license**, then paste the signed key or use
 **Import License File**. In the CLI, choose **License Management** and enter the
@@ -208,43 +176,30 @@ with the current client; old beta credentials are not upgraded automatically.
 See the [installation guide](docs/INSTALLATION.md).
 
 ## General Information
+#### GitHub Workflow Targets
 
-In the **Cross-Platform Build Pipeline → Run workflow** form, choose `build_target`:
-`cli`, `gui`, or `both` (the default). CLI-only runs skip GUI compilation, installers,
-and the macOS universal build; GUI-only runs skip all CLI builds. Update deployment
-and GitHub Release publishing follow the selected target. Tag pushes build both.
-All selections still run the shared validation suite.
+| Platform                  | App                | Architectures                        | OS Version (GUI)               |
+|---------------------------|--------------------|--------------------------------------|--------------------------------|
+| **Windows**               | GUI, CLI           | x64, ARM64                           | 10+                            |
+| **Linux (X11 / Wayland)** | GUI, CLI           | x64, ARM64, (experimental archs)     | Kernel 5.10+, BTF, glibc 2.28+ |
+| **macOS**                 | GUI, CLI           | x86_64, ARM64  (Universal build)     | Sonoma 14.4+                   |
+| **Android**               | GUI, CLI           | arm64-v8a, armeabi-v7a, x86_64, i686 | Android 9+, Custom OS possible |
+| **iOS**                   | GUI, CLI           | arm64                                | iOS 15+                        |
 
-> [!NOTE]
-> **Targets in the current build workflow.** A target in the workflow does not
-> mean its first beta artifact has passed manual testing.
+##### About FreeBSD
+FreeBSD should theoretically work, as Qt has full support for it, however I have never tested it. 
+So you'd need to see for yourself, but I at least can guarantee you, that I have not made any application logic that stops you 
+from using it xD 
 
-| Platform                   | App              | Architectures                                   |
-|----------------------------|------------------|-------------------------------------------------|
-| **Windows**                | GUI              | x64, ARM64                                      |
-| **Windows**                | CLI              | x64, ARM64                                      |
-| **Linux (X11 / Wayland)**  | GUI              | x64, ARM64                                      |
-| **Linux (X11 / Wayland)**  | CLI              | x64, ARM64                                      |
-| **macOS**                  | GUI              | x86_64, ARM64  (Universal build)                |
-| **Android**                | GUI (experimental) | arm64-v8a, armeabi-v7a, x86_64, x86 APK build targets |
-| **Android**                | CLI from source  | Termux                                          |
-
-This table describes configured build targets, not a guarantee that every target
-has a successful artifact for every release. Check the release's Actions run.
-Linux 32-bit (x32 artifact) and riscv64 CLI builds are optional experimental
-workflow-dispatch targets. Linux s390x/ppc64le and Windows x86 are not in the
-current build matrix. Android build and device limitations are tracked in the
-[Android CI guide](docs/ANDROID_CI.md) and [development checklist](https://pornfetch.to/checklist).
-
-> [!NOTE]
-> Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
-
-> [!NOTE]
-> The [experimental iOS port](docs/iOS.md) has user-confirmed downloads, MP4
-> remuxing and playback on both jailbroken and non-jailbroken iPhone 7 devices.
-> The separate **iOS Build** workflow produces an IPA requiring re-signing;
-> Android APK jobs are part of **Cross-Platform Build Pipeline**. See the
-> [iOS build instructions](docs/ios/BUILDING.md).
+#### Development Testing
+Porn Fetch is tested actively on the following devices and systems:
+- Arch Linux + Hyprland (DMS) :: Main Development Machine 
+- Windows 11 
+- iPhone 7 (iOS 15.8.8) 
+- Xiaomi 15 (Android 16)
+- Xiaomi Redmi 6 (Android 9)
+- Teclast T50 Pro (kp Bruder) 
+- virtual macOS Sequoia 
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -265,18 +220,17 @@ current build matrix. Android build and device limitations are tracked in the
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
-> Some providers support only direct videos while others also support profiles or collections. Search is intentionally not available.
+> Some providers support only direct videos while others also support profiles or collections.
+> Searching is intentionally not available due to legal reasons
 
 ### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)
 
 ### For Developers
 If you want to develop on Porn Fetch and do local changes, contribute code or do whatever, please
 have a look at the internal code documentation which explains the core structure of the project,
-as well as the different concepts used here.
+as well as the different concepts used.
 
 See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS.md
-
-
 
 ## 🌍 Translating
 
@@ -285,19 +239,11 @@ See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS
 > before starting a large translation update.
 
 Currently available in:
-- German (3.0)
 - English
-- Chinese (3.0) `[*]` Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
-- French (3.0) `[*]` Thanks to: [Egsagon](https://github.com/Egsagon)
-- Italian (3.8) Thanks to: [FatalPuppet](https://github.com/FatalPuppet)
 
 <br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/TRANSLATING.md).
 
-> If a language is marked with a `*` it means, you can contribute something, and it needs an update!
-
-
 ## 👏 Credits
-- API/download engine: [eaf_base_api](https://github.com/EchterAlsFake/eaf_base_api) and the provider libraries listed in [pyproject.toml](pyproject.toml)
 - GUI: [Qt](https://qt.io) for Python
 - Media processing: a separate minimal LGPL-only [FFmpeg build](docs/FFMPEG.md); see third-party notices
 
@@ -307,16 +253,7 @@ Currently available in:
 Current development snapshots marked with the [Porn Fetch Source-Available License 1.0](LICENSE) use that license for application-owned material. Earlier GPL-3.0-or-later copies retain their GPL rights; the historical license text is in [LICENSES](LICENSES/GPL-3.0-or-later.txt). Third-party components retain their own terms. See the [licensing guide](docs/LICENSING.md).
 <br>Copyright (C) 2023–2026 Johannes Habel 
 
-# Sponsoring / Donations
-The donation links below are separate from Premium purchases and optional;
-they are not needed to use the beta.
-
-However, I kindly ask every one of you to donate a small amount of money. If you have Monero (crypto)
-or PayPal, you can donate me here:
-
-- Paypal: `https://paypal.me/EchterAlsFake` (Prefered)
-- Monero: `42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR`
-- Ko-Fi : `https://ko-fi.com/EchterAlsFake`
-
-Even if it's just 10 cents, for me, it matters, because I do not work yet and it means a lot
-to me :)
+## Legal
+- [Terms of Service](https://pornfetch.to/terms)
+- [Privacy Policy](https://pornfetch.to/privacy_policy)
+- [Server Source Code](https://github.com/EchterAlsFake/Server)

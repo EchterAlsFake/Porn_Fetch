@@ -38,7 +38,8 @@ class SettingsWindow:
                            "Video/pocketbase_data_path": str(self.directory / "database")}.items():
             self.disk.setValue(key, value)
         app_settings.set_settings_storage(self.disk)
-        self.backend = make_account_backend()
+        # These diagnostics exercise the paid controls; entitlement rules have separate tests.
+        self.backend = make_account_backend(premium=True)
         self.backend._pending_parallel_limit = None
         self.backend._pending_pocketbase_move = None
         self.backend._restart_warning_shown = True
@@ -68,7 +69,7 @@ ApplicationWindow {
     visible: true; width: 1700; height: 1100
     font.pointSize: appSettings.font_size
     property bool androidLayout: false
-    property QtObject bridge: QtObject { property bool isPremium: false }
+    property QtObject bridge: QtObject { property bool isPremium: true }
     Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
     Material.accent: appSettings.accent_color
     readonly property color appliedBackground: Material.background
@@ -223,7 +224,8 @@ ApplicationWindow {
         named = set(re.findall(r'objectName:\s*"([^"]+)"', source))
         covered = {setting.control for setting in SETTINGS}
         ancillary = {"settingsStack", "outputFolderDialog", "pocketbaseFolderDialog", "torStatusLabel",
-                     "torAllTrafficWarning", "resetSettingsButton"}
+                     "torAllTrafficWarning", "resetSettingsButton", "guiLanguageComboBox",
+                     "manageInstallationButton", "uninstallButton"}
         require(not (named - covered - ancillary), f"Settings inventory has uncovered controls: {named - covered - ancillary}")
         return len(covered)
 

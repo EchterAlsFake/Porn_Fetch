@@ -111,8 +111,8 @@ class DesignLayoutTests(unittest.TestCase):
     def test_credit_cards_and_their_text_do_not_overlap_after_resizing(self):
         self.load('InfoPage { objectName: "page"; anchors.fill: parent }')
         cards = [item for item in visual_items(self.page) if item.objectName() == "creditCard"]
-        self.assertEqual(len(cards), 9)
-        applications = next(card for card in cards if card.property("title") == "Applications")
+        self.assertEqual(len(cards), 4)
+        applications = next(card for card in cards if card.property("title") == "Built with")
         # A taller card must move the next row rather than cover it.
         applications.setProperty("content", "Media processing details that wrap over several lines. " * 12)
         for width in (1500, 420, 900, 1500):

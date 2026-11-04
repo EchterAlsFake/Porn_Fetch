@@ -9,6 +9,16 @@ from ..providers import ClientPool, route_url
 from .models import TestResult
 
 
+async def gallery_metadata(album) -> list[str]:
+    title = getattr(album, "title", None)
+    if not isinstance(title, str) or not title.strip() or title == "Untitled":
+        raise AssertionError("Gallery has no meaningful title")
+    images = await album.get_all_images()
+    if not images or not all(isinstance(url, str) and url.startswith(("https://", "http://")) for url in images):
+        raise AssertionError("Gallery has no usable image URLs")
+    return images
+
+
 def _error(error: Exception, timeout: float) -> str:
     if isinstance(error, (TimeoutError, asyncio.TimeoutError)):
         return f"Timed out after {timeout:.0f}s"
@@ -34,9 +44,10 @@ async def test_video(name: str, url: str, pool: ClientPool, timeout: float = 60.
 async def test_gallery(name: str, url: str, pool: ClientPool, timeout: float = 60.0) -> TestResult:
     started = time.perf_counter()
     try:
-        _route, album = await asyncio.wait_for(pool.resolve(url), timeout)
-        title = getattr(album, "title", None) or "Untitled"
-        return TestResult("Gallery", name, url, True, str(title)[:60], time.perf_counter() - started)
+        async with asyncio.timeout(timeout):
+            _route, album = await pool.resolve(url)
+            images = await gallery_metadata(album)
+        return TestResult("Gallery", name, url, True, f"{len(images)} image URLs", time.perf_counter() - started)
     except Exception as error:
         return TestResult("Gallery", name, url, False, "", time.perf_counter() - started, _error(error, timeout))
 

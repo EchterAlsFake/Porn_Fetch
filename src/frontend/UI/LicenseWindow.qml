@@ -6,15 +6,19 @@ Window {
     id: licenseWin
     width: 500
     height: 560
-    minimumWidth: 460
-    minimumHeight: 520
+    minimumWidth: 320
+    minimumHeight: 240
     title: qsTr("Manage License")
 
-    // Use the dark background to match the widget
-    color: (appSettings.high_contrast ? "#000000" : "#1f1f21")
+    color: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1f1f21" : "#f5f6f8"
 
-    // Instantiate your hyper-modern widget inside this window!
-    LicenseWidget {
+    ScrollView {
         anchors.fill: parent
+        clip: true
+        contentWidth: availableWidth
+        LicenseWidget {
+            width: parent.width
+            height: implicitHeight
+        }
     }
 }

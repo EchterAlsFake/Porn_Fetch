@@ -33,9 +33,17 @@ class _TestBackend(QObject):
         self.settings = settings_manager
         self.bridge = bridge
 
+    @Property(bool, constant=True)
+    def maintenance_available(self):
+        return False
+
     @Property(str, constant=True)
     def errorReportDisclosure(self) -> str:
         return "Test Disclosure"
+
+    @Slot(int)
+    def set_parallel_downloads(self, value: int) -> None:
+        self.settings.parallel_downloads = value if self.bridge and self.bridge.isPremium else 1
 
     @Slot(int)
     def set_default_quality(self, index: int) -> None:
@@ -65,16 +73,19 @@ class _TestBackend(QObject):
 
 
 class _TestBridge(QObject):
+    premiumChanged = Signal()
+
     def __init__(self, premium: bool = True) -> None:
         super().__init__()
         self._is_premium = premium
 
-    @Property(bool, constant=True)
+    @Property(bool, notify=premiumChanged)
     def isPremium(self) -> bool:
         return self._is_premium
 
     def set_premium(self, premium: bool) -> None:
         self._is_premium = premium
+        self.premiumChanged.emit()
 
 
 class _TestTorStatus(QObject):

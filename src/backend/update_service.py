@@ -17,7 +17,7 @@ from PySide6.QtCore import QCoreApplication, QFile, QIODevice, QObject, Signal
 
 from src.backend import clients
 from src.backend.helper_functions import get_original_executable_path
-from src.backend.shared_functions import configure_app_logging
+from src.shared.logging_setup import configure_app_logging
 from src.shared.paths import shared_data_dir
 from src.shared.release import ROOT_FILE, validate_ifw_packages, verify_repository_manifest
 from src.shared.service_transport import ServiceCore
@@ -43,7 +43,10 @@ def find_maintenance_tool() -> Path | None:
         if p.is_file() and (sys.platform == "win32" or os.access(p, os.X_OK)):
             return p
 
-    orig = get_original_executable_path()
+    try:
+        orig = get_original_executable_path()
+    except FileNotFoundError:
+        return None
     if orig is None:
         return None
 
@@ -57,6 +60,17 @@ def find_maintenance_tool() -> Path | None:
         if candidate.is_file() and (sys.platform == "win32" or os.access(candidate, os.X_OK)):
             return candidate.resolve()
     return None
+
+
+def launch_maintenance_tool(tool: Path, mode: str) -> None:
+    """Open IFW's interactive component manager or uninstaller."""
+    flags = {"components": "--start-package-manager", "uninstall": "--start-uninstaller"}
+    subprocess.Popen(
+        [str(tool), flags[mode]],
+        cwd=str(tool.parent),
+        creationflags=subprocess.DETACHED_PROCESS if sys.platform == "win32" else 0,
+        start_new_session=sys.platform != "win32",
+    )
 
 
 class CheckUpdates:
@@ -184,6 +198,7 @@ class AutoUpdater(QObject):
     statusReport = Signal(str)
     updateProgress = Signal(int, int)
     finished = Signal()
+    outcome = Signal(str, str)
 
     def __init__(
         self,
@@ -199,34 +214,44 @@ class AutoUpdater(QObject):
             await self._run()
         except asyncio.CancelledError:
             self._android_cancel.set()
+            self.outcome.emit("info", self.tr("Update cancelled."))
             raise
-        except Exception as error:
+        except Exception:
             logger.exception("Update launch failed")
-            self.statusReport.emit(f"Update failed: {error}")
+            message = self.tr("The update could not be completed. Check your connection and try again later.")
+            self.statusReport.emit(message)
+            self.outcome.emit("error", message)
         finally:
             self.finished.emit()
 
     async def _run(self) -> None:
         from src.shared.android_updates import download_and_request_install, is_android_device
         if is_android_device():
-            self.statusReport.emit("Downloading and verifying the Android update…")
+            self.statusReport.emit(self.tr("Downloading and verifying the Android update…"))
             self._android_cancel.clear()
+            downloaded = 0
+            def progress(size):
+                nonlocal downloaded
+                downloaded += size
+                self.updateProgress.emit(downloaded, 0)
             await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__,
-                                    None, self._android_cancel)
-            self.statusReport.emit("APK verified. Waiting for Android's installation confirmation…")
+                                    progress, self._android_cancel)
+            message = self.tr("APK verified. Waiting for Android's installation confirmation…")
+            self.statusReport.emit(message)
+            self.outcome.emit("info", message)
             return
         tool = find_maintenance_tool()
         if not tool:
-            self.statusReport.emit(
-                "Automatic updates require an installation managed by the Qt Maintenance Tool.\n"
-                "Please download the latest beta build from "
-                "https://pornfetch.to/download"
-            )
+            message = self.tr("Automatic updates require the Qt Maintenance Tool. Download the latest build from the website instead.")
+            self.statusReport.emit(message)
+            self.outcome.emit("warning", message)
             return
 
         update = await CheckUpdates.check_signed_repository()
         if update is None:
-            self.statusReport.emit("No update available.")
+            message = self.tr("No update available.")
+            self.statusReport.emit(message)
+            self.outcome.emit("info", message)
             return
         repository = await self._stage_repository(update)
 

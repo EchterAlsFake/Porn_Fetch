@@ -32,6 +32,7 @@ from src.cli.settings import CliSettings
 from src.shared.ffmpeg import find_ffmpeg
 from src.shared.provider_routing import PROVIDER_MODULES, ContentKind
 from src.shared.tor_transport import MediaCore
+from src.tests.provider_cases import MANUAL_PROVIDERS
 
 
 def require(condition, message):
@@ -374,6 +375,7 @@ async def run(args, workspace, ffmpeg):
         "libraries": {name: version(name) for name in packages},
         "base_api_source": str(Path(base_api.__file__).resolve()),
         "results": [], "passed": 0, "failed": 0, "interrupted": False,
+        "manual_checks": args.manual_checks, "manual": len(args.manual_checks),
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
 
@@ -430,7 +432,7 @@ async def run(args, workspace, ffmpeg):
         finally:
             logging.getLogger().removeHandler(handler)
             handler.close()
-    print(f"{report['passed']} passed, {report['failed']} failed. Report: {args.report}")
+    print(f"{report['passed']} passed, {report['failed']} failed, {report['manual']} manual. Report: {args.report}")
     return int(report["failed"] != 0)
 
 
@@ -451,6 +453,8 @@ def parse_args(argv=None):
                         default=Path(tempfile.gettempdir()) / "porn-fetch-download-lifecycle.json")
     parser.add_argument("--artifacts-dir", type=Path, help="Parent folder for an isolated run directory")
     parser.add_argument("--keep-artifacts", action="store_true", help="Retain media and state for inspection")
+    parser.add_argument("--include-manual-providers", action="store_true",
+                        help="Explicitly retry media workflows with known provider/CDN problems; failures remain failures")
     args = parser.parse_args(argv)
     if args.timeout <= 0:
         parser.error("--timeout must be positive")
@@ -472,6 +476,14 @@ def parse_args(argv=None):
         parser.error(str(error))
     selected = set(args.provider or ["all"])
     args.fixtures = [fixture for fixture in fixtures if "all" in selected or fixture[0] in selected]
+    scenarios = ("pause-resume", "cleanup") if args.scenario == "all" else (args.scenario,)
+    args.manual_checks = [{"provider": provider, "scenario": scenario, "status": "MANUAL",
+                           "reason": MANUAL_PROVIDERS[provider]}
+                          for provider, _, _ in args.fixtures
+                          if provider in MANUAL_PROVIDERS and not args.include_manual_providers
+                          for scenario in scenarios]
+    args.fixtures = [fixture for fixture in args.fixtures
+                     if fixture[0] not in MANUAL_PROVIDERS or args.include_manual_providers]
     return args
 
 
@@ -481,10 +493,15 @@ def main():
         scenarios = ("pause-resume", "cleanup") if args.scenario == "all" else (args.scenario,)
         for provider, transport, url in args.fixtures:
             print(f"{provider:12} {transport.upper():4} {', '.join(scenarios)}\n  {url}")
-        print(f"{len(args.fixtures)} providers, {len(args.fixtures) * len(scenarios)} cases. No network requests.")
+        for check in args.manual_checks:
+            print(f"MANUAL {check['provider']} {check['scenario']}: {check['reason']}")
+        print(f"{len(args.fixtures)} automated providers, {len(args.fixtures) * len(scenarios)} automated cases, "
+              f"{len(args.manual_checks)} manual. No network requests.")
         return 0
-    ffmpeg = find_ffmpeg()
-    if ffmpeg is None:
+    for check in args.manual_checks:
+        print(f"MANUAL {check['provider']} {check['scenario']}: {check['reason']}; no automated requests", flush=True)
+    ffmpeg = find_ffmpeg() if args.fixtures else None
+    if args.fixtures and ffmpeg is None:
         raise SystemExit("FFmpeg is required for HLS remuxing and completed-media validation")
     if args.artifacts_dir:
         args.artifacts_dir.mkdir(parents=True, exist_ok=True)

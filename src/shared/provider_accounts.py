@@ -9,6 +9,10 @@ from base_api import CachePolicy
 from selectolax.lexbor import LexborHTMLParser
 
 
+class AccountSessionError(ValueError):
+    """An app-generated account failure safe to show without upstream secrets."""
+
+
 def valid_xhamster_playlist_url(url: str) -> bool:
     parsed = urlsplit(url.strip())
     host = (parsed.hostname or "").casefold()
@@ -41,7 +45,10 @@ async def verify_account_session(client: Any, provider: str) -> str:
                 match = re.fullmatch(r"/users/([^/]+)/?", path)
                 if match:
                     return unquote(match[1])
-    raise ValueError(f"{provider.title()} did not confirm an authenticated browser session")
+    raise AccountSessionError(
+        f"{provider.title()} did not confirm an authenticated browser session. "
+        "Sign in again in the selected browser or refresh the session tokens."
+    )
 
 
 async def connect_pornhub_cookies(client: Any, cookies: Any, username: str = "") -> bool:
@@ -72,8 +79,12 @@ async def connect_xvideos_cookies(client: Any, cookies: Any, *, browser_jar: Any
     """Scope manually supplied tokens to the site, then verify the session."""
     values = dict(cookies)
     client.account = None
-    if any(not values.get(name) for name in ("session_token", "session_token_auth")):
-        raise ValueError("Both XVideos session tokens are required")
+    missing = [name for name in ("session_token", "session_token_auth") if not values.get(name)]
+    if missing:
+        raise AccountSessionError(
+            "XVideos session is incomplete. Missing cookies: " + ", ".join(missing)
+            + ". Sign in again in the selected browser or supply both session tokens."
+        )
     client.core.session.cookies.clear()
     if browser_jar is not None:
         client.core.session.cookies.update(browser_jar)

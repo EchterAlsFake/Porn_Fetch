@@ -12,7 +12,7 @@ WheelHandler {
     property var scrollAnimation: NumberAnimation {
         target: control.flickable
         property: "contentY"
-        duration: appSettings.reduced_motion ? 0 : control.animationDuration
+        duration: appSettings && appSettings.reduced_motion ? 0 : control.animationDuration
         easing.type: Easing.OutCubic
     }
 

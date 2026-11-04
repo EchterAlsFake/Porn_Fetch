@@ -9,6 +9,7 @@ import questionary
 from rich.panel import Panel
 from rich.table import Table
 
+from src.shared.access import public_collection_items
 from src.shared.media import VideoObject, quality_requires_premium, select_allowed_quality
 
 from ..downloads import download_gallery, download_video
@@ -80,11 +81,16 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
         print_error(ctx.console, "Invalid URL", str(error))
         return
 
+    premium = ctx.license_service.status.allowed
+    if not premium and route.kind in {ContentKind.PROFILE, ContentKind.COLLECTION}:
+        ctx.console.print("[yellow]Free bulk preview: only the first 5 videos are available. Activate a premium license for the full model, channel or playlist.[/]")
     items: list[tuple[Route, Any, VideoObject | None]] = []
     with ctx.console.status(f"[bold green]Scraping {route.provider.title()} ({url})...[/]", spinner="dots"):
         ctx.pool.runtime_config.profile_video_mode = mode
         try:
             stream = ctx.pool.media_stream(url, pages=5)
+            if route.kind in {ContentKind.PROFILE, ContentKind.COLLECTION}:
+                stream = public_collection_items(stream, premium)
             async with aclosing(stream):
                 async for source in stream:
                     media = None if route.kind == ContentKind.GALLERY else await prepare_video(source, route.provider)

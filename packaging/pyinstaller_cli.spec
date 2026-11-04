@@ -78,7 +78,8 @@ executable = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    # UPX rewrites PE files and would invalidate embedded Authenticode signatures.
-    upx=sys.platform != "win32",
+    # UPX must not rewrite signed Windows or macOS payloads.
+    upx=sys.platform not in {"win32", "darwin"},
+    codesign_identity=os.environ.get("PORN_FETCH_MACOS_SIGN_IDENTITY") if sys.platform == "darwin" else None,
     console=True,
 )

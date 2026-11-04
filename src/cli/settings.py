@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass, fields, replace
 from pathlib import Path
 from typing import Any
 
+from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 from src.shared.paths import config_dir
 
 SETTINGS_VERSION = 2
@@ -64,6 +65,7 @@ class CliSettings:
     debug: bool = False
     error_reporting: bool = False
     error_reporting_decided: bool = False
+    error_reporting_consent_version: int = 0
     beta_disclaimer_version: str = ""
     # Database / PocketBase tracking
     track_videos: bool = False
@@ -180,6 +182,8 @@ class SettingsStore:
             values = raw.get("settings", raw)
             known = {field.name for field in fields(CliSettings)}
             settings = CliSettings(**{k: v for k, v in values.items() if k in known})
+            if settings.error_reporting and settings.error_reporting_consent_version != ERROR_REPORT_CONSENT_VERSION:
+                settings = replace(settings, error_reporting=False, error_reporting_decided=False)
             if not settings.error_reporting_decided:
                 settings = replace(settings, error_reporting=False)
             settings.validate()
@@ -221,7 +225,10 @@ async def prompt_error_reporting_consent(
     console: Any | None = None,
 ) -> CliSettings:
     """Show the one-time CLI disclosure and persist only an explicit choice."""
-    if settings.error_reporting_decided:
+    if settings.error_reporting_decided and (
+        not settings.error_reporting
+        or settings.error_reporting_consent_version == ERROR_REPORT_CONSENT_VERSION
+    ):
         return settings
 
     import questionary
@@ -245,7 +252,7 @@ async def prompt_error_reporting_consent(
         padding=(1, 2),
     ))
     choice = await questionary.select(
-        "Enable automatic redacted error reports?",
+        "Enable automatic error reports with full tracebacks and video URLs?",
         choices=[
             questionary.Choice("No, keep error reporting disabled", value=False),
             questionary.Choice("Yes, enable automatic error reports", value=True),
@@ -259,6 +266,7 @@ async def prompt_error_reporting_consent(
         settings,
         error_reporting=bool(choice),
         error_reporting_decided=True,
+        error_reporting_consent_version=ERROR_REPORT_CONSENT_VERSION,
     )
     updated.validate()
     store.save(updated)

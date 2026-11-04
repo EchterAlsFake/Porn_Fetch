@@ -320,6 +320,8 @@ async def handle_settings(ctx: WizardContext) -> None:
                     )
                     continue
                 try:
+                    if target_setting == "parallel_downloads" and int(new_val) > 1 and not ctx.license_service.status.allowed:
+                        raise ValueError("Parallel downloads require an active premium license. Free use allows one download at a time.")
                     updated = replace(ctx.settings, **{target_setting: new_val})
                     updated.validate()
                     ctx.settings_store.save(updated)
@@ -379,7 +381,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
             table = Table(show_header=False, box=None, padding=(0, 1))
             table.add_row("[bold cyan]State:[/]", f"[bold green]{status.state}[/]" if status.allowed else f"[bold yellow]{status.state}[/]")
             table.add_row("[bold cyan]Description:[/]", ctx.license_service.reason)
-            table.add_row("[bold cyan]Features:[/]", "[bold green]Premium unlocked (1080p+, fast downloads)[/]" if status.allowed else "[dim]Standard free tier (<=720p)[/]")
+            table.add_row("[bold cyan]Features:[/]", "[bold green]Premium unlocked (>720p, bulk and parallel downloads)[/]" if status.allowed else "[dim]Standard free tier (<=720p)[/]")
             expiry_display = (
                 f"{license_expiry_str} [dim](valid for current release, 1 yr updates included)[/dim]"
                 if license_expiry_str == "Lifetime / Never"

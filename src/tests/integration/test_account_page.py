@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import asyncio
 import os
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -78,6 +80,39 @@ class RecordingAccountBridge(QObject):
 
 
 class AccountPageControlTests(unittest.TestCase):
+    def test_prepared_account_rows_render_error_role_and_resume_action_in_both_layouts(self):
+        from src.backend.account_diagnostics import visual_items
+        from src.tests.integration.test_download_queue import video
+
+        with tempfile.TemporaryDirectory() as directory:
+            for layout in ("desktop", "mobile"):
+                backend = make_account_backend()
+                window = AccountWindow(backend, layout)
+                try:
+                    empty = window.verify_rows(limit=1, allow_empty=True)
+                    self.assertEqual(empty["status"], "EMPTY")
+                    self.assertTrue(empty["empty_state_verified"])
+                    self.assertEqual(empty["rendered_delegates_verified"], 0)
+                    item = video("account-row")
+                    item.source_video = object()
+                    item.thumbnail_url = "https://images.example/thumbnail.jpg"
+                    item.output_path = Path(directory) / "unused.mp4"
+                    item.origin_iterator_name = "Account history"
+                    item.is_from_account = True
+                    backend._downloads_model.add_video(item, "720")
+                    _app.processEvents()
+                    evidence = window.verify_rows(limit=1)
+                    self.assertEqual(evidence["roles_verified"], 10)
+                    if layout == "desktop":
+                        backend._downloads_model.set_status(item.identifier, "cancelled")
+                        _app.processEvents()
+                        resume = next(control for control in visual_items(window.downloads)
+                                      if control.objectName() == "downloadStopResumeButton")
+                        self.assertTrue(resume.isEnabled())
+                        self.assertEqual(resume.property("text"), "Resume")
+                finally:
+                    window.close()
+
     def test_every_provider_form_and_collection_action_on_both_layouts(self):
         for layout in ("desktop", "mobile"):
             bridge = RecordingAccountBridge()
@@ -324,6 +359,7 @@ class AccountBackendRecoveryTests(unittest.IsolatedAsyncioTestCase):
         self.addCleanup(setattr, self.backend.logger, "disabled", old_disabled)
         self.messages = []
         self.backend.showMessage.connect(self.messages.append)
+        self.backend.notifications.announced.connect(lambda message, urgent: self.messages.append(message))
 
     async def test_each_native_login_dispatch_and_normal_failure(self):
         cases = (("PornHub", "LoginPornhub", {"email": "identity", "password": "secret", "from_browser": False}),

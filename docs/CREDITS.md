@@ -106,7 +106,7 @@ and the actual artifact inventory.
 
 # Media processing
 Current builds invoke a separate minimal LGPL-only FFmpeg executable, without
-PyAV. See [FFmpeg builds](FFMPEG.md) and the
+PyAV. See [FFmpeg builds](INSTALLATION.md) and the
 [current third-party notices](../THIRD_PARTY_NOTICES.md) for the shipped profile.
 
 Some libraries may not be used in the current release, but have been used in an older release.
@@ -116,12 +116,11 @@ For the fairness to these authors, I will still list them here, although they do
 Big shoutout to this project: https://github.com/notAperson535/OneClick-macOS-Simple-KVM
 This makes Porn Fetch on macOS possible thanks to virtualization
 
-# iOS Testing
-iOS Testing is only possible because I can use some old iPhone 7 that is jailbroken to test Porn Fetch's CLI there.
-This is very experimental, but still,
+# iOS development
+The current experimental iOS GUI has been tested on an iPhone 7, including
+non-jailbroken operation. Qt/PySide device builds and native dependency recipes
+are maintained in `ios-lab/`. See [the iOS guide](iOS.md) for the build inputs
+and current limits.
 
-Thanks to: 
-
-- [palera1n](https://palera.in/)  (Jailbreaking)
-- Kitty-XZ for pre-compiled Python 3.12.5 
-
+The earlier jailbreak experiments used palera1n and Kitty-XZ's Python builds.
+Thanks to both for their work on that early port.

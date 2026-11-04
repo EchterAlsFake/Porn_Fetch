@@ -139,6 +139,18 @@ class FFmpegSourceDownloadTests(unittest.IsolatedAsyncioTestCase):
 
 
 class QmlPackagingTests(unittest.TestCase):
+    def test_cache_compiler_uses_active_environment_before_unrelated_path_tool(self):
+        from scripts.compile_qml import find_qmlcachegen
+
+        with tempfile.TemporaryDirectory() as directory:
+            prefix = Path(directory)
+            expected = prefix / "bin/pyside6-qmlcachegen"
+            expected.parent.mkdir()
+            expected.touch()
+            with patch("scripts.compile_qml.sys.prefix", str(prefix)), \
+                    patch("scripts.compile_qml.shutil.which", return_value="/usr/bin/qmlcachegen"):
+                self.assertEqual(find_qmlcachegen(), expected)
+
     def test_windows_wheel_layout_is_used_for_scan_and_exclusions(self):
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary) / "project"
@@ -202,14 +214,14 @@ class QmlPackagingTests(unittest.TestCase):
             dll_exclusions = [arg.split("=", 1)[1] for arg in arguments if arg.startswith("--noinclude-dlls=")]
             data_exclusions = [arg.split("=", 1)[1] for arg in arguments
                                if arg.startswith("--noinclude-data-files=")]
-            for module in ("QtMultimedia", "QtSensors", "QtWebEngine", "QtQuick3D", "Qt/labs/StyleKit"):
+            for module in ("QtMultimedia", "QtSensors", "QtWebEngine", "QtQuick3D", "Qt/labs/StyleKit",
+                           "Qt5Compat/GraphicalEffects"):
                 with self.subTest(excluded=module):
                     self.assertTrue(any(fnmatch.fnmatch(f"{pyside}/Qt/qml/{module}/libplugin.dylib", pattern)
                                         for pattern in dll_exclusions))
                     self.assertTrue(any(fnmatch.fnmatch(f"PySide6/qml/{module}/qmldir", pattern)
                                         for pattern in data_exclusions))
-            for module in ("QtQuick/Layouts", "QtQuick/Dialogs", "QtQuick/Controls/Material",
-                           "Qt5Compat/GraphicalEffects"):
+            for module in ("QtQuick/Layouts", "QtQuick/Dialogs", "QtQuick/Controls/Material"):
                 with self.subTest(retained=module):
                     self.assertFalse(any(fnmatch.fnmatch(f"{pyside}/Qt/qml/{module}/libplugin.dylib", pattern)
                                          for pattern in dll_exclusions))

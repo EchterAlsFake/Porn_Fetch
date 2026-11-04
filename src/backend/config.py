@@ -11,6 +11,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Property, QSettings, QStandardPaths, QUrl, Signal, Slot
 from src.shared.version import __version__
 from src.shared.beta_disclaimer import BETA_DISCLAIMER_VERSION
+from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 
 __license__ = "Porn Fetch Source-Available License 1.0"
 __author__ = "Johannes Habel"
@@ -22,7 +23,6 @@ __app_name__ = "Porn Fetch"
 __org_name__ = "EchterAlsFake"
 
 
-PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
 IS_SOURCE_RUN = True
 
 IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
@@ -51,11 +51,14 @@ class SettingsManager(QObject):
     darkModeChanged = Signal(bool)
     accentColorChanged = Signal(str)
     activityGlowEnabledChanged = Signal(bool)
+    systemNotificationsChanged = Signal(bool)
 
     # Missing Signals
     networkLoggingChanged = Signal(bool)
     errorReportingDecisionChanged = Signal(bool)
     betaDisclaimerAcceptedChanged = Signal()
+    ukraineMessageSeenChanged = Signal()
+    licenseOfferSeenChanged = Signal()
 
     # These Signals are not needed yet, but who knows
     logLevelChanged = Signal(int)
@@ -153,7 +156,13 @@ class SettingsManager(QObject):
         self._settings.sync()
 
     def reset(self):
+        message_seen = self.ukraine_message_seen
+        offer_seen = self.license_offer_seen
         self._settings.clear() # Resets settings back to default
+        if offer_seen:
+            self._settings.setValue("Onboarding/license_offer_seen", True)
+        if message_seen:
+            self._settings.setValue("Onboarding/ukraine_message_seen", True)
         self._settings.sync()
 
     def get_bool(self, key: str, default: bool = False) -> bool:
@@ -308,6 +317,16 @@ class SettingsManager(QObject):
         if val != self.result_limit:
             self._settings.setValue("Video/result_limit", val)
             self.resultLimitChanged.emit(val)
+
+    @Property(bool, notify=systemNotificationsChanged)
+    def system_notifications(self) -> bool:
+        return self.get_bool("UI/system_notifications", False)
+
+    @system_notifications.setter
+    def system_notifications(self, enabled: bool):
+        if bool(enabled) != self.system_notifications:
+            self._settings.setValue("UI/system_notifications", bool(enabled))
+            self.systemNotificationsChanged.emit(bool(enabled))
 
     @Property(str, notify=outputPathChanged)
     def output_path(self) -> str:
@@ -573,6 +592,29 @@ class SettingsManager(QObject):
             self.reloadClients.emit(val)
 
     # System / Misc related
+    @Property(bool, notify=licenseOfferSeenChanged)
+    def license_offer_seen(self) -> bool:
+        return self.get_bool("Onboarding/license_offer_seen", False)
+
+    @Slot()
+    def mark_license_offer_seen(self) -> None:
+        if not self.license_offer_seen:
+            self._settings.setValue("Onboarding/license_offer_seen", True)
+            self._settings.sync()
+            self.licenseOfferSeenChanged.emit()
+
+    @Property(bool, notify=ukraineMessageSeenChanged)
+    def ukraine_message_seen(self) -> bool:
+        # Deliberately independent of the app version: updates must not replay it.
+        return self.get_bool("Onboarding/ukraine_message_seen", False)
+
+    @Slot()
+    def mark_ukraine_message_seen(self) -> None:
+        if not self.ukraine_message_seen:
+            self._settings.setValue("Onboarding/ukraine_message_seen", True)
+            self._settings.sync()
+            self.ukraineMessageSeenChanged.emit()
+
     @Property(bool, notify=betaDisclaimerAcceptedChanged)
     def beta_disclaimer_accepted(self) -> bool:
         return self._settings.value("Misc/beta_disclaimer_version", "") == BETA_DISCLAIMER_VERSION
@@ -608,20 +650,16 @@ class SettingsManager(QObject):
 
     @enable_logging.setter
     def enable_logging(self, val):
-        enabled = bool(val)
-        decision_changed = not self.error_reporting_decided
-        logging_changed = enabled != self.enable_logging
-        self._settings.setValue("Misc/error_reporting_decided", True)
-        self._settings.setValue("Misc/network_logging", enabled)
-        self._settings.sync()
-        if decision_changed:
-            self.errorReportingDecisionChanged.emit(True)
-        if logging_changed:
-            self.networkLoggingChanged.emit(enabled)
+        self.set_error_reporting_consent(bool(val))
 
     @Property(bool, notify=errorReportingDecisionChanged)
     def error_reporting_decided(self) -> bool:
-        return self.get_bool("Misc/error_reporting_decided", False)
+        if not self.get_bool("Misc/error_reporting_decided", False):
+            return False
+        return (
+            not self.get_bool("Misc/network_logging", False)
+            or self.get_int("Misc/error_reporting_consent_version", 0) == ERROR_REPORT_CONSENT_VERSION
+        )
 
     @Slot(bool)
     def set_error_reporting_consent(self, enabled: bool) -> None:
@@ -629,6 +667,7 @@ class SettingsManager(QObject):
         old_decided = self.error_reporting_decided
         old_enabled = self.enable_logging
         self._settings.setValue("Misc/error_reporting_decided", True)
+        self._settings.setValue("Misc/error_reporting_consent_version", ERROR_REPORT_CONSENT_VERSION)
         self._settings.setValue("Misc/network_logging", bool(enabled))
         self._settings.sync()
         if not old_decided:

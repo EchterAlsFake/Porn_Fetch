@@ -18,8 +18,8 @@ ApplicationWindow {
     palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
     palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
     font.pointSize: appSettings.font_size
-    Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
-    Material.accent: appSettings.accent_color
+    Material.theme: appSettings.high_contrast || appSettings.dark_mode ? Material.Dark : Material.Light
+    Material.accent: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
 
     width: 1350
     height: 720
@@ -31,7 +31,7 @@ ApplicationWindow {
     property alias safeToClose: shutdownController.safeToClose
     property bool startupContinued: false
 
-    ServiceTorFailureDialog {}
+    ServiceTorFailureDialog { presentationBlocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
 
     ActivityEdge {
         objectName: "activityEdge"
@@ -49,10 +49,20 @@ ApplicationWindow {
             return
         startupContinued = true
         if (appSettings.update_checks)
-            backend.check_for_updates()
+            backend.check_for_updates_background()
     }
 
     function continueAfterBetaDisclaimer() {
+        if (!licenseOfferDialog.presentOnce())
+            continueAfterLicenseOffer()
+    }
+
+    function continueAfterLicenseOffer() {
+        if (!ukraineMessageDialog.presentOnce())
+            continueAfterPersonalMessage()
+    }
+
+    function continueAfterPersonalMessage() {
         if (appSettings.error_reporting_decided)
             continueStartup()
         else
@@ -66,6 +76,18 @@ ApplicationWindow {
             Qt.callLater(function() { betaDisclaimerDialog.open() })
     }
 
+    LicenseOfferDialog {
+        id: licenseOfferDialog
+        settings: appSettings
+        onDismissed: window.continueAfterLicenseOffer()
+    }
+
+    UkraineMessageDialog {
+        id: ukraineMessageDialog
+        settings: appSettings
+        onDismissed: window.continueAfterPersonalMessage()
+    }
+
     BetaDisclaimerDialog {
         id: betaDisclaimerDialog
         disclaimer: betaDisclaimer
@@ -77,6 +99,11 @@ ApplicationWindow {
         id: shutdownController
         targetWindow: window
         backendController: backend
+    }
+
+    Connections {
+        target: typeof systemNotifier !== "undefined" ? systemNotifier : null
+        function onActivated() { navigation.currentIndex = 0; window.show(); window.raise(); window.requestActivate() }
     }
 
     Connections {
@@ -96,7 +123,8 @@ ApplicationWindow {
             updateDialog.statusMessage = ""
             updateDialog.downloadedBytes = 0
             updateDialog.totalBytes = 0
-            updateDialog.open()
+            if (!details.automatic)
+                updateDialog.open()
         }
 
         function onUpdateProgress(current, total) {
@@ -106,45 +134,12 @@ ApplicationWindow {
 
         function onUpdateStatus(status) {
             updateDialog.statusMessage = status
-            var normalized = status.toLowerCase()
-            if (normalized.indexOf("failed") !== -1
-                    || normalized.indexOf("successful") !== -1)
-                updateDialog.updateInProgress = false
         }
 
         function onUpdateFinished() {
             updateDialog.updateInProgress = false
         }
 
-    }
-
-    Connections {
-        target: bridge
-        function onLicenseRejected(message) {
-            licenseRejectedText.text = message
-            licenseRejectedDialog.open()
-        }
-    }
-
-    Dialog {
-        id: licenseRejectedDialog
-        parent: Overlay.overlay
-        anchors.centerIn: parent
-        width: Math.min(window.width - 48, 560)
-        modal: true
-        title: qsTr("License rejected")
-        standardButtons: Dialog.Ok
-
-        contentItem: Label {
-            id: licenseRejectedText
-            wrapMode: Text.Wrap
-            color: (appSettings.high_contrast ? "#ffffff" : "#f1f5f9")
-        }
-        background: Rectangle {
-            radius: 12
-            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
-            border.color: (appSettings.high_contrast ? "#ffffff" : "#ef4444")
-        }
     }
 
     Dialog {
@@ -179,7 +174,7 @@ ApplicationWindow {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("This is a one-time choice. Automatic error reporting is disabled until you explicitly enable it.")
+                text: qsTr("Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.")
                 color: (appSettings.high_contrast ? "#ffffff" : "#f1f5f9")
                 font.bold: true
                 wrapMode: Text.Wrap
@@ -200,6 +195,7 @@ ApplicationWindow {
                     Label {
                         Layout.fillWidth: true
                         text: backend.errorReportDisclosure
+                        textFormat: Text.PlainText
                         color: (appSettings.high_contrast ? "#ffffff" : "#d7dce5")
                         wrapMode: Text.Wrap
                     }
@@ -226,7 +222,8 @@ ApplicationWindow {
                             anchors.margins: 12
                             height: contentHeight
                             text: backend.errorReportExample
-                            color: (appSettings.high_contrast ? "#000000" : "#d7dce5")
+                            textFormat: TextEdit.PlainText
+                            color: (appSettings.high_contrast ? "#ffffff" : "#d7dce5")
                             font.family: "monospace"
                             font.pixelSize: 12 * appSettings.font_size / 12
                             readOnly: true
@@ -483,6 +480,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
 
                 TabButton {
+                    Accessible.name: qsTr("Downloads")
                     icon.source: "qrc:/images/graphics/download.svg"
                     icon.width: 24
                     icon.height: 24
@@ -491,6 +489,7 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    Accessible.name: qsTr("Account")
                     icon.source: "qrc:/images/graphics/account.svg"
                     icon.width: 24
                     icon.height: 24
@@ -499,6 +498,7 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    Accessible.name: qsTr("Statistics")
                     icon.source: "qrc:/images/graphics/database.svg"
                     icon.width: 24
                     icon.height: 24
@@ -507,6 +507,7 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    Accessible.name: qsTr("Settings")
                     icon.source: "qrc:/images/graphics/settings.svg"
                     icon.width: 24
                     icon.height: 24
@@ -515,6 +516,7 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    Accessible.name: qsTr("Information")
                     icon.source: "qrc:/images/graphics/information.svg"
                     icon.width: 24
                     icon.height: 24
@@ -522,6 +524,9 @@ ApplicationWindow {
                     display: AbstractButton.IconOnly
                 }
 
+            }
+            NotificationPanel {
+                blocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
             }
             Button {
                 text: qsTr("SUPPORTED WEBSITES")

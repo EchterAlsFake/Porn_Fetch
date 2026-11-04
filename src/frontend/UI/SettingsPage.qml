@@ -146,7 +146,11 @@ Pane {
             height: Math.min(window.height - 24, 650)
             modal: true
             title: qsTr("Import License File")
-            contentItem: LicenseWidget { anchors.fill: parent }
+            contentItem: ScrollView {
+                contentWidth: availableWidth
+                clip: true
+                LicenseWidget { width: parent.width; height: implicitHeight }
+            }
         }
 
         // RowLayout arranges its children horizontally.
@@ -603,9 +607,10 @@ Pane {
                                 Accessible.description: AppStrings.parallelDownloadsHelp
                                 Layout.fillWidth: true
                                 editable: true
-                                to: 100
+                                from: 1
+                                to: bridge.isPremium ? 100 : 1
                                 value: appSettings.parallel_downloads
-                                onValueModified: appSettings.parallel_downloads = value
+                                onValueModified: backend.set_parallel_downloads(value)
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -718,12 +723,19 @@ Pane {
                                 Layout.fillWidth: true
                                 rowSpacing: 15
 
-                                Label {
-                                    text: qsTr("Response Cache Size (MB/s)")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Response cache size (MB)")
+                                    }
+                                    HelpButton { helpText: AppStrings.responseCacheSizeHelp }
                                 }
                                 SpinBox {
                                     objectName: "responseCacheSizeSpinBox"
-                                    Accessible.name: qsTr("Response Cache Size (MB/s)")
+                                    Accessible.name: qsTr("Response cache size (MB)")
+                                    Accessible.description: AppStrings.responseCacheSizeHelp
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 2000
@@ -731,12 +743,19 @@ Pane {
                                     onValueModified: appSettings.response_cache_size = value
                                 }
 
-                                Label {
-                                    text: qsTr("Response Cache TTL (Seconds)")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Response cache lifetime (seconds)")
+                                    }
+                                    HelpButton { helpText: AppStrings.responseCacheTTLHelp }
                                 }
                                 SpinBox {
                                     objectName: "responseCacheTTLSpinBox"
-                                    Accessible.name: qsTr("Response Cache TTL (Seconds)")
+                                    Accessible.name: qsTr("Response cache lifetime (seconds)")
+                                    Accessible.description: AppStrings.responseCacheTTLHelp
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 20000
@@ -744,12 +763,19 @@ Pane {
                                     onValueModified: appSettings.response_cache_ttl = value
                                 }
 
-                                Label {
-                                    text: qsTr("Segment Cache Size (MB/s)")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Segment-list cache size (MB)")
+                                    }
+                                    HelpButton { helpText: AppStrings.segmentCacheSizeHelp }
                                 }
                                 SpinBox {
                                     objectName: "segmentCacheSizeSpinBox"
-                                    Accessible.name: qsTr("Segment Cache Size (MB/s)")
+                                    Accessible.name: qsTr("Segment-list cache size (MB)")
+                                    Accessible.description: AppStrings.segmentCacheSizeHelp
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 2000
@@ -757,12 +783,19 @@ Pane {
                                     onValueModified: appSettings.segment_cache_size = value
                                 }
 
-                                Label {
-                                    text: qsTr("Segment Cache TTL (Seconds)")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Segment-list cache lifetime (seconds)")
+                                    }
+                                    HelpButton { helpText: AppStrings.segmentCacheTTLHelp }
                                 }
                                 SpinBox {
                                     objectName: "segmentCacheTTLSpinBox"
-                                    Accessible.name: qsTr("Segment Cache TTL (Seconds)")
+                                    Accessible.name: qsTr("Segment-list cache lifetime (seconds)")
+                                    Accessible.description: AppStrings.segmentCacheTTLHelp
                                     Layout.fillWidth: true
                                     editable: true
                                     to: 20000
@@ -770,48 +803,76 @@ Pane {
                                     onValueModified: appSettings.segment_cache_ttl = value
                                 }
 
-                                Label {
-                                    text: qsTr("Request Initial Retry Delay")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Initial retry wait (seconds)")
+                                    }
+                                    HelpButton { helpText: AppStrings.retryInitialDelayHelp }
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestInitialRetryDelaySpinBox"
-                                    Accessible.name: qsTr("Request Initial Retry Delay")
+                                    Accessible.name: qsTr("Initial retry wait (seconds)")
+                                    Accessible.description: AppStrings.retryInitialDelayHelp
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_initial_retry_delay
                                     onRealValueModified: (newValue) => appSettings.request_initial_retry_delay = newValue
                                 }
 
-                                Label {
-                                    text: qsTr("Request Retry Max Delay")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Maximum retry wait (seconds)")
+                                    }
+                                    HelpButton { helpText: AppStrings.retryMaxDelayHelp }
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryMaxDelaySpinBox"
-                                    Accessible.name: qsTr("Request Retry Max Delay")
+                                    Accessible.name: qsTr("Maximum retry wait (seconds)")
+                                    Accessible.description: AppStrings.retryMaxDelayHelp
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_max_delay
                                     onRealValueModified: (newValue) => appSettings.request_retry_max_delay = newValue
                                 }
 
-                                Label {
-                                    text: qsTr("Request Retry Multiplier")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Retry wait multiplier")
+                                    }
+                                    HelpButton { helpText: AppStrings.retryMultiplierHelp }
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryMultiplierSpinBox"
-                                    Accessible.name: qsTr("Request Retry Multiplier")
+                                    Accessible.name: qsTr("Retry wait multiplier")
+                                    Accessible.description: AppStrings.retryMultiplierHelp
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_multiplier
                                     onRealValueModified: (newValue) => appSettings.request_retry_multiplier = newValue
                                 }
 
-                                Label {
-                                    text: qsTr("Request Retry Jitter")
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        text: qsTr("Random extra retry wait (seconds)")
+                                    }
+                                    HelpButton { helpText: AppStrings.retryJitterHelp }
                                 }
                                 DecimalSpinBox {
                                     objectName: "requestRetryJitterSpinBox"
-                                    Accessible.name: qsTr("Request Retry Jitter")
+                                    Accessible.name: qsTr("Random extra retry wait (seconds)")
+                                    Accessible.description: AppStrings.retryJitterHelp
                                     Layout.fillWidth: true
                                     realTo: 20000
                                     realValue: appSettings.request_retry_jitter
@@ -838,7 +899,7 @@ Pane {
 
                         GridLayout {
                             columnSpacing: 15
-                            columns: window.compact ? 1 : 2
+                            columns: 2
                             width: scrollviewSettings.availableWidth
                             Layout.fillWidth: true
                             rowSpacing: 15
@@ -856,15 +917,39 @@ Pane {
                                 checked: appSettings.update_checks
                                 onToggled: appSettings.update_checks = checked
                             }
+                            Button {
+                                text: qsTr("Check for app updates")
+                                Layout.columnSpan: 2
+                                Layout.fillWidth: true
+                                onClicked: backend.check_for_updates()
+                            }
+                            HelpButton {
+                                helpText: AppStrings.systemNotificationsHelp
+                            }
+                            CheckBox {
+                                Layout.fillWidth: true
+                                text: qsTr("System notifications when the app is inactive")
+                                objectName: "systemNotificationsCheckBox"
+                                checked: appSettings.system_notifications
+                                onToggled: appSettings.system_notifications = checked
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.columnSpan: 2
+                                visible: text !== ""
+                                text: typeof systemNotifier !== "undefined" ? systemNotifier.status : ""
+                                textFormat: Text.PlainText
+                                wrapMode: Text.Wrap
+                            }
                             HelpButton {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.supressErrors
                             }
                             CheckBox {
                                 objectName: "supressErrorsCheckBox"
-                                Accessible.name: qsTr("Ignore Errors")
+                                Accessible.name: qsTr("Reduce repeated error announcements")
                                 Accessible.description: AppStrings.supressErrors
-                                text: qsTr("Ignore Errors")
+                                text: qsTr("Reduce repeated error announcements")
                                 Layout.fillWidth: true
                                 checked: appSettings.supress_errors
                                 onToggled: appSettings.supress_errors = checked
@@ -875,10 +960,10 @@ Pane {
                             }
                             CheckBox {
                                 objectName: "enableLoggingCheckBox"
-                                Accessible.name: qsTr("Allow redacted error reports")
+                                Accessible.name: qsTr("Send tracebacks and video URLs")
                                 Accessible.description: backend.errorReportDisclosure
                                 // Use \n for multi-line text
-                                text: qsTr("Allow redacted error reports")
+                                text: qsTr("Send tracebacks and video URLs")
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_logging
                                 onToggled: appSettings.enable_logging  = checked
@@ -1236,9 +1321,15 @@ Pane {
                                 Accessible.name: qsTr("Graphical User Interface Language")
                                 Accessible.description: AppStrings.guiLanguageHelp
                                 Layout.fillWidth: true
-                                model: appSettings.ui_languages
-                                currentIndex: appSettings.language
-                                onActivated: appSettings.language = currentIndex
+                                model: ["English"]
+                                currentIndex: 0
+                                enabled: false
+                            }
+                            Label {
+                                Layout.columnSpan: 3
+                                Layout.fillWidth: true
+                                wrapMode: Text.WordWrap
+                                text: qsTr("Porn Fetch is English-only. Translations are not available yet.")
                             }
                             Label { text: qsTr("Accessibility") }
                             CheckBox {
@@ -1390,12 +1481,6 @@ Pane {
                 }
             }
 
-            Label {
-                Layout.fillWidth: true
-                text: qsTr("Purchase a license on the website, then paste the signed key or import your license file. Automatic app updates are free for everyone. Licenses provide premium features for entitled versions.")
-                wrapMode: Text.WordWrap
-            }
-
             // Row 2
             RowLayout {
                 Layout.fillWidth: true
@@ -1420,37 +1505,24 @@ Pane {
 
             }
 
-            // Row 3
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 10
-
-                Loader {
-                    id: dialogLoader
-                }
-
+                visible: backend.maintenance_available
                 Button {
-                    Accessible.name: qsTr("Install Porn Fetch")
+                    objectName: "manageInstallationButton"
                     Layout.fillWidth: true
-                    Material.background: "#10b981" // Success Green color
-                    Material.foreground: "white"
-                    text: qsTr("Install Porn Fetch")
-                    onClicked: {
-                        dialogLoader.source = "InstallDialog.qml"
-                        dialogLoader.item.acceptedInput.connect(function(inputValue) {backend.install_pornfetch(inputValue)})
-                        dialogLoader.item.open()
-                    }
+                    text: qsTr("Manage installation")
+                    Accessible.name: text
+                    onClicked: backend.open_maintenance("components")
                 }
-
                 Button {
-                    Accessible.name: qsTr("Uninstall Porn Fetch")
+                    objectName: "uninstallButton"
                     Layout.fillWidth: true
-                    Material.background: "#ef4444" // Danger Red color
-                    Material.foreground: "white"
                     text: qsTr("Uninstall Porn Fetch")
-                    onClicked: {backend.uninstall_pornfetch()}
+                    Accessible.name: text
+                    onClicked: backend.open_maintenance("uninstall")
                 }
-
             }
         }
     }

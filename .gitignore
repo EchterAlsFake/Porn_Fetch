@@ -11,6 +11,7 @@ htmlcov/
 
 # Virtual environments and Python tooling
 .venv/
+.venv-termux/
 venv/
 env/
 .tox/
@@ -83,3 +84,7 @@ desktop.ini
 .pyside6_android_deploy_patch/
 src/shared/tor/
 examples/
+
+# Locally resolved dependencies and generated Android deployment settings
+/uv.lock
+/pysidedeploy.spec

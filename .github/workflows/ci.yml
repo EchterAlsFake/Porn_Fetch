@@ -23,7 +23,7 @@ jobs:
       QT_QPA_PLATFORM: offscreen
       QT_QUICK_BACKEND: software
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Linux Qt runtime libraries
         run: |
@@ -38,51 +38,56 @@ jobs:
           tar -xzf /tmp/actionlint.tar.gz -C /tmp
           /tmp/actionlint -color
 
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.15"
 
-      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
 
       - name: Install development dependencies
-        run: uv sync --locked --extra gui --group dev
+        run: uv sync --upgrade --extra gui --group dev
 
       - name: Apply and verify required QtAsyncio compatibility patch
         run: |
           uv run --no-sync python scripts/patch_qtasyncio.py .venv
           uv run --no-sync python scripts/patch_qtasyncio.py .venv --verify
 
-      - name: Check lockfile
-        run: uv lock --check
-
       - name: Lint maintained Python modules
-        run: uv run --locked ruff check main.py Porn_Fetch_CLI.py src/shared src/database src/licensing src/cli src/tests scripts packaging
+        run: uv run --no-sync ruff check main.py Porn_Fetch_CLI.py src/shared src/database src/licensing src/cli src/tests scripts packaging
+
+      - name: Check GUI backend for Python errors
+        # Startup imports are intentionally interleaved with splash initialization.
+        # Enforce correctness now without requiring a release-time import-order rewrite.
+        run: uv run --no-sync ruff check src/backend --select E9,F63,F7,F82
+
+      - name: Validate translation catalogs
+        run: uv run --no-sync python scripts/translations.py check
 
       - name: Check focused type boundaries
-        run: uv run --locked pyright
+        run: uv run --no-sync pyright
 
       - name: Compile Python sources
-        run: uv run --locked python -m compileall -q main.py Porn_Fetch_CLI.py src scripts packaging
+        run: uv run --no-sync python -m compileall -q main.py Porn_Fetch_CLI.py src scripts packaging
 
       - name: Load the GUI offline
-        run: uv run --locked python main.py --smoke-test
+        run: uv run --no-sync python main.py --smoke-test
 
       - name: Run offline unit tests
-        run: uv run --locked coverage run -m unittest discover -s src/tests/unit -p "test_*.py"
+        run: uv run --no-sync coverage run -m unittest discover -s src/tests/unit -p "test_*.py"
 
       - name: Run integration tests
-        run: uv run --locked coverage run --append -m unittest discover -s src/tests/integration -p "test_*.py"
+        run: uv run --no-sync coverage run --append -m unittest discover -s src/tests/integration -p "test_*.py"
 
       - name: Report coverage
-        run: uv run --locked coverage report
+        run: uv run --no-sync coverage report
 
       - name: Run the Qt-free CLI checks
-        run: uv run --locked porn-fetch-cli --test-mode --filter offline
+        run: uv run --no-sync porn-fetch-cli --test-mode --filter offline
 
       - name: Verify packaged version metadata
-        run: uv run --locked python -c "from importlib.metadata import version; from src.shared.version import __version__; assert version('Porn_Fetch') == __version__"
+        run: uv run --no-sync python -c "from importlib.metadata import version; from src.shared.version import __version__; assert version('Porn_Fetch') == __version__"
 
       - name: Build wheel and source archive
         run: uv build
@@ -94,5 +99,4 @@ jobs:
           path: dist/*
 
       - name: Audit installed dependencies
-        continue-on-error: true
-        run: uv run --locked pip-audit --local --skip-editable
+        run: uv run --no-sync pip-audit --local --skip-editable

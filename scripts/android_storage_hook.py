@@ -118,15 +118,20 @@ def before_apk_assemble(toolchain) -> None:
     platform_call = "org.kivy.android.PornFetchPlatform.install(this);"
     if platform_call not in patched:
         patched = patched.replace(call, call + "\n        " + platform_call, 1)
+    notification_call = "org.kivy.android.PornFetchNotifications.install(this);"
+    if notification_call not in patched:
+        patched = patched.replace(platform_call, platform_call + "\n        " + notification_call, 1)
     helper = Path(__file__).parent / "android" / "PornFetchDisplay.java"
     (activity.parent / helper.name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
-    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java"):
+    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java", "PornFetchNotifications.java"):
         helper = Path(__file__).parent / "android" / name
         (activity.parent / name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
     for manifest in (Path(toolchain._dist.dist_dir) / "src/main/AndroidManifest.xml",
                      Path(toolchain._dist.dist_dir) / "AndroidManifest.xml"):
         if manifest.is_file():
             text = manifest.read_text(encoding="utf-8")
+            if "android.permission.POST_NOTIFICATIONS" not in text:
+                text = text.replace("<application", '<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n<application', 1)
             if "PornFetchUpdateProvider" not in text:
                 text = text.replace("</application>", '<provider android:name="org.kivy.android.PornFetchUpdateProvider" '
                                     'android:authorities="to.pornfetch.app.updates" android:exported="false" '

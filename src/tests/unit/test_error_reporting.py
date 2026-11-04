@@ -2,20 +2,22 @@ from __future__ import annotations
 
 import json
 import tempfile
+import traceback
 import unittest
 from io import StringIO
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
+from base_api.modules.errors import MediaLoadErrors
 from rich.console import Console
 
 from src.cli.settings import CliSettings, SettingsStore, prompt_error_reporting_consent
 from src.shared.error_reporting import (
+    ERROR_REPORT_CONSENT_VERSION,
     ERROR_REPORT_DISCLOSURE,
     ERROR_REPORT_EXAMPLE,
     MAX_BODY_BYTES,
-    MAX_MESSAGE_CHARS,
     _payload_bytes,
     build_error_report,
     redact_log_text,
@@ -28,12 +30,13 @@ from src.shared.error_reporting import (
 class ErrorReportFormattingTests(unittest.TestCase):
     def test_first_run_text_describes_the_actual_report(self) -> None:
         for detail in (
-            "correlation ID", "UTC timestamp", "query strings", "cookies",
-            "2,000 characters", "4 KiB", "not to log or store client IP addresses",
+            "correlation ID", "UTC timestamp", "full Python traceback", "video URL",
+            "query string", "cookies", "securely stored", "never shared with third parties",
+            "used only to reproduce, diagnose and fix", "not anonymous",
         ):
             self.assertIn(detail, ERROR_REPORT_DISCLOSURE)
-        self.assertNotIn("video_url=", ERROR_REPORT_EXAMPLE)
-        self.assertIn("functions=", ERROR_REPORT_EXAMPLE)
+        self.assertIn('"video_url":', ERROR_REPORT_EXAMPLE)
+        self.assertIn("Traceback (most recent call last):", ERROR_REPORT_EXAMPLE)
 
     def test_safe_url_preserves_reproduction_path_only(self) -> None:
         value = safe_url("https://user:password@example.com/watch/abc?token=secret#private")
@@ -55,10 +58,14 @@ class ErrorReportFormattingTests(unittest.TestCase):
             self.assertNotIn(secret, redacted)
         self.assertIn("https://example.com/", redacted)
 
-    def test_report_has_context_traceback_and_contract_limits(self) -> None:
+    def test_report_has_full_chained_traceback_and_reproduction_context(self) -> None:
         try:
-            raise RuntimeError("synthetic failure")
+            try:
+                raise ValueError("original provider failure " + "漢" * 3000)
+            except ValueError as cause:
+                raise RuntimeError("synthetic failure") from cause
         except RuntimeError as error:
+            expected_traceback = "".join(traceback.format_exception(error))
             message, report_id = build_error_report(
                 error,
                 operation="scrape video",
@@ -68,29 +75,49 @@ class ErrorReportFormattingTests(unittest.TestCase):
             )
 
         self.assertEqual(report_id, "test-correlation")
-        self.assertNotIn("operation=", message)
-        self.assertNotIn("location=", message)
-        self.assertNotIn("example.com", message)
-        self.assertIn("functions=", message)
+        self.assertIn("operation=scrape video", message)
+        self.assertIn("location=Example.scrape", message)
+        self.assertIn("https://example.com/video/42?account=private", message)
         self.assertIn("error_type=RuntimeError", message)
-        self.assertNotIn("synthetic failure", message)
-        self.assertLessEqual(len(message), MAX_MESSAGE_CHARS)
-        self.assertLessEqual(len(_payload_bytes(message)), MAX_BODY_BYTES)
+        self.assertIn(expected_traceback, message)
+        self.assertGreater(len(_payload_bytes(message)), 4096)
         self.assertEqual(set(json.loads(_payload_bytes(message))), {"message"})
+
+    def test_media_source_failure_includes_its_own_traceback(self) -> None:
+        try:
+            raise ValueError("provider source failed")
+        except ValueError as source_error:
+            expected_traceback = "".join(traceback.format_exception(source_error))
+            error = MediaLoadErrors((source_error,))
+
+        message, _ = build_error_report(error, operation="load sources", location="provider")
+        self.assertIn("MediaLoadErrors", message)
+        self.assertIn("Media source failure 1:", message)
+        self.assertIn(expected_traceback, message)
 
 
 class ErrorReportDeliveryTests(unittest.IsolatedAsyncioTestCase):
     async def test_delivery_uses_exact_public_contract(self) -> None:
+        message = (
+            "video_url=https://example.com/watch?v=42&token=reproduction\n"
+            + "traceback line 漢\n" * 500
+            + "RuntimeError: original exception message\n"
+        )
         session = AsyncMock()
         session.post.return_value.status_code = 204
         with patch("src.shared.error_reporting.AsyncSession", return_value=session):
-            delivered = await report_public_error("synthetic diagnostic")
+            delivered = await report_public_error(message)
 
         self.assertTrue(delivered)
         _, kwargs = session.post.await_args
-        self.assertEqual(json.loads(kwargs["content"]), {"message": "synthetic diagnostic"})
+        self.assertEqual(json.loads(kwargs["content"]), {"message": message})
         self.assertFalse(kwargs["allow_redirects"])
         session.close.assert_awaited_once()
+
+    async def test_oversized_report_is_not_silently_shortened(self) -> None:
+        with patch("src.shared.error_reporting.AsyncSession") as session:
+            self.assertFalse(await report_public_error("x" * MAX_BODY_BYTES))
+        session.assert_not_called()
 
     async def test_disabled_reporting_does_not_send(self) -> None:
         with patch(
@@ -107,6 +134,24 @@ class ErrorReportDeliveryTests(unittest.IsolatedAsyncioTestCase):
 
 
 class ErrorReportConsentTests(unittest.IsolatedAsyncioTestCase):
+    async def test_existing_opt_in_requires_consent_for_detailed_reports(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            store = SettingsStore(Path(directory) / "settings.json")
+            store.save(CliSettings(error_reporting=True, error_reporting_decided=True))
+            loaded = store.load()
+
+        self.assertFalse(loaded.error_reporting)
+        self.assertFalse(loaded.error_reporting_decided)
+
+    async def test_existing_opt_out_stays_disabled_without_another_prompt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            store = SettingsStore(Path(directory) / "settings.json")
+            store.save(CliSettings(error_reporting=False, error_reporting_decided=True))
+            loaded = store.load()
+
+        self.assertFalse(loaded.error_reporting)
+        self.assertTrue(loaded.error_reporting_decided)
+
     async def test_legacy_enabled_value_is_inactive_until_decided(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             store = SettingsStore(Path(directory) / "settings.json")
@@ -136,6 +181,7 @@ class ErrorReportConsentTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(updated.error_reporting_decided)
         self.assertTrue(loaded.error_reporting)
         self.assertTrue(loaded.error_reporting_decided)
+        self.assertEqual(loaded.error_reporting_consent_version, ERROR_REPORT_CONSENT_VERSION)
 
     async def test_cancelled_cli_prompt_does_not_record_consent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
