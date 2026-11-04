@@ -17,20 +17,12 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.macos_bundle import is_macho, relocate_resources  # noqa: E402
+
 PROFILE = "pornfetch-notary"
-MACHO_MAGIC = {
-    bytes.fromhex(value)
-    for value in (
-        "feedface",
-        "cefaedfe",
-        "feedfacf",
-        "cffaedfe",
-        "cafebabe",
-        "bebafeca",
-        "cafebabf",
-        "bfbafeca",
-    )
-}
 
 
 def run(command, *, sensitive=False, check=True, timeout=None):
@@ -159,13 +151,6 @@ def setup():
     print("Developer ID identity and notarization credentials are ready in the temporary keychain.")
 
 
-def is_macho(path):
-    if path.is_symlink() or not path.is_file():
-        return False
-    with path.open("rb") as source:
-        return source.read(4) in MACHO_MAGIC
-
-
 def verify(path):
     team = os.environ["PORN_FETCH_MACOS_TEAM_ID"]
     requirement = (
@@ -184,6 +169,8 @@ def sign(path, runtime="none"):
     path = Path(path).absolute()
     if path.is_symlink() or not path.exists():
         raise ValueError(f"Missing or symlinked signing input: {path}")
+    if path.suffix == ".app":
+        relocate_resources(path)
     files = [item for item in path.rglob("*") if is_macho(item)] if path.is_dir() else [path]
     if not files or (path.is_file() and path.suffix != ".dmg" and not is_macho(path)):
         raise ValueError(f"No Mach-O code to sign: {path}")
@@ -202,6 +189,9 @@ def sign(path, runtime="none"):
         if Path(executable).name != executable:
             raise ValueError("Invalid CFBundleExecutable")
         main_binary = path / "Contents/MacOS" / executable
+        # codesign recognizes this as the enclosing app. Sign it through the
+        # bundle only, after every nested library and helper has been signed.
+        files = [binary for binary in files if binary != main_binary]
     for item in [*sorted(files), *sorted(containers, key=lambda p: (-len(p.parts), str(p)))]:
         command = [
             "codesign",
@@ -221,27 +211,51 @@ def sign(path, runtime="none"):
     print(f"Developer ID signature verified: {path.name}")
 
 
-def submit(archive):
-    arguments = ["--keychain-profile", PROFILE, "--keychain", os.environ["PORN_FETCH_MACOS_KEYCHAIN"]]
-    result = run(
-        ["xcrun", "notarytool", "submit", archive, *arguments, "--wait", "--timeout", "30m", "--output-format", "json"],
-        check=False,
-    )
+def notary_result(command, directory, phase):
+    result = run(["xcrun", "notarytool", *command, "--output-format", "json"], check=False)
+    (directory / f"{phase}.stdout.txt").write_text(result.stdout, encoding="utf-8")
+    (directory / f"{phase}.stderr.txt").write_text(result.stderr, encoding="utf-8")
     try:
         response = json.loads(result.stdout)
     except ValueError:
+        response = None
+    return result, response if isinstance(response, dict) else None
+
+
+def submit(archive):
+    arguments = ["--keychain-profile", PROFILE, "--keychain", os.environ["PORN_FETCH_MACOS_KEYCHAIN"]]
+    reports = Path(os.environ["RUNNER_TEMP"]) / "porn-fetch-build-logs/notarization"
+    reports.mkdir(parents=True, exist_ok=True)
+    diagnostics = Path(tempfile.mkdtemp(prefix="submission-", dir=reports))
+    # Obtain and retain the ID before waiting: a wait timeout can suppress JSON.
+    result, response = notary_result(["submit", archive, *arguments, "--no-wait"], diagnostics, "submit")
+    identifier = response.get("id", "") if response else ""
+    if result.returncode or not re.fullmatch(r"[A-Za-z0-9-]+", identifier):
         raise RuntimeError(
-            "notarytool did not return a submission result; check Apple service availability and the signing credentials"
-        ) from None
-    identifier = response.get("id", "")
-    if re.fullmatch(r"[A-Za-z0-9-]+", identifier):
-        reports = Path(os.environ["RUNNER_TEMP"]) / "porn-fetch-build-logs/notarization"
-        reports.mkdir(parents=True, exist_ok=True)
-        (reports / f"{identifier}.json").write_text(json.dumps(response, indent=2), encoding="utf-8")
+            f"Notary upload failed (exit {result.returncode}); see {diagnostics} for Apple's response."
+        )
+    report = reports / f"{identifier}.json"
+    report.write_text(json.dumps(response, indent=2), encoding="utf-8")
+    print(f"Apple notarization submitted: {identifier}", flush=True)
+    result, response = notary_result(
+        ["wait", identifier, *arguments, "--timeout", "60m"], diagnostics, "wait"
+    )
+    if result.returncode or response is None:
+        info, current = notary_result(["info", identifier, *arguments], diagnostics, "info")
+        if not info.returncode and current is not None:
+            response = current
+    status = response.get("status", "Unknown") if response else "Unknown"
+    report.write_text(json.dumps(response or {"id": identifier, "status": status}, indent=2), encoding="utf-8")
+    if status not in {"In Progress", "Unknown"}:
         run(["xcrun", "notarytool", "log", identifier, *arguments, reports / f"{identifier}.log.json"], check=False)
-    if result.returncode or response.get("status") != "Accepted":
+    if status == "In Progress":
         raise RuntimeError(
-            f"Apple notarization was not accepted (submission {identifier or 'unknown'}). See the notarization build logs."
+            f"Apple notarization is still In Progress after the wait (submission {identifier}). "
+            f"Apple continues processing it; see {diagnostics}."
+        )
+    if status != "Accepted":
+        raise RuntimeError(
+            f"Apple notarization was not accepted (submission {identifier}, status {status}). See {diagnostics}."
         )
     print(f"Apple notarization accepted: {identifier}")
 

@@ -1145,6 +1145,13 @@ jobs:
             uv run --no-sync python scripts/write_checksum.py PornFetch_Linux_CLI_riscv64
             uv run --no-sync python packaging/collect_legal.py PornFetch_Linux_CLI_riscv64_LEGAL
 
+      - name: Restore runner ownership of RISC-V build logs
+        if: always()
+        run: |
+          if [ -d build/riscv64-logs ]; then
+            sudo chown -R "$(id -u):$(id -g)" build/riscv64-logs
+          fi
+
       - name: Report release sizes
         uses: ./.github/actions/report-sizes
         with:

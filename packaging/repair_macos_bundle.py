@@ -14,21 +14,9 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_output  # noqa: E402
+from scripts.macos_bundle import is_macho, relocate_resources  # noqa: E402
 
-MACHO_MAGIC = {
-    b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",
-    b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",
-    b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",
-    b"\xca\xfe\xba\xbf", b"\xbf\xba\xfe\xca",
-}
 QT_FRAMEWORK = re.compile(r"(?:^|/)(Qt[^/]+)\.framework/(?:Versions/[^/]+/)?\1$")
-
-
-def is_macho(path: Path) -> bool:
-    if path.is_symlink() or not path.is_file():
-        return False
-    with path.open("rb") as binary:
-        return binary.read(4) in MACHO_MAGIC
 
 
 def dependencies(path: Path) -> list[str]:
@@ -104,6 +92,7 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
             if dependency != replacement:
                 changes.setdefault(binary, []).append((dependency, replacement))
 
+    relocated = relocate_resources(bundle)
     for target, source in frameworks_to_copy.items():
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(source, target, symlinks=True)
@@ -122,7 +111,7 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
             binary.chmod(mode)
         build_output.detail(f"Repaired Qt dependencies: {binary.relative_to(bundle)}")
 
-    if changes or frameworks_to_copy:
+    if changes or frameworks_to_copy or relocated:
         # Mach-O edits invalidate the build's signature, including nested code.
         # Nuitka places some libraries under Contents/MacOS, outside the usual
         # framework/plugin directories traversed by codesign --deep.

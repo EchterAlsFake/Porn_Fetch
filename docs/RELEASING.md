@@ -77,6 +77,10 @@ on failure too. Signing or timestamp failures stop the release job.
 identity, checks notarization credentials, and removes the keychain afterwards.
 Local builds are only ad-hoc signed; official releases must not fall back to that.
 
+Runtime data is moved to `Contents/Resources/runtime` before signing, with relative
+symlinks preserving the paths expected by bundled packages. Data must not occupy
+macOS code locations; see [Apple's bundle layout guidance](https://developer.apple.com/library/archive/technotes/tn2206/).
+
 1. Repair native dependencies, sign inner Mach-O files and bundles, then sign
    the app. Use hardened runtime and only the required entitlements.
 2. Notarize and staple the app, then make, sign, notarize and staple its DMG.
@@ -87,7 +91,11 @@ Local builds are only ad-hoc signed; official releases must not fall back to tha
 
 Notarization must return `Accepted`. Bare CLI executables and ZIP files cannot
 be stapled; macOS retrieves their tickets online. Rejections and missing credentials
-fail the job. Notarization logs are retained with build diagnostics. See
+fail the job. Each upload records its submission ID before waiting up to 60 minutes.
+If the wait times out, CI checks that same submission and retains its status and
+the tool's stdout/stderr in the build diagnostics. `In Progress` means Apple is
+still processing it; use the recorded ID with `notarytool info` or `wait` and your
+notarization credentials to check it later. See
 [Apple's notarization guide](https://developer.apple.com/documentation/security/customizing-the-notarization-workflow)
 and [Qt's maintenance component procedure](https://doc.qt.io/qtinstallerframework/ifw-updates.html#populating-the-maintenance-tool-component).
 

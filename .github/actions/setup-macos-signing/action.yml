@@ -5,3 +5,6 @@ runs:
   steps:
     - shell: bash
       run: python3 packaging/sign_macos.py setup
+    - name: Check native app signing before compilation
+      shell: bash
+      run: uv run --no-sync python -m unittest src.tests.unit.test_macos_signing.NativeMacOSSigningTests

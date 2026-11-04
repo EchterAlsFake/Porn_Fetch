@@ -6,7 +6,9 @@ import io
 import json
 import os
 import plistlib
+import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -79,6 +81,7 @@ class MacOSSigningTests(unittest.TestCase):
         self.assertLess(paths.index(framework_binary), paths.index(framework))
         self.assertLess(paths.index(framework), paths.index(app))
         self.assertIn(library, paths)
+        self.assertNotIn(main, paths)
         self.assertNotIn(framework / "QtCore", paths)
         for command in signed:
             self.assertNotIn("--deep", command)
@@ -88,12 +91,36 @@ class MacOSSigningTests(unittest.TestCase):
             else:
                 self.assertNotIn("--entitlements", command)
 
+    def test_bundle_data_moves_to_resources_and_remains_readable_at_runtime_paths(self):
+        app = self.root / "Example.app"
+        macos = app / "Contents/MacOS"
+        main = native(macos / "Example")
+        library = native(macos / "package/native.so")
+        data = ("LICENSES/Monero-CC-BY-SA-4.0.txt", "src/frontend/resources.rcc", "package/data.json")
+        for name in data:
+            path = macos / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(name)
+        with (app / "Contents/Info.plist").open("wb") as output:
+            plistlib.dump({"CFBundleExecutable": "Example"}, output)
+        with patch.object(signing, "run"):
+            signing.sign(app, "python")
+            signing.sign(app, "python")  # Re-signing staged IFW bundles must be safe.
+        for name in data:
+            path = macos / name
+            self.assertTrue(path.is_symlink())
+            self.assertEqual(path.read_text(), name)
+            self.assertEqual(path.resolve(), app / "Contents/Resources/runtime" / name)
+            self.assertFalse(path.readlink().is_absolute())
+        self.assertFalse(main.is_symlink())
+        self.assertFalse(library.is_symlink())
+
     def test_notarization_failure_never_staples_or_passes_gatekeeper(self):
         commands = []
 
         def invoke(command, **kwargs):
             commands.append(command)
-            result = {"id": "test-submission", "status": "Invalid"} if "submit" in command else {}
+            result = {"id": "test-submission", "status": "Invalid"} if command[2] in {"submit", "wait"} else {}
             return SimpleNamespace(returncode=0, stdout=json.dumps(result), stderr="")
 
         with patch.object(signing, "run", side_effect=invoke):
@@ -119,6 +146,44 @@ class MacOSSigningTests(unittest.TestCase):
         self.assertTrue(any("staple" in command for command in commands))
         self.assertTrue(any("validate" in command for command in commands))
         self.assertTrue(any(command[0] == "spctl" for command in commands))
+
+    def test_wait_timeout_checks_existing_submission_without_uploading_again(self):
+        commands = []
+
+        def invoke(command, **kwargs):
+            commands.append(command)
+            if "wait" in command:
+                return SimpleNamespace(returncode=9, stdout="", stderr="Timeout reached")
+            status = "Accepted" if "info" in command else "In Progress"
+            return SimpleNamespace(returncode=0, stdout=json.dumps({"id": "delayed", "status": status}), stderr="")
+
+        with patch.object(signing, "run", side_effect=invoke):
+            signing.submit(self.root / "payload.zip")
+        self.assertEqual(sum("submit" in command for command in commands), 1)
+        upload = next(command for command in commands if "submit" in command)
+        self.assertIn("--no-wait", upload)
+        wait = next(command for command in commands if "wait" in command)
+        self.assertEqual(wait[wait.index("--timeout") + 1], "60m")
+        reports = self.root / "porn-fetch-build-logs/notarization"
+        self.assertEqual(json.loads((reports / "delayed.json").read_text())["status"], "Accepted")
+        self.assertEqual(next(reports.glob("submission-*/wait.stderr.txt")).read_text(), "Timeout reached")
+
+    def test_pending_notarization_reports_id_and_never_staples(self):
+        commands = []
+
+        def invoke(command, **kwargs):
+            commands.append(command)
+            if "wait" in command:
+                return SimpleNamespace(returncode=9, stdout="", stderr="Timeout reached")
+            return SimpleNamespace(returncode=0, stdout=json.dumps({"id": "pending", "status": "In Progress"}),
+                                   stderr="")
+
+        with patch.object(signing, "run", side_effect=invoke):
+            with self.assertRaisesRegex(RuntimeError, "still In Progress.*submission pending"):
+                signing.notarize(self.root / "Example.app")
+        self.assertFalse(any("stapler" in command or "spctl" in command or "log" in command for command in commands))
+        report = self.root / "porn-fetch-build-logs/notarization/pending.json"
+        self.assertEqual(json.loads(report.read_text())["status"], "In Progress")
 
     def test_import_uses_temporary_keychain_and_cleanup_restores_search_list(self):
         github_env = self.root / "github-env"
@@ -193,6 +258,27 @@ class MacOSSigningTests(unittest.TestCase):
         script = packages / "to.pornfetch.echteralsfake.maintenance/meta/installscript.qs"
         self.assertIn("tmpMaintenanceToolApp/maintenancetool.app", script.read_text())
         self.assertIn('component.addOperation("Extract"', script.read_text())
+
+
+@unittest.skipUnless(sys.platform == "darwin" and os.environ.get("PORN_FETCH_MACOS_SIGNING") == "1",
+                     "requires the macOS CI signing identity")
+class NativeMacOSSigningTests(unittest.TestCase):
+    def test_signs_app_with_runtime_data_before_compilation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            app = Path(temporary) / "SigningProbe.app"
+            macos = app / "Contents/MacOS"
+            macos.mkdir(parents=True)
+            shutil.copy2("/usr/bin/true", macos / "SigningProbe")
+            (macos / "LICENSES").mkdir()
+            (macos / "LICENSES/notice.txt").write_text("Signing probe license")
+            (macos / "package").mkdir()
+            shutil.copy2("/usr/bin/true", macos / "package/helper")
+            (macos / "package/data.json").write_text("{}")
+            with (app / "Contents/Info.plist").open("wb") as output:
+                plistlib.dump({"CFBundleExecutable": "SigningProbe", "CFBundleIdentifier": "to.pornfetch.signingprobe",
+                               "CFBundlePackageType": "APPL", "CFBundleVersion": "1.0"}, output)
+            signing.sign(app, "python")
+            self.assertEqual((macos / "LICENSES/notice.txt").read_text(), "Signing probe license")
 
 
 if __name__ == "__main__":
