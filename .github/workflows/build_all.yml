@@ -62,6 +62,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v3.8.91 dist_release/* --title 'Porn Fetch 3.8.91' \
-            --notes-file CHANGELOG_STATIC.md --prerelease \
-            --target 3046ce6b12f0799f14ab329199f2ad104e170323 --draft=false
+          gh release view v3.8.91 --json isDraft --jq '.isDraft' | grep -qx true
+          gh release upload v3.8.91 dist_release/* --clobber
+          gh release edit v3.8.91 --prerelease --draft=false
