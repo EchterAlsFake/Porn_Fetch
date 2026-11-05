@@ -189,6 +189,11 @@ bash scripts/install.sh
 The Unix script installs system packages and may ask for sudo. The Windows script
 expects the compiler and MSYS2 tools to be installed already. Both use the current
 checkout when available. They do not switch tags or overwrite local source changes.
+The Windows script saves its console transcript under
+`%TEMP%\porn-fetch-build-logs\install-windows-*.log`, prints the full error and
+waits for Enter on an interactive failure. Use `-NoPause` for unattended runs.
+The uv installer runs in a child PowerShell process so its failure cannot close
+the terminal running the README's `irm ... | iex` command.
 
 ## Compile the CLI
 

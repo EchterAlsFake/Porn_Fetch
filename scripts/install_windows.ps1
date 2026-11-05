@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$Msys2Root = "C:\msys64",
-    [switch]$WithoutFFmpeg
+    [switch]$WithoutFFmpeg,
+    [switch]$NoPause
 )
 $ErrorActionPreference = "Stop"
 if ($VerbosePreference -eq 'Continue') { $env:PORN_FETCH_BUILD_VERBOSE = '1' }
@@ -14,7 +15,16 @@ function Run {
 
 function Main {
     if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
-        Invoke-RestMethod https://astral.sh/uv/install.ps1 | Invoke-Expression
+        # The upstream installer calls exit on failure. Keep that exit inside
+        # a child process when this script is invoked through irm ... | iex.
+        $uvInstaller = Join-Path ([IO.Path]::GetTempPath()) ("pornfetch-uv-" + [guid]::NewGuid().ToString('N') + '.ps1')
+        try {
+            Invoke-WebRequest https://astral.sh/uv/install.ps1 -UseBasicParsing -OutFile $uvInstaller
+            $shell = (Get-Process -Id $PID).Path
+            Run $shell -NoLogo -NoProfile -ExecutionPolicy Bypass -File $uvInstaller
+        } finally {
+            Remove-Item -LiteralPath $uvInstaller -Force -ErrorAction SilentlyContinue
+        }
         $env:PATH = "$env:USERPROFILE\.local\bin;$env:PATH"
     }
     if (Test-Path "scripts\build_desktop.py") {
@@ -50,4 +60,25 @@ function Main {
     }
 }
 
-Main
+$logDirectory = Join-Path ([IO.Path]::GetTempPath()) 'porn-fetch-build-logs'
+$logPath = Join-Path $logDirectory ("install-windows-" + [guid]::NewGuid().ToString('N') + '.log')
+$transcriptStarted = $false
+try {
+    New-Item -ItemType Directory -Path $logDirectory -Force | Out-Null
+    Start-Transcript -Path $logPath | Out-Null
+    $transcriptStarted = $true
+    Write-Host "Installation log: $logPath"
+    Main
+} catch {
+    Write-Host "`nPorn Fetch build failed:" -ForegroundColor Red
+    Write-Host $_.ToString() -ForegroundColor Red
+    Write-Host $_.InvocationInfo.PositionMessage
+    Write-Host $_.ScriptStackTrace
+    if ($transcriptStarted) { Write-Host "Full log: $logPath" }
+    if (-not $NoPause -and [Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        try { Read-Host 'Press Enter to return to PowerShell' | Out-Null } catch { }
+    }
+    throw
+} finally {
+    if ($transcriptStarted) { Stop-Transcript | Out-Null }
+}

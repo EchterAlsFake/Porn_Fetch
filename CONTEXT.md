@@ -70,8 +70,8 @@ redacted, and Anonymous Mode hides and closes the detailed-error dialog.
 
 `eaf-base-api>=4.2.6` makes FFmpeg remux/tagging subprocesses noninteractive with
 explicit null input and captured output. This removes dependence on Windows
-console handles when launching from Explorer or Start Menu. The sibling library
-checkout contains the fix; publish 4.2.6 before building against the new minimum.
+console handles when launching from Explorer or Start Menu. Version 4.2.6 is
+published on PyPI and GitHub, with a verified fresh PyPI installation.
 
 GUI feedback uses `notifications.py` and `NotificationPanel.qml`: asynchronous
 session-only Recent activity and queued decisions. Desktop activity is in the
@@ -123,6 +123,11 @@ paths from platform templates, keeps the full deployment folder, assembles
 helper binaries and legal files, and checks startup. Existing outputs are not
 overwritten. Local builds have no publisher signature; macOS uses ad-hoc signing.
 See [installation](docs/INSTALLATION.md) and [release operations](docs/RELEASING.md).
+
+The Windows convenience script runs the uv installer in a child PowerShell so
+upstream `exit` calls cannot close an `irm ... | iex` caller. It saves a transcript
+under the temporary `porn-fetch-build-logs` folder, prints failure details and
+pauses on interactive failures unless `-NoPause` is set.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
