@@ -2,9 +2,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
-#include <QCoreApplication>
-#include <QFileSystemWatcher>
-#include <QTimer>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QFileSystemWatcher>
+#include <QtCore/QTimer>
 
 static NSString *notificationDirectory()
 {

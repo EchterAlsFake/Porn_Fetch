@@ -65,6 +65,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   # Publishing runs have their own queue and cannot be cancelled by another build.
@@ -114,7 +115,26 @@ jobs:
         run: |
           RELEASE_VERSION="${RELEASE_VERSION#v}"
           python -c 'import re, sys; assert re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", sys.argv[1]), "Use a three-part release version (major.minor.patch) for all platforms"' "$RELEASE_VERSION"
-          RELEASE_CREATED_AT=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq .created_at)
+          test "$RELEASE_VERSION" = 3.8.91
+          test "${{ inputs.build_target }}" = ios
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/42053364458" > "$RUNNER_TEMP/original-build.json"
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/42053364458/jobs?per_page=100" > "$RUNNER_TEMP/original-jobs.json"
+          python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          run = json.loads((root / "original-build.json").read_text())
+          jobs = [j for page in json.loads((root / "original-jobs.json").read_text()) for j in page["jobs"]]
+          assert run["head_sha"] == "b12f87ffc6cfaf899131d52d525931a353fee3bc"
+          assert run["status"] == "completed"
+          assert run["path"] == ".github/workflows/build_all.yml"
+          assert run["head_repository"]["full_name"] == os.environ["GITHUB_REPOSITORY"]
+          required = [j for j in jobs if j["name"].startswith(("GUI (", "CLI (", "Android (", "CLI experimental (", "Validate build commit /", "Deploy IFW", "Deploy CLI"))]
+          assert len(required) == 22, [(j["name"], j["conclusion"]) for j in required]
+          assert all(j["conclusion"] == "success" for j in required)
+          assert any(j["name"] == "iOS (arm64)" and j["conclusion"] == "failure" for j in jobs)
+          PYCODE
+          RELEASE_CREATED_AT=$(python -c 'import json, os; print(json.load(open(os.environ["RUNNER_TEMP"] + "/original-build.json"))["created_at"])')
           RELEASE_TIMESTAMP=$(python -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$RELEASE_CREATED_AT")
           python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
           echo "timestamp=$RELEASE_TIMESTAMP" >> "$GITHUB_OUTPUT"
@@ -1673,10 +1693,10 @@ jobs:
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [validate, build-gui, build-android, build-ios, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
+    needs: [validate, build-gui, build-android, build-ios, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata, publish-website]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
-      needs.validate.result == 'success' &&
+      needs.validate.result == 'success' && needs.publish-website.result == 'success' &&
       (inputs.build_target == 'cli' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-gui.result == 'success' &&
         needs.build-macos-universal.result == 'success' && needs.deploy-repositories.result == 'success')) &&
       (inputs.build_target == 'gui' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success')) &&
@@ -1685,8 +1705,18 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      actions: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Reuse successful non-iOS packages from original build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          github-token: ${{ github.token }}
+          run-id: 42053364458
+          pattern: PornFetch_*
+          path: all_artifacts
+          merge-multiple: false
 
       - name: Download all artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -1770,6 +1800,15 @@ jobs:
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       - name: Install publishing dependencies
         run: uv sync --upgrade --no-dev
+      - name: Reuse successful non-iOS packages from original build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          github-token: ${{ github.token }}
+          run-id: 42053364458
+          pattern: PornFetch_*
+          path: website_artifacts
+          merge-multiple: false
+
       - name: Download website packages
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -1797,7 +1836,7 @@ jobs:
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
             --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
             --notes CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
-          if [ "$RELEASE_BUILD_TARGET" != cli ] && [ "$RELEASE_BUILD_TARGET" != ios ]; then
+          if [ "$RELEASE_BUILD_TARGET" != cli ]; then
             test -n "$CLI_UPDATE_SIGNING_KEY"
             umask 077
             SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")

@@ -1,3 +1,10 @@
+## 3.8.91 build recovery
+
+Non-iOS packages reuse the successful artifacts from build run 42053364458,
+source b12f87ffc6cfaf899131d52d525931a353fee3bc. Only iOS is rebuilt with
+QtCore-qualified notification headers. Release version and timestamp are preserved.
+The release source includes this iOS-only fix; no other application changes are included.
+
 # Porn Fetch 3.9 beta
 
 These notes cover the current 3.9 development tree and changes since 3.8, updated through 3 November 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below. Current release readiness is tracked in the [development checklist](https://pornfetch.to/checklist).
