@@ -9,6 +9,7 @@ Payment deployment is maintained separately from the application; these notes do
 - Keep the Windows install script's calling terminal open when uv installation fails. Save an installation log and show failure details with an interactive pause.
 - Automatically install missing Git for Windows through winget and refresh PATH so the Windows build script can continue without restarting PowerShell.
 - Automatically install MSYS2 and the appropriate Clang toolchain, make, pkgconf, diffutils and zlib for Windows FFmpeg builds, including core-update restarts and ARM64 selection.
+- Ensure Microsoft C++ Build Tools and a Windows SDK are available before installing Python dependencies. Add missing C++ workloads to existing Build Tools installations and select ARM64 components when required.
 - Moved project requirements, dependency locking, installers, validation and all platform build workflows to Python 3.15. Updated desktop compilation to Nuitka 4.3.3.
 - Extended the Qt compatibility patch to preload Python 3.15's executor before Qt initialization, preventing deferred import objects from breaking asynchronous work.
 - Android targets Python/hostpython 3.15.2 and matching `cp315` PySide6/Shiboken6 wheels from the pinned `6.12.0-api28` release, with per-wheel checksums. The local Python recipe skips two obsolete Python 3.14 patches already incorporated or superseded in 3.15.

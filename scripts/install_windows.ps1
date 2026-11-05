@@ -37,6 +37,62 @@ function Ensure-Git {
     Run git --version
 }
 
+function Find-MsvcCompiler {
+    param([string]$VsWhere, [string[]]$Components, [string]$Target)
+    if (Test-Path -LiteralPath $VsWhere) {
+        Run $VsWhere -latest -products '*' -version '[17.0,)' -requires @Components -find "VC\Tools\MSVC\**\bin\Host*\$Target\cl.exe" |
+            Select-Object -First 1
+    }
+}
+
+function Ensure-Msvc {
+    param([string]$Architecture)
+    $components = @('Microsoft.VisualStudio.Component.VC.Tools.x86.x64', 'Microsoft.VisualStudio.Component.Windows*SDK.*')
+    $options = '--quiet --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64'
+    switch ($Architecture.ToLowerInvariant()) {
+        { $_ -in @('amd64', 'x86_64', 'x64') } { $target = 'x64'; break }
+        { $_ -in @('arm64', 'aarch64') } {
+            $target = 'arm64'
+            $components += 'Microsoft.VisualStudio.Component.VC.Tools.ARM64'
+            $options += ' --add Microsoft.VisualStudio.Component.VC.Tools.ARM64'
+            break
+        }
+        default { throw "Unsupported Python architecture for Microsoft C++: $Architecture" }
+    }
+    $installer = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer'
+    $vswhere = Join-Path $installer 'vswhere.exe'
+    $compiler = Find-MsvcCompiler -VsWhere $vswhere -Components $components -Target $target
+    if ($compiler) {
+        Write-Host "Using Microsoft C++ compiler: $compiler"
+        return
+    }
+    $buildTools = $null
+    if (Test-Path -LiteralPath $vswhere) {
+        $buildTools = Run $vswhere -latest -products Microsoft.VisualStudio.Product.BuildTools -version '[17.0,)' -property installationPath
+    }
+    if ($buildTools) {
+        Write-Host 'Adding Microsoft C++ tools and the Windows SDK to Visual Studio Build Tools...'
+        $setup = Join-Path $installer 'setup.exe'
+        $arguments = 'modify --installPath "' + $buildTools + '" ' + $options
+        $result = Start-Process -FilePath $setup -ArgumentList $arguments -Wait -PassThru
+        if ($result.ExitCode -eq 3010) {
+            throw 'Microsoft C++ tools were installed. Restart Windows, then rerun this script to finish the build.'
+        }
+        if ($result.ExitCode -ne 0) { throw "Visual Studio Installer failed with exit code $($result.ExitCode)" }
+    } else {
+        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+            throw 'Microsoft C++ build tools are missing. Install App Installer or Visual Studio Build Tools with the Desktop development with C++ workload, then rerun this script.'
+        }
+        Write-Host 'Installing Visual Studio 2022 Build Tools with Microsoft C++ and the Windows SDK...'
+        Run winget install --id Microsoft.VisualStudio.2022.BuildTools --exact --source winget --accept-package-agreements --accept-source-agreements --override "$options --wait"
+    }
+    $compiler = Find-MsvcCompiler -VsWhere $vswhere -Components $components -Target $target
+    if (-not $compiler) {
+        throw 'Microsoft C++ compiler or Windows SDK is still unavailable. Check the Visual Studio Installer output above and complete any required Windows restart before rerunning.'
+    }
+    Write-Host "Using Microsoft C++ compiler: $compiler"
+}
+
 function Ensure-Msys2 {
     param([string]$Architecture)
     switch ($Architecture.ToLowerInvariant()) {
@@ -120,10 +176,12 @@ function Main {
     try {
         if (-not (Test-Path scripts/build_desktop.py)) { throw "Use the build instructions from this checkout's release tag." }
         Run uv python install 3.15
-        Run uv sync --upgrade --extra gui --extra build --extra desktop-build
+        $python = Run uv python find 3.15
+        $buildArch = Run $python -c 'import platform; print(platform.machine().lower())'
+        Ensure-Msvc -Architecture $buildArch.Trim()
+        Run uv sync --python $python --upgrade --extra gui --extra build --extra desktop-build
         $env:UV_NO_SYNC = '1'
         if (-not $WithoutFFmpeg) {
-            $buildArch = Run uv run --no-sync python -c 'import platform; print(platform.machine().lower())'
             Ensure-Msys2 -Architecture $buildArch.Trim()
         }
         $buildArguments = @('run', '--no-sync', 'python', 'scripts/build_desktop.py')

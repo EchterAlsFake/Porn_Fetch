@@ -121,7 +121,8 @@ Finish any Xcode license or first-launch prompts before building.
 
 Use native x64 or ARM64 Python through uv. Install Git for Windows and a C/C++
 compiler supported by Nuitka. Visual Studio Build Tools with **Desktop development
-with C++** is one option. Read Nuitka's compiler error if a toolchain is missing.
+with C++** is one option. The convenience script installs these prerequisites
+automatically, including the Windows SDK.
 
 The Windows convenience script below installs MSYS2 and its FFmpeg Clang
 toolchain automatically. For a manual build, install [MSYS2](https://www.msys2.org/).
@@ -195,8 +196,12 @@ or Git for Windows and rerun it. Unless `-WithoutFFmpeg` is set, the Windows scr
 also installs missing MSYS2 under `-Msys2Root` (default `C:\msys64`), finishes its
 core/system updates in fresh processes and installs make, diffutils, pkgconf,
 the Clang toolchain and zlib. It selects CLANG64 or CLANGARM64 from the actual
-Python architecture and checks the tools before building FFmpeg. A compiler
-supported by Nuitka is still required for compiling the application itself.
+Python architecture and checks the tools before building FFmpeg. Before syncing
+Python dependencies, it checks for Microsoft C++ tools and a Windows SDK using
+vswhere. Missing tools are installed with the Visual Studio 2022 Build Tools C++
+workload, including ARM64 components when needed. An incomplete Build Tools
+installation is modified to add the workload. If Windows needs a restart, the
+script reports that requirement without restarting the machine automatically.
 Both scripts use the current
 checkout when available. They do not switch tags or overwrite local source changes.
 The Windows script saves its console transcript under

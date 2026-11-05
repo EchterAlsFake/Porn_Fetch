@@ -199,15 +199,116 @@ if ($env:PATH -ne $originalPath) { throw 'MSYS2 PATH was not restored' }
         self.assertNotIn("MSYS2_SETUP_COMPLETE", output)
 
     def test_without_ffmpeg_skips_msys2_bootstrap(self):
-        output, _ = self.run_failure(r"""
-function uv {
-    if ($args -contains 'scripts/build_desktop.py') { throw 'BUILD_REACHED_WITHOUT_MSYS2' }
-    $global:LASTEXITCODE = 0
-}
-function winget { throw 'MSYS2_MUST_NOT_INSTALL' }
-""", "& ([scriptblock]::Create($source)) -WithoutFFmpeg -NoPause")
+        output = self.run_msvc_setup("missing", invoke_main=True)
         self.assertIn("BUILD_REACHED_WITHOUT_MSYS2", output)
-        self.assertNotIn("MSYS2_MUST_NOT_INSTALL", output)
+        self.assertIn("MSVC_READY_BEFORE_SYNC", output)
+        self.assertNotIn("DEPENDENCIES_STARTED_WITHOUT_MSVC", output)
+
+    def run_msvc_setup(self, state: str, architecture: str = "amd64", repair_exit: int = 0, invoke_main: bool = False):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "scripts").mkdir()
+            (root / "scripts/build_desktop.py").touch()
+            harness = Path(temporary) / "test.ps1"
+            harness.write_text(r"""
+$ErrorActionPreference = 'Stop'
+$source = Get-Content -LiteralPath $env:PORN_FETCH_INSTALL_SCRIPT -Raw
+$ast = [Management.Automation.Language.Parser]::ParseInput($source, [ref]$null, [ref]$null)
+foreach ($statement in $ast.EndBlock.Statements) {
+    if ($statement -is [Management.Automation.Language.FunctionDefinitionAst]) {
+        Invoke-Expression $statement.Extent.Text
+    }
+}
+$global:MsvcReady = $env:PORN_FETCH_MSVC_STATE -eq 'ready'
+$vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
+New-Item -ItemType Directory (Split-Path $vswhere) -Force | Out-Null
+New-Item $vswhere | Out-Null
+function winget { }
+function uv { }
+function Run {
+    param([string]$Exe, [Parameter(ValueFromRemainingArguments=$true)]$Arguments)
+    if ($Exe -eq 'winget') {
+        if ($Arguments[2] -ne 'Microsoft.VisualStudio.2022.BuildTools') { throw 'Wrong MSVC package' }
+        $options = $Arguments[-1]
+        foreach ($required in @('--wait', '--norestart', '--includeRecommended', 'Microsoft.VisualStudio.Workload.VCTools')) {
+            if (-not $options.Contains($required)) { throw "Missing installer option: $required" }
+        }
+        Write-Host "INSTALL_MSVC: $options"
+        $global:MsvcReady = $true
+    } elseif ($Exe -eq 'uv') {
+        if ($Arguments[0] -eq 'python' -and $Arguments[1] -eq 'find') { Write-Output 'fake-python' }
+        if ($Arguments[0] -eq 'sync') {
+            if (-not $global:MsvcReady) { throw 'DEPENDENCIES_STARTED_WITHOUT_MSVC' }
+            Write-Host 'MSVC_READY_BEFORE_SYNC'
+        }
+        if ($Arguments -contains 'scripts/build_desktop.py') { throw 'BUILD_REACHED_WITHOUT_MSYS2' }
+    } elseif ($Exe -eq 'fake-python') {
+        Write-Output $env:PORN_FETCH_TEST_ARCH
+    } elseif ($Arguments -contains '-find') {
+        if ($Arguments -notcontains 'Microsoft.VisualStudio.Component.Windows*SDK.*') { throw 'Windows SDK was not checked' }
+        if ($Arguments -notcontains 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64') { throw 'C++ tools were not checked' }
+        if ($env:PORN_FETCH_TEST_ARCH -eq 'arm64') {
+            if ($Arguments -notcontains 'Microsoft.VisualStudio.Component.VC.Tools.ARM64') { throw 'ARM64 compiler was not checked' }
+            if (-not $Arguments[-1].Contains('\arm64\cl.exe')) { throw 'Wrong compiler target' }
+        }
+        if ($global:MsvcReady) { Write-Output 'C:\VisualStudio\VC\Tools\MSVC\14.44\bin\Hostx64\cl.exe' }
+    } elseif ($env:PORN_FETCH_MSVC_STATE -eq 'incomplete') {
+        Write-Output 'C:\Existing BuildTools'
+    }
+}
+function Start-Process {
+    param($FilePath, $ArgumentList, [switch]$Wait, [switch]$PassThru)
+    if (-not $ArgumentList.Contains('modify --installPath "C:\Existing BuildTools"')) { throw 'Wrong repair target' }
+    if ($ArgumentList.Contains('--wait')) { throw 'setup.exe does not support --wait' }
+    if (-not $Wait) { throw 'Installer was not awaited' }
+    Write-Host 'REPAIR_MSVC'
+    $global:MsvcReady = $true
+    return @{ ExitCode = [int]$env:PORN_FETCH_REPAIR_EXIT }
+}
+try {
+    if ($env:PORN_FETCH_TEST_MAIN -eq '1') { $WithoutFFmpeg = $true; Main }
+    else { Ensure-Msvc -Architecture $env:PORN_FETCH_TEST_ARCH }
+    Write-Output 'MSVC_SETUP_COMPLETE'
+}
+catch { Write-Output "SETUP_FAILED: $_" }
+""", encoding="utf-8")
+            result = subprocess.run(
+                [POWERSHELL, "-NoLogo", "-NoProfile", "-NonInteractive", "-File", str(harness)],
+                cwd=root, capture_output=True, text=True, timeout=30,
+                env=dict(os.environ, **{"ProgramFiles(x86)": temporary},
+                         PORN_FETCH_INSTALL_SCRIPT=str(SCRIPT), PORN_FETCH_MSVC_STATE=state,
+                         PORN_FETCH_TEST_ARCH=architecture, PORN_FETCH_REPAIR_EXIT=str(repair_exit),
+                         PORN_FETCH_TEST_MAIN="1" if invoke_main else "0"),
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return result.stdout
+
+    def test_existing_msvc_and_sdk_are_kept(self):
+        output = self.run_msvc_setup("ready")
+        self.assertIn("MSVC_SETUP_COMPLETE", output)
+        self.assertNotIn("INSTALL_MSVC:", output)
+        self.assertNotIn("REPAIR_MSVC", output)
+
+    def test_msvc_installation_includes_cpp_workload_and_arm64_when_needed(self):
+        for arch in ("amd64", "arm64"):
+            with self.subTest(arch=arch):
+                output = self.run_msvc_setup("missing", arch)
+                self.assertIn("INSTALL_MSVC:", output)
+                self.assertIn("MSVC_SETUP_COMPLETE", output)
+                if arch == "arm64":
+                    self.assertIn("Microsoft.VisualStudio.Component.VC.Tools.ARM64", output)
+
+    def test_incomplete_build_tools_are_modified_and_reboot_is_reported(self):
+        for exit_code in (0, 3010):
+            with self.subTest(exit_code=exit_code):
+                output = self.run_msvc_setup("incomplete", repair_exit=exit_code)
+                self.assertIn("REPAIR_MSVC", output)
+                self.assertNotIn("INSTALL_MSVC:", output)
+                if exit_code == 0:
+                    self.assertIn("MSVC_SETUP_COMPLETE", output)
+                else:
+                    self.assertIn("Restart Windows", output)
+                    self.assertNotIn("MSVC_SETUP_COMPLETE", output)
 
 
 if __name__ == "__main__":

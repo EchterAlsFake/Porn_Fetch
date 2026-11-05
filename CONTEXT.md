@@ -135,6 +135,10 @@ For bundled FFmpeg, it installs missing MSYS2 through winget, runs core/system
 updates in separate pacman processes, and installs make/diffutils/pkgconf plus
 the Clang toolchain and zlib for the actual Python architecture. CLANG64 and
 CLANGARM64 match the native FFmpeg builder. `-WithoutFFmpeg` skips this setup.
+Before syncing Python dependencies, vswhere checks for a modern Microsoft C++
+compiler and Windows SDK for the selected Python architecture. Missing tools are
+installed with Visual Studio 2022 Build Tools; incomplete Build Tools installs
+are modified to add the C++ workload. Report required reboots without forcing one.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
