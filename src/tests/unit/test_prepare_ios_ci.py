@@ -3,6 +3,7 @@
 import configparser
 import json
 import os
+import plistlib
 import runpy
 import shutil
 import tempfile
@@ -50,6 +51,8 @@ class IOSPreparationTests(unittest.TestCase):
                     project.write_text('/* Copy Python Packages */ = { shellScript = "original"; };\n'
                                        'main.cpp; lastKnownFileType = sourcecode.cpp.cpp; buildSettings = {};')
                     (project.parent.parent / "main.cpp").write_text("int main() { return 0; }\n")
+                    (project.parent.parent / "Info.plist").write_bytes(plistlib.dumps({
+                        "CFBundleShortVersionString": "1.0", "CFBundleVersion": "1"}))
 
             environment = {
                 "PORN_FETCH_SOURCE": str(source), "IOS_DEPLOY_VENV": str(root / "venv"),
@@ -64,6 +67,9 @@ class IOSPreparationTests(unittest.TestCase):
             config = configparser.ConfigParser()
             config.read(device / "app/pysidedeploy.spec")
             self.assertEqual(config["ios"]["version"], "3.9.77")
+            info = plistlib.loads((project.parent.parent / "Info.plist").read_bytes())
+            self.assertEqual(info["CFBundleShortVersionString"], "3.9.77")
+            self.assertEqual(info["CFBundleVersion"], "3.9.77")
             self.assertEqual(config["ios"]["xcframework_path"], environment["IOS_PYTHON_XCFRAMEWORK"])
             self.assertEqual(config["ios"]["wheel_pyside"],
                              str(wheels / "pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl"))

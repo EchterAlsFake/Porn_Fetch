@@ -1,17 +1,14 @@
 # Building for iOS
 
-The iOS GUI is experimental. I have tested the application on my old iPhone 7 running
-iOS 15.8.8. This does not mean Porn Fetch will run on a modern iPhone too. 
-
-If the application literally just closes I will not be able to help you :/ 
+Porn Fetch officially supports iOS 15.0 and later with a native ARM64 GUI. The IPA is installed through a sideloading tool that re-signs and provisions it; no jailbreak is required. Device testing includes an iPhone 7 on iOS 15.8.8.
 
 ## GitHub Actions
 
-The **iOS Build** workflow builds on macOS ARM64 with Xcode. Supply a full
-`release_version`. It uses Python 3.13 for host deployment tools and the matching
+The **Cross-Platform Build Pipeline** builds iOS on macOS ARM64 with Xcode alongside the other platforms. Choose `gui`, `both`, or `ios` and supply a three-part
+`release_version`. It uses Python 3.15.2 for host deployment tools and the matching
 Qt/PySide 6.12.0 device wheels with embedded Python 3.15.0rc2 from
 [the iOS toolchain release](https://github.com/EchterAlsFake/PySide6-to-iOS/releases/tag/6.12.0-ios15-cp315).
-The workflow verifies the pinned manifest and asset checksums.
+The workflow verifies the pinned manifest and asset checksums. The embedded runtime remains 3.15.0rc2 until the matching runtime and native dependencies are rebuilt and published together. It receives the same application version and original run timestamp as every other platform. Enable `deploy_website` and the existing redistribution acknowledgment to publish the IPA, checksum and notices on the website. GitHub Release publication includes the IPA too.
 
 An Ubuntu job restores the required native dependencies from the archived lab.
 Its token needs access to the draft snapshot release. A public clone alone does

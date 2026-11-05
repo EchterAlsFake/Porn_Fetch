@@ -89,10 +89,10 @@ The wrapper regenerates machine paths and patches Qt's preload library names
 for Android 13. All four Python 3.15 CI targets built on 2026-11-03; physical
 device startup of those artifacts was not established by that build result.
 
-The separate iOS CI build uses ARM64 macOS host tools and the published matching
+The shared cross-platform CI pipeline includes the iOS GUI, using Python 3.15.2 ARM64 macOS host tools and the published matching
 Qt/PySide device inputs. The preserved lab still embeds Python 3.15.0rc2.
 Its native dependency archive is required; a public clone alone is insufficient.
-CI produces an IPA for re-signing. The user confirmed license activation,
+iOS 15+ is officially supported with a native GUI. CI produces an IPA for sideloading re-signing and publishes it through the same website/release jobs. The embedded 3.15.0rc2 runtime must be rebuilt together with its native dependencies to change its patch version. The user confirmed license activation,
 downloading, remuxing and playback on a non-jailbroken iPhone 7 on 2026-10-30.
 That does not validate every later artifact or device. See [iOS](docs/iOS.md).
 

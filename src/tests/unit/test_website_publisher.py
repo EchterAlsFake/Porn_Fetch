@@ -106,6 +106,21 @@ class WebsitePublisherTests(unittest.TestCase):
             self.assertEqual({a["arch"] for a in manifest["artifacts"] if a["kind"] == kind},
                              {"arm64", "armv7", "x64", "x86"})
 
+    def test_native_ios_raw_ipa_and_notices_are_published(self):
+        name = "PornFetch_ios_GUI_arm64_resign.ipa"
+        self.artifact(name, {name: b"native IPA"})
+        self.artifact(name + ".sha256", {name + ".sha256": b"checksum"})
+        legal = "PornFetch_ios_GUI_arm64_LEGAL.zip"
+        self.artifact(legal, {legal: b"notices"})
+        manifest = self.publisher.prepare(self.artifacts, self.output, "3.9.66", "beta", 1792833600, "a" * 40, "notes")
+        ipa = next(item for item in manifest["artifacts"] if item["kind"] == "ipa")
+        self.assertEqual(ipa["platform"], "ios")
+        self.assertEqual(ipa["arch"], "arm64")
+        self.assertFalse(ipa["experimental"])
+        self.assertIn("iOS 15.0", ipa["min_os"])
+        self.assertEqual((self.output / name).read_bytes(), b"native IPA")
+        self.assertEqual({item["kind"] for item in manifest["artifacts"]}, {"ipa", "notices"})
+
     def test_unix_cli_bundle_restores_executable_permissions(self):
         self.artifact("PornFetch_linux_CLI_x64", {"PornFetch_linux_CLI_x64": b"cli", "pocketbase": b"helper"})
         self.publisher.prepare(self.artifacts, self.output, "3.9.66", "beta", 1792833600, "a" * 40, "notes")

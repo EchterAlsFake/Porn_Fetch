@@ -2,6 +2,7 @@
 import configparser
 import json
 import os
+import plistlib
 from pathlib import Path
 import re
 import shutil
@@ -58,6 +59,13 @@ env["PATH"] = str(deploy_venv / "bin") + os.pathsep + env.get("PATH", "")
 subprocess.run([str(deploy_venv / "bin/pyside6-ios-deploy"), "-c", str(config_path)],
                cwd=app, env=env, check=True)
 project = output / "PornFetch.xcodeproj/project.pbxproj"
+# Keep both visible and internal bundle versions aligned with the shared release.
+# Qt's generator otherwise hardcodes CFBundleVersion to "1".
+plist_path = output / "Info.plist"
+info = plistlib.loads(plist_path.read_bytes())
+info["CFBundleShortVersionString"] = config["ios"]["version"]
+info["CFBundleVersion"] = config["ios"]["version"]
+plist_path.write_bytes(plistlib.dumps(info))
 text = project.read_text()
 pattern = r'(/\* Copy Python Packages \*/ = \{.*?shellScript = )("(?:\\.|[^"\\])*");'
 match = re.search(pattern, text, re.S)

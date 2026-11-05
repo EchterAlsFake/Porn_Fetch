@@ -6,13 +6,15 @@ This page is for maintainers publishing official artifacts.
 ## Build inputs
 
 Run **Cross-Platform Build Pipeline** from the intended commit. Choose a full
-numeric `release_version`, such as `3.9.77`, and a target: `cli`, `gui`, `both`,
-or `android`. GUI includes Android; CLI-only skips it. Optional experimental
+three-part numeric `release_version` (major.minor.patch), such as `3.9.77`, and a target: `cli`, `gui`, `both`,
+`android`, or `ios`. GUI includes Android and iOS; CLI-only skips both. Mobile-only targets skip desktop builds. Optional experimental
 architectures have separate checks. A tag build uses the tag's version.
 
 The experimental RISC-V job uses GCC 14 explicitly. Ubuntu 24.04's default
 GCC 13 rejects the `-mno-omit-leaf-frame-pointer` flag inherited from Python 3.15
 when compiling native dependencies.
+
+All workflow host tools are pinned to Python 3.15.2. Android embeds Python 3.15.2; iOS reuses the pinned Python 3.15.0rc2 runtime and matching native archives. Updating that iOS runtime requires rebuilding and publishing the matching toolchain.
 
 CI resolves current compatible Python dependencies with `uv sync --upgrade`.
 It does not use a committed `uv.lock`. Each job keeps its environment unchanged
@@ -140,8 +142,7 @@ refresh workflow renews metadata between releases; monitor failures before the
 seven-day timestamp expiry. CLI publishing and refresh share a concurrency group.
 
 Use **Publish website release** to retry publication from an eligible existing
-build without compiling again. Android-only publication should not replace desktop
-variants. Public APKs must be signed; `_unsigned.apk` files are diagnostics.
+build without compiling again. Android-only and iOS-only publication retain desktop variants from earlier releases. iOS publishes the native ARM64 IPA for iOS 15+, its checksum and dependency notices. Users re-sign and provision it with their sideloading tool. Public APKs must be signed; `_unsigned.apk` files are diagnostics.
 
 ## Notices, logs and size
 

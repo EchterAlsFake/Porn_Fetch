@@ -30,7 +30,8 @@ def download_lgpl_text() -> bytes:
     raise RuntimeError("LGPL download retry loop ended unexpectedly")
 
 
-def collect_legal(output: Path, *, offline: bool = False, ffmpeg_legal: list[Path] | None = None) -> Path:
+def collect_legal(output: Path, *, offline: bool = False, ffmpeg_legal: list[Path] | None = None,
+                  distribution_paths: list[Path] | None = None) -> Path:
     output.mkdir(parents=True, exist_ok=True)
     for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copy2(PROJECT_ROOT / name, output / name)
@@ -55,7 +56,8 @@ def collect_legal(output: Path, *, offline: bool = False, ffmpeg_legal: list[Pat
     ]
     review = []
     has_qt = False
-    for dist in sorted(distributions(), key=lambda item: (item.metadata.get("Name") or "").lower()):
+    installed = distributions(path=list(map(str, distribution_paths))) if distribution_paths else distributions()
+    for dist in sorted(installed, key=lambda item: (item.metadata.get("Name") or "").lower()):
         name = dist.metadata.get("Name") or "unknown"
         if name.lower() == "porn-fetch":
             continue
@@ -110,5 +112,8 @@ if __name__ == "__main__":
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--ffmpeg-legal", type=Path, action="append",
                         help="FFmpeg source/license/build directory; repeat for universal builds")
+    parser.add_argument("--distribution-path", type=Path, action="append",
+                        help="Read metadata from a staged mobile package directory; repeat for multiple roots")
     arguments = parser.parse_args()
-    print(collect_legal(arguments.output, offline=arguments.offline, ffmpeg_legal=arguments.ffmpeg_legal))
+    print(collect_legal(arguments.output, offline=arguments.offline, ffmpeg_legal=arguments.ffmpeg_legal,
+                        distribution_paths=arguments.distribution_path))

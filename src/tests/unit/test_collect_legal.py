@@ -15,6 +15,20 @@ module_spec.loader.exec_module(collect_legal)
 
 
 class CollectLegalTests(unittest.TestCase):
+    def test_staged_mobile_dependency_license_is_included(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            vendor = root / "vendor"
+            metadata = vendor / "mobile_dep-1.0.dist-info"
+            (metadata / "licenses").mkdir(parents=True)
+            (metadata / "METADATA").write_text("Name: mobile-dep\nVersion: 1.0\nLicense: MIT\n")
+            (metadata / "licenses/LICENSE").write_text("Staged mobile dependency license")
+            (metadata / "RECORD").write_text("mobile_dep-1.0.dist-info/licenses/LICENSE,,\n")
+            archive = collect_legal.collect_legal(root / "legal", offline=True, distribution_paths=[vendor])
+            with ZipFile(archive) as bundle:
+                self.assertEqual(bundle.read("python/mobile-dep/LICENSE"), b"Staged mobile dependency license")
+                self.assertIn(b"mobile-dep | 1.0", bundle.read("PYTHON_INVENTORY.md"))
+
     def test_ffmpeg_source_and_build_details_are_included_in_legal_archive(self):
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)

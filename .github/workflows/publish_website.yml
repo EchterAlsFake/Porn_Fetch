@@ -44,7 +44,7 @@ jobs:
           path: tooling
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       - name: Validate original build and preserve its metadata
         id: build
@@ -64,7 +64,7 @@ jobs:
           assert run["head_repository"]["full_name"] == os.environ["GITHUB_REPOSITORY"]
           assert run["status"] == "completed", "Build is still running"
           assert any(job["name"] == "Validate build commit / offline-tests" and job["conclusion"] == "success" for job in jobs)
-          builds = [job for job in jobs if job["name"].startswith(("GUI (", "CLI (", "Android (", "CLI experimental ("))]
+          builds = [job for job in jobs if job["name"].startswith(("GUI (", "CLI (", "Android (", "iOS (", "CLI experimental ("))]
           assert builds and any(job["conclusion"] == "success" for job in builds), "No successful builds"
           assert all(job["conclusion"] in {"success", "skipped"} for job in builds), "A platform build failed"
           timestamp = int(datetime.fromisoformat(run["created_at"].replace("Z", "+00:00")).timestamp())
@@ -102,11 +102,13 @@ jobs:
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
             --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
             --notes source/CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
-          test -n "$CLI_UPDATE_SIGNING_KEY"
-          umask 077
-          SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")
-          trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
-          printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
-          unset CLI_UPDATE_SIGNING_KEY
-          uv run --project tooling --no-sync python tooling/packaging/publish_android_updates.py \
-            --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --allow-empty
+          if compgen -G 'website_release/PornFetch_android_GUI_*.apk' > /dev/null; then
+            test -n "$CLI_UPDATE_SIGNING_KEY"
+            umask 077
+            SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")
+            trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
+            printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
+            unset CLI_UPDATE_SIGNING_KEY
+            uv run --project tooling --no-sync python tooling/packaging/publish_android_updates.py \
+              --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
+          fi

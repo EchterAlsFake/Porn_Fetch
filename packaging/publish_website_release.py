@@ -24,6 +24,7 @@ NAME = re.compile(
     r"PornFetch_(linux|windows|macos|android)_(GUI|CLI)_(arm64-v8a|armeabi-v7a|x86_64|x64|arm64|x86|x32|riscv64|universal)(_Setup)?(_LEGAL)?(?:\.(?:tar\.gz|zip|dmg|exe|run|bin|apk))?",
     re.I,
 )
+IOS_NAME = re.compile(r"PornFetch_ios_GUI_arm64(?:_resign\.ipa|_LEGAL\.zip)", re.I)
 ARCH = {"arm64-v8a": "arm64", "armeabi-v7a": "armv7", "x86_64": "x64"}
 MIN_OS = {
     "windows": "Windows 10 or later",
@@ -34,6 +35,9 @@ MIN_OS = {
 
 
 def classify(name):
+    if IOS_NAME.fullmatch(name):
+        return dict(platform="ios", arch="arm64", kind="notices" if name.lower().endswith(".zip") else "ipa",
+                    experimental=False, min_os="iOS 15.0 or later · ARM64 · sideloading")
     match = NAME.fullmatch(name)
     if not match:
         return None

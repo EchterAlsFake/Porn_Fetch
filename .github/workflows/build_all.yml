@@ -8,13 +8,14 @@ on:
         type: string
         required: true
       build_target:
-        description: "Build desktop + Android GUI, CLI, both, or Android only"
+        description: "Build all GUIs, CLI, both, Android only, or iOS only"
         type: choice
         options:
           - both
           - cli
           - gui
           - android
+          - ios
         default: both
         required: true
       create_release:
@@ -84,7 +85,7 @@ jobs:
     name: Set release version and timestamp
     runs-on: ubuntu-24.04
     env:
-      CHECK_CLI_RELEASE: ${{ inputs.build_target != 'gui' && inputs.build_target != 'android' && (inputs.deploy_cli_updates || inputs.create_release) }}
+      CHECK_CLI_RELEASE: ${{ inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios' && (inputs.deploy_cli_updates || inputs.create_release) }}
     permissions:
       actions: read
       contents: read
@@ -95,9 +96,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        if: env.CHECK_CLI_RELEASE == 'true'
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
 
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         if: env.CHECK_CLI_RELEASE == 'true'
@@ -113,9 +113,10 @@ jobs:
           RELEASE_VERSION: ${{ inputs.release_version || github.ref_name }}
         run: |
           RELEASE_VERSION="${RELEASE_VERSION#v}"
+          python -c 'import re, sys; assert re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", sys.argv[1]), "Use a three-part release version (major.minor.patch) for all platforms"' "$RELEASE_VERSION"
           RELEASE_CREATED_AT=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq .created_at)
-          RELEASE_TIMESTAMP=$(python3 -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$RELEASE_CREATED_AT")
-          python3 packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          RELEASE_TIMESTAMP=$(python -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$RELEASE_CREATED_AT")
+          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
           echo "timestamp=$RELEASE_TIMESTAMP" >> "$GITHUB_OUTPUT"
           echo "version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
 
@@ -130,7 +131,7 @@ jobs:
   # ==========================================
   build-gui:
     needs: [validate, release-metadata]
-    if: inputs.build_target != 'cli' && inputs.build_target != 'android'
+    if: inputs.build_target != 'cli' && inputs.build_target != 'android' && inputs.build_target != 'ios'
     name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     environment: ${{ (matrix.platform == 'windows' || matrix.platform == 'macos') && 'signing' || 'build' }}
@@ -164,7 +165,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
           architecture: ${{ (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
@@ -632,7 +633,7 @@ jobs:
   build-android:
     name: Android (${{ matrix.arch }})
     needs: [validate, release-metadata]
-    if: inputs.build_target != 'cli'
+    if: inputs.build_target != 'cli' && inputs.build_target != 'ios'
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     environment: beta
@@ -661,7 +662,7 @@ jobs:
           echo "VIRTUAL_ENV=$RUNNER_TEMP/android-venv" >> "$GITHUB_ENV"
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
@@ -849,12 +850,203 @@ jobs:
             pysidedeploy.spec
             ${{ runner.temp }}/android-manifest.txt
 
+  restore-ios-native:
+    needs: [validate, release-metadata]
+    if: inputs.build_target != 'cli' && inputs.build_target != 'android'
+    name: Restore pinned iOS device dependencies
+    runs-on: ubuntu-24.04
+    # GitHub exposes draft releases only to identities with push access.
+    permissions:
+      contents: write
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15.2"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: native-cache
+        with:
+          path: ${{ runner.temp }}/ios-inputs/ios-lab
+          key: ios-device-inputs-${{ hashFiles('ios-lab/snapshot-assets.json') }}
+      - name: Extract device dependencies from the archived lab
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash packaging/restore_ios_dependencies.sh "$RUNNER_TEMP/ios-inputs"
+      - uses: ./.github/actions/upload-artifact
+        with:
+          name: ios-native-inputs
+          if-no-files-found: error
+          path: ${{ runner.temp }}/ios-inputs/ios-lab
+
+  build-ios:
+    name: iOS (arm64)
+    needs: [restore-ios-native, release-metadata]
+    runs-on: macos-15
+    timeout-minutes: 120
+    environment: beta
+    defaults:
+      run:
+        shell: bash
+    env:
+      GH_TOKEN: ${{ github.token }}
+      IOS_APP_VERSION: ${{ needs.release-metadata.outputs.version }}
+      RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
+      IOS_WHEELS_RELEASE: "6.12.0-ios15-cp315"
+      IOS_MANIFEST_SHA256: "6b8d8de1e6bd31b2c6e7b8d458eae9c6b4032a58a668f7d12cfb4eed64ca3c56"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15.2"
+          architecture: arm64
+
+      - name: Configure native ARM64 tools and Xcode
+        run: |
+          test "$(uname -m)" = arm64
+          test -d /Applications/Xcode_26.3.app/Contents/Developer
+          export DEVELOPER_DIR=/Applications/Xcode_26.3.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-path
+          python -c 'import sys; assert sys.version_info[:2] == (3, 15)'
+          for tool in python gh rsync; do command -v "$tool"; done
+          {
+            echo "IOS_WORK_ROOT=$RUNNER_TEMP/ios-ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+            echo "PORN_FETCH_SOURCE=$GITHUB_WORKSPACE"
+            echo "DEVELOPER_DIR=$DEVELOPER_DIR"
+          } >> "$GITHUB_ENV"
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ios-native-inputs
+          path: ${{ env.IOS_WORK_ROOT }}/restored
+
+      - name: Download and verify published iOS inputs
+        run: |
+          mkdir -p "$IOS_WORK_ROOT/downloads"
+          gh release download "$IOS_WHEELS_RELEASE" --repo EchterAlsFake/PySide6-to-iOS \
+            --dir "$IOS_WORK_ROOT/downloads" \
+            --pattern 'pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl' \
+            --pattern 'shiboken6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl' \
+            --pattern python-3.15.0rc2-iOS-XCframework.tar.gz \
+            --pattern PySide6-to-iOS-build-scripts.tar.gz --pattern SHA256SUMS
+          cd "$IOS_WORK_ROOT/downloads"
+          echo "$IOS_MANIFEST_SHA256  SHA256SUMS" | shasum -a 256 --check --strict
+          for asset in *.whl *.tar.gz; do
+            awk -v name="$asset" '$2 == name { print }' SHA256SUMS
+          done > selected.sha256
+          test "$(wc -l < selected.sha256)" -eq 4
+          shasum -a 256 --check --strict selected.sha256
+          mkdir -p "$IOS_WORK_ROOT/helpers" "$IOS_WORK_ROOT/runtime"
+          tar -xzf PySide6-to-iOS-build-scripts.tar.gz -C "$IOS_WORK_ROOT/helpers"
+          tar -xzf python-3.15.0rc2-iOS-XCframework.tar.gz -C "$IOS_WORK_ROOT/runtime"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path(os.environ["IOS_WORK_ROOT"])
+          framework = root / "runtime/Python.xcframework"
+          if not framework.is_dir():
+              raise SystemExit("Published Python.xcframework is missing")
+          with open(os.environ["GITHUB_ENV"], "a") as stream:
+              stream.write(f"IOS_PYTHON_XCFRAMEWORK={framework}\n")
+              stream.write(f"IOS_DEPLOY_VENV={root / 'deploy-venv'}\n")
+          PY
+
+      - name: Prepare native host tools and stage device dependencies
+        run: |
+          python -m venv "$IOS_DEPLOY_VENV"
+          "$IOS_DEPLOY_VENV/bin/python" -m pip install 'PySide6-Essentials==6.12.0'
+          REQUIREMENTS=$("$IOS_DEPLOY_VENV/bin/python" -c 'from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent / "scripts/requirements-ios.txt")')
+          "$IOS_DEPLOY_VENV/bin/python" -m pip install -r "$REQUIREMENTS"
+          "$IOS_DEPLOY_VENV/bin/python" -c 'import platform; assert platform.machine() == "arm64"'
+          RCC=$("$IOS_DEPLOY_VENV/bin/python" -c 'from pathlib import Path; import PySide6; print(Path(PySide6.__file__).parent / "Qt/libexec/rcc")')
+          file "$RCC"
+          HELPERS="$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts"
+          "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/patch-ios-deploy.py" --python "$IOS_DEPLOY_VENV/bin/python"
+          "$IOS_DEPLOY_VENV/bin/python" scripts/patch_ios_deploy.py
+          "$IOS_DEPLOY_VENV/bin/python" "$HELPERS/check-ios-wheels.py" "$IOS_WORK_ROOT/downloads" --target ios_arm64 --max-ios 15.0
+          mkdir -p "$IOS_WORK_ROOT/lab/device/wheels" "$IOS_WORK_ROOT/lab/pornfetch/vendor" "$IOS_WORK_ROOT/lab/device/native/packages"
+          rsync -a ios-lab/ "$IOS_WORK_ROOT/lab/"
+          rsync -a "$IOS_WORK_ROOT/restored/pornfetch/vendor/" "$IOS_WORK_ROOT/lab/pornfetch/vendor/"
+          rsync -a "$IOS_WORK_ROOT/restored/device/native/packages/" "$IOS_WORK_ROOT/lab/device/native/packages/"
+          rsync -a ios-lab/device/native/packages/ "$IOS_WORK_ROOT/lab/device/native/packages/"
+          cp "$IOS_WORK_ROOT/downloads/"*.whl "$IOS_WORK_ROOT/lab/device/wheels/"
+          echo "$IOS_DEPLOY_VENV/bin" >> "$GITHUB_PATH"
+
+      - name: Check portable staging
+        run: python -m unittest src.tests.unit.test_prepare_ios_ci
+
+      - name: Stamp version and generate the app project
+        run: |
+          python packaging/write_build_version.py "$IOS_APP_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          python "$IOS_WORK_ROOT/lab/device/prepare-application.py"
+
+      - name: Build device app and package IPA for re-signing
+        run: |
+          mkdir -p "$IOS_WORK_ROOT/output"
+          python scripts/build_output.py --label "Compile iOS app" --log-file "$IOS_WORK_ROOT/xcodebuild.log" -- \
+            xcodebuild -project "$IOS_WORK_ROOT/lab/device/app/deployment/ios_arm64/PornFetch.xcodeproj" \
+            -scheme PornFetch -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath "$IOS_WORK_ROOT/derived" -jobs 4 \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=- \
+            EXPANDED_CODE_SIGN_IDENTITY=- EXPANDED_CODE_SIGN_IDENTITY_NAME=ad-hoc build
+          python "$IOS_WORK_ROOT/helpers/PySide6-to-iOS/scripts/package-ipa.py" \
+            --app "$IOS_WORK_ROOT/derived/Build/Products/Release-iphoneos/PornFetch.app" \
+            --output "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa" \
+            --display-name 'Porn Fetch' --share-documents
+
+      - name: Upload re-signable IPA
+        uses: ./.github/actions/upload-artifact
+        with:
+          archive: false
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.ipa
+
+      - name: Upload IPA checksum
+        uses: ./.github/actions/upload-artifact
+        with:
+          archive: false
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.ipa.sha256
+
+      - name: Collect iOS notices
+        run: |
+          HOST_PACKAGES=$(python -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
+          python packaging/collect_legal.py "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_LEGAL" \
+            --distribution-path "$IOS_WORK_ROOT/lab/device/vendor" --distribution-path "$HOST_PACKAGES"
+
+      - name: Upload iOS notices
+        uses: ./.github/actions/upload-artifact
+        with:
+          archive: false
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_LEGAL.zip
+
+      - name: Upload IPA validation report
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: ios-validation-report
+          if-no-files-found: error
+          path: ${{ env.IOS_WORK_ROOT }}/output/PornFetch_ios_GUI_arm64_resign.json
+
+      - name: Upload build diagnostics
+        if: always() && env.IOS_WORK_ROOT != ''
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: ios-build-diagnostics
+          path: |
+            ${{ env.IOS_WORK_ROOT }}/xcodebuild.log
+            ${{ env.IOS_WORK_ROOT }}/lab/device/app/pysidedeploy.spec
+            ${{ env.IOS_WORK_ROOT }}/downloads/SHA256SUMS
+
   # ==========================================
   # 2. CLI BUILDS (Standard Cross-Platform)
   # ==========================================
   build-cli:
     needs: [validate, release-metadata]
-    if: inputs.build_target != 'gui' && inputs.build_target != 'android'
+    if: inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios'
     name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     environment: ${{ (matrix.platform == 'windows' || matrix.platform == 'macos') && 'signing' || 'build' }}
@@ -888,7 +1080,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
           architecture: ${{ (matrix.arch == 'x86') && 'x86' || (matrix.arch == 'arm64') && 'arm64' || 'x64' }}
 
       - name: Install uv
@@ -1063,15 +1255,19 @@ jobs:
   build-cli-linux-x32:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-x32)
-    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15.2"
+
       - name: Build and smoke test in 32-bit Linux
         run: |
-          python3 scripts/build_output.py --label "Build Linux 32-bit CLI" -- \
+          python scripts/build_output.py --label "Build Linux 32-bit CLI" -- \
             docker run --rm --platform linux/386 \
             --mount type=bind,source="$GITHUB_WORKSPACE",target=/workspace \
             --workdir /workspace \
@@ -1110,11 +1306,15 @@ jobs:
   build-cli-linux-riscv64:
     needs: [validate, release-metadata]
     name: CLI experimental (linux-riscv64)
-    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.experimental_builds
+    if: github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios' && inputs.experimental_builds
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15.2"
 
       - name: Build and smoke test via QEMU
         uses: uraimo/run-on-arch-action@fa1f3e7de95534497266c7265950b5188355fbfb # v3.2.1
@@ -1133,8 +1333,8 @@ jobs:
             curl -fsSL https://astral.sh/uv/install.sh | sh
             export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
             export UV_NO_PROGRESS=1
-            uv python install 3.15
-            uv sync --upgrade --no-dev --extra build --python 3.15
+            uv python install 3.15.2
+            uv sync --upgrade --no-dev --extra build --python 3.15.2
             uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
             uv run --no-sync python packaging/write_cli_build_version.py linux riscv64
             uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
@@ -1192,7 +1392,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
 
       - name: Install uv
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
@@ -1318,7 +1518,7 @@ jobs:
     name: Deploy IFW Repositories
     needs: [validate, build-gui, release-metadata]
     if: >-
-      github.event_name == 'workflow_dispatch' && inputs.build_target != 'cli' && inputs.build_target != 'android' && inputs.legal_review_complete &&
+      github.event_name == 'workflow_dispatch' && inputs.build_target != 'cli' && inputs.build_target != 'android' && inputs.build_target != 'ios' && inputs.legal_review_complete &&
       (inputs.deploy_repositories || inputs.create_release)
     runs-on: ubuntu-latest
     environment: beta
@@ -1330,7 +1530,7 @@ jobs:
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
 
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
 
@@ -1410,7 +1610,7 @@ jobs:
     name: Deploy CLI Updates
     needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, release-metadata]
     if: >-
-      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.legal_review_complete &&
+      !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios' && inputs.legal_review_complete &&
       (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
     runs-on: ubuntu-latest
     environment: beta
@@ -1422,7 +1622,7 @@ jobs:
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
 
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
 
@@ -1473,14 +1673,15 @@ jobs:
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [validate, build-gui, build-android, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
+    needs: [validate, build-gui, build-android, build-ios, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
       needs.validate.result == 'success' &&
-      (inputs.build_target == 'cli' || inputs.build_target == 'android' || (needs.build-gui.result == 'success' &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-gui.result == 'success' &&
         needs.build-macos-universal.result == 'success' && needs.deploy-repositories.result == 'success')) &&
-      (inputs.build_target == 'gui' || inputs.build_target == 'android' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success')) &&
-      (inputs.build_target == 'cli' || needs.build-android.result == 'success')
+      (inputs.build_target == 'gui' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success')) &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'ios' || needs.build-android.result == 'success') &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || needs.build-ios.result == 'success')
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -1514,7 +1715,7 @@ jobs:
               fi
             done
             # Installers and Android packages/sidecars are already direct assets.
-            if [[ "$artifact_name" != PornFetch_*_GUI_*_Setup.* && "$artifact_name" != PornFetch_android_GUI_* ]]; then
+            if [[ "$artifact_name" != PornFetch_*_GUI_*_Setup.* && "$artifact_name" != PornFetch_android_GUI_* && "$artifact_name" != PornFetch_ios_GUI_* ]]; then
               (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
             fi
             for file in "$artifact_dir"/*; do
@@ -1547,14 +1748,15 @@ jobs:
   # Independent website distribution; existing update publishers are unchanged.
   publish-website:
     name: Publish Website Downloads
-    needs: [validate, build-gui, build-android, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, build-macos-universal, release-metadata]
+    needs: [validate, build-gui, build-android, build-ios, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, build-macos-universal, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.deploy_website && inputs.legal_review_complete &&
       needs.validate.result == 'success' && needs.release-metadata.result == 'success' &&
-      (inputs.build_target == 'cli' || inputs.build_target == 'android' || (needs.build-gui.result == 'success' && needs.build-macos-universal.result == 'success')) &&
-      (inputs.build_target == 'gui' || inputs.build_target == 'android' || (needs.build-cli.result == 'success' &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-gui.result == 'success' && needs.build-macos-universal.result == 'success')) &&
+      (inputs.build_target == 'gui' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-cli.result == 'success' &&
         (!inputs.experimental_builds || (needs.build-cli-linux-x32.result == 'success' && needs.build-cli-linux-riscv64.result == 'success')))) &&
-      (inputs.build_target == 'cli' || needs.build-android.result == 'success')
+      (inputs.build_target == 'cli' || inputs.build_target == 'ios' || needs.build-android.result == 'success') &&
+      (inputs.build_target == 'cli' || inputs.build_target == 'android' || needs.build-ios.result == 'success')
     runs-on: ubuntu-24.04
     environment: beta
     concurrency:
@@ -1564,7 +1766,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: "3.15"
+          python-version: "3.15.2"
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       - name: Install publishing dependencies
         run: uv sync --upgrade --no-dev
@@ -1595,7 +1797,7 @@ jobs:
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
             --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
             --notes CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
-          if [ "$RELEASE_BUILD_TARGET" != cli ]; then
+          if [ "$RELEASE_BUILD_TARGET" != cli ] && [ "$RELEASE_BUILD_TARGET" != ios ]; then
             test -n "$CLI_UPDATE_SIGNING_KEY"
             umask 077
             SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/android-online.XXXXXX.pem")
