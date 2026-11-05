@@ -187,7 +187,10 @@ bash scripts/install.sh
 ```
 
 The Unix script installs system packages and may ask for sudo. The Windows script
-expects the compiler and MSYS2 tools to be installed already. Both use the current
+installs missing Git for Windows with `winget`, refreshes PATH and continues in
+the same terminal. If winget is unavailable, install Microsoft's App Installer
+or Git for Windows and rerun it. The compiler and MSYS2 tools must already be
+installed. Both scripts use the current
 checkout when available. They do not switch tags or overwrite local source changes.
 The Windows script saves its console transcript under
 `%TEMP%\porn-fetch-build-logs\install-windows-*.log`, prints the full error and

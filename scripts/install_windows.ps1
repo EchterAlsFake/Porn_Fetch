@@ -13,7 +13,32 @@ function Run {
     if ($LASTEXITCODE -ne 0) { throw "$Exe failed with exit code $LASTEXITCODE" }
 }
 
+function Refresh-Path {
+    # Keep this session's additions and import paths registered by installers.
+    $paths = @($env:PATH,
+        [Environment]::GetEnvironmentVariable('Path', 'Machine'),
+        [Environment]::GetEnvironmentVariable('Path', 'User'))
+    $env:PATH = ($paths | Where-Object { $_ }) -join [IO.Path]::PathSeparator
+}
+
+function Ensure-Git {
+    if (Get-Command git -ErrorAction SilentlyContinue) { return }
+    Refresh-Path
+    if (Get-Command git -ErrorAction SilentlyContinue) { return }
+    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+        throw 'Git and winget are unavailable. Install App Installer from the Microsoft Store, or install Git for Windows, then rerun this script.'
+    }
+    Write-Host 'Installing Git for Windows with winget...'
+    Run winget install --id Git.Git --exact --source winget --accept-package-agreements --accept-source-agreements
+    Refresh-Path
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        throw 'Git installation completed, but git.exe is not on PATH. Reopen PowerShell and rerun this script.'
+    }
+    Run git --version
+}
+
 function Main {
+    Ensure-Git
     if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
         # The upstream installer calls exit on failure. Keep that exit inside
         # a child process when this script is invoked through irm ... | iex.
@@ -32,9 +57,6 @@ function Main {
     } elseif ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "build_desktop.py"))) {
         $projectDir = Split-Path $PSScriptRoot -Parent
     } else {
-        if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-            throw "Install Git for Windows, reopen PowerShell, and run this script again."
-        }
         if (-not (Test-Path Porn_Fetch)) {
             Run git clone https://github.com/EchterAlsFake/Porn_Fetch.git Porn_Fetch
         }

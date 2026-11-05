@@ -128,6 +128,9 @@ The Windows convenience script runs the uv installer in a child PowerShell so
 upstream `exit` calls cannot close an `irm ... | iex` caller. It saves a transcript
 under the temporary `porn-fetch-build-logs` folder, prints failure details and
 pauses on interactive failures unless `-NoPause` is set.
+Missing Git is installed with winget's exact `Git.Git` package before cloning or
+building. Refresh the process PATH from registered machine/user values so a
+successful installation can be used immediately; existing Git is kept.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
