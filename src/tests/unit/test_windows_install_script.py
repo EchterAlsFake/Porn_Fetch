@@ -116,6 +116,99 @@ function uv { throw 'BUILD_MUST_NOT_START' }
         self.assertIn("GIT_INSTALL_FAILED", log)
         self.assertNotIn("BUILD_MUST_NOT_START", output)
 
+    def run_msys2_setup(self, architecture: str, fail_update: bool = False):
+        with tempfile.TemporaryDirectory() as temporary:
+            harness = Path(temporary) / "test.ps1"
+            harness.write_text(r"""
+$ErrorActionPreference = 'Stop'
+$source = Get-Content -LiteralPath $env:PORN_FETCH_INSTALL_SCRIPT -Raw
+$ast = [Management.Automation.Language.Parser]::ParseInput($source, [ref]$null, [ref]$null)
+foreach ($statement in $ast.EndBlock.Statements) {
+    if ($statement -is [Management.Automation.Language.FunctionDefinitionAst]) {
+        Invoke-Expression $statement.Extent.Text
+    }
+}
+$Msys2Root = Join-Path $env:TEMP 'custom-msys'
+$env:MSYSTEM = 'ORIGINAL_SYSTEM'
+$env:CHERE_INVOKING = 'ORIGINAL_CHERE'
+$originalPath = $env:PATH
+$global:updates = 0
+function winget { }
+function Run {
+    param([string]$Exe, [Parameter(ValueFromRemainingArguments=$true)]$Arguments)
+    if ($Exe -eq 'winget') {
+        if ($Arguments[2] -ne 'MSYS2.MSYS2' -or $Arguments[8] -ne $Msys2Root) {
+            throw 'Wrong MSYS2 package or custom installation path'
+        }
+        $expectedArch = if ($env:PORN_FETCH_TEST_ARCH -eq 'amd64') { 'x64' } else { 'arm64' }
+        if ($Arguments[10] -ne $expectedArch) { throw 'MSYS2 installer architecture does not match Python' }
+        Write-Output 'MSYS2_INSTALLED'
+        New-Item -ItemType Directory (Join-Path $Msys2Root 'usr/bin') -Force | Out-Null
+        New-Item (Join-Path $Msys2Root 'usr/bin/bash.exe') | Out-Null
+    } elseif ($Exe.EndsWith('pacman.exe')) {
+        if ($Arguments -contains '-Syu') {
+            $global:updates++
+            if ($global:updates -eq 1 -or $env:PORN_FETCH_FAIL_UPDATE -eq '1') {
+                throw 'SIMULATED_CORE_UPDATE_EXIT'
+            }
+            Write-Output 'UPDATE_FINISHED'
+        } else {
+            Write-Output ('PACKAGES: ' + ($Arguments -join ' '))
+        }
+    } elseif ($Exe.EndsWith('bash.exe')) {
+        if ($Arguments[1] -ne 'true') {
+            Write-Output ('TOOLS_READY: ' + $env:MSYSTEM)
+        }
+    } else { throw "Unexpected tool: $Exe" }
+}
+try {
+    Ensure-Msys2 -Architecture $env:PORN_FETCH_TEST_ARCH
+    Write-Output 'MSYS2_SETUP_COMPLETE'
+} catch { Write-Output "SETUP_FAILED: $_" }
+if ($env:MSYSTEM -ne 'ORIGINAL_SYSTEM' -or $env:CHERE_INVOKING -ne 'ORIGINAL_CHERE') {
+    throw 'MSYS2 environment was not restored'
+}
+if ($env:PATH -ne $originalPath) { throw 'MSYS2 PATH was not restored' }
+""", encoding="utf-8")
+            result = subprocess.run(
+                [POWERSHELL, "-NoLogo", "-NoProfile", "-NonInteractive", "-File", str(harness)],
+                capture_output=True, text=True, timeout=30,
+                env=dict(os.environ, TEMP=temporary, TMP=temporary, TMPDIR=temporary,
+                         PORN_FETCH_INSTALL_SCRIPT=str(SCRIPT), PORN_FETCH_TEST_ARCH=architecture,
+                         PORN_FETCH_FAIL_UPDATE="1" if fail_update else "0"),
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return result.stdout
+
+    def test_msys2_bootstrap_finishes_core_update_and_selects_python_architecture(self):
+        for arch, system, prefix in (("amd64", "CLANG64", "x86_64"), ("arm64", "CLANGARM64", "aarch64")):
+            with self.subTest(arch=arch):
+                output = self.run_msys2_setup(arch)
+                self.assertIn("MSYS2_INSTALLED", output)
+                self.assertIn("UPDATE_FINISHED", output)
+                self.assertIn(f"mingw-w64-clang-{prefix}-toolchain", output)
+                self.assertIn(f"mingw-w64-clang-{prefix}-zlib", output)
+                self.assertIn("make diffutils pkgconf", output)
+                self.assertIn(f"TOOLS_READY: {system}", output)
+                self.assertIn("MSYS2_SETUP_COMPLETE", output)
+
+    def test_failed_final_msys2_update_stops_toolchain_installation(self):
+        output = self.run_msys2_setup("amd64", fail_update=True)
+        self.assertIn("SETUP_FAILED: SIMULATED_CORE_UPDATE_EXIT", output)
+        self.assertNotIn("PACKAGES:", output)
+        self.assertNotIn("MSYS2_SETUP_COMPLETE", output)
+
+    def test_without_ffmpeg_skips_msys2_bootstrap(self):
+        output, _ = self.run_failure(r"""
+function uv {
+    if ($args -contains 'scripts/build_desktop.py') { throw 'BUILD_REACHED_WITHOUT_MSYS2' }
+    $global:LASTEXITCODE = 0
+}
+function winget { throw 'MSYS2_MUST_NOT_INSTALL' }
+""", "& ([scriptblock]::Create($source)) -WithoutFFmpeg -NoPause")
+        self.assertIn("BUILD_REACHED_WITHOUT_MSYS2", output)
+        self.assertNotIn("MSYS2_MUST_NOT_INSTALL", output)
+
 
 if __name__ == "__main__":
     unittest.main()

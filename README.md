@@ -115,8 +115,9 @@ To automatically install dependencies, clone, and build the latest code on your 
   ```powershell
   irm https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/scripts/install_windows.ps1 | iex
   ```
-  Missing Git for Windows is installed automatically using winget. Build failures
-  stay visible and are logged under `%TEMP%\porn-fetch-build-logs`.
+  Missing Git and MSYS2 are installed automatically using winget. The script
+  prepares the Clang toolchain for FFmpeg. Build failures stay visible and are
+  logged under `%TEMP%\porn-fetch-build-logs`.
 
 ### 3. Building & Running from Source
 The source tree targets Python 3.15 and uses [`uv`](https://docs.astral.sh/uv/) for dependency management.

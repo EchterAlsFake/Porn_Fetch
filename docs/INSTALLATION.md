@@ -123,7 +123,9 @@ Use native x64 or ARM64 Python through uv. Install Git for Windows and a C/C++
 compiler supported by Nuitka. Visual Studio Build Tools with **Desktop development
 with C++** is one option. Read Nuitka's compiler error if a toolchain is missing.
 
-To build the bundled FFmpeg, install [MSYS2](https://www.msys2.org/). In its shell:
+The Windows convenience script below installs MSYS2 and its FFmpeg Clang
+toolchain automatically. For a manual build, install [MSYS2](https://www.msys2.org/).
+In its shell:
 
 ```sh
 pacman -Syu
@@ -189,8 +191,13 @@ bash scripts/install.sh
 The Unix script installs system packages and may ask for sudo. The Windows script
 installs missing Git for Windows with `winget`, refreshes PATH and continues in
 the same terminal. If winget is unavailable, install Microsoft's App Installer
-or Git for Windows and rerun it. The compiler and MSYS2 tools must already be
-installed. Both scripts use the current
+or Git for Windows and rerun it. Unless `-WithoutFFmpeg` is set, the Windows script
+also installs missing MSYS2 under `-Msys2Root` (default `C:\msys64`), finishes its
+core/system updates in fresh processes and installs make, diffutils, pkgconf,
+the Clang toolchain and zlib. It selects CLANG64 or CLANGARM64 from the actual
+Python architecture and checks the tools before building FFmpeg. A compiler
+supported by Nuitka is still required for compiling the application itself.
+Both scripts use the current
 checkout when available. They do not switch tags or overwrite local source changes.
 The Windows script saves its console transcript under
 `%TEMP%\porn-fetch-build-logs\install-windows-*.log`, prints the full error and

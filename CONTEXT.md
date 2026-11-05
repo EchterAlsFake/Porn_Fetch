@@ -131,6 +131,10 @@ pauses on interactive failures unless `-NoPause` is set.
 Missing Git is installed with winget's exact `Git.Git` package before cloning or
 building. Refresh the process PATH from registered machine/user values so a
 successful installation can be used immediately; existing Git is kept.
+For bundled FFmpeg, it installs missing MSYS2 through winget, runs core/system
+updates in separate pacman processes, and installs make/diffutils/pkgconf plus
+the Clang toolchain and zlib for the actual Python architecture. CLANG64 and
+CLANGARM64 match the native FFmpeg builder. `-WithoutFFmpeg` skips this setup.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.

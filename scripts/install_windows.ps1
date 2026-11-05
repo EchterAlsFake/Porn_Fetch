@@ -37,6 +37,59 @@ function Ensure-Git {
     Run git --version
 }
 
+function Ensure-Msys2 {
+    param([string]$Architecture)
+    switch ($Architecture.ToLowerInvariant()) {
+        { $_ -in @('amd64', 'x86_64', 'x64') } {
+            $msystem = 'CLANG64'
+            $msysArchitecture = 'x64'
+            $prefix = 'mingw-w64-clang-x86_64'
+            break
+        }
+        { $_ -in @('arm64', 'aarch64') } {
+            $msystem = 'CLANGARM64'
+            $msysArchitecture = 'arm64'
+            $prefix = 'mingw-w64-clang-aarch64'
+            break
+        }
+        default { throw "Unsupported Python architecture for FFmpeg: $Architecture" }
+    }
+    $bash = Join-Path $Msys2Root 'usr\bin\bash.exe'
+    $pacman = Join-Path $Msys2Root 'usr\bin\pacman.exe'
+    if (-not (Test-Path -LiteralPath $bash)) {
+        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+            throw 'MSYS2 and winget are unavailable. Install App Installer from the Microsoft Store, or install MSYS2, then rerun this script.'
+        }
+        Write-Host "Installing MSYS2 into $Msys2Root..."
+        Run winget install --id MSYS2.MSYS2 --exact --source winget --silent --location $Msys2Root --architecture $msysArchitecture --accept-package-agreements --accept-source-agreements
+        if (-not (Test-Path -LiteralPath $bash)) {
+            throw "MSYS2 installation did not create $bash. Check -Msys2Root and the installer output above."
+        }
+    }
+    $previousMsystem = $env:MSYSTEM
+    $previousChereInvoking = $env:CHERE_INVOKING
+    $previousPath = $env:PATH
+    try {
+        $env:MSYSTEM = $msystem
+        $env:CHERE_INVOKING = 'yes'
+        $env:PATH = (Join-Path $Msys2Root 'usr\bin') + [IO.Path]::PathSeparator + $env:PATH
+        Write-Host "Preparing MSYS2 $msystem for FFmpeg..."
+        Run $bash -lc 'true'
+        # Run pacman directly, without a parent MSYS shell that a core update
+        # would close. The second process finishes updating with the new core.
+        try { Run $pacman --noconfirm -Syu } catch {
+            Write-Host "Initial MSYS2 update interrupted: $_. Retrying in a fresh process..."
+        }
+        Run $pacman --noconfirm -Syu
+        Run $pacman --noconfirm -S --needed make diffutils pkgconf "$prefix-toolchain" "$prefix-zlib"
+        Run $bash -lc 'command -v make && command -v clang && command -v llvm-strip && pkg-config --exists zlib && clang --version'
+    } finally {
+        $env:MSYSTEM = $previousMsystem
+        $env:CHERE_INVOKING = $previousChereInvoking
+        $env:PATH = $previousPath
+    }
+}
+
 function Main {
     Ensure-Git
     if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
@@ -66,12 +119,13 @@ function Main {
     Push-Location $projectDir
     try {
         if (-not (Test-Path scripts/build_desktop.py)) { throw "Use the build instructions from this checkout's release tag." }
-        if (-not $WithoutFFmpeg -and -not (Test-Path "$Msys2Root\usr\bin\make.exe")) {
-            throw "Install MSYS2 and its CLANG64/CLANGARM64 build tools first (docs/INSTALLATION.md), or use -WithoutFFmpeg with FFmpeg on PATH."
-        }
         Run uv python install 3.15
         Run uv sync --upgrade --extra gui --extra build --extra desktop-build
         $env:UV_NO_SYNC = '1'
+        if (-not $WithoutFFmpeg) {
+            $buildArch = Run uv run --no-sync python -c 'import platform; print(platform.machine().lower())'
+            Ensure-Msys2 -Architecture $buildArch.Trim()
+        }
         $buildArguments = @('run', '--no-sync', 'python', 'scripts/build_desktop.py')
         if ($WithoutFFmpeg) { $buildArguments += '--without-ffmpeg' }
         else { $buildArguments += @('--msys2-root', $Msys2Root) }
