@@ -50,7 +50,7 @@ on:
         type: boolean
         default: false
       verbose_build:
-        description: "Stream full compiler and patch output"
+        description: "Include extra build and patch diagnostics (compiler output always streams)"
         type: boolean
         default: false
       experimental_builds:

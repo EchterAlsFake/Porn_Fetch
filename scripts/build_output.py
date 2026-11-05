@@ -11,7 +11,6 @@ import subprocess
 import sys
 import tempfile
 import time
-from collections import deque
 from pathlib import Path
 
 
@@ -21,7 +20,7 @@ def verbose() -> bool:
 
 def add_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-v", "--verbose", action="store_true", default=verbose(),
-                        help="show full build output (also: PORN_FETCH_BUILD_VERBOSE=1)")
+                        help="show extra build diagnostics (compiler output is always streamed; also: PORN_FETCH_BUILD_VERBOSE=1)")
 
 
 def configure(args: argparse.Namespace) -> None:
@@ -47,7 +46,7 @@ def detail(text: str) -> None:
 
 
 def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None) -> subprocess.CompletedProcess:
-    """Keep complete output on disk; stream in verbose mode, show a tail on failure.
+    """Stream complete child output to the terminal and retain it on disk.
 
     Use only for unattended commands. Password prompts and other interactive
     tools must retain their own terminal output.
@@ -64,22 +63,27 @@ def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None
     message(f"{label} — log: {log_path}")
     detail(shlex.join([str(part) for part in command]))
     started = time.monotonic()
+    last_activity = started
+    environment = dict(os.environ if env is None else env, PYTHONUNBUFFERED="1")
     with log_path.open("wb") as output, log_path.open(encoding="utf-8", errors="replace") as reader:
-        with subprocess.Popen(command, cwd=cwd, env=env, stdout=output, stderr=subprocess.STDOUT) as process:
+        with subprocess.Popen(command, cwd=cwd, env=environment, stdout=output, stderr=subprocess.STDOUT) as process:
             try:
                 while True:
-                    if verbose():
-                        sys.stderr.write(reader.read())
+                    pending = reader.read()
+                    if pending:
+                        sys.stderr.write(pending)
                         sys.stderr.flush()
+                        last_activity = time.monotonic()
+                    elif time.monotonic() - last_activity >= 60:
+                        message(f"{label}: still running ({int(time.monotonic() - started)}s)")
+                        last_activity = time.monotonic()
                     try:
-                        process.wait(timeout=0.2 if verbose() else 60)
+                        process.wait(timeout=0.2)
                         break
                     except subprocess.TimeoutExpired:
-                        if not verbose():
-                            message(f"{label}: still running ({int(time.monotonic() - started)}s)")
-                if verbose():
-                    sys.stderr.write(reader.read())
-                    sys.stderr.flush()
+                        pass
+                sys.stderr.write(reader.read())
+                sys.stderr.flush()
             except BaseException:
                 process.terminate()
                 try:
@@ -89,9 +93,6 @@ def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None
                     process.wait()
                 raise
     if process.returncode:
-        if not verbose():
-            with log_path.open(encoding="utf-8", errors="replace") as output:
-                print("".join(deque(output, maxlen=25)), file=sys.stderr, end="")
         message(f"{label} failed (exit {process.returncode}). Full log: {log_path}", "error")
         raise subprocess.CalledProcessError(process.returncode, command)
     message(f"{label} finished ({int(time.monotonic() - started)}s)", "ok")

@@ -176,8 +176,11 @@ On macOS, the output name must end in `.app`. Other useful options:
 - `--without-tor`: omit managed Tor. Use a fresh checkout without a staged
   `src/shared/tor` folder for this option.
 
-Use `PORN_FETCH_BUILD_VERBOSE=1` for more output. Native compiler logs are saved
-under the system temporary directory in `porn-fetch-build-logs`.
+FFmpeg and GUI compiler output is streamed to the terminal and saved in full
+under the system temporary directory in `porn-fetch-build-logs`. Each step prints
+its log path. Silent steps report that they are still running every 60 seconds.
+Use `PORN_FETCH_BUILD_VERBOSE=1` for extra build and patch diagnostics; compiler
+output is visible without enabling it.
 
 The convenience scripts use this same builder:
 

@@ -143,6 +143,11 @@ Windows FFmpeg notice collection reads zlib.h directly from the selected MSYS2
 Clang prefix. Do not launch bare pkg-config/cygpath with only a child env PATH:
 Windows CreateProcess resolves executable names against the parent's environment.
 
+`scripts/build_output.py` always streams child stdout/stderr to the terminal while
+retaining the complete compiler log. Python children use unbuffered output, and
+silent steps emit a heartbeat every 60 seconds. Verbose mode adds diagnostics;
+FFmpeg and GUI compilation output must remain visible by default.
+
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
 Android uses Qt/PySide 6.12.0 cp315 wheels, target Python 3.15.2 and NDK r28c.
