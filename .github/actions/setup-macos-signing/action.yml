@@ -3,6 +3,14 @@ description: Import the signing identity and notarization profile into a tempora
 runs:
   using: composite
   steps:
+    - name: Use TCP for Apple ticket delivery on hosted Intel runners
+      if: runner.arch == 'X64' && runner.environment == 'github-hosted'
+      shell: bash
+      run: |
+        # https://github.com/actions/runner-images/issues/14924
+        # Broken HTTP/3 connections cause stapler Error 68 after acceptance.
+        echo "block return out quick proto udp from any to any port 443" | sudo pfctl -f -
+        sudo pfctl -E
     - shell: bash
       run: python3 packaging/sign_macos.py setup
     - name: Check native app signing before compilation

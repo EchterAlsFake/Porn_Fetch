@@ -237,6 +237,12 @@ class MacOSSigningTests(unittest.TestCase):
         self.assertNotIn("secret", str(error.exception))
         self.assertNotIn("shell", execute.call_args.kwargs)
 
+    def test_public_subprocess_failure_includes_stapler_stdout_diagnostics(self):
+        failure = subprocess.CompletedProcess([], 68, stdout="CloudKit connection was lost", stderr="")
+        with patch.object(signing.subprocess, "run", return_value=failure):
+            with self.assertRaisesRegex(RuntimeError, "CloudKit connection was lost"):
+                signing.run(["xcrun", "stapler", "staple", self.root / "Example.app"])
+
     def test_macos_repository_preserves_framework_links_and_uses_signed_maintenance(self):
         dist = self.root / "dist"
         app = dist / "Porn Fetch.app/Contents/MacOS"

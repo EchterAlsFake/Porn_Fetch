@@ -33,7 +33,9 @@ def run(command, *, sensitive=False, check=True, timeout=None):
     result = subprocess.run(arguments, capture_output=True, text=True, timeout=timeout)
     if check and result.returncode:
         # Never include subprocess arguments: security/notarytool setup receives credentials.
-        detail = "" if sensitive else "\n" + result.stderr.strip()[-4000:]
+        detail = "" if sensitive else "\n" + "\n".join(
+            part.strip() for part in (result.stdout, result.stderr) if part.strip()
+        )[-4000:]
         raise RuntimeError(f"{command[0]} failed (exit {result.returncode}).{detail}")
     return result
 
