@@ -202,6 +202,9 @@ vswhere. Missing tools are installed with the Visual Studio 2022 Build Tools C++
 workload, including ARM64 components when needed. An incomplete Build Tools
 installation is modified to add the workload. If Windows needs a restart, the
 script reports that requirement without restarting the machine automatically.
+The FFmpeg builder reads the zlib notice directly from the selected MSYS2 Clang
+prefix; MSYS2 tools do not need to be on PowerShell's global PATH. Its post-build
+output names the executable being verified and the notice being collected.
 Both scripts use the current
 checkout when available. They do not switch tags or overwrite local source changes.
 The Windows script saves its console transcript under

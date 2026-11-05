@@ -139,6 +139,9 @@ Before syncing Python dependencies, vswhere checks for a modern Microsoft C++
 compiler and Windows SDK for the selected Python architecture. Missing tools are
 installed with Visual Studio 2022 Build Tools; incomplete Build Tools installs
 are modified to add the C++ workload. Report required reboots without forcing one.
+Windows FFmpeg notice collection reads zlib.h directly from the selected MSYS2
+Clang prefix. Do not launch bare pkg-config/cygpath with only a child env PATH:
+Windows CreateProcess resolves executable names against the parent's environment.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.

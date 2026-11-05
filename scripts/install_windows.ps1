@@ -40,8 +40,8 @@ function Ensure-Git {
 function Find-MsvcCompiler {
     param([string]$VsWhere, [string[]]$Components, [string]$Target)
     if (Test-Path -LiteralPath $VsWhere) {
-        Run $VsWhere -latest -products '*' -version '[17.0,)' -requires @Components -find "VC\Tools\MSVC\**\bin\Host*\$Target\cl.exe" |
-            Select-Object -First 1
+        $compilers = @(Run $VsWhere -latest -products '*' -version '[17.0,)' -requires @Components -find "VC\Tools\MSVC\**\bin\Host*\$Target\cl.exe")
+        if ($compilers.Count) { $compilers[0] }
     }
 }
 

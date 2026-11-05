@@ -2,6 +2,7 @@
 import configparser
 import fnmatch
 import hashlib
+import io
 import json
 import os
 import shlex
@@ -110,6 +111,57 @@ class WindowsBuildDependencyTests(unittest.TestCase):
                         self.assertEqual(Path(make), tools / "make.exe")
                         self.assertEqual(environment["PATH"].split(os.pathsep)[:2],
                                          [str(root / compiler / "bin"), str(tools)])
+
+    def test_windows_ffmpeg_collects_notices_without_msys2_on_parent_path(self):
+        for arch, compiler in (("x64", "clang64"), ("arm64", "clangarm64")):
+            with self.subTest(arch=arch), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                msys = root / "MSYS2 installation"
+                tools = msys / "usr/bin"
+                tools.mkdir(parents=True)
+                for name in ("bash.exe", "make.exe"):
+                    (tools / name).touch()
+                include = msys / compiler / "include"
+                include.mkdir(parents=True)
+                (include / "zlib.h").write_text("zlib license fixture")
+                archive = root / "source.tar.xz"
+                with tarfile.open(archive, "w:xz") as bundle:
+                    for name in ("configure", "COPYING.LGPLv2.1", "LICENSE.md"):
+                        data = b"source fixture"
+                        entry = tarfile.TarInfo(f"ffmpeg-{ffmpeg_builder.VERSION}/{name}")
+                        entry.size = len(data)
+                        bundle.addfile(entry, io.BytesIO(data))
+
+                def compile_fixture(command, *, label, cwd, env):
+                    if label == "Configure FFmpeg":
+                        (cwd / "config.h").write_text("\n".join(
+                            f"#define CONFIG_{option} 0" for option in ("GPL", "VERSION3", "NONFREE")))
+                        (cwd / "config_components.h").write_text("#define CONFIG_AAC_ENCODER 0\n")
+                    else:
+                        (cwd / "ffmpeg.exe").write_bytes(b"compiled executable")
+
+                def windows_output(command, **kwargs):
+                    # CreateProcess resolves bare names using the parent's PATH,
+                    # regardless of the PATH passed in the child's environment.
+                    if not Path(command[0]).is_absolute():
+                        raise FileNotFoundError(2, "Windows cannot locate this executable", command[0])
+                    self.assertTrue(Path(command[0]).is_file())
+                    return "GNU Lesser General Public License version 2.1" if "-L" in command else "FFmpeg version fixture"
+
+                with patch.object(ffmpeg_builder.sys, "platform", "win32"), \
+                        patch.object(ffmpeg_builder.platform, "machine", return_value=arch), \
+                        patch.object(ffmpeg_builder, "SOURCE_SHA256", hashlib.sha256(archive.read_bytes()).hexdigest()), \
+                        patch.object(ffmpeg_builder.build_output, "run", side_effect=compile_fixture), \
+                        patch.object(ffmpeg_builder.subprocess, "check_output", side_effect=windows_output), \
+                        patch.dict(os.environ, {"PATH": "plain PowerShell PATH without MSYS2"}):
+                    result = ffmpeg_builder.build("windows", arch, root / "output", root / "work", archive,
+                                                  msys2_root=msys)
+                self.assertEqual(result.read_bytes(), b"compiled executable")
+                legal = result.parent / "ffmpeg-legal"
+                self.assertEqual((legal / "zlib.h").read_text(), "zlib license fixture")
+                self.assertIn("FFmpeg version fixture", (legal / "version.txt").read_text())
+                manifest = json.loads((legal / "build.json").read_text())
+                self.assertEqual(manifest["arch"], arch)
 
 
 class FFmpegSourceDownloadTests(unittest.IsolatedAsyncioTestCase):

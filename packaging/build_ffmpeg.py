@@ -124,6 +124,9 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
     binary_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
     build_output.run([make, f"-j{jobs}", binary_name], label="Compile FFmpeg", cwd=build_dir, env=environment)
     executable = build_dir / binary_name
+    if not executable.is_file():
+        raise FileNotFoundError(f"FFmpeg compilation completed but the executable is missing: {executable}")
+    build_output.message(f"Verify FFmpeg license: {executable}")
     license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
                                           stderr=subprocess.STDOUT, text=True)
     if "GNU Lesser General Public" not in license_text or "version 2.1" not in license_text:
@@ -144,10 +147,13 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
         [str(result), "-version"], stderr=subprocess.STDOUT, text=True), encoding="utf-8")
     if target_platform == "windows":
         # The Windows executable statically links MSYS2's permissively licensed zlib.
-        include = subprocess.check_output(["pkg-config", "--variable=includedir", "zlib"],
-                                          env=environment, text=True).strip()
-        include = subprocess.check_output(["cygpath", "-w", include], env=environment, text=True).strip()
-        shutil.copy2(Path(include) / "zlib.h", legal / "zlib.h")
+        # Use the same prefix as build_tools: Windows CreateProcess cannot find
+        # bare pkg-config/cygpath commands via the PATH supplied in env.
+        assert msys2_root is not None
+        prefix = msys2_root.resolve() / ("clangarm64" if arch == "arm64" else "clang64")
+        notice = prefix / "include/zlib.h"
+        build_output.message(f"Collect Windows zlib notice: {notice}")
+        shutil.copy2(notice, legal / "zlib.h")
     (legal / "configuration.txt").write_text(
         shlex.join(["bash", f"ffmpeg-{VERSION}/configure", *flags]) + f"\nmake {binary_name}\n", encoding="utf-8")
     (legal / "build.json").write_text(json.dumps({
