@@ -70,8 +70,25 @@ a signed maintenance component, not just a signed setup EXE. CI installs it in a
 temporary folder, checks the installed maintenance binary, then uninstalls it.
 Windows ARM64 currently uses the portable GUI build.
 
+The application requires `eaf-base-api>=4.2.6` for FFmpeg remux/tagging launches
+that do not inherit Windows console input handles. Publish the matching library
+release before building the app; a fix in a sibling checkout does not reach CI's
+PyPI dependency installation. The Windows FFmpeg fixture checks include a real
+windowless child process with an invalid inherited input handle, matching the
+Explorer/Start Menu failure mode.
+
 Certum sessions live only in the runner's temporary folder and are cleaned up
 on failure too. Signing or timestamp failures stop the release job.
+
+Windows can display the whole signing-certificate subject as the publisher,
+including country, state, locality, organization and common name. Repeating a
+personal name in organization (`O`) and common name (`CN`) is valid. The app's
+version information, IFW Publisher and `ssign --name` do not override this identity.
+Inspect a published executable in PowerShell with
+`(Get-AuthenticodeSignature -LiteralPath '.\Porn Fetch.exe').SignerCertificate.Subject`.
+Changing those signed identity fields requires a certificate reissue through
+Certum, subject to its validation requirements; changing app metadata cannot
+remove location fields from an existing certificate.
 
 ## macOS
 
@@ -126,6 +143,19 @@ Desktop updates verify signed metadata and stage verified repository bytes befor
 launching Qt Maintenance Tool. CLI updates use TUF; Android uses a separate TUF
 feed and asks the OS installer for permission and confirmation. Updates are free
 and do not need a Premium license. Portable GUI/source copies update manually.
+
+Update payloads use HTTP/1.1: the production HTTP/2 route was observed resetting
+CLI transfers at exactly 1 MiB. TUF downloads resume interrupted streams with a
+validated HTTP Range response, with at most three attempts; final signed lengths
+and hashes are still mandatory. Desktop staging retries interrupted transfers
+before launching IFW and shows download progress. Successful launch uses the
+normal cooperative shutdown to save the queue and release services.
+
+The signed maintenance component stays forced, virtual and a dependency of the
+core app, but is not Essential. IFW prioritizes Essential updates and requires a
+restart before installing other updates, which caused Windows users to run each
+release update twice. The signed replacement tool can be installed alongside
+the app using IFW's deferred tool replacement.
 
 `src/cli/update_root.json` is the shared public trust anchor. Keep its root private
 key offline, with verified encrypted backups. The online key signs release/update

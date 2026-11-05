@@ -5,16 +5,18 @@ import QtQuick.Layouts
 
 Dialog {
     id: root
+    ContrastPopupBackground { popup: root }
     objectName: "licenseOfferDialog"
     required property var settings
+    property bool fullScreen: false
     readonly property bool highContrast: settings.high_contrast
     readonly property real textScale: Math.max(1, settings.font_size / 12)
-    readonly property color surface: highContrast ? "#000000" : "#101012"
-    readonly property color ink: "#f5f2f4"
+    readonly property color surface: highContrast ? Theme.background : "#101012"
+    readonly property color ink: highContrast ? Theme.ink : "#f5f2f4"
     readonly property color muted: highContrast ? ink : "#b7b1ba"
-    readonly property color accent: highContrast ? "#ffff00" : "#ef88b2"
-    readonly property color outline: highContrast ? "#ffffff" : "#3b343e"
-    Material.theme: Material.Dark
+    readonly property color accent: highContrast ? Theme.accent : "#ef88b2"
+    readonly property color outline: highContrast ? Theme.ink : "#3b343e"
+    Material.theme: highContrast && !settings.dark_mode ? Material.Light : Material.Dark
     Material.foreground: root.ink
     palette.buttonText: root.ink
     signal dismissed()
@@ -30,9 +32,17 @@ Dialog {
 
     parent: Overlay.overlay
     anchors.centerIn: parent
-    width: Math.min(parent.width - 24, 680)
-    height: Math.min(parent.height - 24, offerScroll.contentHeight + topPadding + bottomPadding + footer.implicitHeight)
+    width: fullScreen ? parent.width : Math.min(parent.width - 24, 680)
+    height: fullScreen ? parent.height : Math.min(parent.height - 24, offerScroll.contentHeight + topPadding + bottomPadding + footer.implicitHeight)
+    margins: 0
+    topInset: 0
+    bottomInset: 0
+    leftInset: 0
+    rightInset: 0
     padding: width < 480 ? 20 : 32
+    topPadding: padding + (fullScreen ? parent.SafeArea.margins.top : 0)
+    leftPadding: padding + (fullScreen ? parent.SafeArea.margins.left : 0)
+    rightPadding: padding + (fullScreen ? parent.SafeArea.margins.right : 0)
     modal: true
     focus: true
     z: 1000
@@ -46,7 +56,7 @@ Dialog {
 
     background: Rectangle {
         color: root.surface
-        radius: 18
+        radius: root.fullScreen ? 0 : 18
         border.width: root.highContrast ? 2 : 1
         border.color: root.outline
     }
@@ -134,7 +144,7 @@ Dialog {
                 Layout.fillWidth: true
                 implicitHeight: payments.implicitHeight + 32
                 radius: 12
-                color: root.highContrast ? "#000000" : "#20171d"
+                color: root.highContrast ? Theme.background : "#20171d"
                 border.color: root.highContrast ? root.outline : "#5c3447"
                 ColumnLayout {
                     id: payments
@@ -221,14 +231,16 @@ Dialog {
     }
 
     footer: Item {
-        implicitHeight: actions.implicitHeight + 24
+        implicitHeight: actions.implicitHeight + 24 + (root.fullScreen ? root.parent.SafeArea.margins.bottom : 0)
         GridLayout {
             id: actions
             anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
+            anchors.leftMargin: 12 + (root.fullScreen ? root.parent.SafeArea.margins.left : 0)
+            anchors.rightMargin: 12 + (root.fullScreen ? root.parent.SafeArea.margins.right : 0)
             columns: root.width < 480 ? 1 : 2
             columnSpacing: 12
             rowSpacing: 8
-            Button {
+            AppButton {
                 objectName: "licenseOfferBuyButton"
                 Layout.fillWidth: true
                 text: qsTr("Get license ↗")
@@ -245,13 +257,13 @@ Dialog {
                 }
                 background: Rectangle {
                     radius: 10
-                    color: root.highContrast ? "#ffff00" : parent.down ? "#d16b96" : parent.hovered ? "#ffa3ca" : root.accent
+                    color: root.highContrast ? Theme.accent : parent.down ? "#d16b96" : parent.hovered ? "#ffa3ca" : root.accent
                     border.width: parent.activeFocus ? 2 : 0
                     border.color: root.ink
                 }
                 onClicked: Qt.openUrlExternally("https://pornfetch.to")
             }
-            Button {
+            AppButton {
                 objectName: "licenseOfferContinueButton"
                 Layout.fillWidth: true
                 text: qsTr("Continue with free version")

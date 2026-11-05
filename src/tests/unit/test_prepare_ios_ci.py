@@ -23,6 +23,7 @@ class IOSPreparationTests(unittest.TestCase):
             ui = source / "src/frontend/UI"
             ui.mkdir(parents=True)
             (ui / "Main.qml").write_text("import QtQuick\nItem {}\n")
+            shutil.copytree(ROOT / "src/frontend/graphics/ios", source / "src/frontend/graphics/ios")
             notification_source = source / "src/backend/native/ios_notifications.mm"
             notification_source.parent.mkdir(parents=True)
             shutil.copyfile(ROOT / "src/backend/native/ios_notifications.mm", notification_source)
@@ -48,7 +49,10 @@ class IOSPreparationTests(unittest.TestCase):
             def deploy(command, **kwargs):
                 if Path(command[0]).name == "pyside6-ios-deploy":
                     project.parent.mkdir(parents=True)
-                    project.write_text('/* Copy Python Packages */ = { shellScript = "original"; };\n'
+                    project.write_text('/* Begin PBXFileReference section */\n/* End PBXFileReference section */\n'
+                                       '/* Begin PBXBuildFile section */\n/* End PBXBuildFile section */\n'
+                                       'resources = { isa = PBXResourcesBuildPhase; files = (); };\n'
+                                       '/* Copy Python Packages */ = { shellScript = "original"; };\n'
                                        'main.cpp; lastKnownFileType = sourcecode.cpp.cpp; buildSettings = {};')
                     (project.parent.parent / "main.cpp").write_text("int main() { return 0; }\n")
                     (project.parent.parent / "Info.plist").write_bytes(plistlib.dumps({
@@ -74,6 +78,9 @@ class IOSPreparationTests(unittest.TestCase):
             self.assertEqual(config["ios"]["wheel_pyside"],
                              str(wheels / "pyside6-6.12.0-6.12.0-cp315-cp315-ios_arm64.whl"))
             self.assertEqual(config["app"]["icon"], "")
+            self.assertTrue((project.parent.parent / "Assets.xcassets/AppIcon.appiconset/AppIcon.png").is_file())
+            self.assertIn("folder.assetcatalog", project.read_text())
+            self.assertIn("files = (\n\t\t\t\tAF1000000000000000000002", project.read_text())
             self.assertEqual((device / "vendor/_ios_ffmpeg.cpython-315-iphoneos.so").read_bytes(),
                              b"device extension")
             self.assertTrue((device / "app/src/frontend/UI/Main.qml").is_file())

@@ -73,7 +73,10 @@ class WindowsSigningTests(unittest.TestCase):
             metadata = ET.parse(component / "meta/package.xml")
             # IFW rejects Default and Virtual together, even when both are true.
             self.assertIsNone(metadata.find("Default"))
-            for setting in ("ForcedInstallation", "Essential", "Virtual"):
+            # Essential splits every app release into a tool update and a second
+            # app update after restart. The dependency keeps this tool required.
+            self.assertIsNone(metadata.find("Essential"))
+            for setting in ("ForcedInstallation", "Virtual"):
                 self.assertEqual(metadata.findtext(setting), "true")
             self.assertEqual(metadata.findtext("Version"), "3.9.123")
             self.assertEqual(metadata.findtext("ReleaseDate"),

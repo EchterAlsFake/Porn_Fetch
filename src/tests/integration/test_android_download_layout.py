@@ -55,6 +55,7 @@ ApplicationWindow {
  Material.primary: "#6366f1"
  property QtObject appSettings: QtObject {
  property int font_size: 12
+ signal anonymousModeChanged(bool anonymous)
  property bool high_contrast: false
  property bool reduced_motion: false
  property bool dark_mode: false

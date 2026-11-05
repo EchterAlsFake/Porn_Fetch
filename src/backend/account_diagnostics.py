@@ -306,9 +306,15 @@ ApplicationWindow {
         QGuiApplication.processEvents()
 
     def provider(self, name):
-        button = self.control("text", name)
+        button = (self.control("text", name) if self.layout == "desktop"
+                  else self.control("objectName", "mobileAccountProviderSelector"))
         point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2)).toPoint()
         QTest.mouseClick(self.window, Qt.MouseButton.LeftButton, pos=point)
+        if self.layout == "mobile":
+            QTest.keyClick(self.window, Qt.Key.Key_Home)
+            for _ in range(PROVIDERS.index(name)):
+                QTest.keyClick(self.window, Qt.Key.Key_Down)
+            QTest.keyClick(self.window, Qt.Key.Key_Return)
         QGuiApplication.processEvents()
         key = "selectedProvider" if self.layout == "desktop" else "provider"
         require(self.page.property(key) == name, "Provider selection did not update")
@@ -323,11 +329,14 @@ ApplicationWindow {
     def verify_action_inventory(self, provider):
         actual = {item.property("text") for item in visual_items(self.page)
                   if item.isVisible() and item.inherits("QQuickAbstractButton")}
-        expected = set(PROVIDERS) | {"How to login"} | set(COLLECTION_BUTTONS[self.layout][provider].values())
+        expected = {"How to login"} | set(COLLECTION_BUTTONS[self.layout][provider].values())
         if self.layout == "desktop":
-            expected |= {"Login with Browser Cookies", "Login with Session Tokens" if provider == "XVideos" else "Login"}
+            expected |= set(PROVIDERS) | {"Login with Browser Cookies", "Login with Session Tokens" if provider == "XVideos" else "Login"}
         else:
             expected.add("Sign in")
+            selector = self.control("objectName", "mobileAccountProviderSelector")
+            require(selector.property("count") == len(PROVIDERS), "The mobile provider selector is incomplete")
+            require(selector.property("currentText") == provider, "The mobile provider selector shows another provider")
         require(actual == expected, "Visible account actions differ from the complete action inventory")
         return len(expected)
 

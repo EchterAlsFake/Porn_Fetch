@@ -29,6 +29,25 @@ uv run --no-sync python src/tests/helper.py
 The helper asks before accessing websites, browser sessions or real media.
 Ordinary unit and integration discovery must stay offline.
 
+The update-dialog regression is offline and uses the software renderer by
+default. On a Linux desktop, exercise the real Wayland/OpenGL renderer with:
+
+```sh
+PORNFETCH_NATIVE_UPDATE_TEST=1 uv run --no-sync python -m unittest src.tests.integration.test_update_dialog
+```
+
+This opens an isolated test window and verifies startup presentation, the saved
+opt-out and Activity review with the full release notes. It does not install an
+update or change your normal settings. The native check caught the Qt Quick
+render-thread crash that the software renderer did not reproduce.
+
+`src.tests.integration.test_contrast_theme` renders the real desktop window in
+Material and Fusion styles while toggling dark/light mode and high contrast. It
+checks button foreground/background pairs, field outlines, statistics surfaces,
+the native application palette and all fourteen bundled content-language flag
+images, then opens the language popup. Check Windows title-bar appearance and
+native Windows style on Windows as well; offscreen tests do not validate those.
+
 ## Live checks
 
 These commands contact real providers. Download checks save actual media and
@@ -154,6 +173,10 @@ Use the actual release artifact on each supported OS:
 - Test a screen reader: NVDA on Windows, VoiceOver on macOS/iOS, Orca on Linux,
   and TalkBack on Android. Check labels, progress, errors and restart notices.
 - Check high contrast, reduced motion, larger text and a small window/screen.
+- Check app icons in the launcher, taskbar/Dock, window and installer at normal
+  and high display scaling. `test_app_icons` checks the shipped desktop frames,
+  padding, Android mask safety and opaque iOS artwork; iOS staging checks verify
+  that Xcode receives its asset catalog. Native appearance still needs OS builds.
 - Allow and deny system-notification permission. Notifications must stay generic
   and the app must still show results when OS delivery is unavailable.
 - Check fresh installation, optional components, upgrade and uninstall. Preserve

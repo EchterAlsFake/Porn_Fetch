@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Dialog {
     id: dialog
+    ContrastPopupBackground { popup: dialog }
     property alias message: messageLabel.text
     property var previousFocus: null
     property real preferredTextHeight: 0
@@ -38,7 +39,7 @@ Dialog {
         standardButtons: dialog.standardButtons
         onAccepted: dialog.accept()
         onRejected: dialog.reject()
-        Button {
+        AppButton {
             id: copyButton
             property bool copied: false
             text: copied ? qsTr("Copied") : qsTr("Copy text")

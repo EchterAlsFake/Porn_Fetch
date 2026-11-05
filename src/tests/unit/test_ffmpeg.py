@@ -1,6 +1,7 @@
 """Offline media checks, explicitly enabled for freshly built FFmpeg executables."""
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -26,6 +27,35 @@ class MinimalFFmpegTests(unittest.TestCase):
         result = subprocess.run([str(self.binary), "-hide_banner", "-i", str(self.output)],
                                 capture_output=True, text=True)
         return result.stderr
+
+    @unittest.skipUnless(sys.platform == "win32", "Requires Windows standard handles")
+    def test_remux_and_tags_without_an_inherited_console(self):
+        script = r'''
+import ctypes
+import sys
+from ctypes import wintypes
+from pathlib import Path
+from src.shared.ffmpeg import remux_ts_to_mp4, write_metadata_tags
+
+kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+kernel32.SetStdHandle.argtypes = [wintypes.DWORD, wintypes.HANDLE]
+kernel32.SetStdHandle.restype = wintypes.BOOL
+if not kernel32.SetStdHandle(wintypes.DWORD(-10), wintypes.HANDLE(-1)):
+    raise ctypes.WinError(ctypes.get_last_error())
+binary, source, destination = map(Path, sys.argv[1:])
+assert remux_ts_to_mp4(source, destination, binary)
+assert write_metadata_tags(destination, {'title': 'Windowless remux'}, binary)
+assert destination.stat().st_size > 0
+print('Windowless remux and metadata passed')
+'''
+        result = subprocess.run(
+            [sys.executable, "-c", script, str(self.binary), str(FIXTURES / "sample.ts"),
+             str(Path(self.temp.name) / "windowless.mp4")],
+            stdin=subprocess.DEVNULL, capture_output=True, text=True,
+            creationflags=subprocess.CREATE_NO_WINDOW, timeout=30,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Windowless remux and metadata passed", result.stdout)
 
     def test_ts_remux_preserves_audio_and_video_with_faststart(self):
         description = self.inspect()

@@ -18,7 +18,7 @@ RowLayout {
             font.bold: true
             wrapMode: Text.Wrap
         }
-        ComboBox {
+        AppComboBox {
             id: scopeCombo
             objectName: "torRoutingComboBox"
             Accessible.name: qsTr("Tor routing")

@@ -42,20 +42,39 @@ otherwise leave bindings alive after their context objects disappear.
 Do not edit generated `resources.py` or QM files by hand. Draft translation
 catalogs are kept for contributors; the released interface stays English.
 
+App icon artwork lives in `src/frontend/graphics/logo_artwork.png`. After changing
+it, run `python scripts/generate_app_icons.py` in the GUI environment before
+rebuilding resources. Commit the generated square PNGs, multi-size Windows ICO,
+macOS ICNS, Android adaptive foreground and opaque iOS asset catalog. Desktop
+artwork fills 92% of its square canvas; Android keeps separate padding for its
+launcher mask. Windows icon frames must not exceed 256px. The runtime window and
+tray share `app_icon.py`, with an additional 1024px PNG for large/high-DPI requests.
+The iOS staging script attaches the catalog to Xcode's Resources build phase.
+
 Use the shared notification presenter for messages and decisions. It keeps a
 bounded session history and does not stop the event loop. Optional system
 notifications are off by default and use generic text. They do not keep mobile
 downloads running in the background. Test focus, keyboard navigation, reduced
 motion and high contrast when changing controls; see [testing](TESTING.md).
 
-First launch shows the beta notice, `LicenseOfferDialog.qml`, then the personal
+Use the shared `Theme.qml` colors and `AppButton`, `AppTextField`, `AppComboBox`
+and `AppSpinBox` controls. Their contrast overrides restore the original style
+bindings when disabled. Respect `dark_mode` in high contrast: light contrast uses
+black text on white with navy selections, while dark contrast uses white on black
+with yellow selections. Selection text uses the matching inverse color. Keep
+`ThemeManager`'s native palette aligned with QML and avoid forcing high contrast
+into a dark Material theme. Content-language selectors share
+`ContentLanguageComboBox.qml`; bundle its flag SVGs and their MIT notice instead
+of depending on platform emoji fonts.
+
+First launch shows `LicenseOfferDialog.qml`, then the personal
 message in `UkraineMessageDialog.qml`, followed by error-reporting consent.
 The license offer uses `Onboarding/license_offer_seen`, independent of the app
 version and preserved when resetting preferences. Both layouts share the dialogs. Its
 `Onboarding/ukraine_message_seen` setting is saved when the dialog opens. Keep
 this key independent of the release version and preserve it when resetting
 preferences, so updates do not repeat the message. Deleting app data also
-removes this record. The corner star opens YouTube only when clicked.
+removes this record. The corner arrow opens YouTube only when clicked.
 
 Optional error reports use `src/shared/error_reporting.py` for the GUI and CLI.
 With explicit consent they send full Python tracebacks, exception chains and
@@ -67,6 +86,18 @@ report contents. The receiver in the adjacent Server project needs its matching
 hook, 1 MiB proxy limit and `1793750400_full_error_reports.js` migration deployed
 before releasing this client. Reports beyond that request limit are skipped,
 never silently truncated.
+
+Failed download rows keep the full Python traceback, exception chain and video
+URL in session memory for the user-opened error dialog and its Copy text action,
+independently of reporting consent. Anonymous Mode hides and closes this details
+view. Activity and system notifications still use redacted summaries.
+
+Startup update checks open the update dialog by default. `Misc/update_prompts`
+stores the user's opt-out separately from `Misc/update_checks`; manual checks and
+Activity's Review update action still open it. Close Activity before dispatching
+an action that opens another dialog. Long release notes use a selectable plain
+text reader: the old rich-text scene-graph rendering crashed in Qt 6.12's
+`QSGBatchRenderer::Renderer::prepareAlphaBatches` on native Wayland/NVIDIA.
 
 ## Downloads and storage
 

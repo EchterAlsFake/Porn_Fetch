@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import tempfile
+import traceback
 from pathlib import Path
 import multiprocessing as mp
 
@@ -12,11 +13,12 @@ if _rcc_candidate.is_file():
     QResource.registerResource(str(_rcc_candidate))
 else:
     import src.frontend.UI.resources # Fallback when binary resource is not pre-compiled
-from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 from src.backend.android_storage import copy_download_file, folder_destination
 from src.backend.theme_manager import ThemeManager
+from src.backend.app_icon import application_icon
 from src.backend.splashscreen import SplashController
 from src.backend.qt_logging import install_wayland_message_filter
 
@@ -52,7 +54,9 @@ if is_main_process:
     else:
         from PySide6.QtWidgets import QApplication
         app = QGuiApplication.instance() or QApplication(sys.argv)
-    app.setWindowIcon(QIcon(":/images/graphics/logo.png"))
+    app.setWindowIcon(application_icon())
+    if sys.platform == "linux" and not is_mobile:
+        app.setDesktopFileName("pornfetch")
     engine = QQmlApplicationEngine()
     if not is_mobile:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
@@ -121,7 +125,6 @@ update_splash("Importing (Backend)")
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
 from src.backend.license_bridge import LicenseBridge, load_production_config
-from src.backend.beta_disclaimer import BetaDisclaimerBridge
 from src.licensing.service import create_license_service
 from src.shared.paths import shared_data_dir
 from src.shared.release import GITHUB_RELEASES_URL
@@ -210,7 +213,7 @@ class Backend(QObject):
     inputErrorsChanged = Signal()
     preparationStatusChanged = Signal()
     updateAvailable = Signal("QVariantMap")
-    updateProgress = Signal(int, int)
+    updateProgress = Signal(float, float)
     updateStatus = Signal(str)
     updateFinished = Signal()
     updateCheckStarted = Signal()
@@ -250,7 +253,7 @@ class Backend(QObject):
         self._downloads_model = DownloadListModel(self, premium_access=self.has_premium_access)
         self.download_manager = DownloadManager()
         self.download_manager.video_added.connect(self.video_added_signal)
-        self.auto_updater = AutoUpdater(self, before_update=self._prepare_for_update)
+        self.auto_updater = AutoUpdater(self, request_shutdown=self.initiate_shutdown)
         self.auto_updater.updateProgress.connect(self.updateProgress)
         self.auto_updater.statusReport.connect(self.updateStatus)
         self.auto_updater.finished.connect(self.updateFinished)
@@ -446,7 +449,11 @@ class Backend(QObject):
         message = update.get("entitlement_message", "Release metadata could not be authenticated.")
         if update.get("source") in {"signed_repository", "signed_android"}:
             install_allowed = True
-            message = "Automatic updates are free for everyone."
+            message = self.tr("Updates are free for everyone.")
+            if update.get("source") == "signed_repository":
+                install_allowed = not IS_SOURCE_RUN and find_maintenance_tool() is not None
+                message = (self.tr("Porn Fetch will save download progress and close. The installer will guide you through the update.")
+                           if install_allowed else self.tr("Download the latest version from the releases page to update this copy."))
         details = {
             "automatic": not self._update_check_manual,
             "install_allowed": install_allowed,
@@ -462,13 +469,32 @@ class Backend(QObject):
         self.logger.info("New update found: %s", details["version"])
         self.updateAvailable.emit(details)
         if details["automatic"]:
-            self.notifications.publish(self.tr("A new version is available. Review it when you are ready."),
+            self.notifications.publish(self.tr("Version %s is available.") % details["version"],
                                        self.tr("App updates"), "info", key="update-check", action="updates")
 
     @Slot()
     def review_update(self):
         if self._available_update:
             self.updateAvailable.emit({**self._available_update, "automatic": False})
+
+    @Slot(str, str, result=str)
+    def release_notes_text(self, notes: str, notes_format: str) -> str:
+        # Parse once outside the scene graph. Large rich-text release documents
+        # do not need to participate in popup geometry or load remote images.
+        from PySide6.QtGui import QTextDocument
+
+        document = QTextDocument()
+        if notes_format == "markdown":
+            document.setMarkdown(notes)
+        else:
+            document.setHtml(notes)
+        return document.toPlainText()
+
+    @Slot(str, result=str)
+    def download_error_details(self, job_id: str) -> str:
+        if app_settings.anonymous_mode:
+            return self.tr("Turn off Anonymous Mode to view the Python traceback and video URL.")
+        return self._downloads_model.error_details(job_id) or self.tr("No error details are available for this download.")
 
     @Slot()
     def cancel_update(self) -> None:
@@ -538,18 +564,6 @@ class Backend(QObject):
         except Exception as error:
             self.logger.exception("Could not save download to the configured output folder")
             raise OutputFolderError("Configured output folder is unavailable") from error
-
-    async def _prepare_for_update(self) -> None:
-        """Gracefully stop PocketBase and close sessions before the installer runs."""
-        if self.database_bridge is not None:
-            try:
-                await self.database_bridge.close()
-            except Exception as exc:
-                self.logger.warning("Error closing database bridge before update: %s", exc)
-        try:
-            await clients.close_all_clients()
-        except Exception as exc:
-            self.logger.warning("Error closing network clients before update: %s", exc)
 
     @Slot(int)
     def toggle_user_interface_language(self, value: int) -> None:
@@ -1137,29 +1151,15 @@ class Backend(QObject):
                 if stop_event.is_set() or report_status == "cancelled":
                     status = "cancelled"
                 elif report_status in {"missing", "failed"} or result is False:
-                    status = "failed"
+                    raise RuntimeError(
+                        f"Downloader returned failure status: {report_status or 'false result'}; "
+                        f"missing segments: {getattr(result, 'missing', None)}"
+                    )
                 else:
                     status = "completed"
 
                 video.status = status
                 self._downloads_model.set_status(job_id, status)
-                if status == "failed":
-                    report_id = await report_exception(
-                        RuntimeError(f"Downloader returned failure status: {report_status or 'false result'}"),
-                        operation="download video",
-                        location="Backend._download_video",
-                        context={
-                            "video_url": getattr(video, "url", None),
-                            "provider": type(getattr(video, "source_video", None)).__module__,
-                            "quality": getattr(video, "selected_quality", None),
-                            "job_id": job_id,
-                        },
-                        enabled=app_settings.enable_logging,
-                        version=__version__,
-                    )
-                    self.logger.error("Download %s failed [error %s]", job_id, report_id)
-                    self._downloads_model.set_error(job_id, report_id)
-                    self.notifications.download_failed(report_id)
                 if status == "completed":
                     metadata_written = bool(getattr(result, "metadata_written", False))
                     if (
@@ -1207,9 +1207,11 @@ class Backend(QObject):
                 enabled=app_settings.enable_logging,
                 version=__version__,
             )
-            self._downloads_model.set_error(job_id, report_id)
+            details = "".join(traceback.format_exception(error))
+            details += f"\nVideo URL: {getattr(video, 'url', '')}\nError ID: {report_id}"
+            self._downloads_model.set_error(job_id, report_id, details)
             message = (self.tr("Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.")
-                       if isinstance(error, OutputFolderError) else "")
+                       if isinstance(error, OutputFolderError) else f"{type(error).__name__}: {error}")
             self.notifications.download_failed(report_id, message)
         finally:
             if download_started and cleanup_on_stop and stop_event.is_set():
@@ -1779,8 +1781,6 @@ def main() -> None:
     tor_status = TorStatus(parent=engine)
     tor_status.installResult.connect(backend_instance.updateStatus)
     engine.rootContext().setContextProperty("torStatus", tor_status)
-    beta_disclaimer = BetaDisclaimerBridge(app_settings, parent=engine)
-    engine.rootContext().setContextProperty("betaDisclaimer", beta_disclaimer)
     engine.rootContext().setContextProperty("androidLayout", is_mobile or args.android)
     from src.backend.android_display import AndroidDisplay
     display_geometry = AndroidDisplay(os.environ.get("ANDROID_PRIVATE", "") if is_android else "", parent=engine)

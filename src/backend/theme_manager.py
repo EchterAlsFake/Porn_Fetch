@@ -1,7 +1,9 @@
-from PySide6.QtCore import QObject, Property, Signal, Slot, Qt
-from PySide6.QtGui import QGuiApplication, QPalette, QColor
+from PySide6.QtCore import Property, QObject, Qt, Signal, Slot
+from PySide6.QtGui import QColor, QGuiApplication, QPalette
 from PySide6.QtQuickControls2 import QQuickStyle
+
 from src.backend.config import app_settings
+
 
 class ThemeManager(QObject):
     """Manages the UI theme, exposing properties to QML."""
@@ -16,6 +18,7 @@ class ThemeManager(QObject):
 
         app_settings.darkModeChanged.connect(self._on_settings_mode_changed)
         app_settings.accentColorChanged.connect(self._on_settings_color_changed)
+        app_settings.accessibilityChanged.connect(self._refresh_palette)
         
         self._update_color_scheme(self._theme_mode == "Dark")
 
@@ -29,39 +32,43 @@ class ThemeManager(QObject):
         except AttributeError:
             pass
 
-        if app_settings.core_style == "Fusion":
-            # Explicitly apply QPalette to override platform theme bugs (e.g. xdgdesktopportal ignoring color scheme)
-            palette = QPalette()
-            if is_dark:
-                palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
-                palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.Base, QColor(25, 25, 25))
-                palette.setColor(QPalette.ColorRole.AlternateBase, QColor(53, 53, 53))
-                palette.setColor(QPalette.ColorRole.ToolTipBase, Qt.GlobalColor.black)
-                palette.setColor(QPalette.ColorRole.ToolTipText, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
-                palette.setColor(QPalette.ColorRole.ButtonText, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.BrightText, Qt.GlobalColor.red)
-                palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
-                palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
-                palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.black)
-            else:
-                palette.setColor(QPalette.ColorRole.Window, QColor(239, 239, 239))
-                palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.black)
-                palette.setColor(QPalette.ColorRole.Base, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.AlternateBase, QColor(247, 247, 247))
-                palette.setColor(QPalette.ColorRole.ToolTipBase, Qt.GlobalColor.white)
-                palette.setColor(QPalette.ColorRole.ToolTipText, Qt.GlobalColor.black)
-                palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.black)
-                palette.setColor(QPalette.ColorRole.Button, QColor(239, 239, 239))
-                palette.setColor(QPalette.ColorRole.ButtonText, Qt.GlobalColor.black)
-                palette.setColor(QPalette.ColorRole.BrightText, Qt.GlobalColor.red)
-                palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
-                palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
-                palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)
-            
-            app.setPalette(palette)
+        palette = QPalette()
+        if app_settings.high_contrast:
+            background, foreground = ("#000000", "#ffffff") if is_dark else ("#ffffff", "#000000")
+            accent, selected_text = ("#ffff00", "#000000") if is_dark else ("#000080", "#ffffff")
+            colors = {
+                "Window": background, "WindowText": foreground,
+                "Base": background, "AlternateBase": background,
+                "ToolTipBase": background, "ToolTipText": foreground,
+                "Text": foreground, "Button": background, "ButtonText": foreground,
+                "BrightText": foreground, "Link": accent, "LinkVisited": accent,
+                "Highlight": accent, "HighlightedText": selected_text,
+                "PlaceholderText": foreground,
+                "Light": background, "Midlight": background,
+                "Mid": foreground, "Dark": foreground, "Shadow": foreground,
+            }
+        else:
+            background, foreground = ("#353535", "#ffffff") if is_dark else ("#efefef", "#000000")
+            colors = {
+                "Window": background, "WindowText": foreground,
+                "Base": "#191919" if is_dark else "#ffffff",
+                "AlternateBase": background if is_dark else "#f7f7f7",
+                "ToolTipBase": background, "ToolTipText": foreground,
+                "Text": foreground, "Button": background, "ButtonText": foreground,
+                "BrightText": "#ff0000", "Link": app_settings.accent_color,
+                "Highlight": app_settings.accent_color, "HighlightedText": "#ffffff",
+            }
+        for role, color in colors.items():
+            palette.setColor(getattr(QPalette.ColorRole, role), QColor(color))
+        if app_settings.high_contrast:
+            disabled = QColor("#b3b3b3" if is_dark else "#555555")
+            for role in (QPalette.ColorRole.Text, QPalette.ColorRole.ButtonText, QPalette.ColorRole.WindowText):
+                palette.setColor(QPalette.ColorGroup.Disabled, role, disabled)
+        app.setPalette(palette)
+
+    @Slot()
+    def _refresh_palette(self):
+        self._update_color_scheme(app_settings.dark_mode)
 
 
     @Slot(bool)
@@ -98,6 +105,7 @@ class ThemeManager(QObject):
             self._accent_color = color
             self.accentColorChanged.emit()
             app_settings.accent_color = color
+            self._refresh_palette()
 
     # noinspection PyPropertyDefinition
     @Property(list, constant=True)

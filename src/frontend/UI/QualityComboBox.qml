@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-ComboBox {
+AppComboBox {
     id: control
 
     // Public Properties mapping to your Python arguments

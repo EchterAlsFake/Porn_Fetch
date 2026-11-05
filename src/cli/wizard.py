@@ -11,7 +11,6 @@ from rich.panel import Panel
 
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 
-from .beta_disclaimer import prompt_beta_disclaimer
 from .downloads import PausedStore
 from .flows import (
     handle_account_auth,
@@ -46,6 +45,7 @@ __all__ = [
     "handle_license_management",
     "handle_resume_paused",
     "handle_scrape_profile",
+    "handle_self_update",
     "handle_settings",
     "handle_statistics_dashboard",
     "make_download_progress",
@@ -56,15 +56,25 @@ __all__ = [
 ]
 
 
+async def handle_self_update() -> bool:
+    """Run the signed updater and signal when the menu must exit for replacement."""
+    from .self_update import run_self_update
+
+    staged = False
+
+    def mark_staged() -> None:
+        nonlocal staged
+        staged = True
+
+    await asyncio.to_thread(run_self_update, check_only=False, assume_yes=False, on_staged=mark_staged)
+    return staged
+
+
 async def run_wizard(args: argparse.Namespace | None = None) -> int:
     """Run the interactive terminal menu and close session resources cleanly."""
     console = Console()
     store = SettingsStore()
     settings = store.load()
-    settings = await prompt_beta_disclaimer(settings, store, console=console)
-    if settings is None:
-        return 1
-
     explicit_reporting_choice = getattr(args, "error_reporting", None) if args else None
     if explicit_reporting_choice is not None:
         settings = settings.overridden(
@@ -110,6 +120,7 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
                 questionary.Choice("🔑 Account & Authentication (Login credentials, browser cookie import)", value="auth"),
                 questionary.Choice("⚙️  Settings & Configuration (Output path, naming templates, preferred quality)", value="settings"),
                 questionary.Choice("📜 License Management (Check status, import key/file, deactivate)", value="license"),
+                questionary.Choice("⬆️  Check for Updates (Download and install CLI updates)", value="update"),
                 questionary.Choice("🧪 Run Self-Test Suite (Automated check for supported sites & features)", value="test"),
                 questionary.Choice("❌ Exit", value="exit"),
             ])
@@ -140,6 +151,9 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
                     await handle_settings(ctx)
                 elif action == "license":
                     await handle_license_management(ctx)
+                elif action == "update":
+                    if await handle_self_update():
+                        break
                 elif action == "test":
                     from .tests import run_cli_self_test
                     await run_cli_self_test()

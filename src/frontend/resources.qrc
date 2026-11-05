@@ -24,7 +24,22 @@
         <file>graphics/database.svg</file>
         <file>graphics/database.png</file>
         <file>graphics/logo.png</file>
+        <file>graphics/logo_transparent.ico</file>
         <file>graphics/lock.png</file>
+        <file>graphics/flags/cn.svg</file>
+        <file>graphics/flags/cz.svg</file>
+        <file>graphics/flags/de.svg</file>
+        <file>graphics/flags/es.svg</file>
+        <file>graphics/flags/fr.svg</file>
+        <file>graphics/flags/it.svg</file>
+        <file>graphics/flags/jp.svg</file>
+        <file>graphics/flags/nl.svg</file>
+        <file>graphics/flags/ph.svg</file>
+        <file>graphics/flags/pl.svg</file>
+        <file>graphics/flags/pt.svg</file>
+        <file>graphics/flags/ru.svg</file>
+        <file>graphics/flags/ua.svg</file>
+        <file>graphics/flags/us.svg</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../docs/CREDITS.md</file>
@@ -36,6 +51,7 @@
         <file alias="THIRD_PARTY_NOTICES.md">../../THIRD_PARTY_NOTICES.md</file>
         <file alias="Lucide.txt">../../LICENSES/Lucide.txt</file>
         <file alias="Provider-permission.txt">../../LICENSES/Provider-permission.txt</file>
+        <file alias="FlagIcons.txt">../../LICENSES/FlagIcons.txt</file>
     </qresource>
     <qresource prefix="/updates">
         <file alias="root.json">../cli/update_root.json</file>

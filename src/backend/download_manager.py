@@ -236,12 +236,17 @@ class DownloadListModel(QAbstractListModel):
             last = self.index(changed_rows[-1], 0)
             self.dataChanged.emit(first, last, [self.SelectedRole])
 
-    def set_error(self, job_id: str, report_id: str) -> None:
+    def set_error(self, job_id: str, report_id: str, details: str = "") -> None:
         row = self._row_by_id.get(str(job_id))
         if row is not None:
             self._items[row]["errorId"] = str(report_id)
+            self._items[row]["errorDetails"] = details
             index = self.index(row, 0)
             self.dataChanged.emit(index, index, [self.ErrorIdRole])
+
+    def error_details(self, job_id: str) -> str:
+        row = self._row_by_id.get(str(job_id))
+        return self._items[row].get("errorDetails", "") if row is not None else ""
 
     def set_status(self, job_id: str, status: str) -> None:
         row = self._row_by_id.get(str(job_id))

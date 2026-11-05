@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import asyncio
+import re
+import time
 from collections.abc import Callable
 from urllib.parse import urlsplit
 
@@ -156,28 +158,41 @@ class ServiceCore(BaseCore):
         response.raise_for_status()
         return response.content
 
-    async def download_verified(self, url, target, path):
+    async def download_verified(self, url, target, path, *, on_progress=None):
+        for attempt in range(3):
+            try:
+                return await self._download_verified(url, target, path, on_progress=on_progress,
+                                                     notify_failure=attempt == 2)
+            except NETWORK_ERRORS:
+                if attempt == 2:
+                    raise
+                await asyncio.sleep(attempt + 1)
+
+    async def _download_verified(self, url, target, path, *, on_progress, notify_failure):
         routed, proxy = await asyncio.to_thread(self.policy.route, url)
         self.initialize_session()
         assert self.session is not None
         total = 0
         try:
             async with self.session.stream("GET", routed, proxy=proxy or "", allow_redirects=False,
-                                           verify=True, timeout=(30, 120)) as response:
+                                           verify=True, timeout=(15, 30), http_version="v1",
+                                           headers={"Accept-Encoding": "identity"}) as response:
                 self.policy.response_received(response.status_code, via_tor=bool(proxy))
                 if response.status_code != 200:
-                    raise ValueError("Update download failed")
+                    raise ValueError(f"Update download failed (HTTP {response.status_code})")
                 with path.open("wb") as destination:
                     async for chunk in response.aiter_content(chunk_size=65536):
                         total += len(chunk)
                         if total > target.length:
                             raise ValueError("Update download exceeds signed length")
                         destination.write(chunk)
+                        if on_progress:
+                            on_progress(total)
             with path.open("rb") as source:
                 target.verify_length_and_hashes(source)
         except NETWORK_ERRORS as error:
             path.unlink(missing_ok=True)
-            if proxy:
+            if proxy and notify_failure:
                 raise self.policy.failed("connection") from error
             raise
         except BaseException:
@@ -192,20 +207,37 @@ class ServiceFetcher(FetcherInterface):
         self.on_chunk = None
 
     def _fetch(self, url):
-        routed, proxy = self.policy.route(url)
-        try:
-            with requests.Session(trust_env=False, verify=True, curl_options={CurlOpt.NOPROXY: b""}) as session:
-                with session.stream("GET", routed, proxy=proxy or "", allow_redirects=False,
-                                    timeout=(30, 120)) as response:
-                    self.policy.response_received(response.status_code, via_tor=bool(proxy))
-                    if response.status_code != 200:
-                        from tuf.api.exceptions import DownloadHTTPError
-                        raise DownloadHTTPError("Update download failed", response.status_code)
-                    for chunk in response.iter_content(chunk_size=65536):
-                        if self.on_chunk:
-                            self.on_chunk(len(chunk))
-                        yield chunk
-        except NETWORK_ERRORS as error:
-            if proxy:
-                raise self.policy.failed("connection") from error
-            raise
+        from tuf.api.exceptions import DownloadHTTPError
+
+        received = 0
+        for attempt in range(3):
+            routed, proxy = self.policy.route(url)
+            headers = {"Accept-Encoding": "identity"}
+            if received:
+                headers["Range"] = f"bytes={received}-"
+            try:
+                # HTTP/1.1 avoids HTTP/2 stream resets seen on release downloads.
+                # Each retry retains the selected route and TUF verifies the final bytes.
+                with requests.Session(trust_env=False, verify=True, curl_options={CurlOpt.NOPROXY: b""}) as session:
+                    with session.stream("GET", routed, proxy=proxy or "", allow_redirects=False,
+                                        timeout=(15, 30), http_version="v1", headers=headers) as response:
+                        self.policy.response_received(response.status_code, via_tor=bool(proxy))
+                        if response.status_code != (206 if received else 200):
+                            raise DownloadHTTPError("Update download failed", response.status_code)
+                        if received:
+                            match = re.fullmatch(r"bytes (\d+)-(\d+)/(\d+)", response.headers.get("Content-Range", ""))
+                            if not match or int(match[1]) != received or not received <= int(match[2]) < int(match[3]):
+                                raise DownloadHTTPError("Invalid resumed update response", response.status_code)
+                        for chunk in response.iter_content(chunk_size=65536):
+                            received += len(chunk)
+                            if self.on_chunk:
+                                self.on_chunk(len(chunk))
+                            yield chunk
+                return
+            except NETWORK_ERRORS as error:
+                if attempt < 2:
+                    time.sleep(attempt + 1)
+                    continue
+                if proxy:
+                    raise self.policy.failed("connection") from error
+                raise

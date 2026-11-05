@@ -14,7 +14,7 @@ Pane {
     readonly property bool androidLayoutMode: Qt.platform.os === "android"
                                               || (typeof androidLayout !== "undefined" && androidLayout)
 
-    component DecimalSpinBox: SpinBox {
+    component DecimalSpinBox: AppSpinBox {
         property int decimals: 2
         property real realFrom: 0
         property real realTo: 100
@@ -75,6 +75,7 @@ Pane {
     background: Rectangle {
         color: "transparent"
         border.width: 2
+        border.color: Theme.outline
         radius: 10
     }
 
@@ -119,13 +120,13 @@ Pane {
         RowLayout {
             visible: window.compact
             Layout.fillWidth: true
-            ComboBox {
+            AppComboBox {
                 Layout.fillWidth: true
                 model: [qsTr("Video"), qsTr("Performance"), qsTr("System"), qsTr("Privacy"), qsTr("UI")]
                 currentIndex: stackLayout.currentIndex
                 onActivated: stackLayout.currentIndex = currentIndex
             }
-            Button {
+            AppButton {
                 text: qsTr("Actions")
                 onClicked: mobileActions.open()
                 Menu {
@@ -140,6 +141,7 @@ Pane {
 
         Dialog {
             id: mobileLicenseDialog
+            ContrastPopupBackground { popup: mobileLicenseDialog }
             parent: Overlay.overlay
             anchors.centerIn: parent
             width: Math.min(window.width - 24, 520)
@@ -270,7 +272,7 @@ Pane {
                                     Layout.fillWidth: false
                                     text: qsTr("Quality")
                                 }
-                                ComboBox {
+                                AppComboBox {
                                     id: defaultQualityCombo
                                     objectName: "defaultQualityCombo"
                                     Accessible.name: qsTr("Quality")
@@ -339,7 +341,7 @@ Pane {
                                     Layout.fillWidth: false
                                     text: qsTr("Model Videos")
                                 }
-                                ComboBox {
+                                AppComboBox {
                                     objectName: "modelVideosCombo"
                                     Accessible.name: qsTr("Model Videos")
                                     Accessible.description: AppStrings.modelVideosHelp
@@ -358,39 +360,8 @@ Pane {
                                     Layout.fillWidth: false
                                     text: qsTr("Content Language")
                                 }
-                                ComboBox {
-                                    id: contentLanguageComboBox
-                                    objectName: "contentLanguageComboBox"
-                                    Accessible.name: qsTr("Content Language")
-                                    Accessible.description: AppStrings.contentLanguageHelp
+                                ContentLanguageComboBox {
                                     Layout.fillWidth: true
-                                    textRole: "label"
-                                    valueRole: "locale"
-                                    model: ListModel {
-                                        ListElement { label: qsTr("🇨🇿 Čeština"); locale: "cs-CZ" }
-                                        ListElement { label: qsTr("🇩🇪 Deutsch"); locale: "de-DE" }
-                                        ListElement { label: qsTr("🇺🇸 English"); locale: "en-US" }
-                                        ListElement { label: qsTr("🇪🇸 Español"); locale: "es-ES" }
-                                        ListElement { label: qsTr("🇵🇭 Filipino"); locale: "fil-PH" }
-                                        ListElement { label: qsTr("🇫🇷 Français"); locale: "fr-FR" }
-                                        ListElement { label: qsTr("🇮🇹 Italiano"); locale: "it-IT" }
-                                        ListElement { label: qsTr("🇳🇱 Nederlands"); locale: "nl-NL" }
-                                        ListElement { label: "🇯🇵 日本語"; locale: "ja-JP" }
-                                        ListElement { label: qsTr("🇵🇱 Polski"); locale: "pl-PL" }
-                                        ListElement { label: qsTr("🇵🇹 Português"); locale: "pt-PT" }
-                                        ListElement { label: "🇷🇺 Русский"; locale: "ru-RU" }
-                                        ListElement { label: "🇺🇦 Українська"; locale: "uk-UA" }
-                                        ListElement { label: "🇨🇳 中文"; locale: "zh-CN" }
-                                    }
-                                    currentIndex: {
-                                        // Re-evaluate when the model becomes ready; indexOfValue alone
-                                        // does not establish a dependency on the available options.
-                                        if (count === 0)
-                                            return -1
-                                        var savedIndex = indexOfValue(appSettings.locale)
-                                        return savedIndex >= 0 ? savedIndex : indexOfValue("en-US")
-                                    }
-                                    onActivated: appSettings.locale = currentValue
                                 }
 
                                 // --- Row 4: Strict Enforcement ---
@@ -418,7 +389,7 @@ Pane {
                                     Layout.fillWidth: false
                                     text: qsTr("Max Result Limit")
                                 }
-                                SpinBox {
+                                AppSpinBox {
                                     objectName: "resultLimitSpinBox"
                                     Accessible.name: qsTr("Max Result Limit")
                                     Accessible.description: AppStrings.resultLimitHelp
@@ -439,7 +410,7 @@ Pane {
                                     Layout.fillWidth: true
                                     spacing: 10
 
-                                    TextField {
+                                    AppTextField {
                                         id: outputPathInput
                                         objectName: "outputPathInput"
                                         Accessible.name: qsTr("Output Path")
@@ -456,7 +427,7 @@ Pane {
                                                 text = appSettings.output_path
                                         }
                                     }
-                                    Button {
+                                    AppButton {
                                         Accessible.name: qsTr("Choose video output folder")
                                         Layout.fillWidth: false
                                         visible: !window.androidLayoutMode
@@ -521,7 +492,7 @@ Pane {
                                     Layout.fillWidth: true
                                     spacing: 10
 
-                                    TextField {
+                                    AppTextField {
                                         id: databasePathInput
                                         objectName: "databasePathInput"
                                         Accessible.name: qsTr("PocketBase Data Folder")
@@ -538,7 +509,7 @@ Pane {
                                                 text = appSettings.pocketbase_data_path
                                         }
                                     }
-                                    Button {
+                                    AppButton {
                                         Accessible.name: qsTr("Choose PocketBase data folder")
                                         Layout.fillWidth: false
                                         visible: !window.androidLayoutMode
@@ -570,7 +541,7 @@ Pane {
                                 Layout.fillWidth: false
                                 text: qsTr("Download workers:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "downloadWorkersSpinBox"
                                 Accessible.name: qsTr("Download workers")
                                 Accessible.description: AppStrings.downloadWorkersHelp
@@ -584,7 +555,7 @@ Pane {
                             Label {
                                 text: qsTr("Network delay (requests/sec):")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "networkDelaySpinBox"
                                 Accessible.name: qsTr("Network delay")
                                 Accessible.description: AppStrings.networkDelayHelp
@@ -601,7 +572,7 @@ Pane {
                             Label {
                                 text: qsTr("Parallel Downloads:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "parallelDownloadsSpinBox"
                                 Accessible.name: qsTr("Parallel Downloads")
                                 Accessible.description: AppStrings.parallelDownloadsHelp
@@ -619,7 +590,7 @@ Pane {
                             Label {
                                 text: qsTr("Maximum retries:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "retriesSpinBox"
                                 Accessible.name: qsTr("Maximum retries")
                                 Accessible.description: AppStrings.retriesHelp
@@ -636,7 +607,7 @@ Pane {
                             Label {
                                 text: qsTr("Maximum timeout:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "timeoutSpinBox"
                                 Accessible.name: qsTr("Maximum timeout")
                                 Accessible.description: AppStrings.timeoutHelp
@@ -653,7 +624,7 @@ Pane {
                             Label {
                                 text: qsTr("Processing Delay (videos/sec):")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "processingDelaySpinBox"
                                 Accessible.name: qsTr("Processing Delay")
                                 Accessible.description: AppStrings.processingDelay
@@ -687,7 +658,7 @@ Pane {
                             Label {
                                 text: qsTr("Videos Concurrency:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "videosConcurrencySpinBox"
                                 Accessible.name: qsTr("Videos Concurrency")
                                 Accessible.description: AppStrings.videosConcurrencyHelp
@@ -704,7 +675,7 @@ Pane {
                             Label {
                                 text: qsTr("Pages concurrency:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "pagesConcurrencySpinBox"
                                 Accessible.name: qsTr("Pages Concurrency")
                                 Accessible.description: AppStrings.pagesConcurrencyHelp
@@ -732,7 +703,7 @@ Pane {
                                     }
                                     HelpButton { helpText: AppStrings.responseCacheSizeHelp }
                                 }
-                                SpinBox {
+                                AppSpinBox {
                                     objectName: "responseCacheSizeSpinBox"
                                     Accessible.name: qsTr("Response cache size (MB)")
                                     Accessible.description: AppStrings.responseCacheSizeHelp
@@ -752,7 +723,7 @@ Pane {
                                     }
                                     HelpButton { helpText: AppStrings.responseCacheTTLHelp }
                                 }
-                                SpinBox {
+                                AppSpinBox {
                                     objectName: "responseCacheTTLSpinBox"
                                     Accessible.name: qsTr("Response cache lifetime (seconds)")
                                     Accessible.description: AppStrings.responseCacheTTLHelp
@@ -772,7 +743,7 @@ Pane {
                                     }
                                     HelpButton { helpText: AppStrings.segmentCacheSizeHelp }
                                 }
-                                SpinBox {
+                                AppSpinBox {
                                     objectName: "segmentCacheSizeSpinBox"
                                     Accessible.name: qsTr("Segment-list cache size (MB)")
                                     Accessible.description: AppStrings.segmentCacheSizeHelp
@@ -792,7 +763,7 @@ Pane {
                                     }
                                     HelpButton { helpText: AppStrings.segmentCacheTTLHelp }
                                 }
-                                SpinBox {
+                                AppSpinBox {
                                     objectName: "segmentCacheTTLSpinBox"
                                     Accessible.name: qsTr("Segment-list cache lifetime (seconds)")
                                     Accessible.description: AppStrings.segmentCacheTTLHelp
@@ -910,18 +881,25 @@ Pane {
                             }
                             CheckBox {
                                 objectName: "updateChecksCheckBox"
-                                Accessible.name: qsTr("Search for Updates")
+                                Accessible.name: qsTr("Check for updates at startup")
                                 Accessible.description: AppStrings.updateChecks
-                                text: qsTr("Search for Updates")
+                                text: qsTr("Check for updates at startup")
                                 Layout.fillWidth: true
                                 checked: appSettings.update_checks
                                 onToggled: appSettings.update_checks = checked
                             }
-                            Button {
+                            AppButton {
                                 text: qsTr("Check for app updates")
                                 Layout.columnSpan: 2
                                 Layout.fillWidth: true
                                 onClicked: backend.check_for_updates()
+                            }
+                            CheckBox {
+                                Layout.columnSpan: 2
+                                Layout.fillWidth: true
+                                text: qsTr("Show a dialog when an update is available")
+                                checked: appSettings.update_prompts
+                                onToggled: appSettings.update_prompts = checked
                             }
                             HelpButton {
                                 helpText: AppStrings.systemNotificationsHelp
@@ -1000,7 +978,7 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.logLevel
                             }
-                            ComboBox {
+                            AppComboBox {
                                 objectName: "logLevelComboBox"
                                 Accessible.name: qsTr("Log Level")
                                 Accessible.description: AppStrings.logLevel
@@ -1014,7 +992,7 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.httpVersionHelp
                             }
-                            TextField {
+                            AppTextField {
                                 id: "httpVersion"
                                 objectName: "httpVersionInput"
                                 Accessible.name: qsTr("HTTP Version")
@@ -1037,7 +1015,7 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.impersonationHelp
                             }
-                            TextField {
+                            AppTextField {
                                 id: "impersonation"
                                 objectName: "impersonationInput"
                                 Accessible.name: qsTr("Browser Impersonation Target")
@@ -1060,7 +1038,7 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.customJA3Help
                             }
-                            TextField {
+                            AppTextField {
                                 id: "customJA3"
                                 objectName: "customJA3Input"
                                 Accessible.name: qsTr("Custom JA3 String")
@@ -1083,7 +1061,7 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.interfaceHelp
                             }
-                            TextField {
+                            AppTextField {
                                 id: "interface"
                                 objectName: "interfaceInput"
                                 Accessible.name: qsTr("Network Interface or IP")
@@ -1173,7 +1151,7 @@ Pane {
                                 Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.dnsPrimaryHelp
                             }
-                            TextField {
+                            AppTextField {
                                 id: "dnsPrimaryInput"
                                 objectName: "dnsPrimaryInput"
                                 Accessible.name: qsTr("Primary DNS over HTTPS Server")
@@ -1197,7 +1175,7 @@ Pane {
                                 Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.fallbackDNSHelp
                             }
-                            TextField {
+                            AppTextField {
                                 id: "dnsFallbackInput"
                                 objectName: "dnsFallbackInput"
                                 Accessible.name: qsTr("Fallback DNS over HTTPS Server")
@@ -1263,7 +1241,7 @@ Pane {
                                     checked: appSettings.sni_obfuscation_strict
                                     onClicked: appSettings.set_sni_obfuscation_mode("strict")
                                 }
-                                ComboBox {
+                                AppComboBox {
                                     id: strictProfileCombo
                                     objectName: "strictProfileCombo"
                                     Accessible.name: qsTr("Strict SNI Obfuscation Profile")
@@ -1282,7 +1260,7 @@ Pane {
                                 Layout.alignment: Qt.AlignTop
                                 helpText: AppStrings.proxySetupHelp
                             }
-                            Button {
+                            AppButton {
                                 Accessible.name: qsTr("Proxy Configuration")
                                 Accessible.description: AppStrings.proxySetupHelp
                                 Layout.fillWidth: true
@@ -1316,7 +1294,7 @@ Pane {
                             Label {
                                 text: qsTr("Graphical User Interface language:")
                             }
-                            ComboBox {
+                            AppComboBox {
                                 objectName: "guiLanguageComboBox"
                                 Accessible.name: qsTr("Graphical User Interface Language")
                                 Accessible.description: AppStrings.guiLanguageHelp
@@ -1349,7 +1327,7 @@ Pane {
                             Label {
                                 text: qsTr("Font Size:")
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 objectName: "fontSizeSpinBox"
                                 Accessible.name: qsTr("Font Size")
                                 Accessible.description: AppStrings.fontSizeHelp
@@ -1361,7 +1339,7 @@ Pane {
                             }
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.appStyleHelp }
                             Label { text: qsTr("Application Style (Requires Restart):") }
-                            ComboBox {
+                            AppComboBox {
                                 objectName: "coreStyleComboBox"
                                 Accessible.name: qsTr("Application Style")
                                 Accessible.description: AppStrings.appStyleHelp
@@ -1400,7 +1378,7 @@ Pane {
                             // 3. Accent Color
                             HelpButton { Layout.fillWidth: false; helpText: AppStrings.accentColorHelp }
                             Label { text: qsTr("Accent Color:") }
-                            ComboBox {
+                            AppComboBox {
                                 objectName: "accentColorComboBox"
                                 Accessible.name: qsTr("Application Accent Color")
                                 Accessible.description: AppStrings.accentColorHelp
@@ -1448,7 +1426,7 @@ Pane {
                 Layout.fillWidth: true
                 spacing: 10
 
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Purchase / renew license")
                     Layout.fillWidth: true
                     // Material styling overrides for specific buttons to make them stand out
@@ -1462,7 +1440,7 @@ Pane {
                     }
 
                 }
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Import License File")
                     Layout.fillWidth: true
                     text: qsTr("Import License File")
@@ -1486,7 +1464,7 @@ Pane {
                 Layout.fillWidth: true
                 spacing: 10
 
-                Button {
+                AppButton {
                     objectName: "resetSettingsButton"
                     Accessible.name: qsTr("Reset Porn Fetch to default settings")
                     Accessible.description: qsTr("Restores all application settings to their default values")
@@ -1496,7 +1474,7 @@ Pane {
                     text: qsTr("Reset Porn Fetch to default settings")
                     onClicked: {backend.reset_pornfetch()}
                 }
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Clear Temporary Files")
                     Layout.fillWidth: true
                     text: qsTr("Clear Temporary Files")
@@ -1509,14 +1487,14 @@ Pane {
                 Layout.fillWidth: true
                 spacing: 10
                 visible: backend.maintenance_available
-                Button {
+                AppButton {
                     objectName: "manageInstallationButton"
                     Layout.fillWidth: true
-                    text: qsTr("Manage installation")
+                    text: qsTr("Add or remove components")
                     Accessible.name: text
                     onClicked: backend.open_maintenance("components")
                 }
-                Button {
+                AppButton {
                     objectName: "uninstallButton"
                     Layout.fillWidth: true
                     text: qsTr("Uninstall Porn Fetch")

@@ -20,7 +20,7 @@ Pane {
         "sources": []
     })
 
-    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : (typeof appSettings !== "undefined" && appSettings)
+    readonly property color accentColor: appSettings.high_contrast ? Theme.accent : (typeof appSettings !== "undefined" && appSettings)
                                          ? appSettings.accent_color : "#7c5cff"
     readonly property bool materialStyle: (typeof appSettings !== "undefined" && appSettings)
                                           && appSettings.core_style === "Material"
@@ -28,14 +28,14 @@ Pane {
                                      ? Material.theme === Material.Dark
                                      : ((typeof appSettings !== "undefined" && appSettings)
                                         ? appSettings.dark_mode : false)
-    readonly property color successColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#35d07f" : "#168352"
-    readonly property color failureColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#ff627d" : "#c62845"
-    readonly property color pendingColor: appSettings.high_contrast ? "#ffffff" : darkMode ? "#f5b942" : "#9a6500"
-    readonly property color foregroundColor: appSettings.high_contrast ? "#ffffff" : materialStyle ? Material.foreground : palette.text
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : materialStyle
+    readonly property color successColor: appSettings.high_contrast ? Theme.ink : darkMode ? "#35d07f" : "#168352"
+    readonly property color failureColor: appSettings.high_contrast ? Theme.ink : darkMode ? "#ff627d" : "#c62845"
+    readonly property color pendingColor: appSettings.high_contrast ? Theme.ink : darkMode ? "#f5b942" : "#9a6500"
+    readonly property color foregroundColor: appSettings.high_contrast ? Theme.ink : materialStyle ? Material.foreground : palette.text
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : materialStyle
                                        ? Material.dialogColor
                                        : (darkMode ? Qt.lighter(palette.window, 1.18) : palette.base)
-    readonly property color subtleTextColor: appSettings.high_contrast ? "#ffffff" : Qt.rgba(foregroundColor.r,
+    readonly property color subtleTextColor: appSettings.high_contrast ? Theme.ink : Qt.rgba(foregroundColor.r,
                                                      foregroundColor.g,
                                                      foregroundColor.b, 0.62)
     readonly property bool privacyMode: (typeof appSettings !== "undefined" && appSettings)
@@ -128,7 +128,7 @@ Pane {
                     }
                 }
 
-                Button {
+                AppButton {
                     objectName: "statisticsRefreshButton"
                     text: qsTr("Refresh")
                     enabled: !databaseBridge.busy
@@ -210,7 +210,7 @@ Pane {
                     Layout.preferredHeight: 285
                     radius: 14
                     color: root.cardColor
-                    border.color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
+                    border.color: appSettings.high_contrast ? Theme.outline : Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
 
                     ColumnLayout {
                         anchors.fill: parent
@@ -332,7 +332,7 @@ Pane {
                     Layout.preferredHeight: 285
                     radius: 14
                     color: root.cardColor
-                    border.color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
+                    border.color: appSettings.high_contrast ? Theme.outline : Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
 
                     ColumnLayout {
                         anchors.fill: parent
@@ -399,7 +399,7 @@ Pane {
                 implicitHeight: sourcesColumn.implicitHeight + 36
                 radius: 14
                 color: root.cardColor
-                border.color: Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
+                border.color: appSettings.high_contrast ? Theme.outline : Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.2)
 
                 ColumnLayout {
                     id: sourcesColumn
@@ -515,7 +515,7 @@ Pane {
         Layout.preferredHeight: 112
         radius: 13
         color: root.cardColor
-        border.color: Qt.rgba(highlight.r, highlight.g, highlight.b, 0.34)
+        border.color: appSettings.high_contrast ? Theme.outline : Qt.rgba(highlight.r, highlight.g, highlight.b, 0.34)
 
         Rectangle {
             width: 4

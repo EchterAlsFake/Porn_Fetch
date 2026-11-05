@@ -42,7 +42,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+66"/>
+        <location filename="../../UI/AccountPage.qml" line="+67"/>
         <source>PornHub</source>
         <translation type="unfinished"></translation>
     </message>
@@ -197,11 +197,12 @@
     <name>AndroidAccountPage</name>
     <message>
         <location filename="../../UI/AndroidAccountPage.qml" line="+37"/>
+        <location line="+12"/>
         <source>Choose a website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+23"/>
         <source>Connected to %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -325,7 +326,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+59"/>
         <location line="+211"/>
         <location line="+271"/>
         <source>Add videos</source>
@@ -453,14 +454,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>The download failed. Check your connection and output folder, then retry.
-
-Error ID: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+25"/>
         <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
@@ -655,12 +649,12 @@ Error ID: %1</source>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>Application license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-31"/>
+        <location line="-32"/>
         <source>Porn Fetch Source-Available License 1.0. See the full license for terms.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -685,7 +679,7 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Third-party notices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -694,30 +688,30 @@ Error ID: %1</source>
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="+12"/>
-        <location line="+233"/>
+        <location line="+245"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-191"/>
-        <location line="+324"/>
+        <location line="-192"/>
+        <location line="+325"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-324"/>
-        <location line="+324"/>
+        <location line="-325"/>
+        <location line="+325"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-324"/>
-        <location line="+324"/>
+        <location line="-325"/>
+        <location line="+325"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-324"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,17 +722,17 @@ Error ID: %1</source>
     </message>
     <message>
         <location line="+0"/>
-        <location line="+323"/>
+        <location line="+324"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-231"/>
+        <location line="-232"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -758,7 +752,7 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+121"/>
+        <location line="+122"/>
         <source>Porn Fetch update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -775,6 +769,11 @@ Error ID: %1</source>
     <message>
         <location line="+15"/>
         <source>Update download progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Don&apos;t show update dialogs again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -813,6 +812,34 @@ Error ID: %1</source>
     <message>
         <location line="+1"/>
         <source>See where downloads work</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AndroidOutputSetupDialog</name>
+    <message>
+        <location filename="../../UI/AndroidOutputSetupDialog.qml" line="+35"/>
+        <source>Choose your video folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Choose where to save videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Choose a folder where Porn Fetch will save your completed videos so you can find them outside the app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>In the system picker, open or create a folder, then allow Porn Fetch to use it. You can change this later in Settings → Video.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Choose folder</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -880,12 +907,12 @@ Error ID: %1</source>
     </message>
     <message>
         <location line="+205"/>
-        <location line="+443"/>
+        <location line="+440"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-442"/>
+        <location line="-439"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1171,12 +1198,12 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+10"/>
         <source>Content language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+13"/>
         <source>App behavior</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1198,6 +1225,11 @@ Error ID: %1</source>
     <message>
         <location line="+3"/>
         <source>Maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show a dialog when an update is available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1246,7 +1278,7 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-130"/>
+        <location line="-127"/>
         <source>Send tracebacks and video URLs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1261,7 +1293,7 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+20"/>
         <source>System notifications when the app is inactive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1271,7 +1303,7 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+45"/>
         <source>Next Online Check: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1727,13 +1759,13 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+217"/>
+        <location filename="../../../backend/update_service.py" line="+219"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>The update could not be completed. Check your connection and try again later.</source>
+        <source>Could not prepare the update: %s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1756,11 +1788,21 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <source>No update available.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+6"/>
+        <source>Preparing the verified update…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Downloading and verifying the update…</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+789"/>
+        <location filename="../../../backend/application.py" line="+800"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1780,16 +1822,16 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-654"/>
+        <location line="-665"/>
         <location line="+172"/>
         <location line="+8"/>
-        <location line="+25"/>
-        <location line="+18"/>
+        <location line="+29"/>
+        <location line="+37"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-163"/>
+        <location line="-186"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1819,12 +1861,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>A new version is available. Review it when you are ready.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
+        <location line="+67"/>
         <source>Automatic updates are only available in installed builds. Use the download link instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1839,7 +1876,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+92"/>
         <source>Clear files during downloads?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1874,7 +1911,37 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-196"/>
+        <source>Updates are free for everyone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Porn Fetch will save download progress and close. The installer will guide you through the update.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download the latest version from the releases page to update this copy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Version %s is available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Turn off Anonymous Mode to view the Python traceback and video URL.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>No error details are available for this download.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+155"/>
         <source>Open Qt Maintenance Tool?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1934,7 +2001,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="+156"/>
         <source>Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1975,9 +2042,9 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-495"/>
+        <location line="-483"/>
         <location line="+102"/>
-        <location line="+369"/>
+        <location line="+357"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
@@ -2034,55 +2101,10 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
     </message>
 </context>
 <context>
-    <name>BetaDisclaimerDialog</name>
+    <name>ContentLanguageComboBox</name>
     <message>
-        <location filename="../../UI/BetaDisclaimerDialog.qml" line="+25"/>
-        <source>Porn Fetch v3.9 BETA disclaimer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>You can now accept the disclaimer and continue.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+35"/>
-        <source>Please read the disclaimer. OK will be available in %1 seconds.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Click OK to consent and continue, or Exit to close Porn Fetch.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Accept disclaimer and continue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Accept and continue, or choose Exit to close the application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Read the disclaimer. This action becomes available when the reading timer finishes.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>OK (%1 s)</source>
+        <location filename="../../UI/ContentLanguageComboBox.qml" line="+8"/>
+        <source>Content Language</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2098,7 +2120,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>DownloadsPage</name>
     <message>
-        <location filename="../../UI/DownloadsPage.qml" line="+104"/>
+        <location filename="../../UI/DownloadsPage.qml" line="+114"/>
         <source>Video URL:</source>
         <translation>URL de la vidéo :</translation>
     </message>
@@ -2277,8 +2299,8 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-803"/>
-        <location line="+405"/>
+        <location line="-813"/>
+        <location line="+415"/>
         <source>Stop / Resume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2288,19 +2310,19 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-414"/>
-        <location line="+496"/>
+        <location line="-424"/>
+        <location line="+506"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-493"/>
-        <location line="+417"/>
+        <location line="-503"/>
+        <location line="+427"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-410"/>
+        <location line="-420"/>
         <source>Title formatting options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2319,7 +2341,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+201"/>
         <source>Free preview: model, channel and playlist URLs show their first 5 videos. Activate a premium license for bulk downloading.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2370,14 +2392,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
-        <source>The download failed. Check your connection and output folder, then retry.
-
-Error ID: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+12"/>
+        <location line="+31"/>
         <source>Remove video from list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2504,8 +2519,8 @@ Error ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-933"/>
-        <location line="+942"/>
+        <location line="-943"/>
+        <location line="+952"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2514,7 +2529,7 @@ Error ID: %1</source>
     <name>HelpButton</name>
     <message>
         <location filename="../../UI/HelpButton.qml" line="+9"/>
-        <location line="+33"/>
+        <location line="+35"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2607,12 +2622,12 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
     </message>
     <message>
         <location line="+4"/>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Third-party notices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-17"/>
+        <location line="-18"/>
         <source>Full credits</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2622,7 +2637,7 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Porn Fetch application license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2630,7 +2645,7 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
 <context>
     <name>LicenseOfferDialog</name>
     <message>
-        <location filename="../../UI/LicenseOfferDialog.qml" line="+39"/>
+        <location filename="../../UI/LicenseOfferDialog.qml" line="+49"/>
         <source>Porn Fetch Premium</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2716,7 +2731,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>Get license ↗</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2726,12 +2741,12 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="-47"/>
         <source>Private, and made to share</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+69"/>
         <source>Continue with free version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2859,7 +2874,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+72"/>
         <source>License &amp; Activation Guide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2899,7 +2914,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-409"/>
+        <location line="-410"/>
         <source>Activate pasted license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2915,12 +2930,12 @@ No subscription.</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../../UI/Main.qml" line="+30"/>
+        <location filename="../../UI/Main.qml" line="+38"/>
         <source>Video Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+127"/>
         <source>Help improve Porn Fetch after errors?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2945,32 +2960,12 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+55"/>
-        <source>🚀 New Update Available!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Purchase / renew license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+19"/>
+        <location line="+87"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
-        <source>Download:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>View GitHub releases</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Important Info:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2980,27 +2975,42 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Updating…</source>
+        <location line="-123"/>
+        <source>Update available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+111"/>
+        <source>Don&apos;t show update dialogs again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Preparing update…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Update now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Auto Update</source>
+        <source>Open downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Starting update…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3126,7 +3136,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+66"/>
         <source>Recent activity (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3146,12 +3156,12 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>Recent activity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+30"/>
         <source>Messages are kept for this session only. Downloaded videos use the output folder in Settings.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3207,7 +3217,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+24"/>
         <source>Closing…
 Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
@@ -3264,7 +3274,7 @@ Stopping downloads and saving application state.</source>
 <context>
     <name>ProxyWindow</name>
     <message>
-        <location filename="../../UI/ProxyWindow.qml" line="+31"/>
+        <location filename="../../UI/ProxyWindow.qml" line="+32"/>
         <source>Proxy connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3479,7 +3489,7 @@ Stopping downloads and saving application state.</source>
 <context>
     <name>ScrollableMessageDialog</name>
     <message>
-        <location filename="../../UI/ScrollableMessageDialog.qml" line="+44"/>
+        <location filename="../../UI/ScrollableMessageDialog.qml" line="+45"/>
         <location line="+1"/>
         <source>Copy text</source>
         <translation type="unfinished"></translation>
@@ -3517,12 +3527,12 @@ Stopping downloads and saving application state.</source>
     <name>SettingsPage</name>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="+48"/>
-        <location line="+412"/>
+        <location line="+383"/>
         <source>Choose video output folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-397"/>
+        <location line="-368"/>
         <source>Choose a PocketBase data folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3532,7 +3542,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+61"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3563,21 +3573,21 @@ Stopping downloads and saving application state.</source>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1318"/>
+        <location line="+1296"/>
         <location line="+6"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1323"/>
-        <location line="+14"/>
-        <location line="+1317"/>
+        <location line="-1301"/>
+        <location line="+15"/>
+        <location line="+1294"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1332"/>
+        <location line="-1310"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3587,7 +3597,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+42"/>
         <source>Settings sections</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3605,62 +3615,11 @@ Stopping downloads and saving application state.</source>
     </message>
     <message>
         <location line="+15"/>
-        <location line="+5"/>
         <source>Content Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>🇨🇿 Čeština</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇩🇪 Deutsch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇺🇸 English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇪🇸 Español</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇵🇭 Filipino</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇫🇷 Français</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇮🇹 Italiano</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇳🇱 Nederlands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>🇵🇱 Polski</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>🇵🇹 Português</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+23"/>
+        <location line="+13"/>
         <location line="+4"/>
         <source>Strict Enforcement for content language</source>
         <translation type="unfinished"></translation>
@@ -3886,7 +3845,18 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+39"/>
+        <location line="+2"/>
+        <source>Check for updates at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Show a dialog when an update is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
         <location line="+2"/>
         <source>Reduce repeated error announcements</source>
         <translation type="unfinished"></translation>
@@ -3898,23 +3868,22 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-52"/>
-        <location line="+2"/>
-        <source>Search for Updates</source>
+        <location line="+549"/>
+        <source>Add or remove components</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-601"/>
         <source>Check for app updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+17"/>
         <source>System notifications when the app is inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <source>Trust Environment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4179,12 +4148,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Manage installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+20"/>
         <source>Uninstall Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4437,12 +4401,12 @@ Stopping downloads and saving application state.</source>
 <context>
     <name>UkraineMessageDialog</name>
     <message>
-        <location filename="../../UI/UkraineMessageDialog.qml" line="+41"/>
+        <location filename="../../UI/UkraineMessageDialog.qml" line="+50"/>
         <source>I stand with Ukraine. 🇺🇦</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+43"/>
         <source>A PERSONAL MESSAGE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4452,7 +4416,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+22"/>
         <source>A small discovery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4497,7 +4461,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+19"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4522,8 +4486,8 @@ If you are using only the GUI this will not affect your user experience, but may
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+375"/>
-        <location filename="../../../backend/profile_diagnostics.py" line="+216"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+390"/>
+        <location filename="../../../backend/profile_diagnostics.py" line="+217"/>
         <source>%d min</source>
         <translation type="unfinished"></translation>
     </message>

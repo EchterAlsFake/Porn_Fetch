@@ -10,7 +10,6 @@ from pathlib import Path
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtCore import QObject, Property, QSettings, QStandardPaths, QUrl, Signal, Slot
 from src.shared.version import __version__
-from src.shared.beta_disclaimer import BETA_DISCLAIMER_VERSION
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 
 __license__ = "Porn Fetch Source-Available License 1.0"
@@ -36,6 +35,7 @@ class SettingsManager(QObject):
     qualityChanged = Signal(int)
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
+    updatePromptsChanged = Signal(bool)
     languageChanged = Signal(int)
     accessibilityChanged = Signal()
     sniProxyChanged = Signal(str)
@@ -56,7 +56,6 @@ class SettingsManager(QObject):
     # Missing Signals
     networkLoggingChanged = Signal(bool)
     errorReportingDecisionChanged = Signal(bool)
-    betaDisclaimerAcceptedChanged = Signal()
     ukraineMessageSeenChanged = Signal()
     licenseOfferSeenChanged = Signal()
 
@@ -615,15 +614,6 @@ class SettingsManager(QObject):
             self._settings.sync()
             self.ukraineMessageSeenChanged.emit()
 
-    @Property(bool, notify=betaDisclaimerAcceptedChanged)
-    def beta_disclaimer_accepted(self) -> bool:
-        return self._settings.value("Misc/beta_disclaimer_version", "") == BETA_DISCLAIMER_VERSION
-
-    def accept_beta_disclaimer(self) -> None:
-        self._settings.setValue("Misc/beta_disclaimer_version", BETA_DISCLAIMER_VERSION)
-        self._settings.sync()
-        self.betaDisclaimerAcceptedChanged.emit()
-
     @Property(bool, notify=updateChecksChanged)
     def update_checks(self) -> bool:
         return self.get_bool("Misc/update_checks", True)
@@ -633,6 +623,17 @@ class SettingsManager(QObject):
         if val != self.update_checks:
             self._settings.setValue("Misc/update_checks", val)
             self.updateChecksChanged.emit(val)
+
+    @Property(bool, notify=updatePromptsChanged)
+    def update_prompts(self) -> bool:
+        return self.get_bool("Misc/update_prompts", True)
+
+    @update_prompts.setter
+    def update_prompts(self, val):
+        if val != self.update_prompts:
+            self._settings.setValue("Misc/update_prompts", val)
+            self._settings.sync()
+            self.updatePromptsChanged.emit(val)
 
     @Property(bool, notify=supressErrorsChanged)
     def supress_errors(self) -> bool:

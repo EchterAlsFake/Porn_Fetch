@@ -10,11 +10,11 @@ Pane {
     property int section: -1
     readonly property bool tablet: width >= 740
     readonly property int activeSection: section < 0 ? 0 : section
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color accentColor: appSettings.high_contrast ? Theme.accent : appSettings.accent_color
     readonly property var titles: [qsTr("Downloads"), qsTr("Performance"), qsTr("Privacy & network"),
                                    qsTr("Appearance"), qsTr("System & data"), qsTr("License")]
     readonly property var subtitles: [qsTr("Quality, sources and files"), qsTr("Speed and reliability"),
@@ -117,7 +117,7 @@ Pane {
             color: root.textColor
             wrapMode: Text.Wrap
         }
-        SpinBox {
+        AppSpinBox {
             Layout.preferredWidth: 130
             from: row.minimum
             to: row.maximum
@@ -144,7 +144,7 @@ Pane {
             Label { Layout.fillWidth: true; text: row.label; color: root.textColor; wrapMode: Text.Wrap }
             HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
         }
-        ComboBox {
+        AppComboBox {
             id: choiceCombo
             Layout.fillWidth: true
             model: row.choices
@@ -198,7 +198,7 @@ Pane {
             Label { Layout.fillWidth: true; text: row.label; color: root.textColor; wrapMode: Text.Wrap }
             HelpButton { visible: row.helpText !== ""; helpText: row.helpText }
         }
-        TextField {
+        AppTextField {
             Layout.fillWidth: true
             text: row.value
             readOnly: row.locked
@@ -438,7 +438,7 @@ Pane {
                         text: qsTr("Folder access")
                         color: root.textColor
                     }
-                    Button {
+                    AppButton {
                         text: qsTr("Choose folder")
                         onClicked: outputFolderDialog.open()
                     }
@@ -455,12 +455,12 @@ Pane {
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     text: qsTr("Choose folder")
                     onClicked: outputFolderDialog.open()
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     visible: appSettings.android_output_folder !== ""
                     text: qsTr("Use app storage")
@@ -536,7 +536,7 @@ Pane {
                 ToggleRow { label: qsTr("DNS over HTTPS"); helpText: AppStrings.dnsOverHTTPSHelp; value: appSettings.dns_over_https; onChanged: function(v) { appSettings.dns_over_https = v } }
                 ToggleRow { label: qsTr("Encrypted Client Hello"); helpText: AppStrings.encryptedCHHelp; value: appSettings.encrypted_ch; onChanged: function(v) { appSettings.encrypted_ch = v } }
                 TorRouting { Layout.fillWidth: true }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     text: appSettings.proxy ? qsTr("Configure proxy") : qsTr("Set up proxy")
                     onClicked: proxyWindow.openWithProxy(appSettings.proxy)
@@ -587,12 +587,8 @@ Pane {
                     selected: 0
                     enabled: false
                 }
-                ChoiceRow {
-                    label: qsTr("Content language"); helpText: AppStrings.contentLanguageHelp
-                    choices: ["English", "Deutsch", "Français", "Italiano", "Español", "中文"]
-                    selected: Math.max(0, ["en-US", "de-DE", "fr-FR", "it-IT", "es-ES", "zh-CN"].indexOf(appSettings.locale))
-                    onChosen: function(index) { appSettings.locale = ["en-US", "de-DE", "fr-FR", "it-IT", "es-ES", "zh-CN"][index] }
-                }
+                Label { text: qsTr("Content language") }
+                ContentLanguageComboBox { Layout.fillWidth: true }
             }
             Item { Layout.preferredHeight: 14 }
         }
@@ -616,7 +612,7 @@ Pane {
                     textFormat: Text.PlainText
                     wrapMode: Text.Wrap
                 }
-                Button {
+                AppButton {
                     text: qsTr("Open system notification settings")
                     implicitHeight: 48
                     visible: Qt.platform.os === "android" || Qt.platform.os === "ios"
@@ -628,9 +624,10 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Maintenance")
-                Button { Layout.fillWidth: true; text: qsTr("Check for app updates"); onClicked: backend.check_for_updates() }
-                Button { Layout.fillWidth: true; text: qsTr("Clear temporary files"); onClicked: backend.clear_temporary_files() }
-                Button { Layout.fillWidth: true; text: qsTr("Reset settings"); onClicked: backend.reset_pornfetch() }
+                ToggleRow { label: qsTr("Show a dialog when an update is available"); value: appSettings.update_prompts; onChanged: function(v) { appSettings.update_prompts = v } }
+                AppButton { Layout.fillWidth: true; text: qsTr("Check for app updates"); onClicked: backend.check_for_updates() }
+                AppButton { Layout.fillWidth: true; text: qsTr("Clear temporary files"); onClicked: backend.clear_temporary_files() }
+                AppButton { Layout.fillWidth: true; text: qsTr("Reset settings"); onClicked: backend.reset_pornfetch() }
             }
             Item { Layout.preferredHeight: 14 }
         }
@@ -665,18 +662,18 @@ Pane {
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     text: qsTr("Import license file")
                     onClicked: licenseFileDialog.open()
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     text: qsTr("Refresh license (renews 7-day check-in)")
                     enabled: !bridge.busy
                     onClicked: bridge.refresh()
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     visible: bridge.isValid
                     text: qsTr("Deactivate license (frees 1 of 10 machine seats)")
@@ -695,7 +692,7 @@ Pane {
             SettingCard {
                 heading: qsTr("Production license")
                 description: qsTr("The beta checkout is a test. No real transaction takes place.")
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     text: qsTr("Purchase / renew license")
                     onClicked: Qt.openUrlExternally("https://pornfetch.to/")

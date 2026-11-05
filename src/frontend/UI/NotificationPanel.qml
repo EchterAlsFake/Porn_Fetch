@@ -35,6 +35,11 @@ ColumnLayout {
     }
 
     function performAction(action) {
+        activityDialog.pendingAction = action;
+        activityDialog.close();
+    }
+
+    function dispatchAction(action) {
         if (action === "retry")
             backend.retry_failed_downloads();
         else if (action === "output")
@@ -68,7 +73,7 @@ ColumnLayout {
     }
 
     RowLayout {
-        Button {
+        AppButton {
             id: activityButton
             objectName: "recentActivityButton"
             Layout.minimumWidth: 0
@@ -95,6 +100,7 @@ ColumnLayout {
 
     Dialog {
         id: activityDialog
+        ContrastPopupBackground { popup: activityDialog }
         objectName: "recentActivityDialog"
         parent: Overlay.overlay
         anchors.centerIn: parent
@@ -105,6 +111,7 @@ ColumnLayout {
         title: qsTr("Recent activity")
         property var previousFocus: null
         property var displayedEntries: []
+        property string pendingAction: ""
         onAboutToShow: {
             previousFocus = root.Window.window.activeFocusItem;
             displayedEntries = root.controller ? root.controller.entries : [];
@@ -112,7 +119,14 @@ ColumnLayout {
         onOpened: activityList.forceActiveFocus()
         onClosed: {
             var item = previousFocus;
+            var action = pendingAction;
+            pendingAction = "";
             Qt.callLater(function () {
+                // Finish closing Activity before opening another modal dialog.
+                if (action) {
+                    root.dispatchAction(action);
+                    return;
+                }
                 if (item) {
                     item.focus = false;
                     item.forceActiveFocus(Qt.TabFocusReason);
@@ -170,7 +184,7 @@ ColumnLayout {
                         Flow {
                             Layout.fillWidth: true
                             spacing: 8
-                            Button {
+                            AppButton {
                                 id: copyMessageButton
                                 property bool copied: false
                                 text: copied ? qsTr("Copied") : qsTr("Copy message")
@@ -187,7 +201,7 @@ ColumnLayout {
                                     onTriggered: copyMessageButton.copied = false
                                 }
                             }
-                            Button {
+                            AppButton {
                                 visible: modelData.action !== ""
                                 text: modelData.action === "retry" ? qsTr("Retry failed downloads") : modelData.action === "updates" ? qsTr("Review update") : qsTr("Open output folder")
                                 implicitHeight: 48
@@ -204,13 +218,13 @@ ColumnLayout {
             Flow {
                 Layout.fillWidth: true
                 spacing: 8
-                Button {
+                AppButton {
                     id: refreshButton
                     text: qsTr("Refresh messages")
                     implicitHeight: 48
                     onClicked: activityDialog.displayedEntries = root.controller ? root.controller.entries : []
                 }
-                Button {
+                AppButton {
                     text: qsTr("Clear messages")
                     enabled: root.entryCount > 0
                     implicitHeight: 48
@@ -226,6 +240,7 @@ ColumnLayout {
 
     Popup {
         id: shutdownPopup
+        ContrastPopupBackground { popup: shutdownPopup }
         parent: Overlay.overlay
         anchors.centerIn: parent
         width: Math.max(1, Math.min(480, parent.width - 32))

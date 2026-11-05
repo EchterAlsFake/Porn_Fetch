@@ -55,15 +55,50 @@ class RoutingTests(unittest.TestCase):
 
         @contextmanager
         def stream(*_args, **_kwargs):
-            yield SimpleNamespace(status_code=200, iter_content=chunks)
+            start = int(_kwargs.get("headers", {}).get("Range", "bytes=0-")[6:-1])
+            yield SimpleNamespace(status_code=206 if start else 200, iter_content=chunks,
+                                  headers={"Content-Range": f"bytes {start}-99/100"})
 
         with patch("src.shared.service_transport.requests.Session") as session, \
+             patch("src.shared.service_transport.time.sleep"), \
              patch("src.shared.service_transport.failure_listener") as notice:
             session.return_value.__enter__.return_value.stream = stream
             with self.assertRaises(TorServiceFailure):
                 list(ServiceFetcher(policy=policy)._fetch("https://pornfetch.to/repo/android/targets/update.apk"))
             notice.assert_called_once()
             self.assertIn("could not be reached through Tor", notice.call_args.args[0])
+
+    def test_update_stream_resumes_without_repeating_bytes_and_keeps_tuf_verification(self):
+        from tuf.api.metadata import TargetFile
+
+        calls = []
+        chunks_seen = []
+
+        def interrupted(**_kwargs):
+            yield b"first"
+            raise ConnectionError("stream reset")
+
+        @contextmanager
+        def stream(*args, **kwargs):
+            calls.append(kwargs)
+            if len(calls) == 1:
+                yield SimpleNamespace(status_code=200, iter_content=interrupted)
+            else:
+                yield SimpleNamespace(status_code=206, headers={"Content-Range": "bytes 5-8/9"},
+                                      iter_content=lambda **_: iter([b"last"]))
+
+        fetcher = ServiceFetcher()
+        fetcher.on_chunk = chunks_seen.append
+        with patch("src.shared.service_transport.requests.Session") as session, \
+             patch("src.shared.service_transport.time.sleep"):
+            session.return_value.__enter__.return_value.stream = stream
+            data = b"".join(fetcher._fetch("https://api.pornfetch.to/repo/cli/targets/update.zip"))
+        self.assertEqual(data, b"firstlast")
+        TargetFile.from_data("update.zip", b"firstlast").verify_length_and_hashes(data)
+        self.assertEqual(calls[1]["headers"]["Range"], "bytes=5-")
+        self.assertEqual([options["http_version"] for options in calls], ["v1", "v1"])
+        self.assertEqual(sum(chunks_seen), len(data))
+        self.assertTrue(all(options["proxy"] == "" for options in calls))
 
     def test_missing_runtime_and_owned_process_cleanup(self):
         with tempfile.TemporaryDirectory() as temporary:

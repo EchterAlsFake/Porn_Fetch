@@ -9,17 +9,25 @@ ApplicationWindow {
     id: window
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
-    palette.window: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
-    palette.windowText: appSettings.high_contrast ? "#ffffff" : (appSettings.dark_mode ? "#ffffff" : "#202431")
-    palette.text: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
-    palette.base: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
-    palette.button: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#303030" : "#eeeeee")
-    palette.buttonText: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
-    palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
-    palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
+    palette.window: Theme.background
+    palette.windowText: Theme.ink
+    palette.text: Theme.ink
+    palette.base: Theme.background
+    palette.button: Theme.surface
+    palette.buttonText: Theme.ink
+    palette.placeholderText: Theme.muted
+    palette.highlight: Theme.accent
+    palette.highlightedText: Theme.selectionInk
+    palette.mid: Theme.outline
+    palette.disabled.text: Theme.disabledInk
+    palette.disabled.buttonText: Theme.disabledInk
     font.pointSize: appSettings.font_size
-    Material.theme: appSettings.high_contrast || appSettings.dark_mode ? Material.Dark : Material.Light
-    Material.accent: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
+    Material.accent: Theme.accent
+    Material.foreground: Theme.ink
+    Material.background: Theme.background
+
+    background: Rectangle { color: Theme.background }
 
     width: 1350
     height: 720
@@ -31,7 +39,7 @@ ApplicationWindow {
     property alias safeToClose: shutdownController.safeToClose
     property bool startupContinued: false
 
-    ServiceTorFailureDialog { presentationBlocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
+    ServiceTorFailureDialog { presentationBlocked: !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
 
     ActivityEdge {
         objectName: "activityEdge"
@@ -52,7 +60,7 @@ ApplicationWindow {
             backend.check_for_updates_background()
     }
 
-    function continueAfterBetaDisclaimer() {
+    function beginOnboarding() {
         if (!licenseOfferDialog.presentOnce())
             continueAfterLicenseOffer()
     }
@@ -69,12 +77,7 @@ ApplicationWindow {
             Qt.callLater(function() { errorReportingDialog.open() })
     }
 
-    Component.onCompleted: {
-        if (appSettings.beta_disclaimer_accepted)
-            continueAfterBetaDisclaimer()
-        else
-            Qt.callLater(function() { betaDisclaimerDialog.open() })
-    }
+    Component.onCompleted: Qt.callLater(window.beginOnboarding)
 
     LicenseOfferDialog {
         id: licenseOfferDialog
@@ -86,13 +89,6 @@ ApplicationWindow {
         id: ukraineMessageDialog
         settings: appSettings
         onDismissed: window.continueAfterPersonalMessage()
-    }
-
-    BetaDisclaimerDialog {
-        id: betaDisclaimerDialog
-        disclaimer: betaDisclaimer
-        onConfirmed: window.continueAfterBetaDisclaimer()
-        onExitRequested: window.close()
     }
 
     ApplicationShutdown {
@@ -123,7 +119,7 @@ ApplicationWindow {
             updateDialog.statusMessage = ""
             updateDialog.downloadedBytes = 0
             updateDialog.totalBytes = 0
-            if (!details.automatic)
+            if (!details.automatic || appSettings.update_prompts)
                 updateDialog.open()
         }
 
@@ -144,6 +140,7 @@ ApplicationWindow {
 
     Dialog {
         id: errorReportingDialog
+        ContrastPopupBackground { popup: errorReportingDialog }
 
         parent: Overlay.overlay
         anchors.centerIn: parent
@@ -155,8 +152,8 @@ ApplicationWindow {
 
         background: Rectangle {
             radius: 12
-            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
-            border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
+            color: Theme.surface
+            border.color: Theme.outline
             border.width: 1
         }
 
@@ -166,7 +163,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Help improve Porn Fetch after errors?")
-                color: (appSettings.high_contrast ? "#ffffff" : "#4da6ff")
+                color: Theme.accent
                 font.pixelSize: 24 * appSettings.font_size / 12
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
@@ -175,7 +172,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.")
-                color: (appSettings.high_contrast ? "#ffffff" : "#f1f5f9")
+                color: Theme.ink
                 font.bold: true
                 wrapMode: Text.Wrap
             }
@@ -196,14 +193,14 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         text: backend.errorReportDisclosure
                         textFormat: Text.PlainText
-                        color: (appSettings.high_contrast ? "#ffffff" : "#d7dce5")
+                        color: Theme.ink
                         wrapMode: Text.Wrap
                     }
 
                     Label {
                         Layout.fillWidth: true
                         text: qsTr("Synthetic example of a stored report:")
-                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
+                        color: Theme.accent
                         font.bold: true
                     }
 
@@ -211,8 +208,8 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         implicitHeight: exampleText.contentHeight + 24
                         radius: 6
-                        color: (appSettings.high_contrast ? "#000000" : "#111318")
-                        border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
+                        color: Theme.surface
+                        border.color: Theme.outline
 
                         TextEdit {
                             id: exampleText
@@ -223,7 +220,7 @@ ApplicationWindow {
                             height: contentHeight
                             text: backend.errorReportExample
                             textFormat: TextEdit.PlainText
-                            color: (appSettings.high_contrast ? "#ffffff" : "#d7dce5")
+                            color: Theme.ink
                             font.family: "monospace"
                             font.pixelSize: 12 * appSettings.font_size / 12
                             readOnly: true
@@ -240,7 +237,7 @@ ApplicationWindow {
 
                 Item { Layout.fillWidth: true }
 
-                Button {
+                AppButton {
                     text: qsTr("No, keep disabled")
                     onClicked: {
                         appSettings.set_error_reporting_consent(false)
@@ -249,7 +246,7 @@ ApplicationWindow {
                     }
                 }
 
-                Button {
+                AppButton {
                     text: qsTr("Yes, enable reports")
                     onClicked: {
                         appSettings.set_error_reporting_consent(true)
@@ -263,6 +260,7 @@ ApplicationWindow {
 
     Dialog {
         id: updateDialog
+        ContrastPopupBackground { popup: updateDialog }
         objectName: "updateDialog"
 
         property bool installAllowed: false
@@ -290,13 +288,14 @@ ApplicationWindow {
         width: Math.min(window.width - 48, 820)
         height: Math.min(window.height - 48, 640)
         modal: true
+        focus: true
         padding: 20
         closePolicy: Popup.NoAutoClose
 
         background: Rectangle {
             radius: 12
-            color: (appSettings.high_contrast ? "#000000" : "#1e1e24")
-            border.color: (appSettings.high_contrast ? "#ffffff" : "#383b48")
+            color: Theme.surface
+            border.color: Theme.outline
             border.width: 1
         }
 
@@ -305,8 +304,8 @@ ApplicationWindow {
 
             Label {
                 Layout.fillWidth: true
-                text: qsTr("🚀 New Update Available!")
-                color: (appSettings.high_contrast ? "#ffffff" : "#4da6ff")
+                text: qsTr("Update available")
+                color: Theme.accent
                 font.pixelSize: 26 * appSettings.font_size / 12
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
@@ -316,22 +315,19 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 text: updateDialog.entitlementMessage
                 wrapMode: Text.WordWrap
-                color: (appSettings.high_contrast ? "#ffffff" : "#EAEAEA")
+                color: Theme.ink
             }
-            Button {
-                text: qsTr("Purchase / renew license")
-                visible: !updateDialog.installAllowed
-                onClicked: Qt.openUrlExternally("https://pornfetch.to/")
-            }
-
             SmoothScrollView {
                 id: updateScroll
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
+                // Keep wrapping stable when the scrollbar appears.
+                rightPadding: ScrollBar.vertical.width + 6
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
                 ColumnLayout {
-                    width: updateScroll.availableWidth
+                    width: Math.max(1, updateScroll.availableWidth)
                     spacing: 14
 
                     RowLayout {
@@ -339,41 +335,21 @@ ApplicationWindow {
 
                         Label {
                             text: qsTr("Version:")
-                            color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
+                            color: Theme.accent
                             font.bold: true
                         }
 
                         Label {
                             Layout.fillWidth: true
                             text: updateDialog.version
-                            color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
+                            color: Theme.ink
                         }
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-
-                        Label {
-                            text: qsTr("Download:")
-                            color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
-                            font.bold: true
-                        }
-
-                        Button {
-                            objectName: "updateReleasesButton"
-                            text: qsTr("View GitHub releases")
-                            flat: true
-                            enabled: updateDialog.releaseUrl !== ""
-                            onClicked: Qt.openUrlExternally(updateDialog.releaseUrl)
-                        }
-
-                        Item { Layout.fillWidth: true }
                     }
 
                     Label {
                         visible: updateDialog.importantInfo !== ""
                         text: qsTr("Important Info:")
-                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
+                        color: Theme.accent
                         font.bold: true
                     }
 
@@ -381,7 +357,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         visible: updateDialog.importantInfo !== ""
                         text: updateDialog.importantInfo
-                        color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
+                        color: Theme.ink
                         textFormat: Text.RichText
                         wrapMode: Text.Wrap
                         onLinkActivated: (link) => Qt.openUrlExternally(link)
@@ -389,29 +365,23 @@ ApplicationWindow {
 
                     Label {
                         text: qsTr("Changelog:")
-                        color: (appSettings.high_contrast ? "#ffffff" : "#5dade2")
+                        color: Theme.accent
                         font.bold: true
                     }
 
-                    Rectangle {
+                    TextArea {
+                        id: changelogText
+                        objectName: "updateChangelogText"
                         Layout.fillWidth: true
-                        implicitHeight: changelogText.contentHeight + 20
-                        radius: 6
-                        color: (appSettings.high_contrast ? "#000000" : "#2a2a2a")
-                        border.color: (appSettings.high_contrast ? "#ffffff" : "#444444")
-                        border.width: 1
-
-                        Text {
-                            id: changelogText
-                            objectName: "updateChangelogText"
-                            anchors.fill: parent
-                            anchors.margins: 10
-                            text: updateDialog.changelog
-                            color: (appSettings.high_contrast ? "#ffffff" : "#e0e0e0")
-                            textFormat: updateDialog.changelogFormat === "markdown" ? Text.MarkdownText : Text.RichText
-                            wrapMode: Text.Wrap
-                            onLinkActivated: (link) => Qt.openUrlExternally(link)
-                        }
+                        // A bounded plain-text reader avoids the Qt Quick batch
+                        // renderer crash with long rich-text release notes.
+                        text: backend.release_notes_text(updateDialog.changelog, updateDialog.changelogFormat)
+                        color: Theme.ink
+                        textFormat: Text.PlainText
+                        readOnly: true
+                        selectByMouse: true
+                        wrapMode: Text.Wrap
+                        background: null
                     }
                 }
             }
@@ -429,7 +399,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 visible: text !== ""
                 text: updateDialog.statusMessage
-                color: text.toLowerCase().indexOf("failed") !== -1 ? "#ef4444" : "#e0e0e0"
+                color: Theme.ink
                 wrapMode: Text.Wrap
             }
 
@@ -438,8 +408,17 @@ ApplicationWindow {
                 visible: updateDialog.totalBytes > 0
                 text: updateDialog.formatBytes(updateDialog.downloadedBytes)
                       + " / " + updateDialog.formatBytes(updateDialog.totalBytes)
-                color: (appSettings.high_contrast ? "#ffffff" : "#94a3b8")
+                color: Theme.ink
                 horizontalAlignment: Text.AlignRight
+            }
+
+            CheckBox {
+                objectName: "hideUpdatePromptsCheckBox"
+                Layout.fillWidth: true
+                text: qsTr("Don't show update dialogs again")
+                checked: !appSettings.update_prompts
+                enabled: !updateDialog.updateInProgress
+                onToggled: appSettings.update_prompts = !checked
             }
 
             RowLayout {
@@ -447,17 +426,23 @@ ApplicationWindow {
 
                 Item { Layout.fillWidth: true }
 
-                Button {
+                AppButton {
                     text: qsTr("Later")
                     enabled: !updateDialog.updateInProgress
                     onClicked: updateDialog.close()
                 }
 
-                Button {
-                    text: updateDialog.updateInProgress ? qsTr("Updating…") : qsTr("Auto Update")
-                    enabled: !updateDialog.updateInProgress && updateDialog.installAllowed
+                AppButton {
+                    objectName: "installUpdateButton"
+                    text: updateDialog.updateInProgress ? qsTr("Preparing update…")
+                          : updateDialog.installAllowed ? qsTr("Update now") : qsTr("Open downloads")
+                    enabled: !updateDialog.updateInProgress
                     highlighted: true
                     onClicked: {
+                        if (!updateDialog.installAllowed) {
+                            Qt.openUrlExternally(updateDialog.releaseUrl)
+                            return
+                        }
                         updateDialog.updateInProgress = true
                         updateDialog.statusMessage = qsTr("Starting update…")
                         backend.auto_update()
@@ -476,6 +461,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             TabBar {
                 id: navigation
+                objectName: "mainNavigation"
 
                 Layout.fillWidth: true
 
@@ -526,9 +512,9 @@ ApplicationWindow {
 
             }
             NotificationPanel {
-                blocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
+                blocked: !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
             }
-            Button {
+            AppButton {
                 text: qsTr("SUPPORTED WEBSITES")
                 onClicked: Qt.openUrlExternally("https://pornfetch.to/#websites")
             }

@@ -10,23 +10,23 @@ Item {
     implicitWidth: 460
     implicitHeight: card.implicitHeight + 48
 
-    readonly property bool dark: appSettings.dark_mode || appSettings.high_contrast
-    readonly property color bgBase: appSettings.high_contrast ? "#000000" : dark ? "#1f1f21" : "#f5f6f8"
-    readonly property color bgCard: appSettings.high_contrast ? "#000000" : dark ? "#262628" : "#ffffff"
-    readonly property color bgInput: appSettings.high_contrast ? "#000000" : dark ? "#303136" : "#f3f4f7"
-    readonly property color border: appSettings.high_contrast ? "#ffffff" : dark ? "#666976" : "#858b98"
+    readonly property bool dark: appSettings.dark_mode
+    readonly property color bgBase: appSettings.high_contrast ? Theme.background : dark ? "#1f1f21" : "#f5f6f8"
+    readonly property color bgCard: appSettings.high_contrast ? Theme.background : dark ? "#262628" : "#ffffff"
+    readonly property color bgInput: appSettings.high_contrast ? Theme.background : dark ? "#303136" : "#f3f4f7"
+    readonly property color border: appSettings.high_contrast ? Theme.ink : dark ? "#666976" : "#858b98"
     readonly property color textPri: dark ? "#f3f3f5" : "#202431"
-    readonly property color textSec: appSettings.high_contrast ? "#ffffff" : dark ? "#c2c4cc" : "#565e70"
-    readonly property color accent: appSettings.high_contrast ? "#ffff00" : "#2563eb"
-    readonly property color accentGlow: appSettings.high_contrast ? "#ffff00" : dark ? "#9cc0ff" : "#1d4ed8"
-    readonly property color success: appSettings.high_contrast ? "#ffffff" : dark ? "#4ade80" : "#15803d"
-    readonly property color danger: appSettings.high_contrast ? "#ffffff" : dark ? "#ff676f" : "#b91c1c"
+    readonly property color textSec: appSettings.high_contrast ? Theme.ink : dark ? "#c2c4cc" : "#565e70"
+    readonly property color accent: appSettings.high_contrast ? Theme.accent : "#2563eb"
+    readonly property color accentGlow: appSettings.high_contrast ? Theme.accent : dark ? "#9cc0ff" : "#1d4ed8"
+    readonly property color success: appSettings.high_contrast ? Theme.ink : dark ? "#4ade80" : "#15803d"
+    readonly property color danger: appSettings.high_contrast ? Theme.ink : dark ? "#ff676f" : "#b91c1c"
     Material.theme: root.dark ? Material.Dark : Material.Light
     Material.foreground: root.textPri
     Material.background: root.bgCard
     Material.accent: root.accent
 
-    component LicenseActionButton: Button {
+    component LicenseActionButton: AppButton {
         id: action
         implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
         contentItem: Label {
@@ -206,14 +206,14 @@ Item {
                     Layout.maximumWidth: card.width - 60
                 }
 
-                TextField {
+                AppTextField {
                     id: pastedLicense
                     objectName: "pastedLicenseInput"
                     Layout.fillWidth: true
                     color: root.textPri
                     placeholderTextColor: root.textSec
                     selectionColor: root.accent
-                    selectedTextColor: appSettings.high_contrast ? "#000000" : "#ffffff"
+                    selectedTextColor: appSettings.high_contrast ? Theme.selectionInk : "#ffffff"
                     background: Rectangle {
                         radius: 8
                         color: root.bgInput
@@ -423,7 +423,7 @@ Item {
                     text: bridge && bridge.isValid ? qsTr("Replace license…") : qsTr("Import license…")
                     font.pixelSize: 14 * appSettings.font_size / 12
                     font.weight: Font.DemiBold
-                    color: appSettings.high_contrast ? "#000000" : "white"
+                    color: appSettings.high_contrast ? Theme.background : "white"
                 }
 
                 MouseArea {
@@ -444,6 +444,7 @@ Item {
 
     Dialog {
         id: activationDialog
+        ContrastPopupBackground { popup: activationDialog }
         parent: root.Overlay.overlay ? root.Overlay.overlay : root
         anchors.centerIn: parent
         width: Math.min(parent ? parent.width - 32 : 460, 460)
@@ -633,7 +634,7 @@ Item {
                     color: parent.color
                 }
 
-                Button {
+                AppButton {
                     anchors.centerIn: parent
                     implicitWidth: 140
                     implicitHeight: 34

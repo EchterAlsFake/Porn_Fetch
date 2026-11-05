@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
 
-Button {
+AppButton {
     id: control
     property string helpText: ""
 
@@ -13,7 +13,8 @@ Button {
     implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
     clip: true
     icon.source: "qrc:/images/graphics/information.svg"
-    palette.buttonText: "white"
+    icon.width: 22
+    icon.height: 22
 
     onClicked: {
         helpDialog.open()
@@ -27,6 +28,7 @@ Button {
         mirrored: control.mirrored
         spacing: control.spacing
         text: control.text
+        color: control.palette.buttonText
     }
 
     ScrollableMessageDialog {

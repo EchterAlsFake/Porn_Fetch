@@ -7,3 +7,11 @@ singleton Theme 1.0 Theme.qml
 SmoothScrollView 1.0 SmoothScrollView.qml
 SmoothWheelHandler 1.0 SmoothWheelHandler.qml
 ActivityEdge 1.0 ActivityEdge.qml
+
+AppButton 1.0 AppButton.qml
+ContentLanguageComboBox 1.0 ContentLanguageComboBox.qml
+AppTextField 1.0 AppTextField.qml
+AppComboBox 1.0 AppComboBox.qml
+AppSpinBox 1.0 AppSpinBox.qml
+ContrastOutline 1.0 ContrastOutline.qml
+ContrastPopupBackground 1.0 ContrastPopupBackground.qml

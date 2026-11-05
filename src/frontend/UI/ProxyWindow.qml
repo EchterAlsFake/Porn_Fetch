@@ -5,6 +5,7 @@ import QtQuick.Window
 
 Dialog {
     id: root
+    ContrastPopupBackground { popup: root }
     readonly property bool androidLayoutMode: Qt.platform.os === "android"
                                               || (typeof androidLayout !== "undefined" && androidLayout)
 
@@ -249,7 +250,7 @@ Dialog {
                 rowSpacing: 10
 
                 Label { text: qsTr("Protocol") }
-                ComboBox {
+                AppComboBox {
                     id: schemeBox
                     Accessible.name: qsTr("Proxy Protocol")
                     Layout.fillWidth: true
@@ -258,7 +259,7 @@ Dialog {
                 }
 
                 Label { text: qsTr("Host") }
-                TextField {
+                AppTextField {
                     id: hostField
                     Accessible.name: qsTr("Proxy Host")
                     Accessible.description: qsTr("Enter the proxy hostname or IP address")
@@ -268,7 +269,7 @@ Dialog {
                 }
 
                 Label { text: qsTr("Port") }
-                TextField {
+                AppTextField {
                     id: portField
                     Accessible.name: qsTr("Proxy Port")
                     Accessible.description: qsTr("Enter the proxy port number from 1 to 65535")
@@ -295,7 +296,7 @@ Dialog {
                 visible: authenticationCheck.checked
 
                 Label { text: qsTr("Username") }
-                TextField {
+                AppTextField {
                     id: usernameField
                     Accessible.name: qsTr("Proxy Username")
                     Layout.fillWidth: true
@@ -303,7 +304,7 @@ Dialog {
                 }
 
                 Label { text: qsTr("Password") }
-                TextField {
+                AppTextField {
                     id: passwordField
                     Accessible.name: qsTr("Proxy Password")
                     Layout.fillWidth: true
@@ -375,7 +376,7 @@ Dialog {
                 Layout.fillWidth: true
                 columns: 1
 
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Disable proxy")
                     text: qsTr("Disable proxy")
                     onClicked: {
@@ -386,21 +387,21 @@ Dialog {
 
                 Item { Layout.fillWidth: true }
 
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Ignore SSL and retry")
                     visible: root.testState === "sslWarning"
                     text: qsTr("Ignore SSL and retry")
                     onClicked: root.startTest(false)
                 }
 
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Test again")
                     text: qsTr("Test again")
                     enabled: root.inputValid && root.testState !== "testing"
                     onClicked: root.startTest(true)
                 }
 
-                Button {
+                AppButton {
                     Accessible.name: qsTr("Use proxy")
                     text: qsTr("Use proxy")
                     enabled: root.testState === "success"

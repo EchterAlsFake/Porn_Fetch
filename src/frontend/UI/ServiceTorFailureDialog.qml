@@ -41,13 +41,13 @@ ScrollableMessageDialog {
     }
     footer: ColumnLayout {
         spacing: 8
-        Button {
+        AppButton {
             Layout.fillWidth: true
             objectName: "disableServiceTorButton"
             text: qsTr("Turn off Tor for Porn Fetch")
             onClicked: { appSettings.service_transport = "direct"; root.close() }
         }
-        Button {
+        AppButton {
             Layout.fillWidth: true
             text: qsTr("Keep Tor enabled")
             onClicked: root.close()

@@ -14,6 +14,11 @@ Payment deployment is maintained separately from the application; these notes do
 ### Free automatic updates
 
 - Automatic updates are free for everyone on desktop, Android, and CLI, without a license or licensing-server check. Signed metadata and artifact verification remain required. Premium-feature licensing remains unchanged.
+- Startup update dialogs have a saved opt-out and one update action. Portable/source copies get a download action. Long release notes use a selectable plain-text reader to avoid a Qt Quick crash on Linux.
+- Update downloads use HTTP/1.1 to avoid the observed HTTP/2 reset at 1 MiB. TUF transfers can resume interrupted downloads; signed length/hash verification remains required. Desktop updates show download progress and use the normal queue-saving shutdown.
+- Windows maintenance-tool and app updates can install together instead of requiring two update runs for every release.
+- Failed download details show the full Python traceback and exception chain, with a Copy text action, even when online reporting is disabled. Activity shows the actual error summary; Anonymous Mode hides detailed errors.
+- Require eaf-base-api 4.2.6 for FFmpeg launches with explicit null input and captured output, addressing remuxing failures when the Windows GUI has no console. FFmpeg runs without opening a console window.
 
 ### Supported websites and URL handling
 
@@ -85,6 +90,9 @@ Payment deployment is maintained separately from the application; these notes do
 
 ### Desktop interface and settings
 
+- Enlarged the visible app icon by removing excess transparent padding. Rebuilt Windows and macOS icon sizes, aligned window/tray/installer artwork, and added separate Android adaptive and iOS launcher assets.
+- Fixed high contrast across light and dark themes, including readable selection text, visible field/button borders and matching page surfaces. Theme changes apply to the native palette and QML together.
+- Replaced content-language flag emoji with bundled SVG flags so they render on Windows. Desktop and mobile share the same language options.
 - Rebuilt the desktop interface in QML, covering downloads, accounts, settings, statistics, licensing and information.
 - Added Material appearance, accent colors, dark mode and activity glow, with live updates where supported.
 - Align switch controls to the left of their settings control column instead of centering them in the available space.
@@ -94,7 +102,7 @@ Payment deployment is maintained separately from the application; these notes do
 - Added scrollable dialogs for longer help and notices, including title-formatting guidance and third-party notices.
 - Apply logging, preparation delay, cache, retry, network, provider and idle download-concurrency settings to their actual runtime consumers.
 - Persist settings to disk and reload them consistently. Language and Material appearance changes update the live QML interface; settings that need a restart still explain that requirement.
-- Added a first-run beta disclaimer with a 30-second reading period in desktop, Android and CLI flows.
+- Removed the beta startup disclaimer and its reading delay from GUI and CLI flows.
 - Added an explicit first-run choice for optional error reporting, with privacy-sensitive details redacted from reports.
 - Improved anonymous mode so sensitive video details and widgets are hidden when enabled.
 
@@ -150,6 +158,7 @@ Payment deployment is maintained separately from the application; these notes do
 #### Standalone CLI
 
 - Added `self-update --check`, interactive `self-update`, and `self-update --yes` for supported standalone binaries.
+- Added **Check for Updates** directly to the interactive CLI main menu. It asks before installing and closes the session after staging the signed update so the helper can replace the executable.
 - Verify signed updates through The Update Framework (TUF), then replace the executable and bundled PocketBase with a separate update helper.
 - Keep previous files and a staging result for recovery and diagnosis if installation fails.
 - Fixed standalone certificate-bundle discovery and added visible update download progress.

@@ -154,7 +154,7 @@ class NotificationCenter(QObject):
             or self.tr("A download failed. Check your connection and output folder, then retry the failed rows."),
             self.tr("Download failed"),
             "error",
-            key="download-output-failed" if message else "download-failed",
+            key="download-failed",
             action="retry",
             details=self.tr("Error ID: %s") % report_id,
             quiet=self.settings.supress_errors,

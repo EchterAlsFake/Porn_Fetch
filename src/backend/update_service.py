@@ -196,7 +196,7 @@ class AutoUpdater(QObject):
     """Orchestrates Qt Installer Framework maintenancetool to update the installed application."""
 
     statusReport = Signal(str)
-    updateProgress = Signal(int, int)
+    updateProgress = Signal(float, float)
     finished = Signal()
     outcome = Signal(str, str)
 
@@ -204,9 +204,11 @@ class AutoUpdater(QObject):
         self,
         parent: QObject | None = None,
         before_update: Callable[[], Awaitable[None]] | None = None,
+        request_shutdown: Callable[[], None] | None = None,
     ) -> None:
         super().__init__(parent)
         self.before_update = before_update
+        self.request_shutdown = request_shutdown
         self._android_cancel = threading.Event()
 
     async def run(self) -> None:
@@ -216,9 +218,9 @@ class AutoUpdater(QObject):
             self._android_cancel.set()
             self.outcome.emit("info", self.tr("Update cancelled."))
             raise
-        except Exception:
+        except Exception as error:
             logger.exception("Update launch failed")
-            message = self.tr("The update could not be completed. Check your connection and try again later.")
+            message = self.tr("Could not prepare the update: %s: %s") % (type(error).__name__, error)
             self.statusReport.emit(message)
             self.outcome.emit("error", message)
         finally:
@@ -255,7 +257,7 @@ class AutoUpdater(QObject):
             return
         repository = await self._stage_repository(update)
 
-        self.statusReport.emit("Preparing update: stopping background services...")
+        self.statusReport.emit(self.tr("Preparing the verified update…"))
 
         # Gracefully stop PocketBase and close sessions so binaries are not locked on Windows
         if self.before_update:
@@ -276,8 +278,12 @@ class AutoUpdater(QObject):
         )
 
         self.statusReport.emit("Updater launched. Closing Porn Fetch...")
-        await asyncio.sleep(0.5)
-        QCoreApplication.quit()
+        if self.request_shutdown:
+            # Use the same cooperative download/recovery teardown as a normal
+            # window close. Only start it after the installer was opened.
+            self.request_shutdown()
+        else:
+            QCoreApplication.quit()
 
     async def _stage_repository(self, update):
         """Pin ALL IFW metadata and payload bytes before handing control to IFW."""
@@ -286,10 +292,18 @@ class AutoUpdater(QObject):
         stage = Path(tempfile.mkdtemp(prefix="repository-", dir=cache))
         try:
             metadata = update["metadata"]
+            total = sum(target.length for target in metadata.signed.targets.values())
+            completed = 0
+            self.statusReport.emit(self.tr("Downloading and verifying the update…"))
+            self.updateProgress.emit(0, total)
             for name, target in metadata.signed.targets.items():
                 path = stage / name
                 path.parent.mkdir(parents=True, exist_ok=True)
-                await service_core.download_verified(update["repository_url"] + quote(name, safe="/"), target, path)
+                await service_core.download_verified(
+                    update["repository_url"] + quote(name, safe="/"), target, path,
+                    on_progress=lambda size: self.updateProgress.emit(completed + size, total),
+                )
+                completed += target.length
             xml = ET.parse(stage / "Updates.xml")
             validate_ifw_packages(xml, update["version"], update["release_timestamp"])
             # All content is local and hash checked; remote repository substitutions are forbidden.

@@ -145,6 +145,37 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(item.missing_segments, [2])
             self.assertEqual(backend._downloads_model.get_status("job"), "failed")
             self.assertIs(backend.download_manager.get_video("job"), item)
+            self.assertIn("missing segments: [2]", backend._downloads_model.error_details("job"))
+
+    async def test_provider_exception_details_keep_traceback_and_cause_without_reporting_consent(self):
+        async def fail(_configuration):
+            try:
+                raise ConnectionError("provider refused the request")
+            except ConnectionError as cause:
+                raise RuntimeError("could not download video") from cause
+
+        with tempfile.TemporaryDirectory() as directory:
+            item = video("job")
+            item.output_path = Path(directory) / "output.mp4"
+            item.source_video = SimpleNamespace(download=fail)
+            backend = self.backend(item)
+            settings = SimpleNamespace(processing_delay=0, skip_existing_files=False,
+                                       write_metadata=False, enable_logging=False, anonymous_mode=False)
+            with patch("src.backend.application.app_settings", settings), \
+                 patch("src.backend.application.report_exception", AsyncMock(return_value="local-error")) as report:
+                await Backend._download_video(backend, "job", item, asyncio.Event(), False)
+                details = Backend.download_error_details(backend, "job")
+                self.assertIn("Traceback (most recent call last)", details)
+                self.assertIn("ConnectionError: provider refused the request", details)
+                self.assertIn("RuntimeError: could not download video", details)
+                self.assertIn(item.url, details)
+                self.assertFalse(report.call_args.kwargs["enabled"])
+                settings.anonymous_mode = True
+                backend.tr = lambda text: text
+                self.assertNotIn("provider refused", Backend.download_error_details(backend, "job"))
+            self.assertEqual(backend._downloads_model.get_status("job"), "failed")
+            backend._downloads_model.set_error("job", "")
+            self.assertEqual(backend._downloads_model.error_details("job"), "")
 
     async def test_clear_list_removes_every_row_and_keeps_completed_files(self):
         with tempfile.TemporaryDirectory() as directory:

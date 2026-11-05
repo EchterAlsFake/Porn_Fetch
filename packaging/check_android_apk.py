@@ -19,6 +19,8 @@ def check_apk(apk: Path, abi: str) -> None:
             raise ValueError(f"Invalid native libraries for Android {abi}: {', '.join(invalid)}")
         required = {f"lib/{abi}/{name}" for name in (
             "libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so", "libpython3.15.so", "libTor.so",
+            f"libQt6Svg_{abi}.so", f"libplugins_imageformats_qsvg_{abi}.so",
+            f"libplugins_iconengines_qsvgicon_{abi}.so",
         )}
         missing = required - set(archive.namelist())
         if missing:

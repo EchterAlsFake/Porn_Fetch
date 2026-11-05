@@ -16,6 +16,7 @@ is an inventory, not a substitute for those license texts.
 | zlib | [zlib license](https://zlib.net/zlib_license.html) | Used for PNG cover probing. Linux/macOS use the system library; Windows statically links the MSYS2 library and includes its `zlib.h` copyright/license text in `ffmpeg-legal`. |
 | Other Python packages | `pyproject.toml` and installed package metadata | Generate an artifact-specific list and include the packages' license and notice files; account for platform extras and transitive dependencies. |
 | Application graphics | [Graphics source files](src/frontend/graphics/); Lucide settings-icon attribution below | Application-owned SVGs use the application license; Lucide icons retain their MIT notice. Preserve provenance records for the PNG logo and splash assets; replace or clear any uncertain asset before release. |
+| Content-language flag images | [flag-icons](https://github.com/lipis/flag-icons), MIT | SVGs from revision `ac7e0eb3259eb62aa6100c435607e2fe03896a97`; copyright and license in [LICENSES/FlagIcons.txt](LICENSES/FlagIcons.txt). |
 
 The obsolete library list in `docs/CREDITS.md` is retained as historical
 acknowledgment. It does not establish the shipped dependency list or license

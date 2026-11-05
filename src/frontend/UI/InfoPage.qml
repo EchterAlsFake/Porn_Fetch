@@ -6,12 +6,12 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 0
-    readonly property bool dark: appSettings.dark_mode || appSettings.high_contrast
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : dark ? "#17191f" : "#f5f6f8"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : dark ? "#22252d" : "#ffffff"
+    readonly property bool dark: appSettings.dark_mode
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : dark ? "#17191f" : "#f5f6f8"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : dark ? "#22252d" : "#ffffff"
     readonly property color ink: dark ? "#f1f3f8" : "#202431"
     readonly property color muted: appSettings.high_contrast ? ink : dark ? "#b9c0cf" : "#566176"
-    readonly property color outline: appSettings.high_contrast ? "#ffffff" : dark ? "#3a404d" : "#dce0e8"
+    readonly property color outline: appSettings.high_contrast ? Theme.ink : dark ? "#3a404d" : "#dce0e8"
     readonly property real textScale: Math.max(1, appSettings.font_size / 12)
     Material.theme: root.dark ? Material.Dark : Material.Light
     Material.foreground: root.ink
@@ -59,9 +59,9 @@ Pane {
                 Flow {
                     Layout.fillWidth: true
                     spacing: 8
-                    Button { text: qsTr("Website"); onClicked: Qt.openUrlExternally("https://pornfetch.to/") }
-                    Button { text: qsTr("Source code"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch") }
-                    Button { text: qsTr("Report a problem"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch/issues") }
+                    AppButton { text: qsTr("Website"); onClicked: Qt.openUrlExternally("https://pornfetch.to/") }
+                    AppButton { text: qsTr("Source code"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch") }
+                    AppButton { text: qsTr("Report a problem"); onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch/issues") }
                 }
             }
 
@@ -86,15 +86,15 @@ Pane {
                 Layout.leftMargin: 24
                 Layout.rightMargin: 24
                 spacing: 8
-                Button {
+                AppButton {
                     text: qsTr("Application license")
                     onClicked: { legalDialog.showNotices = false; legalDialog.open() }
                 }
-                Button {
+                AppButton {
                     text: qsTr("Third-party notices")
                     onClicked: { legalDialog.showNotices = true; legalDialog.open() }
                 }
-                Button {
+                AppButton {
                     text: qsTr("Full credits")
                     onClicked: Qt.openUrlExternally("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/CREDITS.md")
                 }
@@ -111,6 +111,7 @@ Pane {
 
     Dialog {
         id: legalDialog
+        ContrastPopupBackground { popup: legalDialog }
         property bool showNotices: false
         title: showNotices ? qsTr("Third-party notices") : qsTr("Porn Fetch application license")
         modal: true

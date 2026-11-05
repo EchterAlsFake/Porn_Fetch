@@ -13,9 +13,10 @@ packages =
 android_packages = buildozer,cython==3.3.0
 
 [qt]
-qml_files = src/frontend/UI/NotificationPanel.qml,src/frontend/UI/BetaDisclaimerDialog.qml,src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidMorePage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/AccountLoginHelp.qml,src/frontend/UI/ScrollableMessageDialog.qml,src/frontend/UI/TorRouting.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/Theme.qml
+qml_files = src/frontend/UI/NotificationPanel.qml,src/frontend/UI/LicenseOfferDialog.qml,src/frontend/UI/UkraineMessageDialog.qml,src/frontend/UI/AndroidOutputSetupDialog.qml,src/frontend/UI/AndroidMain.qml,src/frontend/UI/AndroidDownloadsPage.qml,src/frontend/UI/AndroidAccountPage.qml,src/frontend/UI/AndroidSettingsPage.qml,src/frontend/UI/AndroidMorePage.qml,src/frontend/UI/AndroidInfoPage.qml,src/frontend/UI/LicenseWidget.qml,src/frontend/UI/ProxyWindow.qml,src/frontend/UI/HelpButton.qml,src/frontend/UI/AccountLoginHelp.qml,src/frontend/UI/ScrollableMessageDialog.qml,src/frontend/UI/TorRouting.qml,src/frontend/UI/QualityComboBox.qml,src/frontend/UI/SmoothScrollView.qml,src/frontend/UI/SmoothWheelHandler.qml,src/frontend/UI/AppStrings.qml,src/frontend/UI/Theme.qml,src/frontend/UI/AppButton.qml,src/frontend/UI/AppTextField.qml,src/frontend/UI/AppComboBox.qml,src/frontend/UI/AppSpinBox.qml,src/frontend/UI/ContrastOutline.qml,src/frontend/UI/ContentLanguageComboBox.qml,src/frontend/UI/ContrastPopupBackground.qml
 excluded_qml_plugins =
-modules = Core,Gui,Qml,Quick,QuickControls2,QuickLayouts,Network,Widgets
+# SVG images and icons need QtSvg even though Python never imports it directly.
+modules = Core,Gui,Qml,Quick,QuickControls2,QuickLayouts,Network,Widgets,Svg
 plugins =
 
 [android]

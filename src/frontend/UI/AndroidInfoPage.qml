@@ -5,10 +5,10 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 8
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
     ScrollView {
@@ -18,7 +18,7 @@ Pane {
         ColumnLayout {
             width: parent.width
             spacing: 12
-            Button {
+            AppButton {
                 text: qsTr("Help translate")
                 Layout.fillWidth: true
                 implicitHeight: Math.max(48, contentItem.implicitHeight + topPadding + bottomPadding)
@@ -39,12 +39,12 @@ Pane {
                 color: root.mutedColor
                 wrapMode: Text.Wrap
             }
-            Button {
+            AppButton {
                 Layout.fillWidth: true
                 text: qsTr("Show application license")
                 onClicked: { legalDialog.showNotices = false; legalDialog.open() }
             }
-            Button {
+            AppButton {
                 Layout.fillWidth: true
                 text: qsTr("Show third-party notices")
                 onClicked: { legalDialog.showNotices = true; legalDialog.open() }
@@ -61,6 +61,7 @@ Pane {
 
     Dialog {
         id: legalDialog
+        ContrastPopupBackground { popup: legalDialog }
         property bool showNotices: false
         parent: Overlay.overlay
         anchors.centerIn: parent

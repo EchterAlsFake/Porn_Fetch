@@ -67,6 +67,29 @@ info["CFBundleShortVersionString"] = config["ios"]["version"]
 info["CFBundleVersion"] = config["ios"]["version"]
 plist_path.write_bytes(plistlib.dumps(info))
 text = project.read_text()
+# Qt's iOS generator leaves its Resources phase empty, even with an app icon
+# configured. Attach the opaque icon catalog so Xcode generates every device size.
+catalog = output / "Assets.xcassets"
+shutil.copytree(app / "src/frontend/graphics/ios/Assets.xcassets", catalog, dirs_exist_ok=True)
+icon_file_id = "AF1000000000000000000001"
+icon_build_id = "AF1000000000000000000002"
+for section, entry in (
+    ("PBXFileReference", f'{icon_file_id} /* Assets.xcassets */ = {{isa = PBXFileReference; '
+     'lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = SOURCE_ROOT; };'),
+    ("PBXBuildFile", f'{icon_build_id} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; '
+     f'fileRef = {icon_file_id}; }};'),
+):
+    marker = f"/* End {section} section */"
+    if text.count(marker) != 1:
+        raise SystemExit(f"Generated iOS project is missing {section}")
+    text = text.replace(marker, f"\t\t{entry}\n{marker}")
+text, icon_phases = re.subn(
+    r"(isa = PBXResourcesBuildPhase;.*?files = \()",
+    rf"\g<1>\n\t\t\t\t{icon_build_id} /* Assets.xcassets in Resources */,",
+    text, flags=re.S,
+)
+if icon_phases != 1:
+    raise SystemExit("Generated iOS project must have one Resources phase")
 pattern = r'(/\* Copy Python Packages \*/ = \{.*?shellScript = )("(?:\\.|[^"\\])*");'
 match = re.search(pattern, text, re.S)
 if not match:

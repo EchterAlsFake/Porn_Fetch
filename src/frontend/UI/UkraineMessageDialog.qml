@@ -4,14 +4,16 @@ import QtQuick.Layouts
 
 Dialog {
     id: root
+    ContrastPopupBackground { popup: root }
     objectName: "ukraineMessageDialog"
 
     required property var settings
+    property bool fullScreen: false
     readonly property bool highContrast: settings.high_contrast
-    readonly property bool dark: settings.dark_mode || highContrast
-    readonly property color paper: highContrast ? "#000000" : dark ? "#172235" : "#fffdf6"
-    readonly property color ink: highContrast ? "#ffffff" : dark ? "#eef3fc" : "#24344c"
-    readonly property color mutedInk: highContrast ? "#ffffff" : dark ? "#bccbe0" : "#53627a"
+    readonly property bool dark: settings.dark_mode
+    readonly property color paper: highContrast ? Theme.background : dark ? "#172235" : "#fffdf6"
+    readonly property color ink: highContrast ? Theme.ink : dark ? "#eef3fc" : "#24344c"
+    readonly property color mutedInk: highContrast ? Theme.ink : dark ? "#bccbe0" : "#53627a"
     readonly property real textScale: Math.max(1, settings.font_size / 12)
 
     signal dismissed()
@@ -28,13 +30,20 @@ Dialog {
 
     parent: Overlay.overlay
     anchors.centerIn: parent
-    width: Math.min(parent.width - 24, 720)
-    height: Math.min(parent.height - 24, header.implicitHeight + topPadding
+    width: fullScreen ? parent.width : Math.min(parent.width - 24, 720)
+    height: fullScreen ? parent.height : Math.min(parent.height - 24, header.implicitHeight + topPadding
                      + letterScroll.contentHeight + bottomPadding + footer.implicitHeight)
+    margins: 0
+    topInset: 0
+    bottomInset: 0
+    leftInset: 0
+    rightInset: 0
     modal: true
     focus: true
     z: 1000
     padding: width < 480 ? 20 : 32
+    leftPadding: padding + (fullScreen ? parent.SafeArea.margins.left : 0)
+    rightPadding: padding + (fullScreen ? parent.SafeArea.margins.right : 0)
     topPadding: 20
     bottomPadding: 12
     closePolicy: Popup.CloseOnEscape
@@ -47,26 +56,26 @@ Dialog {
 
     background: Rectangle {
         color: root.paper
-        radius: 18
+        radius: root.fullScreen ? 0 : 18
         border.width: root.highContrast ? 2 : 1
-        border.color: root.highContrast ? "#ffffff" : root.dark ? "#354963" : "#ddd9cd"
+        border.color: root.highContrast ? Theme.ink : root.dark ? "#354963" : "#ddd9cd"
     }
 
     header: Item {
-        implicitHeight: heading.implicitHeight + 66
+        implicitHeight: heading.implicitHeight + 66 + (root.fullScreen ? root.parent.SafeArea.margins.top : 0)
 
         Rectangle {
             anchors.fill: parent
-            radius: 18
+            radius: root.fullScreen ? 0 : 18
             gradient: Gradient {
-                GradientStop { position: 0; color: root.highContrast ? "#000000" : "#123e78" }
-                GradientStop { position: 1; color: root.highContrast ? "#000000" : "#235ca0" }
+                GradientStop { position: 0; color: root.highContrast ? Theme.background : "#123e78" }
+                GradientStop { position: 1; color: root.highContrast ? Theme.background : "#235ca0" }
             }
         }
         Rectangle {
             anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
             height: 18
-            color: root.highContrast ? "#000000" : "#235ca0"
+            color: root.highContrast ? Theme.background : "#235ca0"
         }
         Rectangle {
             anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
@@ -76,11 +85,13 @@ Dialog {
         ColumnLayout {
             id: heading
             anchors { left: parent.left; right: discoveryButton.left; top: parent.top; margins: root.padding }
+            anchors.topMargin: root.padding + (root.fullScreen ? root.parent.SafeArea.margins.top : 0)
+            anchors.leftMargin: root.leftPadding
             spacing: 12
             Label {
                 Layout.fillWidth: true
                 text: qsTr("A PERSONAL MESSAGE")
-                color: "#f3cf63"
+                color: root.highContrast ? Theme.accent : "#f3cf63"
                 font.pixelSize: 11 * root.textScale
                 font.letterSpacing: 2
                 wrapMode: Text.Wrap
@@ -93,7 +104,7 @@ Dialog {
                       + Math.round((root.width < 480 ? 30 : 42) * root.textScale) + '" height="'
                       + Math.round((root.width < 480 ? 20 : 28) * root.textScale) + '">'
                 textFormat: Text.RichText
-                color: "#ffffff"
+                color: root.highContrast ? Theme.ink : "#ffffff"
                 font.pixelSize: (root.width < 480 ? 27 : 36) * root.textScale
                 font.weight: Font.DemiBold
                 wrapMode: Text.Wrap
@@ -105,10 +116,12 @@ Dialog {
             id: discoveryButton
             objectName: "ukraineDiscoveryButton"
             anchors { top: parent.top; right: parent.right; margins: 10 }
+            anchors.topMargin: 10 + (root.fullScreen ? root.parent.SafeArea.margins.top : 0)
+            anchors.rightMargin: 10 + (root.fullScreen ? root.parent.SafeArea.margins.right : 0)
             width: 60
             height: 44
             hoverEnabled: true
-            text: "✦ ↗"
+            text: "↗"
             Accessible.name: qsTr("A small discovery")
             Accessible.description: qsTr("Open a video on YouTube in your browser.")
             ToolTip.visible: hovered || activeFocus
@@ -116,7 +129,7 @@ Dialog {
             HoverHandler { cursorShape: Qt.PointingHandCursor }
             contentItem: Label {
                 text: discoveryButton.text
-                color: discoveryButton.hovered || discoveryButton.activeFocus || root.highContrast ? "#ffe797" : "#a9bdd7"
+                color: root.highContrast ? Theme.accent : discoveryButton.hovered || discoveryButton.activeFocus ? "#ffe797" : "#a9bdd7"
                 font.pixelSize: 20
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -124,9 +137,9 @@ Dialog {
             }
             background: Rectangle {
                 radius: 12
-                color: discoveryButton.down ? "#12345d" : discoveryButton.hovered ? "#3a608f" : "#294f7e"
+                color: root.highContrast ? Theme.background : discoveryButton.down ? "#12345d" : discoveryButton.hovered ? "#3a608f" : "#294f7e"
                 border.width: discoveryButton.activeFocus || root.highContrast ? 2 : 1
-                border.color: discoveryButton.hovered || discoveryButton.activeFocus || root.highContrast ? "#f3cf63" : "#7894b8"
+                border.color: root.highContrast ? Theme.outline : discoveryButton.hovered || discoveryButton.activeFocus ? "#f3cf63" : "#7894b8"
             }
             onClicked: Qt.openUrlExternally("https://www.youtube.com/watch?v=lV9q901vS6o")
         }
@@ -163,7 +176,7 @@ Dialog {
                     objectName: "ukraineMessageParagraph" + index
                     text: modelData
                     textFormat: Text.MarkdownText
-                    linkColor: root.highContrast ? "#ffff00" : root.dark ? "#9dc9ff" : "#155eaa"
+                    linkColor: root.highContrast ? Theme.accent : root.dark ? "#9dc9ff" : "#155eaa"
                     onLinkActivated: function(link) { Qt.openUrlExternally(link) }
                     HoverHandler {
                         cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
@@ -194,8 +207,11 @@ Dialog {
 
     footer: DialogButtonBox {
         padding: 12
+        bottomPadding: 12 + (root.fullScreen ? root.parent.SafeArea.margins.bottom : 0)
+        leftPadding: root.leftPadding
+        rightPadding: root.rightPadding
         background: Item {}
-        Button {
+        AppButton {
             objectName: "ukraineMessageContinueButton"
             text: qsTr("Continue")
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole

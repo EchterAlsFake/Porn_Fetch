@@ -4,7 +4,7 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 ApplicationWindow {
-    ServiceTorFailureDialog { presentationBlocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
+    ServiceTorFailureDialog { presentationBlocked: window.onboardingActive }
     id: window
     visible: true
     width: 400
@@ -12,28 +12,39 @@ ApplicationWindow {
     title: qsTr("Porn Fetch")
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
-    palette.window: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
-    palette.windowText: appSettings.high_contrast ? "#ffffff" : (appSettings.dark_mode ? "#ffffff" : "#202431")
-    palette.text: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
-    palette.base: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#121212" : "#ffffff")
-    palette.button: appSettings.high_contrast ? "#000000" : (appSettings.dark_mode ? "#303030" : "#eeeeee")
-    palette.buttonText: appSettings.high_contrast || appSettings.dark_mode ? "#ffffff" : "#202431"
-    palette.highlight: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
-    palette.highlightedText: appSettings.high_contrast ? "#000000" : "#ffffff"
+    palette.window: Theme.background
+    palette.windowText: Theme.ink
+    palette.text: Theme.ink
+    palette.base: Theme.background
+    palette.button: Theme.surface
+    palette.buttonText: Theme.ink
+    palette.placeholderText: Theme.muted
+    palette.highlight: Theme.accent
+    palette.highlightedText: Theme.selectionInk
+    palette.mid: Theme.outline
+    palette.disabled.text: Theme.disabledInk
+    palette.disabled.buttonText: Theme.disabledInk
     font.pointSize: Math.max(12, appSettings.font_size)
-    Material.theme: appSettings.high_contrast || appSettings.dark_mode ? Material.Dark : Material.Light
-    Material.accent: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
+    Material.accent: Theme.accent
+    Material.foreground: Theme.ink
+    Material.background: Theme.background
     Material.primary: appSettings.accent_color
 
-    readonly property color backgroundColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color surfaceColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color navigationColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#171b23" : "#eef0f7"
-    readonly property color primaryTextColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color secondaryTextColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    readonly property color backgroundColor: Theme.background
+    readonly property color surfaceColor: Theme.surface
+    readonly property color navigationColor: Theme.surface
+    readonly property color primaryTextColor: Theme.ink
+    readonly property color secondaryTextColor: Theme.muted
+    readonly property color accentColor: Theme.accent
     background: Rectangle { color: window.backgroundColor }
 
     property bool safeToClose: false
+    readonly property bool outputSetupRequired: Qt.platform.os === "android" && !appSettings.android_output_folder
+    readonly property bool onboardingActive: !appSettings.license_offer_seen || licenseOfferDialog.visible
+        || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible
+        || !appSettings.error_reporting_decided || consentDialog.visible
+        || outputSetupRequired || outputSetupDialog.visible
 
     ActivityEdge {
         objectName: "activityEdge"
@@ -92,7 +103,7 @@ ApplicationWindow {
         }
     }
 
-    function continueAfterBetaDisclaimer() {
+    function beginOnboarding() {
         if (!licenseOfferDialog.presentOnce())
             continueAfterLicenseOffer()
     }
@@ -105,39 +116,39 @@ ApplicationWindow {
     function continueAfterPersonalMessage() {
         if (!appSettings.error_reporting_decided)
             Qt.callLater(function() { consentDialog.open() })
+        else
+            continueAfterConsent()
     }
 
-    Component.onCompleted: {
-        if (appSettings.beta_disclaimer_accepted)
-            continueAfterBetaDisclaimer()
-        else
-            Qt.callLater(function() { betaDisclaimerDialog.open() })
+    function continueAfterConsent() {
+        if (outputSetupRequired)
+            Qt.callLater(function() { outputSetupDialog.open() })
     }
+
+    Component.onCompleted: Qt.callLater(window.beginOnboarding)
 
     LicenseOfferDialog {
         id: licenseOfferDialog
         settings: appSettings
+        fullScreen: true
         onDismissed: window.continueAfterLicenseOffer()
     }
 
     UkraineMessageDialog {
         id: ukraineMessageDialog
         settings: appSettings
+        fullScreen: true
         onDismissed: window.continueAfterPersonalMessage()
     }
 
-    BetaDisclaimerDialog {
-        id: betaDisclaimerDialog
-        disclaimer: betaDisclaimer
-        surfaceColor: window.surfaceColor
-        textColor: window.primaryTextColor
-        borderColor: window.secondaryTextColor
-        onConfirmed: window.continueAfterBetaDisclaimer()
-        onExitRequested: window.close()
+    AndroidOutputSetupDialog {
+        id: outputSetupDialog
+        settings: appSettings
     }
 
     Dialog {
         id: consentDialog
+        ContrastPopupBackground { popup: consentDialog }
         parent: Overlay.overlay
         anchors.centerIn: parent
         width: Math.min(window.width - 32, 560)
@@ -145,6 +156,7 @@ ApplicationWindow {
         modal: true
         closePolicy: Popup.NoAutoClose
         title: qsTr("Help improve Porn Fetch after errors?")
+        onClosed: window.continueAfterConsent()
 
         contentItem: ColumnLayout {
             spacing: 12
@@ -172,7 +184,7 @@ ApplicationWindow {
                     font.pixelSize: 13 * appSettings.font_size / 12
                 }
             }
-            Button {
+            AppButton {
                 Layout.fillWidth: true
                 text: qsTr("No, keep disabled")
                 onClicked: {
@@ -180,7 +192,7 @@ ApplicationWindow {
                     consentDialog.close()
                 }
             }
-            Button {
+            AppButton {
                 Layout.fillWidth: true
                 text: qsTr("Yes, enable reports")
                 onClicked: {
@@ -194,7 +206,7 @@ ApplicationWindow {
     NotificationPanel {
         id: feedback
         visible: false
-        blocked: !appSettings.beta_disclaimer_accepted || !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
+        blocked: window.onboardingActive
         z: 150
     }
 
@@ -313,7 +325,7 @@ ApplicationWindow {
                         anchors.leftMargin: 8
                         anchors.rightMargin: 8
                         spacing: 8
-                        Button {
+                        AppButton {
                             visible: window.settingsDetail || window.moreDetail
                             Layout.preferredWidth: visible ? 48 : 0
                             Layout.preferredHeight: 48
@@ -430,6 +442,7 @@ ApplicationWindow {
     }
     Dialog {
         id: androidUpdateDialog
+        ContrastPopupBackground { popup: androidUpdateDialog }
         property var details: ({})
         property bool busy: false
         property real downloadedBytes: 0
@@ -464,7 +477,13 @@ ApplicationWindow {
             }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status; textFormat: Text.PlainText }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport !== "direct"; text: torStatus.text }
-            Button {
+            CheckBox {
+                Layout.fillWidth: true
+                text: qsTr("Don't show update dialogs again")
+                checked: !appSettings.update_prompts
+                onToggled: appSettings.update_prompts = !checked
+            }
+            AppButton {
                 Layout.fillWidth: true
                 text: qsTr("Download and install update")
                 enabled: androidUpdateDialog.details.install_allowed === true && !androidUpdateDialog.busy
@@ -474,7 +493,7 @@ ApplicationWindow {
     }
     Connections {
         target: backend
-        function onUpdateAvailable(details) { androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0; androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; if (!details.automatic) androidUpdateDialog.open() }
+        function onUpdateAvailable(details) { androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0; androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; if (!details.automatic || appSettings.update_prompts) androidUpdateDialog.open() }
         function onUpdateStatus(status) { androidUpdateDialog.status = status }
         function onUpdateProgress(current, total) { androidUpdateDialog.downloadedBytes = current; androidUpdateDialog.totalBytes = total }
         function onUpdateCheckStarted() { androidUpdateDialog.details = ({}); androidUpdateDialog.status = ""; androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0 }

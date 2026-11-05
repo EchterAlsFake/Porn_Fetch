@@ -65,7 +65,6 @@ from PySide6.QtCore import QTimer
 from src.backend.config import app_settings
 app_settings.update_checks = False
 app_settings.track_videos = False
-app_settings.accept_beta_disclaimer()
 app_settings.mark_ukraine_message_seen()
 app_settings.set_error_reporting_consent(False)
 mode, layout = sys.argv[1:]

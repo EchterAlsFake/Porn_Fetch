@@ -480,7 +480,7 @@ def update_pysidedeploy_spec(
             "jars_dir": project_root / "deployment/jar/PySide6/jar",
             "mode": mode,
         },
-        "app": {"icon": project_root / "src/frontend/graphics/logo_transparent.png"},
+        "app": {"icon": project_root / "src/frontend/graphics/logo_square.png"},
     }
     for section, options in values.items():
         if not config.has_section(section):

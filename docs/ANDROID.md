@@ -1,7 +1,10 @@
 # Android
 
-Porn Fetch has an Android GUI. Choose a destination folder before downloading;
-completed videos are copied there automatically. Change the folder in Settings.
+Porn Fetch has an Android GUI. After the first-launch notices, setup asks you to
+choose a video folder with Android's system picker. Open or create a folder and
+allow Porn Fetch to use it. Cancelling the picker returns to setup so you can try
+again. An existing saved folder skips this step; access is retained across launches.
+Completed videos are copied there automatically. Change the folder in Settings → Video.
 Android has no persistent download history or statistics. Notifications do not
 keep downloads running after Android stops the app.
 
@@ -80,6 +83,8 @@ and QtAsyncio, extracts the required JARs and checks the APK. Use `--clean`
 after changing native recipes or Qt wheels. Downloaded archives are retained.
 The wrapper keeps `.buildozer/` between runs. Qt preload libraries must be named
 `libQt*.abi3.so` in the APK so Android 13 extracts them; the assembly hook does this.
+The deployment template also includes QtSvg. The APK check requires its SVG image
+and icon plugins so payment logos, flags and help icons render on Android.
 
 The default build mode is release. Supply your own keystore with `--keystore`
 and `--key-alias`, or use `--unsigned` to sign later. An unsigned release APK

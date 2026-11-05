@@ -66,7 +66,6 @@ class CliSettings:
     error_reporting: bool = False
     error_reporting_decided: bool = False
     error_reporting_consent_version: int = 0
-    beta_disclaimer_version: str = ""
     # Database / PocketBase tracking
     track_videos: bool = False
     pocketbase_data_path: str = "./pocketbase_data"

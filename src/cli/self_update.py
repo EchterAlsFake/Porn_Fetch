@@ -204,7 +204,7 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
     return _apply_update(stage, executable)
 
 
-def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
+def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[], None] | None = None) -> int:
     try:
         from src.cli.settings import SettingsStore
         from src.shared.service_transport import ServiceFetcher
@@ -266,7 +266,10 @@ def run_self_update(*, check_only: bool, assume_yes: bool) -> int:
             start_new_session=sys.platform != "win32",
             close_fds=True,
         )
-        print(f"Update staged. Exit now; the helper will replace the CLI. Result: {stage / 'result.txt'}")
+        if on_staged is not None:
+            on_staged()
+        next_step = "Closing the CLI to finish installation." if on_staged else "Exit now; the helper will replace the CLI."
+        print(f"Update staged. {next_step} Result: {stage / 'result.txt'}")
         return 0
     except Exception as exc:
         print(f"CLI update failed: {exc}", file=sys.stderr)

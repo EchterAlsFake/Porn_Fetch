@@ -519,7 +519,7 @@ mode = onefile
             config.read(spec_path)
             self.assertEqual(config["nuitka"]["mode"], "onefile")
             self.assertNotIn("arch", config["buildozer"])
-            self.assertEqual(config["app"]["icon"], "/project/src/frontend/graphics/logo_transparent.png")
+            self.assertEqual(config["app"]["icon"], "/project/src/frontend/graphics/logo_square.png")
             self.assertEqual(config["android"]["extra_recipes_dir"], "/project/p4a-recipes")
 
     def test_regenerated_buildozer_spec_recovers_application_settings(self) -> None:

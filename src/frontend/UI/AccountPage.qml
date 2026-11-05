@@ -28,10 +28,11 @@ Pane {
     background: Rectangle {
         color: "transparent"
         border.width: 2
+        border.color: Theme.outline
         radius: 10
     }
 
-    component CollectionButton: Button {
+    component CollectionButton: AppButton {
         id: actionButton
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -86,7 +87,7 @@ Pane {
                           : qsTr("Email:")
                 }
 
-                TextField {
+                AppTextField {
                     id: identityField
 
                     Layout.fillWidth: true
@@ -104,7 +105,7 @@ Pane {
                     text: qsTr("Password:")
                 }
 
-                TextField {
+                AppTextField {
                     id: passwordField
 
                     Layout.fillWidth: true
@@ -130,7 +131,7 @@ Pane {
                     text: qsTr("Session token:")
                 }
 
-                TextField {
+                AppTextField {
                     id: sessionTokenField
                     Layout.fillWidth: true
                     echoMode: TextInput.Password
@@ -143,7 +144,7 @@ Pane {
                     text: qsTr("Session token auth:")
                 }
 
-                TextField {
+                AppTextField {
                     id: sessionTokenAuthField
                     Layout.fillWidth: true
                     echoMode: TextInput.Password
@@ -157,7 +158,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 id: loginButton
                 Layout.fillWidth: true
 
@@ -247,7 +248,7 @@ Pane {
                 Layout.fillWidth: true
                 visible: !root.androidLayoutMode
 
-                TextField {
+                AppTextField {
                     id: browserUsernameField
                     Layout.fillWidth: true
                     visible: root.selectedProvider === "PornHub"
@@ -256,7 +257,7 @@ Pane {
                     selectByMouse: true
                 }
 
-                Button {
+                AppButton {
                     Layout.fillWidth: root.selectedProvider !== "PornHub"
                     text: qsTr("Login with Browser Cookies")
                     enabled: !root.accountBusy && (root.selectedProvider !== "PornHub"
@@ -290,7 +291,7 @@ Pane {
                     text: qsTr("Account playlist URL:")
                 }
 
-                TextField {
+                AppTextField {
                     id: accountPlaylistField
                     Layout.fillWidth: true
                     Accessible.name: placeholderText
@@ -303,7 +304,7 @@ Pane {
                     }
                 }
 
-                Button {
+                AppButton {
                     id: accountPlaylistButton
                     text: qsTr("Get Playlist Videos")
                     enabled: root.providerLoggedIn

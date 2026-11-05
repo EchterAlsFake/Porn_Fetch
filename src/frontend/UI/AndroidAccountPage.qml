@@ -6,11 +6,11 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 0
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
-    readonly property color accentColor: appSettings.high_contrast ? "#ffff00" : appSettings.accent_color
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color accentColor: appSettings.high_contrast ? Theme.accent : appSettings.accent_color
     readonly property var providers: ["PornHub", "XHamster", "XVideos"]
     property int providerIndex: 0
     readonly property string provider: providers[providerIndex]
@@ -38,25 +38,16 @@ Pane {
                 color: root.textColor
                 font.pixelSize: 20 * appSettings.font_size / 12
                 font.bold: true
+                wrapMode: Text.Wrap
             }
-            GridLayout {
-                columns: accountScroll.availableWidth < 360 ? 1 : 3
+            AppComboBox {
+                id: providerSelector
+                objectName: "mobileAccountProviderSelector"
                 Layout.fillWidth: true
-                columnSpacing: 8
-                Repeater {
-                    model: root.providers
-                    delegate: Button {
-                        required property int index
-                        required property string modelData
-                        Layout.fillWidth: true
-                        text: modelData
-                        leftPadding: 10
-                        rightPadding: 10
-                        flat: root.providerIndex !== index
-                        highlighted: root.providerIndex === index
-                        onClicked: root.providerIndex = index
-                    }
-                }
+                model: root.providers
+                currentIndex: root.providerIndex
+                Accessible.name: qsTr("Choose a website")
+                onActivated: root.providerIndex = currentIndex
             }
 
             AccountLoginHelp {
@@ -85,7 +76,7 @@ Pane {
                         font.bold: true
                         wrapMode: Text.Wrap
                     }
-                    TextField {
+                    AppTextField {
                         id: identityField
                         Layout.fillWidth: true
                         visible: !root.tokenLogin
@@ -93,14 +84,14 @@ Pane {
                         placeholderText: root.provider === "XHamster" ? qsTr("Username") : qsTr("Email address")
                         inputMethodHints: root.provider === "PornHub" ? Qt.ImhEmailCharactersOnly : Qt.ImhNoPredictiveText
                     }
-                    TextField {
+                    AppTextField {
                         id: passwordField
                         Layout.fillWidth: true
                         visible: !root.tokenLogin
                         placeholderText: qsTr("Password")
                         echoMode: TextInput.Password
                     }
-                    TextField {
+                    AppTextField {
                         id: tokenField
                         Layout.fillWidth: true
                         visible: root.tokenLogin
@@ -108,14 +99,14 @@ Pane {
                         placeholderText: qsTr("session_token")
                         echoMode: TextInput.Password
                     }
-                    TextField {
+                    AppTextField {
                         id: tokenAuthField
                         Layout.fillWidth: true
                         visible: root.tokenLogin
                         placeholderText: qsTr("session_token_auth")
                         echoMode: TextInput.Password
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         text: root.busy ? qsTr("Connecting…") : qsTr("Sign in")
                         highlighted: true
@@ -155,7 +146,7 @@ Pane {
                         color: root.mutedColor
                         wrapMode: Text.Wrap
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         visible: root.provider !== "XHamster"
                         text: root.provider === "PornHub" ? qsTr("Watch history") : qsTr("Watch later")
@@ -163,28 +154,28 @@ Pane {
                         onClicked: backend.fetch_account_videos(root.provider,
                                      root.provider === "PornHub" ? "history" : "watch_later", "")
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         visible: root.provider !== "XHamster"
                         text: root.provider === "PornHub" ? qsTr("Recommended") : qsTr("Watch history")
                         enabled: root.loggedIn && !root.busy
                         onClicked: backend.fetch_account_videos(root.provider, root.provider === "PornHub" ? "recommended" : "history", "")
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         visible: root.provider === "PornHub"
                         text: qsTr("Subscription feed")
                         enabled: root.loggedIn && !root.busy
                         onClicked: backend.fetch_account_videos(root.provider, "feed", "")
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         text: root.provider === "PornHub" ? qsTr("Favorites") : qsTr("Liked videos")
                         enabled: root.loggedIn && !root.busy
                         onClicked: backend.fetch_account_videos(root.provider,
                                      root.provider === "PornHub" ? "favorites" : "liked", "")
                     }
-                    TextField {
+                    AppTextField {
                         id: playlistField
                         Layout.fillWidth: true
                         visible: root.provider === "XHamster"
@@ -192,7 +183,7 @@ Pane {
                         placeholderText: qsTr("Account playlist URL")
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                     }
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         visible: root.provider === "XHamster"
                         text: qsTr("Get playlist videos")

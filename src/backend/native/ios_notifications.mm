@@ -2,9 +2,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
-#include <QCoreApplication>
-#include <QFileSystemWatcher>
-#include <QTimer>
+// iOS deployment exposes Qt headers through framework search paths.
+#include <QtCore/QCoreApplication>
+#include <QtCore/QFileSystemWatcher>
+#include <QtCore/QTimer>
 
 static NSString *notificationDirectory()
 {

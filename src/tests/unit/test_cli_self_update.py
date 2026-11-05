@@ -15,7 +15,7 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
-from unittest.mock import call, patch
+from unittest.mock import Mock, call, patch
 
 from rich.console import Console
 from rich.progress import Progress
@@ -185,9 +185,38 @@ class CliUpdateTests(unittest.TestCase):
                             patch("src.licensing.service.create_license_service", side_effect=AssertionError("Updates must not contact licensing")) as license_service, \
                             patch("src.shared.service_transport.ServiceFetcher", lambda settings: self_update._ProgressFetcher()), \
                             redirect_stdout(io.StringIO()) as output:
-                        self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False), 0)
+                        on_staged = Mock()
+                        self.assertEqual(self_update.run_self_update(
+                            check_only=False, assume_yes=False, on_staged=on_staged), 0)
+                        on_staged.assert_not_called()
                     self.assertIn("up to date (3.9.1)", output.getvalue())
                     license_service.assert_not_called()
+
+                    # The menu can exit only once the verified update and helper
+                    # are ready. Exercise that signal against this signed feed.
+                    build.write_text(json.dumps({"version": "3.9.0", "target": "linux/amd64.zip"}))
+                    executable = base / "installed-cli"
+                    executable.write_bytes(b"previous cli")
+                    on_staged = Mock()
+                    with patch.object(self_update, "BUILD_FILE", build), \
+                            patch.object(self_update, "ROOT_FILE", root_file), \
+                            patch.object(self_update, "REPOSITORY_URL", url), \
+                            patch.object(self_update, "user_cache_dir", return_value=str(base / "cli-cache")), \
+                            patch("src.shared.service_transport.ServiceFetcher", lambda settings: self_update._ProgressFetcher()), \
+                            patch.object(self_update, "_installation_path", return_value=executable), \
+                            patch.object(self_update.sys.stdin, "isatty", return_value=True), \
+                            patch("builtins.input", return_value="y") as confirm, \
+                            patch.object(self_update.subprocess, "Popen") as launch, \
+                            redirect_stdout(io.StringIO()) as staged_output:
+                        self.assertEqual(self_update.run_self_update(
+                            check_only=False, assume_yes=False, on_staged=on_staged), 0)
+                    confirm.assert_called_once()
+                    launch.assert_called_once()
+                    on_staged.assert_called_once_with()
+                    helper = Path(launch.call_args.args[0][0])
+                    self.assertTrue(helper.is_file())
+                    self.assertTrue((helper.parent / "plan.json").is_file())
+                    self.assertIn("Closing the CLI to finish installation.", staged_output.getvalue())
 
                     # Progress reporting must not bypass TUF's payload verification.
                     remote_bundle = next((public / "targets").rglob("*.zip"))

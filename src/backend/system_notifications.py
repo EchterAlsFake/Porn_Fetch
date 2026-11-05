@@ -8,7 +8,9 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import Property, QFileSystemWatcher, QObject, Qt, QTimer, Signal, Slot
-from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtGui import QGuiApplication
+
+from src.backend.app_icon import application_icon
 
 
 class SystemNotifications(QObject):
@@ -39,7 +41,7 @@ class SystemNotifications(QObject):
             from PySide6.QtWidgets import QApplication, QSystemTrayIcon
 
             if isinstance(QGuiApplication.instance(), QApplication) and QSystemTrayIcon.isSystemTrayAvailable():
-                self._tray = QSystemTrayIcon(QIcon(":/images/graphics/logo.png"), self)
+                self._tray = QSystemTrayIcon(application_icon(), self)
                 self._tray.setToolTip(self.tr("Download notifications"))
                 self._tray.messageClicked.connect(self.activated)
                 self._state = "available" if QSystemTrayIcon.supportsMessages() else "unavailable"

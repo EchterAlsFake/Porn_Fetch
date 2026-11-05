@@ -7,10 +7,10 @@ Pane {
     signal openPage(int index)
     signal openActivity()
     padding: 8
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle { color: root.pageColor }
 
     ColumnLayout {
@@ -18,7 +18,7 @@ Pane {
         anchors.right: parent.right
         anchors.top: parent.top
         spacing: 8
-        Button {
+        AppButton {
             Layout.fillWidth: true
             text: qsTr("Recent activity")
             onClicked: root.openActivity()

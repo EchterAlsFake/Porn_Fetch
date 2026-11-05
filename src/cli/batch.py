@@ -14,7 +14,6 @@ from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION, report_exce
 from src.shared.legal import legal_document
 from src.shared.media import select_allowed_quality
 
-from .beta_disclaimer import prompt_beta_disclaimer
 from .concurrency import bounded_map
 from .downloads import DownloadController, PausedStore, download_gallery, download_video
 from .media import prepare_video
@@ -132,9 +131,6 @@ async def run_stats(args: argparse.Namespace) -> int:
     """Display PocketBase download statistics and exit."""
     store = SettingsStore()
     persisted = store.load()
-    persisted = await prompt_beta_disclaimer(persisted, store)
-    if persisted is None:
-        return 1
     overrides: dict[str, Any] = {}
     if getattr(args, "pocketbase_data", None):
         overrides["pocketbase_data_path"] = args.pocketbase_data
@@ -196,9 +192,6 @@ def offline_self_test() -> int:
 async def run_batch(args: argparse.Namespace) -> int:
     store = SettingsStore()
     persisted = store.load()
-    persisted = await prompt_beta_disclaimer(persisted, store)
-    if persisted is None:
-        return 1
     explicit_reporting_choice = getattr(args, "error_reporting", None)
     if explicit_reporting_choice is not None:
         persisted = persisted.overridden(

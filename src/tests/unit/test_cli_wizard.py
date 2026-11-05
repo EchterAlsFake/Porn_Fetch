@@ -26,7 +26,6 @@ from src.cli.wizard import (
     print_banner,
     run_wizard,
 )
-from src.shared.beta_disclaimer import BETA_DISCLAIMER_VERSION
 
 
 class FakeQuestionaryPrompt:
@@ -329,10 +328,41 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.ctx.settings.quality, "2160")
 
     @patch("questionary.select")
+    async def test_menu_update_uses_confirmation_and_exits_only_after_staging(self, mock_select):
+        self.settings_store.save(self.settings.overridden(error_reporting_decided=True))
+        for staged, result in ((True, 0), (False, 0), (False, 1)):
+            with self.subTest(staged=staged, result=result):
+                mock_select.reset_mock()
+                mock_select.side_effect = [FakeQuestionaryPrompt("update"), FakeQuestionaryPrompt("exit")]
+
+                def update(*, check_only, assume_yes, on_staged):
+                    self.assertFalse(check_only)
+                    self.assertFalse(assume_yes)
+                    if staged:
+                        on_staged()
+                    return result
+
+                with (
+                    patch("src.cli.wizard.SettingsStore", return_value=self.settings_store),
+                    patch("src.cli.wizard.WizardContext", return_value=self.ctx),
+                    patch("src.cli.wizard.Console", return_value=self.console),
+                    patch("src.cli.wizard.PausedStore.load", return_value=[]),
+                    patch("src.cli.self_update.run_self_update", side_effect=update) as updater,
+                    patch.object(self.ctx, "close", wraps=self.ctx.close) as close,
+                ):
+                    self.assertEqual(await run_wizard(), 0)
+
+                updater.assert_called_once()
+                close.assert_awaited_once()
+                self.assertEqual(mock_select.call_count, 1 if staged else 2)
+                choices = mock_select.call_args_list[0].kwargs["choices"]
+                self.assertTrue(any(choice.value == "update" and "Check for Updates" in choice.title
+                                    for choice in choices))
+
+    @patch("questionary.select")
     async def test_run_wizard_immediate_exit(self, mock_select):
         mock_select.return_value = FakeQuestionaryPrompt("exit")
         self.settings_store.save(self.settings.overridden(
-            beta_disclaimer_version=BETA_DISCLAIMER_VERSION,
             error_reporting_decided=True,
         ))
         with (

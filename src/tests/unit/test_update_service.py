@@ -59,6 +59,22 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_update_uses_normal_shutdown_only_after_successful_launch(self):
+        shutdown = MagicMock()
+        updater = AutoUpdater(request_shutdown=shutdown)
+        with patch("src.backend.update_service.find_maintenance_tool", return_value=Path("/tool")), \
+             patch.object(CheckUpdates, "check_signed_repository", AsyncMock(return_value={})), \
+             patch.object(updater, "_stage_repository", AsyncMock(return_value=Path("/verified"))), \
+             patch("subprocess.Popen", side_effect=OSError("could not launch")) as launch, \
+             patch("src.backend.update_service.QCoreApplication.quit") as quit_app:
+            await updater.run()
+            shutdown.assert_not_called()
+            quit_app.assert_not_called()
+            launch.side_effect = None
+            await updater.run()
+            shutdown.assert_called_once()
+            quit_app.assert_not_called()
+
     async def test_missing_maintenance_tool_finishes_without_starting_installation(self):
         updater = AutoUpdater()
         finished = []
@@ -79,7 +95,9 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
             _update_check_manual=False, notifications=MagicMock(), tr=lambda text: text,
         )
         for source in ("signed_repository", "signed_android", "http"):
-            with self.subTest(source=source), patch.object(CheckUpdates, "check", AsyncMock(return_value={
+            with self.subTest(source=source), patch("src.backend.application.IS_SOURCE_RUN", False), \
+                 patch("src.backend.application.find_maintenance_tool", return_value=Path("/tool")), \
+                 patch.object(CheckUpdates, "check", AsyncMock(return_value={
                 "source": source, "version": "3.10", "release_timestamp": RELEASE_TIMESTAMP,
             })):
                 await Backend._check_for_updates(backend)
@@ -89,8 +107,8 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                 Backend.review_update(backend)
                 self.assertFalse(backend.updateAvailable.emit.call_args.args[0]["automatic"])
                 self.assertEqual(details["install_allowed"], source != "http")
-                if details["install_allowed"]:
-                    self.assertIn("free for everyone", details["entitlement_message"])
+                if source == "signed_repository":
+                    self.assertIn("save download progress", details["entitlement_message"])
 
     async def test_android_updater_without_license_requests_install(self):
         updater = AutoUpdater()

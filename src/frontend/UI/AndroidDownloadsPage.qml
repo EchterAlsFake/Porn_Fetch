@@ -11,10 +11,10 @@ Pane {
     property bool showFilters: false
     property bool selectionMode: false
     property string expandedJob: ""
-    readonly property color pageColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? "#000000" : appSettings.dark_mode ? "#1b202a" : "#ffffff"
-    readonly property color textColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#f0f2f8" : "#202431"
-    readonly property color mutedColor: appSettings.high_contrast ? "#ffffff" : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
+    readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle {
         color: root.pageColor
     }
@@ -61,6 +61,15 @@ Pane {
     }
 
     ScrollableMessageDialog { id: downloadErrorDialog; title: qsTr("Download failed"); modal: true }
+    Connections {
+        target: appSettings
+        function onAnonymousModeChanged() {
+            if (appSettings.anonymous_mode) {
+                downloadErrorDialog.close()
+                downloadErrorDialog.message = ""
+            }
+        }
+    }
 
     function filterValue(field) {
         return field.text.trim() === "" ? null : field.text.trim();
@@ -129,7 +138,7 @@ Pane {
                 ColumnLayout {
                     width: entryScroll.availableWidth
                     spacing: 8
-                    ComboBox {
+                    AppComboBox {
                         id: sourceType
                         implicitHeight: 48
                         Layout.fillWidth: true
@@ -142,7 +151,7 @@ Pane {
                         wrapMode: Text.Wrap
                         color: root.mutedColor
                     }
-                    TextField {
+                    AppTextField {
                         id: urlField
                         Accessible.description: root.inputErrors[["video", "model", "playlist"][sourceType.currentIndex]] || ""
                         onTextEdited: backend.clear_input_error(["video", "model", "playlist"][sourceType.currentIndex])
@@ -153,7 +162,7 @@ Pane {
                         inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                         onAccepted: fetchButton.clicked()
                     }
-                    Button {
+                    AppButton {
                         id: fetchButton
                         implicitHeight: 48
                         highlighted: true
@@ -198,14 +207,14 @@ Pane {
                             color: root.mutedColor
                             elide: Text.ElideRight
                         }
-                        Button {
+                        AppButton {
                             text: qsTr("Choose folder")
                             flat: true
                             onClicked: outputFolderDialog.open()
                         }
                     }
 
-                    Button {
+                    AppButton {
                         Layout.fillWidth: true
                         implicitHeight: 48
                         text: root.showFilters ? qsTr("Hide filters and options") : qsTr("Filters and options")
@@ -229,7 +238,7 @@ Pane {
                         }
                         RowLayout {
                             Layout.fillWidth: true
-                            SpinBox {
+                            AppSpinBox {
                                 id: minDuration
                                 Layout.fillWidth: true
                                 from: 0
@@ -239,7 +248,7 @@ Pane {
                             Label {
                                 text: "–"
                             }
-                            SpinBox {
+                            AppSpinBox {
                                 id: maxDuration
                                 Layout.fillWidth: true
                                 from: 0
@@ -247,18 +256,18 @@ Pane {
                                 editable: true
                             }
                         }
-                        TextField {
+                        AppTextField {
                             id: titleRegex
                             Layout.fillWidth: true
                             Accessible.name: placeholderText
                             placeholderText: qsTr("Title regex")
                         }
-                        TextField {
+                        AppTextField {
                             id: authorRegex
                             Layout.fillWidth: true
                             placeholderText: qsTr("Author regex")
                         }
-                        TextField {
+                        AppTextField {
                             id: tagsRegex
                             Layout.fillWidth: true
                             placeholderText: qsTr("Tags regex")
@@ -268,29 +277,29 @@ Pane {
                         }
                         RowLayout {
                             Layout.fillWidth: true
-                            ComboBox {
+                            AppComboBox {
                                 id: minQuality
                                 Layout.fillWidth: true
                                 model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
-                            ComboBox {
+                            AppComboBox {
                                 id: maxQuality
                                 Layout.fillWidth: true
                                 model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
                         }
-                        TextField {
+                        AppTextField {
                             id: afterDate
                             Layout.fillWidth: true
                             Accessible.name: placeholderText
                             placeholderText: qsTr("Published after (YYYY-MM-DD)")
                         }
-                        TextField {
+                        AppTextField {
                             id: beforeDate
                             Layout.fillWidth: true
                             placeholderText: qsTr("Published before (YYYY-MM-DD)")
                         }
-                        TextField {
+                        AppTextField {
                             id: customOptions
                             Layout.fillWidth: true
                             placeholderText: qsTr("Custom options")
@@ -320,7 +329,7 @@ Pane {
                 font.bold: true
                 elide: Text.ElideRight
             }
-            Button {
+            AppButton {
                 text: qsTr("Add videos")
                 highlighted: true
                 background: Rectangle {
@@ -494,7 +503,7 @@ Pane {
                                 return (labels[card.status] || card.status) + (card.status === "downloading" ? " · " + card.progress + "%" : "") + (card.selectedQuality ? " · " + card.selectedQuality : "");
                             }
                         }
-                        Button {
+                        AppButton {
                             implicitHeight: 48
                             flat: true
                             Accessible.name: qsTr("Download %1: %2").arg(card.index + 1).arg(text)
@@ -510,12 +519,12 @@ Pane {
                             }
                         }
                     }
-                    Button {
+                    AppButton {
                         visible: card.status === "failed" && card.errorId !== ""
                         text: qsTr("Error details")
                         implicitHeight: 48
                         onClicked: {
-                            downloadErrorDialog.message = qsTr("The download failed. Check your connection and output folder, then retry.\n\nError ID: %1").arg(card.errorId)
+                            downloadErrorDialog.message = backend.download_error_details(card.jobId)
                             downloadErrorDialog.open()
                         }
                     }
@@ -526,7 +535,7 @@ Pane {
                             text: qsTr("Quality")
                             color: root.mutedColor
                         }
-                        ComboBox {
+                        AppComboBox {
                             id: qualityCombo
                             Layout.fillWidth: true
                             implicitHeight: 48
@@ -590,7 +599,7 @@ Pane {
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
                 }
-                Button {
+                AppButton {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("Add videos")
                     implicitHeight: 48
@@ -604,20 +613,20 @@ Pane {
             spacing: 0
             RowLayout {
                 Layout.fillWidth: true
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     implicitHeight: 48
                     text: qsTr("Select all")
                     onClicked: backend.select_all_videos(true)
                 }
-                Button {
+                AppButton {
                     Layout.fillWidth: true
                     implicitHeight: 48
                     text: qsTr("Clear selection")
                     onClicked: backend.select_all_videos(false)
                 }
             }
-            Button {
+            AppButton {
                 Layout.fillWidth: true
                 implicitHeight: 48
                 highlighted: true

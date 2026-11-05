@@ -13,7 +13,10 @@ Use [pornfetch.to/download](https://pornfetch.to/download).
   Windows uses ZIP, Linux uses `.tar.gz`, and macOS uses DMG. Portable copies do
   not have a maintenance tool. Replace the complete folder when updating.
 - A **CLI** runs in a terminal. Official standalone builds support
-  `self-update --check` and `self-update`. Source copies use their package manager.
+  **Check for Updates** in the interactive main menu, as well as
+  `self-update --check` and `self-update`. The menu asks before installing and
+  closes the session when an update is ready to replace the CLI. Source copies
+  use their package manager.
 - [Android](ANDROID.md) and [iOS](iOS.md) have separate instructions.
 
 PocketBase is optional. It stores download history and statistics; it does not

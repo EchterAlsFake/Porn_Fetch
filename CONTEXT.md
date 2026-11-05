@@ -29,10 +29,15 @@ The desktop entry point is `main.py`; its backend is `src/backend/application.py
 `AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
 Weblate integration are unfinished; language selectors remain disabled.
 
-First launch shows the beta notice, then the €19.99 license offer, then the
+First launch shows the €19.99 license offer, then the
 Ukraine message and error-reporting consent. `Onboarding/license_offer_seen`
 and `Onboarding/ukraine_message_seen` survive preference resets and updates.
 The offer opens pornfetch.to for purchase and has a free Continue action.
+On mobile, the license offer and Ukraine message fill the window while respecting
+system safe areas. Android then asks users without a saved output folder to choose
+one through the system picker. Cancelling keeps setup open; an existing selection
+skips setup. The picker retains access for future launches. Android packaging must
+include QtSvg and its image and icon plugins for the bundled SVG artwork.
 
 Optional error reports now include full Python tracebacks, chained exceptions
 and supplied diagnostic context, including video URLs and query strings.
@@ -46,6 +51,28 @@ Qt Installer Framework owns desktop installation, component changes, updates
 and removal. Source and portable copies have no in-app installer/uninstaller.
 Active-download temporary cleanup asks for confirmation but remains allowed.
 
+Desktop update discovery opens a dialog by default. `Misc/update_prompts` saves
+the opt-out independently of startup checks; manual review remains available.
+Long release notes use a plain-text reader to avoid the Qt Quick rich-text
+renderer crash confirmed on Wayland/NVIDIA. Update payloads use HTTP/1.1 after
+reproducing an HTTP/2 reset at 1 MiB; TUF streams resume with validated ranges.
+The signed maintenance component is required but not Essential, avoiding IFW's
+separate tool-first update/restart. Update launch uses normal async shutdown.
+
+The interactive CLI main menu includes Check for Updates, using the same signed
+updater and confirmation as `self-update`. Only a successfully staged update
+closes the menu and its session resources so the helper can replace the binary;
+declining, failed checks and up-to-date results return to the menu.
+
+Failed download details keep full Python tracebacks, causes and video URLs in
+session memory, independently of report consent. Activity summaries remain
+redacted, and Anonymous Mode hides and closes the detailed-error dialog.
+
+`eaf-base-api>=4.2.6` makes FFmpeg remux/tagging subprocesses noninteractive with
+explicit null input and captured output. This removes dependence on Windows
+console handles when launching from Explorer or Start Menu. The sibling library
+checkout contains the fix; publish 4.2.6 before building against the new minimum.
+
 GUI feedback uses `notifications.py` and `NotificationPanel.qml`: asynchronous
 session-only Recent activity and queued decisions. Desktop activity is in the
 navigation row; mobile activity is under More. There is no top notification banner. Optional system
@@ -53,6 +80,21 @@ notifications are disabled by default and use generic text. They do not enable
 background downloads. Mobile copies completed files to the selected output
 folder automatically; there is no per-video Save action. Native notification
 and assistive-technology checks require devices.
+
+High contrast respects the selected light/dark mode. `Theme.qml` defines the
+shared colors; `AppButton`, `AppTextField`, `AppComboBox` and `AppSpinBox` add
+contrast rendering while retaining normal style bindings when disabled. Dark
+contrast uses black/white with yellow selections; light contrast uses white/black
+with navy selections. `ThemeManager` synchronizes the application palette and
+native color scheme. Content-language flags are bundled SVG images from
+flag-icons (MIT), rather than font-dependent emoji, in both layouts.
+
+App icons are generated from `graphics/logo_artwork.png` using
+`scripts/generate_app_icons.py`: square desktop PNGs with reduced padding,
+multi-size Windows ICO and macOS ICNS, a separate Android adaptive foreground,
+and an opaque iOS asset catalog attached during staging. Runtime window/tray
+icons share the native small sizes plus a high-resolution PNG. Linux uses the
+installed `pornfetch.desktop` identity for launcher matching.
 
 Graceful shutdown stops downloads cooperatively, saves paused queue snapshots
 and flushes history before closing services. Recovery metadata uses the writable

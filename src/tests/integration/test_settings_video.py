@@ -59,7 +59,7 @@ class TestVideoTabGUI(SettingsGUITestBase):
         combo = self.find_control("contentLanguageComboBox")
         self.assertEqual(combo.property("count"), 14)
         self.assertEqual(combo.property("currentIndex"), 2)
-        self.assertEqual(combo.property("currentText"), "🇺🇸 English")
+        self.assertEqual(combo.property("currentText"), "English")
         self.assertEqual(combo.property("currentValue"), "en-US")
 
     def test_content_language_displays_saved_locale_on_startup(self) -> None:
@@ -69,7 +69,7 @@ class TestVideoTabGUI(SettingsGUITestBase):
         try:
             combo = page.findChild(QObject, "contentLanguageComboBox")
             self.assertIsNotNone(combo)
-            self.assertEqual(combo.property("currentText"), "🇩🇪 Deutsch")
+            self.assertEqual(combo.property("currentText"), "Deutsch")
             self.assertEqual(combo.property("currentValue"), "de-DE")
             self.assertEqual(self.settings_manager.locale, "de-DE")
         finally:

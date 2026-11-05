@@ -50,6 +50,15 @@ Pane {
     }
 
     ScrollableMessageDialog { id: downloadErrorDialog; title: qsTr("Download failed"); modal: true }
+    Connections {
+        target: appSettings
+        function onAnonymousModeChanged() {
+            if (appSettings.anonymous_mode) {
+                downloadErrorDialog.close()
+                downloadErrorDialog.message = ""
+            }
+        }
+    }
 
     function qualityRequiresLicense(quality) {
         var normalized = String(quality || "").trim().toLowerCase()
@@ -63,6 +72,7 @@ Pane {
     background: Rectangle {
         color: "transparent"
         border.width: 2
+        border.color: Theme.outline
         radius: 10
     }
 
@@ -104,7 +114,7 @@ Pane {
                 text: qsTr("Video URL:")
             }
 
-            TextField {
+            AppTextField {
                 id: videoUrlField
                 Accessible.description: root.inputErrors.video || ""
                 onTextEdited: backend.clear_input_error("video")
@@ -123,7 +133,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 objectName: "getVideoButton"
                 text: qsTr("Get Video")
 
@@ -149,7 +159,7 @@ Pane {
                 text: qsTr("Model URL:")
             }
 
-            TextField {
+            AppTextField {
                 id: modelUrlField
                 Accessible.description: root.inputErrors.model || ""
                 onTextEdited: backend.clear_input_error("model")
@@ -168,7 +178,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 objectName: "getModelVideosButton"
                 text: qsTr("Get Videos")
 
@@ -195,7 +205,7 @@ Pane {
                 text: qsTr("Playlist URL:")
             }
 
-            TextField {
+            AppTextField {
                 id: playlistUrlField
                 Accessible.description: root.inputErrors.playlist || ""
                 onTextEdited: backend.clear_input_error("playlist")
@@ -214,7 +224,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 objectName: "getPlaylistVideosButton"
                 text: qsTr("Get Videos")
 
@@ -252,7 +262,7 @@ Pane {
             Layout.fillWidth: true
             spacing: 2
 
-            Button {
+            AppButton {
                 Layout.fillWidth: true
 
                 text: qsTr("Downloads")
@@ -264,7 +274,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 Layout.fillWidth: true
 
                 text: qsTr("Advanced Configuration")
@@ -276,7 +286,7 @@ Pane {
                 }
             }
 
-            Button {
+            AppButton {
                 Layout.fillWidth: true
 
                 text: qsTr("Cancel Loading")
@@ -314,21 +324,21 @@ Pane {
                         Layout.bottomMargin: 4
                         spacing: 8
 
-                        Button {
+                        AppButton {
                             text: qsTr("Select All")
                             objectName: "downloadSelectAllButton"
                             enabled: downloadList.count > 0
                             onClicked: backend.select_all_videos(true)
                         }
 
-                        Button {
+                        AppButton {
                             text: qsTr("Clear Selection")
                             objectName: "downloadClearSelectionButton"
                             enabled: downloadList.count > 0
                             onClicked: backend.select_all_videos(false)
                         }
 
-                        Button {
+                        AppButton {
                             objectName: "clearDownloadListButton"
                             text: qsTr("Clear list")
                             enabled: downloadList.count > 0 || backend.busy
@@ -342,7 +352,7 @@ Pane {
                             Layout.fillWidth: true
                         }
 
-                        Button {
+                        AppButton {
                             objectName: "downloadSelectedButton"
                             text: qsTr("Download Selected")
                             enabled: downloadList.count > 0
@@ -504,7 +514,7 @@ Pane {
                                                                downloadRow.jobId, checked)
                                             }
 
-                                            Button {
+                                            AppButton {
                                                 objectName: "downloadStartButton"
                                                 Layout.fillWidth: true
                                                 Layout.maximumWidth: root.downloadButtonMaximumWidth
@@ -570,7 +580,7 @@ Pane {
                                             text: downloadRow.duration
                                         }
 
-                                        ComboBox {
+                                        AppComboBox {
                                             id: qualityCombo
                                             Accessible.name: qsTr("Video quality")
                                             objectName: "downloadQualityCombo"
@@ -651,7 +661,7 @@ Pane {
                                             }
                                         }
 
-                                        Button {
+                                        AppButton {
                                             objectName: "downloadStopResumeButton"
                                             Layout.preferredWidth: root.stopColumnWidth
                                             Layout.minimumWidth: root.stopColumnWidth
@@ -700,16 +710,16 @@ Pane {
                                                 value: downloadRow.progress
                                                 indeterminate: downloadRow.status === "queued"
                                             }
-                                            Button {
+                                            AppButton {
                                                 visible: downloadRow.status === "failed" && downloadRow.errorId !== ""
                                                 text: qsTr("Error details")
                                                 onClicked: {
-                                                    downloadErrorDialog.message = qsTr("The download failed. Check your connection and output folder, then retry.\n\nError ID: %1").arg(downloadRow.errorId)
+                                                    downloadErrorDialog.message = backend.download_error_details(downloadRow.jobId)
                                                     downloadErrorDialog.open()
                                                 }
                                             }
                                         }
-                                        Button {
+                                        AppButton {
                                             objectName: "downloadRemoveButton"
                                             Layout.preferredWidth: root.removeColumnWidth
                                             Layout.minimumWidth: root.removeColumnWidth
@@ -790,7 +800,7 @@ Pane {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label { text: qsTr("Start video:") }
-                                SpinBox {
+                                AppSpinBox {
                                     id: startSpin
                                     objectName: "downloadStartIndex"
                                     from: 0; to: 1000000
@@ -803,7 +813,7 @@ Pane {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label { text: qsTr("End video:") }
-                                SpinBox {
+                                AppSpinBox {
                                     id: endSpin
                                     objectName: "downloadEndIndex"
                                     from: 0; to: 1000000
@@ -838,7 +848,7 @@ Pane {
                                 Layout.fillWidth: true
                                 spacing: 10
 
-                                SpinBox {
+                                AppSpinBox {
                                     id: minDurationSpin
                                     objectName: "downloadMinimumDuration"
                                     from: 0; to: 9999
@@ -849,7 +859,7 @@ Pane {
                                     textFromValue: function(value) { return value === 0 ? qsTr("Any") : value + qsTr(" min") }
                                 }
                                 Label { text: "-" }
-                                SpinBox {
+                                AppSpinBox {
                                     id: maxDurationSpin
                                     objectName: "downloadMaximumDuration"
                                     from: 0; to: 9999
@@ -862,7 +872,7 @@ Pane {
 
                             // Regex Filters
                             Label { text: qsTr("Title Regex:") }
-                            TextField {
+                            AppTextField {
                                 id: titleRegexField
                                 objectName: "downloadTitleRegex"
                                 Layout.fillWidth: true
@@ -871,7 +881,7 @@ Pane {
                             }
 
                             Label { text: qsTr("Author Regex:") }
-                            TextField {
+                            AppTextField {
                                 id: authorRegexField
                                 objectName: "downloadAuthorRegex"
                                 Layout.fillWidth: true
@@ -879,7 +889,7 @@ Pane {
                             }
 
                             Label { text: qsTr("Tags Regex:") }
-                            TextField {
+                            AppTextField {
                                 id: tagsRegexField
                                 objectName: "downloadTagsRegex"
                                 Layout.fillWidth: true
@@ -893,14 +903,14 @@ Pane {
                                 Layout.fillWidth: true
                                 spacing: 10
 
-                                ComboBox {
+                                AppComboBox {
                                     id: minQualityCombo
                                     objectName: "downloadMinimumQuality"
                                     Layout.fillWidth: true
                                     model: ["Any", "144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
                                 }
                                 Label { text: qsTr("to") }
-                                ComboBox {
+                                AppComboBox {
                                     id: maxQualityCombo
                                     objectName: "downloadMaximumQuality"
                                     Layout.fillWidth: true
@@ -914,7 +924,7 @@ Pane {
                                 Layout.fillWidth: true
                                 spacing: 10
 
-                                TextField {
+                                AppTextField {
                                     id: afterDateField
                                     objectName: "downloadAfterDate"
                                     Layout.fillWidth: true
@@ -924,7 +934,7 @@ Pane {
                                     validator: RegularExpressionValidator { regularExpression: /^\d{4}-\d{2}-\d{2}$/ }
                                 }
                                 Label { text: "-" }
-                                TextField {
+                                AppTextField {
                                     id: beforeDateField
                                     objectName: "downloadBeforeDate"
                                     Layout.fillWidth: true
@@ -954,14 +964,14 @@ Pane {
                             Label { text: qsTr("Custom Title formatting:") }
                             RowLayout {
                                 Layout.fillWidth: true
-                                TextField {
+                                AppTextField {
                                     id: customOptions
                                     objectName: "downloadTitlePattern"
                                     Accessible.name: placeholderText
                                     placeholderText: qsTr("$title")
                                     Layout.fillWidth: true
                                 }
-                                Button {
+                                AppButton {
                                     objectName: "downloadTitleOptionsButton"
                                     text: qsTr("Options")
                                     onClicked: titleOptionsDialog.open()
@@ -970,7 +980,7 @@ Pane {
                         }
                     }
 
-                    Button {
+                    AppButton {
                         objectName: "downloadKeyboardButton"
                         text: qsTr("Keyboard shortcuts")
                         onClicked: keyboardShortcutsDialog.open()
