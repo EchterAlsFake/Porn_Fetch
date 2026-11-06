@@ -22,7 +22,8 @@ plugins =
 [android]
 wheel_pyside =
 wheel_shiboken =
-plugins =
+# Copy these into APK/lib as well as the wheel's private Python bundle.
+plugins = platforms_qtforandroid,imageformats_qsvg,iconengines_qsvgicon
 
 [nuitka]
 extra_args =

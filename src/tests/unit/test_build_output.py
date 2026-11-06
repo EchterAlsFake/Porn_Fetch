@@ -2,6 +2,8 @@
 import importlib.util
 import io
 import os
+import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -53,6 +55,15 @@ class BuildOutputTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("verbose=1", result.stderr)
 
+    def test_old_quiet_environment_cannot_hide_build_diagnostics(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result, _ = self.invoke(directory, "import os; print('verbose=' + os.environ['PORN_FETCH_BUILD_VERBOSE'])")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("verbose=1", result.stderr)
+        with patch.dict(os.environ, {"PORN_FETCH_BUILD_VERBOSE": "0"}), redirect_stderr(io.StringIO()) as output:
+            build_output.detail("patch diagnostics")
+        self.assertIn("patch diagnostics", output.getvalue())
+
     def test_failure_preserves_full_terminal_output_log_and_exit_code(self):
         with tempfile.TemporaryDirectory() as directory:
             result, log = self.invoke(directory, "import sys; print('earlier details'); "
@@ -63,7 +74,7 @@ class BuildOutputTests(unittest.TestCase):
             self.assertIn("exit 17", result.stderr)
             self.assertIn(str(log), result.stderr)
             self.assertIn("earlier details", result.stderr)
-            self.assertEqual(result.stderr.count("compiler failed"), 1)
+            self.assertEqual(result.stderr.splitlines().count("compiler failed"), 1)
             self.assertIn("earlier details", log.read_text())
 
     def test_default_output_reaches_terminal_and_log_before_child_exits(self):
@@ -91,13 +102,13 @@ print('compiler finished')
             ) as process:
                 try:
                     received = ""
-                    while "compiler stderr ready" not in received:
+                    while "compiler stderr ready" not in received.splitlines():
                         line = process.stderr.readline()
                         if not line:
                             break
                         received += line
-                    self.assertIn("compiler stdout ready", received)
-                    self.assertIn("compiler stderr ready", received)
+                    self.assertIn("compiler stdout ready", received.splitlines())
+                    self.assertIn("compiler stderr ready", received.splitlines())
                     self.assertIsNone(process.poll(), received)
                     retained = log.read_text()
                     self.assertIn("compiler stdout ready", retained)
@@ -192,6 +203,57 @@ for _ in range(10):
             os.environ["NO_COLOR"] = "1"
             build_output.message("Warning", "warn")
             self.assertNotIn("\033[", output.getvalue())
+
+
+@unittest.skipUnless(shutil.which("bash"), "Shell build wrappers require bash")
+class ShellBuildOutputTests(unittest.TestCase):
+    def test_shell_wrappers_stream_both_streams_keep_logs_and_return_failure(self):
+        project = WRAPPER.parents[1]
+        for name in ("scripts/install.sh", "scripts/install_termux.sh", "packaging/build_linux_x86.sh"):
+            with self.subTest(script=name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                release = root / "continue-build"
+                source = (project / name).read_text()
+                function = "run() {\n" + source.split("\nrun() {\n", 1)[1].split("\n}\n", 1)[0] + "\n}\n"
+                code = """
+import pathlib, sys, time
+print('stdout ready', flush=True)
+print('stderr ready', file=sys.stderr, flush=True)
+for _ in range(500):
+    if pathlib.Path(sys.argv[1]).exists():
+        break
+    time.sleep(0.01)
+print('later compiler output', flush=True)
+sys.exit(17)
+"""
+                label = "" if name == "scripts/install.sh" else "'Fixture' "
+                script = ("set -euo pipefail\ncmd() { :; }\ninfo() { :; }\nerror() { :; }\n"
+                          "build_status() { :; }\n" + function +
+                          f'run {label}"$1" -c {shlex.quote(code)} "$2"\n')
+                with subprocess.Popen(
+                    ["bash", "-c", script, "fixture", sys.executable, str(release)],
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                    env={**os.environ, "TMPDIR": directory, "PORN_FETCH_BUILD_VERBOSE": "0"},
+                ) as process:
+                    try:
+                        received = ""
+                        while "stderr ready" not in received:
+                            line = process.stdout.readline()
+                            if not line:
+                                break
+                            received += line
+                        self.assertIn("stdout ready", received)
+                        self.assertIn("stderr ready", received)
+                        self.assertIsNone(process.poll(), received)
+                    finally:
+                        release.touch()
+                        remaining, errors = process.communicate(timeout=10)
+                    self.assertEqual(process.returncode, 17, received + remaining + errors)
+                    self.assertIn("later compiler output", remaining)
+                    log, = root.glob("pornfetch-build.*")
+                    self.assertIn("stdout ready", log.read_text())
+                    self.assertIn("stderr ready", log.read_text())
+                    self.assertIn("later compiler output", log.read_text())
 
 
 if __name__ == "__main__":

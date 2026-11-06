@@ -31,6 +31,10 @@ def run(command, *, sensitive=False, check=True, timeout=None):
     tools["spctl"] = "/usr/sbin/spctl"
     arguments[0] = tools.get(arguments[0], arguments[0])
     result = subprocess.run(arguments, capture_output=True, text=True, timeout=timeout)
+    if not sensitive:
+        # Retain machine-readable responses for callers and show tool diagnostics.
+        print(result.stdout, end="", file=sys.stderr, flush=True)
+        print(result.stderr, end="", file=sys.stderr, flush=True)
     if check and result.returncode:
         # Never include subprocess arguments: security/notarytool setup receives credentials.
         detail = "" if sensitive else "\n" + "\n".join(

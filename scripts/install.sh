@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-# One switch also reaches all Python build/patch children.
+# Keep the old switch accepted; builds always show their full output.
 for argument in "$@"; do
   case "$argument" in
     -v|--verbose) export PORN_FETCH_BUILD_VERBOSE=1 ;;
@@ -11,11 +11,8 @@ for argument in "$@"; do
     *) echo "Unknown option: $argument" >&2; exit 2 ;;
   esac
 done
-case "${PORN_FETCH_BUILD_VERBOSE:-0}" in
-  1|true|yes) PORN_FETCH_BUILD_VERBOSE=1 ;;
-  *) PORN_FETCH_BUILD_VERBOSE=0 ;;
-esac
-export PORN_FETCH_BUILD_VERBOSE
+export PORN_FETCH_BUILD_VERBOSE=1
+export PYTHONUNBUFFERED=1
 
 # ------------------------------------------------------------
 # Pretty colors (works in most terminals)
@@ -40,22 +37,17 @@ error()   { echo -e "${RED}${BOLD}[ERR ]${RESET} $*" >&2; }
 cmd()     { echo -e "${MAGENTA}${BOLD}>>${RESET} ${DIM}$*${RESET}"; }
 
 run() {
-  # Authenticate with sudo before hiding command output so its prompt is visible.
+  # Authenticate directly so sudo retains its terminal for password prompts.
   if [[ "$1" == sudo ]]; then sudo -v || return $?; fi
   local command_log result
   command_log=$(mktemp "${TMPDIR:-/tmp}/pornfetch-build.XXXXXX")
-  if [[ "$PORN_FETCH_BUILD_VERBOSE" == 1 ]]; then
-    cmd "$*"
-    if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi
-  else
-    if "$@" >"$command_log" 2>&1; then result=0; else result=$?; fi
-  fi
+  cmd "$*"
+  info "Full log: $command_log"
+  if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi
   if [[ "$result" != 0 ]]; then
-    [[ "$PORN_FETCH_BUILD_VERBOSE" == 1 ]] || tail -n 25 "$command_log" >&2
     error "Command failed (exit $result). Full log: $command_log"
     return "$result"
   fi
-  [[ "$PORN_FETCH_BUILD_VERBOSE" != 1 ]] || info "Full log: $command_log"
   return 0
 }
 
@@ -138,7 +130,6 @@ install_uv_if_missing() {
 install_linux_build_deps() {
   if command -v pacman >/dev/null 2>&1; then
     info "Detected Arch Linux (pacman)"
-    run sudo pacman -Syu --noconfirm
     run sudo pacman -S --noconfirm --needed \
       base-devel git cmake curl pkgconf openssl libevent zlib mesa libxkbcommon-x11 libxcb
   elif command -v apt-get >/dev/null 2>&1; then
@@ -189,10 +180,9 @@ install_macos_build_deps() {
     exit 1
   fi
 
-  run brew update
-
   # Basics used by builds & fetch/update
-  run brew install git cmake curl pkg-config make
+  run env HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_UPGRADE=1 \
+    brew install --verbose git cmake curl pkg-config make
 
   ok "macOS build deps installed (or already present)."
 }

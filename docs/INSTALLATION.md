@@ -176,11 +176,13 @@ On macOS, the output name must end in `.app`. Other useful options:
 - `--without-tor`: omit managed Tor. Use a fresh checkout without a staged
   `src/shared/tor` folder for this option.
 
-FFmpeg and GUI compiler output is streamed to the terminal and saved in full
-under the system temporary directory in `porn-fetch-build-logs`. Each step prints
-its log path. Silent steps report that they are still running every 60 seconds.
-Use `PORN_FETCH_BUILD_VERBOSE=1` for extra build and patch diagnostics; compiler
-output is visible without enabling it.
+All build scripts always display full command output and build/patch diagnostics.
+The old `--verbose` flag remains accepted for compatibility; no flag or environment
+setting is needed to see output. Dependency installation, FFmpeg and GUI compilation
+stream output while retaining logs in the system temporary directory. Compiler
+logs use `porn-fetch-build-logs`; each step prints its log path. Silent compiler
+steps report that they are still running every 60 seconds.
+
 Interactive GUI builds preserve a terminal connection for Nuitka, so its native
 module/C-compilation progress bars stay active while output is logged. Windows
 uses ConPTY through the `desktop-build` extra's pywinpty dependency; Unix uses a
@@ -198,8 +200,13 @@ bash scripts/install.sh
 ./scripts/install_windows.ps1 -Msys2Root C:/msys64
 ```
 
-The Unix script installs system packages and may ask for sudo. The Windows script
-installs missing Git for Windows with `winget`, refreshes PATH and continues in
+The Unix script installs the listed build dependencies and may ask for sudo.
+It never starts a full Linux system upgrade. On Arch it uses `pacman -S --needed`
+without refreshing package databases. On macOS it installs the required Homebrew
+formulae with automatic updates and installed-formula upgrades disabled
+([Homebrew options](https://docs.brew.sh/Manpage)).
+
+The Windows script installs missing Git for Windows with `winget`, refreshes PATH and continues in
 the same terminal. If winget is unavailable, install Microsoft's App Installer
 or Git for Windows and rerun it. Unless `-WithoutFFmpeg` is set, the Windows script
 also installs missing MSYS2 under `-Msys2Root` (default `C:\msys64`), finishes its

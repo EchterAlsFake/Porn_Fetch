@@ -1,7 +1,6 @@
 """Maintain Qt catalogs. Run with uv run python scripts/translations.py COMMAND."""
 import argparse
 import re
-import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
@@ -20,11 +19,7 @@ TOKENS = re.compile(r"%L?\d+|%Ln|%n|%(?:\([^)]+\))?[sdif]|\$\{?[a-z_]+\}?")
 
 def run(tool, *args):
     executable = Path(sys.executable).parent / (tool + (".exe" if sys.platform == "win32" else ""))
-    result = subprocess.run([str(executable), *map(str, args)], cwd=ROOT, capture_output=True, text=True)
-    if build_output.verbose() or result.returncode:
-        print(result.stdout, end="", file=sys.stderr)
-        print(result.stderr, end="", file=sys.stderr)
-    result.check_returncode()
+    build_output.run([str(executable), *map(str, args)], cwd=ROOT, label=tool)
 
 
 def validate():

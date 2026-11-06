@@ -508,7 +508,7 @@ def ensure_host_patches(project_root: Path, venv_dir: Path) -> None:
 
     if patch_deploy.is_file():
         # Verify first
-        proc = subprocess.run([sys.executable, str(patch_deploy), str(venv_dir), "--verify"], capture_output=True, text=True)
+        proc = subprocess.run([sys.executable, str(patch_deploy), str(venv_dir), "--verify"])
         if proc.returncode != 0:
             build_output.detail("[*] Applying PySide6 android_deploy patch to virtual environment...")
             subprocess.run([sys.executable, str(patch_deploy), str(venv_dir)], check=True)
@@ -529,7 +529,7 @@ def ensure_android_deploy_deps(venv_dir: Path) -> None:
     missing_deps = []
     for pkg in ("jinja2", "pkginfo", "tqdm"):
         try:
-            subprocess.run([str(venv_dir / "bin" / "python"), "-c", f"import {pkg}"], check=True, capture_output=True)
+            subprocess.run([str(venv_dir / "bin" / "python"), "-c", f"import {pkg}"], check=True)
         except subprocess.CalledProcessError:
             missing_deps.append(pkg)
     if missing_deps:

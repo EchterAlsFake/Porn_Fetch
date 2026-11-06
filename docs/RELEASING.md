@@ -99,6 +99,9 @@ Local builds are only ad-hoc signed; official releases must not fall back to tha
 Runtime data is moved to `Contents/Resources/runtime` before signing, with relative
 symlinks preserving the paths expected by bundled packages. Data must not occupy
 macOS code locations; see [Apple's bundle layout guidance](https://developer.apple.com/library/archive/technotes/tn2206/).
+The macOS deployment template excludes `src/frontend/graphics/ios`: its source
+asset catalog is only used by iOS staging and breaks macOS signing if copied into
+`Contents/MacOS` as an uncompiled nested bundle.
 
 1. Repair native dependencies, sign inner Mach-O files and bundles, then sign
    the app. Use hardened runtime and only the required entitlements.

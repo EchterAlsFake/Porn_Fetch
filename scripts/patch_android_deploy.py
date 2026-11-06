@@ -39,6 +39,7 @@ RECIPE_TMPL_MARKER = "porn-fetch-all-abi3-v1"
 FAILURE_MARKER = "porn-fetch-deploy-failure-v1"
 CACHE_MARKER = "porn-fetch-buildozer-cache-v1"
 TOOLCHAIN_MARKER = "porn-fetch-ndk28c-release-apk-v1"
+MODULES_MARKER = "porn-fetch-preserve-qt-modules-v1"
 NDK_SHA1 = '''_NDK_SHA1: dict[str, str] = {
     "linux": "a7b54a5de87fecd125a17d54f73c446199e72a64",
     "darwin": "fc20a6bf15a30fb3428c9b60a7308793a362dc6d",
@@ -332,6 +333,21 @@ def patch_android_utilities_source(source: str) -> str:
 def verify_android_utilities(content: str) -> None:
     if patch_android_utilities_source(content) != content:
         raise ValueError("NDK r28c download configuration is not installed in android_utilities.py")
+
+
+def patch_deploy_config_source(source: str) -> str:
+    if MODULES_MARKER not in source:
+        # Config.modules writes through to the parsed spec. Its initializer must
+        # not erase the explicit modules before AndroidConfig reads them.
+        source = replace_once(source, "        self.modules = []\n",
+                              f"        self._modules = []  # {MODULES_MARKER}\n")
+    ast.parse(source)
+    return source
+
+
+def verify_deploy_config(content: str) -> None:
+    if patch_deploy_config_source(content) != content:
+        raise ValueError("Qt module preservation patch is not installed in config.py")
 
 
 def patch_android_config_source(source: str) -> str:
@@ -654,6 +670,13 @@ def main() -> int:
                 path=deploy_android_config_path(venv),
                 patch_fn=patch_android_config_source,
                 verify_fn=verify_android_config,
+                is_python=True,
+            ),
+            PatchTarget(
+                name="deploy_config",
+                path=deploy_android_config_path(venv).parent.parent / "config.py",
+                patch_fn=patch_deploy_config_source,
+                verify_fn=verify_deploy_config,
                 is_python=True,
             ),
             PatchTarget(

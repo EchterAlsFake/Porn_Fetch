@@ -231,10 +231,12 @@ class MacOSSigningTests(unittest.TestCase):
 
     def test_sensitive_subprocess_failure_does_not_expose_its_arguments_or_output(self):
         failure = subprocess.CompletedProcess([], 1, stdout="secret", stderr="secret")
-        with patch.object(signing.subprocess, "run", return_value=failure) as execute:
+        with patch.object(signing.subprocess, "run", return_value=failure) as execute, \
+                contextlib.redirect_stderr(io.StringIO()) as output:
             with self.assertRaises(RuntimeError) as error:
                 signing.run(["security", "import", "secret"], sensitive=True)
         self.assertNotIn("secret", str(error.exception))
+        self.assertNotIn("secret", output.getvalue())
         self.assertNotIn("shell", execute.call_args.kwargs)
 
     def test_public_subprocess_failure_includes_stapler_stdout_diagnostics(self):

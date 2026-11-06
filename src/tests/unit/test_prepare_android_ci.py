@@ -44,6 +44,9 @@ class AndroidCIPreparationTests(unittest.TestCase):
             self.assertEqual(deploy["python"]["python_path"], str(venv / "bin/python"))
             self.assertEqual(deploy["app"]["project_file"], "")
             self.assertNotIn("arch", deploy["buildozer"])
+            self.assertIn("Svg", deploy["qt"]["modules"].split(","))
+            self.assertTrue({"platforms_qtforandroid", "imageformats_qsvg", "iconengines_qsvgicon"}
+                            <= set(deploy["android"]["plugins"].split(",")))
 
 
 if __name__ == "__main__":

@@ -49,10 +49,6 @@ on:
         description: "Compare IFW compression levels 5/7/9 (slower)"
         type: boolean
         default: false
-      verbose_build:
-        description: "Include extra build and patch diagnostics (compiler output always streams)"
-        type: boolean
-        default: false
       experimental_builds:
         description: "Also build Linux 32-bit and RISC-V CLI artifacts"
         type: boolean
@@ -74,7 +70,7 @@ concurrency:
 env:
   PYTHONUNBUFFERED: "1"
   UV_NO_SYNC: "1"
-  PORN_FETCH_BUILD_VERBOSE: ${{ inputs.verbose_build && '1' || '0' }}
+  PORN_FETCH_BUILD_VERBOSE: "1"
 
 jobs:
   validate:
@@ -697,7 +693,7 @@ jobs:
           export JAVA_HOME="$JAVA_HOME_21_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          printf '%s\n' y y y y y y y y y y y y y y y y | "$SDKMANAGER" --licenses > /dev/null
+          printf '%s\n' y y y y y y y y y y y y y y y y | "$SDKMANAGER" --licenses
           "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
           {
             echo "JAVA_HOME=$JAVA_HOME"
@@ -1323,7 +1319,7 @@ jobs:
           distro: ubuntu24.04
           run: |
             set -eu
-            export PORN_FETCH_BUILD_VERBOSE="${{ inputs.verbose_build && '1' || '0' }}"
+            export PORN_FETCH_BUILD_VERBOSE=1
             export PORN_FETCH_BUILD_LOG_DIR="$PWD/build/riscv64-logs"
             apt-get update
             apt-get install -y build-essential gcc-14 g++-14 ca-certificates curl git libffi-dev libssl-dev pkg-config zlib1g-dev

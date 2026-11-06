@@ -113,7 +113,8 @@ With the restored kit, wheels and native packages in place:
 ```sh
 cd /Users/asuna/ios-lab/device
 ../.venv/bin/python prepare-application.py
-sh build-application.sh > ../build/device-app-build.log 2>&1
+set -o pipefail
+sh build-application.sh 2>&1 | tee ../build/device-app-build.log
 ```
 
 Preparation copies **the current repository's** `src/` into the staging tree,
@@ -190,7 +191,8 @@ After Python/QML/resource edits, restage and rebuild:
 ```sh
 cd /Users/asuna/ios-lab/device
 ../.venv/bin/python prepare-application.py --stage-only
-sh build-application.sh > ../build/device-app-build.log 2>&1
+set -o pipefail
+sh build-application.sh 2>&1 | tee ../build/device-app-build.log
 sh deploy-app.sh PornFetch
 ```
 
@@ -318,14 +320,14 @@ export SIM_ID=YOUR_SIMULATOR_UUID
 sh run-native.sh "$SIM_ID"
 cd pornfetch
 ../.venv/bin/python prepare-application.py
-sh run-application.sh
+bash run-application.sh
 ```
 
 Preparation uses the restored unpacked official wheel kit at
 `qt/deployment/ios_x86_64_simulator/_wheels`, applies the repository's QtAsyncio
 patch for embedded Python 3.15, and generates the app project. The launcher
 boots the simulator, builds, installs and opens the real app. Use
-`sh run-application.sh --launch-only` to reopen an already installed build.
+`bash run-application.sh --launch-only` to reopen an already installed build.
 Runtime output is in `ios-lab/build/app-runtime.log` and `.err`.
 
 The VM launcher selects `QT_QUICK_BACKEND=rhi`, `QSG_RHI_BACKEND=opengl` and
@@ -344,9 +346,9 @@ sh build-openssl.sh
 sh build-cryptography.sh
 ../.venv/bin/python prepare-pure-deps.py
 ../.venv/bin/python prepare-probe.py
-sh run-probe.sh
+bash run-probe.sh
 ../.venv/bin/python prepare-application.py
-sh run-application.sh
+bash run-application.sh
 ```
 
 `run-probe.sh` expects the selected simulator to be booted; `run-native.sh`

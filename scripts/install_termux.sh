@@ -8,6 +8,8 @@ for argument in "$@"; do
     *) echo "Unknown option: $argument" >&2; exit 2 ;;
   esac
 done
+export PORN_FETCH_BUILD_VERBOSE=1
+export PYTHONUNBUFFERED=1
 build_status() {
   local label="$1" color=36; shift
   case "$label" in FAIL) color=31 ;; OK) color=32 ;; WARN) color=33 ;; esac
@@ -21,14 +23,8 @@ run() {
   local label="$1" command_log result; shift
   command_log=$(mktemp "${TMPDIR:-/tmp}/pornfetch-build.XXXXXX")
   build_status INFO "$label — log: $command_log"
-  case "${PORN_FETCH_BUILD_VERBOSE:-0}" in
-    1|true|yes)
-      if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi ;;
-    *)
-      if "$@" >"$command_log" 2>&1; then result=0; else result=$?; fi ;;
-  esac
+  if "$@" 2>&1 | tee "$command_log"; then result=0; else result=$?; fi
   if [[ "$result" != 0 ]]; then
-    tail -n 25 "$command_log" >&2
     build_status FAIL "$label failed (exit $result). Full log: $command_log"
     return "$result"
   fi

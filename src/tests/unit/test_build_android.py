@@ -34,11 +34,13 @@ from scripts.patch_android_deploy import (
     patch_android_config_source,
     patch_android_utilities_source,
     patch_buildozer_source,
+    patch_deploy_config_source,
     patched_source,
     verify_android_config,
     verify_android_deploy,
     verify_android_utilities,
     verify_buildozer,
+    verify_deploy_config,
 )
 
 
@@ -108,6 +110,39 @@ class TestApkSigning(unittest.TestCase):
 
 
 class TestAndroidDeployToolchain(unittest.TestCase):
+    def test_base_config_keeps_explicit_modules_for_android_dependency_discovery(self):
+        source = '''class Config:
+    def __init__(self, settings):
+        self.settings = settings
+        self.modules = []
+
+    @property
+    def modules(self):
+        return self._modules
+
+    @modules.setter
+    def modules(self, modules):
+        self._modules = modules
+        self.settings["modules"] = ",".join(modules)
+
+class AndroidConfig(Config):
+    def __init__(self, settings):
+        super().__init__(settings)
+        configured = self.settings["modules"]
+        self.modules = configured.split(",") if configured else ["Core", "Gui"]
+'''
+        with self.assertRaisesRegex(ValueError, "module preservation"):
+            verify_deploy_config(source)
+        patched = patch_deploy_config_source(source)
+        verify_deploy_config(patched)
+        self.assertEqual(patch_deploy_config_source(patched), patched)
+        namespace = {}
+        exec(compile(patched, "config.py", "exec"), namespace)
+        settings = {"modules": "Core,Gui,Qml,Quick,QuickControls2,QuickLayouts,Svg"}
+        config = namespace["AndroidConfig"](settings)
+        self.assertIn("Svg", config.modules)
+        self.assertIn("QuickLayouts", config.modules)
+
     def test_ndk_download_version_and_checksums_are_patched_together(self):
         source = '''ANDROID_NDK_VERSION = "27c"
 _NDK_SHA1: dict[str, str] = {

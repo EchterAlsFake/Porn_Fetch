@@ -281,6 +281,9 @@ class QmlPackagingTests(unittest.TestCase):
                                          for pattern in data_exclusions))
             self.assertTrue(any(fnmatch.fnmatch("PornFetch_old.app/Contents/MacOS/main", pattern)
                                 for pattern in data_exclusions))
+            self.assertTrue(any(fnmatch.fnmatch(
+                "src/frontend/graphics/ios/Assets.xcassets/AppIcon.appiconset/Contents.json", pattern)
+                for pattern in data_exclusions))
             self.assertEqual(config.get("app", "input_file"), str(PROJECT_ROOT / "main.py"))
             self.assertTrue(all(path.startswith("src/frontend/UI/")
                                 for path in config.get("qt", "qml_files").split(",")))
@@ -573,6 +576,32 @@ class DeploymentInputTests(unittest.TestCase):
 
 
 class InstallerTests(unittest.TestCase):
+    def test_arch_installs_only_build_dependencies_without_system_upgrade(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            commands = {
+                "sudo": 'if [[ "$1" == -v ]]; then exit 0; fi\nexec "$@"\n',
+                "pacman": 'printf "%s\\n" "$@" > "$CAPTURE"\n'
+                          'echo "Package installation output"\necho "Package diagnostics" >&2\nexit 37\n',
+            }
+            for name, body in commands.items():
+                command = base / name
+                command.write_text(f"#!{shutil.which('bash')}\n" + body)
+                command.chmod(0o755)
+            capture = base / "arguments.txt"
+            result = subprocess.run(
+                ["bash", str(PROJECT_ROOT / "scripts/install.sh")], cwd=base,
+                env={**os.environ, "PATH": f"{base}:{os.environ['PATH']}", "CAPTURE": str(capture),
+                     "PORN_FETCH_BUILD_VERBOSE": "0"},
+                capture_output=True, text=True, timeout=10,
+            )
+            self.assertEqual(result.returncode, 37, result.stdout + result.stderr)
+            arguments = capture.read_text().splitlines()
+            self.assertEqual(arguments[:3], ["-S", "--noconfirm", "--needed"])
+            self.assertIn("base-devel", arguments)
+            self.assertIn("Package installation output", result.stdout)
+            self.assertIn("Package diagnostics", result.stdout)
+
     def test_piped_macos_installer_continues_after_homebrew_reads_stdin(self):
         script = (PROJECT_ROOT / "scripts/install.sh").read_text()
         # Exercise the macOS branch on an offline Linux test runner.
@@ -581,7 +610,8 @@ class InstallerTests(unittest.TestCase):
             base = Path(temporary)
             commands = {
                 "xcode-select": "exit 0\n",
-                "brew": "cat >/dev/null\n",
+                "brew": '[[ "$1" == install && "${HOMEBREW_NO_AUTO_UPDATE:-}" == 1 '
+                        '&& "${HOMEBREW_NO_INSTALL_UPGRADE:-}" == 1 ]] || exit 19\ncat >/dev/null\n',
                 "uv": "echo 'mock uv'\n",
                 # Stop before fetching or compiling; reaching this command proves
                 # the build flow survived the dependency installer's stdin read.
@@ -598,7 +628,7 @@ class InstallerTests(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 42, result.stdout + result.stderr)
             self.assertIn("macOS build deps installed", result.stdout)
-            self.assertIn("Reached project fetch", result.stderr)
+            self.assertIn("Reached project fetch", result.stdout)
 
 
 if __name__ == "__main__":

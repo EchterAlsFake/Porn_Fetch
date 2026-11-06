@@ -18,16 +18,17 @@ if __package__ in (None, ""):
 
 
 def verbose() -> bool:
-    return os.environ.get("PORN_FETCH_BUILD_VERBOSE", "").lower() in {"1", "true", "yes"}
+    """Compatibility for build helpers: full diagnostics are always enabled."""
+    return True
 
 
 def add_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-v", "--verbose", action="store_true", default=verbose(),
-                        help="show extra build diagnostics (compiler output is always streamed; also: PORN_FETCH_BUILD_VERBOSE=1)")
+                        help="accepted for compatibility; full build output is always shown")
 
 
 def configure(args: argparse.Namespace) -> None:
-    os.environ["PORN_FETCH_BUILD_VERBOSE"] = "1" if args.verbose else "0"
+    os.environ["PORN_FETCH_BUILD_VERBOSE"] = "1"
 
 
 def message(text: str, kind: str = "info") -> None:
@@ -44,8 +45,7 @@ def message(text: str, kind: str = "info") -> None:
 
 
 def detail(text: str) -> None:
-    if verbose():
-        print(text, file=sys.stderr, flush=True)
+    print(text, file=sys.stderr, flush=True)
 
 
 def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None,

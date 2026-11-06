@@ -147,10 +147,14 @@ Windows FFmpeg notice collection reads zlib.h directly from the selected MSYS2
 Clang prefix. Do not launch bare pkg-config/cygpath with only a child env PATH:
 Windows CreateProcess resolves executable names against the parent's environment.
 
-`scripts/build_output.py` always streams child stdout/stderr to the terminal while
-retaining the complete compiler log. Python children use unbuffered output, and
-silent steps emit a heartbeat every 60 seconds. Verbose mode adds diagnostics;
-FFmpeg and GUI compilation output must remain visible by default.
+All build scripts must always show full output, including dependency installation,
+compiler output and build/patch diagnostics. Do not reintroduce quiet defaults or
+require a verbosity flag. Shell wrappers stream stdout/stderr while retaining logs;
+`scripts/build_output.py` does the same for compiler commands. Python children use
+unbuffered output, and silent compiler steps emit a heartbeat every 60 seconds.
+The Unix installer never runs a full Linux system upgrade: Arch uses only
+`pacman -S --needed`, without a database refresh. Homebrew dependency installation
+disables automatic updates and upgrades of already-installed formulae.
 Interactive desktop GUI compilation also passes `--terminal` to the wrapper.
 `build_terminal.py` uses Windows ConPTY (pywinpty, desktop-build only) or a Unix
 pseudo-terminal to preserve Nuitka's own TTY-detected progress bars and raw log
@@ -163,6 +167,10 @@ Android uses Qt/PySide 6.12.0 cp315 wheels, target Python 3.15.2 and NDK r28c.
 The wrapper regenerates machine paths and patches Qt's preload library names
 for Android 13. All four Python 3.15 CI targets built on 2026-11-03; physical
 device startup of those artifacts was not established by that build result.
+The Android deployment patch preserves configured Qt modules through PySide's
+base initializer, and its template explicitly copies the SVG image/icon plugins
+into the APK's native library folder. macOS packaging excludes the iOS source
+asset catalog, which codesign rejects inside `Contents/MacOS`.
 
 The shared cross-platform CI pipeline includes the iOS GUI, using Python 3.15.2 ARM64 macOS host tools and the published matching
 Qt/PySide device inputs. The preserved lab still embeds Python 3.15.0rc2.

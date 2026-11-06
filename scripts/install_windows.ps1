@@ -5,7 +5,8 @@ param(
     [switch]$NoPause
 )
 $ErrorActionPreference = "Stop"
-if ($VerbosePreference -eq 'Continue') { $env:PORN_FETCH_BUILD_VERBOSE = '1' }
+$env:PORN_FETCH_BUILD_VERBOSE = '1'
+$env:PYTHONUNBUFFERED = '1'
 
 function Run {
     param([string]$Exe, [Parameter(ValueFromRemainingArguments=$true)]$Arguments)
@@ -48,7 +49,7 @@ function Find-MsvcCompiler {
 function Ensure-Msvc {
     param([string]$Architecture)
     $components = @('Microsoft.VisualStudio.Component.VC.Tools.x86.x64', 'Microsoft.VisualStudio.Component.Windows*SDK.*')
-    $options = '--quiet --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64'
+    $options = '--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64'
     switch ($Architecture.ToLowerInvariant()) {
         { $_ -in @('amd64', 'x86_64', 'x64') } { $target = 'x64'; break }
         { $_ -in @('arm64', 'aarch64') } {
@@ -117,7 +118,7 @@ function Ensure-Msys2 {
             throw 'MSYS2 and winget are unavailable. Install App Installer from the Microsoft Store, or install MSYS2, then rerun this script.'
         }
         Write-Host "Installing MSYS2 into $Msys2Root..."
-        Run winget install --id MSYS2.MSYS2 --exact --source winget --silent --location $Msys2Root --architecture $msysArchitecture --accept-package-agreements --accept-source-agreements
+        Run winget install --id MSYS2.MSYS2 --exact --source winget --location $Msys2Root --architecture $msysArchitecture --accept-package-agreements --accept-source-agreements
         if (-not (Test-Path -LiteralPath $bash)) {
             throw "MSYS2 installation did not create $bash. Check -Msys2Root and the installer output above."
         }

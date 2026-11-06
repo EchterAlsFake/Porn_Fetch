@@ -44,12 +44,12 @@ $pending = @(
 for ($offset = 0; $offset -lt $pending.Count; $offset += 20) {
     $batch = @($pending[$offset..([Math]::Min($offset + 19, $pending.Count - 1))])
     for ($attempt = 1; $attempt -le 5; $attempt++) {
-        $output = & ssign --timestamp-url 'http://time.certum.pl/' --name 'Porn Fetch' --url 'https://pornfetch.to' @batch 2>&1
-        if ($LASTEXITCODE -eq 0) { $output | Write-Host; break }
+        & ssign --timestamp-url 'http://time.certum.pl/' --name 'Porn Fetch' --url 'https://pornfetch.to' @batch 2>&1 |
+            Tee-Object -Variable output | Out-Host
+        if ($LASTEXITCODE -eq 0) { break }
         # Certum accepts an OTP only once. Concurrent matrix jobs may log in in
         # the same 30-second window; retry login in a fresh window with jitter.
         if ($attempt -eq 5 -or ($output -join "`n") -notmatch 'login|no authorization code') {
-            $output | Write-Host
             throw "ssign failed (exit $LASTEXITCODE)"
         }
         Write-Host "Certum login failed; retrying in a fresh OTP window (attempt $attempt/5)."

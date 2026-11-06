@@ -69,12 +69,9 @@ def compile_all_qml() -> int:
     for qml in qml_files:
         cache_path = qml.with_suffix(".qmlc")
         cmd = [str(cachegen), "-I", str(UI_DIR), str(qml), "-o", str(cache_path)]
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        if build_output.verbose():
-            build_output.detail(res.stdout)
-            build_output.detail(res.stderr)
-        if res.returncode != 0:
-            build_output.message(f"{qml.name}: {res.stderr.strip()}", "error")
+        try:
+            build_output.run(cmd, label=f"Compile QML {qml.name}")
+        except subprocess.CalledProcessError:
             failures += 1
 
     if failures == 0:

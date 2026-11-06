@@ -83,8 +83,10 @@ and QtAsyncio, extracts the required JARs and checks the APK. Use `--clean`
 after changing native recipes or Qt wheels. Downloaded archives are retained.
 The wrapper keeps `.buildozer/` between runs. Qt preload libraries must be named
 `libQt*.abi3.so` in the APK so Android 13 extracts them; the assembly hook does this.
-The deployment template also includes QtSvg. The APK check requires its SVG image
-and icon plugins so payment logos, flags and help icons render on Android.
+The deployment patch preserves the template's Qt modules during PySide's base
+configuration initialization. The template explicitly includes QtSvg and its
+SVG image/icon plugins in the APK's native library folder so payment logos,
+flags and help icons render on Android. The APK check requires these libraries.
 
 The default build mode is release. Supply your own keystore with `--keystore`
 and `--key-alias`, or use `--unsigned` to sign later. An unsigned release APK

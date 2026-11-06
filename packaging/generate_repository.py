@@ -275,7 +275,7 @@ def main(argv: list[str] | None = None) -> int:
     build_output.add_arguments(parser)
     args = parser.parse_args(argv)
     build_output.configure(args)
-    logger.setLevel(logging.INFO if args.verbose else logging.WARNING)
+    logger.setLevel(logging.INFO)
 
     raw_os = "windows" if args.platform in {"win32", "windows"} else "darwin" if args.platform in {"darwin", "macos"} else "linux"
     raw_arch = "amd64" if args.arch in {"x86_64", "amd64", "x64"} else "arm64" if args.arch in {"aarch64", "arm64"} else args.arch
