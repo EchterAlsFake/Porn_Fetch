@@ -115,6 +115,13 @@ class DesktopPackagingSpecTests(unittest.TestCase):
         self.assertIn("--keep-deployment-files", builder)
         self.assertIn("--no-install", builder)
 
+    def test_desktop_installer_python_matches_ci_and_checkout(self):
+        self.assertEqual((PROJECT_ROOT / ".python-version").read_text().strip(), "3.15.2")
+        unix = (PROJECT_ROOT / "scripts/install.sh").read_text()
+        windows = (PROJECT_ROOT / "scripts/install_windows.ps1").read_text()
+        self.assertIn("uv sync --python 3.15.2 --upgrade", unix)
+        self.assertIn("uv python find --system 3.15.2", windows)
+
     def test_ci_workflow_deploy_flags(self):
         workflow_path = PROJECT_ROOT / ".github" / "workflows" / "build_all.yml"
         content = workflow_path.read_text(encoding="utf-8")
@@ -205,6 +212,31 @@ if __name__ == "__main__":
 
 
 class LocalDesktopBuilderTests(unittest.TestCase):
+    def test_alpha_python_stops_before_downloading_helpers(self):
+        from types import SimpleNamespace
+
+        from scripts.build_desktop import build
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "output"
+            with patch("scripts.build_desktop.sys.platform", "darwin"), \
+                    patch("scripts.build_desktop.platform.machine", return_value="x86_64"), \
+                    patch("scripts.build_desktop.sys.version_info",
+                          SimpleNamespace(major=3, minor=15, releaselevel="alpha")), \
+                    patch("scripts.build_desktop.python") as command:
+                with self.assertRaisesRegex(RuntimeError, "stable Python 3.15"):
+                    build(SimpleNamespace(output=output.with_suffix(".app"), target="gui"))
+            command.assert_not_called()
+
+    def test_missing_curl_extension_explains_how_to_repair_the_environment(self):
+        from scripts.build_desktop import check_environment
+
+        with patch.dict(sys.modules, {"curl_cffi": None}):
+            with self.assertRaises(RuntimeError) as failure:
+                check_environment()
+        self.assertIn("--python 3.15.2", str(failure.exception))
+        self.assertIn("--reinstall-package curl-cffi", str(failure.exception))
+
     def test_windows_fallback_keeps_dlls_and_renames_executable(self):
         from scripts.build_desktop import gui_payload
 

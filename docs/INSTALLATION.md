@@ -45,7 +45,8 @@ See [release signing](RELEASING.md) if you plan to distribute your builds.
 ## Run from source
 
 Install Git and [uv](https://docs.astral.sh/uv/getting-started/installation/).
-Use a normal user account. Python 3.15 is required; uv can install it for you.
+Use a normal user account. A stable Python 3.15 release is required; the checkout
+selects Python 3.15.2, matching CI, and uv can install it for you.
 
 ```sh
 git clone https://github.com/EchterAlsFake/Porn_Fetch.git
@@ -142,7 +143,23 @@ the update. Run the Porn Fetch build from PowerShell, not WSL.
 From the repository root:
 
 ```sh
-uv sync --upgrade --extra gui --extra build --extra desktop-build
+uv python install 3.15.2
+uv sync --python 3.15.2 --upgrade --extra gui --extra build --extra desktop-build
+uv run --no-sync python scripts/build_desktop.py
+```
+
+The convenience installers select the same Python version explicitly when syncing,
+so an old `.venv` cannot keep using a Python 3.15 alpha. If the installed uv cannot
+install 3.15.2, the installers update uv and retry once; its Python download catalog
+is bundled with each uv release. The builder checks the
+interpreter and imports `curl_cffi` before downloading or compiling helpers.
+Early Python 3.15 alphas cannot load current `abi3t` native extensions; this can
+appear as `ModuleNotFoundError: curl_cffi._wrapper`. Update the checkout and rerun
+the installer. To repair that environment directly:
+
+```sh
+uv python install 3.15.2
+uv sync --python 3.15.2 --upgrade --reinstall-package curl-cffi --extra gui --extra build --extra desktop-build
 uv run --no-sync python scripts/build_desktop.py
 ```
 

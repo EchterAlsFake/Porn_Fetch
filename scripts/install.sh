@@ -207,8 +207,12 @@ main() {
   fi
   cd "$PROJECT_DIR"
   [[ -f scripts/build_desktop.py ]] || { error "This checkout is too old for this builder. Use its own tagged instructions."; return 1; }
-  run uv python install 3.15
-  run uv sync --upgrade --extra gui --extra build --extra desktop-build
+  if ! run uv python install 3.15.2; then
+    warn "Python 3.15.2 could not be installed. Updating uv's bundled Python catalog and retrying..."
+    run uv self update
+    run uv python install 3.15.2
+  fi
+  run uv sync --python 3.15.2 --upgrade --extra gui --extra build --extra desktop-build
   export UV_NO_SYNC=1
   uv run --no-sync python scripts/build_desktop.py
 }

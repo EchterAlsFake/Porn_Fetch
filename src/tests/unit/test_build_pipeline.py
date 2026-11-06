@@ -576,6 +576,44 @@ class DeploymentInputTests(unittest.TestCase):
 
 
 class InstallerTests(unittest.TestCase):
+    def test_macos_installer_selects_stable_python_and_refreshes_old_uv_catalog(self):
+        script = (PROJECT_ROOT / "scripts/install.sh").read_text().replace('OS="$(detect_os)"', 'OS="darwin"')
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            (base / "scripts").mkdir()
+            (base / "scripts/build_desktop.py").touch()
+            (base / "pyproject.toml").touch()
+            for name in ("xcode-select", "brew"):
+                command = base / name
+                command.write_text(f"#!{shutil.which('bash')}\nexit 0\n")
+                command.chmod(0o755)
+            uv = base / "uv"
+            uv.write_text(f"#!{sys.executable}\n" + textwrap.dedent('''\
+                import json, os, sys
+                from pathlib import Path
+                root = Path(os.environ["CAPTURE"])
+                with (root / "uv-arguments.jsonl").open("a") as output:
+                    output.write(json.dumps(sys.argv[1:]) + "\\n")
+                if sys.argv[1:3] == ["python", "install"] and not (root / "updated").exists():
+                    print("No download found in old uv catalog", file=sys.stderr)
+                    sys.exit(2)
+                if sys.argv[1:3] == ["self", "update"]:
+                    (root / "updated").touch()
+                if "scripts/build_desktop.py" in sys.argv:
+                    sys.exit(42)
+                '''))
+            uv.chmod(0o755)
+            result = subprocess.run(
+                ["bash"], input=script, text=True, cwd=base, capture_output=True, timeout=10,
+                env={**os.environ, "PATH": f"{base}:{os.environ['PATH']}", "CAPTURE": str(base)},
+            )
+            self.assertEqual(result.returncode, 42, result.stdout + result.stderr)
+            commands = [json.loads(line) for line in (base / "uv-arguments.jsonl").read_text().splitlines()]
+            self.assertEqual(commands.count(["python", "install", "3.15.2"]), 2)
+            self.assertIn(["self", "update"], commands)
+            sync = next(command for command in commands if command[0] == "sync")
+            self.assertEqual(sync[sync.index("--python") + 1], "3.15.2")
+
     def test_arch_installs_only_build_dependencies_without_system_upgrade(self):
         with tempfile.TemporaryDirectory() as temporary:
             base = Path(temporary)

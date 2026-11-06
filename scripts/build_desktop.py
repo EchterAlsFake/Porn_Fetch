@@ -24,6 +24,20 @@ def python(*arguments: str | Path) -> None:
     run(sys.executable, *arguments)
 
 
+def check_environment() -> None:
+    recovery = ("uv sync --python 3.15.2 --upgrade --reinstall-package curl-cffi "
+                "--extra gui --extra build --extra desktop-build")
+    if (sys.version_info.major, sys.version_info.minor) != (3, 15) or sys.version_info.releaselevel != "final":
+        raise RuntimeError(f"Desktop builds require a stable Python 3.15 release; running {sys.version}. "
+                           f"From the project root, run: {recovery}")
+    try:
+        import curl_cffi  # noqa: F401
+    except ImportError as error:
+        raise RuntimeError(f"The curl_cffi native extension cannot be imported: {error}. "
+                           f"Repair the build environment with: {recovery}") from error
+    print(f"Build Python: {sys.version}\nInterpreter: {sys.executable}", flush=True)
+
+
 def gui_payload(staging: Path, project: Path = ROOT) -> Path:
     """Handle PySide's normal output and Windows' long-command fallback."""
     suffix = ".app" if sys.platform == "darwin" else ".dist"
@@ -65,6 +79,7 @@ def build(args: argparse.Namespace) -> Path:
         raise FileExistsError(f"Output already exists: {output}. Choose a new --output folder or move the old build.")
     if (ROOT / "deployment/deploy_main.dist").exists():
         raise FileExistsError("Move or remove deployment/deploy_main.dist before building; it may be an old Windows build.")
+    check_environment()
     print("Local builds have no publisher signature. macOS builds are ad-hoc signed, not notarized.\n"
           "Windows SmartScreen, Gatekeeper or antivirus software may warn about these files.", flush=True)
     with tempfile.TemporaryDirectory(prefix="pornfetch-desktop-") as temporary:

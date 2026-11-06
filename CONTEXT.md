@@ -117,6 +117,13 @@ Use `uv sync --upgrade` with the needed extras to resolve current compatible
 packages, then `uv run --no-sync` to keep that environment through the build.
 `uv.lock` and root `pysidedeploy.spec` are generated locally and ignored.
 After refreshing GUI dependencies, apply and verify `scripts/patch_qtasyncio.py`.
+The checkout and desktop convenience installers explicitly select Python 3.15.2,
+matching CI. Installing a newer interpreter alone can leave an old alpha-backed
+`.venv` selected; pass `--python 3.15.2` to sync. Early 3.15 alphas cannot load
+current `curl_cffi` abi3t extensions. The desktop builder checks for a stable
+interpreter and imports `curl_cffi` before helper downloads or compilation.
+If uv cannot install the selected Python, the installers update uv's bundled
+Python download catalog with `uv self update` and retry once.
 
 `scripts/build_desktop.py` is the shared local GUI/CLI builder. It generates
 paths from platform templates, keeps the full deployment folder, assembles

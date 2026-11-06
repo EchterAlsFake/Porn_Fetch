@@ -155,11 +155,13 @@ function winget { }
 function Run {
     param([string]$Exe, [Parameter(ValueFromRemainingArguments=$true)]$Arguments)
     if ($Exe -eq 'winget') {
-        if ($Arguments[2] -ne 'MSYS2.MSYS2' -or $Arguments[8] -ne $Msys2Root) {
+        if ($Arguments[2] -ne 'MSYS2.MSYS2' -or $Arguments[[Array]::IndexOf($Arguments, '--location') + 1] -ne $Msys2Root) {
             throw 'Wrong MSYS2 package or custom installation path'
         }
         $expectedArch = if ($env:PORN_FETCH_TEST_ARCH -eq 'amd64') { 'x64' } else { 'arm64' }
-        if ($Arguments[10] -ne $expectedArch) { throw 'MSYS2 installer architecture does not match Python' }
+        if ($Arguments[[Array]::IndexOf($Arguments, '--architecture') + 1] -ne $expectedArch) {
+            throw 'MSYS2 installer architecture does not match Python'
+        }
         Write-Output 'MSYS2_INSTALLED'
         New-Item -ItemType Directory (Join-Path $Msys2Root 'usr/bin') -Force | Out-Null
         New-Item (Join-Path $Msys2Root 'usr/bin/bash.exe') | Out-Null

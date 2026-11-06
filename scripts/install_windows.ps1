@@ -176,8 +176,12 @@ function Main {
     Push-Location $projectDir
     try {
         if (-not (Test-Path scripts/build_desktop.py)) { throw "Use the build instructions from this checkout's release tag." }
-        Run uv python install 3.15
-        $python = Run uv python find 3.15
+        try { Run uv python install 3.15.2 } catch {
+            Write-Host "Python 3.15.2 could not be installed. Updating uv's bundled Python catalog and retrying..."
+            Run uv self update
+            Run uv python install 3.15.2
+        }
+        $python = Run uv python find --system 3.15.2
         $buildArch = Run $python -c 'import platform; print(platform.machine().lower())'
         Ensure-Msvc -Architecture $buildArch.Trim()
         Run uv sync --python $python --upgrade --extra gui --extra build --extra desktop-build
