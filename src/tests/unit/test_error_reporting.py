@@ -31,8 +31,8 @@ class ErrorReportFormattingTests(unittest.TestCase):
     def test_first_run_text_describes_the_actual_report(self) -> None:
         for detail in (
             "correlation ID", "UTC timestamp", "full Python traceback", "video URL",
-            "query string", "cookies", "securely stored", "never shared with third parties",
-            "used only to reproduce, diagnose and fix", "not anonymous",
+            "query string", "cookies", "I store them securely", "never share them with third parties",
+            "use them only to reproduce, diagnose and fix", "not anonymous",
         ):
             self.assertIn(detail, ERROR_REPORT_DISCLOSURE)
         self.assertIn('"video_url":', ERROR_REPORT_EXAMPLE)

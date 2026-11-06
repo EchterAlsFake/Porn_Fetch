@@ -13,7 +13,7 @@ from curl_cffi import requests
 from curl_cffi.const import CurlOpt
 from tuf.ngclient.fetcher import FetcherInterface
 
-from .tor_runtime import TorUnavailable, runtime
+from .tor_runtime import TOR_BINARY_MISSING_MESSAGE, TorBinaryMissing, TorUnavailable, runtime
 
 ONION_ORIGIN = "http://pornfetchc5ct7s7uiervf4ziymmus5gy33gyqc6vkdtqyr5pbxrxmid.onion"
 SERVICE_ORIGINS = {"https://api.pornfetch.to": "", "https://pornfetch.to": "", "https://licenses.pornfetch.to": "/licensing"}
@@ -26,6 +26,8 @@ class TorServiceFailure(TorUnavailable):
 
 
 def service_failure_message(kind):
+    if kind == "missing":
+        return TOR_BINARY_MISSING_MESSAGE
     detail = {
         "bootstrap": "Tor could not start or connect for Porn Fetch updates and licensing.",
         "connection": "Porn Fetch's update or licensing server could not be reached through Tor. The onion service or Tor connection may be unavailable.",
@@ -74,6 +76,8 @@ class ServicePolicy:
     def ready(self):
         try:
             return self.manager.ensure_ready()
+        except TorBinaryMissing as error:
+            raise self.failed("missing") from error
         except (TorUnavailable, OSError) as error:
             raise self.failed("bootstrap") from error
 

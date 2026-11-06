@@ -327,13 +327,13 @@
     </message>
     <message>
         <location line="+59"/>
-        <location line="+211"/>
+        <location line="+210"/>
         <location line="+271"/>
         <source>Add videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-477"/>
+        <location line="-476"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -383,7 +383,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+106"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
@@ -484,12 +484,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-405"/>
+        <location line="-404"/>
         <source>Filters and options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+290"/>
+        <location line="+289"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
@@ -504,12 +504,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-407"/>
+        <location line="-406"/>
         <source>Cleanup on stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+77"/>
+        <location line="+76"/>
         <source>Title formatting options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -580,7 +580,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-273"/>
+        <location line="-272"/>
         <source>Duration in minutes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,11 +617,6 @@
     <message>
         <location line="+5"/>
         <source>Published before (YYYY-MM-DD)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Custom options</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -907,12 +902,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+440"/>
+        <location line="+450"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-439"/>
+        <location line="-449"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -937,7 +932,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+151"/>
         <source>Video preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1003,7 +998,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
+        <location line="-97"/>
+        <source>Restart Porn Fetch to apply your changed settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Prefer content language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1098,7 +1098,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+6"/>
+        <source>I store reports securely, never share them and use them only to fix errors.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Connection protection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1283,12 +1288,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Stored securely by the developer, never shared and used only for debugging.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+57"/>
+        <location line="+58"/>
         <source>English only — translations are not available yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1564,30 +1564,7 @@ Choose a service you trust, because it can receive your website-name lookups too
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>SNI is the website name normally sent at the start of an HTTPS connection. Porn Fetch can split this part of the connection into smaller pieces, which may help on some restricted networks.
-
-Lite mode
-Splits the data into separate writes. It needs no administrator rights. Your operating system or network may combine those pieces again.
-
-Strict mode
-Splits actual outgoing TCP packets. It needs root on Linux or Run as Administrator on Windows. Strict mode supports Windows x64 and Linux x64/ARM64; Linux also needs a compatible kernel and libbpf. It is unavailable on macOS and Windows ARM64.
-
-Strict profiles
-Fragmentation: send the pieces in order.
-Reverse: send the later piece first; the server puts them back in order.
-Desync: first send a fake greeting intended to confuse some inspection systems, then send the real pieces in reverse order.
-
-Important limits
-This changes only Porn Fetch&apos;s connections. It uses HTTP/2 over TCP, not HTTP/3. If you have another proxy configured, the local SNI proxy connects through it.
-
-Splitting is not encryption. An observer can put the pieces back together and read the website name. DNS lookups and destination IP addresses may also reveal it. This is not a VPN and does not guarantee anonymity or access.
-
-For Linux source runs that need Strict mode, use sudo -E .venv/bin/python main.py to retain your environment. Depending on your sudo setup, a plain sudo launch may use root&apos;s separate settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Tor sends requests through several relays before they reach the destination. Porn Fetch starts its bundled Tor client when needed.
 
 Off: use your normal connection.
@@ -1693,7 +1670,32 @@ Turn this off if you do not want download history. It does not delete existing h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+75"/>
+        <source>Restart Porn Fetch after changing SNI obfuscation, its mode or its profile.
+
+SNI is the website name normally sent at the start of an HTTPS connection. Porn Fetch can split this part of the connection into smaller pieces, which may help on some restricted networks.
+
+Lite mode
+Splits the data into separate writes. It needs no administrator rights. Your operating system or network may combine those pieces again.
+
+Strict mode
+Splits actual outgoing TCP packets. It needs root on Linux or Run as Administrator on Windows. Strict mode supports Windows x64 and Linux x64/ARM64; Linux also needs a compatible kernel and libbpf. It is unavailable on macOS and Windows ARM64.
+
+Strict profiles
+Fragmentation: send the pieces in order.
+Reverse: send the later piece first; the server puts them back in order.
+Desync: first send a fake greeting intended to confuse some inspection systems, then send the real pieces in reverse order.
+
+Important limits
+This changes only Porn Fetch&apos;s connections. It uses HTTP/2 over TCP, not HTTP/3. If you have another proxy configured, the local SNI proxy connects through it.
+
+Splitting is not encryption. An observer can put the pieces back together and read the website name. DNS lookups and destination IP addresses may also reveal it. This is not a VPN and does not guarantee anonymity or access.
+
+For Linux source runs that need Strict mode, use sudo -E .venv/bin/python main.py to retain your environment. Depending on your sudo setup, a plain sudo launch may use root&apos;s separate settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <source>Choose the colour used for selected controls, highlights and other interface details.
 
 This changes the appearance only. High contrast can override the accent colour.</source>
@@ -1802,7 +1804,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+800"/>
+        <location filename="../../../backend/application.py" line="+819"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1822,16 +1824,16 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-665"/>
-        <location line="+172"/>
-        <location line="+8"/>
+        <location line="-678"/>
+        <location line="+184"/>
+        <location line="+9"/>
         <location line="+29"/>
         <location line="+37"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-186"/>
+        <location line="-199"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1851,12 +1853,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+79"/>
+        <location line="+91"/>
         <source>The update check failed. Check your connection and try again later.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>No update available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2509,18 +2511,13 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>$title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-943"/>
-        <location line="+952"/>
+        <location line="-941"/>
+        <location line="+950"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3048,7 +3045,7 @@ No subscription.</source>
 <context>
     <name>NotificationCenter</name>
     <message>
-        <location filename="../../../backend/notifications.py" line="+93"/>
+        <location filename="../../../backend/notifications.py" line="+95"/>
         <source>The operation could not be completed. Please try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3073,7 +3070,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+45"/>
         <source>Downloads completed this session: %s. Files are saved to your configured output folder.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3100,6 +3097,16 @@ No subscription.</source>
     <message>
         <location line="+8"/>
         <source>Restart required. Your settings will take effect after restarting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Restart required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Restart Porn Fetch to apply your changed settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3131,12 +3138,12 @@ No subscription.</source>
 <context>
     <name>NotificationPanel</name>
     <message>
-        <location filename="../../UI/NotificationPanel.qml" line="+16"/>
+        <location filename="../../UI/NotificationPanel.qml" line="+25"/>
         <source>Application notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+73"/>
         <source>Recent activity (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3156,7 +3163,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+33"/>
         <source>Recent activity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3527,12 +3534,12 @@ Stopping downloads and saving application state.</source>
     <name>SettingsPage</name>
     <message>
         <location filename="../../UI/SettingsPage.qml" line="+48"/>
-        <location line="+383"/>
+        <location line="+393"/>
         <source>Choose video output folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-368"/>
+        <location line="-378"/>
         <source>Choose a PocketBase data folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3573,21 +3580,21 @@ Stopping downloads and saving application state.</source>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1296"/>
+        <location line="+1273"/>
         <location line="+6"/>
         <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1301"/>
+        <location line="-1278"/>
         <location line="+15"/>
-        <location line="+1294"/>
+        <location line="+1271"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1310"/>
+        <location line="-1287"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3597,7 +3604,12 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+25"/>
+        <source>Restart Porn Fetch to apply your changed settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>Settings sections</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3797,55 +3809,55 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
-        <location line="+6"/>
+        <location line="+13"/>
+        <location line="+4"/>
         <source>Response cache size (MB)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+6"/>
+        <location line="+13"/>
+        <location line="+4"/>
         <source>Response cache lifetime (seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+6"/>
+        <location line="+13"/>
+        <location line="+4"/>
         <source>Segment-list cache size (MB)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+6"/>
+        <location line="+13"/>
+        <location line="+4"/>
         <source>Segment-list cache lifetime (seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+6"/>
+        <location line="+13"/>
+        <location line="+4"/>
         <source>Initial retry wait (seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+6"/>
+        <location line="+12"/>
+        <location line="+4"/>
         <source>Maximum retry wait (seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+6"/>
+        <location line="+12"/>
+        <location line="+4"/>
         <source>Retry wait multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+6"/>
+        <location line="+12"/>
+        <location line="+4"/>
         <source>Random extra retry wait (seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+38"/>
         <location line="+2"/>
         <source>Check for updates at startup</source>
         <translation type="unfinished"></translation>
@@ -3868,7 +3880,12 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+549"/>
+        <location line="+262"/>
+        <source>SNI Obfuscation (restart required)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+287"/>
         <source>Add or remove components</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3983,12 +4000,11 @@ Stopping downloads and saving application state.</source>
     </message>
     <message>
         <location line="+21"/>
-        <location line="+2"/>
         <source>SNI Obfuscation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <location line="+1"/>
         <source>Lite SNI Obfuscation</source>
         <translation type="unfinished"></translation>
@@ -4161,7 +4177,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+35"/>
         <source>Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4304,7 +4320,7 @@ Stopping downloads and saving application state.</source>
 <context>
     <name>SystemNotifications</name>
     <message>
-        <location filename="../../../backend/system_notifications.py" line="+43"/>
+        <location filename="../../../backend/system_notifications.py" line="+45"/>
         <source>Download notifications</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4357,6 +4373,19 @@ Stopping downloads and saving application state.</source>
         <location line="+5"/>
         <location line="+21"/>
         <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TitleFormatField</name>
+    <message>
+        <location filename="../../UI/TitleFormatField.qml" line="+17"/>
+        <source>Custom title formatting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Valid placeholders are highlighted. Unknown placeholders and incomplete dollar expressions have a wavy underline. Use $$ for a dollar sign.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

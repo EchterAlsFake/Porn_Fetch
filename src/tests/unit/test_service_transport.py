@@ -14,7 +14,7 @@ from src.shared.service_transport import (
     TorServiceFailure,
     service_mode,
 )
-from src.shared.tor_runtime import TorRuntime, TorUnavailable
+from src.shared.tor_runtime import TorBinaryMissing, TorRuntime, TorUnavailable
 
 
 class RoutingTests(unittest.TestCase):
@@ -43,6 +43,22 @@ class RoutingTests(unittest.TestCase):
                 list(ServiceFetcher(policy=policy)._fetch("https://pornfetch.to/repo/android/metadata/root.json"))
             session.assert_not_called()
             self.assertIn("Tor could not start or connect", notice.call_args.args[0])
+
+    def test_missing_binary_keeps_actionable_reason_in_service_failure(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            manager = TorRuntime(binary=Path(temporary) / "missing-tor")
+            policy = ServicePolicy(SimpleNamespace(service_transport="tor"), manager=manager)
+            with patch("src.shared.service_transport.failure_listener") as notice, \
+                 patch("src.shared.service_transport.requests.Session") as session:
+                with self.assertRaises(TorServiceFailure) as raised:
+                    list(ServiceFetcher(policy=policy)._fetch("https://api.pornfetch.to/update"))
+            self.assertIsInstance(raised.exception.__cause__, TorBinaryMissing)
+            self.assertIn("Tor executable could not be found", str(raised.exception))
+            self.assertIn("PORNFETCH_TOR_BINARY", str(raised.exception))
+            self.assertIn("No direct connection was attempted", str(raised.exception))
+            self.assertEqual(notice.call_args.args[0], str(raised.exception))
+            self.assertEqual(policy.last_failure, str(raised.exception))
+            session.assert_not_called()
 
     def test_sync_update_stream_failure_notifies_before_tuf_wraps_it(self):
         manager = MagicMock()
@@ -105,8 +121,9 @@ class RoutingTests(unittest.TestCase):
             root = Path(temporary)
             runtime = TorRuntime(binary=root / "missing", directory=root / "data")
             with patch("src.shared.tor_runtime.subprocess.Popen") as launch:
-                with self.assertRaises(TorUnavailable):
+                with self.assertRaises(TorBinaryMissing):
                     runtime.ensure_ready()
+                self.assertEqual(runtime.state, "missing")
                 launch.assert_not_called()
             binary = root / "tor"
             binary.touch()

@@ -35,12 +35,12 @@ What a report contains
 These details can reveal which adult content you accessed. URLs, error messages and file paths can contain sensitive or personal information, such as account details, URL tokens or your local username. Reports are not anonymous. Python local-variable dumps, browsing history and download records are not collected. The app does not attach account credentials, cookies or authorization headers, but sensitive values may appear in the traceback or URLs.
 
 How reports are sent
-Reports are sent over HTTPS directly to the developer's server at api.pornfetch.to/error_log. They are securely stored on that server, never shared with third parties and used only to reproduce, diagnose and fix application errors. Media-provider proxy settings do not control this connection; the app's All app traffic Tor setting applies separately.
+Reports are sent over HTTPS directly to my server at api.pornfetch.to/error_log. I store them securely, never share them with third parties and use them only to reproduce, diagnose and fix application errors. Media-provider proxy settings do not control this connection; the app's All app traffic Tor setting applies separately.
 
 The server receives connection metadata while handling the request. It is configured not to log or store client IP addresses in diagnostic records. If sending a report fails, your download continues.
 
 Storage and deletion
-Reports are stored privately in PocketBase and deleted manually. The operator plans to delete them with the next published version. There is no fixed storage period or automatic cleanup.
+I store reports privately in PocketBase and delete them manually. I plan to delete them when I publish the next version. There is no fixed storage period or automatic cleanup.
 
 Turning this off stops future reports. It does not delete reports already sent or change the lawfulness of their earlier processing. To request deletion, send the correlation ID to support@echteralsfake.me.
 

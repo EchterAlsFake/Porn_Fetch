@@ -15,3 +15,4 @@ AppComboBox 1.0 AppComboBox.qml
 AppSpinBox 1.0 AppSpinBox.qml
 ContrastOutline 1.0 ContrastOutline.qml
 ContrastPopupBackground 1.0 ContrastPopupBackground.qml
+TitleFormatField 1.0 TitleFormatField.qml

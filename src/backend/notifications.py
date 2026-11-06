@@ -26,6 +26,7 @@ class NotificationCenter(QObject):
     announced = Signal(str, bool)
     systemRequested = Signal(str)
     decisionAccepted = Signal(str)
+    directRequested = Signal(str, str)
 
     def __init__(self, settings, parent=None):
         super().__init__(parent)
@@ -82,6 +83,7 @@ class NotificationCenter(QObject):
         action: str = "",
         details: str = "",
         quiet: bool = False,
+        direct: bool = False,
     ):
         severity = severity if severity in {"info", "success", "warning", "error"} else "info"
         message, title, details = map(public_message, (message, title, details))
@@ -126,6 +128,8 @@ class NotificationCenter(QObject):
         # Presentation coalesces announcements, including bursts of repeated errors.
         if not quiet and not preserve_error:
             self.announced.emit(f"{title}. {message}", severity == "error")
+        if direct and not quiet:
+            self.directRequested.emit(title, message)
         return entry["id"]
 
     @Slot(str, str, str)
@@ -165,6 +169,7 @@ class NotificationCenter(QObject):
         self._restart = True
         self.changed.emit()
         self.announced.emit(self.tr("Restart required. Your settings will take effect after restarting."), False)
+        self.directRequested.emit(self.tr("Restart required"), self.tr("Restart Porn Fetch to apply your changed settings."))
 
     def begin_shutdown(self):
         self._shutting_down = True

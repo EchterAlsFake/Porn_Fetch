@@ -964,11 +964,9 @@ Pane {
                             Label { text: qsTr("Custom Title formatting:") }
                             RowLayout {
                                 Layout.fillWidth: true
-                                AppTextField {
+                                TitleFormatField {
                                     id: customOptions
                                     objectName: "downloadTitlePattern"
-                                    Accessible.name: placeholderText
-                                    placeholderText: qsTr("$title")
                                     Layout.fillWidth: true
                                 }
                                 AppButton {

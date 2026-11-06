@@ -155,6 +155,16 @@ Pane {
             }
         }
 
+        Label {
+            objectName: "settingsRestartNotice"
+            Layout.fillWidth: true
+            visible: typeof noticeCenter !== "undefined" && noticeCenter.restartRequired
+            text: qsTr("Restart Porn Fetch to apply your changed settings.")
+            font.bold: true
+            color: Theme.ink
+            wrapMode: Text.Wrap
+        }
+
         // RowLayout arranges its children horizontally.
         // This splits the upper part into Left (Sidebar) and Right (Settings Content)
         RowLayout {
@@ -686,169 +696,136 @@ Pane {
                                 onValueModified: appSettings.pages_concurrency = value
                             }
 
-                            GridLayout {
-                                columnSpacing: 15
-                                Layout.columnSpan: 3
-                                columns: window.compact ? 1 : 2
-                                width: scrollviewPerformance.availableWidth
+                            HelpButton { helpText: AppStrings.responseCacheSizeHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Response cache size (MB)")
+                            }
+                            AppSpinBox {
+                                objectName: "responseCacheSizeSpinBox"
+                                Accessible.name: qsTr("Response cache size (MB)")
+                                Accessible.description: AppStrings.responseCacheSizeHelp
                                 Layout.fillWidth: true
-                                rowSpacing: 15
+                                editable: true
+                                to: 2000
+                                value: appSettings.response_cache_size
+                                onValueModified: appSettings.response_cache_size = value
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Response cache size (MB)")
-                                    }
-                                    HelpButton { helpText: AppStrings.responseCacheSizeHelp }
-                                }
-                                AppSpinBox {
-                                    objectName: "responseCacheSizeSpinBox"
-                                    Accessible.name: qsTr("Response cache size (MB)")
-                                    Accessible.description: AppStrings.responseCacheSizeHelp
-                                    Layout.fillWidth: true
-                                    editable: true
-                                    to: 2000
-                                    value: appSettings.response_cache_size
-                                    onValueModified: appSettings.response_cache_size = value
-                                }
+                            HelpButton { helpText: AppStrings.responseCacheTTLHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Response cache lifetime (seconds)")
+                            }
+                            AppSpinBox {
+                                objectName: "responseCacheTTLSpinBox"
+                                Accessible.name: qsTr("Response cache lifetime (seconds)")
+                                Accessible.description: AppStrings.responseCacheTTLHelp
+                                Layout.fillWidth: true
+                                editable: true
+                                to: 20000
+                                value: appSettings.response_cache_ttl
+                                onValueModified: appSettings.response_cache_ttl = value
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Response cache lifetime (seconds)")
-                                    }
-                                    HelpButton { helpText: AppStrings.responseCacheTTLHelp }
-                                }
-                                AppSpinBox {
-                                    objectName: "responseCacheTTLSpinBox"
-                                    Accessible.name: qsTr("Response cache lifetime (seconds)")
-                                    Accessible.description: AppStrings.responseCacheTTLHelp
-                                    Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.response_cache_ttl
-                                    onValueModified: appSettings.response_cache_ttl = value
-                                }
+                            HelpButton { helpText: AppStrings.segmentCacheSizeHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Segment-list cache size (MB)")
+                            }
+                            AppSpinBox {
+                                objectName: "segmentCacheSizeSpinBox"
+                                Accessible.name: qsTr("Segment-list cache size (MB)")
+                                Accessible.description: AppStrings.segmentCacheSizeHelp
+                                Layout.fillWidth: true
+                                editable: true
+                                to: 2000
+                                value: appSettings.segment_cache_size
+                                onValueModified: appSettings.segment_cache_size = value
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Segment-list cache size (MB)")
-                                    }
-                                    HelpButton { helpText: AppStrings.segmentCacheSizeHelp }
-                                }
-                                AppSpinBox {
-                                    objectName: "segmentCacheSizeSpinBox"
-                                    Accessible.name: qsTr("Segment-list cache size (MB)")
-                                    Accessible.description: AppStrings.segmentCacheSizeHelp
-                                    Layout.fillWidth: true
-                                    editable: true
-                                    to: 2000
-                                    value: appSettings.segment_cache_size
-                                    onValueModified: appSettings.segment_cache_size = value
-                                }
+                            HelpButton { helpText: AppStrings.segmentCacheTTLHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Segment-list cache lifetime (seconds)")
+                            }
+                            AppSpinBox {
+                                objectName: "segmentCacheTTLSpinBox"
+                                Accessible.name: qsTr("Segment-list cache lifetime (seconds)")
+                                Accessible.description: AppStrings.segmentCacheTTLHelp
+                                Layout.fillWidth: true
+                                editable: true
+                                to: 20000
+                                value: appSettings.segment_cache_ttl
+                                onValueModified: appSettings.segment_cache_ttl = value
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Segment-list cache lifetime (seconds)")
-                                    }
-                                    HelpButton { helpText: AppStrings.segmentCacheTTLHelp }
-                                }
-                                AppSpinBox {
-                                    objectName: "segmentCacheTTLSpinBox"
-                                    Accessible.name: qsTr("Segment-list cache lifetime (seconds)")
-                                    Accessible.description: AppStrings.segmentCacheTTLHelp
-                                    Layout.fillWidth: true
-                                    editable: true
-                                    to: 20000
-                                    value: appSettings.segment_cache_ttl
-                                    onValueModified: appSettings.segment_cache_ttl = value
-                                }
+                            HelpButton { helpText: AppStrings.retryInitialDelayHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Initial retry wait (seconds)")
+                            }
+                            DecimalSpinBox {
+                                objectName: "requestInitialRetryDelaySpinBox"
+                                Accessible.name: qsTr("Initial retry wait (seconds)")
+                                Accessible.description: AppStrings.retryInitialDelayHelp
+                                Layout.fillWidth: true
+                                realTo: 20000
+                                realValue: appSettings.request_initial_retry_delay
+                                onRealValueModified: (newValue) => appSettings.request_initial_retry_delay = newValue
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Initial retry wait (seconds)")
-                                    }
-                                    HelpButton { helpText: AppStrings.retryInitialDelayHelp }
-                                }
-                                DecimalSpinBox {
-                                    objectName: "requestInitialRetryDelaySpinBox"
-                                    Accessible.name: qsTr("Initial retry wait (seconds)")
-                                    Accessible.description: AppStrings.retryInitialDelayHelp
-                                    Layout.fillWidth: true
-                                    realTo: 20000
-                                    realValue: appSettings.request_initial_retry_delay
-                                    onRealValueModified: (newValue) => appSettings.request_initial_retry_delay = newValue
-                                }
+                            HelpButton { helpText: AppStrings.retryMaxDelayHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Maximum retry wait (seconds)")
+                            }
+                            DecimalSpinBox {
+                                objectName: "requestRetryMaxDelaySpinBox"
+                                Accessible.name: qsTr("Maximum retry wait (seconds)")
+                                Accessible.description: AppStrings.retryMaxDelayHelp
+                                Layout.fillWidth: true
+                                realTo: 20000
+                                realValue: appSettings.request_retry_max_delay
+                                onRealValueModified: (newValue) => appSettings.request_retry_max_delay = newValue
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Maximum retry wait (seconds)")
-                                    }
-                                    HelpButton { helpText: AppStrings.retryMaxDelayHelp }
-                                }
-                                DecimalSpinBox {
-                                    objectName: "requestRetryMaxDelaySpinBox"
-                                    Accessible.name: qsTr("Maximum retry wait (seconds)")
-                                    Accessible.description: AppStrings.retryMaxDelayHelp
-                                    Layout.fillWidth: true
-                                    realTo: 20000
-                                    realValue: appSettings.request_retry_max_delay
-                                    onRealValueModified: (newValue) => appSettings.request_retry_max_delay = newValue
-                                }
+                            HelpButton { helpText: AppStrings.retryMultiplierHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Retry wait multiplier")
+                            }
+                            DecimalSpinBox {
+                                objectName: "requestRetryMultiplierSpinBox"
+                                Accessible.name: qsTr("Retry wait multiplier")
+                                Accessible.description: AppStrings.retryMultiplierHelp
+                                Layout.fillWidth: true
+                                realTo: 20000
+                                realValue: appSettings.request_retry_multiplier
+                                onRealValueModified: (newValue) => appSettings.request_retry_multiplier = newValue
+                            }
 
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Retry wait multiplier")
-                                    }
-                                    HelpButton { helpText: AppStrings.retryMultiplierHelp }
-                                }
-                                DecimalSpinBox {
-                                    objectName: "requestRetryMultiplierSpinBox"
-                                    Accessible.name: qsTr("Retry wait multiplier")
-                                    Accessible.description: AppStrings.retryMultiplierHelp
-                                    Layout.fillWidth: true
-                                    realTo: 20000
-                                    realValue: appSettings.request_retry_multiplier
-                                    onRealValueModified: (newValue) => appSettings.request_retry_multiplier = newValue
-                                }
-
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    Label {
-                                        Layout.fillWidth: true
-                                        wrapMode: Text.Wrap
-                                        text: qsTr("Random extra retry wait (seconds)")
-                                    }
-                                    HelpButton { helpText: AppStrings.retryJitterHelp }
-                                }
-                                DecimalSpinBox {
-                                    objectName: "requestRetryJitterSpinBox"
-                                    Accessible.name: qsTr("Random extra retry wait (seconds)")
-                                    Accessible.description: AppStrings.retryJitterHelp
-                                    Layout.fillWidth: true
-                                    realTo: 20000
-                                    realValue: appSettings.request_retry_jitter
-                                    onRealValueModified: (newValue) => appSettings.request_retry_jitter = newValue
-                                }
+                            HelpButton { helpText: AppStrings.retryJitterHelp }
+                            Label {
+                                Layout.maximumWidth: window.compact ? scrollviewPerformance.availableWidth : 320
+                                wrapMode: Text.Wrap
+                                text: qsTr("Random extra retry wait (seconds)")
+                            }
+                            DecimalSpinBox {
+                                objectName: "requestRetryJitterSpinBox"
+                                Accessible.name: qsTr("Random extra retry wait (seconds)")
+                                Accessible.description: AppStrings.retryJitterHelp
+                                Layout.fillWidth: true
+                                realTo: 20000
+                                realValue: appSettings.request_retry_jitter
+                                onRealValueModified: (newValue) => appSettings.request_retry_jitter = newValue
                             }
                             // Empty spaces for layout balance where the right side has no items
                             Item {
@@ -1203,7 +1180,7 @@ Pane {
                                     objectName: "sniObfuscationCheckBox"
                                     Accessible.name: qsTr("SNI Obfuscation")
                                     Accessible.description: AppStrings.sniObfuscationHelp
-                                    text: qsTr("SNI Obfuscation")
+                                    text: qsTr("SNI Obfuscation (restart required)")
                                     Layout.fillWidth: true
                                     checked: appSettings.sni_obfuscation
                                     onToggled: appSettings.sni_obfuscation = checked

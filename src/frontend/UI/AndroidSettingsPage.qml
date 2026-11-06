@@ -366,6 +366,16 @@ Pane {
                 }
             }
 
+            Label {
+                objectName: "settingsRestartNotice"
+                Layout.fillWidth: true
+                visible: typeof noticeCenter !== "undefined" && noticeCenter.restartRequired
+                text: qsTr("Restart Porn Fetch to apply your changed settings.")
+                font.bold: true
+                color: root.textColor
+                wrapMode: Text.Wrap
+            }
+
             ScrollView {
                 id: detailScroll
                 Layout.fillWidth: true
@@ -525,7 +535,7 @@ Pane {
                 }
                 ToggleRow {
                     label: qsTr("Send tracebacks and video URLs")
-                    detail: qsTr("Stored securely by the developer, never shared and used only for debugging.")
+                    detail: qsTr("I store reports securely, never share them and use them only to fix errors.")
                     helpText: backend.errorReportDisclosure
                     value: appSettings.enable_logging
                     onChanged: function(selected) { appSettings.set_error_reporting_consent(selected) }

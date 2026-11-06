@@ -9,6 +9,8 @@ AppComboBox {
     Accessible.description: AppStrings.contentLanguageHelp
     textRole: "label"
     valueRole: "locale"
+    leftPadding: 12
+    rightPadding: 12
     model: ListModel {
         ListElement { label: "Čeština"; locale: "cs-CZ"; flag: "cz" }
         ListElement { label: "Deutsch"; locale: "de-DE"; flag: "de" }
@@ -62,6 +64,8 @@ AppComboBox {
         required property string label
         required property string flag
         width: control.popup.width
+        leftPadding: 12
+        rightPadding: 12
         highlighted: control.highlightedIndex === index
         text: label
         Accessible.name: label

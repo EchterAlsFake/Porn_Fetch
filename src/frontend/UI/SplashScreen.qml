@@ -19,6 +19,7 @@ Window {
     // 3. Layout (Vertical, Centered)
     Column {
         anchors.centerIn: parent
+        width: parent.width - 48
         spacing: 15
 
         // 4. Logo Widget
@@ -26,12 +27,14 @@ Window {
             id: logoImage
             // In QML, you pass a file path/URL instead of a QPixmap
             source: "qrc:/images/graphics/logo_transparent.png"
+            width: parent.width
+            height: Math.min(240, splashWindow.height - statusText.implicitHeight - 80)
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
 
             // Optional: Constrain maximum size to respect margins
-            sourceSize.width: 560
-            sourceSize.height: 300
+            sourceSize.width: width * Screen.devicePixelRatio
+            sourceSize.height: height * Screen.devicePixelRatio
         }
 
         // 5. Text Widget (Status)
@@ -40,6 +43,9 @@ Window {
             text: qsTr("Initializing...")
             color: "#ffffff"
             font.pointSize: 10
+            width: parent.width
+            wrapMode: Text.Wrap
+            horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }

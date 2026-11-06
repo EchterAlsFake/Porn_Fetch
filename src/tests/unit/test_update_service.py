@@ -59,6 +59,37 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_missing_tor_update_failure_preserves_reason_without_stacking_dialogs(self):
+        from src.backend.application import Backend
+        from src.shared.service_transport import TorServiceFailure
+        from src.shared.tor_runtime import TOR_BINARY_MISSING_MESSAGE
+
+        backend = SimpleNamespace(
+            _update_check_manual=True, notifications=MagicMock(), logger=MagicMock(),
+            updateStatus=MagicMock(), tr=lambda text: text,
+        )
+        with patch.object(CheckUpdates, "check", AsyncMock(side_effect=TorServiceFailure(TOR_BINARY_MISSING_MESSAGE))):
+            await Backend._check_for_updates(backend)
+        self.assertEqual(backend.updateStatus.emit.call_args.args[0], TOR_BINARY_MISSING_MESSAGE)
+        self.assertEqual(backend.notifications.publish.call_args.args[0], TOR_BINARY_MISSING_MESSAGE)
+        self.assertFalse(backend.notifications.publish.call_args.kwargs["direct"])
+
+    async def test_no_update_result_is_direct_only_for_manual_checks(self):
+        from src.backend.application import Backend
+
+        for manual in (False, True):
+            backend = SimpleNamespace(
+                _update_check_manual=manual, notifications=MagicMock(),
+                updateStatus=MagicMock(), tr=lambda text: text,
+            )
+            with patch.object(CheckUpdates, "check", AsyncMock(return_value=None)):
+                await Backend._check_for_updates(backend)
+            if manual:
+                self.assertTrue(backend.notifications.publish.call_args.kwargs["direct"])
+            else:
+                backend.notifications.publish.assert_not_called()
+            self.assertFalse(backend._update_check_manual)
+
     async def test_update_uses_normal_shutdown_only_after_successful_launch(self):
         shutdown = MagicMock()
         updater = AutoUpdater(request_shutdown=shutdown)
@@ -132,7 +163,8 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
         try:
             if sys.platform != "win32":
                 tmp_path.chmod(0o755)
-            with patch("src.backend.update_service.find_maintenance_tool", return_value=tmp_path):
+            with patch("src.backend.update_service.find_maintenance_tool", return_value=tmp_path), \
+                 patch("src.backend.update_service.service_core", SimpleNamespace(tor_enabled=False)):
                 mock_proc = AsyncMock()
                 mock_proc.communicate.return_value = (xml_output, b"")
                 with patch("asyncio.create_subprocess_exec", return_value=mock_proc):

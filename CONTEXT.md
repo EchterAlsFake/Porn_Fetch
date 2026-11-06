@@ -12,6 +12,8 @@ Read [the developer guide](docs/FOR_DEVELOPERS.md) for the source map.
 - Keep `src/cli`, `src/shared`, `src/licensing` and `src/database/core.py` free of
   PySide6 imports. Qt adapters belong in `src/backend` or a named bridge module.
 - Use asyncio and cooperative cancellation, never QThread workers.
+- User-facing copy about the author uses I/my, never we/our, "the operator" or
+  "the developer".
 - Keyword search is intentionally unavailable in every frontend.
 - Android history/statistics are disabled; do not add another database backend.
   Desktop tracking uses PocketBase. Licensing storage is separate.

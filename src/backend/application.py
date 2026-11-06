@@ -149,6 +149,8 @@ from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
 from src.backend.update_service import AutoUpdater, CheckUpdates, find_maintenance_tool, launch_maintenance_tool
 from src.backend.sni_proxy_manager import SNIProxyManager
 from src.shared.tor_transport import configure as configure_tor_transport
+from src.shared.tor_runtime import TorUnavailable
+from src.shared.service_transport import TorServiceFailure
 from src.shared.errors import CookiesNotFound, LoginError
 from src.backend.download_manager import (
     DownloadManager,
@@ -233,6 +235,7 @@ class Backend(QObject):
         self._account_fetch_in_progress = False
         self._video_fetch_task: asyncio.Task[object] | None = None
         self._input_errors = {}
+        self._title_highlighters = {}
         self._prepared_items = 0
         self._preparation_had_errors = False
         self._proxy_test_task: asyncio.Task[object] | None = None
@@ -381,6 +384,17 @@ class Backend(QObject):
 
     # Slots / Signals connected to the Configuration / Settings
 
+    @Slot(QObject, bool, bool)
+    def highlight_title_format(self, document, dark, high_contrast):
+        from src.backend.title_highlighter import TitleFormatHighlighter
+
+        highlighter = self._title_highlighters.get(document)
+        if highlighter is None:
+            highlighter = TitleFormatHighlighter(document.textDocument())
+            self._title_highlighters[document] = highlighter
+            document.destroyed.connect(lambda: self._title_highlighters.pop(document, None))
+        highlighter.set_theme(dark, high_contrast)
+
     @Slot(bool)
     def toggle_anonymous_mode(self, value: bool) -> None:
         ...
@@ -429,19 +443,21 @@ class Backend(QObject):
     async def _check_for_updates(self) -> None:
         try:
             update = await CheckUpdates.check()
-        except Exception:
+        except Exception as error:
             self.logger.exception("Update check failed")
-            message = self.tr("The update check failed. Check your connection and try again later.")
+            message = (str(error) if isinstance(error, TorUnavailable) else
+                       self.tr("The update check failed. Check your connection and try again later."))
             self.updateStatus.emit(message)
             self.notifications.publish(message, self.tr("App updates"), "error", key="update-check",
-                                       quiet=not self._update_check_manual)
+                                       quiet=not self._update_check_manual,
+                                       direct=self._update_check_manual and not isinstance(error, TorServiceFailure))
             self._update_check_manual = False
             return
         if update is None:
             message = self.tr("No update available.")
             self.updateStatus.emit(message)
             if self._update_check_manual:
-                self.notifications.publish(message, self.tr("App updates"), "info", key="update-check")
+                self.notifications.publish(message, self.tr("App updates"), "info", key="update-check", direct=True)
             self._update_check_manual = False
             return
 

@@ -141,6 +141,18 @@ ApplicationWindow {
         QTest.qWait(250)
         self.assertFalse(dialog.property("visible"))
         self.assertIsNone(window.findChild(QObject, "notificationBanner"))
+        self.settings.anonymous_mode = False
+        self.center.publish("No update available.", "App updates", direct=True)
+        QTest.qWait(250)
+        feedback = window.findChild(QObject, "directFeedbackDialog")
+        self.assertTrue(feedback.property("visible"))
+        self.assertEqual(feedback.property("message"), "No update available.")
+        self.assertFalse(dialog.property("visible"))
+        feedback.setProperty("visible", False)
+        self.center.require_restart()
+        QTest.qWait(250)
+        self.assertTrue(feedback.property("visible"))
+        self.assertIn("Restart Porn Fetch", feedback.property("message"))
         self.assertEqual(warnings, [])
         self.app.sendPostedEvents(None, QEvent.DeferredDelete)
 

@@ -10,6 +10,15 @@ ColumnLayout {
     readonly property var decision: controller ? controller.pendingDecision : ({})
     property string pendingAnnouncement: ""
     property bool pendingUrgent: false
+    property var pendingFeedback: null
+    function showFeedback() {
+        if (!blocked && pendingFeedback) {
+            feedbackDialog.title = pendingFeedback.title;
+            feedbackDialog.message = pendingFeedback.message;
+            pendingFeedback = null;
+            feedbackDialog.open();
+        }
+    }
     function openActivity() { activityDialog.open() }
     spacing: 0
     Accessible.role: Accessible.Grouping
@@ -30,6 +39,8 @@ ColumnLayout {
             activityDialog.close();
             activityDialog.displayedEntries = root.controller ? root.controller.entries : [];
             root.pendingAnnouncement = "";
+            root.pendingFeedback = null;
+            feedbackDialog.close();
             announcementTimer.stop();
         }
     }
@@ -50,6 +61,10 @@ ColumnLayout {
 
     Connections {
         target: root.controller
+        function onDirectRequested(title, message) {
+            root.pendingFeedback = {title: title, message: message};
+            root.showFeedback();
+        }
         function onAnnounced(message, urgent) {
             root.pendingAnnouncement = message;
             root.pendingUrgent = urgent;
@@ -70,6 +85,7 @@ ColumnLayout {
         if (!blocked && pendingAnnouncement)
             announcementTimer.restart();
         Qt.callLater(showDecision);
+        Qt.callLater(showFeedback);
     }
 
     RowLayout {
@@ -86,6 +102,12 @@ ColumnLayout {
             enabled: !root.blocked
             onClicked: activityDialog.open()
         }
+    }
+
+    ScrollableMessageDialog {
+        id: feedbackDialog
+        objectName: "directFeedbackDialog"
+        modal: true
     }
 
     ScrollableMessageDialog {

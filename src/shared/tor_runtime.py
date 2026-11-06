@@ -14,9 +14,25 @@ from pathlib import Path
 
 from .paths import shared_data_dir
 
+TOR_BINARY_MISSING_MESSAGE = (
+    "The Tor executable could not be found. Tor may be missing from this build, "
+    "or PORNFETCH_TOR_BINARY may point to a missing file.\n\n"
+    "Use a build that includes Tor. For source runs, install Tor and set "
+    "PORNFETCH_TOR_BINARY to the full path of its executable before starting Porn Fetch.\n\n"
+    "No direct connection was attempted. To use your normal connection instead, "
+    "select Off under Tor routing in Privacy settings."
+)
+
 
 class TorUnavailable(ConnectionError):
     """Tor could not become ready; callers must not retry outside Tor."""
+
+
+class TorBinaryMissing(TorUnavailable):
+    """The configured or bundled Tor executable is absent."""
+
+    def __init__(self):
+        super().__init__(TOR_BINARY_MISSING_MESSAGE)
 
 
 def bundled_binary() -> Path:
@@ -89,8 +105,8 @@ class TorRuntime:
             self._stopped.clear()
             binary = Path(self.binary or bundled_binary())
             if not binary.is_file():
-                self._report("error")
-                raise TorUnavailable("Bundled Tor is unavailable for this build")
+                self._report("missing")
+                raise TorBinaryMissing()
             private = Path(os.environ["ANDROID_PRIVATE"]) if "ANDROID_PRIVATE" in os.environ else shared_data_dir()
             directory = Path(self.directory or private / "tor-client")
             directory.mkdir(parents=True, exist_ok=True, mode=0o700)

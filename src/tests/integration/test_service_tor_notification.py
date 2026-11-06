@@ -12,7 +12,7 @@ from PySide6.QtTest import QSignalSpy
 from src.backend.config import SettingsManager
 from src.backend.tor_status import TorStatus
 from src.shared import service_transport
-from src.shared.tor_runtime import runtime
+from src.shared.tor_runtime import TorBinaryMissing, TorRuntime, runtime
 from src.tests.integration.settings_support import _app
 
 UI_DIR = Path(__file__).resolve().parents[2] / "frontend/UI"
@@ -88,3 +88,30 @@ class ServiceTorNotificationTests(unittest.TestCase):
         with patch("src.backend.tor_status.time.monotonic", return_value=71):
             self.adapter.failureReceived.emit("service unreachable")
         self.assertEqual(len(messages), 2)
+
+    def test_missing_runtime_notifies_without_a_service_request(self):
+        self.settings.service_transport = "tor_all"
+        engine = QQmlApplicationEngine()
+        self.addCleanup(self.close_engine, engine)
+        engine.rootContext().setContextProperty("torStatus", self.adapter)
+        engine.rootContext().setContextProperty("appSettings", self.settings)
+        engine.loadData(b"""
+            import QtQuick
+            import QtQuick.Controls
+            ApplicationWindow {
+                width: 375; height: 667; visible: true
+                ServiceTorFailureDialog {}
+            }
+        """, QUrl.fromLocalFile(str(UI_DIR / "MissingTorTest.qml")))
+        self.assertTrue(engine.rootObjects())
+        window = engine.rootObjects()[0]
+        dialog = window.findChild(QObject, "serviceTorFailureDialog")
+        opened = QSignalSpy(dialog, SIGNAL("opened()"))
+        missing = TorRuntime(binary=Path(self.temporary.name) / "missing-tor", progress=self.adapter.received.emit)
+        with self.assertRaises(TorBinaryMissing):
+            asyncio.run(asyncio.to_thread(missing.ensure_ready))
+        self.assertTrue(opened.count() or opened.wait(2000), "Missing Tor executable was not reported")
+        self.assertTrue(dialog.property("visible"))
+        self.assertIn("Tor executable could not be found", dialog.property("message"))
+        self.assertIn("PORNFETCH_TOR_BINARY", self.adapter.text)
+        self.assertIn("No direct connection was attempted", dialog.property("message"))

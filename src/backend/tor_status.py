@@ -34,6 +34,9 @@ class TorStatus(QObject):
 
     @Slot(str, int)
     def _receive(self, state, percentage):
+        if state == "missing":
+            self._failure(service_transport.service_failure_message("missing"))
+            return
         self._text = {"stopped": "Tor is stopped.", "ready": "Connected through Tor.",
                       "error": "Tor is unavailable. No direct connection was attempted.",
                       "connecting": f"Connecting to Tor… {percentage}%"}[state]

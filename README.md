@@ -8,7 +8,7 @@ instead. You can get it from https://pornfetch.to/download
 The beta is still unstable and being tested, but I would rather give you a broken app, than a working app with a backdoor!
 
 <div align = center>
-<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
+<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="160"/>
 <br>
 <h1 align="center">Porn Fetch - Source-Available Adult Media Downloader</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build Status"/></a>

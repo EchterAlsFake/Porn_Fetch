@@ -299,10 +299,9 @@ Pane {
                             Layout.fillWidth: true
                             placeholderText: qsTr("Published before (YYYY-MM-DD)")
                         }
-                        AppTextField {
+                        TitleFormatField {
                             id: customOptions
                             Layout.fillWidth: true
-                            placeholderText: qsTr("Custom options")
                         }
                         HelpButton {
                             text: qsTr("Title formatting options")
