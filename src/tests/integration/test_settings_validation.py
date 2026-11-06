@@ -156,7 +156,7 @@ class TestSettingsAccessibility(SettingsGUITestBase):
             ("speedLimitSpinBox", "Speed Limit"),
             ("videosConcurrencySpinBox", "Videos Concurrency"),
             ("pagesConcurrencySpinBox", "Pages Concurrency"),
-            ("updateChecksCheckBox", "Search for Updates"),
+            ("updateChecksCheckBox", "Check for updates at startup"),
             ("supressErrorsCheckBox", "Reduce repeated error announcements"),
             ("enableLoggingCheckBox", "Send tracebacks and video URLs"),
             ("trustEnvironmentCheckBox", "Trust Environment"),
