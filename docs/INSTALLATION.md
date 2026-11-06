@@ -216,11 +216,18 @@ prefix; MSYS2 tools do not need to be on PowerShell's global PATH. Its post-buil
 output names the executable being verified and the notice being collected.
 Both scripts use the current
 checkout when available. They do not switch tags or overwrite local source changes.
+When the Windows script needs a new checkout, it clones into `Porn_Fetch` under
+your user profile, even if PowerShell starts in `C:\Windows\System32`.
 The Windows script saves its console transcript under
 `%TEMP%\porn-fetch-build-logs\install-windows-*.log`, prints the full error and
 waits for Enter on an interactive failure. Use `-NoPause` for unattended runs.
 The uv installer runs in a child PowerShell process so its failure cannot close
 the terminal running the README's `irm ... | iex` command.
+
+On Windows, application and provider debug logs are stored in the shared user
+data folder's `logs` directory (normally
+`%LOCALAPPDATA%\EchterAlsFake\Porn Fetch\logs`). Startup does not need write
+access to the executable's folder or the current working directory for logging.
 
 ## Compile the CLI
 

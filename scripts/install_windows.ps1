@@ -166,10 +166,10 @@ function Main {
     } elseif ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "build_desktop.py"))) {
         $projectDir = Split-Path $PSScriptRoot -Parent
     } else {
-        if (-not (Test-Path Porn_Fetch)) {
-            Run git clone https://github.com/EchterAlsFake/Porn_Fetch.git Porn_Fetch
+        $projectDir = Join-Path ([Environment]::GetFolderPath('UserProfile')) 'Porn_Fetch'
+        if (-not (Test-Path -LiteralPath $projectDir)) {
+            Run git clone https://github.com/EchterAlsFake/Porn_Fetch.git $projectDir
         }
-        $projectDir = (Resolve-Path Porn_Fetch).Path
     }
     $previousNoSync = $env:UV_NO_SYNC
     Push-Location $projectDir

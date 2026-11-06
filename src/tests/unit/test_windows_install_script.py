@@ -13,11 +13,12 @@ SCRIPT = Path(__file__).resolve().parents[3] / "scripts/install_windows.ps1"
 
 @unittest.skipUnless(POWERSHELL, "PowerShell is required")
 class WindowsInstallScriptTests(unittest.TestCase):
-    def run_failure(self, mock_commands: str, invocation: str):
+    def run_failure(self, mock_commands: str, invocation: str, *, checkout: bool = True):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            (root / "scripts").mkdir()
-            (root / "scripts/build_desktop.py").touch()
+            if checkout:
+                (root / "scripts").mkdir()
+                (root / "scripts/build_desktop.py").touch()
             harness = root / "test.ps1"
             harness.write_text(mock_commands + "\n" + r"""
 $source = Get-Content -LiteralPath $env:PORN_FETCH_INSTALL_SCRIPT -Raw
@@ -115,6 +116,23 @@ function uv { throw 'BUILD_MUST_NOT_START' }
         self.assertIn("winget failed with exit code 42", output)
         self.assertIn("GIT_INSTALL_FAILED", log)
         self.assertNotIn("BUILD_MUST_NOT_START", output)
+
+    def test_fresh_clone_uses_user_profile_instead_of_the_calling_directory(self):
+        output, _ = self.run_failure(r"""
+function uv { }
+function Test-Path {
+    param($Path, $LiteralPath)
+    if ($LiteralPath -and $LiteralPath.EndsWith('Porn_Fetch')) { return $false }
+    if ($LiteralPath) { return Microsoft.PowerShell.Management\Test-Path -LiteralPath $LiteralPath }
+    return Microsoft.PowerShell.Management\Test-Path $Path
+}
+function git {
+    Write-Host ('CLONE_TARGET: ' + $args[-1])
+    throw 'STOP_BEFORE_ACTUAL_CLONE'
+}
+""", "& ([scriptblock]::Create($source)) -WithoutFFmpeg -NoPause", checkout=False)
+        self.assertIn(f"CLONE_TARGET: {Path.home() / 'Porn_Fetch'}", output)
+        self.assertIn("STOP_BEFORE_ACTUAL_CLONE", output)
 
     def run_msys2_setup(self, architecture: str, fail_update: bool = False):
         with tempfile.TemporaryDirectory() as temporary:

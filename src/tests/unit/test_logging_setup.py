@@ -9,6 +9,30 @@ from src.shared.logging_setup import ConsoleHandler, configure_app_logging
 
 
 class LoggingSetupTests(unittest.TestCase):
+    def test_windows_log_file_does_not_require_a_writable_working_directory(self):
+        logger = logging.getLogger("test.windows.readonly")
+        file_handler = logging.FileHandler
+
+        def protected_directory(filename, *args, **kwargs):
+            if not Path(filename).is_absolute():
+                raise PermissionError("The installation directory is read-only")
+            return file_handler(filename, *args, **kwargs)
+
+        try:
+            with tempfile.TemporaryDirectory() as directory:
+                with patch("src.shared.logging_setup.sys.platform", "win32"), \
+                        patch("src.shared.logging_setup.shared_data_dir", return_value=Path(directory)), \
+                        patch("logging.FileHandler", side_effect=protected_directory):
+                    configure_app_logging(logger_name=logger.name, log_file="PornFetch.log")
+                    logger.warning("Startup from Explorer")
+                for handler in logger.handlers:
+                    handler.close()
+                self.assertIn("Startup from Explorer", (Path(directory) / "logs/PornFetch.log").read_text())
+        finally:
+            for handler in logger.handlers:
+                handler.close()
+            logger.handlers.clear()
+
     def test_invalid_windows_console_preserves_records_in_file(self):
         class BrokenConsole:
             def write(self, message):

@@ -64,7 +64,7 @@ from tnaflix_api import Client as tf_Client, Video as tf_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
 from src.shared.provider_routing import HOST_PATTERNS, ContentKind, eporner_video_id, resolve_video, route_url
-from src.shared.logging_setup import configure_app_logging
+from src.shared.logging_setup import configure_app_logging, log_file_path
 from src.shared.media import VideoObject
 from src.shared.tor_transport import MediaCore, FAIL_CLOSED_PROXY, all_traffic_enabled
 from src.shared.provider_parsing import parse_length, parse_publish_date
@@ -261,22 +261,22 @@ def refresh_clients() -> None:
 
     logger.info("Refreshing all clients!")
     level = logging.DEBUG if debug_mode else getattr(logging, app_settings.log_level_map.get(app_settings.log_level, "INFO"))
-    core.enable_logging(level=level, log_file="BaseCore.log" if debug_mode else None)
-    core_ep.enable_logging(level=level, log_file="BaseCore_EP.log" if debug_mode else None)
-    core_ph.enable_logging(level=level, log_file="BaseCore_PH.log" if debug_mode else None)
-    core_xv.enable_logging(level=level, log_file="BaseCore_XV.log" if debug_mode else None)
-    core_xh.enable_logging(level=level, log_file="BaseCore_XH.log" if debug_mode else None)
-    core_xn.enable_logging(level=level, log_file="BaseCore_XN.log" if debug_mode else None)
-    core_sp.enable_logging(level=level, log_file="BaseCore_SP.log" if debug_mode else None)
-    core_yp.enable_logging(level=level, log_file="BaseCore_YP.log" if debug_mode else None)
-    core_bg.enable_logging(level=level, log_file="BaseCore_BG.log" if debug_mode else None)
-    core_pt.enable_logging(level=level, log_file="BaseCore_PT.log" if debug_mode else None)
-    core_xf.enable_logging(level=level, log_file="BaseCore_XF.log" if debug_mode else None)
-    core_rt.enable_logging(level=level, log_file="BaseCore_RT.log" if debug_mode else None)
-    core_tu.enable_logging(level=level, log_file="BaseCore_Tu.log" if debug_mode else None)
-    core_th.enable_logging(level=level, log_file="BaseCore_TH.log" if debug_mode else None)
-    core_ef.enable_logging(level=level, log_file="BaseCore_EF.log" if debug_mode else None)
-    core_tf.enable_logging(level=level, log_file="BaseCore_TF.log" if debug_mode else None)
+    core.enable_logging(level=level, log_file=log_file_path("BaseCore.log") if debug_mode else None)
+    core_ep.enable_logging(level=level, log_file=log_file_path("BaseCore_EP.log") if debug_mode else None)
+    core_ph.enable_logging(level=level, log_file=log_file_path("BaseCore_PH.log") if debug_mode else None)
+    core_xv.enable_logging(level=level, log_file=log_file_path("BaseCore_XV.log") if debug_mode else None)
+    core_xh.enable_logging(level=level, log_file=log_file_path("BaseCore_XH.log") if debug_mode else None)
+    core_xn.enable_logging(level=level, log_file=log_file_path("BaseCore_XN.log") if debug_mode else None)
+    core_sp.enable_logging(level=level, log_file=log_file_path("BaseCore_SP.log") if debug_mode else None)
+    core_yp.enable_logging(level=level, log_file=log_file_path("BaseCore_YP.log") if debug_mode else None)
+    core_bg.enable_logging(level=level, log_file=log_file_path("BaseCore_BG.log") if debug_mode else None)
+    core_pt.enable_logging(level=level, log_file=log_file_path("BaseCore_PT.log") if debug_mode else None)
+    core_xf.enable_logging(level=level, log_file=log_file_path("BaseCore_XF.log") if debug_mode else None)
+    core_rt.enable_logging(level=level, log_file=log_file_path("BaseCore_RT.log") if debug_mode else None)
+    core_tu.enable_logging(level=level, log_file=log_file_path("BaseCore_Tu.log") if debug_mode else None)
+    core_th.enable_logging(level=level, log_file=log_file_path("BaseCore_TH.log") if debug_mode else None)
+    core_ef.enable_logging(level=level, log_file=log_file_path("BaseCore_EF.log") if debug_mode else None)
+    core_tf.enable_logging(level=level, log_file=log_file_path("BaseCore_TF.log") if debug_mode else None)
 
     cores_to_update = {
         core, core_ep, core_ph, core_xv, core_xh, core_xn, core_sp,

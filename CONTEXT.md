@@ -139,6 +139,10 @@ Before syncing Python dependencies, vswhere checks for a modern Microsoft C++
 compiler and Windows SDK for the selected Python architecture. Missing tools are
 installed with Visual Studio 2022 Build Tools; incomplete Build Tools installs
 are modified to add the C++ workload. Report required reboots without forcing one.
+Fresh Windows installer checkouts go under the user's profile, not the calling
+directory (administrator PowerShell often starts in System32). Application and
+provider debug log files go under shared user data/logs on Windows, so logging
+cannot require write access to a protected application/working folder.
 Windows FFmpeg notice collection reads zlib.h directly from the selected MSYS2
 Clang prefix. Do not launch bare pkg-config/cygpath with only a child env PATH:
 Windows CreateProcess resolves executable names against the parent's environment.
