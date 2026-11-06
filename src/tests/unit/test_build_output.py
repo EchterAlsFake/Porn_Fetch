@@ -1,4 +1,5 @@
 """Exercise real child output, retained logs and failure codes without compiling."""
+import importlib.util
 import io
 import os
 import subprocess
@@ -7,9 +8,10 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
 
-from scripts import build_output
+from scripts import build_output, build_terminal
 
 WRAPPER = Path(build_output.__file__)
 
@@ -106,6 +108,79 @@ print('compiler finished')
                     _, remaining = process.communicate(timeout=10)
                 self.assertEqual(process.returncode, 0, received + remaining)
                 self.assertIn("compiler finished", log.read_text())
+
+    @unittest.skipIf(sys.platform == "win32" and importlib.util.find_spec("winpty") is None,
+                     "Windows terminal builds need the desktop-build extra")
+    def test_terminal_mode_keeps_tty_and_carriage_returns_in_terminal_and_log(self):
+        class TerminalOutput(io.StringIO):
+            def isatty(self):
+                return True
+
+        code = "import sys; print('tty=' + str(sys.stdout.isatty() and sys.stderr.isatty())); " \
+               "sys.stdout.write('progress 25%\\rprogress 100%\\n'); sys.stdout.flush(); sys.exit(17)"
+        with tempfile.TemporaryDirectory() as directory, redirect_stderr(TerminalOutput()) as output:
+            log = Path(directory) / "progress.log"
+            with self.assertRaises(subprocess.CalledProcessError) as failure:
+                build_output.run([sys.executable, "-c", code], label="Progress", log_path=log, terminal=True)
+            self.assertEqual(failure.exception.returncode, 17)
+            self.assertIn("tty=True", output.getvalue())
+            self.assertIn("progress 25%\rprogress 100%", output.getvalue())
+            self.assertIn(b"progress 25%\rprogress 100%", log.read_bytes())
+
+    @unittest.skipUnless(importlib.util.find_spec("nuitka"), "Nuitka is needed for its native progress regression")
+    @unittest.skipIf(sys.platform == "win32" and importlib.util.find_spec("winpty") is None,
+                     "Windows terminal builds need the desktop-build extra")
+    def test_native_nuitka_compiler_progress_survives_log_capture(self):
+        class TerminalOutput(io.StringIO):
+            def isatty(self):
+                return True
+
+        code = """
+import time
+from nuitka.build.SconsProgress import (
+    enableSconsProgressBar, setSconsProgressBarTotal, updateSconsProgressBar,
+)
+enableSconsProgressBar('auto')
+setSconsProgressBarTotal('Backend', 10)
+for _ in range(10):
+    updateSconsProgressBar()
+    time.sleep(0.03)
+"""
+        with tempfile.TemporaryDirectory() as directory, redirect_stderr(TerminalOutput()) as output:
+            log = Path(directory) / "nuitka.log"
+            build_output.run([sys.executable, "-c", code], label="Nuitka", log_path=log, terminal=True)
+            self.assertIn("Backend C", output.getvalue())
+            self.assertRegex(output.getvalue(), r"\d+(?:\.\d+)?%")
+            self.assertIn(b"/10 files", log.read_bytes())
+            self.assertIn(b"Backend C linking", log.read_bytes())
+
+    def test_windows_conpty_quotes_arguments_retains_output_and_propagates_exit_code(self):
+        class WinptyError(Exception):
+            pass
+
+        terminal = Mock()
+        terminal.read.side_effect = ["compiler 50%\rcompiler 100%\r\n", WinptyError("end of terminal")]
+        terminal.iseof.return_value = True
+        terminal.isalive.return_value = False
+        terminal.get_exitstatus.return_value = 23
+        constructor = Mock(return_value=terminal)
+        modules = {"winpty": SimpleNamespace(PTY=constructor, WinptyError=WinptyError),
+                   "winpty.enums": SimpleNamespace(Backend=SimpleNamespace(ConPTY=0))}
+        with tempfile.TemporaryDirectory() as directory, redirect_stderr(io.StringIO()) as output:
+            log = Path(directory) / "windows.log"
+            with patch.dict(sys.modules, modules), patch.object(build_terminal.sys, "platform", "win32"), \
+                    patch.object(build_terminal.shutil, "which", return_value="C:\\Build Tools\\python.exe"):
+                result = build_terminal.run_terminal(
+                    ["python.exe", "module with spaces.py", "--mode=compile"], cwd=directory,
+                    environment={"PATH": "C:\\Build Tools", "BUILD_VALUE": "kept"}, log_path=log,
+                    on_silence=Mock(),
+                )
+            self.assertEqual(result, 23)
+            self.assertIn("compiler 50%\rcompiler 100%", output.getvalue())
+            self.assertIn(b"compiler 50%\rcompiler 100%", log.read_bytes())
+            self.assertEqual(terminal.spawn.call_args.kwargs["cmdline"], ' "module with spaces.py" --mode=compile')
+            self.assertIn("BUILD_VALUE=kept\0", terminal.spawn.call_args.kwargs["env"])
+            terminal.cancel_io.assert_called_once()
 
     def test_no_color_overrides_forced_color(self):
         with patch.dict(os.environ, {"FORCE_COLOR": "1"}), redirect_stderr(io.StringIO()) as output:

@@ -1,4 +1,4 @@
-"""Small, dependency-free console and subprocess helpers for build tools.
+"""Console and subprocess helpers for build tools.
 
 Can also wrap an external tool: python scripts/build_output.py --label Build -- command
 """
@@ -12,6 +12,9 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 def verbose() -> bool:
@@ -45,7 +48,8 @@ def detail(text: str) -> None:
         print(text, file=sys.stderr, flush=True)
 
 
-def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None) -> subprocess.CompletedProcess:
+def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None,
+        terminal: bool = False) -> subprocess.CompletedProcess:
     """Stream complete child output to the terminal and retain it on disk.
 
     Use only for unattended commands. Password prompts and other interactive
@@ -65,6 +69,18 @@ def run(command, *, label: str, cwd=None, env=None, log_path: Path | None = None
     started = time.monotonic()
     last_activity = started
     environment = dict(os.environ if env is None else env, PYTHONUNBUFFERED="1")
+    if terminal and (sys.stderr.isatty() or sys.stdin.isatty()):
+        from scripts.build_terminal import run_terminal
+
+        returncode = run_terminal(
+            command, cwd=cwd, environment=environment, log_path=log_path,
+            on_silence=lambda: message(f"{label}: still running ({int(time.monotonic() - started)}s)"),
+        )
+        if returncode:
+            message(f"{label} failed (exit {returncode}). Full log: {log_path}", "error")
+            raise subprocess.CalledProcessError(returncode, command)
+        message(f"{label} finished ({int(time.monotonic() - started)}s)", "ok")
+        return subprocess.CompletedProcess(command, returncode)
     with log_path.open("wb") as output, log_path.open(encoding="utf-8", errors="replace") as reader:
         with subprocess.Popen(command, cwd=cwd, env=environment, stdout=output, stderr=subprocess.STDOUT) as process:
             try:
@@ -104,6 +120,7 @@ def main() -> int:
     add_arguments(parser)
     parser.add_argument("--label", default="Build")
     parser.add_argument("--log-file", type=Path)
+    parser.add_argument("--terminal", action="store_true", help="preserve compiler progress bars in an interactive terminal")
     parser.add_argument("command", nargs=argparse.REMAINDER, help="command after --")
     args = parser.parse_args()
     configure(args)
@@ -111,7 +128,7 @@ def main() -> int:
     if not command:
         parser.error("a command is required after --")
     try:
-        run(command, label=args.label, log_path=args.log_file)
+        run(command, label=args.label, log_path=args.log_file, terminal=args.terminal)
     except subprocess.CalledProcessError as error:
         return error.returncode if error.returncode > 0 else 1
     except OSError as error:

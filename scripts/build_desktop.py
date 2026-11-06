@@ -95,7 +95,7 @@ def build(args: argparse.Namespace) -> Path:
             with spec.open("w") as stream:
                 config.write(stream)
             deploy = Path(sys.executable).parent / ("pyside6-deploy.exe" if sys.platform == "win32" else "pyside6-deploy")
-            python("scripts/build_output.py", "--label", "Compile desktop GUI", "--", deploy,
+            python("scripts/build_output.py", "--terminal", "--label", "Compile desktop GUI", "--", deploy,
                    "-c", spec, "-f", "-v", "--keep-deployment-files", "--no-install", "--nuitka-version", version("Nuitka"))
             executable = gui_payload(work)
             payload = work / ("Porn Fetch.app" if sys.platform == "darwin" else "Porn Fetch.dist")

@@ -181,6 +181,12 @@ under the system temporary directory in `porn-fetch-build-logs`. Each step print
 its log path. Silent steps report that they are still running every 60 seconds.
 Use `PORN_FETCH_BUILD_VERBOSE=1` for extra build and patch diagnostics; compiler
 output is visible without enabling it.
+Interactive GUI builds preserve a terminal connection for Nuitka, so its native
+module/C-compilation progress bars stay active while output is logged. Windows
+uses ConPTY through the `desktop-build` extra's pywinpty dependency; Unix uses a
+pseudo-terminal. Captured/noninteractive builds retain streaming text logs.
+Nuitka does not provide percentage progress during final C linking/LTO; that
+stage still reports the 60-second heartbeat when otherwise silent.
 
 The convenience scripts use this same builder:
 

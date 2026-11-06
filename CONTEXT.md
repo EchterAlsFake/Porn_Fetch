@@ -147,6 +147,11 @@ Windows CreateProcess resolves executable names against the parent's environment
 retaining the complete compiler log. Python children use unbuffered output, and
 silent steps emit a heartbeat every 60 seconds. Verbose mode adds diagnostics;
 FFmpeg and GUI compilation output must remain visible by default.
+Interactive desktop GUI compilation also passes `--terminal` to the wrapper.
+`build_terminal.py` uses Windows ConPTY (pywinpty, desktop-build only) or a Unix
+pseudo-terminal to preserve Nuitka's own TTY-detected progress bars and raw log
+control codes. Noninteractive output keeps the normal streaming path. Linking
+has no Nuitka percentage information; retain the silent-stage heartbeat.
 
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
