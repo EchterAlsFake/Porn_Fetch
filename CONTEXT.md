@@ -129,6 +129,10 @@ Python download catalog with `uv self update` and retry once.
 paths from platform templates, keeps the full deployment folder, assembles
 helper binaries and legal files, and checks startup. Existing outputs are not
 overwritten. Local builds have no publisher signature; macOS uses ad-hoc signing.
+Local macOS builds put `LEGAL/` and `LEGAL.zip` directly in `Contents/Resources`.
+License inventories have dotted distribution directories such as `boolean.py`;
+leaving those directories under `Contents/MacOS` makes codesign treat them as
+malformed nested bundles, even after individual files are relocated.
 See [installation](docs/INSTALLATION.md) and [release operations](docs/RELEASING.md).
 
 The Windows convenience script runs the uv installer in a child PowerShell so

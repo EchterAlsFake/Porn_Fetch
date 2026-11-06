@@ -1,5 +1,6 @@
 """Unit tests validating desktop deployment specifications and build scripts."""
 import configparser
+import plistlib
 import shutil
 import sys
 import tempfile
@@ -212,6 +213,64 @@ if __name__ == "__main__":
 
 
 class LocalDesktopBuilderTests(unittest.TestCase):
+    def test_macos_legal_inventory_is_kept_out_of_code_directories_before_signing(self):
+        from types import SimpleNamespace
+        from zipfile import ZipFile
+
+        from scripts import build_desktop
+        from scripts.macos_bundle import relocate_resources
+        from src.tests.unit.test_collect_legal import collect_legal
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "output/Porn Fetch.app"
+            vendor = root / "vendor"
+            metadata = vendor / "boolean_py-1.0.dist-info"
+            (metadata / "licenses").mkdir(parents=True)
+            (metadata / "METADATA").write_text("Name: boolean.py\nVersion: 1.0\nLicense: BSD-2-Clause\n")
+            (metadata / "licenses/LICENSE").write_text("boolean.py license fixture")
+            (metadata / "RECORD").write_text("boolean_py-1.0.dist-info/licenses/LICENSE,,\n")
+
+            def python(script, *arguments):
+                if script == "packaging/prepare_deploy.py":
+                    Path(arguments[arguments.index("--output") + 1]).write_text("[app]\n")
+                elif script == "scripts/build_output.py":
+                    config = configparser.ConfigParser()
+                    config.read(arguments[arguments.index("-c") + 1])
+                    app = Path(config["app"]["exec_directory"]) / "Porn Fetch.app"
+                    macos = app / "Contents/MacOS"
+                    macos.mkdir(parents=True)
+                    (macos / "main").write_bytes(bytes.fromhex("cffaedfe") + b"compiled app fixture")
+                    with (app / "Contents/Info.plist").open("wb") as stream:
+                        plistlib.dump({"CFBundleExecutable": "main"}, stream)
+                elif script == "packaging/collect_legal.py":
+                    collect_legal.collect_legal(Path(arguments[0]), offline=True, distribution_paths=[vendor])
+                elif script == "packaging/repair_macos_bundle.py":
+                    app = Path(arguments[0])
+                    relocate_resources(app)
+                    self.assertFalse((app / "Contents/MacOS/LEGAL").exists())
+                    self.assertFalse((app / "Contents/MacOS/LEGAL.zip").exists())
+                    notice = app / "Contents/Resources/LEGAL/python/boolean.py/LICENSE"
+                    self.assertEqual(notice.read_text(), "boolean.py license fixture")
+                    self.assertFalse(notice.is_symlink())
+
+            args = SimpleNamespace(output=output, target="gui", without_pocketbase=True,
+                                   without_ffmpeg=True, without_tor=True)
+            with patch.object(build_desktop, "ROOT", root), \
+                    patch.object(build_desktop.sys, "platform", "darwin"), \
+                    patch.object(build_desktop.platform, "machine", return_value="x86_64"), \
+                    patch.object(build_desktop, "check_environment"), \
+                    patch.object(build_desktop, "version", return_value="4.3.3"), \
+                    patch.object(build_desktop, "python", side_effect=python) as execute, \
+                    patch.object(build_desktop, "run") as smoke:
+                self.assertEqual(build_desktop.build(args), output)
+            self.assertTrue(any(call.args[0] == "packaging/repair_macos_bundle.py" for call in execute.call_args_list))
+            smoke.assert_called_once()
+            with ZipFile(output / "Contents/Resources/LEGAL.zip") as archive:
+                self.assertEqual(archive.read("python/boolean.py/LICENSE"), b"boolean.py license fixture")
+            self.assertEqual((output / "Contents/Resources/LEGAL/python/boolean.py/LICENSE").read_text(),
+                             "boolean.py license fixture")
+
     def test_alpha_python_stops_before_downloading_helpers(self):
         from types import SimpleNamespace
 

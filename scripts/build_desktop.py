@@ -125,7 +125,10 @@ def build(args: argparse.Namespace) -> Path:
         shutil.copytree(tools, runtime / "third_party", dirs_exist_ok=True)
         if args.target == "gui" and not args.without_tor and (ROOT / "src/shared/tor").is_dir():
             shutil.copytree(ROOT / "src/shared/tor", runtime / "src/shared/tor", dirs_exist_ok=True)
-        legal_args = ["packaging/collect_legal.py", runtime / "LEGAL", "--offline"]
+        # Legal inventories use distribution names such as "boolean.py" as
+        # directories. In MacOS, codesign mistakes those for nested code bundles.
+        legal_root = payload / "Contents/Resources" if args.target == "gui" and target == "macos" else runtime
+        legal_args = ["packaging/collect_legal.py", legal_root / "LEGAL", "--offline"]
         if not args.without_ffmpeg:
             legal_args.extend(["--ffmpeg-legal", tools / "ffmpeg-legal"])
         python(*legal_args)

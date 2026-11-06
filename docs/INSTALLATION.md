@@ -176,6 +176,10 @@ It keeps the whole application folder. Default output:
 - Linux/Windows: `dist/local-gui/`
 - macOS: `dist/local-gui/Porn Fetch.app`
 
+Local macOS notices are in `Contents/Resources/LEGAL/` and `LEGAL.zip`, before
+the final ad-hoc signature is created. Their distribution directories can have
+dotted names such as `boolean.py`, which codesign rejects under `Contents/MacOS`.
+
 Run `Porn Fetch` or `Porn Fetch.exe` inside that folder, or open the macOS app.
 An offscreen check on Linux/Windows does not replace testing your real desktop.
 The macOS check uses Cocoa.
