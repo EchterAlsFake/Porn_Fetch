@@ -1761,7 +1761,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+219"/>
+        <location filename="../../../backend/update_service.py" line="+234"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>

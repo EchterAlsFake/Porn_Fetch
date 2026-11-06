@@ -25,15 +25,18 @@ class TorServiceFailure(TorUnavailable):
     """A failure on the app-owned service route, never a media-provider error."""
 
 
-def service_failure_message(kind):
+def service_failure_message(kind, *, detail=""):
     if kind == "missing":
         return TOR_BINARY_MISSING_MESSAGE
-    detail = {
+    message = {
         "bootstrap": "Tor could not start or connect for Porn Fetch updates and licensing.",
         "connection": "Porn Fetch's update or licensing server could not be reached through Tor. The onion service or Tor connection may be unavailable.",
         "server": "Porn Fetch's update or licensing server returned a temporary error over Tor. Tor itself may still be connected.",
+        "metadata": "Porn Fetch's update server did not return readable signed update metadata over Tor. The onion gateway or update repository may be misconfigured. No update was installed.",
     }[kind]
-    return (detail + "\n\nNo direct connection was attempted. Retry, or turn off Tor by selecting Off under "
+    if detail:
+        message += "\n\n" + detail
+    return (message + "\n\nNo direct connection was attempted. Retry, or turn off Tor by selecting Off under "
             "Tor routing in Privacy settings and retry using a direct connection.\n\n"
             "If All app traffic is selected, video downloads and third-party websites also require Tor.")
 
@@ -62,8 +65,8 @@ class ServicePolicy:
         self._qt_mode = "tor" if value == "tor_all" else value
         self.last_failure = ""
 
-    def failed(self, kind):
-        message = service_failure_message(kind)
+    def failed(self, kind, *, detail=""):
+        message = service_failure_message(kind, detail=detail)
         self.last_failure = message
         if failure_listener is not None:
             try:
@@ -146,10 +149,11 @@ class ServiceCore(BaseCore):
         self.initialize_session()
         assert self.session is not None
         # Explicit request options prevent session/environment proxy inheritance.
+        # HTTP onion requests must not send h2c upgrades to an HTTPS gateway.
         try:
             response = await self.session.request(method=method, url=routed, headers=headers, json=json_data,
                                                  timeout=timeout, allow_redirects=False, verify=True,
-                                                 proxy=proxy or "")
+                                                 proxy=proxy or "", http_version="v1" if proxy else "v2")
         except NETWORK_ERRORS as error:
             if proxy:
                 raise self.policy.failed("connection") from error

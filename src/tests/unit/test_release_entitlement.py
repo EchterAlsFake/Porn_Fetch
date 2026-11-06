@@ -105,6 +105,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             patch("src.backend.update_service.ROOT_FILE", self.root),
             patch("src.backend.update_service.__version__", "3.9.0"),
             patch("src.backend.update_service.service_core.request", new=AsyncMock(return_value=SimpleNamespace(
+                status_code=200,
                 content=(self.repo / "release.json").read_bytes(),
             ))),
             patch("src.backend.update_service.service_core.fetch_bytes", new=AsyncMock(

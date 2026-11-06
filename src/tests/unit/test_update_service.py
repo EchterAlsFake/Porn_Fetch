@@ -59,6 +59,34 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_tor_metadata_errors_report_the_response_without_unsigned_fallback(self):
+        from src.shared.service_transport import ServicePolicy, TorServiceFailure
+
+        for status in (302, 404, 502, 200):
+            with self.subTest(status=status):
+                policy = ServicePolicy(SimpleNamespace(service_transport="tor"))
+                core = SimpleNamespace(
+                    tor_enabled=True, policy=policy,
+                    request=AsyncMock(return_value=SimpleNamespace(
+                        status_code=status, content=b"" if status == 502 else b"<html>Not an update manifest</html>",
+                        headers={"Content-Type": "text/html"},
+                    )),
+                )
+                with patch("src.backend.update_service.service_core", core), \
+                     patch("src.backend.update_service.QFile") as resource, \
+                     patch.object(CheckUpdates, "check_via_http", new=AsyncMock()) as fallback, \
+                     patch("src.shared.service_transport.failure_listener") as notice:
+                    resource.return_value.exists.return_value = False
+                    with self.assertRaises(TorServiceFailure) as raised:
+                        await CheckUpdates.check()
+                self.assertIn("signed update metadata over Tor", str(raised.exception))
+                self.assertIn("No direct connection was attempted", str(raised.exception))
+                if status != 200:
+                    self.assertIn(f"HTTP {status}", str(raised.exception))
+                self.assertEqual(notice.call_args.args[0], str(raised.exception))
+                fallback.assert_not_awaited()
+                core.request.assert_awaited_once()
+
     async def test_missing_tor_update_failure_preserves_reason_without_stacking_dialogs(self):
         from src.backend.application import Backend
         from src.shared.service_transport import TorServiceFailure

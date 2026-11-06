@@ -14,6 +14,7 @@ from urllib.parse import quote
 
 from curl_cffi import Response
 from PySide6.QtCore import QCoreApplication, QFile, QIODevice, QObject, Signal
+from tuf.api.serialization import DeserializationError
 
 from src.backend import clients
 from src.backend.helper_functions import get_original_executable_path
@@ -29,6 +30,12 @@ DEFAULT_UPDATE_URL = "https://api.pornfetch.to/update"
 UPDATE_URL_ENVIRONMENT_VARIABLE = "PORNFETCH_UPDATE_URL"
 DEFAULT_REPO_BASE_URL = "https://api.pornfetch.to/repo"
 service_core = ServiceCore(clients.app_settings)
+
+
+def _metadata_error(message):
+    if service_core.tor_enabled:
+        return service_core.policy.failed("metadata", detail=message)
+    return ValueError(message)
 
 
 def get_update_url() -> str:
@@ -98,6 +105,8 @@ class CheckUpdates:
         tag = platform.system().lower() + "_" + {"x86_64": "amd64", "x64": "amd64", "aarch64": "arm64"}.get(platform.machine().lower(), platform.machine().lower())
         url = DEFAULT_REPO_BASE_URL + "/" + tag + "/"
         response = await service_core.request(url=url + "release.json", allow_redirects=False)
+        if response.status_code != 200:
+            raise _metadata_error(f"The update metadata request returned HTTP {response.status_code}; expected HTTP 200.")
         resource = QFile(":/updates/root.json")
         if resource.exists():
             if not resource.open(QIODevice.OpenModeFlag.ReadOnly):
@@ -108,7 +117,13 @@ class CheckUpdates:
                 resource.close()
         else:
             root_bytes = ROOT_FILE.read_bytes()
-        metadata, release = verify_repository_manifest(response.content, root_bytes, tag)
+        try:
+            metadata, release = verify_repository_manifest(response.content, root_bytes, tag)
+        except DeserializationError as error:
+            content_type = response.headers.get("Content-Type", "unspecified")
+            logger.error("Unreadable signed update metadata from %s (HTTP %s, Content-Type %s)",
+                         url + "release.json", response.status_code, content_type)
+            raise _metadata_error("The update server returned a response that could not be read as signed JSON metadata.") from error
         if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
             return None
         if changelog_path := release.get("changelog_path"):

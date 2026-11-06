@@ -234,6 +234,7 @@ class AsyncRoutingTests(unittest.IsolatedAsyncioTestCase):
         self.assertIs(result, response)
         options = core.session.request.call_args.kwargs
         self.assertEqual(options["proxy"], "socks5h://127.0.0.1:12345")
+        self.assertEqual(options["http_version"], "v1")
         self.assertFalse(options["allow_redirects"])
         self.assertTrue(options["verify"])
         core.session = None
