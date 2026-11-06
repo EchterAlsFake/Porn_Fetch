@@ -42,6 +42,7 @@ ApplicationWindow {
         property bool accountFetchInProgress: false
         property var accountLoginStatus: ({"PornHub": true})
         property var downloads: sampleModel
+        function highlight_title_format(document, dark, highContrast) {}
     }
     PAGE
 }

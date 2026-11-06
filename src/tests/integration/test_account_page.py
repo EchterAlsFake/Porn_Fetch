@@ -68,6 +68,10 @@ class RecordingAccountBridge(QObject):
     def fetch_account_videos(self, provider, collection, url):
         self.fetches.append((provider, collection, url))
 
+    @Slot(QObject, bool, bool)
+    def highlight_title_format(self, document, dark, high_contrast):
+        pass
+
     def set_state(self, *, provider=None, logged=None, login=False, fetch=False):
         if provider is not None:
             self.status = dict(self.status, **{provider: logged})

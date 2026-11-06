@@ -223,7 +223,7 @@ ApplicationWindow {
         source = (UI / "SettingsPage.qml").read_text() + (UI / "TorRouting.qml").read_text()
         named = set(re.findall(r'objectName:\s*"([^"]+)"', source))
         covered = {setting.control for setting in SETTINGS}
-        ancillary = {"settingsStack", "outputFolderDialog", "pocketbaseFolderDialog", "torStatusLabel",
+        ancillary = {"settingsStack", "settingsRestartNotice", "outputFolderDialog", "pocketbaseFolderDialog", "torStatusLabel",
                      "torAllTrafficWarning", "resetSettingsButton", "guiLanguageComboBox",
                      "manageInstallationButton", "uninstallButton"}
         require(not (named - covered - ancillary), f"Settings inventory has uncovered controls: {named - covered - ancillary}")

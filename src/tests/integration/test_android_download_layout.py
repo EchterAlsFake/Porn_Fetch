@@ -67,6 +67,7 @@ ApplicationWindow {
  property QtObject backend: QtObject {
  property bool busy: false
  property var downloads: sampleModel
+ function highlight_title_format(document, dark, highContrast) {}
  }
 
  AndroidDownloadsPage { id: page; objectName: "page"; anchors.fill: parent }

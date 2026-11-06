@@ -271,6 +271,7 @@ def make_test_backend(*, premium=False):
     QObject.__init__(backend)
     backend._license_bridge = DiagnosticLicense(isPremium=premium)
     backend._input_errors = {}
+    backend._title_highlighters = {}
     backend._prepared_items = 0
     backend._preparation_had_errors = False
     backend.notifications = NotificationCenter(app_settings, backend)

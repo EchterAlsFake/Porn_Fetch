@@ -28,7 +28,7 @@ class EditorBackend(QObject):
 
 class TitleFormattingTests(unittest.TestCase):
     def test_typing_highlights_tokens_without_changing_the_template(self):
-        app = QGuiApplication.instance() or QGuiApplication([])
+        self.app = QGuiApplication.instance() or QGuiApplication([])
         backend = EditorBackend()
         engine = QQmlApplicationEngine()
         engine.rootContext().setContextProperty("backend", backend)
