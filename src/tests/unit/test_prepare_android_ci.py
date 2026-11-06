@@ -37,6 +37,7 @@ class AndroidCIPreparationTests(unittest.TestCase):
             self.assertEqual(build["app"]["version"], "3.9.77")
             self.assertEqual(build["app"]["android.archs"], "x86")
             self.assertEqual(build["app"]["android.api"], "36")
+            self.assertEqual(build["app"]["android.ant_path"], "/usr/share/ant")
             self.assertNotIn("android.add_jars", build["app"])
             self.assertEqual(build["buildozer"]["bin_dir"], str(project))
             self.assertNotIn("/home/asuna/", str(dict(build["app"])))

@@ -177,6 +177,8 @@ has no Nuitka percentage information; retain the silent-stage heartbeat.
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
 Android uses Qt/PySide 6.12.0 cp315 wheels, target Python 3.15.2 and NDK r28c.
+Android CI installs Ubuntu's Ant package and sets `android.ant_path` to
+`/usr/share/ant`, avoiding Buildozer's legacy Ant 1.9.4 archive download.
 The wrapper regenerates machine paths and patches Qt's preload library names
 for Android 13. All four Python 3.15 CI targets built on 2026-11-03; physical
 device startup of those artifacts was not established by that build result.
