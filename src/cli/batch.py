@@ -73,8 +73,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--error-reporting",
         action=argparse.BooleanOptionalAction,
         default=None,
-        help="enable or disable automatic reports containing full Python tracebacks and video URLs; remember the choice",
+        help="enable or disable private automatic error reports; remember the choice",
     )
+    parser.add_argument("--error-reporting-full-traceback", action=argparse.BooleanOptionalAction, default=None,
+                        help="explicitly include or exclude Python tracebacks and video URLs in reports")
     parser.add_argument("--add-model-to-database", action="append", default=[], metavar="URL")
     parser.add_argument("--remove-model-from-database", action="append", default=[], metavar="URL")
     parser.add_argument("--update-pending-urls", action="store_true")
@@ -193,9 +195,13 @@ async def run_batch(args: argparse.Namespace) -> int:
     store = SettingsStore()
     persisted = store.load()
     explicit_reporting_choice = getattr(args, "error_reporting", None)
-    if explicit_reporting_choice is not None:
+    traceback_choice = getattr(args, "error_reporting_full_traceback", None)
+    if explicit_reporting_choice is not None or traceback_choice is not None:
         persisted = persisted.overridden(
-            error_reporting=explicit_reporting_choice,
+            error_reporting=(explicit_reporting_choice if explicit_reporting_choice is not None
+                             else persisted.error_reporting or traceback_choice is True),
+            error_reporting_full_traceback=(traceback_choice if traceback_choice is not None
+                                            else persisted.error_reporting_full_traceback),
             error_reporting_decided=True,
             error_reporting_consent_version=ERROR_REPORT_CONSENT_VERSION,
         )
@@ -329,6 +335,7 @@ async def run_batch(args: argparse.Namespace) -> int:
                     location="src.cli.batch.run_batch",
                     context={"source_url": source_url},
                     enabled=settings.error_reporting,
+                    include_traceback=settings.error_reporting_full_traceback,
                 )
                 print(f"Failed: {source_url}: {error} [error {report_id}]", file=sys.stderr)
                 if not args.ignore_errors:
@@ -374,6 +381,7 @@ async def _scan_model(
             location="src.cli.batch._scan_model",
             context={"model_url": model_url},
             enabled=settings.error_reporting,
+            include_traceback=settings.error_reporting_full_traceback,
         )
         print(f"Failed to scan {model_url}: {error} [error {report_id}]", file=sys.stderr)
         if not ignore_errors:
@@ -415,6 +423,7 @@ async def _download_url(
                     location="src.cli.batch._download_url",
                     context={"source_url": url, "provider": route.provider},
                     enabled=settings.error_reporting,
+                    include_traceback=settings.error_reporting_full_traceback,
                 )
             await record_cli_download(
                 settings,
@@ -438,6 +447,7 @@ async def _download_url(
             location="src.cli.batch._download_url",
             context={"video_url": url},
             enabled=settings.error_reporting,
+            include_traceback=settings.error_reporting_full_traceback,
         )
         print(f"Failed: {url}: {error} [error {report_id}]", file=sys.stderr)
         return False
@@ -500,6 +510,7 @@ async def _download_prepared(
                     "provider": type(getattr(media, "source_video", None)).__module__,
                 },
                 enabled=settings.error_reporting,
+                include_traceback=settings.error_reporting_full_traceback,
             )
             print(f"Metadata warning for {media.title}: {error} [error {report_id}]", file=sys.stderr)
     print(f"\n{result.status}: {media.title}")
@@ -522,6 +533,7 @@ async def _download_prepared(
                 "quality": quality,
             },
             enabled=settings.error_reporting,
+            include_traceback=settings.error_reporting_full_traceback,
         )
     return result.status == "completed"
 

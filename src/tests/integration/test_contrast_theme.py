@@ -50,7 +50,7 @@ def next_case():
     try:
         dark, contrast = next(cases)
     except StopIteration:
-        verify_flags()
+        verify_brightness()
         return
     state.update(dark=dark, contrast=contrast)
     app_settings.dark_mode = dark
@@ -80,6 +80,27 @@ def verify_case():
         assert application.app.palette().color(QPalette.Window).name() == base
         assert application.app.palette().color(QPalette.HighlightedText).name() == selected
     single_shot(30, checked(next_case))
+
+def verify_brightness():
+    app_settings.dark_mode = False
+    app_settings.high_contrast = False
+    app_settings.light_theme_brightness = 80
+    single_shot(100, checked(verify_dimmed))
+
+def verify_dimmed():
+    window = application.engine.rootObjects()[-1]
+    assert window.property('background').property('color').name() == '#cccccc'
+    assert application.app.palette().color(QPalette.Window).name() == '#cccccc'
+    assert application.app.palette().color(QPalette.Base).name() == '#cccccc'
+    assert window.findChild(QObject, 'statisticsPage').property('cardColor').name() == '#cccccc'
+    slider = window.findChild(QObject, 'lightThemeBrightnessSlider')
+    assert slider.property('value') == 80
+    assert slider.property('enabled')
+    app_settings.high_contrast = True
+    assert not slider.property('enabled')
+    assert window.property('background').property('color').name() == '#ffffff'
+    app_settings.light_theme_brightness = 100
+    verify_flags()
 
 def verify_flags():
     window = application.engine.rootObjects()[-1]

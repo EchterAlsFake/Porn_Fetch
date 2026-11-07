@@ -131,7 +131,7 @@ Pane {
                 onClicked: mobileActions.open()
                 Menu {
                     id: mobileActions
-                    MenuItem { text: qsTr("Purchase / renew license"); onTriggered: Qt.openUrlExternally("https://pornfetch.to/") }
+                    MenuItem { text: qsTr("Get lifetime Premium"); onTriggered: Qt.openUrlExternally("https://pornfetch.to/") }
                     MenuItem { text: qsTr("Import License File"); onTriggered: mobileLicenseDialog.open() }
                     MenuItem { text: qsTr("Reset settings"); onTriggered: backend.reset_pornfetch() }
                     MenuItem { text: qsTr("Clear temporary files"); onTriggered: backend.clear_temporary_files() }
@@ -915,13 +915,27 @@ Pane {
                             }
                             CheckBox {
                                 objectName: "enableLoggingCheckBox"
-                                Accessible.name: qsTr("Send tracebacks and video URLs")
+                                Accessible.name: qsTr("Send private error reports")
                                 Accessible.description: backend.errorReportDisclosure
                                 // Use \n for multi-line text
-                                text: qsTr("Send tracebacks and video URLs")
+                                text: qsTr("Send private error reports")
                                 Layout.fillWidth: true
                                 checked: appSettings.enable_logging
                                 onToggled: appSettings.enable_logging  = checked
+                            }
+                            HelpButton {
+                                Layout.fillWidth: false
+                                helpText: backend.errorReportDisclosure
+                            }
+                            CheckBox {
+                                objectName: "reportTracebacksCheckBox"
+                                Accessible.name: qsTr("Include full Python tracebacks and video URLs")
+                                Accessible.description: backend.errorReportDisclosure
+                                text: qsTr("Include full Python tracebacks and video URLs")
+                                Layout.fillWidth: true
+                                enabled: appSettings.enable_logging
+                                checked: appSettings.error_reporting_full_traceback
+                                onToggled: appSettings.error_reporting_full_traceback = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -1286,17 +1300,6 @@ Pane {
                                 wrapMode: Text.WordWrap
                                 text: qsTr("Porn Fetch is English-only. Translations are not available yet.")
                             }
-                            Label { text: qsTr("Accessibility") }
-                            CheckBox {
-                                text: qsTr("Reduce motion")
-                                checked: appSettings.reduced_motion
-                                onToggled: appSettings.reduced_motion = checked
-                            }
-                            CheckBox {
-                                text: qsTr("High contrast")
-                                checked: appSettings.high_contrast
-                                onToggled: appSettings.high_contrast = checked
-                            }
                             HelpButton {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.fontSizeHelp
@@ -1336,6 +1339,27 @@ Pane {
                                 Layout.alignment: Qt.AlignLeft
                                 checked: appSettings.dark_mode
                                 onToggled: appSettings.dark_mode = checked
+                            }
+
+                            LightThemeBrightness {
+                                Layout.columnSpan: window.compact ? 1 : 3
+                                Layout.fillWidth: true
+                            }
+                            Label {
+                                Layout.columnSpan: window.compact ? 1 : 3
+                                text: qsTr("Theme accessibility")
+                            }
+                            CheckBox {
+                                Layout.columnSpan: window.compact ? 1 : 3
+                                text: qsTr("High contrast")
+                                checked: appSettings.high_contrast
+                                onToggled: appSettings.high_contrast = checked
+                            }
+                            CheckBox {
+                                Layout.columnSpan: window.compact ? 1 : 3
+                                text: qsTr("Reduce motion")
+                                checked: appSettings.reduced_motion
+                                onToggled: appSettings.reduced_motion = checked
                             }
 
                             HelpButton {
@@ -1404,13 +1428,13 @@ Pane {
                 spacing: 10
 
                 AppButton {
-                    Accessible.name: qsTr("Purchase / renew license")
+                    Accessible.name: qsTr("Get lifetime Premium")
                     Layout.fillWidth: true
                     // Material styling overrides for specific buttons to make them stand out
                     Material.background: "#6366f1" // Premium Indigo color
                     Material.foreground: "white"   // White text
                     font.bold: true // Make text bold
-                    text: qsTr("Purchase / renew license")
+                    text: qsTr("Get lifetime Premium")
 
                     onClicked: {
                         Qt.openUrlExternally("https://pornfetch.to/")

@@ -363,9 +363,9 @@ Dialog {
                         Label { text: qsTr("SSL status") }
                         Label { text: root.stats.sslStatus || qsTr("Unknown"); font.bold: true }
                         Label { text: qsTr("HTTP status") }
-                        Label { text: root.stats.statusCode || "—"; font.bold: true }
+                        Label { text: root.stats.statusCode || "-"; font.bold: true }
                         Label { text: qsTr("Remote IP") }
-                        Label { text: root.stats.remoteIp || "—"; font.bold: true }
+                        Label { text: root.stats.remoteIp || "-"; font.bold: true }
                     }
                 }
             }

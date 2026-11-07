@@ -38,8 +38,9 @@ ApplicationWindow {
     title: qsTr("Video Downloader")
     property alias safeToClose: shutdownController.safeToClose
     property bool startupContinued: false
+    readonly property bool onboardingActive: setupWizard.active
 
-    ServiceTorFailureDialog { presentationBlocked: !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided }
+    ServiceTorFailureDialog { presentationBlocked: window.onboardingActive }
 
     ActivityEdge {
         objectName: "activityEdge"
@@ -55,40 +56,24 @@ ApplicationWindow {
     function continueStartup() {
         if (startupContinued)
             return
+        if (appSettings.smoke_test || !appSettings.setup_completed) return
         startupContinued = true
+        backend.start_configured_services()
         if (appSettings.update_checks)
             backend.check_for_updates_background()
     }
 
-    function beginOnboarding() {
-        if (!licenseOfferDialog.presentOnce())
-            continueAfterLicenseOffer()
-    }
+    Component.onCompleted: Qt.callLater(function() {
+        if (!setupWizard.begin()) window.continueStartup()
+    })
 
-    function continueAfterLicenseOffer() {
-        if (!ukraineMessageDialog.presentOnce())
-            continueAfterPersonalMessage()
-    }
-
-    function continueAfterPersonalMessage() {
-        if (appSettings.error_reporting_decided)
-            continueStartup()
-        else
-            Qt.callLater(function() { errorReportingDialog.open() })
-    }
-
-    Component.onCompleted: Qt.callLater(window.beginOnboarding)
-
-    LicenseOfferDialog {
-        id: licenseOfferDialog
+    FirstRunSetup {
+        id: setupWizard
         settings: appSettings
-        onDismissed: window.continueAfterLicenseOffer()
-    }
-
-    UkraineMessageDialog {
-        id: ukraineMessageDialog
-        settings: appSettings
-        onDismissed: window.continueAfterPersonalMessage()
+        licenseText: applicationLicenseText
+        reportDisclosure: backend.errorReportDisclosure
+        onFinished: window.continueStartup()
+        onQuitRequested: backend.initiate_shutdown()
     }
 
     ApplicationShutdown {
@@ -136,126 +121,6 @@ ApplicationWindow {
             updateDialog.updateInProgress = false
         }
 
-    }
-
-    Dialog {
-        id: errorReportingDialog
-        ContrastPopupBackground { popup: errorReportingDialog }
-
-        parent: Overlay.overlay
-        anchors.centerIn: parent
-        width: Math.min(window.width - 48, 900)
-        height: Math.min(window.height - 48, 680)
-        modal: true
-        padding: 20
-        closePolicy: Popup.NoAutoClose
-
-        background: Rectangle {
-            radius: 12
-            color: Theme.surface
-            border.color: Theme.outline
-            border.width: 1
-        }
-
-        contentItem: ColumnLayout {
-            spacing: 14
-
-            Label {
-                Layout.fillWidth: true
-                text: qsTr("Help improve Porn Fetch after errors?")
-                color: Theme.accent
-                font.pixelSize: 24 * appSettings.font_size / 12
-                font.bold: true
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Label {
-                Layout.fillWidth: true
-                text: qsTr("Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.")
-                color: Theme.ink
-                font.bold: true
-                wrapMode: Text.Wrap
-            }
-
-            SmoothScrollView {
-                id: consentScroll
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
-                contentWidth: availableWidth
-                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-                ColumnLayout {
-                    width: consentScroll.availableWidth
-                    spacing: 12
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: backend.errorReportDisclosure
-                        textFormat: Text.PlainText
-                        color: Theme.ink
-                        wrapMode: Text.Wrap
-                    }
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Synthetic example of a stored report:")
-                        color: Theme.accent
-                        font.bold: true
-                    }
-
-                    Rectangle {
-                        Layout.fillWidth: true
-                        implicitHeight: exampleText.contentHeight + 24
-                        radius: 6
-                        color: Theme.surface
-                        border.color: Theme.outline
-
-                        TextEdit {
-                            id: exampleText
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.margins: 12
-                            height: contentHeight
-                            text: backend.errorReportExample
-                            textFormat: TextEdit.PlainText
-                            color: Theme.ink
-                            font.family: "monospace"
-                            font.pixelSize: 12 * appSettings.font_size / 12
-                            readOnly: true
-                            selectByMouse: true
-                            wrapMode: TextEdit.Wrap
-                        }
-                    }
-                }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 10
-
-                Item { Layout.fillWidth: true }
-
-                AppButton {
-                    text: qsTr("No, keep disabled")
-                    onClicked: {
-                        appSettings.set_error_reporting_consent(false)
-                        errorReportingDialog.close()
-                        window.continueStartup()
-                    }
-                }
-
-                AppButton {
-                    text: qsTr("Yes, enable reports")
-                    onClicked: {
-                        appSettings.set_error_reporting_consent(true)
-                        errorReportingDialog.close()
-                        window.continueStartup()
-                    }
-                }
-            }
-        }
     }
 
     Dialog {
@@ -373,15 +238,16 @@ ApplicationWindow {
                         id: changelogText
                         objectName: "updateChangelogText"
                         Layout.fillWidth: true
-                        // A bounded plain-text reader avoids the Qt Quick batch
-                        // renderer crash with long rich-text release notes.
-                        text: backend.release_notes_text(updateDialog.changelog, updateDialog.changelogFormat)
+                        text: updateDialog.changelog
                         color: Theme.ink
-                        textFormat: Text.PlainText
+                        textFormat: updateDialog.changelogFormat === "markdown" ? TextEdit.MarkdownText : TextEdit.RichText
+                        // Use native glyph rendering for long formatted notes.
+                        renderType: TextEdit.NativeRendering
                         readOnly: true
                         selectByMouse: true
-                        wrapMode: Text.Wrap
+                        wrapMode: TextEdit.Wrap
                         background: null
+                        onLinkActivated: (link) => Qt.openUrlExternally(link)
                     }
                 }
             }
@@ -453,6 +319,8 @@ ApplicationWindow {
     }
 
     ColumnLayout {
+        visible: !window.onboardingActive
+        enabled: visible
         anchors.fill: parent
         anchors.margins: 8
         spacing: 6
@@ -510,9 +378,17 @@ ApplicationWindow {
                     display: AbstractButton.IconOnly
                 }
 
+                TabButton {
+                    objectName: "downloadManagerTab"
+                    text: qsTr("Manager")
+                    Accessible.name: qsTr("Download manager")
+                    ToolTip.visible: hovered
+                    ToolTip.text: Accessible.name
+                }
+
             }
             NotificationPanel {
-                blocked: !appSettings.license_offer_seen || licenseOfferDialog.visible || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible || !appSettings.error_reporting_decided
+                blocked: window.onboardingActive
             }
             AppButton {
                 text: qsTr("SUPPORTED WEBSITES")
@@ -554,6 +430,7 @@ ApplicationWindow {
                 }
 
             }
+            DownloadManagerPage {}
         }
     }
 }

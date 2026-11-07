@@ -59,6 +59,50 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_component_manager_stages_current_repository_before_ifw_launch(self):
+        shutdown = MagicMock()
+        updater = AutoUpdater(request_shutdown=shutdown)
+        update = {"version": "3.9"}
+        with patch("src.backend.update_service.find_maintenance_tool", return_value=Path("/tool")), \
+                patch.object(CheckUpdates, "check_signed_repository", AsyncMock(return_value=update)) as check, \
+                patch.object(updater, "_stage_repository", AsyncMock(return_value=Path("/verified"))) as stage, \
+                patch("src.backend.update_service.subprocess.Popen") as launch:
+            await updater.run("components")
+        check.assert_awaited_once_with(include_current=True)
+        stage.assert_awaited_once_with(update)
+        self.assertEqual(launch.call_args.args[0], [
+            "/tool", "--start-package-manager", "--set-temp-repository", Path("/verified").as_uri(), "--no-proxy",
+        ])
+        shutdown.assert_called_once()
+
+    async def test_component_preparation_failure_never_launches_ifw_or_closes_app(self):
+        from src.shared.tor_runtime import TorUnavailable
+
+        shutdown = MagicMock()
+        updater = AutoUpdater(request_shutdown=shutdown)
+        with patch("src.backend.update_service.find_maintenance_tool", return_value=Path("/tool")), \
+                patch.object(CheckUpdates, "check_signed_repository", AsyncMock(side_effect=TorUnavailable("offline"))), \
+                patch("src.backend.update_service.subprocess.Popen") as launch:
+            await updater.run("components")
+        launch.assert_not_called()
+        shutdown.assert_not_called()
+
+    async def test_component_discovery_accepts_current_version_but_rejects_older_repository(self):
+        release = {"version": "3.9"}
+        core = SimpleNamespace(request=AsyncMock(return_value=SimpleNamespace(status_code=200, content=b"signed")))
+        with patch("src.backend.update_service.service_core", core), \
+                patch("src.backend.update_service.QFile") as resource, \
+                patch("src.backend.update_service.ROOT_FILE") as root, \
+                patch("src.backend.update_service.__version__", "3.9.0"), \
+                patch("src.backend.update_service.verify_repository_manifest", return_value=(object(), release)):
+            resource.return_value.exists.return_value = False
+            root.read_bytes.return_value = b"root"
+            self.assertIsNone(await CheckUpdates.check_signed_repository())
+            self.assertEqual((await CheckUpdates.check_signed_repository(include_current=True))["version"], "3.9")
+            release["version"] = "3.8"
+            with self.assertRaisesRegex(ValueError, "older"):
+                await CheckUpdates.check_signed_repository(include_current=True)
+
     async def test_tor_metadata_errors_report_the_response_without_unsigned_fallback(self):
         from src.shared.service_transport import ServicePolicy, TorServiceFailure
 
@@ -228,6 +272,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                         mock_popen.assert_called_once()
                         self.assertEqual(mock_popen.call_args.args[0], [
                             str(tmp_path), "--updater", "--set-temp-repository", tmp_path.parent.as_uri(),
+                            "--no-proxy",
                         ])
                         mock_quit.assert_called_once()
         finally:
@@ -243,9 +288,15 @@ class MaintenanceAndCleanupTests(unittest.TestCase):
         from src.backend.update_service import launch_maintenance_tool
 
         tool = Path("/some folder/maintenancetool")
-        with patch("src.backend.update_service.subprocess.Popen") as launch:
+        with tempfile.TemporaryDirectory() as directory, \
+                patch("src.backend.update_service.shared_data_dir", return_value=Path(directory)), \
+                patch("src.backend.update_service.subprocess.Popen") as launch:
             launch_maintenance_tool(tool, "uninstall")
-        self.assertEqual(launch.call_args.args[0], [str(tool), "--start-uninstaller"])
+            command = launch.call_args.args[0]
+            self.assertEqual(command[:3], [str(tool), "--start-uninstaller", "--set-temp-repository"])
+            self.assertTrue(command[3].startswith("file:"))
+            self.assertEqual(command[4], "--no-proxy")
+            self.assertEqual(len(list(Path(directory).rglob("Updates.xml"))), 1)
         self.assertEqual(launch.call_args.kwargs["cwd"], str(tool.parent))
 
     def test_active_cleanup_waits_for_confirmation_but_acceptance_clears(self):
@@ -273,7 +324,7 @@ class MaintenanceAndCleanupTests(unittest.TestCase):
         from src.backend.application import Backend
 
         backend = SimpleNamespace(notifications=MagicMock(), logger=MagicMock(), tr=lambda text: text,
-                                  initiate_shutdown=MagicMock())
+                                  initiate_shutdown=MagicMock(), _auto_update_task=None)
         with patch("src.backend.application.find_maintenance_tool", return_value=Path("/tool")), \
              patch("src.backend.application.launch_maintenance_tool", side_effect=OSError("failed")):
             Backend._accept_decision(backend, "maintenance-uninstall")

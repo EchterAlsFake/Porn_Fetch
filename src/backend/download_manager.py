@@ -1,12 +1,64 @@
-from PySide6.QtCore import QObject, Signal, QAbstractListModel, QModelIndex, Qt
+from PySide6.QtCore import QAbstractListModel, QModelIndex, QObject, Qt, Signal
 
 from src.backend.config import app_settings
+from src.shared.media import VideoFilters as VideoFilters
 from src.shared.media import (
-    VideoFilters,
     VideoObject,
     quality_requires_premium,
     select_allowed_quality,
 )
+
+
+class SessionDownloadModel(QAbstractListModel):
+    """Small session snapshots, independent of queue removal and persistent history."""
+
+    _fields = ("jobId", "title", "author", "selectedQuality", "progress", "status")
+
+    def __init__(self, source):
+        super().__init__(source)
+        self._source = source
+        self._items = []
+        self._active_rows: dict[str, int] = {}
+        source.dataChanged.connect(self._record_changes)
+        source.rowsAboutToBeRemoved.connect(self._detach_rows)
+
+    def roleNames(self):
+        return {Qt.ItemDataRole.UserRole + index + 1: field.encode()
+                for index, field in enumerate(self._fields)}
+
+    def rowCount(self, parent=QModelIndex()):
+        return 0 if parent.isValid() else len(self._items)
+
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        field_index = role - Qt.ItemDataRole.UserRole - 1
+        if index.isValid() and 0 <= index.row() < len(self._items) and 0 <= field_index < len(self._fields):
+            return self._items[index.row()][self._fields[field_index]]
+        return None
+
+    def _record_changes(self, first, last, _roles):
+        for source_row in range(first.row(), last.row() + 1):
+            item = self._source._items[source_row]
+            job_id = item["jobId"]
+            row = self._active_rows.get(job_id)
+            snapshot = {field: item[field] for field in self._fields}
+            if row is None:
+                # Prepared links and restored paused rows are not session downloads
+                # until the user starts them. Retries keep their original entry.
+                if item["status"] not in {"queued", "downloading"}:
+                    continue
+                row = len(self._items)
+                self.beginInsertRows(QModelIndex(), row, row)
+                self._items.append(snapshot)
+                self._active_rows[job_id] = row
+                self.endInsertRows()
+            elif self._items[row] != snapshot:
+                self._items[row] = snapshot
+                index = self.index(row, 0)
+                self.dataChanged.emit(index, index, [])
+
+    def _detach_rows(self, _parent, first, last):
+        for item in self._source._items[first:last + 1]:
+            self._active_rows.pop(item["jobId"], None)
 
 
 class DownloadListModel(QAbstractListModel):
@@ -27,6 +79,7 @@ class DownloadListModel(QAbstractListModel):
         self._items = []
         self._row_by_id: dict[str, int] = {}  # O(1) row lookup cache because why not optimizing for nanoseconds xD
         self._premium_access = premium_access or (lambda: False) # The function which checks if user has premium access
+        self.session_history = SessionDownloadModel(self)
         app_settings.qualityChanged.connect(self.update_all_qualities)
         # if the user changed the preferred quality in settings it will instantly update all rows
 

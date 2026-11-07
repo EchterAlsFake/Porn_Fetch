@@ -10,8 +10,8 @@ Pane {
     property int section: -1
     readonly property bool tablet: width >= 740
     readonly property int activeSection: section < 0 ? 0 : section
-    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : Theme.lightShade("#f7f8fc")
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : Theme.lightShade("#ffffff")
     readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
     readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     readonly property color accentColor: appSettings.high_contrast ? Theme.accent : appSettings.accent_color
@@ -472,7 +472,7 @@ Pane {
                 }
                 AppButton {
                     Layout.fillWidth: true
-                    visible: appSettings.android_output_folder !== ""
+                    visible: Qt.platform.os !== "android" && appSettings.android_output_folder !== ""
                     text: qsTr("Use app storage")
                     flat: true
                     onClicked: appSettings.android_output_folder = ""
@@ -534,11 +534,22 @@ Pane {
                     onChanged: function(selected) { appSettings.anonymous_mode = selected }
                 }
                 ToggleRow {
-                    label: qsTr("Send tracebacks and video URLs")
-                    detail: qsTr("I store reports securely, never share them and use them only to fix errors.")
+                    label: qsTr("Send private error reports")
+                    detail: qsTr("I never share reports with anyone. I use them only to fix errors, not to see what you watch or download.")
                     helpText: backend.errorReportDisclosure
                     value: appSettings.enable_logging
                     onChanged: function(selected) { appSettings.set_error_reporting_consent(selected) }
+                }
+            }
+            SettingCard {
+                heading: qsTr("Report details")
+                ToggleRow {
+                    label: qsTr("Include full Python tracebacks and video URLs")
+                    detail: qsTr("Off sends basic diagnostics only: no video URLs, messages, paths or tracebacks. Full reports can contain sensitive information.")
+                    helpText: backend.errorReportDisclosure
+                    enabled: appSettings.enable_logging
+                    value: appSettings.error_reporting_full_traceback
+                    onChanged: function(selected) { appSettings.error_reporting_full_traceback = selected }
                 }
             }
             SettingCard {
@@ -565,6 +576,9 @@ Pane {
                 heading: qsTr("Theme")
                 description: qsTr("A Material look designed for your phone and tablet.")
                 ToggleRow { label: qsTr("Dark mode"); helpText: AppStrings.darkModeHelp; value: appSettings.dark_mode; onChanged: function(v) { appSettings.dark_mode = v } }
+                LightThemeBrightness { Layout.fillWidth: true }
+                ToggleRow { label: qsTr("High contrast"); value: appSettings.high_contrast; onChanged: function(v) { appSettings.high_contrast = v } }
+                ToggleRow { label: qsTr("Reduce motion"); value: appSettings.reduced_motion; onChanged: function(v) { appSettings.reduced_motion = v } }
                 ToggleRow {
                     label: qsTr("Activity glow")
                     detail: qsTr("Show a glowing border while the app is busy.")
@@ -581,18 +595,8 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Language")
-                CheckBox {
-                    text: qsTr("Reduce motion")
-                    checked: appSettings.reduced_motion
-                    onToggled: appSettings.reduced_motion = checked
-                }
-                CheckBox {
-                    text: qsTr("High contrast")
-                    checked: appSettings.high_contrast
-                    onToggled: appSettings.high_contrast = checked
-                }
                 ChoiceRow {
-                    label: qsTr("English only — translations are not available yet")
+                    label: qsTr("English only. Translations are not available yet")
                     choices: ["English"]
                     selected: 0
                     enabled: false
@@ -654,7 +658,7 @@ Pane {
                 Label {
                     Layout.fillWidth: true
                     visible: Boolean(bridge.isValid && bridge.licenseExpiresAt !== "")
-                    text: qsTr("Premium version entitlement ends: %1 (%2)").arg(bridge.licenseExpiresAt).arg(qsTr("covers premium features in releases for 1 year"))
+                    text: qsTr("Premium license expires: %1").arg(bridge.licenseExpiresAt)
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }
@@ -679,7 +683,7 @@ Pane {
                 }
                 AppButton {
                     Layout.fillWidth: true
-                    text: qsTr("Refresh license (renews 7-day check-in)")
+                    text: qsTr("Refresh license (updates offline permit)")
                     enabled: !bridge.busy
                     onClicked: bridge.refresh()
                 }
@@ -693,7 +697,7 @@ Pane {
                 Label {
                     Layout.fillWidth: true
                     visible: bridge.isValid
-                    text: qsTr("Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.")
+                    text: qsTr("Lifetime Premium costs €29.99 once for up to 10 active installations. Every future Porn Fetch update and feature I release is included. Future development has no guaranteed duration. Activation and periodic online validation are required. If I permanently close the licensing service, I will provide an offline unlock before closure. Deactivating frees an installation slot.")
                     color: root.mutedColor
                     font.pixelSize: 11 * appSettings.font_size / 12
                     wrapMode: Text.Wrap
@@ -701,10 +705,10 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Production license")
-                description: qsTr("The beta checkout is a test. No real transaction takes place.")
+                description: qsTr("Pay €29.99 once for permanent Premium, including all future versions. No subscription or paid renewal.")
                 AppButton {
                     Layout.fillWidth: true
-                    text: qsTr("Purchase / renew license")
+                    text: qsTr("Get lifetime Premium")
                     onClicked: Qt.openUrlExternally("https://pornfetch.to/")
                 }
             }

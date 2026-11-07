@@ -28,6 +28,11 @@ timestamp. A rerun keeps that timestamp. Use a newer version than the published
 one. CLI publication checks this before compilation. After changing source or
 workflow files, start a new run; rerunning an old job uses its old commit.
 
+GitHub release asset collection copies existing GUI archives, installers, mobile
+packages, checksums and platform-specific legal archives unchanged. Only CLI
+payloads are bundled with their helpers. Shared files such as `LICENSE` remain
+inside bundles and legal archives, avoiding filename collisions between platforms.
+
 Start with publication disabled. Inspect the build logs, signatures and platform
 smoke checks. Then test the actual artifacts on clean systems. Passing Python
 tests is not a substitute for installation and device tests.

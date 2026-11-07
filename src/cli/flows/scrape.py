@@ -131,9 +131,9 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
 
     for idx, (rt, src, med) in enumerate(items, 1):
         if med is None:
-            preview_table.add_row(str(idx), getattr(src, "title", "Album"), "—", "Gallery")
+            preview_table.add_row(str(idx), getattr(src, "title", "Album"), "-", "Gallery")
         else:
-            dur = f"{med.length} min" if med.length is not None else "—"
+            dur = f"{med.length} min" if med.length is not None else "-"
             q_str = ", ".join(f"{q}p" for q in med.qualities) if med.qualities else "Auto"
             preview_table.add_row(str(idx), med.title, dur, q_str)
 

@@ -14,19 +14,29 @@ assets in a release marked with this license, excluding third-party material.
 and the restrictions those checks apply to premium features. "Bypassed version"
 means a version of the Software changed so that premium features can be used
 without the credential or entitlement that the unmodified release requires.
-"Public distribution" means making a copy available to people beyond a private
-circle, including through a public repository, download, mirror, or hosted
-service. Direct sharing with friends or family in a private circle is "private
-sharing," even when the Software has been modified.
+"Friends" means people with whom you have an existing personal friendship in
+real life and whom you have met in person. Online-only contacts, followers,
+subscribers, and members of the same online community do not qualify merely
+because of that connection.
+"Private sharing" means sharing directly with individual family members or
+Friends within your personal circle, including modified copies. You may use
+private online messages or a private group consisting only of those people;
+the relationships, rather than the delivery method, determine whether sharing
+is private.
+"Public distribution" means making a copy available beyond Private sharing,
+including through a repository, download, mirror, hosted service, or an online
+community. Sharing with a Discord server, forum, group chat, or similar community
+whose recipients extend beyond that personal circle is Public distribution,
+even if membership is restricted or its members are described as friends.
 
 2. Permissions
 
 Subject to this license, you receive a worldwide, non-exclusive, royalty-free
 permission to use, read, copy, audit, and modify the Software, including its
-Premium controls. You may privately share original or modified copies, including
-a Bypassed version, with friends and family. You may publicly distribute original
-or modified copies if you satisfy Sections 3 and 4. These permissions continue
-for copies you received while complying with this license.
+Premium controls. You may use Private sharing for original or modified copies,
+including a Bypassed version. Public distribution of original or modified copies
+is permitted if you satisfy Sections 3 and 4. These permissions continue for
+copies you received while complying with this license.
 
 3. Public distribution conditions
 
@@ -43,12 +53,18 @@ official Porn Fetch release.
 
 4. Credentials and third-party rights
 
-Sharing the Software does not transfer any premium credential or entitlement.
-Each recipient must obtain their own valid entitlement for premium features in
-an unmodified release. No permission here authorizes disclosure or reuse of
-another person's credentials. This license does not replace, narrow, or grant
-rights in any third-party component. You must comply with its own license when
-you copy or distribute it.
+Sharing a copy of the Software does not by itself grant a premium entitlement.
+You may share your own valid premium credential with family members and Friends
+through Private sharing, subject to a total limit of ten active installations
+under that entitlement, including your own. This does not create additional
+entitlements or remove validation requirements.
+This permission does not authorize publishing credentials or sharing them with
+recipients outside that private circle. Other recipients need their own valid entitlement
+to use premium features in an unmodified release. Nothing here limits a transfer
+right that applicable law does not allow this license to exclude.
+
+This license does not replace, narrow, or grant rights in any third-party
+component. You must comply with its own license when you copy or distribute it.
 
 5. Contractual publication rule
 
@@ -60,15 +76,11 @@ security research, or information needed to exercise rights that applicable
 law does not allow a contract to exclude. This section does not purport to bind
 someone who has not accepted this license.
 
-6. Mandatory rights and termination
+6. Mandatory rights
 
 Nothing in this license removes rights that cannot lawfully be waived, including
 applicable rights to observe, study, test, make necessary backups, correct errors,
-or achieve interoperability. If you breach a condition of this license, your
-permissions for affected copies end after written notice and a 30-day
-opportunity to cure the breach. Permissions already granted to compliant
-recipients are unaffected. You may regain your permissions by curing within
-that period or by the copyright holder's written reinstatement.
+or achieve interoperability.
 
 7. Warranty and liability
 

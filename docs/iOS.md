@@ -21,6 +21,15 @@ provision it with your own sideloading setup before installing. Security tools
 may warn about self-built files. The workflow checks packaging but does not
 install on a phone. Test startup and a download on the intended device.
 
+Before staging, CI runs `packaging/prepare_ios_legal.py` with the verified
+FFmpeg 9.0.2 source archive. The helper checks the restored extension's recorded
+hash and retains its actual build configuration. Both the IPA and the separate
+legal archive receive the FFmpeg source, bridge sources and replacement
+instructions. Local native rebuilds prepare the same materials automatically.
+Use `IOS_PYTHON_XCFRAMEWORK` to select the matching published Python headers.
+The FFmpeg bundle's `REBUILD.md` also explains replacement in an existing IPA
+without access to the private native dependency snapshot.
+
 ## Download and verify
 
 Install the GitHub CLI, GnuPG and zstd, authenticate `gh` with an account that

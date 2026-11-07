@@ -6,13 +6,14 @@ import QtQuick.Layouts
 
 Pane {
     id: root
+    signal openManager()
     padding: width >= 840 ? 24 : 12
     readonly property var inputErrors: backend.inputErrors || ({})
     property bool showFilters: false
     property bool selectionMode: false
     property string expandedJob: ""
-    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : Theme.lightShade("#f7f8fc")
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : Theme.lightShade("#ffffff")
     readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
     readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     background: Rectangle {
@@ -246,7 +247,7 @@ Pane {
                                 editable: true
                             }
                             Label {
-                                text: "–"
+                                text: "-"
                             }
                             AppSpinBox {
                                 id: maxDuration
@@ -327,6 +328,12 @@ Pane {
                 font.pixelSize: 24 * appSettings.font_size / 12
                 font.bold: true
                 elide: Text.ElideRight
+            }
+            AppButton {
+                objectName: "openDownloadManagerButton"
+                text: qsTr("Manager")
+                Accessible.name: qsTr("Download manager")
+                onClicked: root.openManager()
             }
             AppButton {
                 text: qsTr("Add videos")

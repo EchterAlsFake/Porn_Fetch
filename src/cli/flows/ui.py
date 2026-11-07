@@ -90,7 +90,7 @@ def print_banner(console: Console, license_state: str | None = None) -> None:
     banner.append(f"v{__version__}", style="dim")
     if license_state:
         state_clean = license_state.replace("_", " ").title()
-        if license_state.lower() in {"valid", "active", "update_entitlement_expired"}:
+        if license_state.lower() in {"valid", "active"}:
             banner.append("  •  [Premium: Active]", style="bold green")
         elif license_state.lower() in {"offline_grace"}:
             banner.append(f"  •  [License: {state_clean}]", style="bold yellow")

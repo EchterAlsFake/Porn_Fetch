@@ -78,7 +78,8 @@ class LicenseStatus:
     failure: str | None = None
 
     def entitled_to(self, release_timestamp: float) -> bool:
-        return self.allowed and self.license_expires_at is not None and release_timestamp <= self.license_expires_at
+        """Verified permanent entitlement has no release-date cutoff."""
+        return self.allowed
 
 
 def decode(value: str, *, url: bool = False) -> bytes:
@@ -295,13 +296,14 @@ class LicenseClient:
                 payload["account"]["id"] != self.account_id
                 or payload["product"]["id"] != self.product_id
                 or payload["policy"]["id"] != self.policy_id
+                or payload["policy"]["duration"] is not None
             ):
                 raise ValueError
             uuid.UUID(payload["license"]["id"])
             timestamp(payload["license"]["created"])
-            lic_exp = payload["license"].get("expiry")
-            if lic_exp is not None:
-                timestamp(lic_exp)
+            # Only an explicit signed null means permanent; missing claims fail.
+            if payload["license"]["expiry"] is not None:
+                raise ValueError
             return payload
         except BetaLicenseError:
             raise
@@ -360,16 +362,17 @@ class LicenseClient:
             attributes = licenses[0]["attributes"]
             if attributes["suspended"] is not False:
                 raise ValueError
-            lic_expiry = None
-            if attributes.get("expiry") is not None:
-                lic_expiry = timestamp(attributes["expiry"])
+            # License permanence does not change the bounded meta.expiry/ttl above.
+            # Index the claim so a missing expiry cannot be mistaken for null.
+            if attributes["expiry"] is not None:
+                raise ValueError
             if licenses[0]["relationships"]["policy"]["data"]["id"] != self.policy_id:
                 raise ValueError
             return {
                 "issued": issued,
                 "expiry": expiry,
                 "machine_id": machine["id"],
-                "license_expiry": lic_expiry,
+                "license_expiry": attributes["expiry"],
             }
         except FuturePermitError:
             raise
@@ -476,9 +479,7 @@ class LicenseClient:
         except (ValueError, KeyError, TypeError):
             raise LicenseError("Import a valid production license file or signed key") from None
         license_id = claims["license"]["id"]
-        lic_expiry = None
-        if claims["license"].get("expiry") is not None:
-            lic_expiry = timestamp(claims["license"]["expiry"])
+        lic_expiry = claims["license"]["expiry"]
         async with self._state() as state:
             state["active"] = license_id
             record = state["licenses"].setdefault(
@@ -528,8 +529,8 @@ class LicenseClient:
                     or data["relationships"]["product"]["data"]["id"] != self.product_id
                     or data["relationships"]["policy"]["data"]["id"] != self.policy_id):
                 raise Rejected("rejected")
-            # EXPIRED can be valid with MAINTAIN_ACCESS. Never override valid=false.
-            if meta["valid"] and meta["code"] not in ("VALID", "EXPIRED"):
+            # Lifetime validation must succeed without an expiration code.
+            if meta["valid"] and meta["code"] != "VALID":
                 raise Rejected("rejected")
             return meta
 
@@ -540,7 +541,7 @@ class LicenseClient:
                     raise Rejected("rejected")
                 raise Rejected({
                     "SUSPENDED": "suspended", "BANNED": "revoked",
-                    "EXPIRED": "entitlement_server_denied", "NOT_FOUND": "not_found",
+                    "EXPIRED": "rejected", "NOT_FOUND": "not_found",
                     "TOO_MANY_MACHINES": "installation_limit",
                     "MACHINE_LIMIT_EXCEEDED": "installation_limit",
                 }.get(code, "rejected"))
@@ -586,8 +587,6 @@ class LicenseClient:
             installation_id=fingerprint,
             now=now,
         )
-        if permit["license_expiry"] is None:
-            raise LicenseError("The commercial entitlement deadline is missing")
         if permit["expiry"] <= now:
             raise LicenseError("The renewed permit has already expired")
         license_expiry = permit["license_expiry"]
@@ -664,8 +663,6 @@ class LicenseClient:
                         record["permit"], license_id=license_id,
                         installation_id=state["installation_id"], now=now,
                     )
-                    if permit["license_expiry"] is None:
-                        raise LicenseError("Missing entitlement deadline")
                     last_success = record["last_successful_validation"]
                     if not permit["issued"] - 300 <= last_success <= permit["issued"] + 300:
                         raise LicenseError("Invalid cached validation time")
@@ -673,12 +670,9 @@ class LicenseClient:
                     return LicenseStatus("invalid_signature", False)
                 expiry = min(permit["expiry"], last_success + WEEK)
                 lic_exp = permit["license_expiry"]
-                if lic_exp is not None and self.release_timestamp > lic_exp:
-                    return LicenseStatus("renewal_required", False, expiry, lic_exp, expiry)
                 return LicenseStatus(
                     "expired_grace" if now >= expiry
                     else "offline_grace" if record.get("offline")
-                    else "update_entitlement_expired" if lic_exp is not None and now > lic_exp
                     else "valid",
                     now < expiry, expires_at=expiry, license_expires_at=lic_exp,
                     next_check_at=expiry, failure=record.get("failure") if record.get("offline") else None,
@@ -688,8 +682,6 @@ class LicenseClient:
             # until a complete successful validation and signed checkout clears it.
             if not record["activated"] and record.get("failure") == "network_unavailable":
                 expiry = record["first_import"] + INITIAL_GRACE
-                if license_expiry is not None and self.release_timestamp > license_expiry:
-                    return LicenseStatus("renewal_required", False, license_expires_at=license_expiry)
                 return LicenseStatus(
                     "initial_offline_grace" if now < expiry else "initial_grace_expired",
                     now < expiry, expires_at=expiry, license_expires_at=license_expiry,

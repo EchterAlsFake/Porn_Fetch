@@ -3,7 +3,13 @@ from __future__ import annotations
 
 import questionary
 
-from ..tracker import print_dashboard_stats, print_failed_downloads, print_origin_iterators
+from ..tracker import (
+    close_cli_tracker,
+    get_cli_tracker,
+    print_dashboard_stats,
+    print_failed_downloads,
+    print_origin_iterators,
+)
 from .context import WizardContext
 from .ui import WIZARD_STYLE, print_error, print_success
 
@@ -39,6 +45,8 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
 
         if action == "toggle":
             new_state = not ctx.settings.track_videos
+            if not new_state:
+                await close_cli_tracker()
             ctx.settings = ctx.settings.overridden(track_videos=new_state)
             ctx.settings_store.save(ctx.settings)
             ctx.console.print(
@@ -53,6 +61,7 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
                 style=WIZARD_STYLE,
             ).ask_async()
             if new_path and new_path.strip():
+                await close_cli_tracker()
                 ctx.settings = ctx.settings.overridden(pocketbase_data_path=new_path.strip())
                 ctx.settings_store.save(ctx.settings)
                 print_success(ctx.console, "Configuration Saved", f"Data path set to: {new_path.strip()}")
@@ -70,14 +79,10 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
 
         with ctx.console.status("[bold cyan]Connecting to PocketBase service...[/]"):
             try:
-                from src.database import PocketBaseError, PocketBaseTracker
-                temp_tracker = PocketBaseTracker(
-                    data_path=ctx.settings.pocketbase_data_path,
-                    enabled=True,
-                    binary_path=ctx.settings.pocketbase_binary or None,
-                    legacy_sqlite_path=ctx.settings.legacy_database_path,
-                )
-                await temp_tracker.start()
+                from src.database import PocketBaseError
+                tracker = await get_cli_tracker(ctx.settings)
+                await tracker.start()
+                await tracker.refresh_cache()
             except PocketBaseError as exc:
                 print_error(
                     ctx.console,
@@ -102,13 +107,14 @@ async def handle_statistics_dashboard(ctx: WizardContext) -> None:
 
         try:
             if action == "overview":
-                stats = temp_tracker.get_dashboard_stats()
+                stats = {**tracker.get_dashboard_stats(), "enabled": ctx.settings.track_videos}
                 print_dashboard_stats(stats, ctx.console)
             elif action == "failed":
-                failed = temp_tracker.get_failed_videos()
+                failed = tracker.get_failed_videos()
                 print_failed_downloads(failed, ctx.console)
             elif action == "origins":
-                iterators = temp_tracker.get_available_iterators()
+                iterators = tracker.get_available_iterators()
                 print_origin_iterators(iterators, ctx.console)
         finally:
-            await temp_tracker.close()
+            if not ctx.settings.track_videos:
+                await close_cli_tracker()

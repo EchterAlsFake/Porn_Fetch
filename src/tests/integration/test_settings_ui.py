@@ -24,6 +24,16 @@ class TestUITabGUI(SettingsGUITestBase):
         self.assertEqual(self.settings_manager.font_size, 16)
         self.assert_file_value("UI/font_size", 16)
 
+    def test_light_theme_brightness_slider_is_saved(self) -> None:
+        self.simulate_switch("darkModeSwitch", False)
+        slider = self.find_control("lightThemeBrightnessSlider")
+        slider.setProperty("value", 82)
+        slider.moved.emit()
+        self.assertEqual(self.settings_manager.light_theme_brightness, 82)
+        self.assert_file_value("UI/light_theme_brightness", 82)
+        restored = SettingsManager(self.read_fresh_settings())
+        self.assertEqual(restored.light_theme_brightness, 82)
+
     def test_core_style_combobox(self) -> None:
         # Index 1: "Fusion"
         self.simulate_combobox("coreStyleComboBox", 1)

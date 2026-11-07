@@ -13,7 +13,7 @@ Read [the developer guide](docs/FOR_DEVELOPERS.md) for the source map.
   PySide6 imports. Qt adapters belong in `src/backend` or a named bridge module.
 - Use asyncio and cooperative cancellation, never QThread workers.
 - User-facing copy about the author uses I/my, never we/our, "the operator" or
-  "the developer".
+  "the developer". Use standard punctuation instead of em/en dashes in app copy.
 - Keyword search is intentionally unavailable in every frontend.
 - Android history/statistics are disabled; do not add another database backend.
   Desktop tracking uses PocketBase. Licensing storage is separate.
@@ -23,6 +23,14 @@ Read [the developer guide](docs/FOR_DEVELOPERS.md) for the source map.
   lifecycle tests. Forced-kill/power-loss recovery is outside the requested scope.
   The user will verify GUI/CLI updates using a GitHub build.
 - Preserve existing user work. Keep runtime files, caches and build output out of Git.
+- The user specifically reviewed retained application code and translations and
+  confirmed that earlier contributions needing additional relicensing permission
+  were removed. Treat that ownership review as established for this release;
+  third-party components still retain their licenses. Private license sharing is
+  allowed with individual family members and real-life personal friends met in
+  person, with ten active installations total. Community/server membership alone
+  is not friendship for this permission. LICENSE section 6 now preserves mandatory
+  rights only; its optional termination/cure-period wording was removed.
 
 ## Current behavior
 
@@ -31,32 +39,56 @@ The desktop entry point is `main.py`; its backend is `src/backend/application.py
 `AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
 Weblate integration are unfinished; language selectors remain disabled.
 
-First launch shows the €19.99 license offer, then the
-Ukraine message and error-reporting consent. `Onboarding/license_offer_seen`
-and `Onboarding/ukraine_message_seen` survive preference resets and updates.
-The offer opens pornfetch.to for purchase and has a free Continue action.
-On mobile, the license offer and Ukraine message fill the window while respecting
-system safe areas. Android then asks users without a saved output folder to choose
-one through the system picker. Cancelling keeps setup open; an existing selection
-skips setup. The picker retains access for future launches. Android packaging must
-include QtSvg and its image and icon plugins for the bundled SVG artwork.
+First use runs `FirstRunSetup.qml` before showing the main interface in either
+layout. It presents the full application license with an unchecked acceptance
+box, the €29.99 lifetime Premium offer, Off/Basic/Full error-reporting choices, the Ukraine message,
+and an Android output-folder step. Only explicit Continue actions save completed
+steps; reopening an interrupted setup resumes outstanding steps. Acceptance saves
+the actual displayed license, its SHA-256 and a UTC timestamp. The completion,
+acceptance, offer/message acknowledgements, reporting choice and Android folder
+survive preference resets and updates; deleting application settings removes them.
+Licensing, history and startup update requests wait until setup finishes.
+The shared surface scrolls on small screens and respects mobile safe areas.
+A small sparkle button in the upper-right corner of the Ukraine setup step
+opens the music-video Easter egg only when clicked. Its tooltip says "Curious?"
+without revealing the destination. The flag is decorative.
+Android requires a shared output folder: private app files are inaccessible to
+ordinary players/file managers. The system picker retains access for future
+launches. Cancelling keeps setup open. Android packaging must include QtSvg and
+its image and icon plugins for the bundled SVG artwork.
 
-Optional error reports now include full Python tracebacks, chained exceptions
-and supplied diagnostic context, including video URLs and query strings.
-Detailed-report consent version 2 requires older opt-ins to choose again;
-existing opt-outs stay disabled. GUI and CLI share the disclosure. The adjacent
-Server project's updated hook, proxy limit and PocketBase message-field migration
-must be deployed before the client is released. Accepted reports are preserved
-verbatim; requests over 1 MiB are skipped instead of truncated.
+Build `--smoke-test` startup uses a temporary QSettings file, download cache and
+licensing directory. It skips setup and starts no async services; it must never
+consume the user's first-use choices or touch their existing download checkpoints.
+
+Optional reports stay disabled until explicitly enabled. Basic reports exclude
+exception messages, URLs, local paths and tracebacks. A separate Full choice adds
+complete Python tracebacks, exception chains and supplied diagnostic context,
+including video URLs and query strings. Both modes use the shared private-report
+and debugging-only disclosure. GUI settings and CLI flags can change the scope.
+Detailed-report consent version 2 still invalidates older opt-ins; existing v2
+full-report opt-ins retain their previously consented scope, and opt-outs remain
+disabled. The adjacent Server project's updated hook, proxy limit and PocketBase
+message-field migration must be deployed before the client is released. Accepted
+reports are preserved verbatim; requests over 1 MiB are skipped, never truncated.
 
 Qt Installer Framework owns desktop installation, component changes, updates
 and removal. Source and portable copies have no in-app installer/uninstaller.
 Active-download temporary cleanup asks for confirmation but remains allowed.
+In-app updates and component management download the complete signed repository
+through the app's service transport, including its managed Tor/onion route.
+IFW receives only that verified local repository and `--no-proxy`. Component
+management accepts the current release but rejects older repositories. Uninstall
+uses an empty local repository and needs no network connection.
+The interactive CLI shares one PocketBase tracker between downloads and history
+inspection. Close it before changing database configuration or disabling tracking;
+starting a second service on the same database resets its shared credentials.
 
 Desktop update discovery opens a dialog by default. `Misc/update_prompts` saves
 the opt-out independently of startup checks; manual review remains available.
-Long release notes use a plain-text reader to avoid the Qt Quick rich-text
-renderer crash confirmed on Wayland/NVIDIA. Update payloads use HTTP/1.1 after
+Release notes use selectable TextArea readers with explicit Markdown/HTML formats
+and native glyph rendering. The previous Qt Quick rich-text renderer crashed on
+Wayland/NVIDIA; keep the native rendering setting for long notes. Update payloads use HTTP/1.1 after
 reproducing an HTTP/2 reset at 1 MiB; TUF streams resume with validated ranges.
 The signed maintenance component is required but not Essential, avoiding IFW's
 separate tool-first update/restart. Update launch uses normal async shutdown.
@@ -91,6 +123,19 @@ with navy selections. `ThemeManager` synchronizes the application palette and
 native color scheme. Content-language flags are bundled SVG images from
 flag-icons (MIT), rather than font-dependent emoji, in both layouts.
 
+Theme controls group high contrast and reduced motion with the light/dark toggle.
+Light mode has a saved 75–100% brightness slider that softens backgrounds in both
+layouts and the native palette. High contrast keeps its full black/white colors
+and disables that slider. XHamster credential login asks for an email address;
+both forms flag usernames before submission and the login adapter validates them
+before calling the provider.
+
+`DownloadManagerPage.qml` shows an in-memory list of downloads started during the
+current session in both layouts. Queue progress/status updates populate small
+snapshots without retaining provider objects. Completed, stopped and failed entries
+survive queue-row removal; retries update the same entry until it leaves the queue.
+This session list resets on exit and does not use desktop or mobile database history.
+
 App icons are generated from `graphics/logo_artwork.png` using
 `scripts/generate_app_icons.py`: square desktop PNGs with reduced padding,
 multi-size Windows ICO and macOS ICNS, a separate Android adaptive foreground,
@@ -105,6 +150,19 @@ native provider objects; resume fetches a fresh object. After async shutdown,
 `qml_lifecycle.destroy_qml_engine` explicitly destroys QML roots before the engine
 and its context adapters. Do not rely on Python garbage collection for this order. Temporary cleanup can
 remove checkpoints. Old orphan temporary files are not automatically migrated.
+
+Premium licensing is lifetime: EUR 29.99 once, with all future Porn Fetch updates
+and features released included and no guaranteed duration of future development.
+Signed keys require policy duration and license expiry to be null; signed machine
+permits retain a seven-day freshness deadline. There is no release-date cutoff.
+Activation, three-day initial outage grace and periodic validation remain. If I
+permanently close licensing, provide an offline unlock before closure. The bundled
+public policy ID remains `7038281b-2429-4aa4-81db-4f04a87e7184`. The server's
+permanent model is deployed with `commercialModel=pornfetch-permanent-v1` and
+`priceEur=29.99`. Fresh TEST-license activation, repeated validation and future-build
+entitlement have been verified against the server. Existing beta records were left
+alone, and renewal checkout requests are rejected. Distributed binaries still need
+an updated build; do not change the account, product, public key or endpoint.
 
 Premium feature limits are shared in `src/shared/access.py`. Free use allows
 up to 720p, one active download, and the first five videos of public model,
@@ -193,6 +251,10 @@ Its native dependency archive is required; a public clone alone is insufficient.
 iOS 15+ is officially supported with a native GUI. CI produces an IPA for sideloading re-signing and publishes it through the same website/release jobs. The embedded 3.15.0rc2 runtime must be rebuilt together with its native dependencies to change its patch version. The user confirmed license activation,
 downloading, remuxing and playback on a non-jailbroken iPhone 7 on 2026-10-30.
 That does not validate every later artifact or device. See [iOS](docs/iOS.md).
+The iOS legal preparation verifies the restored FFmpeg extension and upstream
+source archive against their recorded hashes before staging the source, bridge,
+configuration and rebuild/replacement instructions. Pass that native legal folder
+explicitly to the collector; Python metadata discovery does not cover it.
 
 ## Testing and documentation
 

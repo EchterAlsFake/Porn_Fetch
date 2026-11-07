@@ -26,6 +26,13 @@ To choose a suite interactively:
 uv run --no-sync python src/tests/helper.py
 ```
 
+`test_first_run_setup` exercises real QML with isolated settings: explicit license
+acceptance, the offer acknowledgement, reporting scope, interruption/resumption,
+one-time completion and Android folder selection/cancellation in both orientations.
+`test_build_smoke_isolation` runs desktop and mobile smoke startup with existing
+settings and download checkpoints and verifies they remain byte-for-byte unchanged.
+Native Android picker permissions and external-player access still need a device.
+
 The helper asks before accessing websites, browser sessions or real media.
 Ordinary unit and integration discovery must stay offline.
 
@@ -36,8 +43,9 @@ default. On a Linux desktop, exercise the real Wayland/OpenGL renderer with:
 PORNFETCH_NATIVE_UPDATE_TEST=1 uv run --no-sync python -m unittest src.tests.integration.test_update_dialog
 ```
 
-This opens an isolated test window and verifies startup presentation, the saved
-opt-out and Activity review with the full release notes. It does not install an
+This opens isolated desktop and mobile test windows and verifies startup
+presentation, the saved opt-out, manual review and Markdown/HTML formatting with
+the full release notes. Desktop review also exercises Activity. It does not install an
 update or change your normal settings. The native check caught the Qt Quick
 render-thread crash that the software renderer did not reproduce.
 

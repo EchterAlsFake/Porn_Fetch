@@ -83,6 +83,22 @@ class ErrorReportFormattingTests(unittest.TestCase):
         self.assertGreater(len(_payload_bytes(message)), 4096)
         self.assertEqual(set(json.loads(_payload_bytes(message))), {"message"})
 
+    def test_basic_report_omits_tracebacks_messages_urls_and_paths(self) -> None:
+        try:
+            raise ValueError("private exception https://example.com/video?token=secret /home/alice")
+        except ValueError as error:
+            message, _ = build_error_report(
+                error, operation="load video", location="VideoProcessor.load",
+                context={"provider": "Example", "quality": "720", "video_url": "https://example.com/private",
+                         "output_path": "/home/alice/videos", "message": "private detail"},
+                include_traceback=False,
+            )
+        self.assertIn("error_type=ValueError", message)
+        self.assertIn('"provider": "Example"', message)
+        self.assertIn('"quality": "720"', message)
+        for private in ("Traceback", "private", "example.com", "token", "alice", "output_path", '"message"'):
+            self.assertNotIn(private, message)
+
     def test_media_source_failure_includes_its_own_traceback(self) -> None:
         try:
             raise ValueError("provider source failed")

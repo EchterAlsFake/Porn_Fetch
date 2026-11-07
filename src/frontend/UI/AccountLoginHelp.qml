@@ -8,7 +8,7 @@ HelpButton {
     helpText: (provider === "PornHub"
         ? qsTr("PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.")
         : provider === "XHamster"
-          ? qsTr("XHamster: enter your username and password, then press Login. You can retrieve liked videos or paste an account playlist URL. Browser login does not require a username here.")
+          ? qsTr("XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.")
           : qsTr("XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required."))
         + "\n\n" + qsTr("Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.")
         + "\n\n" + (browserImportAvailable

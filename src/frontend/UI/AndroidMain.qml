@@ -40,11 +40,8 @@ ApplicationWindow {
     background: Rectangle { color: window.backgroundColor }
 
     property bool safeToClose: false
-    readonly property bool outputSetupRequired: Qt.platform.os === "android" && !appSettings.android_output_folder
-    readonly property bool onboardingActive: !appSettings.license_offer_seen || licenseOfferDialog.visible
-        || !appSettings.ukraine_message_seen || ukraineMessageDialog.visible
-        || !appSettings.error_reporting_decided || consentDialog.visible
-        || outputSetupRequired || outputSetupDialog.visible
+    property bool startupContinued: false
+    readonly property bool onboardingActive: setupWizard.active
 
     ActivityEdge {
         objectName: "activityEdge"
@@ -61,9 +58,9 @@ ApplicationWindow {
     readonly property bool tablet: contentItem.width >= 600
     readonly property bool expanded: contentItem.width >= 840
     readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
-    readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4)
+    readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4 || pageIndex === 6)
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
-                                      qsTr("Info"), qsTr("Supported websites"), qsTr("More")]
+                                      qsTr("Info"), qsTr("Supported websites"), qsTr("More"), qsTr("Download manager")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
                                       "qrc:/images/graphics/settings.png",
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
@@ -71,6 +68,7 @@ ApplicationWindow {
 
     function goBack() {
         if (settingsDetail) settingsPage.goBack()
+        else if (pageIndex === 6) pageIndex = 0
         else if (moreDetail) pageIndex = 5
         else if (pageIndex !== 0) pageIndex = 0
     }
@@ -103,104 +101,25 @@ ApplicationWindow {
         }
     }
 
-    function beginOnboarding() {
-        if (!licenseOfferDialog.presentOnce())
-            continueAfterLicenseOffer()
+    function continueStartup() {
+        if (startupContinued || appSettings.smoke_test || !appSettings.setup_completed) return
+        startupContinued = true
+        backend.start_configured_services()
     }
 
-    function continueAfterLicenseOffer() {
-        if (!ukraineMessageDialog.presentOnce())
-            continueAfterPersonalMessage()
-    }
+    Component.onCompleted: Qt.callLater(function() {
+        if (!setupWizard.begin()) window.continueStartup()
+    })
 
-    function continueAfterPersonalMessage() {
-        if (!appSettings.error_reporting_decided)
-            Qt.callLater(function() { consentDialog.open() })
-        else
-            continueAfterConsent()
-    }
-
-    function continueAfterConsent() {
-        if (outputSetupRequired)
-            Qt.callLater(function() { outputSetupDialog.open() })
-    }
-
-    Component.onCompleted: Qt.callLater(window.beginOnboarding)
-
-    LicenseOfferDialog {
-        id: licenseOfferDialog
+    FirstRunSetup {
+        id: setupWizard
         settings: appSettings
+        licenseText: applicationLicenseText
+        reportDisclosure: backend.errorReportDisclosure
         fullScreen: true
-        onDismissed: window.continueAfterLicenseOffer()
-    }
-
-    UkraineMessageDialog {
-        id: ukraineMessageDialog
-        settings: appSettings
-        fullScreen: true
-        onDismissed: window.continueAfterPersonalMessage()
-    }
-
-    AndroidOutputSetupDialog {
-        id: outputSetupDialog
-        settings: appSettings
-    }
-
-    Dialog {
-        id: consentDialog
-        ContrastPopupBackground { popup: consentDialog }
-        parent: Overlay.overlay
-        anchors.centerIn: parent
-        width: Math.min(window.width - 32, 560)
-        height: Math.min(window.height - 32, 620)
-        modal: true
-        closePolicy: Popup.NoAutoClose
-        title: qsTr("Help improve Porn Fetch after errors?")
-        onClosed: window.continueAfterConsent()
-
-        contentItem: ColumnLayout {
-            spacing: 12
-            width: consentDialog.availableWidth
-
-            Label {
-                Layout.fillWidth: true
-                text: qsTr("Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.")
-                wrapMode: Text.Wrap
-                color: window.primaryTextColor
-            }
-            ScrollView {
-                id: disclosureScroll
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
-                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-                Label {
-                    width: disclosureScroll.width > 24 ? disclosureScroll.width - 16 : consentDialog.availableWidth - 16
-                    text: backend.errorReportDisclosure
-                    textFormat: Text.PlainText
-                    wrapMode: Text.Wrap
-                    color: window.secondaryTextColor
-                    font.pixelSize: 13 * appSettings.font_size / 12
-                }
-            }
-            AppButton {
-                Layout.fillWidth: true
-                text: qsTr("No, keep disabled")
-                onClicked: {
-                    appSettings.set_error_reporting_consent(false)
-                    consentDialog.close()
-                }
-            }
-            AppButton {
-                Layout.fillWidth: true
-                text: qsTr("Yes, enable reports")
-                onClicked: {
-                    appSettings.set_error_reporting_consent(true)
-                    consentDialog.close()
-                }
-            }
-        }
+        requireOutputFolder: Qt.platform.os !== "ios"
+        onFinished: window.continueStartup()
+        onQuitRequested: backend.initiate_shutdown()
     }
 
     NotificationPanel {
@@ -211,6 +130,8 @@ ApplicationWindow {
     }
 
     Item {
+        visible: !window.onboardingActive
+        enabled: visible
         anchors.fill: parent
         focus: true
         Keys.onReleased: function(event) {
@@ -363,7 +284,7 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     currentIndex: window.pageIndex
 
-                    AndroidDownloadsPage {}
+                    AndroidDownloadsPage { onOpenManager: window.pageIndex = 6 }
                     AndroidAccountPage {}
                     AndroidSettingsPage { id: settingsPage; objectName: "androidSettingsPage" }
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
@@ -373,6 +294,7 @@ ApplicationWindow {
                         visible: !appSettings.anonymous_mode
                         onOpenPage: function(index) { window.pageIndex = index }
                     }
+                    DownloadManagerPage {}
                 }
 
                 Rectangle {
@@ -442,6 +364,7 @@ ApplicationWindow {
     }
     Dialog {
         id: androidUpdateDialog
+        objectName: "updateDialog"
         ContrastPopupBackground { popup: androidUpdateDialog }
         property var details: ({})
         property bool busy: false
@@ -461,10 +384,24 @@ ApplicationWindow {
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.version ? qsTr("Version %1 is available").arg(androidUpdateDialog.details.version) : qsTr("App updates") }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.entitlement_message || "" }
             ScrollView {
+                id: androidUpdateScroll
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
-                Label { width: parent.width; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.changelog || ""; textFormat: Text.PlainText }
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                TextArea {
+                    id: androidChangelogText
+                    objectName: "updateChangelogText"
+                    width: androidUpdateScroll.availableWidth
+                    renderType: TextEdit.NativeRendering
+                    color: Theme.ink
+                    readOnly: true
+                    selectByMouse: true
+                    wrapMode: TextEdit.Wrap
+                    background: null
+                    onLinkActivated: (link) => Qt.openUrlExternally(link)
+                }
             }
             ProgressBar {
                 Layout.fillWidth: true
@@ -478,12 +415,14 @@ ApplicationWindow {
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status; textFormat: Text.PlainText }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport !== "direct"; text: torStatus.text }
             CheckBox {
+                objectName: "hideUpdatePromptsCheckBox"
                 Layout.fillWidth: true
                 text: qsTr("Don't show update dialogs again")
                 checked: !appSettings.update_prompts
                 onToggled: appSettings.update_prompts = !checked
             }
             AppButton {
+                objectName: "installUpdateButton"
                 Layout.fillWidth: true
                 text: qsTr("Download and install update")
                 enabled: androidUpdateDialog.details.install_allowed === true && !androidUpdateDialog.busy
@@ -493,10 +432,22 @@ ApplicationWindow {
     }
     Connections {
         target: backend
-        function onUpdateAvailable(details) { androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0; androidUpdateDialog.details = details; androidUpdateDialog.busy = false; androidUpdateDialog.status = ""; if (!details.automatic || appSettings.update_prompts) androidUpdateDialog.open() }
+        function onUpdateAvailable(details) {
+            androidUpdateDialog.downloadedBytes = 0
+            androidUpdateDialog.totalBytes = 0
+            androidUpdateDialog.details = details
+            androidUpdateDialog.busy = false
+            androidUpdateDialog.status = ""
+            // Set the format before loading notes to avoid parsing Markdown as HTML.
+            androidChangelogText.clear()
+            androidChangelogText.textFormat = details.changelog_format === "markdown" ? TextEdit.MarkdownText : TextEdit.RichText
+            androidChangelogText.text = details.changelog || ""
+            if (!details.automatic || appSettings.update_prompts)
+                androidUpdateDialog.open()
+        }
         function onUpdateStatus(status) { androidUpdateDialog.status = status }
         function onUpdateProgress(current, total) { androidUpdateDialog.downloadedBytes = current; androidUpdateDialog.totalBytes = total }
-        function onUpdateCheckStarted() { androidUpdateDialog.details = ({}); androidUpdateDialog.status = ""; androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0 }
+        function onUpdateCheckStarted() { androidUpdateDialog.details = ({}); androidChangelogText.clear(); androidUpdateDialog.status = ""; androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0 }
         function onUpdateFinished() { androidUpdateDialog.busy = false }
     }
 

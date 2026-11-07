@@ -23,7 +23,7 @@ def signed_key(license_id: str = LICENSE, expiry: str | None = None) -> str:
     claims = {
         "account": {"id": ACCOUNT},
         "product": {"id": PRODUCT},
-        "policy": {"id": POLICY, "duration": 31556952},
+        "policy": {"id": POLICY, "duration": None},
         "user": None,
         "license": {"id": license_id, "created": iso(NOW), "expiry": expiry},
     }

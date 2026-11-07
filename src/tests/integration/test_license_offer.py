@@ -82,7 +82,7 @@ class LicenseOfferTests(unittest.TestCase):
         QDesktopServices.setUrlHandler("https", capture, "capture")
         self.addCleanup(lambda: QDesktopServices.unsetUrlHandler("https"))
         window, offer = self.load(360, 640)
-        self.assertEqual(window.findChild(QObject, "licenseOfferPrice").property("text"), "19.99 €")
+        self.assertEqual(window.findChild(QObject, "licenseOfferPrice").property("text"), "29.99 €")
         self.assertLessEqual(offer.property("height"), 616)
         self.assertEqual(capture.urls, [])
         window.findChild(QObject, "licenseOfferBuyButton").clicked.emit()

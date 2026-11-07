@@ -262,6 +262,7 @@ class ProcessVideos(QObject):
                                 "video_index": idx,
                             },
                             enabled=app_settings.enable_logging,
+                            include_traceback=app_settings.error_reporting_full_traceback,
                             version=__version__,
                         )
                         if last_error is not None:

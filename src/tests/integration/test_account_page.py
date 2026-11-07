@@ -133,9 +133,8 @@ class AccountPageControlTests(unittest.TestCase):
                             fields = ("Enter session_token", "Enter session_token_auth") if layout == "desktop" else (
                                 "session_token", "session_token_auth")
                         else:
-                            fields = (("Enter your username" if provider == "XHamster" else "Enter your email address"),
-                                      "Enter your password") if layout == "desktop" else (
-                                          "Username" if provider == "XHamster" else "Email address", "Password")
+                            fields = ("Enter your email address", "Enter your password") if layout == "desktop" else (
+                                "Email address", "Password")
                         window.field(fields[0], "")
                         window.field(fields[1], "")
                         button_text = ("Login with Session Tokens" if token else "Login") if layout == "desktop" else "Sign in"
@@ -144,11 +143,19 @@ class AccountPageControlTests(unittest.TestCase):
                         window.field(fields[0], "identity-fixture")
                         self.assertFalse(button.property("enabled"))
                         window.field(fields[1], "secret-fixture")
+                        identity = "identity-fixture"
+                        if provider == "XHamster":
+                            warning = window.control("objectName", "xhamsterEmailWarning")
+                            self.assertTrue(warning.property("visible"))
+                            self.assertFalse(button.property("enabled"))
+                            identity = "account@example.test"
+                            window.field(fields[0], identity)
+                            self.assertFalse(warning.property("visible"))
                         field = window.control("placeholderText", fields[1])
                         expression = QQmlExpression(QQmlEngine.contextForObject(field), field, "Number(echoMode)")
                         self.assertEqual(expression.evaluate()[0], 2)
                         window.click(button_text)
-                        self.assertEqual(bridge.logins[-1], (provider, "identity-fixture", "secret-fixture", False))
+                        self.assertEqual(bridge.logins[-1], (provider, identity, "secret-fixture", False))
                         if layout == "desktop":
                             if provider == "PornHub":
                                 window.field("PornHub username for browser cookies (not email)", "profile-fixture")
@@ -364,6 +371,17 @@ class AccountBackendRecoveryTests(unittest.IsolatedAsyncioTestCase):
         self.messages = []
         self.backend.showMessage.connect(self.messages.append)
         self.backend.notifications.announced.connect(lambda message, urgent: self.messages.append(message))
+
+    async def test_xhamster_username_is_rejected_before_provider_login(self):
+        from src.backend.login_manager import LoginXhamster
+
+        with (patch("src.backend.login_manager.clients.xh_client.login", AsyncMock(return_value=object())) as login,
+              patch("src.backend.login_manager.clients.xh_client.account", None)):
+            with self.assertRaisesRegex(LoginError, "email address"):
+                await LoginXhamster.login(username="profile-name", password="secret")
+            login.assert_not_awaited()
+            self.assertTrue(await LoginXhamster.login(username="account@example.test", password="secret"))
+            login.assert_awaited_once_with(username="account@example.test", password="secret")
 
     async def test_each_native_login_dispatch_and_normal_failure(self):
         cases = (("PornHub", "LoginPornhub", {"email": "identity", "password": "secret", "from_browser": False}),

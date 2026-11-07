@@ -24,6 +24,7 @@ from src.tests.license_fixtures import (
     PRODUCT,
     PUBLIC,
     iso,
+    issuance,
     permit,
     signed_key,
 )
@@ -43,7 +44,7 @@ class FakeBaseCore:
     def __init__(self):
         self.online = True
         self.now = NOW
-        self.entitlement = NOW + 366 * DAY
+        self.entitlement = None
         self.machines = {}
         self.requests = []
         self.code = None
@@ -84,7 +85,7 @@ class FakeBaseCore:
                 raise TimeoutError
             return FakeResponse(201, {"data": {"id": MACHINE}})
         if path.endswith("check-out"):
-            return FakeResponse(payload={"data": {"attributes": {"certificate": self.certificate_transform(permit(self.fingerprint, now=self.now, license_expiry=iso(self.entitlement)))}}})
+            return FakeResponse(payload={"data": {"attributes": {"certificate": self.certificate_transform(permit(self.fingerprint, now=self.now, license_expiry=iso(self.entitlement) if self.entitlement is not None else None))}}})
         if method == "DELETE":
             self.machines.clear()
             return FakeResponse(204)
@@ -130,11 +131,19 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
     async def test_valid_signature_and_literal_noncanonical_json(self):
         claims = self.client.verify_key(signed_key())
         self.assertEqual(self.client.verify_key(resign(claims)), claims)
+        for section, field in (("license", "expiry"), ("policy", "duration")):
+            del claims[section][field]
+            with self.subTest(section=section, claim="missing"), self.assertRaises(LicenseError):
+                self.client.verify_key(resign(claims))
+            claims[section][field] = "never"
+            with self.subTest(section=section, claim="malformed"), self.assertRaises(LicenseError):
+                self.client.verify_key(resign(claims))
+            claims[section][field] = None
 
     async def test_signed_permit_from_future_reports_clock_mismatch(self):
         self.core.certificate_transform = lambda certificate: permit(
             self.core.fingerprint, now=self.now + 7200,
-            license_expiry=iso(self.core.entitlement),
+            license_expiry=None,
         )
         status = await self.import_file()
         self.assertEqual(status.state, "clock_mismatch")
@@ -271,11 +280,11 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
             self.core.online = False
             self.assertFalse((await self.client.check(force=True)).allowed)
 
-    async def test_initial_grace_does_not_override_known_update_expiry(self):
+    async def test_initial_grace_rejects_a_signed_license_with_a_cutoff(self):
         self.core.online = False
-        result = await self.client.import_license(signed_key(expiry=iso(NOW - DAY)))
-        self.assertFalse(result.allowed)
-        self.assertEqual(result.state, "renewal_required")
+        with self.assertRaises(LicenseError):
+            await self.client.import_license(signed_key(expiry=iso(NOW - DAY)))
+        self.assertFalse(self.core.requests)
 
     async def test_tls_and_programming_errors_do_not_start_grace(self):
         from curl_cffi.requests.exceptions import SSLError
@@ -293,49 +302,76 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(service.status.state, "initial_grace_expired")
 
     async def test_offline_within_and_outside_exact_seven_days(self):
-        await self.import_file()
+        active = await self.import_file()
+        self.assertIsNone(active.license_expires_at)
+        self.assertEqual(active.expires_at, NOW + WEEK)
         self.core.online = False
         self.now += WEEK - 1
-        self.assertEqual((await self.client.check(force=True)).state, "offline_grace")
+        cached = await self.client.check(force=True)
+        self.assertEqual(cached.state, "offline_grace")
+        self.assertTrue(cached.allowed)
+        self.assertIsNone(cached.license_expires_at)
+        self.assertEqual(cached.expires_at, active.expires_at)
         self.now += 1
         result = await self.client.check(force=True)
         self.assertEqual(result.state, "expired_grace")
         self.assertFalse(result.allowed)
+        self.assertFalse(result.entitled_to(NOW + 25 * 365 * DAY))
 
-    async def test_active_entitlement_and_expired_old_build(self):
-        self.core.entitlement = NOW + DAY
+    async def test_lifetime_stays_valid_in_later_years(self):
         self.assertTrue((await self.import_file()).allowed)
-        self.now += 2 * DAY
+        self.now += 25 * 365 * DAY
         self.core.now = self.now
-        self.core.code = "EXPIRED"
         status = await self.client.check(force=True)
         self.assertTrue(status.allowed)
-        self.assertEqual(status.state, "update_entitlement_expired")
+        self.assertEqual(status.state, "valid")
+        self.assertIsNone(status.license_expires_at)
         self.core.online = False
         self.assertTrue((await self.client.check(force=True)).allowed)
 
-    async def test_new_build_requires_renewal_same_key_no_new_machine(self):
-        self.core.entitlement = NOW - 1
-        status = await self.import_file()
-        self.assertEqual(status.state, "renewal_required")
-        self.assertFalse(status.allowed)
+    async def test_future_build_uses_same_lifetime_key_and_machine(self):
+        self.assertTrue((await self.import_file()).allowed)
         fingerprint = self.core.fingerprint
-        self.core.entitlement = NOW + 366 * DAY
-        self.assertTrue((await self.client.check(force=True)).allowed)
+        await self.client.close()
+        self.client = self.make_client(release_timestamp=NOW + 25 * 365 * DAY)
+        status = await self.client.check()
+        self.assertTrue(status.allowed)
+        self.assertIsNone(status.license_expires_at)
         self.assertEqual(self.core.fingerprint, fingerprint)
         self.assertEqual(sum(r["url"].endswith("/machines") for r in self.core.requests), 1)
         self.assertEqual({r["headers"]["Authorization"] for r in self.core.requests}, {"License " + signed_key()})
 
-    async def test_entitlement_equality_is_inclusive(self):
-        self.core.entitlement = NOW
-        self.assertTrue((await self.import_file()).allowed)
+    async def test_lifetime_status_covers_future_releases(self):
+        status = await self.import_file()
+        self.assertTrue(status.entitled_to(NOW + 25 * 365 * DAY))
 
-    async def test_cache_tampering_cannot_extend_signed_entitlement(self):
-        self.core.entitlement = NOW - 1
-        await self.import_file()
-        self.mutate_state(lambda s: s["licenses"][s["active"]].update(license_expiry=NOW + WEEK))
-        self.core.online = False
-        self.assertEqual((await self.client.check()).state, "renewal_required")
+    async def test_missing_or_non_null_signed_expiry_is_denied_online_and_cached(self):
+        self.assertTrue((await self.import_file()).allowed)
+        for attributes in (
+            {"suspended": False},
+            {"suspended": False, "expiry": "never"},
+            {"suspended": False, "expiry": iso(NOW + WEEK)},
+        ):
+            included = issuance(LICENSE)
+            included.update(type="licenses", attributes=attributes)
+            certificate = permit(self.core.fingerprint, included=[included])
+            for source in ("refresh", "cache"):
+                with self.subTest(attributes=attributes, source=source):
+                    self.core.online = True
+                    self.core.certificate_transform = lambda cert: cert
+                    self.assertTrue((await self.client.check(force=True)).allowed)
+                    if source == "refresh":
+                        self.core.certificate_transform = lambda cert: certificate
+                        status = await self.client.check(force=True)
+                    else:
+                        # An unsigned null in local storage cannot repair signed claims.
+                        self.mutate_state(lambda s: s["licenses"][s["active"]].update(
+                            permit=certificate, license_expiry=None,
+                        ))
+                        self.core.online = False
+                        status = await self.client.check()
+                    self.assertFalse(status.allowed)
+                    self.assertEqual(status.state, "invalid_signature")
 
     async def test_corrupt_installation_id_is_preserved_and_denied(self):
         await self.import_file()
@@ -466,12 +502,24 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
         self.core.override = FakeResponse(200, {"meta": {"valid": False, "code": "EXPIRED"}, "data": None})
         status = await self.import_file()
         self.assertFalse(status.allowed)
-        self.assertEqual(status.state, "entitlement_server_denied")
+        self.assertEqual(status.state, "rejected")
         self.assertFalse(self.core.machines)
 
-    async def test_signed_commercial_null_entitlement_does_not_mean_unlimited_updates(self):
+    async def test_signed_lifetime_null_expiry_allows_premium(self):
         self.core.certificate_transform = lambda _: permit(self.core.fingerprint, now=self.now)
-        self.assertFalse((await self.import_file()).allowed)
+        active = await self.import_file()
+        self.assertTrue(active.allowed)
+        self.assertIsNone(active.license_expires_at)
+        self.assertEqual(active.expires_at, NOW + WEEK)
+        await self.client.close()
+        self.core.online = False
+        self.client = self.make_client(release_timestamp=NOW + 25 * 365 * DAY)
+        cached = await self.client.check()
+        self.assertTrue(cached.allowed)
+        self.assertEqual(cached.state, "offline_grace")
+        self.assertIsNone(cached.license_expires_at)
+        self.assertTrue(cached.entitled_to(self.client.release_timestamp))
+        self.assertEqual(cached.expires_at, active.expires_at)
 
     async def test_service_state_error_clears_previous_premium_status(self):
         from src.licensing.service import LicenseService

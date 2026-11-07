@@ -971,6 +971,14 @@ jobs:
           cp "$IOS_WORK_ROOT/downloads/"*.whl "$IOS_WORK_ROOT/lab/device/wheels/"
           echo "$IOS_DEPLOY_VENV/bin" >> "$GITHUB_PATH"
 
+      - name: Prepare iOS FFmpeg source and rebuild materials
+        run: |
+          curl --fail --location --retry 3 \
+            https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz \
+            --output "$IOS_WORK_ROOT/downloads/ffmpeg-9.0.2.tar.xz"
+          python packaging/prepare_ios_legal.py --device "$IOS_WORK_ROOT/lab/device" \
+            --source-archive "$IOS_WORK_ROOT/downloads/ffmpeg-9.0.2.tar.xz"
+
       - name: Check portable staging
         run: python -m unittest src.tests.unit.test_prepare_ios_ci
 
@@ -1011,7 +1019,8 @@ jobs:
         run: |
           HOST_PACKAGES=$(python -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
           python packaging/collect_legal.py "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_LEGAL" \
-            --distribution-path "$IOS_WORK_ROOT/lab/device/vendor" --distribution-path "$HOST_PACKAGES"
+            --distribution-path "$IOS_WORK_ROOT/lab/device/vendor" --distribution-path "$HOST_PACKAGES" \
+            --ffmpeg-legal "$IOS_WORK_ROOT/lab/device/native/packages/ffmpeg-legal"
 
       - name: Upload iOS notices
         uses: ./.github/actions/upload-artifact
@@ -1710,14 +1719,16 @@ jobs:
                 chmod +x "$file"
               fi
             done
-            # Installers and Android packages/sidecars are already direct assets.
-            if [[ "$artifact_name" != PornFetch_*_GUI_*_Setup.* && "$artifact_name" != PornFetch_android_GUI_* && "$artifact_name" != PornFetch_ios_GUI_* ]]; then
+            # Only CLI payloads need bundling with their helpers and notices.
+            # GUI archives, installers and mobile packages are already packaged.
+            if [[ "$artifact_name" == PornFetch_*_CLI_* ]]; then
               (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
             fi
             for file in "$artifact_dir"/*; do
               [[ -f "$file" ]] || continue
               name="${file##*/}"
-              [[ "$name" == pocketbase* || "$name" == ffmpeg* ]] && continue
+              # Shared files such as LICENSE stay in bundles and legal archives.
+              [[ "$name" == PornFetch_* ]] || continue
               if [[ -e "dist_release/$name" ]]; then
                 echo "Duplicate release asset: $name" >&2
                 exit 1

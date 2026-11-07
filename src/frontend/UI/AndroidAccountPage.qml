@@ -6,8 +6,8 @@ import QtQuick.Layouts
 Pane {
     id: root
     padding: 0
-    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : "#f7f8fc"
-    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : "#ffffff"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#101319" : Theme.lightShade("#f7f8fc")
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : appSettings.dark_mode ? "#1b202a" : Theme.lightShade("#ffffff")
     readonly property color textColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#f0f2f8" : "#202431"
     readonly property color mutedColor: appSettings.high_contrast ? Theme.ink : appSettings.dark_mode ? "#aeb6c5" : "#616b7d"
     readonly property color accentColor: appSettings.high_contrast ? Theme.accent : appSettings.accent_color
@@ -17,6 +17,9 @@ Pane {
     readonly property bool loggedIn: Boolean(backend.accountLoginStatus[provider])
     readonly property bool busy: backend.loginInProgress || backend.accountFetchInProgress
     readonly property bool tokenLogin: provider === "XVideos"
+    readonly property bool invalidXhamsterEmail: provider === "XHamster"
+                                               && identityField.text.trim().length > 0
+                                               && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identityField.text.trim())
     background: Rectangle { color: root.pageColor }
 
     ScrollView {
@@ -81,8 +84,18 @@ Pane {
                         Layout.fillWidth: true
                         visible: !root.tokenLogin
                         Accessible.name: placeholderText
-                        placeholderText: root.provider === "XHamster" ? qsTr("Username") : qsTr("Email address")
-                        inputMethodHints: root.provider === "PornHub" ? Qt.ImhEmailCharactersOnly : Qt.ImhNoPredictiveText
+                        placeholderText: qsTr("Email address")
+                        inputMethodHints: Qt.ImhEmailCharactersOnly
+                        Accessible.description: root.invalidXhamsterEmail ? emailWarning.text : ""
+                    }
+                    Label {
+                        id: emailWarning
+                        objectName: "xhamsterEmailWarning"
+                        Layout.fillWidth: true
+                        visible: root.invalidXhamsterEmail
+                        text: qsTr("XHamster requires your email address, not your username.")
+                        color: Theme.highContrast ? Theme.ink : Theme.dark ? "#fca5a5" : "#b91c1c"
+                        wrapMode: Text.WordWrap
                     }
                     AppTextField {
                         id: passwordField
@@ -110,7 +123,7 @@ Pane {
                         Layout.fillWidth: true
                         text: root.busy ? qsTr("Connecting…") : qsTr("Sign in")
                         highlighted: true
-                        enabled: !root.busy && (root.tokenLogin
+                        enabled: !root.busy && !root.invalidXhamsterEmail && (root.tokenLogin
                                  ? tokenField.text.trim().length > 0 && tokenAuthField.text.trim().length > 0
                                  : identityField.text.trim().length > 0 && passwordField.text.length > 0)
                         onClicked: backend.login_account(root.provider,

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from pathlib import Path
 from typing import Any
@@ -19,35 +20,38 @@ from .settings import CliSettings
 logger = logging.getLogger(__name__)
 
 _CLI_TRACKER: PocketBaseTracker | None = None
-_CLI_TRACKER_KEY: tuple[str, bool, str, str] | None = None
+_CLI_TRACKER_KEY: tuple[str, str, str] | None = None
+_CLI_TRACKER_LOCK = asyncio.Lock()
 
 
-def get_cli_tracker(settings: CliSettings) -> PocketBaseTracker:
-    """Return the shared PocketBaseTracker configured with *settings*."""
+async def get_cli_tracker(settings: CliSettings) -> PocketBaseTracker:
+    """Share one database session between downloads and explicit history inspection."""
     global _CLI_TRACKER, _CLI_TRACKER_KEY
     key = (
         str(Path(settings.pocketbase_data_path).resolve()),
-        bool(settings.track_videos),
         str(settings.pocketbase_binary or ""),
         str(Path(settings.legacy_database_path).resolve()),
     )
-    if _CLI_TRACKER is None or _CLI_TRACKER_KEY != key:
-        _CLI_TRACKER = PocketBaseTracker(
-            data_path=settings.pocketbase_data_path,
-            enabled=settings.track_videos,
-            binary_path=settings.pocketbase_binary or None,
-            legacy_sqlite_path=settings.legacy_database_path,
-        )
-        _CLI_TRACKER_KEY = key
-    return _CLI_TRACKER
+    async with _CLI_TRACKER_LOCK:
+        if _CLI_TRACKER is None or _CLI_TRACKER_KEY != key:
+            if _CLI_TRACKER is not None:
+                await _CLI_TRACKER.close()
+            _CLI_TRACKER = PocketBaseTracker(
+                data_path=settings.pocketbase_data_path,
+                enabled=True,
+                binary_path=settings.pocketbase_binary or None,
+                legacy_sqlite_path=settings.legacy_database_path,
+            )
+            _CLI_TRACKER_KEY = key
+        return _CLI_TRACKER
 
 
 async def ensure_cli_tracker(settings: CliSettings) -> PocketBaseTracker | None:
     """Ensure the tracker is started; return None gracefully if disabled or unavailable."""
     if not settings.track_videos:
         return None
-    tracker = get_cli_tracker(settings)
     try:
+        tracker = await get_cli_tracker(settings)
         await tracker.start()
         return tracker
     except PocketBaseError as exc:
@@ -239,7 +243,8 @@ def print_origin_iterators(iterators: list[dict[str, Any]], console: Console | N
 async def close_cli_tracker() -> None:
     """Close the running CLI PocketBaseTracker child process if active."""
     global _CLI_TRACKER, _CLI_TRACKER_KEY
-    tracker, _CLI_TRACKER = _CLI_TRACKER, None
-    _CLI_TRACKER_KEY = None
-    if tracker is not None:
-        await tracker.close()
+    async with _CLI_TRACKER_LOCK:
+        tracker, _CLI_TRACKER = _CLI_TRACKER, None
+        _CLI_TRACKER_KEY = None
+        if tracker is not None:
+            await tracker.close()

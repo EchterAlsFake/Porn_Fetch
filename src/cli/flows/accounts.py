@@ -170,5 +170,5 @@ async def handle_account_auth(ctx: WizardContext) -> None:
             col_table.add_column("Title", style="white")
             col_table.add_column("Duration", style="magenta")
             for idx, (_, _, med) in enumerate(items, 1):
-                col_table.add_row(str(idx), med.title if med else "Item", f"{med.length} min" if med and med.length else "—")
+                col_table.add_row(str(idx), med.title if med else "Item", f"{med.length} min" if med and med.length else "-")
             ctx.console.print(col_table)

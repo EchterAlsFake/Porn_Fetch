@@ -69,11 +69,20 @@ def find_maintenance_tool() -> Path | None:
     return None
 
 
-def launch_maintenance_tool(tool: Path, mode: str) -> None:
-    """Open IFW's interactive component manager or uninstaller."""
-    flags = {"components": "--start-package-manager", "uninstall": "--start-uninstaller"}
+def launch_maintenance_tool(tool: Path, mode: str, *, repository: Path | None = None) -> None:
+    """Keep IFW on local files; the app owns all repository network traffic."""
+    flags = {"update": "--updater", "components": "--start-package-manager", "uninstall": "--start-uninstaller"}
+    flag = flags[mode]
+    if repository is None:
+        if mode != "uninstall":
+            raise ValueError("A verified local repository is required")
+        cache = shared_data_dir() / "verified-updates"
+        cache.mkdir(parents=True, exist_ok=True, mode=0o700)
+        repository = Path(tempfile.mkdtemp(prefix="uninstall-", dir=cache))
+        # Removal needs no remote packages, including if the user switches modes.
+        (repository / "Updates.xml").write_text("<Updates/>\n", encoding="utf-8")
     subprocess.Popen(
-        [str(tool), flags[mode]],
+        [str(tool), flag, "--set-temp-repository", repository.as_uri(), "--no-proxy"],
         cwd=str(tool.parent),
         creationflags=subprocess.DETACHED_PROCESS if sys.platform == "win32" else 0,
         start_new_session=sys.platform != "win32",
@@ -101,7 +110,7 @@ class CheckUpdates:
             return update
 
     @staticmethod
-    async def check_signed_repository() -> dict | None:
+    async def check_signed_repository(*, include_current: bool = False) -> dict | None:
         tag = platform.system().lower() + "_" + {"x86_64": "amd64", "x64": "amd64", "aarch64": "arm64"}.get(platform.machine().lower(), platform.machine().lower())
         url = DEFAULT_REPO_BASE_URL + "/" + tag + "/"
         response = await service_core.request(url=url + "release.json", allow_redirects=False)
@@ -124,7 +133,11 @@ class CheckUpdates:
             logger.error("Unreadable signed update metadata from %s (HTTP %s, Content-Type %s)",
                          url + "release.json", response.status_code, content_type)
             raise _metadata_error("The update server returned a response that could not be read as signed JSON metadata.") from error
-        if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
+        published = CheckUpdates._version_parts(release["version"])
+        installed = CheckUpdates._version_parts(__version__)
+        if include_current and published < installed:
+            raise ValueError("The published component repository is older than this installation. Try again after its release repository is published.")
+        if published < installed or (published == installed and not include_current):
             return None
         if changelog_path := release.get("changelog_path"):
             try:
@@ -226,9 +239,9 @@ class AutoUpdater(QObject):
         self.request_shutdown = request_shutdown
         self._android_cancel = threading.Event()
 
-    async def run(self) -> None:
+    async def run(self, mode: str = "update") -> None:
         try:
-            await self._run()
+            await self._run(mode)
         except asyncio.CancelledError:
             self._android_cancel.set()
             self.outcome.emit("info", self.tr("Update cancelled."))
@@ -241,7 +254,9 @@ class AutoUpdater(QObject):
         finally:
             self.finished.emit()
 
-    async def _run(self) -> None:
+    async def _run(self, mode: str = "update") -> None:
+        if mode not in {"update", "components"}:
+            raise ValueError(f"Unsupported maintenance mode: {mode}")
         from src.shared.android_updates import download_and_request_install, is_android_device
         if is_android_device():
             self.statusReport.emit(self.tr("Downloading and verifying the Android update…"))
@@ -264,7 +279,8 @@ class AutoUpdater(QObject):
             self.outcome.emit("warning", message)
             return
 
-        update = await CheckUpdates.check_signed_repository()
+        update = (await CheckUpdates.check_signed_repository(include_current=True)
+                  if mode == "components" else await CheckUpdates.check_signed_repository())
         if update is None:
             message = self.tr("No update available.")
             self.statusReport.emit(message)
@@ -282,15 +298,8 @@ class AutoUpdater(QObject):
                 logger.warning("Error during pre-update cleanup: %s", exc)
 
         self.statusReport.emit("Launching Qt Maintenance Tool...")
-        logger.info("Launching maintenancetool: %s --updater", tool)
-
-        creationflags = subprocess.DETACHED_PROCESS if sys.platform == "win32" else 0
-        subprocess.Popen(
-            [str(tool), "--updater", "--set-temp-repository", repository.as_uri()],
-            cwd=str(tool.parent),
-            creationflags=creationflags,
-            start_new_session=(sys.platform != "win32"),
-        )
+        logger.info("Launching maintenancetool: %s (%s, verified local repository)", tool, mode)
+        launch_maintenance_tool(tool, mode, repository=repository)
 
         self.statusReport.emit("Updater launched. Closing Porn Fetch...")
         if self.request_shutdown:

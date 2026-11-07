@@ -51,6 +51,7 @@ SETTINGS = (
     case("systemNotificationsCheckBox", "system_notifications", "UI", "check", (True, False), group="notifications", tab=2),
     case("supressErrorsCheckBox", "supress_errors", "Misc", "check", (True, False), group="errors", tab=2),
     case("enableLoggingCheckBox", "enable_logging", "Misc", "check", (True, False), group="errors", tab=2),
+    case("reportTracebacksCheckBox", "error_reporting_full_traceback", "Misc", "check", (True, False), group="errors", tab=2),
     case("trustEnvironmentCheckBox", "trust_environment", "Misc", "check", (True, False), "trust_env", "network", 2),
     case("debugModeCheckBox", "debug_mode", "Misc", "check", (True, False), group="logging", tab=2),
     case("logLevelComboBox", "log_level", "Misc", "combo", (2, 3), group="logging", tab=2),

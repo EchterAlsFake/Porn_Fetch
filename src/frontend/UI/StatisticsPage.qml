@@ -32,7 +32,7 @@ Pane {
     readonly property color failureColor: appSettings.high_contrast ? Theme.ink : darkMode ? "#ff627d" : "#c62845"
     readonly property color pendingColor: appSettings.high_contrast ? Theme.ink : darkMode ? "#f5b942" : "#9a6500"
     readonly property color foregroundColor: appSettings.high_contrast ? Theme.ink : materialStyle ? Material.foreground : palette.text
-    readonly property color cardColor: appSettings.high_contrast ? Theme.background : materialStyle
+    readonly property color cardColor: appSettings.high_contrast || !darkMode ? Theme.surface : materialStyle
                                        ? Material.dialogColor
                                        : (darkMode ? Qt.lighter(palette.window, 1.18) : palette.base)
     readonly property color subtleTextColor: appSettings.high_contrast ? Theme.ink : Qt.rgba(foregroundColor.r,

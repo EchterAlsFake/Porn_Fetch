@@ -163,7 +163,13 @@ To produce distributable single binaries yourself:
 
 ## Premium license
 
-A valid entitlement enables these features:
+Pay €29.99 once for a lifetime Premium license on up to ten active installations.
+Every future Porn Fetch update and feature I release is included. Future development
+has no guaranteed duration. Activation and periodic online validation remain required;
+if I permanently close the licensing service, I will provide an offline unlock before
+closure so existing buyers can continue using Premium.
+
+Premium enables these features:
 
 - Downloads above 720p.
 - Bulk downloading from public models, channels and playlists.
@@ -173,10 +179,10 @@ Without an active premium license, public model, channel and playlist URLs show
 only their first five videos. Account collections are exempt from this preview
 limit. Free use supports up to 720p and one active download at a time.
 
-In the GUI, use **Purchase / renew license**, then paste the signed key or use
+In the GUI, use **Get lifetime Premium**, then paste the signed key or use
 **Import License File**. In the CLI, choose **License Management** and enter the
-key, JSON envelope, or file path. Only commercial-policy test credentials work
-with the current client; old beta credentials are not upgraded automatically.
+key, JSON envelope, or file path. The current client accepts signed permanent
+commercial licenses; old beta credentials are not upgraded automatically.
 See the [installation guide](docs/INSTALLATION.md).
 
 ## General Information

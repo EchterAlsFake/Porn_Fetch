@@ -5,9 +5,17 @@ QtObject {
     property real globalPointSize: 14
     readonly property bool highContrast: typeof appSettings !== "undefined" && appSettings && appSettings.high_contrast === true
     readonly property bool dark: typeof appSettings === "undefined" || !appSettings || appSettings.dark_mode !== false
+    readonly property real lightBrightness: typeof appSettings !== "undefined" && appSettings
+                                           && typeof appSettings.light_theme_brightness === "number"
+                                           ? appSettings.light_theme_brightness / 100 : 1
+    function lightShade(value) {
+        const color = Qt.color(value)
+        return Qt.rgba(color.r * lightBrightness, color.g * lightBrightness,
+                       color.b * lightBrightness, color.a)
+    }
     readonly property color background: highContrast ? (dark ? "#000000" : "#ffffff")
-                                                    : (dark ? "#121212" : "#ffffff")
-    readonly property color surface: highContrast ? background : (dark ? "#1e1e24" : "#ffffff")
+                                                    : (dark ? "#121212" : lightShade("#ffffff"))
+    readonly property color surface: highContrast ? background : (dark ? "#1e1e24" : lightShade("#ffffff"))
     readonly property color ink: highContrast ? (dark ? "#ffffff" : "#000000")
                                              : (dark ? "#f0f2f8" : "#202431")
     readonly property color muted: highContrast ? ink : (dark ? "#b9c0cf" : "#566176")

@@ -5,12 +5,17 @@ overwriting when different classes hold their own instances and overwrite
 each other.
 """
 # config.py
+import hashlib
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
+from tempfile import TemporaryDirectory
+
+from PySide6.QtCore import Property, QObject, QSettings, QStandardPaths, QUrl, Signal, Slot
 from PySide6.QtGui import QGuiApplication
-from PySide6.QtCore import QObject, Property, QSettings, QStandardPaths, QUrl, Signal, Slot
-from src.shared.version import __version__
+
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
+from src.shared.version import __version__ as __version__
 
 __license__ = "Porn Fetch Source-Available License 1.0"
 __author__ = "Johannes Habel"
@@ -26,7 +31,9 @@ IS_SOURCE_RUN = True
 
 IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
 
-TEMP_DIRECTORY = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation)) / "PornFetch"
+_smoke_state = TemporaryDirectory(prefix="pornfetch-smoke-") if "--smoke-test" in sys.argv else None
+TEMP_DIRECTORY = (Path(_smoke_state.name) / "cache" if _smoke_state else
+                  Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation)) / "PornFetch")
 TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
 TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
 
@@ -49,6 +56,7 @@ class SettingsManager(QObject):
     # For Theming
     coreStyleChanged = Signal(str)
     darkModeChanged = Signal(bool)
+    lightThemeBrightnessChanged = Signal(int)
     accentColorChanged = Signal(str)
     activityGlowEnabledChanged = Signal(bool)
     systemNotificationsChanged = Signal(bool)
@@ -58,6 +66,8 @@ class SettingsManager(QObject):
     errorReportingDecisionChanged = Signal(bool)
     ukraineMessageSeenChanged = Signal()
     licenseOfferSeenChanged = Signal()
+    setupChanged = Signal()
+    errorReportingTracebackChanged = Signal(bool)
 
     # These Signals are not needed yet, but who knows
     logLevelChanged = Signal(int)
@@ -155,13 +165,13 @@ class SettingsManager(QObject):
         self._settings.sync()
 
     def reset(self):
-        message_seen = self.ukraine_message_seen
-        offer_seen = self.license_offer_seen
+        preserved = {key: self._settings.value(key) for key in self._settings.allKeys()
+                     if key.startswith("Onboarding/") or key in {
+                         "Misc/error_reporting_decided", "Misc/error_reporting_consent_version",
+                         "Misc/network_logging", "Misc/error_reporting_full_traceback", "Video/android_output_folder"}}
         self._settings.clear() # Resets settings back to default
-        if offer_seen:
-            self._settings.setValue("Onboarding/license_offer_seen", True)
-        if message_seen:
-            self._settings.setValue("Onboarding/ukraine_message_seen", True)
+        for key, value in preserved.items():
+            self._settings.setValue(key, value)
         self._settings.sync()
 
     def get_bool(self, key: str, default: bool = False) -> bool:
@@ -591,6 +601,39 @@ class SettingsManager(QObject):
             self.reloadClients.emit(val)
 
     # System / Misc related
+    @Property(bool, constant=True)
+    def smoke_test(self) -> bool:
+        return "--smoke-test" in sys.argv
+
+    @Property(bool, notify=setupChanged)
+    def license_accepted(self) -> bool:
+        return bool(self.get_str("Onboarding/license_accepted_sha256"))
+
+    @Property(bool, notify=setupChanged)
+    def setup_completed(self) -> bool:
+        return self.get_bool("Onboarding/setup_completed", False) and self.license_accepted
+
+    @Slot(str)
+    def accept_application_license(self, text: str) -> None:
+        if not text.strip() or self.smoke_test:
+            return
+        self._settings.setValue("Onboarding/license_accepted_sha256", hashlib.sha256(text.encode("utf-8")).hexdigest())
+        self._settings.setValue("Onboarding/license_accepted_text", text)
+        self._settings.setValue("Onboarding/license_accepted_at", datetime.now(timezone.utc).isoformat())
+        self._settings.sync()
+        self.setupChanged.emit()
+
+    @Slot(bool, result=bool)
+    def finish_setup(self, require_output_folder: bool) -> bool:
+        if (self.smoke_test or not self.license_accepted or not self.license_offer_seen
+                or not self.error_reporting_decided or not self.ukraine_message_seen
+                or (require_output_folder and not self.android_output_folder)):
+            return False
+        self._settings.setValue("Onboarding/setup_completed", True)
+        self._settings.sync()
+        self.setupChanged.emit()
+        return True
+
     @Property(bool, notify=licenseOfferSeenChanged)
     def license_offer_seen(self) -> bool:
         return self.get_bool("Onboarding/license_offer_seen", False)
@@ -664,17 +707,35 @@ class SettingsManager(QObject):
 
     @Slot(bool)
     def set_error_reporting_consent(self, enabled: bool) -> None:
+        self.set_error_reporting_options(enabled, self.error_reporting_full_traceback)
+
+    @Property(bool, notify=errorReportingTracebackChanged)
+    def error_reporting_full_traceback(self) -> bool:
+        # Preserve the detailed scope of an existing, explicitly consented opt-in.
+        previous_detailed = self.error_reporting_decided and self.get_bool("Misc/network_logging", False)
+        return self.get_bool("Misc/error_reporting_full_traceback", previous_detailed)
+
+    @error_reporting_full_traceback.setter
+    def error_reporting_full_traceback(self, enabled: bool) -> None:
+        self.set_error_reporting_options(self.enable_logging, bool(enabled))
+
+    @Slot(bool, bool)
+    def set_error_reporting_options(self, enabled: bool, full_traceback: bool) -> None:
         """Persist an explicit first-run choice and the resulting setting atomically."""
         old_decided = self.error_reporting_decided
         old_enabled = self.enable_logging
+        old_traceback = self.error_reporting_full_traceback
         self._settings.setValue("Misc/error_reporting_decided", True)
         self._settings.setValue("Misc/error_reporting_consent_version", ERROR_REPORT_CONSENT_VERSION)
         self._settings.setValue("Misc/network_logging", bool(enabled))
+        self._settings.setValue("Misc/error_reporting_full_traceback", bool(full_traceback))
         self._settings.sync()
         if not old_decided:
             self.errorReportingDecisionChanged.emit(True)
         if old_enabled != bool(enabled):
             self.networkLoggingChanged.emit(bool(enabled))
+        if old_traceback != bool(full_traceback):
+            self.errorReportingTracebackChanged.emit(bool(full_traceback))
 
     @Property(bool, notify=trustEnvironmentChanged)
     def trust_environment(self) -> bool:
@@ -809,8 +870,9 @@ class SettingsManager(QObject):
             self.serviceTransportChanged.emit(value)
             self.reloadClients.emit(value)
             if value == "direct":
-                from src.shared.tor_runtime import runtime
                 import asyncio
+
+                from src.shared.tor_runtime import runtime
                 try:
                     asyncio.get_running_loop().run_in_executor(None, runtime.stop)
                 except RuntimeError:
@@ -1044,6 +1106,17 @@ class SettingsManager(QObject):
             self._settings.setValue("UI/dark_mode", val)
             self.darkModeChanged.emit(val)
 
+    @Property(int, notify=lightThemeBrightnessChanged)
+    def light_theme_brightness(self) -> int:
+        return max(75, min(100, self.get_int("UI/light_theme_brightness", 100)))
+
+    @light_theme_brightness.setter
+    def light_theme_brightness(self, value: int) -> None:
+        value = max(75, min(100, int(value)))
+        if value != self.light_theme_brightness:
+            self._settings.setValue("UI/light_theme_brightness", value)
+            self.lightThemeBrightnessChanged.emit(value)
+
     @Property(bool, notify=activityGlowEnabledChanged)
     def activity_glow_enabled(self) -> bool:
         return self.get_bool("UI/activity_glow_enabled", True)
@@ -1064,4 +1137,5 @@ class SettingsManager(QObject):
             self._settings.setValue("UI/accent_color", val)
             self.accentColorChanged.emit(val)
 
-app_settings = SettingsManager() # Singleton instance shared globally :)
+app_settings = SettingsManager(QSettings(str(Path(_smoke_state.name) / "settings.ini"), QSettings.IniFormat)
+                               if _smoke_state else None)

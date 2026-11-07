@@ -11,8 +11,8 @@ Item {
     implicitHeight: card.implicitHeight + 48
 
     readonly property bool dark: appSettings.dark_mode
-    readonly property color bgBase: appSettings.high_contrast ? Theme.background : dark ? "#1f1f21" : "#f5f6f8"
-    readonly property color bgCard: appSettings.high_contrast ? Theme.background : dark ? "#262628" : "#ffffff"
+    readonly property color bgBase: appSettings.high_contrast ? Theme.background : dark ? "#1f1f21" : Theme.lightShade("#f5f6f8")
+    readonly property color bgCard: appSettings.high_contrast ? Theme.background : dark ? "#262628" : Theme.lightShade("#ffffff")
     readonly property color bgInput: appSettings.high_contrast ? Theme.background : dark ? "#303136" : "#f3f4f7"
     readonly property color border: appSettings.high_contrast ? Theme.ink : dark ? "#666976" : "#858b98"
     readonly property color textPri: dark ? "#f3f3f5" : "#202431"
@@ -255,7 +255,7 @@ Item {
                         columnSpacing: 12
 
                         Text {
-                            text: qsTr("Premium version entitlement ends:")
+                            text: qsTr("Premium license expires:")
                             font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.DemiBold
                             color: textSec
@@ -268,7 +268,7 @@ Item {
                             color: success
                             horizontalAlignment: Text.AlignRight
                             ToolTip.visible: expiryMa.containsMouse
-                            ToolTip.text: qsTr("Premium features are covered in releases for 1 year after first activation. App updates are free for everyone.")
+                            ToolTip.text: qsTr("Your Premium license never expires. Every future Porn Fetch update and feature I release is included.")
                             MouseArea {
                                 id: expiryMa
                                 anchors.fill: parent
@@ -306,7 +306,7 @@ Item {
                         }
                         Text {
                             Layout.fillWidth: true
-                            text: (typeof bridge !== "undefined" && bridge && bridge.nextCheckAt) ? bridge.nextCheckAt : "—"
+                            text: (typeof bridge !== "undefined" && bridge && bridge.nextCheckAt) ? bridge.nextCheckAt : "-"
                             font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.Medium
                             color: textPri
@@ -326,7 +326,7 @@ Item {
                         font.pixelSize: 13 * appSettings.font_size / 12
                     }
                     Text {
-                        text: qsTr("How do premium entitlement & 10-machine limits work?")
+                        text: qsTr("How do lifetime Premium & installation limits work?")
                         font.pixelSize: 12 * appSettings.font_size / 12
                         font.underline: helpMa.containsMouse
                         color: helpMa.containsMouse ? accentGlow : accent
@@ -539,7 +539,7 @@ Item {
                             spacing: 8
                             Text { text: "📅"; font.pixelSize: 15 * appSettings.font_size / 12 }
                             Text {
-                                text: qsTr("Premium Version Entitlement & Free App Updates")
+                                text: qsTr("Lifetime Premium & App Updates")
                                 font.pixelSize: 14 * appSettings.font_size / 12
                                 font.bold: true
                                 color: textPri
@@ -553,7 +553,7 @@ Item {
                             lineHeight: 1.25
                             color: textSec
                             textFormat: Text.RichText
-                            text: qsTr("• <b>Premium version entitlement ends:</b> The release deadline for licensed premium features. App updates are free for everyone, including without a license. A <b>Permanent License</b> provides perpetual premium access to versions released during the <b>first year after activation</b>. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.<br><br>• <b>Offline Permit:</b> Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately.")
+                            text: qsTr("• <b>Lifetime Premium:</b> Buy once for €29.99 and use Premium forever. Every future Porn Fetch update and feature I release is included. Future development has no guaranteed duration. Your license does not expire if development ends.<br><br>• <b>Offline permit:</b> Activation and periodic online validation are required. Porn Fetch checks at every startup. After a successful check, you can use Premium offline for up to 7 days. A server rejection takes effect immediately.<br><br>• <b>Service closure:</b> If I permanently close the licensing service, I will provide an offline unlock before closure so existing buyers can continue using Premium. Changes to third-party websites and operating systems can affect compatibility.")
                         }
                     }
 

@@ -243,6 +243,7 @@ class Backend(QObject):
         self._update_check_requested = False
         self._update_check_manual = False
         self._available_update = None
+        self._services_started = False
         self._auto_update_task: asyncio.Task[object] | None = None
         self._shutdown_task: asyncio.Task[None] | None = None
         self._download_tasks: dict[str, asyncio.Task[object]] = {}
@@ -427,6 +428,22 @@ class Backend(QObject):
         if self._update_check_requested:
             self._start_update_check()
 
+    @Slot()
+    def start_configured_services(self) -> None:
+        """First-use setup must finish before licensing, history or update requests."""
+        if self._services_started or self._is_shutting_down or not app_settings.setup_completed:
+            return
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            return  # Startup's coroutine will retry after QtAsyncio begins.
+        self._services_started = True
+        if self._license_bridge is not None:
+            self._license_bridge.start()
+        if self.database_bridge is not None:
+            self.database_bridge.start()
+        self.start_async_services()
+
     def _start_update_check(self) -> None:
         self._update_check_requested = False
         if self._update_check_task is not None and not self._update_check_task.done():
@@ -492,19 +509,6 @@ class Backend(QObject):
     def review_update(self):
         if self._available_update:
             self.updateAvailable.emit({**self._available_update, "automatic": False})
-
-    @Slot(str, str, result=str)
-    def release_notes_text(self, notes: str, notes_format: str) -> str:
-        # Parse once outside the scene graph. Large rich-text release documents
-        # do not need to participate in popup geometry or load remote images.
-        from PySide6.QtGui import QTextDocument
-
-        document = QTextDocument()
-        if notes_format == "markdown":
-            document.setMarkdown(notes)
-        else:
-            document.setHtml(notes)
-        return document.toPlainText()
 
     @Slot(str, result=str)
     def download_error_details(self, job_id: str) -> str:
@@ -675,6 +679,16 @@ class Backend(QObject):
         elif action == "clear-download-list":
             self._clear_download_list()
         elif action in {"maintenance-components", "maintenance-uninstall"}:
+            pending = self._auto_update_task
+            if pending is not None and not pending.done():
+                return
+            if action == "maintenance-components":
+                self.notifications.publish(
+                    self.tr("Downloading and verifying installation components. Qt Maintenance Tool will open when they are ready."),
+                    self.tr("Installation"), "info", key="maintenance")
+                self._auto_update_task = self._spawn(
+                    self.auto_updater.run("components"), name="component-manager")
+                return
             tool = find_maintenance_tool()
             if tool is None:
                 self.notifications.publish(self.tr("The Qt Maintenance Tool could not be found."),
@@ -774,6 +788,7 @@ class Backend(QObject):
                             location="Backend._background_task_done",
                             context={"task_name": task.get_name()},
                             enabled=app_settings.enable_logging,
+                            include_traceback=app_settings.error_reporting_full_traceback,
                             version=__version__,
                         ),
                         name=f"report-{task.get_name()}",
@@ -914,6 +929,11 @@ class Backend(QObject):
     @Slot(str, bool)
     def download_video(self, job_id: str, cleanup_on_stop: bool = False) -> None:
         if self._is_shutting_down:
+            return
+        if is_android and not app_settings.android_output_folder:
+            self.notifications.publish(
+                self.tr("Choose an output folder in Settings → Video before downloading. Android's private app directory cannot be opened by normal file managers or video players."),
+                self.tr("Output folder required"), "warning", key="output-folder", direct=True)
             return
         job_id = str(job_id)
         existing_task = self._download_tasks.get(job_id)
@@ -1221,6 +1241,7 @@ class Backend(QObject):
                     "job_id": job_id,
                 },
                 enabled=app_settings.enable_logging,
+                include_traceback=app_settings.error_reporting_full_traceback,
                 version=__version__,
             )
             details = "".join(traceback.format_exception(error))
@@ -1249,6 +1270,10 @@ class Backend(QObject):
     @Property(QObject, notify=downloadsChanged)
     def downloads(self):
         return self._downloads_model
+
+    @Property(QObject, constant=True)
+    def sessionDownloads(self):
+        return self._downloads_model.session_history
 
     @Slot(object)
     def video_added_signal(self, video):
@@ -1471,6 +1496,7 @@ class Backend(QObject):
                 location="Backend._run_fetch_account_videos",
                 context={"provider": provider, "collection": collection, "playlist_url": playlist_url},
                 enabled=app_settings.enable_logging,
+                include_traceback=app_settings.error_reporting_full_traceback,
                 version=__version__,
             )
             self.showMessage.emit(
@@ -1562,6 +1588,7 @@ class Backend(QObject):
                 location="Backend._run_login_account",
                 context={"provider": provider},
                 enabled=app_settings.enable_logging,
+                include_traceback=app_settings.error_reporting_full_traceback,
                 version=__version__,
             )
             self.showMessage.emit(
@@ -1773,7 +1800,7 @@ def main() -> None:
 
     license_service = create_license_service(
         app_settings,
-        Path.cwd() / "licensing" if args.smoke_test else (
+        Path(TEMP_DIRECTORY).parent / "licensing" if args.smoke_test else (
             Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) if is_mobile else shared_data_dir()
         ),
         production_config=load_production_config(),
@@ -1872,9 +1899,7 @@ def main() -> None:
     async def start_async_services() -> None:
         # This coroutine is first advanced by QtAsyncio after its loop is
         # running. QML loading alone is not a safe asyncio startup boundary.
-        bridge_instance.start()
-        database_bridge.start()
-        backend_instance.start_async_services()
+        backend_instance.start_configured_services()
 
     # Finish async shutdown before destroying any QML context-property owners.
     try:

@@ -3,6 +3,7 @@ from pathlib import Path
 import hashlib
 import os
 import re
+import runpy
 import shutil
 import subprocess
 import tarfile
@@ -35,7 +36,9 @@ subprocess.run(["make", "-j6"], cwd=build, check=True)
 configuration = (build / "config.h").read_text()
 assert all(f"#define CONFIG_{name} 0" in configuration for name in ["GPL", "VERSION3", "NONFREE", "NETWORK"])
 assert not re.search(r"^#define CONFIG_\w+_ENCODER 1$", (build / "config_components.h").read_text(), re.M)
-headers = Path("/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework/ios-arm64/Python.framework/Headers")
+framework = Path(os.environ.get("IOS_PYTHON_XCFRAMEWORK",
+    "/Users/asuna/.pyside6_ios/Python-iOS/3.15.0rc2/Python.xcframework"))
+headers = framework / "ios-arm64/Python.framework/Headers"
 output = device / "native/packages/_ios_ffmpeg.cpython-315-iphoneos.so"
 subprocess.run([str(tools / "clang"), "-target", "arm64-apple-ios15.0", "-isysroot", str(sdk),
     "-O2", "-dynamiclib", "-undefined", "dynamic_lookup", "-I", str(headers), "-I", str(source),
@@ -52,4 +55,6 @@ for name in ["COPYING.LGPLv2.1", "LICENSE.md"]:
 for name in ["config.h", "config_components.h"]:
     shutil.copy2(build / name, legal / name)
 (legal / "configuration.txt").write_text("\n".join(flags) + "\n")
+prepare_legal = runpy.run_path(str(repo / "packaging/prepare_ios_legal.py"))["prepare"]
+prepare_legal(device, archive, binary_sha256=hashlib.sha256(output.read_bytes()).hexdigest())
 print(f"Built {output}: {output.stat().st_size / 1024**2:.2f} MiB")

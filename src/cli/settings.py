@@ -64,6 +64,7 @@ class CliSettings:
     log_level: str = "INFO"
     debug: bool = False
     error_reporting: bool = False
+    error_reporting_full_traceback: bool = False
     error_reporting_decided: bool = False
     error_reporting_consent_version: int = 0
     # Database / PocketBase tracking
@@ -181,6 +182,9 @@ class SettingsStore:
             values = raw.get("settings", raw)
             known = {field.name for field in fields(CliSettings)}
             settings = CliSettings(**{k: v for k, v in values.items() if k in known})
+            if ("error_reporting_full_traceback" not in values and settings.error_reporting
+                    and settings.error_reporting_consent_version == ERROR_REPORT_CONSENT_VERSION):
+                settings = replace(settings, error_reporting_full_traceback=True)
             if settings.error_reporting and settings.error_reporting_consent_version != ERROR_REPORT_CONSENT_VERSION:
                 settings = replace(settings, error_reporting=False, error_reporting_decided=False)
             if not settings.error_reporting_decided:
@@ -251,10 +255,11 @@ async def prompt_error_reporting_consent(
         padding=(1, 2),
     ))
     choice = await questionary.select(
-        "Enable automatic error reports with full tracebacks and video URLs?",
+        "Choose automatic error reporting (reports stay private with me):",
         choices=[
-            questionary.Choice("No, keep error reporting disabled", value=False),
-            questionary.Choice("Yes, enable automatic error reports", value=True),
+            questionary.Choice("Off: do not send reports", value=0),
+            questionary.Choice("Basic: no video URLs, exception messages or tracebacks", value=1),
+            questionary.Choice("Full: include Python tracebacks and video URLs", value=2),
         ],
     ).ask_async()
     if choice is None:
@@ -264,6 +269,7 @@ async def prompt_error_reporting_consent(
     updated = replace(
         settings,
         error_reporting=bool(choice),
+        error_reporting_full_traceback=choice == 2,
         error_reporting_decided=True,
         error_reporting_consent_version=ERROR_REPORT_CONSENT_VERSION,
     )

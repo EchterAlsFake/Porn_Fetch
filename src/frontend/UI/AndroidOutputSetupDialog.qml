@@ -35,7 +35,7 @@ Dialog {
     title: qsTr("Choose your video folder")
     header: Item {}
     background: Rectangle {
-        color: root.settings.high_contrast ? Theme.background : root.settings.dark_mode ? "#101319" : "#f7f8fc"
+        color: root.settings.high_contrast ? Theme.background : root.settings.dark_mode ? "#101319" : Theme.lightShade("#f7f8fc")
     }
 
     Dialogs.FolderDialog {
@@ -107,7 +107,7 @@ Dialog {
             implicitHeight: Math.max(52, contentItem.implicitHeight + topPadding + bottomPadding)
             contentItem: Label {
                 text: chooseButton.text
-                color: root.settings.high_contrast ? Theme.background : "#ffffff"
+                color: root.settings.high_contrast ? Theme.background : Theme.lightShade("#ffffff")
                 font.pixelSize: 16 * root.textScale
                 font.weight: Font.DemiBold
                 wrapMode: Text.Wrap

@@ -23,7 +23,16 @@ MAX_BODY_BYTES = 1_048_576
 ERROR_REPORT_CONSENT_VERSION = 2
 _LOGGER = logging.getLogger(__name__)
 
-ERROR_REPORT_DISCLOSURE = """Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a detailed report after an operation fails. You can decline and still use all app features.
+ERROR_REPORT_DISCLOSURE = """Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a report after an operation fails. You can decline and still use all app features.
+
+Your reports stay private with me. I never publish them or share them with anyone. I am not interested in what you watch or download. I do not go through reported video URLs to see what you watched; I use diagnostic information only to reproduce and fix application errors.
+
+Choose how much to include
+Basic reports contain the correlation ID, timestamp, app/OS information, error type, operation, code location, and provider or selected quality when available. They exclude exception messages, video URLs, local file paths and Python tracebacks.
+
+Full error reports make a significant difference: they often give me the details I need to identify an issue immediately and fix it much faster. Each fix benefits everyone using Porn Fetch.
+
+Only if you separately choose full tracebacks do reports include the following additional details.
 
 What a report contains
 - A random correlation ID to identify that error.
@@ -128,20 +137,26 @@ def build_error_report(
     context: Mapping[str, Any] | None = None,
     correlation_id: str | None = None,
     version: str = __version__,
+    include_traceback: bool = True,
 ) -> tuple[str, str]:
-    """Keep the complete exception chain and supplied reproduction context."""
+    """Format basic diagnostics or the explicitly selected full exception context."""
     report_id = correlation_id or uuid.uuid4().hex[:12]
-    diagnostic = _format_traceback(error)
+    diagnostic = _format_traceback(error) if include_traceback else ""
     # The provider API keeps source tracebacks in a tuple rather than in the
     # Python exception chain, so standard traceback formatting omits them.
     current = error
     seen = set()
-    while current is not None and id(current) not in seen:
+    while include_traceback and current is not None and id(current) not in seen:
         seen.add(id(current))
         if isinstance(current, MediaLoadErrors):
             for index, source_error in enumerate(current.errors, start=1):
                 diagnostic += f"\nMedia source failure {index}:\n" + _format_traceback(source_error)
         current = current.__cause__ or (None if current.__suppress_context__ else current.__context__)
+    if not include_traceback:
+        context = {key: value for key, value in (context or {}).items()
+                   if key in {"provider", "quality"} and re.fullmatch(r"[A-Za-z0-9_. -]{1,100}", str(value))}
+        operation = operation if re.fullmatch(r"[A-Za-z0-9_. -]{1,160}", operation) else "[omitted]"
+        location = location if re.fullmatch(r"[A-Za-z0-9_. -]{1,160}", location) else "[omitted]"
     message = "\n".join([
         "Porn Fetch error report",
         f"correlation_id={report_id}",
@@ -217,6 +232,7 @@ async def report_exception(
     context: Mapping[str, Any] | None = None,
     enabled: bool,
     version: str = __version__,
+    include_traceback: bool = True,
 ) -> str:
     """Report an exception when opted in and always return a local correlation ID."""
     report_id = uuid.uuid4().hex[:12]
@@ -229,6 +245,7 @@ async def report_exception(
                 context=context,
                 correlation_id=report_id,
                 version=version,
+                include_traceback=include_traceback,
             )
             await report_public_error(message)
     except Exception:

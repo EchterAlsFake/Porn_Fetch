@@ -7,8 +7,8 @@ Pane {
     id: root
     padding: 0
     readonly property bool dark: appSettings.dark_mode
-    readonly property color pageColor: appSettings.high_contrast ? Theme.background : dark ? "#17191f" : "#f5f6f8"
-    readonly property color cardColor: appSettings.high_contrast ? Theme.background : dark ? "#22252d" : "#ffffff"
+    readonly property color pageColor: appSettings.high_contrast ? Theme.background : dark ? "#17191f" : Theme.lightShade("#f5f6f8")
+    readonly property color cardColor: appSettings.high_contrast ? Theme.background : dark ? "#22252d" : Theme.lightShade("#ffffff")
     readonly property color ink: dark ? "#f1f3f8" : "#202431"
     readonly property color muted: appSettings.high_contrast ? ink : dark ? "#b9c0cf" : "#566176"
     readonly property color outline: appSettings.high_contrast ? Theme.ink : dark ? "#3a404d" : "#dce0e8"
@@ -75,7 +75,7 @@ Pane {
             }
             CreditCard {
                 title: qsTr("Built with")
-                content: qsTr("**Interface** — Python, PySide6 and Qt Quick; Rich and Questionary for the CLI.\n\n**Downloads** — eaf_base_api, curl-cffi and the provider API libraries.\n\n**Media and storage** — a separate FFmpeg program for media processing; PocketBase for optional desktop history and statistics.\n\n**Builds** — Nuitka, PyInstaller, Qt Installer Framework, and the Android and iOS toolchains.\n\nEach component keeps its own license. The third-party notices contain the license information.")
+                content: qsTr("**Interface:** Python, PySide6 and Qt Quick; Rich and Questionary for the CLI.\n\n**Downloads:** eaf_base_api, curl-cffi and the provider API libraries.\n\n**Media and storage:** a separate FFmpeg program for media processing; PocketBase for optional desktop history and statistics.\n\n**Builds:** Nuitka, PyInstaller, Qt Installer Framework, and the Android and iOS toolchains.\n\nEach component keeps its own license. The third-party notices contain the license information.")
             }
             CreditCard {
                 title: qsTr("Licenses and attribution")
@@ -102,7 +102,7 @@ Pane {
             Label {
                 Layout.fillWidth: true
                 Layout.margins: 24
-                text: qsTr("Copyright © 2023–2026 Johannes Habel")
+                text: qsTr("Copyright © 2023-2026 Johannes Habel")
                 color: root.muted
                 wrapMode: Text.Wrap
             }

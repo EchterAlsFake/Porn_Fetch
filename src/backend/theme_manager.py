@@ -19,6 +19,7 @@ class ThemeManager(QObject):
         app_settings.darkModeChanged.connect(self._on_settings_mode_changed)
         app_settings.accentColorChanged.connect(self._on_settings_color_changed)
         app_settings.accessibilityChanged.connect(self._refresh_palette)
+        app_settings.lightThemeBrightnessChanged.connect(self._refresh_palette)
         
         self._update_color_scheme(self._theme_mode == "Dark")
 
@@ -48,11 +49,13 @@ class ThemeManager(QObject):
                 "Mid": foreground, "Dark": foreground, "Shadow": foreground,
             }
         else:
-            background, foreground = ("#353535", "#ffffff") if is_dark else ("#efefef", "#000000")
+            light_level = round(255 * app_settings.light_theme_brightness / 100)
+            light_background = QColor(light_level, light_level, light_level)
+            background, foreground = ("#353535", "#ffffff") if is_dark else (light_background, "#000000")
             colors = {
                 "Window": background, "WindowText": foreground,
-                "Base": "#191919" if is_dark else "#ffffff",
-                "AlternateBase": background if is_dark else "#f7f7f7",
+                "Base": "#191919" if is_dark else light_background,
+                "AlternateBase": background,
                 "ToolTipBase": background, "ToolTipText": foreground,
                 "Text": foreground, "Button": background, "ButtonText": foreground,
                 "BrightText": "#ff0000", "Link": app_settings.accent_color,

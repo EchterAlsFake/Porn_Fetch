@@ -14,7 +14,7 @@ from .client import LicenseClient, LicenseError, LicenseStatus
 
 REASONS = {
     "unlicensed": "No production license is installed.",
-    "valid": "License active. This build is permanently entitled.",
+    "valid": "Lifetime Premium is active. Every future Porn Fetch update and feature I release is included.",
     "activation_required": "Connect to activate this installation.",
     "activation_incomplete": "The server was reached but activation did not complete. Please retry or contact support.",
     "activation_failed": "This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support.",
@@ -22,9 +22,6 @@ REASONS = {
     "initial_grace_expired": "The initial 3-day grace period has ended. Connect to validate your license.",
     "offline_grace": "License server unavailable. Using the last successful validation.",
     "expired_grace": "Please connect to validate your license; the 7-day offline grace has ended.",
-    "update_entitlement_expired": "Update entitlement expired. This version remains licensed permanently. Renew to receive newer Porn Fetch versions.",
-    "renewal_required": "This version was released after your update entitlement ended. Renew to use this version; your earlier entitled versions remain licensed.",
-    "entitlement_server_denied": "The server denied access after update entitlement ended. Your entitled versions remain licensed; contact support to correct the licensing policy.",
     "suspended_or_denied": "License authentication was denied. The license may be suspended; please contact support.",
     "suspended": "This license is suspended. Please contact support.",
     "revoked": "The licensing server has revoked this license.",
@@ -72,10 +69,6 @@ class LicenseService:
     @property
     def reason(self) -> str:
         reason = REASONS.get(self.status.state, self.status.state.replace("_", " ").capitalize())
-        if self.status.state in ("update_entitlement_expired", "renewal_required") and self.status.license_expires_at is not None:
-            from datetime import datetime, timezone
-            end = datetime.fromtimestamp(self.status.license_expires_at, timezone.utc).strftime("%d %B %Y")
-            reason = f"Your update entitlement ended on {end}. " + reason
         if getattr(self.core, "tor_enabled", False) is True:
             failure = getattr(getattr(self.core, "policy", None), "last_failure", "")
             if isinstance(failure, str) and failure and (

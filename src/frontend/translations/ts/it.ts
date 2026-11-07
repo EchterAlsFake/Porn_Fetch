@@ -15,7 +15,7 @@
     </message>
     <message>
         <location line="+2"/>
-        <source>XHamster: enter your username and password, then press Login. You can retrieve liked videos or paste an account playlist URL. Browser login does not require a username here.</source>
+        <source>XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -42,7 +42,7 @@
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+67"/>
+        <location filename="../../UI/AccountPage.qml" line="+70"/>
         <source>PornHub</source>
         <translation type="unfinished">PornHub</translation>
     </message>
@@ -57,27 +57,17 @@
         <translation type="unfinished">XVideos</translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Username:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+10"/>
         <source>Email:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Enter your username</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+8"/>
         <source>Enter your email address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>Password:</source>
         <translation type="unfinished">Password:</translation>
     </message>
@@ -87,7 +77,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+15"/>
+        <source>XHamster requires your email address, not your username.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Session token:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,7 +112,7 @@
         <translation type="unfinished">Login</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+33"/>
         <location line="+15"/>
         <source>Get Watch History</source>
         <translation type="unfinished"></translation>
@@ -196,7 +191,7 @@
 <context>
     <name>AndroidAccountPage</name>
     <message>
-        <location filename="../../UI/AndroidAccountPage.qml" line="+37"/>
+        <location filename="../../UI/AndroidAccountPage.qml" line="+40"/>
         <location line="+12"/>
         <source>Choose a website</source>
         <translation type="unfinished"></translation>
@@ -213,16 +208,16 @@
     </message>
     <message>
         <location line="+11"/>
-        <source>Username</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
         <source>Email address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
+        <source>XHamster requires your email address, not your username.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -306,7 +301,7 @@
 <context>
     <name>AndroidDownloadsPage</name>
     <message>
-        <location filename="../../UI/AndroidDownloadsPage.qml" line="+25"/>
+        <location filename="../../UI/AndroidDownloadsPage.qml" line="+26"/>
         <source>App storage</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,13 +322,13 @@
     </message>
     <message>
         <location line="+59"/>
-        <location line="+210"/>
+        <location line="+216"/>
         <location line="+271"/>
         <source>Add videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-476"/>
+        <location line="-482"/>
         <source>Close</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
@@ -443,7 +438,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+7"/>
+        <source>Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source>%1 videos</source>
         <translation type="unfinished"></translation>
     </message>
@@ -639,7 +644,7 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Copyright © 2023–2026 Johannes Habel (EchterAlsFake)</source>
+        <source>Copyright © 2023-2026 Johannes Habel (EchterAlsFake)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -683,30 +688,30 @@
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="+12"/>
-        <location line="+245"/>
+        <location line="+166"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-192"/>
-        <location line="+325"/>
+        <location line="-116"/>
+        <location line="+250"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-325"/>
-        <location line="+325"/>
+        <location line="-250"/>
+        <location line="+250"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-325"/>
-        <location line="+325"/>
+        <location line="-250"/>
+        <location line="+250"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-324"/>
+        <location line="-249"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -717,37 +722,22 @@
     </message>
     <message>
         <location line="+0"/>
-        <location line="+324"/>
+        <location line="+249"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-232"/>
-        <source>Help improve Porn Fetch after errors?</source>
+        <location line="-249"/>
+        <source>Download manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>No, keep disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Yes, enable reports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+137"/>
+        <location line="+192"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+124"/>
         <source>Porn Fetch update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -762,17 +752,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+29"/>
         <source>Update download progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Don&apos;t show update dialogs again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Download and install update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -902,12 +892,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+450"/>
+        <location line="+454"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-449"/>
+        <location line="-453"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1099,16 +1089,31 @@
     </message>
     <message>
         <location line="+5"/>
-        <source>Send tracebacks and video URLs</source>
+        <source>Send private error reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>I store reports securely, never share them and use them only to fix errors.</source>
+        <source>I never share reports with anyone. I use them only to fix errors, not to see what you watch or download.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+7"/>
+        <source>Report details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Include full Python tracebacks and video URLs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Off sends basic diagnostics only: no video URLs, messages, paths or tracebacks. Full reports can contain sensitive information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Connection protection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1148,7 +1153,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>Activity glow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1198,18 +1203,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-16"/>
         <source>Reduce motion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-1"/>
         <source>High contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>English only — translations are not available yet</source>
+        <location line="+19"/>
+        <source>English only. Translations are not available yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1284,16 +1289,31 @@
     </message>
     <message>
         <location line="+5"/>
-        <source>Premium version entitlement ends: %1 (%2)</source>
+        <source>Premium license expires: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>covers premium features in releases for 1 year</source>
+        <location line="+25"/>
+        <source>Refresh license (updates offline permit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+14"/>
+        <source>Lifetime Premium costs €29.99 once for up to 10 active installations. Every future Porn Fetch update and feature I release is included. Future development has no guaranteed duration. Activation and periodic online validation are required. If I permanently close the licensing service, I will provide an offline unlock before closure. Deactivating frees an installation slot.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Pay €29.99 once for permanent Premium, including all future versions. No subscription or paid renewal.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Get lifetime Premium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-43"/>
         <source>Machine Limit: 10 devices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1303,33 +1323,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Refresh license (renews 7-day check-in)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+18"/>
         <source>Deactivate license (frees 1 of 10 machine seats)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Each license supports up to 10 machines. Permanent licenses cover premium features in releases for 1 year. Automatic app updates are free for everyone. Deactivating unlinks this device to free up a machine seat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+14"/>
         <source>Production license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>The beta checkout is a test. No real transaction takes place.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Purchase / renew license</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1761,7 +1761,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+234"/>
+        <location filename="../../../backend/update_service.py" line="+247"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1771,7 +1771,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+11"/>
         <source>Downloading and verifying the Android update…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1786,7 +1786,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>No update available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1796,7 +1796,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+30"/>
         <source>Downloading and verifying the update…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1804,7 +1804,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+819"/>
+        <location filename="../../../backend/application.py" line="+834"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1819,21 +1819,21 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+112"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-678"/>
-        <location line="+184"/>
+        <location line="-697"/>
+        <location line="+200"/>
         <location line="+9"/>
         <location line="+29"/>
-        <location line="+37"/>
+        <location line="+24"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-199"/>
+        <location line="-202"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1853,7 +1853,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+107"/>
         <source>The update check failed. Check your connection and try again later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1863,7 +1863,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+54"/>
         <source>Automatic updates are only available in installed builds. Use the download link instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1904,16 +1904,17 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
     </message>
     <message>
         <location line="+13"/>
+        <location line="+19"/>
         <source>Installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="-20"/>
         <source>This copy has no Qt Maintenance Tool. Use an official installer to manage an installation. For a portable or source copy, remove its application folder when it is no longer needed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-196"/>
+        <location line="-183"/>
         <source>Updates are free for everyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1933,7 +1934,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+11"/>
         <source>Turn off Anonymous Mode to view the Python traceback and video URL.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1953,7 +1954,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+14"/>
+        <source>Downloading and verifying installation components. Qt Maintenance Tool will open when they are ready.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>The Qt Maintenance Tool could not be found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1973,7 +1979,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+159"/>
         <source>Stop downloads and clear the list?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1983,7 +1989,17 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+29"/>
+        <source>Choose an output folder in Settings → Video before downloading. Android&apos;s private app directory cannot be opened by normal file managers or video players.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Output folder required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Downloading beyond the first 5 videos of a public model, channel or playlist requires an active premium license.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2003,12 +2019,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+156"/>
+        <location line="+157"/>
         <source>Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+56"/>
         <source>Loading stopped. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2044,9 +2060,9 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-483"/>
+        <location line="-488"/>
         <location line="+102"/>
-        <location line="+357"/>
+        <location line="+362"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
@@ -2057,7 +2073,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Could not fetch the account videos. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2097,7 +2113,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>An unexpected login error occurred. Please check the log for details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2113,9 +2129,77 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>DownloadListModel</name>
     <message>
-        <location filename="../../../backend/download_manager.py" line="+113"/>
+        <location filename="../../../backend/download_manager.py" line="+166"/>
         <location line="+80"/>
         <source>%d min</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DownloadManagerPage</name>
+    <message>
+        <location filename="../../UI/DownloadManagerPage.qml" line="+16"/>
+        <source>Download manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Downloads from this session stay here when the main list is cleared. This list resets when you close Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Open output folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>%1 downloads this session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Queued</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Downloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Stopping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>[redacted]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>Download progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>No downloads started this session.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2523,6 +2607,229 @@ Arrow keys change a focused quality selection or number input.</source>
     </message>
 </context>
 <context>
+    <name>FirstRunSetup</name>
+    <message>
+        <location filename="../../UI/FirstRunSetup.qml" line="+22"/>
+        <source>Review the license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Choose how you use Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Make error reporting your choice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A personal message from me</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Choose where your videos are saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+72"/>
+        <source>Set up Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>PORN FETCH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Setup %1 of %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>A small surprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Open a surprise in your browser.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Curious?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Setup progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>One-time setup. Your choices are saved on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A one-time setup for this device. Your choices are saved, and this setup will not appear again after you finish. You can change reporting and storage in Settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+39"/>
+        <source>Full application license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Your reports stay private with me. I never publish them or share them with anyone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>I am not interested in what you watch or download. I do not go through reported video URLs to see what you watched. These reports help me reproduce failures and improve the app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Basic reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>App/OS information, error type, operation and provider or quality. No video URLs, exception messages, local paths or Python tracebacks.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Full Python tracebacks and video URLs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Includes complete exception chains and diagnostic context. Video URLs, query strings, messages and paths can reveal sensitive information. These reports are not anonymous.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>All choices let you use the app. You can change your choice later in Settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Hide full reporting disclosure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>How reports are sent, stored and deleted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Expand the full error-reporting disclosure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>I stand with Ukraine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Choose a shared folder so you can open your completed videos in a player or file manager.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Without an output folder, videos stay in Android&apos;s private app directory. Your normal file manager and other apps cannot open them there; accessing that directory generally requires root. You need to choose a different folder before using the downloader.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>In the system picker, open or create a folder and allow Porn Fetch to use it. The permission is saved for future launches. Cancelling keeps you on this page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Choose another folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Choose output folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <source>Folder selected. Completed videos will be saved there automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-136"/>
+        <source>Get a license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Off: no error reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Full error reports make a significant difference: they often give me the details I need to identify an issue immediately and fix it much faster. Each fix benefits everyone using Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+84"/>
+        <source>Choose an output folder to finish setup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>I have read and accept the Porn Fetch Source-Available License 1.0.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Choose where to save videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Decline and exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Exit setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Finish setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Continue free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HelpButton</name>
     <message>
         <location filename="../../UI/HelpButton.qml" line="+9"/>
@@ -2589,19 +2896,24 @@ Special thanks to [Egsagon](https://github.com/Egsagon), whose original PHUB API
     </message>
     <message>
         <location line="+1"/>
-        <source>**Interface** — Python, PySide6 and Qt Quick; Rich and Questionary for the CLI.
+        <source>**Interface:** Python, PySide6 and Qt Quick; Rich and Questionary for the CLI.
 
-**Downloads** — eaf_base_api, curl-cffi and the provider API libraries.
+**Downloads:** eaf_base_api, curl-cffi and the provider API libraries.
 
-**Media and storage** — a separate FFmpeg program for media processing; PocketBase for optional desktop history and statistics.
+**Media and storage:** a separate FFmpeg program for media processing; PocketBase for optional desktop history and statistics.
 
-**Builds** — Nuitka, PyInstaller, Qt Installer Framework, and the Android and iOS toolchains.
+**Builds:** Nuitka, PyInstaller, Qt Installer Framework, and the Android and iOS toolchains.
 
 Each component keeps its own license. The third-party notices contain the license information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+27"/>
+        <source>Copyright © 2023-2026 Johannes Habel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-24"/>
         <source>Licenses and attribution</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2629,12 +2941,7 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Copyright © 2023–2026 Johannes Habel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+18"/>
         <source>Porn Fetch application license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2647,30 +2954,9 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
     </message>
 </context>
 <context>
-    <name>LicenseOfferDialog</name>
+    <name>LicenseOfferContent</name>
     <message>
-        <location filename="../../UI/LicenseOfferDialog.qml" line="+49"/>
-        <source>Porn Fetch Premium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>PORN FETCH PREMIUM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>One-time payment.
-No subscription.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Keep premium access to the version you first activate and all updates released in the following year — for life.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location filename="../../UI/LicenseOfferContent.qml" line="+53"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2696,6 +2982,11 @@ No subscription.</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Every future update and feature included</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Support independent development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2705,37 +2996,66 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+34"/>
-        <source>Pay with crypto or credit card</source>
+        <location line="+91"/>
+        <source>Share your license with family and personal friends you know in real life and have met in person, with up to 10 active installations in total, including your own. Membership in a Discord server or another online community alone does not make someone a friend for private sharing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+15"/>
+        <source>Activation uses a random installation ID. Periodic online validation is required, with up to 7 days offline after a successful check. If I permanently close the licensing service, I will provide an offline unlock before closure so existing buyers can continue using Premium.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-69"/>
         <source>350+ currencies supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+47"/>
-        <source>No account, hardware ID, tracking or device fingerprinting for licensing. Your key is not tied to your IP address.</source>
+        <location line="-82"/>
+        <source>LIFETIME PREMIUM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Share it with friends and family — up to 10 active installations in total.</source>
+        <location line="+19"/>
+        <source>Buy once. Use forever.
+No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+8"/>
+        <source>Your Premium license never expires. Every future Porn Fetch update and feature I release is included. Future development has no guaranteed duration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Pay with Crypto (NowPayments) or Credit Card / PayPal (Patreon)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Private, and made to share</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>No account, hardware ID, tracking or device fingerprinting for licensing. Your key is not tied to your IP address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>After purchase, open Settings → Import License File to activate your key.</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>LicenseOfferDialog</name>
     <message>
-        <location line="+7"/>
-        <source>Activation uses a random installation ID. Online validation is required, with up to 7 days offline after a successful check.</source>
+        <location filename="../../UI/LicenseOfferDialog.qml" line="+49"/>
+        <source>Lifetime Premium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+43"/>
         <source>Get license ↗</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2745,12 +3065,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-47"/>
-        <source>Private, and made to share</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+69"/>
+        <location line="+22"/>
         <source>Continue with free version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2798,22 +3113,12 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>Premium version entitlement ends:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+34"/>
         <source>Lifetime / Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Premium features are covered in releases for 1 year after first activation. App updates are free for everyone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location line="+15"/>
         <source>Machine Limit:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2833,8 +3138,18 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>How do premium entitlement &amp; 10-machine limits work?</source>
+        <location line="-44"/>
+        <source>Premium license expires:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Your Premium license never expires. Every future Porn Fetch update and feature I release is included.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <source>How do lifetime Premium &amp; installation limits work?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2889,12 +3204,12 @@ No subscription.</source>
     </message>
     <message>
         <location line="+47"/>
-        <source>Premium Version Entitlement &amp; Free App Updates</source>
+        <source>Lifetime Premium &amp; App Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+14"/>
-        <source>• &lt;b&gt;Premium version entitlement ends:&lt;/b&gt; The release deadline for licensed premium features. App updates are free for everyone, including without a license. A &lt;b&gt;Permanent License&lt;/b&gt; provides perpetual premium access to versions released during the &lt;b&gt;first year after activation&lt;/b&gt;. After 1 year, you may continue using premium features in every version released during your active year forever without paying again. Installing a newer version is free; premium access still follows your license entitlement.&lt;br&gt;&lt;br&gt;• &lt;b&gt;Offline Permit:&lt;/b&gt; Porn Fetch checks the licensing server at every startup. If the server is unavailable, a previously valid license remains usable until its 7-day offline permit expires. A server rejection takes effect immediately.</source>
+        <source>• &lt;b&gt;Lifetime Premium:&lt;/b&gt; Buy once for €29.99 and use Premium forever. Every future Porn Fetch update and feature I release is included. Future development has no guaranteed duration. Your license does not expire if development ends.&lt;br&gt;&lt;br&gt;• &lt;b&gt;Offline permit:&lt;/b&gt; Activation and periodic online validation are required. Porn Fetch checks at every startup. After a successful check, you can use Premium offline for up to 7 days. A server rejection takes effect immediately.&lt;br&gt;&lt;br&gt;• &lt;b&gt;Service closure:&lt;/b&gt; If I permanently close the licensing service, I will provide an offline unlock before closure so existing buyers can continue using Premium. Changes to third-party websites and operating systems can affect compatibility.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2932,6 +3247,29 @@ No subscription.</source>
     </message>
 </context>
 <context>
+    <name>LightThemeBrightness</name>
+    <message>
+        <location filename="../../UI/LightThemeBrightness.qml" line="+10"/>
+        <source>Light theme brightness: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Light theme brightness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Turn off high contrast to adjust brightness.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lower the brightness for softer light backgrounds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Main</name>
     <message>
         <location filename="../../UI/Main.qml" line="+38"/>
@@ -2939,32 +3277,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+127"/>
-        <source>Help improve Porn Fetch after errors?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reports include full Python tracebacks and video URLs. Reporting stays off until you choose to enable it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+28"/>
-        <source>Synthetic example of a stored report:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+39"/>
-        <source>No, keep disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Yes, enable reports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+87"/>
+        <location line="+164"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2979,17 +3292,17 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+64"/>
         <source>Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-123"/>
+        <location line="-124"/>
         <source>Update available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+112"/>
         <source>Don&apos;t show update dialogs again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3014,7 +3327,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+24"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3039,7 +3352,17 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+10"/>
+        <source>Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>SUPPORTED WEBSITES</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4368,7 +4691,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
         <source>Error ID: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4674,22 +4997,15 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location line="+1273"/>
-        <location line="+6"/>
-        <source>Purchase / renew license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1278"/>
+        <location line="+5"/>
         <location line="+15"/>
-        <location line="+1271"/>
+        <location line="+1295"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1287"/>
+        <location line="-1311"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4969,33 +5285,51 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
-        <location line="+3"/>
-        <source>Send tracebacks and video URLs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+262"/>
+        <location line="+290"/>
         <source>SNI Obfuscation (restart required)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+287"/>
+        <location line="+153"/>
+        <source>Theme accessibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+144"/>
         <source>Add or remove components</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-601"/>
+        <location line="-625"/>
         <source>Check for app updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-735"/>
+        <location line="+1297"/>
+        <location line="+6"/>
+        <source>Get lifetime Premium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-551"/>
         <source>System notifications when the app is inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+32"/>
+        <location line="+3"/>
+        <source>Send private error reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+2"/>
+        <source>Include full Python tracebacks and video URLs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Trust Environment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5150,22 +5484,17 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Accessibility</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+59"/>
         <source>Reduce motion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-6"/>
         <source>High contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-46"/>
         <source>Font Size:</source>
         <translation type="unfinished">Dimensioni font:</translation>
     </message>
@@ -5195,7 +5524,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+30"/>
         <location line="+6"/>
         <source>Show a glowing border while the app is busy.</source>
         <translation type="unfinished"></translation>
@@ -5502,17 +5831,17 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
     </message>
     <message>
         <location line="+5"/>
-        <source>Off — connect directly</source>
+        <source>Off: connect directly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Tor — updates and licensing only</source>
+        <source>Tor: updates and licensing only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Tor — all app traffic, including downloads</source>
+        <source>Tor: all app traffic, including downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5523,6 +5852,39 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
     <message>
         <location line="+15"/>
         <source>Using Tor for video downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UkraineMessageContent</name>
+    <message>
+        <location filename="../../UI/UkraineMessageContent.qml" line="+17"/>
+        <source>Russia&apos;s full-scale invasion has brought immense suffering and loss of life to Ukraine. Civilians continue to be killed and injured.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>[The UN has documented conflict-related sexual violence](%1). The International Criminal Court has [issued arrest warrants over the alleged unlawful deportation and transfer of Ukrainian children](%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Ukraine and its people deserve a peaceful, independent future. I don&apos;t want their suffering to be forgotten.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You don&apos;t need thousands of euros to make a difference. Even a small donation to a trusted humanitarian organization, such as [UNHCR](%1) or [UNICEF](%2), can help.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Sharing reliable information and countering disinformation are other ways to contribute.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Thank you for taking a moment to read this.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5559,37 +5921,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+34"/>
-        <source>Russia&apos;s full-scale invasion has brought immense suffering and loss of life to Ukraine. Civilians continue to be killed and injured.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>[The UN has documented conflict-related sexual violence](%1). The International Criminal Court has [issued arrest warrants over the alleged unlawful deportation and transfer of Ukrainian children](%2).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>You don&apos;t need thousands of euros to make a difference. Even a small donation to a trusted humanitarian organization, such as [UNHCR](%1) or [UNICEF](%2), can help.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1"/>
-        <source>Ukraine and its people deserve a peaceful, independent future. I don&apos;t want their suffering to be forgotten.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Sharing reliable information and countering disinformation are other ways to contribute.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Thank you for taking a moment to read this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+19"/>
+        <location line="+42"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>

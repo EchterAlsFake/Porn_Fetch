@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import os
 import sqlite3
 import sys
@@ -9,7 +10,8 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from rich.console import Console
 
@@ -17,6 +19,7 @@ from src.cli.downloads import DownloadOutcome
 from src.cli.settings import CliSettings
 from src.cli.tracker import (
     close_cli_tracker,
+    get_cli_tracker,
     print_dashboard_stats,
     print_failed_downloads,
     print_origin_iterators,
@@ -262,6 +265,38 @@ class PocketBaseServiceTests(unittest.TestCase):
 class CliTrackerIntegrationTests(unittest.IsolatedAsyncioTestCase):
     async def asyncTearDown(self):
         await close_cli_tracker()
+
+    async def test_viewing_statistics_preserves_the_download_session(self):
+        from src.cli.flows.statistics import handle_statistics_dashboard
+
+        tracker = MagicMock()
+        tracker.start = AsyncMock()
+        tracker.refresh_cache = AsyncMock()
+        tracker.save_video = AsyncMock(return_value={"id": "record"})
+        tracker.close = AsyncMock()
+        tracker.get_dashboard_stats.return_value = {"enabled": True, "total": 1}
+        settings = CliSettings(track_videos=True)
+        ctx = SimpleNamespace(settings=settings, console=Console(file=io.StringIO()))
+        video = SimpleNamespace(url="https://example.com/video", title="Fixture")
+        with patch("src.cli.tracker.PocketBaseTracker", return_value=tracker) as create, \
+                patch("src.cli.flows.statistics.questionary.select") as select:
+            select.return_value.ask_async = AsyncMock(side_effect=["overview", "back"])
+            await record_cli_download(settings, video, "completed")
+            await handle_statistics_dashboard(ctx)
+            self.assertEqual(await record_cli_download(settings, video, "completed"), {"id": "record"})
+            create.assert_called_once()
+            self.assertEqual(tracker.save_video.await_count, 2)
+            tracker.refresh_cache.assert_awaited_once()
+            tracker.close.assert_not_awaited()
+
+    async def test_changing_database_paths_closes_the_previous_session(self):
+        old, new = MagicMock(), MagicMock()
+        old.close, new.close = AsyncMock(), AsyncMock()
+        with patch("src.cli.tracker.PocketBaseTracker", side_effect=[old, new]):
+            settings = CliSettings(track_videos=True)
+            self.assertIs(await get_cli_tracker(settings), old)
+            self.assertIs(await get_cli_tracker(settings.overridden(pocketbase_data_path="another-directory")), new)
+            old.close.assert_awaited_once()
 
     async def test_record_disabled_returns_none(self):
         settings = CliSettings(track_videos=False)

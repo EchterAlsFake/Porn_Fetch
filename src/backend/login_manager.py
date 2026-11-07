@@ -4,6 +4,7 @@ This file is responsible for managing the login to the sites + automatic cookie 
 
 import asyncio
 import http.cookiejar
+import re
 from collections.abc import AsyncIterator, Mapping
 
 from base_api import ErrorAction, ErrorMode, ScrapeErrorContext, make_iterator_config
@@ -240,6 +241,8 @@ class LoginXhamster:
                 return account is not None
 
             if username and password:
+                if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", username.strip()):
+                    raise LoginError("XHamster requires your email address, not your username.")
                 logger.info("Trying Login for Xhamster [Authentication]")
                 account = await clients.xh_client.login(username=username, password=password)
                 clients.xh_client.account = account

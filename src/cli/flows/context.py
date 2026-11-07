@@ -61,10 +61,12 @@ class WizardContext:
             location=location,
             context=context,
             enabled=self.settings.error_reporting,
+            include_traceback=self.settings.error_reporting_full_traceback,
         )
 
     async def refresh_pool(self) -> None:
         """Rebuild client pool and license service when settings change."""
+        await close_cli_tracker()
         old_pool = self.pool
         configure_tor_transport(self.settings)
         old_lic = self.license_service

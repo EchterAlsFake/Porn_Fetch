@@ -583,6 +583,7 @@ async def errors(gui, lab):
         for suppress, reporting in ((False, False), (True, True)):
             await change(gui, "supress_errors", suppress)
             await change(gui, "enable_logging", reporting)
+            await change(gui, "error_reporting_full_traceback", reporting)
             gui.errors.clear()
             notices = gui.backend.notifications
             notices.clear()
@@ -885,7 +886,7 @@ async def run_effects(gui, args, report, save, log):
         ("real-media", ("quality", "output_path", "write_metadata", "skip_existing_files", "processing_delay", "download_workers"), media),
         ("live-parallel", ("parallel_downloads",), parallel),
         ("real-profiles", ("model_videos", "result_limit", "strict_enforcement", "pages_concurrency", "videos_concurrency"), profiles),
-        ("error-controls", ("supress_errors", "enable_logging"), errors),
+        ("error-controls", ("supress_errors", "enable_logging", "error_reporting_full_traceback"), errors),
         ("system-notification-controls", ("system_notifications",), system_notifications),
         ("actual-log-output", ("debug_mode", "log_level"), logging_effect),
         ("rendered-ui", ("anonymous_mode", "font_size", "dark_mode", "accent_color", "activity_glow_enabled"), ui),
@@ -981,7 +982,10 @@ async def auxiliary_controls(gui):
         gui.control("resetSettingsButton").clicked.emit()
         parser = __import__("configparser").ConfigParser(interpolation=None)
         parser.read(gui.path)
-        require(not parser.sections(), "Reset left settings on disk")
+        require(gui.settings.error_reporting_decided, "Reset lost the saved reporting decision")
+        allowed = {"error_reporting_decided", "error_reporting_consent_version", "network_logging", "error_reporting_full_traceback"}
+        require(all(section == "Misc" and set(parser[section]) <= allowed for section in parser.sections()),
+                "Reset left ordinary preferences on disk")
         gui.backend.load_clients()
         require(gui.clients.config.timeout == 10 and gui.settings.result_limit == 50,
                 "Reset values did not apply when clients were reconstructed")

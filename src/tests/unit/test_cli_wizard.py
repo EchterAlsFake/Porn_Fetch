@@ -254,6 +254,7 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
     @patch("questionary.select")
     @patch("questionary.confirm")
     async def test_license_management_flow(self, mock_confirm, mock_select):
+        self.console.width = 160
         mock_select.side_effect = [
             FakeQuestionaryPrompt("check"),
             FakeQuestionaryPrompt("deactivate"),
@@ -266,6 +267,11 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
 
         self.fake_license.check.assert_called()
         self.fake_license.deactivate.assert_called_once()
+        output = self.console.file.getvalue()
+        self.assertIn("EUR 29.99", output)
+        self.assertIn("Lifetime / Never", output)
+        self.assertIn("all future updates and features included", output)
+        self.assertIn("Offline Permit Expires:", output)
 
     @patch("questionary.select")
     async def test_unlicensed_quality_locked_in_settings(self, mock_select):

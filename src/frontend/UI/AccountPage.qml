@@ -18,6 +18,9 @@ Pane {
         return "PornHub"
     }
     readonly property bool usesAccountCredentials: selectedProvider !== "XVideos"
+    readonly property bool invalidXhamsterEmail: selectedProvider === "XHamster"
+                                               && identityField.text.trim().length > 0
+                                               && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identityField.text.trim())
     readonly property bool providerLoggedIn:
         Boolean(backendController.accountLoginStatus[selectedProvider])
     readonly property bool accountBusy: backendController.loginInProgress
@@ -82,9 +85,7 @@ Pane {
                 visible: root.usesAccountCredentials
 
                 Label {
-                    text: root.selectedProvider === "XHamster"
-                          ? qsTr("Username:")
-                          : qsTr("Email:")
+                    text: qsTr("Email:")
                 }
 
                 AppTextField {
@@ -92,12 +93,9 @@ Pane {
 
                     Layout.fillWidth: true
                     Accessible.name: placeholderText
-                    placeholderText: root.selectedProvider === "XHamster"
-                                     ? qsTr("Enter your username")
-                                     : qsTr("Enter your email address")
-                    inputMethodHints: root.selectedProvider === "PornHub"
-                                      ? Qt.ImhEmailCharactersOnly
-                                      : Qt.ImhNoPredictiveText
+                    placeholderText: qsTr("Enter your email address")
+                    inputMethodHints: Qt.ImhEmailCharactersOnly
+                    Accessible.description: root.invalidXhamsterEmail ? emailWarning.text : ""
                     selectByMouse: true
                 }
 
@@ -120,6 +118,16 @@ Pane {
                             loginButton.clicked()
                     }
                 }
+            }
+
+            Label {
+                id: emailWarning
+                objectName: "xhamsterEmailWarning"
+                Layout.fillWidth: true
+                visible: root.invalidXhamsterEmail
+                text: qsTr("XHamster requires your email address, not your username.")
+                color: Theme.highContrast ? Theme.ink : Theme.dark ? "#fca5a5" : "#b91c1c"
+                wrapMode: Text.WordWrap
             }
 
             GridLayout {
@@ -167,6 +175,7 @@ Pane {
                       : qsTr("Login")
 
                 enabled: !root.accountBusy
+                         && !root.invalidXhamsterEmail
                          && (root.usesAccountCredentials
                              ? identityField.text.trim().length > 0
                                && passwordField.text.length > 0

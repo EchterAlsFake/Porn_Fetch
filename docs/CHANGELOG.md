@@ -665,355 +665,176 @@ to be refactored.
 
 
 
-# V 3.9 (in development)
-
-These notes cover the current 3.9 development tree and changes since 3.8, updated through 3 November 2026. This remains a beta: implemented features, automated checks and verified platform builds are distinguished below. Current release readiness is tracked in the [development checklist](https://pornfetch.to/checklist).
-
-Payment deployment is maintained separately from the application; these notes do not establish whether a checkout or payment method is live.
-
-### Python 3.15 and mobile builds
-
-- Moved project requirements, dependency locking, installers, validation and all platform build workflows to Python 3.15. Updated desktop compilation to Nuitka 4.3.3.
-- Extended the Qt compatibility patch to preload Python 3.15's executor before Qt initialization, preventing deferred import objects from breaking asynchronous work.
-- Android targets Python/hostpython 3.15.2 and matching `cp315` PySide6/Shiboken6 wheels from the pinned `6.12.0-api28` release, with per-wheel checksums. The local Python recipe skips two obsolete Python 3.14 patches already incorporated or superseded in 3.15.
-- The user confirmed license activation, video download, automatic FFmpeg remuxing and audio/video playback on a non-jailbroken iPhone 7. The separate iOS workflow builds and audits an IPA requiring re-signing; its hosted ARM64 build passed on 1 November. Installing each new IPA remains a separate device check.
-
-### Free automatic updates
-
-- Automatic updates are free for everyone on desktop, Android, and CLI, without a license or licensing-server check. Signed metadata and artifact verification remain required. Premium-feature licensing remains unchanged.
-
-### Supported websites and URL handling
-
-- Added RedTube, Thumbzilla and Tube8 video and profile integration.
-- Added EMPFlix and TNAFlix video downloads, metadata and the profile/channel routes each provider exposes.
-- The video-provider inventory now covers PornHub, XHamster, XNXX, XVideos, Eporner, SpankBang, YouPorn, Beeg, RedTube, Thumbzilla, Tube8, XFreeHD, Porntrex, EMPFlix and TNAFlix.
-- Expanded model, pornstar, creator, user and channel URL handling according to each provider's actual capabilities.
-- Added public playlist/collection routing for PornHub, XVideos, YouPorn and RedTube. Thumbzilla has a playlist route and parser, but live playlist verification still needs a usable public fixture.
-- Added gallery handling for supported album links in the CLI, including XFreeHD and PornHub.
-- Unified provider hostname and content-type routing between the GUI and CLI. Unsupported directories, resource types and tabs produce an actionable error instead of entering the wrong parser.
-- Improved handling of localized video paths, profile aliases, explicit video tabs and supported mirror hosts. Relative listing links retain their provider origin.
-- Preserve case-sensitive video IDs and distinguish the requested source URL from its redirected transport URL.
-- Preserve pagination filters and replace existing page parameters instead of appending conflicting page numbers or nesting resource prefixes.
-- Resolve profile identity before reading an AJAX video tab. Follow supported XVideos profile-to-channel redirects and XHamster user-to-creator links.
-- Honor PornHub's uploaded/featured source selection when preparing a model or user list.
-- Replaced the app's separately maintained Supported Websites page with a browser link to [pornfetch.to/#websites](https://pornfetch.to/#websites).
-
-### Downloads, selection and queue controls
-
-- Rebuilt the desktop download list around per-video quality, selection, status, progress, start, stop, resume and removal controls.
-- Added automatic removal of completed desktop downloads from the visible list while retaining their history when tracking is enabled.
-- Added manual removal of pending, queued and active entries. Active writers stop before their row is removed, and removing one job does not stop unrelated downloads.
-- Fixed visible row numbering so entries no longer all display `1`. Numbers update when entries are removed or completed.
-- Fixed column spacing so Stop / Resume and Progress do not overlap regardless of the available window width.
-- Made selection, Download Selected and per-row actions use stable job identities as rows are inserted, removed and automatically cleared.
-- Improved HLS stop/resume so retained segments and checkpoint progress are reused rather than requested again unnecessarily.
-- Fixed RAW resume starting at byte zero after a partial download. The shared downloader now persists checkpoints and resumes with byte ranges when the server supports them.
-- Direct-file downloads can use concurrent parts when supported by the server, with configurable bandwidth limits.
-- Simplified the option label to **Cleanup on stop** and added adjacent help explaining that deleting partial segments and temporary files prevents later resumption from that progress.
-- With cleanup disabled, stopping retains reusable partial data. With cleanup enabled, a later start performs a fresh transfer.
-- Completion releases temporary segment/checkpoint data. Fixed cases where finished HLS downloads could retain substantial temporary data in memory.
-- Treat native failed-download reports as failures that can be retried, rather than displaying a false successful completion.
-- Cancel queued semaphore waits immediately, including jobs stopped before their coroutine first starts. Apply changed parallel limits when idle, deferring changes while active tasks drain.
-- Improved HLS joining, progress reporting and handling of streams with unusual timestamps.
-- Support YouPorn's direct-file fallback when an HLS stream is unavailable; tests record the transport actually selected.
-- Corrected the displayed duration unit: prepared durations are normalized to minutes and displayed without converting them a second time.
-- Added the missing 144p filter choice and retained per-video quality selection. The 4K filter corresponds to 2160p.
-- Preserve quality entitlement checks in single and selected downloads; higher-quality and parallel-download features require an eligible license.
-
-### Filters and custom output filenames
-
-- Added title, author and tag regular expressions, minimum/maximum duration and quality, publication-date bounds, result limits and start/end source positions.
-- Make Start/End inclusive original source positions, applied before filtering. Filenames retain those source indexes even when the visible list is renumbered.
-- Apply combined filters together, with case-insensitive regular expressions. Tag expressions can match an individual tag.
-- Treat publication-date limits as inclusive calendar dates.
-- Validate invalid regexes, dates, reversed ranges and malformed filename templates before starting network preparation.
-- Preserve original desktop list titles and author names for display and filtering. Sanitize metadata only when constructing filesystem paths.
-- Handle foreign alphabets, emoji, combining Unicode, `/`, `\\`, `|`, reserved Windows filenames, trailing dots/spaces, control characters and very long filenames more safely.
-- Prevent title/author metadata from introducing directories or escaping the intended filename component. Directory separators deliberately written in a custom template remain supported.
-- Keep a video titled `~` from being interpreted as a request to use the home directory.
-- Add the expected media extension when a title contains dots that are not a recognized video extension.
-- Implemented the **Options** dialog for custom title formatting, documenting `$title`, `$author`, `$video_id`, `$index`, `$publish_date`, `$length`, `$output_path`, `${name}` syntax and `$$` for a literal dollar sign.
-- Connected the keyboard-shortcuts dialog.
-
-### Account login and account collections
-
-- Added XHamster and XVideos account integration alongside PornHub, using the authentication methods each site exposes.
-- Reorganized PornHub login so email/password and a full-width Login button come first, followed by one row of history, recommendation, subscription-feed and favorite actions. Username and browser-cookie import are grouped separately below.
-- Replaced permanent login-page instructions with a **How to login** dialog explaining the site-specific flow, cookies and browser extraction.
-- Import actual browser sessions through `browser_cookie3`; desktop testing includes Brave. Browser-cookie import is not offered as an Android OS feature.
-- Verify imported sessions against the server's authenticated state. Cookie presence or constructing an Account object alone no longer establishes a successful login.
-- Use PornHub's authenticated account menu to determine the username where needed.
-- Fetch PornHub watch history, recommendations, subscription feed and favorites; XHamster liked videos/account playlists; and XVideos watch later, history and liked videos.
-- Support XVideos session-token login. XVideos password/CAPTCHA login is not added by this release.
-- Fixed XHamster liked-list extraction from embedded account JSON instead of accidentally reading recommendation thumbnails.
-- Handle expired/rejected authentication, invalid collections, duplicate actions and cancellation without leaving the account page stuck in a loading state.
-- Treat a missing later account-list page as the end of pagination while keeping first-page, authentication and video-metadata failures visible.
-- Keep account secrets out of saved download-recovery snapshots and diagnostic result summaries.
-
-### Desktop interface and settings
-
-- Rebuilt the desktop interface in QML, covering downloads, accounts, settings, statistics, licensing and information.
-- Added Material appearance, accent colors, dark mode and activity glow, with live updates where supported.
-- Align switch controls to the left of their settings control column instead of centering them in the available space.
-- Added attributed icons beside the Video, Performance, System, Privacy and UI settings categories.
-- Made Tor routing labels and help more prominent.
-- Fixed overlapping cards in the information/credits layout and improved resizing behavior.
-- Added scrollable dialogs for longer help and notices, including title-formatting guidance and third-party notices.
-- Apply logging, preparation delay, cache, retry, network, provider and idle download-concurrency settings to their actual runtime consumers.
-- Persist settings to disk and reload them consistently. Language and Material appearance changes update the live QML interface; settings that need a restart still explain that requirement.
-- Added a first-run beta disclaimer with a 30-second reading period in desktop, Android and CLI flows.
-- Added an explicit first-run choice for optional error reporting, with privacy-sensitive details redacted from reports.
-- Improved anonymous mode so sensitive video details and widgets are hidden when enabled.
-
-### Download history and statistics
-
-- Rebuilt desktop tracking with a local PocketBase service and added a statistics dashboard. The CLI can discover or install PocketBase; legacy SQLite records can be imported.
-- Track prepared videos, completion, stopped/failed transfers, retries and their originating profile or playlist.
-- Update an existing history entry when a job resumes or retries instead of creating duplicate completion records.
-- Preserve the source name and URL so statistics can group downloads by model, channel or collection.
-- Make Statistics Refresh reload the database cache asynchronously instead of only repainting old values.
-- Keep history after a video is removed from the download list, and retain it across normal application restarts.
-- Honor disabled tracking and anonymous presentation. Android does not start a download-history database.
-- Share database signal wiring between normal startup and diagnostic workflows so initialization failures and busy state are handled consistently.
-- Fixed generated PocketBase passwords beginning with `-` being parsed as command-line options.
-
-### Desktop shutdown and paused-job recovery
-
-- Added coordinated teardown for normal window closing: stop active downloads cooperatively, cancel queued work, save the queue, flush history and close provider sessions and PocketBase.
-- Restore unfinished desktop rows as **paused** after reopening. Transfers resume only when the user explicitly clicks Resume.
-- Restore job identity, output paths, chosen quality and retained progress without making provider requests during startup.
-- Obtain a fresh native provider object when Resume is clicked, rather than serializing live sessions or provider objects.
-- Discard incompatible HLS state if the selected or permitted quality has changed.
-- Store queue snapshots and native HLS state in a writable application cache directory instead of depending on the current working directory.
-- Write recovery metadata atomically and exclude cookies, passwords and native objects from it.
-- Flush pending history before moving its database directory during shutdown.
-- These changes concern normal close/reopen behavior; forced-kill and power-loss recovery are outside the implemented test scope.
-
-### Networking and privacy
-
-- Moved the provider network layer to asynchronous `curl-cffi` through `eaf_base_api`, with browser impersonation, HTTP-version selection, retries, caching and shared proxy handling.
-- Added HTTP, HTTPS and SOCKS proxy configuration with a desktop connection test.
-- Added configurable DNS over HTTPS, primary/fallback resolvers, Encrypted Client Hello, network-interface binding and browser-style TLS fingerprints. Optional desktop SNI obfuscation modes remain available.
-- Apply provider-session changes without requiring a restart, then close replaced sessions and their background tasks.
-- Honor the configured fallback DNS-over-HTTPS resolver after primary-resolution failure.
-- Added managed Tor routing choices: Off, updates/licensing only, or all app traffic including provider requests and media downloads.
-- Start an app-owned Tor client on demand, show bootstrap progress, and stop routed requests on failure rather than falling back to a direct connection.
-- In all-traffic mode, use remote SOCKS hostname resolution, keep PocketBase loopback requests local, and prevent custom proxies, interface settings, environment bypasses or QUIC from silently changing the selected route.
-- Require acknowledgment before routing bandwidth-heavy video downloads through Tor. External browser links and other applications are outside Porn Fetch's route.
-- Added clearer service-failure notices distinguishing Tor startup problems, an unreachable service and temporary server errors, with repeated notifications grouped.
-- Refreshed dependencies and the lockfile, including the shared downloader fixes now present in published releases.
-
-### Automatic updates
-
-#### Desktop GUI
-
-- Added automatic update handoff for installations managed by Qt Installer Framework. The old macOS Sparkle updater has been removed.
-- Check signed release metadata and download/hash-verify the repository metadata and payloads into local staging before launching the Qt Maintenance Tool.
-- Reject external payload substitutions and do not offer automatic installation from unauthenticated fallback update information.
-- Close PocketBase and provider sessions before the updater handoff to reduce locked-file failures, particularly on Windows.
-- Display the current release notes as Markdown in the update dialog, verifying the downloaded notes against the signed release metadata.
-- Check update eligibility against the release timestamp. Portable/source installations retain their appropriate manual update method.
-
-#### Standalone CLI
-
-- Added `self-update --check`, interactive `self-update`, and `self-update --yes` for supported standalone binaries.
-- Verify signed updates through The Update Framework (TUF), then replace the executable and bundled PocketBase with a separate update helper.
-- Keep previous files and a staging result for recovery and diagnosis if installation fails.
-- Fixed standalone certificate-bundle discovery and added visible update download progress.
-- Leave source checkouts and package-manager installations to their original update method.
-
-#### Android
-
-- Added a separate signed Android TUF feed with APK architecture, package, version, release timestamp and hash metadata.
-- Verify the downloaded APK and signing identity before handing it to Android's installer through a read-only content URI.
-- Let Android request installation permission and final confirmation; updates are not installed silently.
-- Preserve the installed application if an update is cancelled or verification/download fails.
-- Android update and installation flows still require validation on real devices and built APKs.
-
-### CLI workflows
-
-- Rebuilt the terminal app around separate flows for videos, profiles/playlists, account access, settings, licensing, tracked sources, history and statistics.
-- Keep CLI and shared services free of Qt dependencies so they can run on headless systems, including Termux.
-- Accept multiple supported source URLs in batch mode, with quality/output overrides and optional continuation past failed entries.
-- Track model/profile pages, scan for new videos and manage a pending download queue.
-- Added pause, resume and cancel controls, including saved paused jobs that can continue in a later CLI session.
-- Improved progress display, optional MP4 metadata writing, unavailable-video reporting and normalization of provider quality APIs.
-- Added explicit offline/provider/download diagnostics and a shared interactive test selector.
-
-### Provider-library fixes used by Porn Fetch
-
-These are the provider versions required by the current application manifest. The summaries cover changes used by Porn Fetch's own video, account, profile, collection, gallery or download paths.
-
-#### [PornHub 5.4.6](https://github.com/EchterAlsFake/unofficial-api-for-pornhub/blob/master/CHANGELOG.md)
-
-- Corrected regular-user upload routes and made profile listing extraction more resilient.
-- Improved normalization of embedded and relative video links and extraction of localized profile statistics.
-- Improved author handling for the video/short types consumed by the app, including channel authors.
-- The live-test guard now lets recognized PornHub math challenges reach the existing native `eaf_base_api` handler. It previously stopped the response before that handler could run.
-- Corrected pagination-test identities to retain PornHub's public `viewkey`; stripping every query parameter had made different videos appear identical.
-
-#### [XHamster 2.6.5](https://github.com/EchterAlsFake/unofficial-api-for-xhamster/blob/main/CHANGELOG.md)
-
-- Restored shorts/moments extraction from current page data and DOM layouts, preserving regional hosts and the correct profile listing route.
-- Read hydrated listing metadata so later cards retain their thumbnails and durations.
-- Improved Full HD/UHD recognition and handling of missing short metadata.
-- Includes the earlier account-JSON extraction fix used for liked videos, and reports rejected credentials as a failed login.
-- Updated the app's pagination test to allow a real overlapping page prefix while still requiring a new later-page video; a fully repeated page still fails.
-
-#### [XNXX 2.4.4](https://github.com/EchterAlsFake/unofficial-api-for-xnxx/blob/master/CHANGELOG.md)
-
-- Read video metadata from JSON-LD arrays and graph objects.
-- Handle empty profiles without division-by-zero errors and close profile scrapers when iteration stops early.
-- Preserve canonical video identity when listing click links contain a separate tracking token.
-
-#### [XVideos 2.5.3](https://github.com/EchterAlsFake/unofficial-api-for-xvideos/blob/master/CHANGELOG.md)
-
-- Return actual listing thumbnails and decoded titles, decode HTML entities in profile JSON, and exclude cards that are not videos.
-- Handle empty channels and model/profile aliases more consistently.
-- Expose uploader names from video-page metadata. Porn Fetch uses those names instead of making a separate author/statistics request for every prepared row, retaining the native lookup when the name is unavailable.
-- Close the inner profile scraper when iteration ends early, preventing leftover prefetches from racing later requests.
-- Support the author-helper calling conventions consumed by shared metadata preparation.
-
-#### [Eporner 2.5.3](https://github.com/EchterAlsFake/unofficial-api-for-eporner/blob/master/CHANGELOG.md)
-
-- Correct listing IDs, embed links, keywords, thumbnails and duration types.
-- Select download qualities for the requested codec and handle absolute media URLs correctly.
-- Tolerate additional JSON-LD shapes and optional metadata.
-- Recognize localized video paths, German/French profile statistics and missing channels that incorrectly return HTTP 200.
-- The app now reads Eporner's real quality method instead of requesting a nonexistent `video_qualities` dataclass field.
-
-#### [SpankBang 2.4.4](https://github.com/EchterAlsFake/unofficial-api-for-spankbang/blob/master/CHANGELOG.md)
-
-- Use more conservative listing concurrency and standard navigation headers.
-- Improve regional profile paths/statistics and thumbnail, duration and stream-data parsing across page layouts.
-- Retain earlier quality-detection improvements, including 4K stream identification.
-- Desktop workflows remain marked manual until separately verified; a parser update alone does not establish working browser/CDN playback.
-
-#### [YouPorn 1.8.3](https://github.com/EchterAlsFake/unofficial-api-for-youporn/blob/main/CHANGELOG.md)
-
-- Handle empty listings, partial collections and users without public collections safely.
-- Resolve absolute collection links without duplicating the provider hostname.
-- Avoid loading unrelated title/name fields just to log helper operations used during metadata/collection handling.
-- Correct duration normalization so minute values are not multiplied into incorrect validation expectations.
-- Retain direct-MP4 fallback handling alongside HLS downloads.
-
-#### [Beeg 1.7.4](https://github.com/EchterAlsFake/unofficial-api-for-beeg/blob/main/CHANGELOG.md)
-
-- Preserve video keys in links copied from tag pages and retain significant trailing zeros.
-- Expose author, tags, thumbnails and publication dates for consumers such as CLI metadata preparation.
-- Return a useful unavailable-video error for missing/malformed API metadata instead of an indexing exception.
-
-#### [RedTube 1.4.4](https://github.com/EchterAlsFake/unofficial-api-for-redtube/blob/main/CHANGELOG.md)
-
-- Recognize playlist video containers as well as profile grids, rather than extracting zero videos from a populated playlist.
-- Normalize supported profile routes and improve localized statistics and playlist counts.
-- Return actual thumbnail URLs instead of lazy-loading placeholders or unprocessed `srcset` strings.
-- Load optional uploader/performer data more safely and remove duplicate performer entries.
-
-#### [Thumbzilla 1.4.3](https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla/blob/main/CHANGELOG.md)
-
-- Handle missing optional playlist metadata and short statistics layouts without crashing.
-- Added parser regression coverage for playlist metadata; live playlist support remains unverified without a usable public fixture.
-
-#### [Tube8 1.3.3](https://github.com/EchterAlsFake/unofficial-api-for-tube8/blob/main/CHANGELOG.md)
-
-- Stop interpreting subscriber totals as video counts, including on French channel pages.
-- Reject empty User pages instead of accepting generic session data as a valid profile identity.
-- Keep public User-feed verification separate from working video, channel, pornstar and amateur routes.
-
-#### [XFreeHD 1.7.4](https://github.com/EchterAlsFake/unofficial-api-for-xfreehd/blob/main/CHANGELOG.md)
-
-- Normalize relative and embedded video/album links, return qualities consistently and accept numeric quality aliases.
-- Tolerate optional ratings/duration metadata and expose private-video status without a metadata parser crash.
-- Handle empty albums and invalid image-page numbers safely.
-- The app reads the native quality method rather than a nonexistent lazy dataclass field.
-
-#### [Porntrex 1.8.3](https://github.com/EchterAlsFake/unofficial-api-for-porntrex/blob/main/CHANGELOG.md)
-
-- Recognize MP4 media URLs with signed query strings or fragments while preserving the tokens required to download them.
-- Retain the corrected profile pagination and provider-origin handling used by model/channel preparation.
-
-#### [EMPFlix 1.0.1](https://github.com/EchterAlsFake/unofficial-api-for-empflix/blob/main/CHANGELOG.md)
-
-- Resolve short and embedded video links to a full watch page when metadata is missing.
-- Return the appropriate profile/channel/pornstar identity for supported author links.
-- Keep channel authors out of category/tag lists and parse abbreviated rating counts safely.
-- Added parser fixtures for the supported page layouts.
-
-#### [TNAFlix 1.0.1](https://github.com/EchterAlsFake/unofficial-api-for-tnaflix/blob/main/CHANGELOG.md)
-
-- Follow canonical watch links when short/embed pages omit required video details.
-- Normalize video/profile/channel/pornstar identities and support the author helpers used by metadata preparation.
-- Keep channel authors out of tags/categories and tolerate missing source-size attributes and abbreviated rating counts.
-- Added parser fixtures for the supported page layouts.
-
-### Shared API/download engine
-
-- Require [eaf_base_api 4.2.5](https://github.com/EchterAlsFake/eaf_base_api/blob/master/CHANGELOG.md), including resumable RAW downloader changes previously available only in the source checkout.
-- Preserve resumable byte offsets/checkpoints and validate ranged responses instead of silently treating a restarted RAW transfer as resumed progress.
-- Sanitize automatic download filenames and provide a safe fallback when no title is available.
-- Fixed contextual logging failures for URLs containing percent escapes.
-- Load metadata through explicit sources/fields, retaining clear errors for unresolved or unavailable values instead of relying on legacy `.load()` behavior.
-- Keep request/download error context consistent across providers, with bounded retries and explicit unavailable-resource handling.
-- Bound asynchronous page/item work, preserve original order where requested, and clean up unfinished scraper tasks.
-- Keep the native PornHub math handler, retry budget and cooldown behavior in the shared library; the app's test guard does not implement a second solver.
-
-### Test coverage and diagnostics
-
-Added substantial offline and opt-in live coverage around the production GUI, CLI, provider libraries, filesystem and local database. Positive live paths use actual requests and media; protocol/error contracts and unusual-title fixtures are explicitly separate.
-
-| Area | Implemented checks |
-| --- | --- |
-| Offline and Qt integration | URL routing, provider adapters, input validation, persistence, real QML bindings, settings consumers, error/cancellation recovery, update verification and application startup |
-| Provider/profile metadata | All 15 video providers, supported shorts/galleries, and a 76-case profile URL/alias/localization inventory feeding actual GUI models |
-| CLI download lifecycle | 30 pause/resume and cleanup/restart workflows across 15 providers, using the native HLS/RAW transport selected by each provider |
-| Desktop download controls | 42 automated workflows across 14 providers: real controls, progress, quality, stop/resume, cleanup, removal and completion clearing; SpankBang is a separate manual exception |
-| Queue/concurrency | Three multi-video workflows using real HLS/RAW transfers, limits 1/2, duplicate starts, queued cancellation and isolation when active jobs are stopped/removed |
-| Desktop settings | Persistence checks for 55 settings, independent disk reads/reloads, active provider configuration and observable effects; optional Tor/Strict SNI effects require their own environment |
-| Statistics/history | Eleven workflows covering actual PocketBase records, aggregates/source groups, retry/resume updates, privacy, refresh, restart persistence and disabled/error states |
-| Advanced controls | Eleven groups using real video metadata, regex/range/date/quality filters, templates and a real formatted download, plus 25 explicit synthetic unusual-title fixtures |
-| Normal teardown/recovery | Eight workflows in 16 independent GUI processes, covering preparation, pending database writes, database moves and retained/cleaned HLS/RAW transfers |
-| Public model/playlist workflow | 16 automated source workflows from input through limits/filters/ranges, cancellation, native later-page rows, selected media and source history/statistics; SpankBang is manual and Thumbzilla playlists remain unverified |
-| Account controls | Default 36-check desktop/mobile-QML action inventory, real browser-cookie sessions and account lists, list metadata, tokens, help, busy state, cancellation and errors; optional private-playlist verification and separate local password checks |
-
-- Added `uv run src/tests/helper.py` selections for the live suites, with explicit network, media-download and browser-session confirmations as appropriate.
-- Live download checks observe actual HTTP range/segment reuse and use FFmpeg to verify a readable output video stream and plausible duration. They do not substitute fake successful transfers.
-- Isolate settings, outputs, queue snapshots and PocketBase data from personal application state. Save JSON reports, stages, library versions and diagnostic logs for follow-up.
-- Keep live suites out of ordinary unit/integration discovery and CI. Ordinary integration tests include offline GUI contracts that reject network calls.
-- Handle HTTP 429 with a minimum 30-second cooldown, longer `Retry-After` values when supplied, and at least five seconds between requests after rate limiting; retries of safe reads are bounded.
-- Stop on explicit access denials, CAPTCHA pages and unsupported scripts. Let only recognized HTTP-200 PornHub math payloads on HTTPS PornHub hosts reach the existing native handler, recording delegations without cookies/tokens.
-- Detect genuinely repeated pagination while permitting real overlapping entries at page boundaries. Retain public IDs such as PornHub `viewkey` in hashed video comparisons.
-- Require actual authenticated server state for account success and explicit anonymous-denial evidence before claiming a private playlist is authorized correctly.
-- Add line/branch reporting through `coverage`, including an HTML report when requested. Workflow/checklist counts are not a claim of 100% Python line or branch coverage.
-- Treat failed, blocked, skipped, manual and unverified cases as distinct outcomes. External website changes, unavailable fixtures and expired sessions remain visible instead of being counted as passes.
-- The focused PornHub model and playlist rerun passed after the guard/identity corrections; the latest integration run completed 165 tests with one existing skip. These are verification snapshots, not a blanket all-platform or all-suite success claim.
-
-### Android, packaging and release workflows
-
-- Replaced the old Kotlin Android app with an experimental QML layout featuring phone/tablet navigation, download cards, safe-area/layout work and file export through Android's picker.
-- Added GitHub Actions APK jobs for arm64-v8a, armeabi-v7a, x86_64 and x86. Android-only workflow selection is available alongside desktop GUI, CLI and combined builds.
-- Updated the Android build path for Python 3.15.2 and matching PySide6/Shiboken wheels, with checksum verification before deployment patches.
-- Fixed native dependency recipes, target-ABI cryptography builds, Android command-line-tool discovery and clean-build registration of the Qt activity JARs.
-- Preserve maintained native recipes outside deployment cleanup, and keep build failures visible through shell pipelines and per-ABI diagnostic artifacts.
-- Added APK signing with a persistent signing identity, signature verification and checksum sidecars. Publishing requires signed APKs; unsigned build artifacts are explicitly diagnostic.
-- Added website release publication and the signed Android update feed, including publication-only retries from existing successful build artifacts without recompiling them.
-- Stamp one release version and original workflow timestamp into the binaries, update metadata and release assets; workflow reruns retain that timestamp.
-- Check the signed CLI feed before platform compilation when CLI publication is requested, rejecting release versions that would overwrite equal or newer published targets.
-- Allow separate GUI/CLI builds, and include only successful target artifacts in signed update repositories.
-- Add offline CI gates, compiled GUI/CLI smoke checks, platform bundle checks, and post-upload signature/hash/download verification before release publication.
-- Improved macOS runtime/plugin packaging and Intel/ARM64 bundle checks, and fixed installer archive handling for paths containing spaces.
-- Package PocketBase, optional installer components, third-party notices and managed Tor runtimes where supported. Keep Android/device and platform-specific runtime verification separate from workflow lint.
-- Refresh signed update metadata between releases and support retrying website publication using retained artifacts.
-- The current source uses the Porn Fetch Source-Available License 1.0. Provider/shared API libraries use AGPL; the existing GPL 3.8 release retains its original license.
-- Moved application service, update and website links to `pornfetch.to`.
-
-### Removals and remaining limits
-
-- Removed in-app keyword search, thumbnail display and the Eporner tools screen. Upstream library capabilities do not automatically become app features.
-- Removed HQPorner, MissAV and Porngo from the application's supported-site list, and removed the kill-switch feature.
-- Removed the old macOS Sparkle update path and the former Kotlin Android application.
-- Linux s390x/ppc64le and Windows x86 builds remain paused where required networking binaries are unavailable or fail their build/runtime checks. Experimental targets are published only after their own checks succeed.
-- SpankBang desktop workflows remain manual; Thumbzilla public playlists need a fixture; a working Tube8 public User feed is not claimed from generic profile/session markup.
-- Recent live diagnostics still require follow-up for the XFreeHD desktop RAW-resume reuse assertion and a Tube8 User fixture. XVideos cookie checks depend on a currently authenticated browser session. These outstanding checks are not described as fixed by the other API updates.
-- Tor/Strict SNI live effects, Android device behavior and packaged CLI/GUI installation/update behavior need their respective environment/build verification. Desktop-rendered mobile QML checks do not establish Android OS/device coverage.
-- Licensing lifecycle retesting and forced-kill/power-loss recovery were not added to the new live matrix. Android device testing remains deferred while that platform is experimental.
+# 3.9 (in development)
+
+This version is still in beta. See the [development checklist](https://pornfetch.to/checklist) for release progress.
+
+
+### Website Support
+
+- Added RedTube video downloads, public playlists, and pornstar, channel and amateur pages.
+- Added Thumbzilla video downloads and pornstar, channel and amateur pages.
+- Added Tube8 video downloads and pornstar, channel and amateur pages.
+- Added EMPFlix video downloads and profile/pornstar pages.
+- Added TNAFlix video downloads and profile, pornstar and channel pages.
+- Added Eporner channel downloads. Pornstar downloads were already supported.
+- Added PornHub Shorts downloads.
+- Added support for XHamster `/users/` links that lead to a creator's video page.
+- Added support for XVideos `/models/`, `/profiles/` and `/amateur-channels/` links, including profiles that redirect to channels. XVideos model and channel downloads were already supported in 3.8.
+- Added support for `xhamster.desi`, XNXX's `xnxx.es`, `xnxx-ru.com`, `xnxx-arabic.com` and `xnxx-india.com`, and Tube8's `tube8.fr` and `tube8.es` domains.
+- [CLI] Added photo-album downloads for PornHub and XFreeHD.
+- [CLI] Added profile/channel downloads for XHamster, SpankBang, YouPorn and Porntrex, alongside the five newly supported websites.
+- [CLI] Added XVideos playlists and YouPorn collections alongside the existing PornHub playlist support.
+
+### Website Fixes
+
+- [PornHub] Fixed loading uploaded videos from regular user pages. Links ending in `/videos` or `/videos/upload` now select the correct video list.
+- [PornHub] Fixed model links that redirect to pornstar pages, and video links copied from embedded players.
+- [XHamster] Fixed Shorts/Moments downloads after changes to the website. Fixed missing durations on later videos in a profile list and incorrect Full HD/4K detection.
+- [XVideos] Fixed loading profile video lists and their later pages. Fixed broken video links taken from profile lists and titles displaying HTML codes such as `&amp;`.
+- [XVideos] Loading video details now uses the uploader name from the video page when available, avoiding an extra profile request for each video.
+- [XNXX] Fixed broken video links taken from profile lists, loading video details from newer page layouts, and crashes on empty profiles.
+- [Eporner] Fixed German video links using `/porno-video/` and pornstar links using `/pornostar/`. Fixed missing quality choices and selecting a download link for the wrong video codec.
+- [YouPorn] Downloads can now use a direct MP4 file when no segmented stream is available. Fixed loading collections with missing details and collection links containing the website address twice.
+- [Beeg] Fixed downloads after changes to Beeg's video API. Fixed links copied from tag pages and video IDs ending in zero.
+- [Porntrex] Fixed downloads whose MP4 links contain access tokens. Fixed loading later pages of model and channel videos.
+- [XFreeHD] Fixed missing quality choices and crashes when videos have missing duration/rating details or are private.
+- Fixed loading video-tab links on PornHub, XNXX and XVideos, such as links ending in `/videos/best/0`, without treating them as a separate profile.
+- Fixed later-page links losing sort/filter settings or adding a second page number on PornHub, XHamster, XNXX, XVideos, Eporner, SpankBang, YouPorn and Porntrex. Video links loaded from lists on these sites also keep the source domain, including localized and mirror domains.
+- Unsupported search pages, profile directories and photo/GIF tabs now show a clear error instead of being opened as video links.
+
+### Downloads
+
+- [Desktop] Rebuilt the download list with quality, status, progress and Start/Stop/Resume controls for each video.
+- [Desktop] You can now remove waiting, queued and active downloads from the list. Removing an active download stops it first and leaves other downloads running.
+- [Desktop] Added an option to remove completed downloads from the list automatically. Their download history is kept if tracking is enabled.
+- [Desktop] Fixed selection and Download Selected acting on the wrong video after rows were added or removed.
+- Improved Stop/Resume so downloaded parts are reused. Direct-file downloads no longer restart at byte zero when the server supports resuming.
+- Renamed the temporary-file option to **Cleanup on stop** and added help beside it. Leave it off to keep partial downloads for Resume; turn it on to delete them and start fresh next time.
+- Direct-file downloads can now download several parts at once when the server supports it. The download speed limit also applies to these transfers.
+- Fixed completed downloads keeping large amounts of temporary data in memory. Temporary download parts are released after completion.
+- Failed transfers now show as failed and can be retried, instead of sometimes being marked complete.
+- Stopping a queued download now removes it from the queue immediately. Repeated Start clicks no longer queue the same download several times.
+- Changes to the number of parallel downloads take effect when the current downloads finish.
+- Improved joining downloaded video parts, conversion progress and handling of streams with unusual timestamps.
+- [Windows] Fixed MP4 conversion and metadata writing failing when the app was opened from Explorer or the Start Menu. FFmpeg no longer opens an extra console window.
+- Fixed video lengths being converted twice and displayed with the wrong duration.
+- [Desktop] Closing the app now saves unfinished downloads. They return as paused when you reopen it; click Resume to continue. The output path, selected quality and reusable progress are kept.
+
+### Filters and Filenames
+
+- [GUI] Added filters for title, author and tags using regular expressions, plus minimum/maximum length, highest available quality and publication dates. You can combine the filters.
+- [GUI] Text filters ignore upper/lower case. A tag filter can match any one tag, and date ranges include both selected days.
+- [GUI] Added Start/End positions to choose a section of a profile or playlist before filtering. For example, 10 to 20 includes both videos 10 and 20.
+- [GUI] Added 144p to the quality filter and fixed the 4K filter to mean 2160p.
+- Invalid filters, dates, ranges and filename templates now show an error before loading videos.
+- Improved custom filenames. The **Options** dialog explains `$title`, `$author`, `$video_id`, `$index`, `$publish_date`, `$length`, `$output_path` and `$$` for a dollar sign.
+- `$index` keeps the video's original position in the source list, even when other videos are filtered out or removed.
+- Fixed filenames containing foreign alphabets, emoji, slashes, Windows-reserved names, trailing dots/spaces or very long titles. Titles and author names can no longer accidentally create folders; folders deliberately written into your template still work.
+- Titles and author names are now shown as written on the website. Only the saved filename has characters replaced when needed.
+- Fixed missing `.mp4` extensions when a title contains dots, and a video titled `~` being saved to the home folder.
+
+### Account Login
+
+- Added XHamster login with username/password or an imported desktop browser session. You can load liked videos and account playlists.
+- Added XVideos login with session tokens or an imported desktop browser session. You can load Watch Later, history and liked videos. XVideos password/CAPTCHA login is not supported.
+- Added desktop browser-session import for PornHub, including automatic username detection. Existing email/password login, watch history and recommendations remain available.
+- Added PornHub subscription-feed and favorites actions.
+- Browser-session import now checks that the website actually recognizes you as logged in. Expired cookies no longer produce a false successful login.
+- Fixed XHamster liked videos showing recommendations instead of your liked list.
+- Added a **How to login** dialog for each supported account website.
+- Fixed account pages staying busy after a failed login, cancelled request or invalid playlist. Reaching the end of an account list no longer reports a missing later page as an error.
+
+### User Interface and Settings
+
+- Rebuilt the desktop interface in QML with a Material design, accent colors and light/dark themes. Appearance changes can be applied while the app is open.
+- Added high-contrast light and dark themes.
+- Added an optional glow around the window while the app is busy.
+- Added **Recent activity** for messages and errors, plus optional system notifications. System notifications are off by default.
+- Added detailed download errors with a **Copy text** button, making it easier to report a problem. You can read these without enabling online error reporting.
+- Improved resizing, download-column spacing, settings alignment and scrolling with high-resolution mouse wheels. Fixed overlapping cards on the information page.
+- Added scrollable help dialogs and connected the keyboard-shortcuts dialog.
+- Improved app icons on Windows, Linux, macOS, Android and iOS.
+- Fixed settings that were saved but not used, including logging, request retries, cache sizes, preparation delays and network options. Settings that need a restart say so.
+- Added a first-run setup for the application license and optional error reporting. Completed steps are remembered across updates and preference resets.
+- Replaced the in-app Supported Websites page with a link to [pornfetch.to/#websites](https://pornfetch.to/#websites).
+
+### Download History and Statistics
+
+- Rebuilt desktop download history using a local PocketBase database and added a statistics dashboard. Download history and statistics are now also available in the CLI.
+- History now records completed, stopped and failed downloads, retries, and the model/channel/playlist they came from.
+- Resuming or retrying updates the existing history entry instead of creating another completion record.
+- History stays available after removing a video from the download list or restarting the app. **Refresh** now loads new database records.
+- Fixed history being lost while moving the database folder during shutdown, and database startup failing with some automatically generated passwords.
+
+### Networking and Privacy
+
+- Rebuilt the entire network backend with asynchronous requests, allowing network work to run without blocking the interface.
+- Added a desktop proxy setup/test dialog for HTTP, HTTPS and SOCKS proxies.
+- Added encrypted DNS (DNS over HTTPS) with a backup resolver, Encrypted Client Hello where supported, and settings for browser fingerprints, HTTP versions and network interfaces.
+- Added optional desktop SNI obfuscation modes to help with some network blocks. Strict mode requires administrator/root access and is available on supported Windows x64 and Linux systems.
+- Added managed Tor routing: Off, updates/licensing only, or all app traffic including video downloads. The app starts Tor when needed and shows connection progress.
+- If the selected Tor route fails, requests stop instead of silently using a direct connection. Links opened in your browser are outside the app's Tor route.
+- Network setting changes can now be applied without restarting. Old connections are closed after replacement.
+- Improved Anonymous Mode to hide sensitive video details and detailed error dialogs.
+- Error reporting is optional. Basic reports leave out URLs, local paths and full error details; Full reports include detailed debugging information. Reporting stays off until you enable it.
+
+### Automatic Updates
+
+- Automatic updates are free on desktop, Android and CLI. No premium license is required.
+- [Desktop] Installer-based copies now update through the Qt Maintenance Tool on Windows, Linux and macOS. This replaces the old macOS Sparkle updater.
+- [Desktop] Added update download progress, release notes and an option to stop showing startup update dialogs. Manual update checks remain available.
+- [Desktop] Updates now use the normal shutdown process to save the queue and close the history database before installation, reducing locked-file errors on Windows.
+- [Desktop] The maintenance tool and app can update together in one run.
+- [CLI] Added **Check for Updates** to the menu and `self-update --check`, `self-update` and `self-update --yes` for standalone binaries.
+- [CLI] Update failures keep the previous files and recovery information. Fixed certificate errors in standalone update checks.
+- [Android] Added APK update downloads with signature, file and package checks. Android still asks for installation permission and confirmation.
+- Updates now check signed update information and downloaded files before installation. Interrupted update-file downloads can resume.
+- Portable, source and package-manager installations still use their appropriate manual update method.
+
+### CLI
+
+- Rebuilt the terminal menus for downloads, profiles/playlists, accounts, settings, licenses, tracked models, history and statistics.
+- The CLI now runs without Qt, including on headless systems and in Termux.
+- Batch downloads accept multiple supported source URLs, with quality/output options and an option to continue after a failed entry.
+- Added pause, resume and cancel controls, including paused downloads that can continue in a later CLI session.
+- Reworked tracked-model scanning and the pending-download queue around the same website handling used by ordinary downloads.
+- Added automatic discovery/installation of PocketBase for download history and statistics.
+- Improved progress displays and errors for unavailable videos. Added offline checks and optional website/download diagnostics to help investigate problems.
+
+### Android and iOS
+
+- Replaced the old Kotlin Android app with a new QML interface for Android 9+, with phone/tablet navigation and download cards. Android remains experimental.
+- Android asks you to choose a shared output folder. Completed videos are copied there automatically so other apps can open them, and the folder choice is remembered.
+- Added Android APK builds for ARM64, ARMv7, x86_64 and x86, with signed release APKs.
+- Added an iOS app for iOS 15+. The IPA needs re-signing for sideloading. License activation, downloading, MP4 conversion and playback have been checked on a non-jailbroken iPhone 7.
+- Download history/statistics and desktop browser-cookie import are unavailable on Android. System notifications do not enable background downloads.
+
+### Licensing
+
+- Replaced the beta licensing system. Old beta keys no longer work; you can now paste a license key or import a license file in both GUI and CLI.
+- Free use supports up to 720p, one active download, and the first five videos of a public model, channel or playlist. Account lists are exempt from the five-video limit.
+- Premium unlocks higher qualities, parallel downloads and bulk downloads beyond that preview.
+- Permanent Premium costs €29.99 once for up to ten active installations and includes all future versions, with no subscription or paid renewal. Activation and periodic validation remain required. After successful online validation, offline use is available for up to seven days.
+- Changed the application license to the Porn Fetch Source-Available License 1.0. Copies of 3.8 released under the GPL keep their original license.
+
+### Other
+
+- Updated the desktop/CLI build environment to Python 3.15, Qt to 6.12 and Nuitka to 4.3.3, and updated the website libraries and shared downloader.
+- Improved the Windows build script to install missing Git, C++ build tools and FFmpeg build dependencies automatically. Build errors stay visible and are saved to a log.
+- Fixed macOS app-bundle packaging and Windows ARM64 build issues. Build scripts now show full compiler output and progress where available.
+- Moved the website, update and application-service links to `pornfetch.to`.
+
+### Removals and Known Issues
+
+- Removed in-app keyword search, thumbnails and the Eporner tools screen.
+- Removed support for HQPorner, MissAV and Porngo, and removed the old proxy kill-switch option.
+- The interface is currently English-only. Translations and language selection are unfinished.
+- Old filename templates using nested fields or format codes, such as `${author.name}` or `${publish_date:%Y}`, need updating to the placeholders listed under **Filters and Filenames**.
+- Download history saved by 3.8 is not imported into the new database. The current importer only supports history from earlier 3.9 betas.
+- The old `xhopen` domain is no longer accepted. Use an `xhamster.com` or `xhamster.desi` link.
+- Windows x86 and Linux s390x/ppc64le builds are paused.
+- SpankBang desktop downloads still need manual checking. Thumbzilla playlists have not been verified with a working public playlist.
+- Public video lists from RedTube and Tube8 User pages are not confirmed working. Use their supported pornstar, channel or amateur pages.
+- XFreeHD desktop downloads still need a follow-up check that Resume reuses the downloaded bytes correctly.
+- Android device behavior, Android updates, packaged desktop/CLI updates, and Tor/Strict SNI behavior still need checks on their respective devices or networks. Desktop queue recovery covers normal close/reopen; recovery after a forced kill or power loss has not been tested.

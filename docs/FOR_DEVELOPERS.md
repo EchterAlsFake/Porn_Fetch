@@ -67,25 +67,35 @@ into a dark Material theme. Content-language selectors share
 `ContentLanguageComboBox.qml`; bundle its flag SVGs and their MIT notice instead
 of depending on platform emoji fonts.
 
-First launch shows `LicenseOfferDialog.qml`, then the personal
-message in `UkraineMessageDialog.qml`, followed by error-reporting consent.
-The license offer uses `Onboarding/license_offer_seen`, independent of the app
-version and preserved when resetting preferences. Both layouts share the dialogs. Its
-`Onboarding/ukraine_message_seen` setting is saved when the dialog opens. Keep
-this key independent of the release version and preserve it when resetting
-preferences, so updates do not repeat the message. Deleting app data also
-removes this record. The corner arrow opens YouTube only when clicked.
+Both layouts use `FirstRunSetup.qml` before the main interface. It shows the full
+bundled license, requires an unchecked acceptance box, presents the premium offer,
+asks for Off/Basic/Full reporting, then shows the Ukraine message. Android also
+requires an accessible output folder through the system picker. Cancelling the
+picker keeps setup open. The shared content is in `LicenseOfferContent.qml` and
+`UkraineMessageContent.qml`; their external links open only when clicked.
+
+Each step saves only when the user explicitly continues. Interrupted setup resumes
+the remaining steps. `Onboarding/license_accepted_text`, `license_accepted_sha256`
+and `license_accepted_at` record the text, digest and UTC time of acceptance.
+`Onboarding/setup_completed`, `license_offer_seen`, `ukraine_message_seen`, reporting
+choices and the Android folder survive preference resets and updates. Deleting
+application settings removes them. `Backend.start_configured_services()` waits for
+completion before starting licensing, history and pending startup update requests.
+`--smoke-test` uses temporary settings/cache/licensing storage, skips the wizard,
+and starts no async services, so building cannot consume first-use state.
 
 Optional error reports use `src/shared/error_reporting.py` for the GUI and CLI.
-With explicit consent they send full Python tracebacks, exception chains and
-diagnostic context, including failing video URLs and query strings. Reports are
-stored privately for debugging. The detailed-report consent version invalidates
-older opt-ins; existing opt-outs remain disabled. Keep both consent dialogs and
-the CLI disclosure consistent. Local notification redaction is separate from
-report contents. The receiver in the adjacent Server project needs its matching
-hook, 1 MiB proxy limit and `1793750400_full_error_reports.js` migration deployed
-before releasing this client. Reports beyond that request limit are skipped,
-never silently truncated.
+Basic mode omits exception messages, URLs, paths and tracebacks. Separately opting
+into Full mode adds full Python tracebacks, exception chains and diagnostic context,
+including failing video URLs and query strings. Reports remain private and are used
+only for debugging; the disclosure explicitly disclaims interest in viewing habits.
+GUI settings and `--[no-]error-reporting-full-traceback` can change that scope.
+Consent version 2 invalidates older opt-ins; existing v2 detailed opt-ins keep their
+previously consented scope and opt-outs remain disabled. Keep the shared disclosure
+and both settings interfaces consistent. Local notification redaction is separate.
+The receiver in the adjacent Server project needs its matching hook, 1 MiB proxy
+limit and `1793750400_full_error_reports.js` migration deployed before release.
+Reports beyond that request limit are skipped, never silently truncated.
 
 Failed download rows keep the full Python traceback, exception chain and video
 URL in session memory for the user-opened error dialog and its Copy text action,
@@ -95,9 +105,12 @@ view. Activity and system notifications still use redacted summaries.
 Startup update checks open the update dialog by default. `Misc/update_prompts`
 stores the user's opt-out separately from `Misc/update_checks`; manual checks and
 Activity's Review update action still open it. Close Activity before dispatching
-an action that opens another dialog. Long release notes use a selectable plain
-text reader: the old rich-text scene-graph rendering crashed in Qt 6.12's
-`QSGBatchRenderer::Renderer::prepareAlphaBatches` on native Wayland/NVIDIA.
+an action that opens another dialog. Release notes use selectable `TextArea`
+readers with explicit Markdown/HTML formats and clickable links in both layouts.
+Keep `TextEdit.NativeRendering`: the old rich-text scene-graph rendering crashed
+in Qt 6.12's `QSGBatchRenderer::Renderer::prepareAlphaBatches` on native
+Wayland/NVIDIA. Clear the notes and set the format before assigning new content
+so Qt does not parse Markdown as HTML while changing formats.
 
 ## Downloads and storage
 

@@ -339,10 +339,12 @@ async def handle_settings(ctx: WizardContext) -> None:
 async def handle_license_management(ctx: WizardContext) -> None:
     """Check license validity, import schema-2 keys/files, and deactivate."""
     ctx.console.print(
-        "[cyan]Production license:[/] Visit https://pornfetch.to/ to purchase or renew. "
+        "[cyan]Lifetime Premium:[/] Buy once, use forever. EUR 29.99 at https://pornfetch.to/porn_fetch. "
         "Import the license file here.\n"
-        "[dim]Note: Each license allows up to 10 machines. Permanent licenses provide lifetime access "
-        "to the current release and include updates for 1 year after first activation.[/dim]"
+        "[dim]Use Premium on up to 10 active installations. Every future Porn Fetch update and feature I release is included. "
+        "Future development has no guaranteed duration. Activation and periodic online validation are required, "
+        "with up to 7 days offline after a successful check. If I permanently close the licensing service, "
+        "I will provide an offline unlock before closure so existing buyers can continue using Premium.[/dim]"
     )
     while True:
         action = await questionary.select(
@@ -363,7 +365,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
             with ctx.console.status("[bold green]Checking license status with server...[/]", spinner="dots"):
                 status = await ctx.check_license(force=True)
 
-            license_expiry_str = "—"
+            license_expiry_str = "-"
             lic_exp = getattr(status, "license_expires_at", None)
             if status.allowed:
                 if lic_exp is None:
@@ -373,7 +375,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
             elif lic_exp is not None:
                 license_expiry_str = datetime.fromtimestamp(lic_exp, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
 
-            next_check_str = "—"
+            next_check_str = "-"
             check_time = getattr(status, "next_check_at", None) or getattr(status, "expires_at", None)
             if check_time is not None:
                 next_check_str = datetime.fromtimestamp(check_time, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
@@ -383,11 +385,11 @@ async def handle_license_management(ctx: WizardContext) -> None:
             table.add_row("[bold cyan]Description:[/]", ctx.license_service.reason)
             table.add_row("[bold cyan]Features:[/]", "[bold green]Premium unlocked (>720p, bulk and parallel downloads)[/]" if status.allowed else "[dim]Standard free tier (<=720p)[/]")
             expiry_display = (
-                f"{license_expiry_str} [dim](valid for current release, 1 yr updates included)[/dim]"
+                f"{license_expiry_str} [dim](all future updates and features included)[/dim]"
                 if license_expiry_str == "Lifetime / Never"
                 else license_expiry_str
             )
-            table.add_row("[bold cyan]Update entitlement ends:[/]", expiry_display)
+            table.add_row("[bold cyan]Premium license expires:[/]", expiry_display)
             table.add_row("[bold cyan]Machine Limit:[/]", "10 machines (use Deactivate to unlink seats)")
             table.add_row("[bold cyan]Offline Permit Expires:[/]", next_check_str)
 

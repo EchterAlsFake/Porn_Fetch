@@ -39645,7 +39645,7 @@ d\x85''\x04\xdd\xa1\x9c0\xbbF\x9b%n\xb2\x9b\
 )\xaax\x99\x8d.\x94\x9f\x1e\xa9%'\x81\xd1yc\
 \xe5n\xdb\x9dG\xefoj\x8c\xff\xb6\x87\x9b2\xbfn\
  \xa9\x91\xf9\xfc\x1d\xbd\xe5\xd5\xbf\x01_\x05t\xa0\
-\x00\x00\x11\xc2\
+\x00\x00\x14\xa1\
 P\
 orn Fetch Source\
 -Available Licen\
@@ -39701,237 +39701,283 @@ d\x0awithout the cr\
 edential or enti\
 tlement that the\
  unmodified rele\
-ase requires.\x0a\x22P\
-ublic distributi\
-on\x22 means making\
- a copy availabl\
-e to people beyo\
-nd a private\x0acir\
-cle, including t\
-hrough a public \
-repository, down\
-load, mirror, or\
- hosted\x0aservice.\
- Direct sharing \
-with friends or \
-family in a priv\
-ate circle is \x22p\
-rivate\x0asharing,\x22\
- even when the S\
-oftware has been\
- modified.\x0a\x0a2. P\
-ermissions\x0a\x0aSubj\
-ect to this lice\
-nse, you receive\
- a worldwide, no\
-n-exclusive, roy\
-alty-free\x0apermis\
-sion to use, rea\
-d, copy, audit, \
-and modify the S\
-oftware, includi\
-ng its\x0aPremium c\
-ontrols. You may\
- privately share\
- original or mod\
-ified copies, in\
-cluding\x0aa Bypass\
-ed version, with\
- friends and fam\
-ily. You may pub\
-licly distribute\
- original\x0aor mod\
-ified copies if \
-you satisfy Sect\
-ions 3 and 4. Th\
-ese permissions \
-continue\x0afor cop\
-ies you received\
- while complying\
- with this licen\
-se.\x0a\x0a3. Public d\
-istribution cond\
-itions\x0a\x0aFor each\
- public distribu\
-tion, retain thi\
-s license, copyr\
-ight notices, an\
-d\x0aapplicable thi\
-rd-party notices\
-; identify your \
-changes; and giv\
-e recipients the\
-\x0asame permission\
-s for your contr\
-ibutions to that\
- distributed ver\
-sion. If you\x0adis\
-tribute executab\
-le copies, also \
-provide the corr\
-esponding source\
- code for\x0ayour c\
-hanges and the b\
-uild instruction\
-s needed to repr\
-oduce them, with\
-out a\x0acharge bey\
-ond reasonable d\
-elivery costs. Y\
-our public versi\
-on must preserve\
- the\x0aPremium con\
-trols' effective\
- operation and m\
-ust not be a Byp\
-assed version.\x0aY\
-ou may not publi\
-cly host a Bypas\
-sed version or p\
-ublish a public \
-fork that\x0aremove\
-s or disables th\
-ose controls. Do\
- not imply that \
-a modified versi\
-on is an\x0aofficia\
-l Porn Fetch rel\
-ease.\x0a\x0a4. Creden\
-tials and third-\
-party rights\x0a\x0aSh\
-aring the Softwa\
-re does not tran\
-sfer any premium\
- credential or e\
-ntitlement.\x0aEach\
- recipient must \
-obtain their own\
- valid entitleme\
-nt for premium f\
-eatures in\x0aan un\
-modified release\
-. No permission \
-here authorizes \
-disclosure or re\
-use of\x0aanother p\
-erson's credenti\
-als. This licens\
-e does not repla\
-ce, narrow, or g\
-rant\x0arights in a\
-ny third-party c\
-omponent. You mu\
-st comply with i\
-ts own license w\
-hen\x0ayou copy or \
-distribute it.\x0a\x0a\
-5. Contractual p\
-ublication rule\x0a\
-\x0aAs a separate u\
-ndertaking by a \
-person who accep\
-ts this license,\
- you agree not\x0at\
-o publish a targ\
-eted, step-by-st\
-ep tutorial, pat\
-ch, or code snip\
-pet whose\x0aprinci\
-pal purpose is t\
-o tell others ho\
-w to disable the\
- Software's Prem\
-ium\x0acontrols. Th\
-is rule does not\
- restrict indepe\
-ndent discussion\
-, criticism,\x0asec\
-urity research, \
-or information n\
-eeded to exercis\
-e rights that ap\
-plicable\x0alaw doe\
-s not allow a co\
-ntract to exclud\
-e. This section \
-does not purport\
- to bind\x0asomeone\
- who has not acc\
-epted this licen\
-se.\x0a\x0a6. Mandator\
-y rights and ter\
-mination\x0a\x0aNothin\
-g in this licens\
-e removes rights\
- that cannot law\
-fully be waived,\
- including\x0aappli\
-cable rights to \
-observe, study, \
-test, make neces\
-sary backups, co\
-rrect errors,\x0aor\
- achieve interop\
-erability. If yo\
-u breach a condi\
-tion of this lic\
-ense, your\x0apermi\
-ssions for affec\
-ted copies end a\
-fter written not\
-ice and a 30-day\
-\x0aopportunity to \
-cure the breach.\
- Permissions alr\
-eady granted to \
-compliant\x0arecipi\
-ents are unaffec\
-ted. You may reg\
-ain your permiss\
-ions by curing w\
-ithin\x0athat perio\
-d or by the copy\
-right holder's w\
-ritten reinstate\
-ment.\x0a\x0a7. Warran\
-ty and liability\
-\x0a\x0aThe Software i\
-s provided witho\
-ut any contractu\
-al warranty of e\
-rror-free\x0aoperat\
-ion, to the exte\
-nt permitted by \
-applicable law. \
-Mandatory consum\
-er rights\x0aand li\
-ability for inte\
-nt, gross neglig\
-ence, injury to \
-life, body, or h\
-ealth,\x0aand other\
- liability that \
+ase requires.\x0a\x22F\
+riends\x22 means pe\
+ople with whom y\
+ou have an exist\
+ing personal fri\
+endship in\x0areal \
+life and whom yo\
+u have met in pe\
+rson. Online-onl\
+y contacts, foll\
+owers,\x0asubscribe\
+rs, and members \
+of the same onli\
+ne community do \
+not qualify mere\
+ly\x0abecause of th\
+at connection.\x0a\x22\
+Private sharing\x22\
+ means sharing d\
+irectly with ind\
+ividual family m\
+embers or\x0aFriend\
+s within your pe\
+rsonal circle, i\
+ncluding modifie\
+d copies. You ma\
+y use\x0aprivate on\
+line messages or\
+ a private group\
+ consisting only\
+ of those people\
+;\x0athe relationsh\
+ips, rather than\
+ the delivery me\
+thod, determine \
+whether sharing\x0a\
+is private.\x0a\x22Pub\
+lic distribution\
+\x22 means making a\
+ copy available \
+beyond Private s\
+haring,\x0aincludin\
+g through a repo\
+sitory, download\
+, mirror, hosted\
+ service, or an \
+online\x0acommunity\
+. Sharing with a\
+ Discord server,\
+ forum, group ch\
+at, or similar c\
+ommunity\x0awhose r\
+ecipients extend\
+ beyond that per\
+sonal circle is \
+Public distribut\
+ion,\x0aeven if mem\
+bership is restr\
+icted or its mem\
+bers are describ\
+ed as friends.\x0a\x0a\
+2. Permissions\x0a\x0a\
+Subject to this \
+license, you rec\
+eive a worldwide\
+, non-exclusive,\
+ royalty-free\x0ape\
+rmission to use,\
+ read, copy, aud\
+it, and modify t\
+he Software, inc\
+luding its\x0aPremi\
+um controls. You\
+ may use Private\
+ sharing for ori\
+ginal or modifie\
+d copies,\x0ainclud\
+ing a Bypassed v\
+ersion. Public d\
+istribution of o\
+riginal or modif\
+ied copies\x0ais pe\
+rmitted if you s\
+atisfy Sections \
+3 and 4. These p\
+ermissions conti\
+nue for\x0acopies y\
+ou received whil\
+e complying with\
+ this license.\x0a\x0a\
+3. Public distri\
+bution condition\
+s\x0a\x0aFor each publ\
+ic distribution,\
+ retain this lic\
+ense, copyright \
+notices, and\x0aapp\
+licable third-pa\
+rty notices; ide\
+ntify your chang\
+es; and give rec\
+ipients the\x0asame\
+ permissions for\
+ your contributi\
+ons to that dist\
+ributed version.\
+ If you\x0adistribu\
+te executable co\
+pies, also provi\
+de the correspon\
+ding source code\
+ for\x0ayour change\
+s and the build \
+instructions nee\
+ded to reproduce\
+ them, without a\
+\x0acharge beyond r\
+easonable delive\
+ry costs. Your p\
+ublic version mu\
+st preserve the\x0a\
+Premium controls\
+' effective oper\
+ation and must n\
+ot be a Bypassed\
+ version.\x0aYou ma\
+y not publicly h\
+ost a Bypassed v\
+ersion or publis\
+h a public fork \
+that\x0aremoves or \
+disables those c\
+ontrols. Do not \
+imply that a mod\
+ified version is\
+ an\x0aofficial Por\
+n Fetch release.\
+\x0a\x0a4. Credentials\
+ and third-party\
+ rights\x0a\x0aSharing\
+ a copy of the S\
+oftware does not\
+ by itself grant\
+ a premium entit\
+lement.\x0aYou may \
+share your own v\
+alid premium cre\
+dential with fam\
+ily members and \
+Friends\x0athrough \
+Private sharing,\
+ subject to a to\
+tal limit of ten\
+ active installa\
+tions\x0aunder that\
+ entitlement, in\
+cluding your own\
+. This does not \
+create additiona\
+l\x0aentitlements o\
+r remove validat\
+ion requirements\
+.\x0aThis permissio\
+n does not autho\
+rize publishing \
+credentials or s\
+haring them with\
+\x0arecipients outs\
+ide that private\
+ circle. Other r\
+ecipients need t\
+heir own valid e\
+ntitlement\x0ato us\
+e premium featur\
+es in an unmodif\
+ied release. Not\
+hing here limits\
+ a transfer\x0arigh\
+t that applicabl\
+e law does not a\
+llow this licens\
+e to exclude.\x0a\x0aT\
+his license does\
+ not replace, na\
+rrow, or grant r\
+ights in any thi\
+rd-party\x0acompone\
+nt. You must com\
+ply with its own\
+ license when yo\
+u copy or distri\
+bute it.\x0a\x0a5. Con\
+tractual publica\
+tion rule\x0a\x0aAs a \
+separate underta\
+king by a person\
+ who accepts thi\
+s license, you a\
+gree not\x0ato publ\
+ish a targeted, \
+step-by-step tut\
+orial, patch, or\
+ code snippet wh\
+ose\x0aprincipal pu\
+rpose is to tell\
+ others how to d\
+isable the Softw\
+are's Premium\x0aco\
+ntrols. This rul\
+e does not restr\
+ict independent \
+discussion, crit\
+icism,\x0asecurity \
+research, or inf\
+ormation needed \
+to exercise righ\
+ts that applicab\
+le\x0alaw does not \
+allow a contract\
+ to exclude. Thi\
+s section does n\
+ot purport to bi\
+nd\x0asomeone who h\
+as not accepted \
+this license.\x0a\x0a6\
+. Mandatory righ\
+ts\x0a\x0aNothing in t\
+his license remo\
+ves rights that \
 cannot lawfully \
-be excluded rema\
-in unaffected.\x0a\x0a\
-8. Governing law\
-\x0a\x0aGerman law app\
-lies, without di\
-splacing mandato\
-ry protections o\
-f the country in\
-\x0awhich an EU con\
-sumer habitually\
- resides. No exc\
-lusive court ven\
-ue is imposed\x0aon\
- consumers.\x0a\x0aThi\
-s is a custom so\
-urce-available l\
-icense, not an O\
-SI-approved open\
--source\x0alicense.\
-\x0a\
+be waived, inclu\
+ding\x0aapplicable \
+rights to observ\
+e, study, test, \
+make necessary b\
+ackups, correct \
+errors,\x0aor achie\
+ve interoperabil\
+ity.\x0a\x0a7. Warrant\
+y and liability\x0a\
+\x0aThe Software is\
+ provided withou\
+t any contractua\
+l warranty of er\
+ror-free\x0aoperati\
+on, to the exten\
+t permitted by a\
+pplicable law. M\
+andatory consume\
+r rights\x0aand lia\
+bility for inten\
+t, gross neglige\
+nce, injury to l\
+ife, body, or he\
+alth,\x0aand other \
+liability that c\
+annot lawfully b\
+e excluded remai\
+n unaffected.\x0a\x0a8\
+. Governing law\x0a\
+\x0aGerman law appl\
+ies, without dis\
+placing mandator\
+y protections of\
+ the country in\x0a\
+which an EU cons\
+umer habitually \
+resides. No excl\
+usive court venu\
+e is imposed\x0aon \
+consumers.\x0a\x0aThis\
+ is a custom sou\
+rce-available li\
+cense, not an OS\
+I-approved open-\
+source\x0alicense.\x0a\
+\
 \x00\x00\x19\xa9\
 #\
  CC0 1.0 Univers\
@@ -40496,7 +40542,7 @@ contribution\x0abef\
 ore relying on t\
 his permission f\
 or a release.\x0a\
-\x00\x00\x11\x9c\
+\x00\x00\x12X\
 #\
  Third-party not\
 ices and release\
@@ -40598,188 +40644,200 @@ e; include its c\
 opyright and MIT\
  text with each \
 affected artifac\
-t. |\x0a| FFmpeg ex\
-ecutable | [LGPL\
--2.1-or-later](h\
-ttps://ffmpeg.or\
-g/legal.html), b\
-uilt from pinned\
- FFmpeg 9.0.2 so\
-urce | The minim\
-al profile expli\
-citly disables G\
-PL, version-3, n\
-onfree, and thir\
-d-party codec fe\
-atures. FFmpeg r\
-uns as a separat\
-e executable. It\
-s complete sourc\
-e archive, licen\
-se texts, config\
-ure flags, confi\
-guration headers\
-, and build hash\
-es accompany it \
-in `third_party/\
-ffmpeg-legal` an\
-d release legal \
-bundles. See [FF\
-mpeg builds](doc\
-s/INSTALLATION.m\
-d). |\x0a| zlib | [\
-zlib license](ht\
-tps://zlib.net/z\
-lib_license.html\
-) | Used for PNG\
- cover probing. \
-Linux/macOS use \
-the system libra\
-ry; Windows stat\
-ically links the\
- MSYS2 library a\
-nd includes its \
-`zlib.h` copyrig\
-ht/license text \
-in `ffmpeg-legal\
-`. |\x0a| Other Pyt\
-hon packages | `\
-pyproject.toml` \
-and installed pa\
-ckage metadata |\
- Generate an art\
-ifact-specific l\
-ist and include \
-the packages' li\
-cense and notice\
- files; account \
-for platform ext\
-ras and transiti\
-ve dependencies.\
- |\x0a| Application\
- graphics | [Gra\
-phics source fil\
-es](src/frontend\
-/graphics/); Luc\
-ide settings-ico\
-n attribution be\
-low | Applicatio\
-n-owned SVGs use\
- the application\
- license; Lucide\
- icons retain th\
-eir MIT notice. \
-Preserve provena\
-nce records for \
-the PNG logo and\
- splash assets; \
-replace or clear\
- any uncertain a\
-sset before rele\
-ase. |\x0a| Content\
--language flag i\
-mages | [flag-ic\
-ons](https://git\
-hub.com/lipis/fl\
-ag-icons), MIT |\
- SVGs from revis\
-ion `ac7e0eb3259\
-eb62aa6100c43560\
-7e2fe03896a97`; \
-copyright and li\
-cense in [LICENS\
-ES/FlagIcons.txt\
-](LICENSES/FlagI\
-cons.txt). |\x0a\x0aTh\
-e obsolete libra\
-ry list in `docs\
-/CREDITS.md` is \
-retained as hist\
-orical\x0aacknowled\
-gment. It does n\
-ot establish the\
- shipped depende\
-ncy list or lice\
-nse\x0aobligations.\
- Third-party not\
-ices and source \
-availability mus\
-t be present in \
-the\x0adelivered pa\
-ckage, not only \
-in this reposito\
-ry.\x0a\x0a## Settings\
- icons\x0a\x0aThe vide\
-o, gauge, settin\
-gs, shield, pale\
-tte and trash SV\
-Gs in\x0a`src/front\
-end/graphics/set\
-tings/` are by L\
-ucide Icons and \
-Contributors, fr\
-om\x0ahttps://githu\
-b.com/lucide-ico\
-ns/lucide/tree/m\
-ain/icons (downl\
-oaded 2026-10-26\
-).\x0aThey are dist\
-ributed under th\
-e ISC license, w\
-ith the Feather-\
-derived icons\x0aco\
-vered by the MIT\
- notice included\
- in [LICENSES/Lu\
-cide.txt](LICENS\
-ES/Lucide.txt).\x0a\
-See https://luci\
-de.dev/license. \
-The SVG artwork \
-is unmodified.\x0a\x0a\
-### Payment logo\
-s\x0a\x0aThe Bitcoin, \
-Ethereum and Lit\
-ecoin logo vecto\
-rs in\x0a`src/front\
-end/graphics/pay\
-ments/` come fro\
-m [Simple Icons]\
-(https://github.\
-com/simple-icons\
-/simple-icons)\x0au\
-nder [CC0-1.0](L\
-ICENSES/SimpleIc\
-ons.txt). Displa\
-y colours were a\
-dded.\x0a\x0aThe Moner\
-o logo is by the\
- Monero Project,\
- from its\x0a[press\
- kit](https://ww\
-w.getmonero.org/\
-press-kit), obta\
-ined through Sim\
-ple Icons.\x0aIt us\
-es [CC BY-SA 4.0\
-](LICENSES/Moner\
-o-CC-BY-SA-4.0.t\
-xt). The SVG has\
- an added\x0aorange\
- fill; that modi\
-fied vector rema\
-ins under CC BY-\
-SA 4.0. Its edit\
-able\x0asource is `\
+t. |\x0a| FFmpeg | \
+[LGPL-2.1-or-lat\
+er](https://ffmp\
+eg.org/legal.htm\
+l), built from p\
+inned FFmpeg 9.0\
+.2 source | The \
+minimal profile \
+explicitly disab\
+les GPL, version\
+-3, nonfree, and\
+ third-party cod\
+ec features. Des\
+ktop and Android\
+ builds use a se\
+parate executabl\
+e. iOS staticall\
+y links the FFmp\
+eg libraries int\
+o its replaceabl\
+e `_ios_ffmpeg` \
+extension. Relea\
+se legal bundles\
+ include the com\
+plete source arc\
+hive, license te\
+xts, configure f\
+lags, configurat\
+ion headers and \
+build hashes; th\
+e iOS bundle als\
+o includes bridg\
+e sources and `f\
+fmpeg/0/REBUILD.\
+md` for rebuildi\
+ng and replacing\
+ the extension. \
+Desktop build ma\
+terials are also\
+ in `third_party\
+/ffmpeg-legal`. \
+|\x0a| zlib | [zlib\
+ license](https:\
+//zlib.net/zlib_\
+license.html) | \
+Used for PNG cov\
+er probing. Linu\
+x/macOS use the \
+system library; \
+Windows statical\
+ly links the MSY\
+S2 library and i\
+ncludes its `zli\
+b.h` copyright/l\
+icense text in `\
+ffmpeg-legal`. |\
+\x0a| Other Python \
+packages | `pypr\
+oject.toml` and \
+installed packag\
+e metadata | Gen\
+erate an artifac\
+t-specific list \
+and include the \
+packages' licens\
+e and notice fil\
+es; account for \
+platform extras \
+and transitive d\
+ependencies. |\x0a|\
+ Application gra\
+phics | [Graphic\
+s source files](\
 src/frontend/gra\
-phics/payments/m\
-onero.svg`.\x0a\x0aThe\
-se names and log\
-os remain the ma\
-rks of their res\
-pective owners; \
-no\x0aendorsement i\
-s implied.\x0a\
+phics/); Lucide \
+settings-icon at\
+tribution below \
+| Application-ow\
+ned SVGs use the\
+ application lic\
+ense; Lucide ico\
+ns retain their \
+MIT notice. Pres\
+erve provenance \
+records for the \
+PNG logo and spl\
+ash assets; repl\
+ace or clear any\
+ uncertain asset\
+ before release.\
+ |\x0a| Content-lan\
+guage flag image\
+s | [flag-icons]\
+(https://github.\
+com/lipis/flag-i\
+cons), MIT | SVG\
+s from revision \
+`ac7e0eb3259eb62\
+aa6100c435607e2f\
+e03896a97`; copy\
+right and licens\
+e in [LICENSES/F\
+lagIcons.txt](LI\
+CENSES/FlagIcons\
+.txt). |\x0a\x0aThe ob\
+solete library l\
+ist in `docs/CRE\
+DITS.md` is reta\
+ined as historic\
+al\x0aacknowledgmen\
+t. It does not e\
+stablish the shi\
+pped dependency \
+list or license\x0a\
+obligations. Thi\
+rd-party notices\
+ and source avai\
+lability must be\
+ present in the\x0a\
+delivered packag\
+e, not only in t\
+his repository.\x0a\
+\x0a## Settings ico\
+ns\x0a\x0aThe video, g\
+auge, settings, \
+shield, palette \
+and trash SVGs i\
+n\x0a`src/frontend/\
+graphics/setting\
+s/` are by Lucid\
+e Icons and Cont\
+ributors, from\x0ah\
+ttps://github.co\
+m/lucide-icons/l\
+ucide/tree/main/\
+icons (downloade\
+d 2026-10-26).\x0aT\
+hey are distribu\
+ted under the IS\
+C license, with \
+the Feather-deri\
+ved icons\x0acovere\
+d by the MIT not\
+ice included in \
+[LICENSES/Lucide\
+.txt](LICENSES/L\
+ucide.txt).\x0aSee \
+https://lucide.d\
+ev/license. The \
+SVG artwork is u\
+nmodified.\x0a\x0a### \
+Payment logos\x0a\x0aT\
+he Bitcoin, Ethe\
+reum and Litecoi\
+n logo vectors i\
+n\x0a`src/frontend/\
+graphics/payment\
+s/` come from [S\
+imple Icons](htt\
+ps://github.com/\
+simple-icons/sim\
+ple-icons)\x0aunder\
+ [CC0-1.0](LICEN\
+SES/SimpleIcons.\
+txt). Display co\
+lours were added\
+.\x0a\x0aThe Monero lo\
+go is by the Mon\
+ero Project, fro\
+m its\x0a[press kit\
+](https://www.ge\
+tmonero.org/pres\
+s-kit), obtained\
+ through Simple \
+Icons.\x0aIt uses [\
+CC BY-SA 4.0](LI\
+CENSES/Monero-CC\
+-BY-SA-4.0.txt).\
+ The SVG has an \
+added\x0aorange fil\
+l; that modified\
+ vector remains \
+under CC BY-SA 4\
+.0. Its editable\
+\x0asource is `src/\
+frontend/graphic\
+s/payments/moner\
+o.svg`.\x0a\x0aThese n\
+ames and logos r\
+emain the marks \
+of their respect\
+ive owners; no\x0ae\
+ndorsement is im\
+plied.\x0a\
 \x00\x00\x0b\xf9\
 \x00\
 \x00*$x\xda\xe5Z\xebo\xdb8\x12\xff\xae\xbf\x82\
@@ -41427,23 +41485,23 @@ qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x06(\x00\x02\x00\x00\x00\x05\x00\x00\x00\x09\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x06B\x00\x00\x00\x00\x00\x01\x00\x09\xff\xa3\
-\x00\x00\x01\xa1\xb24\xb8\xb0\
-\x00\x00\x06R\x00\x00\x00\x00\x00\x01\x00\x09\xff\xb7\
-\x00\x00\x01\xa1\xb24\xba\x0d\
-\x00\x00\x062\x00\x00\x00\x00\x00\x01\x00\x09\xff\x81\
-\x00\x00\x01\xa1\xb24\xba\x8c\
-\x00\x00\x06b\x00\x00\x00\x00\x00\x01\x00\x0a\x00\xe6\
-\x00\x00\x01\xa1\xb24\xb9 \
-\x00\x00\x06x\x00\x00\x00\x00\x00\x01\x00\x0a\x01\xf6\
-\x00\x00\x01\xa1\xb24\xb9\x92\
-\x00\x00\x06\x10\x00\x00\x00\x00\x00\x01\x00\x09\xfa\xe4\
+\x00\x00\x06B\x00\x00\x00\x00\x00\x01\x00\x0a\x03>\
+\x00\x00\x01\xa1\xb7A\x8d7\
+\x00\x00\x06R\x00\x00\x00\x00\x00\x01\x00\x0a\x03R\
+\x00\x00\x01\xa1\xb7A\x8e\x81\
+\x00\x00\x062\x00\x00\x00\x00\x00\x01\x00\x0a\x03\x1c\
+\x00\x00\x01\xa1\xb7A\x8e\xec\
+\x00\x00\x06b\x00\x00\x00\x00\x00\x01\x00\x0a\x04\x81\
+\x00\x00\x01\xa1\xb7A\x8d\xa9\
+\x00\x00\x06x\x00\x00\x00\x00\x00\x01\x00\x0a\x05\x91\
+\x00\x00\x01\xa1\xb7A\x8e\x19\
+\x00\x00\x06\x10\x00\x00\x00\x00\x00\x01\x00\x09\xfe\x7f\
 \x00\x00\x01\xa1'}\xb9\xc0\
 \x00\x00\x05\xc4\x00\x02\x00\x00\x00\x01\x00\x00\x00\x10\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x05\xd2\x00\x01\x00\x00\x00\x01\x00\x09\xed\xb6\
+\x00\x00\x05\xd2\x00\x01\x00\x00\x00\x01\x00\x09\xf1Q\
 \x00\x00\x01\xa1\xa6G\xbb\x07\
-\x00\x00\x05\xec\x00\x00\x00\x00\x00\x01\x00\x09\xf9\xb3\
+\x00\x00\x05\xec\x00\x00\x00\x00\x00\x01\x00\x09\xfdN\
 \x00\x00\x01\xa1'}\xb9\xf2\
 \x00\x00\x00\x80\x00\x02\x00\x00\x00\x12\x00\x00\x00\x13\
 \x00\x00\x00\x00\x00\x00\x00\x00\
@@ -41533,15 +41591,15 @@ qt_resource_struct = b"\
 \x00\x00\x01\xa1\xad\xaf\x89\x92\
 \x00\x00\x02\xd8\x00\x00\x00\x00\x00\x01\x00\x09@F\
 \x00\x00\x01\xa1\xad\xaf\x87\xad\
-\x00\x00\x05>\x00\x00\x00\x00\x00\x01\x00\x09\xd2\xed\
+\x00\x00\x05>\x00\x00\x00\x00\x00\x01\x00\x09\xd5\xcc\
 \x00\x00\x01\xa1\xad\xaf\x8a\x98\
 \x00\x00\x05\x06\x00\x00\x00\x00\x00\x01\x00\x09\xa7z\
-\x00\x00\x01\xa1'}\xb9\xac\
-\x00\x00\x05\x92\x00\x00\x00\x00\x00\x01\x00\x09\xdc\x16\
-\x00\x00\x01\xa1\xad\xb1\x05m\
-\x00\x00\x05^\x00\x00\x00\x00\x00\x01\x00\x09\xd7\x93\
+\x00\x00\x01\xa1\xb7\x05\xb1r\
+\x00\x00\x05\x92\x00\x00\x00\x00\x00\x01\x00\x09\xde\xf5\
+\x00\x00\x01\xa1\xb2R\x01\xcc\
+\x00\x00\x05^\x00\x00\x00\x00\x00\x01\x00\x09\xdar\
 \x00\x00\x01\xa1i:\x07\x1d\
-\x00\x00\x05\x1a\x00\x00\x00\x00\x00\x01\x00\x09\xb9@\
+\x00\x00\x05\x1a\x00\x00\x00\x00\x00\x01\x00\x09\xbc\x1f\
 \x00\x00\x01\xa1\xa6\x8biE\
 \x00\x00\x04\xb8\x00\x00\x00\x00\x00\x01\x00\x09\x86\x0a\
 \x00\x00\x01\xa1y\xbd\x9bF\

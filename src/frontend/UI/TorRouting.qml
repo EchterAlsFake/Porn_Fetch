@@ -26,7 +26,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.minimumWidth: 0
             enabled: !(backend.activityActive === true)
-            model: [qsTr("Off — connect directly"), qsTr("Tor — updates and licensing only"), qsTr("Tor — all app traffic, including downloads")]
+            model: [qsTr("Off: connect directly"), qsTr("Tor: updates and licensing only"), qsTr("Tor: all app traffic, including downloads")]
             currentIndex: Math.max(0, control.modes.indexOf(appSettings.service_transport))
             onActivated: function(index) {
                 // Keep the current route until the warning is acknowledged.

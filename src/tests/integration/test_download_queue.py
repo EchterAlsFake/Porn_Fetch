@@ -22,6 +22,41 @@ def video(identifier):
 
 
 class QueueNumberingTests(unittest.TestCase):
+    def test_session_downloads_survive_removal_and_keep_retry_progress(self):
+        model = DownloadListModel()
+        history = model.session_history
+        roles = {name.decode(): role for role, name in history.roleNames().items()}
+
+        def value(row, field):
+            return history.data(history.index(row, 0), roles[field])
+
+        model.add_video(video("job"), "720")
+        self.assertEqual(history.rowCount(), 0)
+        model.set_status("job", "queued")
+        model.set_status("job", "downloading")
+        model.update_progress("job", 42)
+        model.set_status("job", "failed")
+        self.assertEqual(value(0, "status"), "failed")
+        self.assertEqual(value(0, "progress"), 42)
+        model.set_status("job", "queued")
+        self.assertEqual(history.rowCount(), 1)
+        model.update_progress("job", 100)
+        model.set_status("job", "completed")
+        model.remove_video("job")
+        self.assertEqual(model.rowCount(), 0)
+        self.assertEqual(value(0, "title"), "Example")
+        self.assertEqual(value(0, "status"), "completed")
+        self.assertEqual(value(0, "progress"), 100)
+
+        model.add_video(video("job"), "720")
+        model.set_status("job", "queued")
+        model.set_status("job", "cancelled")
+        model.remove_video("job")
+        self.assertEqual(history.rowCount(), 2)
+        self.assertEqual(value(0, "status"), "completed")
+        self.assertEqual(value(1, "status"), "cancelled")
+        self.assertEqual(DownloadListModel().session_history.rowCount(), 0)
+
     def test_numbering_and_job_lookup_follow_row_removal(self):
         model = DownloadListModel()
         for identifier in ("a", "b", "c"):
@@ -117,7 +152,7 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
             backend.tr = lambda text: text
             backend._save_to_output_folder = AsyncMock(side_effect=OutputFolderError("folder denied"))
             settings = SimpleNamespace(processing_delay=0, skip_existing_files=False,
-                                       write_metadata=False, enable_logging=False)
+                                       write_metadata=False, enable_logging=False, error_reporting_full_traceback=False)
             with (patch("src.backend.application.app_settings", settings),
                   patch("src.backend.application.is_mobile", True),
                   patch("src.backend.application.report_exception", AsyncMock(return_value="output-error"))):
@@ -135,7 +170,7 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
                 return_value=SimpleNamespace(status="failed", missing=[2])))
             backend = self.backend(item)
             settings = SimpleNamespace(processing_delay=0, skip_existing_files=False,
-                                       write_metadata=False, enable_logging=False, supress_errors=True)
+                                       write_metadata=False, enable_logging=False, error_reporting_full_traceback=False, supress_errors=True)
             with (patch("src.backend.application.app_settings", settings),
                   patch("src.backend.application.TEMP_DIRECTORY_STATES", Path(directory) / "states"),
                   patch("src.backend.application.TEMP_DIRECTORY_SEGMENTS", Path(directory) / "segments"),
@@ -160,7 +195,7 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
             item.source_video = SimpleNamespace(download=fail)
             backend = self.backend(item)
             settings = SimpleNamespace(processing_delay=0, skip_existing_files=False,
-                                       write_metadata=False, enable_logging=False, anonymous_mode=False)
+                                       write_metadata=False, enable_logging=False, error_reporting_full_traceback=False, anonymous_mode=False)
             with patch("src.backend.application.app_settings", settings), \
                  patch("src.backend.application.report_exception", AsyncMock(return_value="local-error")) as report:
                 await Backend._download_video(backend, "job", item, asyncio.Event(), False)
