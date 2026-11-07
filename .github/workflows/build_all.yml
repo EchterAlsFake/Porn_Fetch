@@ -179,16 +179,36 @@ jobs:
       # --- Build Process ---
       - name: Windows ARM64 OpenSSL (vcpkg)
         if: matrix.platform == 'windows' && matrix.arch == 'arm64'
-        shell: pwsh
-        run: |
-          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
-          git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
-          & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
-          & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
-          echo "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
+        uses: ./.github/actions/setup-windows-arm64-openssl
 
       - name: Sync Dependencies
         run: uv sync --upgrade --no-dev --extra gui --extra build --extra desktop-build
+
+      - name: Identify Nuitka build environment
+        id: nuitka-environment
+        shell: bash
+        run: |
+          uv run --no-sync python - <<'PY'
+          import hashlib, json, os, sys
+          from importlib.metadata import distributions
+          packages = sorted((d.metadata['Name'], d.version) for d in distributions()
+                            if d.metadata['Name'].lower().replace('_', '-') != 'porn-fetch')
+          inputs = [sys.version, os.environ.get('ImageOS'), os.environ.get('ImageVersion'), packages]
+          key = hashlib.sha256(json.dumps(inputs).encode()).hexdigest()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print(f'key={key}', file=output)
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              print(f"NUITKA_CACHE_DIR={os.path.join(os.environ['RUNNER_TEMP'], 'pornfetch-nuitka')}", file=output)
+          print(f'Nuitka environment cache key: {key}')
+          PY
+
+      - name: Cache Nuitka dependency and compiler results
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/pornfetch-nuitka
+          key: nuitka-v1-${{ runner.os }}-${{ matrix.arch }}-${{ steps.nuitka-environment.outputs.key }}-${{ hashFiles('scripts/patch_nuitka.py', 'packaging/prepare_deploy.py', 'packaging/pysidedeploy_*.spec') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            nuitka-v1-${{ runner.os }}-${{ matrix.arch }}-${{ steps.nuitka-environment.outputs.key }}-${{ hashFiles('scripts/patch_nuitka.py', 'packaging/prepare_deploy.py', 'packaging/pysidedeploy_*.spec') }}-
 
       - name: Set up macOS Developer ID signing
         if: matrix.platform == 'macos'
@@ -254,6 +274,23 @@ jobs:
           path: ${{ runner.temp }}/pornfetch-ffmpeg/*.tar.xz
           key: ffmpeg-source-${{ runner.os }}-${{ hashFiles('packaging/build_ffmpeg.py') }}
 
+      - name: Identify Windows FFmpeg toolchain
+        id: ffmpeg-toolchain
+        if: matrix.platform == 'windows'
+        shell: msys2 {0}
+        run: |
+          pacman -Q
+          echo "key=$(pacman -Q | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+          echo "image=$ImageVersion" >> "$GITHUB_OUTPUT"
+
+      - name: Cache unsigned Windows FFmpeg and legal sources
+        id: ffmpeg-binary
+        if: matrix.platform == 'windows'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/pornfetch-ffmpeg-binary
+          key: ffmpeg-binary-v1-${{ matrix.arch }}-${{ steps.ffmpeg-toolchain.outputs.image }}-${{ steps.ffmpeg-toolchain.outputs.key }}-${{ hashFiles('packaging/build_ffmpeg.py', 'packaging/ffmpeg_configure_flags.txt') }}
+
       - name: Build minimal LGPL FFmpeg (Linux and macOS)
         if: matrix.platform != 'windows'
         shell: bash
@@ -266,9 +303,23 @@ jobs:
         if: matrix.platform == 'windows'
         shell: msys2 {0}
         run: |
-          uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg" --msys2-root "${{ steps.ffmpeg-msys2.outputs.msys2-location }}"
+          FFMPEG_CACHE_DIR="$(cygpath -u "$RUNNER_TEMP")/pornfetch-ffmpeg-binary"
+          if [ "${{ steps.ffmpeg-binary.outputs.cache-hit }}" = true ]; then
+            echo "Restoring cached unsigned FFmpeg and legal sources"
+            cp "$FFMPEG_CACHE_DIR/ffmpeg.exe" third_party/ffmpeg.exe
+            cp -R "$FFMPEG_CACHE_DIR/ffmpeg-legal" third_party/
+          else
+            uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --work-dir "$RUNNER_TEMP/pornfetch-ffmpeg" --msys2-root "${{ steps.ffmpeg-msys2.outputs.msys2-location }}"
+          fi
+          uv run --no-sync python packaging/build_ffmpeg.py --platform windows --arch ${{ matrix.arch }} --dest third_party --verify-existing
           uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg.exe
           PORN_FETCH_TEST_FFMPEG=third_party/ffmpeg.exe uv run --no-sync python -m unittest src.tests.unit.test_ffmpeg
+          if [ "${{ steps.ffmpeg-binary.outputs.cache-hit }}" != true ]; then
+            # This snapshot stays unsigned when third_party is signed later.
+            mkdir -p "$FFMPEG_CACHE_DIR"
+            cp third_party/ffmpeg.exe "$FFMPEG_CACHE_DIR/"
+            cp -R third_party/ffmpeg-legal "$FFMPEG_CACHE_DIR/"
+          fi
 
       - name: Frontend Update
         shell: bash
@@ -1095,13 +1146,7 @@ jobs:
 
       - name: Windows ARM64 OpenSSL (vcpkg)
         if: matrix.platform == 'windows' && matrix.arch == 'arm64'
-        shell: pwsh
-        run: |
-          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
-          git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
-          & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
-          & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
-          echo "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
+        uses: ./.github/actions/setup-windows-arm64-openssl
 
       - name: Sync Dependencies
         run: uv sync --upgrade --no-dev --extra build

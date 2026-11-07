@@ -12,6 +12,11 @@ import sys
 import tempfile
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.patch_nuitka import patch_installed_nuitka  # noqa: E402
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CONTROL_STYLES = ("Basic", "Fusion", "Material", "Universal", "Windows", "macOS")
 
@@ -89,6 +94,7 @@ def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> N
     arguments = shlex.split(config.get("nuitka", "extra_args"))
     # Avoid costly ARM64 link-time optimization in the hosted build.
     if sys.platform == "win32" and platform.machine().lower() in {"arm64", "aarch64"}:
+        patch_installed_nuitka()
         arguments = ["--lto=no" if argument.startswith("--lto=") else argument for argument in arguments]
     arguments.extend(["--nofollow-import-to=src.frontend.UI.resources",
                       "--report=deployment/compilation-report.xml"])

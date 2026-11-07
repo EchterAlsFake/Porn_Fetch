@@ -262,6 +262,14 @@ source archive against their recorded hashes before staging the source, bridge,
 configuration and rebuild/replacement instructions. Pass that native legal folder
 explicitly to the collector; Python metadata discovery does not cover it.
 
+Windows ARM64 GUI preparation applies the source-checked Nuitka 4.3.4 PE scanner
+patch in `scripts/patch_nuitka.py`, reading only import tables and caching names
+for unchanged files. Review it if a Nuitka update changes that function. GUI CI
+persists Nuitka dependency/compiler caches by build environment; ARM64 Windows
+jobs reuse vcpkg's ABI-validated OpenSSL packages. Windows FFmpeg caches keep the
+unsigned executable with complete legal/source files separately from signing
+staging, and verify hashes, LGPL configuration/license and remuxing before reuse.
+
 ## Testing and documentation
 
 ```sh

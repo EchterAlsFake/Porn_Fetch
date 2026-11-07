@@ -197,3 +197,21 @@ Do not publish compiler logs, private credentials or diagnostic-only artifacts.
 report and PyInstaller's payload inventory help find oversized dependencies.
 `generate_repository.py --benchmark-compression` compares IFW archive choices;
 changing compression does not remove the need to test the resulting installer.
+
+Windows ARM64 GUI preparation applies `scripts/patch_nuitka.py` to the active
+environment's reviewed Nuitka 4.3.4 PE scanner. It reads normal and delayed import
+tables with `fast_load=True` and caches their names until a file's size or
+modification time changes. DLL search contexts are still resolved separately.
+The patch is idempotent and checks the original and patched syntax trees; an
+upstream scanner change stops preparation for review instead of silently editing
+new code. The shared desktop builder applies it through `prepare_deploy.py` too.
+
+GUI CI retains Nuitka's dependency and compiler caches per OS, architecture,
+runner image, Python/dependency versions and deployment configuration. Application
+version changes can reuse unchanged compiler inputs. Both ARM64 Windows jobs
+retain vcpkg binary packages; vcpkg validates the port/toolchain ABI before reuse.
+Windows FFmpeg caching includes the unsigned executable and complete legal/source
+folder, keyed by the runner image, installed MSYS2 packages and build recipe.
+Restored payloads pass source/binary hashes, LGPL configuration/license checks and
+the existing remux tests before fresh signing. Cached snapshots stay outside the
+signed staging folder. First runs populate these caches; later hits avoid builds.

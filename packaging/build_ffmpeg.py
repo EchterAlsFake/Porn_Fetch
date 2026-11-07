@@ -73,6 +73,51 @@ def build_tools(target_platform: str, arch: str, msys2_root: Path | None) -> tup
     return str(bash), str(make), environment
 
 
+def verify_configuration(directory: Path) -> None:
+    config = (directory / "config.h").read_text(encoding="utf-8")
+    for option in ("GPL", "VERSION3", "NONFREE"):
+        if f"#define CONFIG_{option} 0" not in config:
+            raise ValueError(f"FFmpeg must be built with CONFIG_{option}=0")
+    components = (directory / "config_components.h").read_text(encoding="utf-8")
+    if re.search(r"^#define CONFIG_\w+_ENCODER 1$", components, re.MULTILINE):
+        raise ValueError("The remux-only FFmpeg build must not contain encoders")
+
+
+def verify_license(executable: Path) -> None:
+    build_output.message(f"Verify FFmpeg license: {executable}")
+    license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
+                                          stderr=subprocess.STDOUT, text=True)
+    if "GNU Lesser General Public" not in license_text or "version 2.1" not in license_text:
+        raise ValueError("The FFmpeg executable does not report the expected LGPL license")
+
+
+def verify_existing(destination: Path, target_platform: str, arch: str) -> Path:
+    """Validate an unsigned cached executable together with its source and notices."""
+    target_platform, arch = normalize_platform(target_platform), normalize_arch(arch)
+    legal = destination / "ffmpeg-legal"
+    manifest = json.loads((legal / "build.json").read_text(encoding="utf-8"))
+    for key, expected in (("version", VERSION), ("platform", target_platform), ("arch", arch),
+                          ("source_sha256", SOURCE_SHA256)):
+        if manifest.get(key) != expected:
+            raise ValueError(f"Cached FFmpeg {key} does not match the requested build")
+    executable = destination / ("ffmpeg.exe" if target_platform == "windows" else "ffmpeg")
+    if hashlib.sha256(executable.read_bytes()).hexdigest() != manifest["binary_sha256"]:
+        raise ValueError("Cached FFmpeg executable does not match its recorded SHA-256")
+    with (legal / f"ffmpeg-{VERSION}.tar.xz").open("rb") as source:
+        if hashlib.file_digest(source, "sha256").hexdigest() != SOURCE_SHA256:
+            raise ValueError("Cached FFmpeg source archive does not match the pinned SHA-256")
+    required = ["COPYING.LGPLv2.1", "LICENSE.md", "configuration.txt", "version.txt"]
+    if target_platform == "windows":
+        required.append("zlib.h")
+    for name in required:
+        if not (legal / name).is_file():
+            raise FileNotFoundError(legal / name)
+    verify_configuration(legal)
+    verify_license(executable.resolve())
+    build_output.message(f"Verified cached LGPL-only FFmpeg: {executable}", "ok")
+    return executable
+
+
 def build(target_platform: str, arch: str, destination: Path, work: Path,
           source_archive: Path | None = None, jobs: int = 2, msys2_root: Path | None = None) -> Path:
     target_platform = normalize_platform(target_platform)
@@ -114,23 +159,13 @@ def build(target_platform: str, arch: str, destination: Path, work: Path,
                       "--extra-ldflags=-mmacosx-version-min=11.0"])
     command = [bash, (source_dir / "configure").as_posix(), *flags]
     build_output.run(command, label="Configure FFmpeg", cwd=build_dir, env=environment)
-    config = (build_dir / "config.h").read_text(encoding="utf-8")
-    for option in ("GPL", "VERSION3", "NONFREE"):
-        if f"#define CONFIG_{option} 0" not in config:
-            raise ValueError(f"FFmpeg must be built with CONFIG_{option}=0")
-    components = (build_dir / "config_components.h").read_text(encoding="utf-8")
-    if re.search(r"^#define CONFIG_\w+_ENCODER 1$", components, re.MULTILINE):
-        raise ValueError("The remux-only FFmpeg build must not contain encoders")
+    verify_configuration(build_dir)
     binary_name = "ffmpeg.exe" if target_platform == "windows" else "ffmpeg"
     build_output.run([make, f"-j{jobs}", binary_name], label="Compile FFmpeg", cwd=build_dir, env=environment)
     executable = build_dir / binary_name
     if not executable.is_file():
         raise FileNotFoundError(f"FFmpeg compilation completed but the executable is missing: {executable}")
-    build_output.message(f"Verify FFmpeg license: {executable}")
-    license_text = subprocess.check_output([str(executable), "-hide_banner", "-L"],
-                                          stderr=subprocess.STDOUT, text=True)
-    if "GNU Lesser General Public" not in license_text or "version 2.1" not in license_text:
-        raise ValueError("The FFmpeg executable does not report the expected LGPL license")
+    verify_license(executable)
 
     destination.mkdir(parents=True, exist_ok=True)
     result = destination / binary_name
@@ -173,12 +208,17 @@ def main() -> int:
     parser.add_argument("--dest", type=Path, default=PROJECT_ROOT / "third_party")
     parser.add_argument("--work-dir", type=Path, default=PROJECT_ROOT / "build/ffmpeg")
     parser.add_argument("--source-archive", type=Path)
+    parser.add_argument("--verify-existing", action="store_true",
+                        help="Verify a restored unsigned executable and its complete legal folder without rebuilding")
     parser.add_argument("--msys2-root", type=Path, help="Windows: MSYS2 installation directory")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 2, 4))
     build_output.add_arguments(parser)
     args = parser.parse_args()
     build_output.configure(args)
-    build(args.platform, args.arch, args.dest, args.work_dir, args.source_archive, args.jobs, args.msys2_root)
+    if args.verify_existing:
+        verify_existing(args.dest, args.platform, args.arch)
+    else:
+        build(args.platform, args.arch, args.dest, args.work_dir, args.source_archive, args.jobs, args.msys2_root)
     return 0
 
 

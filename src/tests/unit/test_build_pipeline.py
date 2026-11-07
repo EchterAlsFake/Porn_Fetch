@@ -164,6 +164,49 @@ class WindowsBuildDependencyTests(unittest.TestCase):
                 self.assertEqual(manifest["arch"], arch)
 
 
+class FFmpegCacheTests(unittest.TestCase):
+    def payload(self, root):
+        legal = root / "ffmpeg-legal"
+        legal.mkdir()
+        source = b"pinned source archive fixture"
+        executable = root / "ffmpeg.exe"
+        executable.write_bytes(b"unsigned native executable")
+        (legal / f"ffmpeg-{ffmpeg_builder.VERSION}.tar.xz").write_bytes(source)
+        for name in ("COPYING.LGPLv2.1", "LICENSE.md", "configuration.txt", "version.txt", "zlib.h"):
+            (legal / name).write_text("legal fixture")
+        (legal / "config.h").write_text("\n".join(
+            f"#define CONFIG_{option} 0" for option in ("GPL", "VERSION3", "NONFREE")))
+        (legal / "config_components.h").write_text("#define CONFIG_AAC_ENCODER 0\n")
+        digest = hashlib.sha256(source).hexdigest()
+        (legal / "build.json").write_text(json.dumps({
+            "version": ffmpeg_builder.VERSION, "platform": "windows", "arch": "arm64",
+            "source_sha256": digest, "binary_sha256": hashlib.sha256(executable.read_bytes()).hexdigest(),
+        }))
+        return executable, digest
+
+    def test_restored_payload_verifies_source_configuration_and_native_license(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            executable, digest = self.payload(root)
+            with patch.object(ffmpeg_builder, "SOURCE_SHA256", digest), \
+                    patch.object(ffmpeg_builder.subprocess, "check_output",
+                                 return_value="GNU Lesser General Public License version 2.1") as command:
+                self.assertEqual(ffmpeg_builder.verify_existing(root, "windows", "ARM64"), executable)
+            command.assert_called_once_with([str(executable), "-hide_banner", "-L"],
+                                            stderr=subprocess.STDOUT, text=True)
+
+    def test_changed_cached_executable_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            executable, digest = self.payload(root)
+            executable.write_bytes(b"unexpected executable")
+            with patch.object(ffmpeg_builder, "SOURCE_SHA256", digest), \
+                    patch.object(ffmpeg_builder.subprocess, "check_output") as command:
+                with self.assertRaisesRegex(ValueError, "recorded SHA-256"):
+                    ffmpeg_builder.verify_existing(root, "windows", "arm64")
+            command.assert_not_called()
+
+
 class FFmpegSourceDownloadTests(unittest.IsolatedAsyncioTestCase):
     async def test_dns_failure_uses_alternate_host_with_the_same_pinned_hash(self):
         from base_api.modules.errors import NetworkRequestError
@@ -229,9 +272,11 @@ class QmlPackagingTests(unittest.TestCase):
             output = project / "windows.spec"
             with patch.object(desktop_preparer.subprocess, "check_output", side_effect=scan), \
                     patch.object(desktop_preparer.sys, "platform", "win32"), \
-                    patch.object(desktop_preparer.platform, "machine", return_value="ARM64"):
+                    patch.object(desktop_preparer.platform, "machine", return_value="ARM64"), \
+                    patch.object(desktop_preparer, "patch_installed_nuitka") as patch_nuitka:
                 desktop_preparer.prepare_spec(PROJECT_ROOT / "packaging/pysidedeploy_windows.spec",
                                              output, project, pyside)
+            patch_nuitka.assert_called_once_with()
             config = configparser.ConfigParser()
             config.read(output)
             arguments = shlex.split(config.get("nuitka", "extra_args"))

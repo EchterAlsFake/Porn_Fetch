@@ -1,0 +1,35 @@
+name: Set up Windows ARM64 OpenSSL
+description: Build current OpenSSL with vcpkg, reusing ABI-validated binary packages between runs.
+runs:
+  using: composite
+  steps:
+    - name: Identify Windows toolchain image
+      id: image
+      shell: pwsh
+      run: '"version=$env:ImageOS-$env:ImageVersion" >> $env:GITHUB_OUTPUT'
+
+    - name: Cache vcpkg binary packages
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/pornfetch-vcpkg-binaries
+        key: vcpkg-arm64-v1-${{ steps.image.outputs.version }}-${{ hashFiles('.github/actions/setup-windows-arm64-openssl/action.yml') }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          vcpkg-arm64-v1-${{ steps.image.outputs.version }}-${{ hashFiles('.github/actions/setup-windows-arm64-openssl/action.yml') }}-
+
+    - name: Install OpenSSL
+      shell: pwsh
+      env:
+        VCPKG_DEFAULT_BINARY_CACHE: ${{ runner.temp }}/pornfetch-vcpkg-binaries
+      run: |
+        $ErrorActionPreference = 'Stop'
+        New-Item -ItemType Directory -Force -Path $env:VCPKG_DEFAULT_BINARY_CACHE
+        $vcpkgRoot = Join-Path $env:RUNNER_TEMP 'vcpkg'
+        git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
+        if ($LASTEXITCODE -ne 0) { throw 'vcpkg checkout failed' }
+        & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
+        if ($LASTEXITCODE -ne 0) { throw 'vcpkg bootstrap failed' }
+        # vcpkg's ABI hash checks the port, compiler, triplet and dependencies;
+        # a changed input causes a rebuild even when an archive cache was restored.
+        & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
+        if ($LASTEXITCODE -ne 0) { throw 'OpenSSL installation failed' }
+        "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
