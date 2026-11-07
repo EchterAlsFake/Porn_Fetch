@@ -1,4 +1,11 @@
 
+# Transition Warning
+I'll transition Porn Fetch's backend and licensing to v3.9 and to the real payment system.
+All sandbox licenses will be deleted and v3.8 will effectively be dead, which is good anyways, because it's insecure.
+During the next 24 hours, please do not use Porn Fetch, do not activate licenses and do not treat any information as accurate.
+
+Thank you all, it was a long run, but I am finally on the finnishing line :) 
+
 # Security Warning v3.8 (DO NOT USE!)
 Porn Fetch v3.8 is affected by the recently discovered Brotli vulnerability. An attacker can theoretically execute code on your machine through a compromised CDN, DNS or website that Porn Fetch requests.
 
