@@ -105,6 +105,8 @@ ApplicationWindow {
         if (startupContinued || appSettings.smoke_test || !appSettings.setup_completed) return
         startupContinued = true
         backend.start_configured_services()
+        if (appSettings.update_checks)
+            backend.check_for_updates_background()
     }
 
     Component.onCompleted: Qt.callLater(function() {
@@ -424,9 +426,17 @@ ApplicationWindow {
             AppButton {
                 objectName: "installUpdateButton"
                 Layout.fillWidth: true
-                text: qsTr("Download and install update")
-                enabled: androidUpdateDialog.details.install_allowed === true && !androidUpdateDialog.busy
-                onClicked: { androidUpdateDialog.busy = true; androidUpdateDialog.status = qsTr("Preparing verified download…"); backend.auto_update() }
+                text: androidUpdateDialog.details.install_allowed === true ? qsTr("Download and install update") : qsTr("Open downloads")
+                enabled: !androidUpdateDialog.busy
+                onClicked: {
+                    if (androidUpdateDialog.details.install_allowed !== true) {
+                        Qt.openUrlExternally(androidUpdateDialog.details.release_url || "https://pornfetch.to/download")
+                        return
+                    }
+                    androidUpdateDialog.busy = true
+                    androidUpdateDialog.status = qsTr("Preparing verified download…")
+                    backend.auto_update()
+                }
             }
         }
     }

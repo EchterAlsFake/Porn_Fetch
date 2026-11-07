@@ -487,6 +487,9 @@ class Backend(QObject):
                 install_allowed = not IS_SOURCE_RUN and find_maintenance_tool() is not None
                 message = (self.tr("Porn Fetch will save download progress and close. The installer will guide you through the update.")
                            if install_allowed else self.tr("Download the latest version from the releases page to update this copy."))
+        if is_ios:
+            install_allowed = False
+            message = self.tr("Download the latest IPA and install it with your sideloading tool.")
         details = {
             "automatic": not self._update_check_manual,
             "install_allowed": install_allowed,

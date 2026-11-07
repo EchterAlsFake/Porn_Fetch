@@ -97,6 +97,8 @@ class CheckUpdates:
         from src.shared.android_updates import check, is_android_device
         if is_android_device():
             return await asyncio.to_thread(check, clients.app_settings, __version__)
+        if sys.platform == "ios":
+            return await CheckUpdates.check_ios_release()
         try:
             return await CheckUpdates.check_signed_repository()
         except Exception:
@@ -108,6 +110,30 @@ class CheckUpdates:
             if update:
                 update.update(install_allowed=False, entitlement_message="Release metadata could not be authenticated. Automatic installation is unavailable.")
             return update
+
+    @staticmethod
+    async def check_ios_release() -> dict | None:
+        """Discover published IPAs for manual sideloading, without an installer feed."""
+        response = await service_core.request(url="https://pornfetch.to/download/catalog.json")
+        response.raise_for_status()
+        releases = [
+            release for release in response.json()["releases"]
+            if any(artifact["platform"] == "ios" and artifact["kind"] == "ipa"
+                   and artifact["arch"] == "arm64" for artifact in release["artifacts"])
+        ]
+        if not releases:
+            return None
+        # Match the website and Android feed's preference for stable releases.
+        release = max(releases, key=lambda item: (
+            item["channel"] == "stable", CheckUpdates._version_parts(item["version"]),
+        ))
+        if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
+            return None
+        return {
+            "version": release["version"], "source": "ios_catalog", "install_allowed": False,
+            "release_url": "https://pornfetch.to/download/ios",
+            "changelog": release.get("notes", ""), "changelog_format": "markdown",
+        }
 
     @staticmethod
     async def check_signed_repository(*, include_current: bool = False) -> dict | None:

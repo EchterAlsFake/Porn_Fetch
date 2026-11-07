@@ -59,6 +59,60 @@ class UpdateServiceTests(unittest.TestCase):
 
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
+    async def test_ios_discovers_only_published_ipas_without_the_desktop_repository(self):
+        ipa = {"platform": "ios", "kind": "ipa", "arch": "arm64"}
+        release = {"version": "3.10.0", "channel": "stable", "notes": "# New release", "artifacts": [ipa]}
+        response = MagicMock()
+        response.json.return_value = {"releases": [
+            {**release, "version": "3.11.0", "artifacts": [{"platform": "android", "kind": "apk"}]},
+            {**release, "version": "3.12.0", "artifacts": [{**ipa, "kind": "notices"}]},
+            release,
+            {**release, "version": "3.9.0"},
+        ]}
+        core = SimpleNamespace(request=AsyncMock(return_value=response))
+        with patch("src.backend.update_service.sys.platform", "ios"), \
+             patch("src.backend.update_service.__version__", "3.9.0"), \
+             patch("src.backend.update_service.service_core", core), \
+             patch.object(CheckUpdates, "check_signed_repository", AsyncMock()) as desktop:
+            update = await CheckUpdates.check()
+        desktop.assert_not_awaited()
+        core.request.assert_awaited_once_with(url="https://pornfetch.to/download/catalog.json")
+        response.raise_for_status.assert_called_once()
+        self.assertEqual(update["version"], "3.10.0")
+        self.assertFalse(update["install_allowed"])
+        self.assertEqual(update["release_url"], "https://pornfetch.to/download/ios")
+        self.assertEqual(update["changelog"], "# New release")
+        self.assertEqual(update["changelog_format"], "markdown")
+
+    async def test_ios_does_not_offer_the_installed_version(self):
+        response = MagicMock()
+        response.json.return_value = {"releases": [{
+            "version": "3.9.0", "channel": "stable",
+            "artifacts": [{"platform": "ios", "kind": "ipa", "arch": "arm64"}],
+        }]}
+        with patch("src.backend.update_service.__version__", "3.9"), \
+             patch("src.backend.update_service.service_core", SimpleNamespace(request=AsyncMock(return_value=response))):
+            self.assertIsNone(await CheckUpdates.check_ios_release())
+
+    async def test_ios_update_presentation_requires_manual_sideloading(self):
+        from src.backend.application import Backend
+
+        backend = SimpleNamespace(
+            _update_check_manual=False, notifications=MagicMock(), logger=MagicMock(),
+            updateStatus=MagicMock(), updateAvailable=MagicMock(), tr=lambda text: text,
+        )
+        with patch("src.backend.application.is_ios", True), \
+             patch.object(CheckUpdates, "check", AsyncMock(return_value={
+                 "version": "3.10.0", "source": "ios_catalog", "release_url": "https://pornfetch.to/download/ios",
+             })):
+            await Backend._check_for_updates(backend)
+        details = backend.updateAvailable.emit.call_args.args[0]
+        self.assertTrue(details["automatic"])
+        self.assertFalse(details["install_allowed"])
+        self.assertIn("sideloading tool", details["entitlement_message"])
+        self.assertEqual(details["release_url"], "https://pornfetch.to/download/ios")
+        self.assertEqual(backend.notifications.publish.call_args.kwargs["action"], "updates")
+
     async def test_component_manager_stages_current_repository_before_ifw_launch(self):
         shutdown = MagicMock()
         updater = AutoUpdater(request_shutdown=shutdown)

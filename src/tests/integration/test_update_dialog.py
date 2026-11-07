@@ -44,6 +44,7 @@ def checked(callback):
 def offer():
     window = application.engine.rootObjects()[-1]
     backend = application.engine.rootContext().contextProperty('backend')
+    verify_startup(window, backend)
     details = dict(version='999.0.0', automatic=True, install_allowed=True,
                    changelog=Path('CHANGELOG_STATIC.md').read_text(), changelog_format='markdown')
     state.update(window=window, backend=backend, details=details,
@@ -51,6 +52,28 @@ def offer():
     backend._available_update = details
     backend.updateAvailable.emit(details)
     QTimer.singleShot(600, checked(suppress))
+
+def verify_startup(window, backend):
+    # Exercise the real startup function with network and services disconnected.
+    sys.argv.remove('--smoke-test')
+    backend._services_started = True
+    try:
+        with patch.object(backend, '_request_update_check') as check:
+            app_settings.update_checks = True
+            QMetaObject.invokeMethod(window, 'continueStartup')
+            check.assert_not_called()  # First-use setup is still incomplete.
+            app_settings._settings.setValue('Onboarding/license_accepted_sha256', 'test')
+            app_settings._settings.setValue('Onboarding/setup_completed', True)
+            app_settings.setupChanged.emit()
+            QMetaObject.invokeMethod(window, 'continueStartup')
+            QMetaObject.invokeMethod(window, 'continueStartup')
+            check.assert_called_once()
+            window.setProperty('startupContinued', False)
+            app_settings.update_checks = False
+            QMetaObject.invokeMethod(window, 'continueStartup')
+            check.assert_called_once()  # The saved opt-out skips future startup checks.
+    finally:
+        sys.argv.append('--smoke-test')
 
 def suppress():
     dialog = state['dialog']
@@ -118,6 +141,14 @@ def verify_html():
     assert document.firstBlock().blockFormat().headingLevel() == 2, 'HTML heading was lost'
     fixed = document.find('Fixed updates')
     assert fixed.block().textList() and fixed.charFormat().fontWeight() >= QFont.Bold
+    state['backend'].updateAvailable.emit(dict(state['details'], automatic=False, install_allowed=False,
+        release_url='https://pornfetch.to/download/ios'))
+    QTimer.singleShot(100, checked(verify_manual_download))
+
+def verify_manual_download():
+    button = state['dialog'].findChild(QObject, 'installUpdateButton')
+    assert button.property('text') == 'Open downloads', 'Manual updates need a download link'
+    assert button.property('enabled'), 'Manual updates must remain actionable'
     print('Update dialog verified', flush=True)
     application.app.quit()
 

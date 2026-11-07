@@ -98,6 +98,12 @@ updater and confirmation as `self-update`. Only a successfully staged update
 closes the menu and its session resources so the helper can replace the binary;
 declining, failed checks and up-to-date results return to the menu.
 
+Android and iOS check for updates at startup after first-use setup, respecting
+`Misc/update_checks` and the independent dialog opt-out. Mobile Settings exposes
+both preferences and a manual check. Android keeps its signed APK installer flow.
+iOS discovers published ARM64 IPAs from the website release catalog and offers
+the iOS download page for manual sideloading; it never installs updates in-app.
+
 Failed download details keep full Python tracebacks, causes and video URLs in
 session memory, independently of report consent. Activity summaries remain
 redacted, and Anonymous Mode hides and closes the detailed-error dialog.

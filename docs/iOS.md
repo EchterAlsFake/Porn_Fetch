@@ -2,6 +2,11 @@
 
 Porn Fetch officially supports iOS 15.0 and later with a native ARM64 GUI. The IPA is installed through a sideloading tool that re-signs and provisions it; no jailbreak is required. Device testing includes an iPhone 7 on iOS 15.8.8.
 
+The app checks for new iOS releases at startup after first-use setup. Settings
+lets you disable startup checks or update dialogs and check manually. When a
+new IPA is available, **Open downloads** opens the iOS download page. Install
+the new IPA with your sideloading tool.
+
 ## GitHub Actions
 
 The **Cross-Platform Build Pipeline** builds iOS on macOS ARM64 with Xcode alongside the other platforms. Choose `gui`, `both`, or `ios` and supply a three-part

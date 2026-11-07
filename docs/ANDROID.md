@@ -8,6 +8,11 @@ Completed videos are copied there automatically. Change the folder in Settings â
 Android has no persistent download history or statistics. Notifications do not
 keep downloads running after Android stops the app.
 
+The app checks for updates at startup after setup. Under Settings â†’ System & data,
+you can disable startup checks or update dialogs and check manually. Installing
+an offered update downloads and verifies the APK before Android asks you to
+confirm installation.
+
 To preview the layout on desktop:
 
 ```sh

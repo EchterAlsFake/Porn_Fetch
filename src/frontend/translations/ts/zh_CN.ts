@@ -688,30 +688,30 @@
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="+12"/>
-        <location line="+166"/>
+        <location line="+168"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-116"/>
-        <location line="+250"/>
+        <location line="-118"/>
+        <location line="+252"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-250"/>
-        <location line="+250"/>
+        <location line="-252"/>
+        <location line="+252"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-250"/>
-        <location line="+250"/>
+        <location line="-252"/>
+        <location line="+252"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-249"/>
+        <location line="-251"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -722,17 +722,17 @@
     </message>
     <message>
         <location line="+0"/>
-        <location line="+249"/>
+        <location line="+251"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-249"/>
+        <location line="-251"/>
         <source>Download manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+194"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
@@ -767,7 +767,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+0"/>
+        <source>Open downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Preparing verified download…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -892,12 +897,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+454"/>
+        <location line="+455"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-453"/>
+        <location line="-454"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1249,6 +1254,11 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>Check for updates at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Show a dialog when an update is available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1298,7 +1308,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-49"/>
+        <location line="-50"/>
         <source>System notifications when the app is inactive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1308,7 +1318,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+32"/>
         <source>Premium license expires: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1761,7 +1771,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+247"/>
+        <location filename="../../../backend/update_service.py" line="+273"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1804,7 +1814,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+834"/>
+        <location filename="../../../backend/application.py" line="+837"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1824,16 +1834,16 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-697"/>
+        <location line="-700"/>
         <location line="+200"/>
         <location line="+9"/>
-        <location line="+29"/>
+        <location line="+32"/>
         <location line="+24"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-205"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1863,7 +1873,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+57"/>
         <source>Automatic updates are only available in installed builds. Use the download link instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1914,7 +1924,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-183"/>
+        <location line="-186"/>
         <source>Updates are free for everyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1926,6 +1936,11 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
     <message>
         <location line="+1"/>
         <source>Download the latest version from the releases page to update this copy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Download the latest IPA and install it with your sideloading tool.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
