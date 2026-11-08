@@ -114,10 +114,15 @@ asset catalog is only used by iOS staging and breaks macOS signing if copied int
 `Contents/MacOS` as an uncompiled nested bundle.
 
 `packaging/repair_macos_bundle.py` runs for every architecture before signing.
-It relinks Homebrew OpenSSL references to the bundled `libssl.dylib` and
+Both macOS desktop build jobs install Homebrew LZ4 before syncing Python packages
+and check for `lib/liblz4.1.dylib` under `brew --prefix lz4`. Do not assume the
+runner image includes it: some Python wheels reference it without bundling it.
+The repair stage relinks Homebrew OpenSSL references to the bundled `libssl.dylib` and
 `libcrypto.dylib`, preserving Python's separate versioned copies. Other missing
 native libraries, including liblz4 used by the compression extensions, are copied
 from their recorded build paths into `Contents/Frameworks` and relinked there.
+Homebrew source symlinks are resolved before inspecting/copying the binary; the
+bundled file retains its ABI name, such as `liblz4.1.dylib`, on both architectures.
 Their transitive dependencies are repaired too. The repaired and Universal bundles
 reject remaining absolute non-system library dependencies, even if the build
 runner can load them. A library's own install-name identity is excluded from that

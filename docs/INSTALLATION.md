@@ -115,7 +115,9 @@ packages; on Ubuntu add `libevent-dev libssl-dev zlib1g-dev`.
 ### macOS
 
 Install Xcode Command Line Tools (`xcode-select --install`), Git, CMake and GNU
-make. With Homebrew, use `brew install git cmake make pkg-config`.
+make. With Homebrew, use `brew install git cmake make pkg-config lz4`.
+LZ4 is a build prerequisite for Python wheels linked to Homebrew's native library;
+packaging copies it into the app so end users do not need Homebrew.
 Finish any Xcode license or first-launch prompts before building.
 
 ### Windows

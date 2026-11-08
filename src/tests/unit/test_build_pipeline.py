@@ -334,6 +334,40 @@ class QmlPackagingTests(unittest.TestCase):
                                 for path in config.get("qt", "qml_files").split(",")))
 
 
+class MacBuildDependencyTests(unittest.TestCase):
+    def test_macos_jobs_install_lz4_before_sync_and_check_its_library(self):
+        workflow = (PROJECT_ROOT / ".github/workflows/build_all.yml").read_text()
+        for job in ("build-gui", "build-cli"):
+            with self.subTest(job=job), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                section = workflow.split(f"  {job}:\n", 1)[1].split("      - name: Sync Dependencies\n", 1)[0]
+                step = section.split("      - name: macOS native dependencies\n", 1)[1].split("      - name:", 1)[0]
+                self.assertIn("if: matrix.platform == 'macos'", step)
+                env = {line.strip().split(":", 1)[0]: line.strip().split(":", 1)[1].strip().strip("'")
+                       for line in step.split("        env:\n", 1)[1].split("        run:", 1)[0].splitlines()}
+                script = textwrap.dedent(step.split("        run: |\n", 1)[1])
+                brew = root / "brew"
+                brew.write_text(f"#!{sys.executable}\n" + textwrap.dedent('''\
+                    import os, sys
+                    from pathlib import Path
+                    root = Path(os.environ["CAPTURE"])
+                    if sys.argv[1:] == ["install", "--verbose", "lz4"]:
+                        assert os.environ["HOMEBREW_NO_AUTO_UPDATE"] == "1"
+                        assert os.environ["HOMEBREW_NO_INSTALL_UPGRADE"] == "1"
+                        library = root / "lz4/lib/liblz4.1.dylib"
+                        library.parent.mkdir(parents=True)
+                        library.write_bytes(b"native library")
+                    elif sys.argv[1:] == ["--prefix", "lz4"]:
+                        print(root / "lz4")
+                    else:
+                        sys.exit(42)
+                    '''))
+                brew.chmod(0o755)
+                subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], check=True,
+                               env={**os.environ, **env, "PATH": f"{root}:{os.environ['PATH']}", "CAPTURE": str(root)})
+                self.assertTrue((root / "lz4/lib/liblz4.1.dylib").is_file())
+
+
 class MacBundleTests(unittest.TestCase):
     def test_single_arch_bundle_relinks_homebrew_openssl_and_keeps_python_copy_separate(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -396,17 +430,19 @@ class MacBundleTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "External library dependency.*libexample"):
                     repairer.verify_bundle_dependencies(bundle)
 
-    def test_bundle_repair_copies_missing_lz4_and_relinks_its_extensions(self):
+    def test_bundle_repair_follows_homebrew_lz4_symlink_and_relinks_its_extensions(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             bundle = root / "Porn Fetch.app"
             extension = bundle / "Contents/MacOS/lz4/block/_block.so"
             source = root / "build host/liblz4.1.dylib"
-            for binary in (extension, source):
+            actual = source.with_name("liblz4.1.10.0.dylib")
+            for binary in (extension, actual):
                 binary.parent.mkdir(parents=True)
                 binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            source.symlink_to(actual.name)
             target = bundle / "Contents/Frameworks/liblz4.1.dylib"
-            linked = {extension: str(source), source: str(source), target: str(source)}
+            linked = {extension: str(source), actual: str(source), target: str(source)}
 
             def otool(command, **_):
                 binary = Path(command[-1])
@@ -422,6 +458,7 @@ class MacBundleTests(unittest.TestCase):
                  patch.object(repairer.subprocess, "run", side_effect=execute):
                 self.assertEqual(repairer.repair_bundle(bundle), 1)
             self.assertEqual(target.read_bytes(), source.read_bytes())
+            self.assertFalse(target.is_symlink())
             self.assertEqual(linked[extension], "@loader_path/../../../Frameworks/liblz4.1.dylib")
 
     def test_repair_relinks_cocoa_and_transitive_framework_dependencies(self):
@@ -783,7 +820,8 @@ class InstallerTests(unittest.TestCase):
             commands = {
                 "xcode-select": "exit 0\n",
                 "brew": '[[ "$1" == install && "${HOMEBREW_NO_AUTO_UPDATE:-}" == 1 '
-                        '&& "${HOMEBREW_NO_INSTALL_UPGRADE:-}" == 1 ]] || exit 19\ncat >/dev/null\n',
+                        '&& "${HOMEBREW_NO_INSTALL_UPGRADE:-}" == 1 && " $* " == *" lz4 "* ]] '
+                        '|| exit 19\ncat >/dev/null\n',
                 "uv": "echo 'mock uv'\n",
                 # Stop before fetching or compiling; reaching this command proves
                 # the build flow survived the dependency installer's stdin read.

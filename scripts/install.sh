@@ -182,7 +182,7 @@ install_macos_build_deps() {
 
   # Basics used by builds & fetch/update
   run env HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_UPGRADE=1 \
-    brew install --verbose git cmake curl pkg-config make
+    brew install --verbose git cmake curl pkg-config make lz4
 
   ok "macOS build deps installed (or already present)."
 }

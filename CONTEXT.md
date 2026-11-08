@@ -232,6 +232,12 @@ copies, separately from Python's OpenSSL, and copies missing native dependencies
 such as liblz4 into `Contents/Frameworks`. Each architecture and the merged
 Universal bundle reject absolute non-system library dependencies before release;
 startup on a runner with Homebrew installed is insufficient verification.
+macOS GUI/CLI CI and the local convenience installer explicitly install Homebrew
+LZ4 before Python dependencies. CI checks its versioned dylib before compilation;
+the runner's default software list does not guarantee that library exists.
+Resolve Homebrew source symlinks before Mach-O detection, preserving the recorded
+ABI basename inside the bundle. `is_macho` skips symlinks during bundle traversal;
+using it directly on a Homebrew dylib alias incorrectly reports a missing library.
 See [installation](docs/INSTALLATION.md) and [release operations](docs/RELEASING.md).
 
 The Windows convenience script runs the uv installer in a child PowerShell so

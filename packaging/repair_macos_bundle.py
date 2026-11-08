@@ -73,6 +73,9 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
                 if not target.is_file():
                     target = contents / "Frameworks" / source.name
                 if not target.is_file() and target not in libraries_to_copy:
+                    # Homebrew's ABI names point to full-version dylibs. Resolve
+                    # the source while keeping the stable ABI name in the bundle.
+                    source = source.resolve()
                     if not is_macho(source):
                         raise ValueError(f"Missing source library {dependency}; required by {binary.relative_to(bundle)}")
                     libraries_to_copy[target] = source
