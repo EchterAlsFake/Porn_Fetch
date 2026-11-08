@@ -20,6 +20,12 @@ Its token needs access to the draft snapshot release. A public clone alone does
 not contain those dependencies. These native packages and their Python metadata
 must be updated together; desktop wheels cannot replace them.
 
+Staging installs the pure Python PyJWT wheel using the requirement in
+`pyproject.toml`, since the archived overlay predates that startup dependency.
+It disables dependency resolution so the matching native packages stay intact.
+The Xcode bundle phase checks the built app for `jwt` and its distribution
+metadata; CI repeats that check on the final IPA before uploading it.
+
 The output is `PornFetch_ios_GUI_arm64_resign.ipa`. It has ad-hoc signatures,
 not an Apple distribution signature or provisioning profile. Re-sign and
 provision it with your own sideloading setup before installing. Security tools

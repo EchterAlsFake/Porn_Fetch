@@ -7,6 +7,7 @@ import plistlib
 import runpy
 import shutil
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -20,6 +21,8 @@ class IOSPreparationTests(unittest.TestCase):
             root = Path(temporary).resolve()
             device = root / "lab/device"
             source = root / "source"
+            source.mkdir()
+            shutil.copyfile(ROOT / "pyproject.toml", source / "pyproject.toml")
             ui = source / "src/frontend/UI"
             ui.mkdir(parents=True)
             (ui / "Main.qml").write_text("import QtQuick\nItem {}\n")
@@ -45,8 +48,11 @@ class IOSPreparationTests(unittest.TestCase):
             # Another ABI must never be selected, even when it sorts first.
             (wheels / "pyside6-0-cp314-cp314-ios_arm64_simulator.whl").touch()
             project = device / "app/deployment/ios_arm64/PornFetch.xcodeproj/project.pbxproj"
+            installs = []
 
             def deploy(command, **kwargs):
+                if command[1:4] == ["-m", "pip", "install"]:
+                    installs.append(command)
                 if Path(command[0]).name == "pyside6-ios-deploy":
                     project.parent.mkdir(parents=True)
                     project.write_text('/* Begin PBXFileReference section */\n/* End PBXFileReference section */\n'
@@ -68,6 +74,14 @@ class IOSPreparationTests(unittest.TestCase):
                     patch("sys.argv", [str(script)]):
                 runpy.run_path(str(script), run_name="__main__")
 
+            requirements = tomllib.loads((source / "pyproject.toml").read_text())["project"]["dependencies"]
+            self.assertEqual(len(installs), 1)
+            self.assertEqual(installs[0][-1], next(req for req in requirements if req.startswith("PyJWT")))
+            self.assertEqual(installs[0][0], str(root / "venv/bin/python"))
+            self.assertIn("--no-deps", installs[0])
+            self.assertIn("--only-binary=:all:", installs[0])
+            self.assertEqual(installs[0][installs[0].index("--platform") + 1], "any")
+            self.assertEqual(installs[0][installs[0].index("--target") + 1], str(device / "vendor"))
             config = configparser.ConfigParser()
             config.read(device / "app/pysidedeploy.spec")
             self.assertEqual(config["ios"]["version"], "3.9.77")
@@ -85,6 +99,7 @@ class IOSPreparationTests(unittest.TestCase):
                              b"device extension")
             self.assertTrue((device / "app/src/frontend/UI/Main.qml").is_file())
             self.assertIn(json.dumps(str(device / "bundle-vendor.sh"))[1:-1], project.read_text())
+            self.assertIn("packaging/check_ios_app.py", project.read_text())
             entry = project.parent.parent / "main.mm"
             self.assertTrue(entry.is_file())
             self.assertIn("ios_notifications.mm", entry.read_text())

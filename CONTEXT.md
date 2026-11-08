@@ -303,6 +303,15 @@ Its native dependency archive is required; a public clone alone is insufficient.
 iOS 15+ is officially supported with a native GUI. CI produces an IPA for sideloading re-signing and publishes it through the same website/release jobs. The embedded 3.15.0rc2 runtime must be rebuilt together with its native dependencies to change its patch version. The user confirmed license activation,
 downloading, remuxing and playback on a non-jailbroken iPhone 7 on 2026-10-30.
 That does not validate every later artifact or device. See [iOS](docs/iOS.md).
+On 2026-11-08, the installed 3.9.0 IPA on the USB-connected iPhone 7 reported
+`ModuleNotFoundError: jwt` in `Documents/PornFetch/ios-runtime.log` during startup.
+The restored dependency snapshot lacks PyJWT. Device staging now installs its
+pure Python wheel from the project's requirement without resolving or replacing
+native dependencies. The Xcode bundle phase and final CI IPA check require
+the `jwt` modules and PyJWT distribution metadata. Actual stage-only preparation
+with Python 3.15.2 installed PyJWT 2.15.1 from an overlay fixture without `jwt`;
+its staged import and HS256 round trip passed with host site-packages disabled.
+A rebuilt IPA still needs startup validation on the phone.
 The iOS legal preparation verifies the restored FFmpeg extension and upstream
 source archive against their recorded hashes before staging the source, bridge,
 configuration and rebuild/replacement instructions. Pass that native legal folder

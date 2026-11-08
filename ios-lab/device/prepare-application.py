@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tomllib
 
 device = Path(__file__).resolve().parent
 lab = device.parent
@@ -22,6 +23,13 @@ shutil.copytree(repo / "src", app / "src", dirs_exist_ok=True,
 shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "*.so", "*.fwork"))
 shutil.copytree(device / "native/packages", vendor, dirs_exist_ok=True)
+# The archived overlay predates PyJWT. Install its pure Python wheel explicitly;
+# resolving dependencies here could replace the matching iOS native packages.
+requirements = tomllib.loads((repo / "pyproject.toml").read_text())["project"]["dependencies"]
+pyjwt_requirement = next(requirement for requirement in requirements if re.match(r"(?i)^pyjwt\b", requirement))
+subprocess.run([str(deploy_venv / "bin/python"), "-m", "pip", "install", "--disable-pip-version-check",
+                "--no-deps", "--only-binary=:all:", "--platform", "any", "--python-version", "3.15",
+                "--upgrade", "--target", str(vendor), pyjwt_requirement], check=True)
 subprocess.run([sys.executable, str(device / "patch-ios-ffmpeg.py")], check=True)
 subprocess.run([str(deploy_venv / "bin/pyside6-rcc"), "--binary", str(repo / "src/frontend/resources.qrc"),
                 "-o", str(app / "src/frontend/resources.rcc")], check=True)
@@ -97,7 +105,8 @@ if not match:
 script = (f'set -e\nrsync -a --delete --exclude="__pycache__/" "{app}/src/" '
           '"$CODESIGNING_FOLDER_PATH/src/"\n'
           f'cp "{app}/main.py" "$CODESIGNING_FOLDER_PATH/main.py"\n'
-          f'/bin/bash "{device}/bundle-vendor.sh"\n')
+          f'/bin/bash "{device}/bundle-vendor.sh"\n'
+          f'"{sys.executable}" "{repo}/packaging/check_ios_app.py" "$CODESIGNING_FOLDER_PATH"\n')
 project.write_text(text[:match.start(2)] + json.dumps(script) + text[match.end(2):])
 
 # The notification bridge uses the existing Qt event loop and Apple's local

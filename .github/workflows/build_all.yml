@@ -1045,7 +1045,7 @@ jobs:
             --source-archive "$IOS_WORK_ROOT/downloads/ffmpeg-9.0.2.tar.xz"
 
       - name: Check portable staging
-        run: python -m unittest src.tests.unit.test_prepare_ios_ci
+        run: python -m unittest src.tests.unit.test_prepare_ios_ci src.tests.unit.test_ios_app
 
       - name: Stamp version and generate the app project
         run: |
@@ -1065,6 +1065,7 @@ jobs:
             --app "$IOS_WORK_ROOT/derived/Build/Products/Release-iphoneos/PornFetch.app" \
             --output "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa" \
             --display-name 'Porn Fetch' --share-documents
+          python packaging/check_ios_app.py "$IOS_WORK_ROOT/output/PornFetch_ios_GUI_arm64_resign.ipa"
 
       - name: Upload re-signable IPA
         uses: ./.github/actions/upload-artifact
