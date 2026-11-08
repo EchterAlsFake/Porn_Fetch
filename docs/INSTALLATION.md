@@ -19,6 +19,13 @@ Use [pornfetch.to/download](https://pornfetch.to/download).
   use their package manager.
 - [Android](ANDROID.md) and [iOS](iOS.md) have separate instructions.
 
+On macOS, Setup offers **Open Porn Fetch** on its final screen and adds a
+shortcut in your user Applications folder (`~/Applications`). You can also
+search for **Porn Fetch** with Spotlight. The app stays in its selected install
+folder so Qt Maintenance Tool can update it. Uninstalling removes the shortcut.
+These conveniences require an installer built with this support; older installers
+do not add the shortcut.
+
 PocketBase is optional. It stores download history and statistics; it does not
 store the download queue. FFmpeg is used to make MP4 files and write metadata.
 Both are optional installer components. A compatible copy on `PATH` also works.

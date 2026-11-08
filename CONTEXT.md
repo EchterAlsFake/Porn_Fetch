@@ -84,6 +84,10 @@ reports are preserved verbatim; requests over 1 MiB are skipped, never truncated
 
 Qt Installer Framework owns desktop installation, component changes, updates
 and removal. Source and portable copies have no in-app installer/uninstaller.
+macOS Setup offers Open Porn Fetch on completion, creates a managed shortcut
+in the user's Applications directory and registers the actual app with Launch
+Services. Keep the app beside its maintenance tool and optional helpers. The
+signed-installer CI check isolates and verifies shortcut creation and removal.
 Active-download temporary cleanup asks for confirmation but remains allowed.
 In-app updates and component management download the complete signed repository
 through the app's service transport, including its managed Tor/onion route.

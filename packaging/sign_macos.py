@@ -314,9 +314,11 @@ def notarize_files(paths):
 
 
 def verify_install(installer):
-    """Exercise IFW's signed maintenance-bundle installation on an isolated target."""
+    """Verify installed signed bundles and the Applications shortcut on an isolated target."""
     with tempfile.TemporaryDirectory(prefix="pornfetch-install-check-", dir=os.environ["RUNNER_TEMP"]) as temporary:
         target = Path(temporary) / "application"
+        applications = Path(temporary) / "Applications"
+        shortcut = applications / "Porn Fetch.app"
         with (installer / "Contents/Info.plist").open("rb") as source:
             executable = plistlib.load(source)["CFBundleExecutable"]
         run(
@@ -328,9 +330,12 @@ def verify_install(installer):
                 "--default-answer",
                 "--confirm-command",
                 "install",
+                f"ApplicationsDirUser={applications}",
             ],
             timeout=180,
         )
+        if not shortcut.is_symlink() or shortcut.resolve() != (target / "Porn Fetch.app").resolve():
+            raise RuntimeError("Installer did not create the Porn Fetch Applications shortcut")
         for bundle in (target / "Porn Fetch.app", target / "maintenancetool.app"):
             verify(bundle)
             run(["xcrun", "stapler", "validate", bundle])
@@ -340,6 +345,8 @@ def verify_install(installer):
         run(
             [maintenance / "Contents/MacOS" / executable, "--default-answer", "--confirm-command", "purge"], timeout=180
         )
+        if shortcut.exists() or shortcut.is_symlink():
+            raise RuntimeError("Uninstaller did not remove the Porn Fetch Applications shortcut")
 
 
 def sign_installer(image):

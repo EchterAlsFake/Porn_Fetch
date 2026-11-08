@@ -91,6 +91,16 @@ def prepare_staging_directory(
     config_xml_text = template_config.read_text(encoding="utf-8")
     config_xml_text = config_xml_text.replace("@TARGET_REPO@", repo_tag)
     config_xml_text = config_xml_text.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
+    if target_platform == "darwin":
+        config_xml_text = config_xml_text.replace(
+            "</Installer>",
+            "    <RunProgram>/usr/bin/open</RunProgram>\n"
+            "    <RunProgramArguments>\n"
+            "        <Argument>@TargetDir@/Porn Fetch.app</Argument>\n"
+            "    </RunProgramArguments>\n"
+            "    <RunProgramDescription>Open Porn Fetch</RunProgramDescription>\n"
+            "</Installer>",
+        )
     if macos_signed:
         config_xml_text = config_xml_text.replace("</Installer>", "    <MaintenanceToolName>maintenancetool</MaintenanceToolName>\n</Installer>")
     config_dest = config_dir / "config.xml"
