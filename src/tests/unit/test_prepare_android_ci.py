@@ -42,6 +42,7 @@ class AndroidCIPreparationTests(unittest.TestCase):
             self.assertEqual(build["buildozer"]["bin_dir"], str(project))
             self.assertNotIn("/home/asuna/", str(dict(build["app"])))
             self.assertEqual(deploy["android"]["version"], "3.9.77")
+            self.assertIn("PyJWT", deploy["android"]["requirements"].split(","))
             self.assertEqual(deploy["python"]["python_path"], str(venv / "bin/python"))
             self.assertEqual(deploy["app"]["project_file"], "")
             self.assertNotIn("arch", deploy["buildozer"])

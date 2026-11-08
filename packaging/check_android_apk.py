@@ -1,9 +1,24 @@
-"""Check that the APK's native Qt preloads can be extracted by Android's installer."""
+"""Check the APK's native Qt preloads and required Python startup modules."""
 from __future__ import annotations
 
 import argparse
+import tarfile
 import zipfile
 from pathlib import Path
+
+
+def check_python_bundle(archive: zipfile.ZipFile, abi: str) -> None:
+    name = f"lib/{abi}/libpybundle.so"
+    if name not in archive.namelist():
+        raise ValueError(f"Missing Android Python bundle: {name}")
+    with archive.open(name) as stream, tarfile.open(fileobj=stream, mode="r|*") as bundle:
+        for entry in bundle:
+            if entry.isfile() and entry.name.removeprefix("./") in {
+                "_python_bundle/site-packages/jwt/__init__.py",
+                "_python_bundle/site-packages/jwt/__init__.pyc",
+            }:
+                return
+    raise ValueError("Missing Android Python startup module jwt; include PyJWT in buildozer.spec requirements")
 
 
 def check_apk(apk: Path, abi: str) -> None:
@@ -25,6 +40,7 @@ def check_apk(apk: Path, abi: str) -> None:
         missing = required - set(archive.namelist())
         if missing:
             raise ValueError(f"Missing native Android runtime libraries: {', '.join(sorted(missing))}")
+        check_python_bundle(archive, abi)
     print(f"Verified {len(libraries)} extractable native libraries for {abi}")
 
 

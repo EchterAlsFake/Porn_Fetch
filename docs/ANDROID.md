@@ -92,6 +92,9 @@ The deployment patch preserves the template's Qt modules during PySide's base
 configuration initialization. The template explicitly includes QtSvg and its
 SVG image/icon plugins in the APK's native library folder so payment logos,
 flags and help icons render on Android. The APK check requires these libraries.
+It also inspects the compressed Python bundle for PyJWT's `jwt` package.
+Licensing imports that package during startup, before the first-use screen;
+missing it prevents the app from opening even when every native library is present.
 
 The default build mode is release. Supply your own keystore with `--keystore`
 and `--key-alias`, or use `--unsigned` to sign later. An unsigned release APK

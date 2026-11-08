@@ -56,6 +56,14 @@ Android requires a shared output folder: private app files are inaccessible to
 ordinary players/file managers. The system picker retains access for future
 launches. Cancelling keeps setup open. Android packaging must include QtSvg and
 its image and icon plugins for the bundled SVG artwork.
+Android requirements must include PyJWT: licensing imports `jwt` during startup.
+The APK checker inspects `libpybundle.so` for that package as well as checking
+native libraries, so a successful native-library check cannot hide its omission.
+On 2026-11-08, the installed 3.8.3 ARM64 APK on an Android 16 phone reproduced
+`ModuleNotFoundError: jwt`. A temporary side-by-side copy with PyJWT 2.15.1 added
+to its Python runtime bundle reached the first-use screen and stayed running.
+That verifies this startup fix on the device, not a rebuilt official APK or other
+ABIs. The original app's data and first-use choices were preserved.
 
 Build `--smoke-test` startup uses a temporary QSettings file, download cache and
 licensing directory, plus disposable logs. It keeps the launch working directory
