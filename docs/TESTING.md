@@ -31,6 +31,8 @@ acceptance, the offer acknowledgement, reporting scope, interruption/resumption,
 one-time completion and Android folder selection/cancellation in both orientations.
 `test_build_smoke_isolation` runs desktop and mobile smoke startup with existing
 settings and download checkpoints and verifies they remain byte-for-byte unchanged.
+It launches from a read-only directory on Unix, with disposable logs. macOS CI
+also launches the packaged executable from `/` to catch working-directory writes.
 Native Android picker permissions and external-player access still need a device.
 
 The helper asks before accessing websites, browser sessions or real media.

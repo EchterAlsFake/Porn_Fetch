@@ -1,8 +1,9 @@
-"""Keep Windows console failures from losing application diagnostics."""
+"""Keep desktop diagnostics writable independently of the launch directory."""
 from __future__ import annotations
 
 import errno
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -12,10 +13,11 @@ from src.shared.paths import shared_data_dir
 
 
 def log_file_path(filename: str) -> str:
-    """Keep Windows diagnostics out of protected application/working folders."""
+    """Keep desktop logs out of protected application/working folders."""
     path = Path(filename)
-    if sys.platform == "win32" and not path.is_absolute():
-        path = shared_data_dir() / "logs" / path
+    directory = os.environ.get("PORN_FETCH_LOG_DIR")
+    if not path.is_absolute() and (directory or sys.platform in {"win32", "darwin"}):
+        path = (Path(directory).resolve() if directory else shared_data_dir() / "logs") / path
         path.parent.mkdir(parents=True, exist_ok=True)
     return str(path)
 
@@ -26,9 +28,7 @@ class ConsoleHandler(logging.StreamHandler):
         if sys.platform == "win32" and isinstance(error, OSError) and error.errno == errno.EINVAL:
             # A detached/invalid console can still look writable to Python.
             # Retain its output in a persistent file instead of repeatedly failing.
-            directory = shared_data_dir() / "logs"
-            directory.mkdir(parents=True, exist_ok=True)
-            self.stream = (directory / "console.log").open("a", encoding="utf-8")
+            self.stream = Path(log_file_path("console.log")).open("a", encoding="utf-8")
             self.emit(record)
             return
         super().handleError(record)

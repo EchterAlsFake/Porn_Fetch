@@ -252,10 +252,12 @@ waits for Enter on an interactive failure. Use `-NoPause` for unattended runs.
 The uv installer runs in a child PowerShell process so its failure cannot close
 the terminal running the README's `irm ... | iex` command.
 
-On Windows, application and provider debug logs are stored in the shared user
-data folder's `logs` directory (normally
-`%LOCALAPPDATA%\EchterAlsFake\Porn Fetch\logs`). Startup does not need write
-access to the executable's folder or the current working directory for logging.
+On Windows and macOS, application and provider debug logs are stored in the shared
+user data folder's `logs` directory. Normally this is
+`%LOCALAPPDATA%\EchterAlsFake\Porn Fetch\logs` on Windows and
+`~/Library/Application Support/Porn Fetch/logs` on macOS. Startup does not need
+write access to the executable's folder or the current working directory for
+logging. Build smoke tests keep their logs in a disposable directory.
 
 ## Compile the CLI
 
