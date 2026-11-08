@@ -379,6 +379,10 @@ async def handle_license_management(ctx: WizardContext) -> None:
             check_time = getattr(status, "next_check_at", None) or getattr(status, "expires_at", None)
             if check_time is not None:
                 next_check_str = datetime.fromtimestamp(check_time, tz=timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
+            permit_expiry = getattr(status, "expires_at", None)
+            permit_expiry_str = "-" if permit_expiry is None else datetime.fromtimestamp(
+                permit_expiry, tz=timezone.utc,
+            ).astimezone().strftime("%Y-%m-%d %H:%M")
 
             table = Table(show_header=False, box=None, padding=(0, 1))
             table.add_row("[bold cyan]State:[/]", f"[bold green]{status.state}[/]" if status.allowed else f"[bold yellow]{status.state}[/]")
@@ -391,7 +395,8 @@ async def handle_license_management(ctx: WizardContext) -> None:
             )
             table.add_row("[bold cyan]Premium license expires:[/]", expiry_display)
             table.add_row("[bold cyan]Machine Limit:[/]", "10 machines (use Deactivate to unlink seats)")
-            table.add_row("[bold cyan]Offline Permit Expires:[/]", next_check_str)
+            table.add_row("[bold cyan]Offline Permit Expires:[/]", permit_expiry_str)
+            table.add_row("[bold cyan]Next Online Check:[/]", next_check_str)
 
             border = "green" if status.allowed else "yellow"
             ctx.console.print(Panel(table, title="[bold #00e5ff]License Information[/]", border_style=border))

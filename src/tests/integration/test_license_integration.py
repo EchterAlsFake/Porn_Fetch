@@ -125,7 +125,7 @@ class LicenseIntegrationTests(unittest.IsolatedAsyncioTestCase):
         config = load_production_config()
         self.assertEqual(
             set(config),
-            {"public_key", "account_id", "product_id", "policy_id", "base_url"},
+            {"public_key", "account_id", "product_id", "policy_id", "base_url", "emergency_public_key"},
         )
         self.assertFalse(any("token" in key or "private" in key for key in config))
 
@@ -144,6 +144,18 @@ class LicenseIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.bridge._set_status(LicenseStatus("valid", True, expires_at=now + 604800, next_check_at=now + 604800))
         self.assertEqual(self.bridge.licenseExpiresAt, "Lifetime / Never")
         self.assertNotEqual(self.bridge.nextCheckAt, "")
+
+        # Retry scheduling must not move the displayed signed permit deadline.
+        permit_expiry = self.bridge.permitExpiresAt
+        self.bridge._set_status(LicenseStatus(
+            "emergency_access", True, expires_at=now + 604800, next_check_at=now + 60,
+        ))
+        self.assertEqual(self.bridge.permitExpiresAt, permit_expiry)
+        self.assertNotEqual(self.bridge.permitExpiresAt, self.bridge.nextCheckAt)
+        self.bridge._set_status(LicenseStatus(
+            "emergency_access", True, expires_at=now + 604800, next_check_at=now + 3600,
+        ))
+        self.assertEqual(self.bridge.permitExpiresAt, permit_expiry)
 
         # Expiring license
         exp_ts = now + 86400 * 30

@@ -60,10 +60,7 @@ Item {
         ignoreUnknownSignals: true
         function onImportFinished(ok, msg) {
             root.feedback = typeof noticeCenter !== "undefined" ? noticeCenter.safe_text(msg)
-                            : (ok ? qsTr("License imported.") : qsTr("License import failed. Check your device clock and try again."))
-            if (!ok && bridge.state !== "clock_mismatch" && bridge.state !== "clock_invalid") {
-                root.feedback += "\n\n" + qsTr("Check your device date, time and time zone, enable automatic time synchronization, then try again.")
-            }
+                            : (msg || (ok ? qsTr("License imported.") : qsTr("License import failed.")))
         }
         function onFirstActivation() {
             activationDialog.open()
@@ -180,7 +177,9 @@ Item {
 
                 Text {
                     Layout.alignment: Qt.AlignHCenter
-                    text: root.hasValidBridge ? "License Active" : "No Valid License"
+                    text: root.hasValidBridge ? qsTr("License Active")
+                          : (typeof bridge !== "undefined" && bridge && bridge.state === "reactivation_required")
+                            ? qsTr("Reactivation required") : qsTr("No Valid License")
                     font.pixelSize: 20 * appSettings.font_size / 12
                     font.weight: Font.DemiBold
                     font.letterSpacing: 0.4
@@ -300,6 +299,20 @@ Item {
 
                         Text {
                             text: qsTr("Offline Permit Expires:")
+                            font.pixelSize: 12 * appSettings.font_size / 12
+                            font.weight: Font.DemiBold
+                            color: textSec
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            text: (typeof bridge !== "undefined" && bridge && bridge.permitExpiresAt) ? bridge.permitExpiresAt : "-"
+                            font.pixelSize: 12 * appSettings.font_size / 12
+                            font.weight: Font.Medium
+                            color: textPri
+                            horizontalAlignment: Text.AlignRight
+                        }
+                        Text {
+                            text: qsTr("Next Online Check:")
                             font.pixelSize: 12 * appSettings.font_size / 12
                             font.weight: Font.DemiBold
                             color: textSec

@@ -16,10 +16,12 @@ REASONS = {
     "unlicensed": "No production license is installed.",
     "valid": "Lifetime Premium is active. Every future Porn Fetch update and feature I release is included.",
     "activation_required": "Connect to activate this installation.",
+    "reactivation_required": "The license was imported, but this installation was previously deactivated. The licensing server is unavailable, so reactivation could not finish. Restore the connection or retry when my emergency licensing service is enabled.",
     "activation_incomplete": "The server was reached but activation did not complete. Please retry or contact support.",
     "activation_failed": "This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support.",
     "initial_offline_grace": "The license server cannot be reached. Initial access is available for up to 3 days from first import; online validation is still required.",
     "initial_grace_expired": "The initial 3-day grace period has ended. Connect to validate your license.",
+    "emergency_access": "My licensing server is unavailable. Temporary Premium access is active through my emergency licensing service.",
     "offline_grace": "License server unavailable. Using the last successful validation.",
     "expired_grace": "Please connect to validate your license; the 7-day offline grace has ended.",
     "suspended_or_denied": "License authentication was denied. The license may be suspended; please contact support.",
@@ -70,6 +72,11 @@ class LicenseService:
     def reason(self) -> str:
         reason = REASONS.get(self.status.state, self.status.state.replace("_", " ").capitalize())
         if getattr(self.core, "tor_enabled", False) is True:
+            if (getattr(self.client, "emergency_public_key", None) is not None
+                    and self.status.failure in {"network_unavailable", "server_unavailable"}):
+                reason += ("\n\nThe fallback licensing server can only be reached without Tor. "
+                           "To try it, turn Tor routing Off in Privacy settings, then refresh your license. "
+                           "This connects directly to echteralsfake.me.")
             failure = getattr(getattr(self.core, "policy", None), "last_failure", "")
             if isinstance(failure, str) and failure and (
                 self.status.failure in {"network_unavailable", "server_unavailable"}
@@ -123,5 +130,6 @@ def create_license_service(
         public_key=production["public_key"], account_id=production["account_id"],
         product_id=production["product_id"], policy_id=production["policy_id"],
         base_url=production["base_url"],
+        emergency_public_key=production.get("emergency_public_key"),
     )
     return LicenseService(client, core)

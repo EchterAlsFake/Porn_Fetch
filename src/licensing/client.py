@@ -2,16 +2,15 @@
 from __future__ import annotations
 
 import asyncio
-import base64
 import json
 import math
 import os
+import secrets
 import sqlite3
 import time
 import uuid
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Protocol
 from urllib.parse import urlsplit
@@ -31,6 +30,23 @@ from curl_cffi.requests.exceptions import (
 
 from src.shared.version import RELEASE_TIMESTAMP
 
+from .crypto import (
+    BETA_ACCOUNT as BETA_ACCOUNT,
+)
+from .crypto import (
+    BETA_MESSAGE,
+    EMERGENCY_URL,
+    BetaLicenseError,
+    LicenseError,
+    decode,
+    timestamp,
+    verify_emergency_permit,
+    verify_license_key,
+)
+from .crypto import (
+    BETA_POLICY as BETA_POLICY,
+)
+
 WEEK = 604800
 DAY = 86400
 INITIAL_GRACE = 3 * DAY
@@ -40,10 +56,6 @@ class AsyncRequestCore(Protocol):
     async def request(self, url: str, **kwargs: Any) -> Any: ...
 
 
-class LicenseError(ValueError):
-    """Invalid input or unusable local licensing state; contains no credentials."""
-
-
 class TemporaryFailure(Exception):
     def __init__(self, state: str = "network_unavailable"):
         self.state = state
@@ -51,15 +63,6 @@ class TemporaryFailure(Exception):
 
 class FuturePermitError(LicenseError):
     """A correctly signed permit is dated ahead of the local clock."""
-
-
-class BetaLicenseError(LicenseError):
-    """An old credential must never be sent to the production endpoint."""
-
-
-BETA_MESSAGE = "This beta license belongs to an older licensing system and is no longer valid for the production release."
-BETA_POLICY = "564897fa-b8d9-4871-82a4-0b49fd50bc1e"
-BETA_ACCOUNT = "2779db33-8e9b-4c5f-b1b5-ee5957939c20"
 
 
 class Rejected(Exception):
@@ -82,17 +85,6 @@ class LicenseStatus:
         return self.allowed
 
 
-def decode(value: str, *, url: bool = False) -> bytes:
-    return base64.b64decode(value, altchars=b"-_" if url else None, validate=True)
-
-
-def timestamp(value: str) -> float:
-    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    if parsed.tzinfo is None:
-        raise ValueError("Naive timestamp")
-    return parsed.timestamp()
-
-
 class LicenseClient:
     """Persist and validate schema-2 licenses without owning a network session."""
 
@@ -106,6 +98,7 @@ class LicenseClient:
         product_id: str,
         policy_id: str,
         base_url: str = "https://licenses.pornfetch.to",
+        emergency_public_key: str | None = None,
         clock: Callable[[], float] = time.time,
         monotonic: Callable[[], float] = time.monotonic,
         release_timestamp: float = RELEASE_TIMESTAMP,
@@ -117,6 +110,13 @@ class LicenseClient:
             self.public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(public_key))
         except (TypeError, ValueError):
             raise LicenseError("The bundled licensing public key is invalid") from None
+        try:
+            self.emergency_public_key = (
+                Ed25519PublicKey.from_public_bytes(bytes.fromhex(emergency_public_key))
+                if emergency_public_key else None
+            )
+        except (ValueError, TypeError):
+            raise LicenseError("The bundled emergency public key is invalid") from None
         self.account_id = account_id
         self.product_id = product_id
         self.policy_id = policy_id
@@ -199,9 +199,8 @@ class LicenseClient:
                 raise LicenseError(
                     "Local license state is unreadable; do not reset it automatically"
                 )
-            if "permit" in record and record["permit"] is not None and not isinstance(
-                record["permit"], str
-            ):
+            if any(name in record and record[name] is not None and not isinstance(record[name], str)
+                   for name in ("permit", "emergency_permit")):
                 raise LicenseError(
                     "Local license state is unreadable; do not reset it automatically"
                 )
@@ -282,33 +281,8 @@ class LicenseClient:
         self._closed = True
 
     def verify_key(self, key: str) -> dict[str, Any]:
-        try:
-            if not isinstance(key, str) or len(key) > 16384 or not key.startswith("key/"):
-                raise ValueError
-            message, signature = key.rsplit(".", 1)
-            # Untrusted inspection is used ONLY to reject known beta material, never to grant access.
-            candidate = json.loads(decode(message[4:], url=True))
-            if isinstance(candidate, dict) and (candidate.get("account", {}).get("id") == BETA_ACCOUNT or candidate.get("policy", {}).get("id") == BETA_POLICY):
-                raise BetaLicenseError(BETA_MESSAGE)
-            self.public_key.verify(decode(signature, url=True), message.encode("ascii"))
-            payload = json.loads(decode(message[4:], url=True))
-            if (
-                payload["account"]["id"] != self.account_id
-                or payload["product"]["id"] != self.product_id
-                or payload["policy"]["id"] != self.policy_id
-                or payload["policy"]["duration"] is not None
-            ):
-                raise ValueError
-            uuid.UUID(payload["license"]["id"])
-            timestamp(payload["license"]["created"])
-            # Only an explicit signed null means permanent; missing claims fail.
-            if payload["license"]["expiry"] is not None:
-                raise ValueError
-            return payload
-        except BetaLicenseError:
-            raise
-        except (ValueError, KeyError, TypeError, AttributeError, UnicodeError, InvalidSignature):
-            raise LicenseError("License signature or signed claims are invalid") from None
+        return verify_license_key(key, self.public_key, account_id=self.account_id,
+                                  product_id=self.product_id, policy_id=self.policy_id)
 
     def verify_permit(
         self,
@@ -602,7 +576,60 @@ class LicenseClient:
             cache_version=2,
             license_expiry=license_expiry,
         )
+        record.pop("emergency_permit", None)
         return permit
+
+    def _emergency_claims(self, state: dict, record: dict, license_id: str, now: float,
+                          *, nonce: str | None = None) -> dict:
+        if self.emergency_public_key is None:
+            raise LicenseError("Emergency licensing is not configured")
+        return verify_emergency_permit(
+            record["emergency_permit"], self.emergency_public_key,
+            key=record["key"], license_id=license_id,
+            installation_id=state["installation_id"], now=now, nonce=nonce,
+        )
+
+    async def _refresh_emergency(self, state: dict, record: dict, license_id: str, now: float) -> None:
+        if self.emergency_public_key is None:
+            return
+        if record.get("emergency_permit"):
+            try:
+                cached = self._emergency_claims(state, record, license_id, now)
+            except LicenseError:
+                record.pop("emergency_permit", None)
+            else:
+                if cached["exp"] > now and now - cached["iat"] < DAY:
+                    record["blocked"] = None
+                    return
+        # This endpoint is direct-only. Never bypass the user's Tor preference.
+        if getattr(self.core, "tor_enabled", False) is True:
+            return
+        nonce = secrets.token_hex(32)
+        try:
+            async with asyncio.timeout(25):
+                response = await self.core.request(
+                    EMERGENCY_URL, method="POST", json_data={
+                        "license_key": record["key"], "installation_id": state["installation_id"],
+                        "nonce": nonce,
+                    },
+                    headers={"Accept": "application/json", "Content-Type": "application/json",
+                             "User-Agent": "PornFetch-license-client"},
+                    allow_redirects=False, timeout=(5, 20), retry_non_idempotent=False,
+                )
+            if response.status_code != 200:
+                return
+            certificate = response.json()["permit"]
+            claims = verify_emergency_permit(
+                certificate, self.emergency_public_key, key=record["key"], license_id=license_id,
+                installation_id=state["installation_id"], now=self.clock(), nonce=nonce,
+            )
+            if claims["exp"] <= self.clock():
+                raise LicenseError("The emergency permit has expired")
+        except (LicenseError, KeyError, TypeError, ValueError, AttributeError,
+                ConnectionError, TimeoutError, CurlConnectionError, CurlTimeout, SSLError,
+                AccessDeniedError, HTTPStatusError):
+            return  # Keep the original primary failure and any existing valid grace.
+        record.update(emergency_permit=certificate, blocked=None)
 
     async def check(self, *, force: bool = False) -> LicenseStatus:
         if self._closed:
@@ -639,12 +666,17 @@ class LicenseClient:
                         failures=failures,
                         retry_at=now + min(60 * 2 ** (failures - 1), 3600),
                     )
+                    if isinstance(error, TemporaryFailure) and error.state in {"network_unavailable", "server_unavailable"}:
+                        await self._refresh_emergency(state, record, license_id, self.clock())
                 except Rejected as error:
+                    record.pop("emergency_permit", None)
                     record.update(blocked=error.state, retry_at=now + 60)
                     server_rejected = True
                 except FuturePermitError:
+                    record.pop("emergency_permit", None)
                     record.update(blocked="clock_mismatch", retry_at=now + 60)
                 except LicenseError:
+                    record.pop("emergency_permit", None)
                     record.update(blocked="invalid_signature", retry_at=now + 60)
             now = self.clock()
             state["last_seen"] = max(now, state.get("last_seen", now))
@@ -652,11 +684,29 @@ class LicenseClient:
             if rollback or now < record["first_import"] or timestamp(claims["license"]["created"]) > now + 300:
                 return LicenseStatus("clock_invalid", False, license_expires_at=license_expiry)
             if record.get("blocked"):
+                if (record["blocked"] == "deactivated" and record.get("offline")
+                        and record.get("failure") in {"network_unavailable", "server_unavailable"}):
+                    return LicenseStatus(
+                        "reactivation_required", False, license_expires_at=license_expiry,
+                        failure=record["failure"],
+                    )
                 return LicenseStatus(
                     record["blocked"], False,
                     license_expires_at=license_expiry,
                     server_rejected=server_rejected,
                 )
+            if (record.get("emergency_permit") and record.get("offline")
+                    and record.get("failure") in {"network_unavailable", "server_unavailable"}):
+                try:
+                    emergency = self._emergency_claims(state, record, license_id, now)
+                except LicenseError:
+                    return LicenseStatus("invalid_signature", False)
+                if now < emergency["exp"]:
+                    return LicenseStatus(
+                        "emergency_access", True, expires_at=emergency["exp"],
+                        next_check_at=min(emergency["exp"], record.get("retry_at", now + DAY)),
+                        failure=record.get("failure"),
+                    )
             if record["activated"] and record.get("cache_version") == 2:
                 try:
                     permit = self.verify_permit(
@@ -679,7 +729,7 @@ class LicenseClient:
                 )
             # Only a transport outage can unlock a never-activated, signed production key.
             # Reimport/restart never moves first_import; rejection above remains sticky
-            # until a complete successful validation and signed checkout clears it.
+            # until primary validation or a manually enabled emergency permit clears it.
             if not record["activated"] and record.get("failure") == "network_unavailable":
                 expiry = record["first_import"] + INITIAL_GRACE
                 return LicenseStatus(
@@ -709,6 +759,7 @@ class LicenseClient:
             except Rejected as error:
                 if error.state != "not_found":
                     return LicenseStatus("deactivation_failed", False)
+            record.pop("emergency_permit", None)
             record.update(blocked="deactivated", permit=None, activated=True, retry_at=0)
             state.pop("active", None)
             return LicenseStatus("deactivated", False)

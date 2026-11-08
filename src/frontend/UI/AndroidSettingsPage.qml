@@ -654,7 +654,8 @@ Pane {
             width: sectionLoader.width
             spacing: 14
             SettingCard {
-                heading: bridge.isValid ? qsTr("Premium active") : qsTr("No active license")
+                heading: bridge.isValid ? qsTr("Premium active")
+                         : bridge.state === "reactivation_required" ? qsTr("Reactivation required") : qsTr("No active license")
                 description: bridge.reason
                 Label {
                     Layout.fillWidth: true
@@ -667,6 +668,13 @@ Pane {
                     Layout.fillWidth: true
                     visible: Boolean(bridge.isValid)
                     text: qsTr("Machine Limit: 10 devices")
+                    color: root.mutedColor
+                    wrapMode: Text.Wrap
+                }
+                Label {
+                    Layout.fillWidth: true
+                    visible: Boolean(bridge.isValid && bridge.permitExpiresAt !== "")
+                    text: qsTr("Offline Permit Expires: %1").arg(bridge.permitExpiresAt)
                     color: root.mutedColor
                     wrapMode: Text.Wrap
                 }

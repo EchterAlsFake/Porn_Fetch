@@ -1,0 +1,33 @@
+[Unit]
+Description=Porn Fetch emergency licensing (manual issuance)
+After=network.target
+
+[Service]
+User=pornfetch-emergency
+Group=pornfetch-emergency
+WorkingDirectory=/opt/pornfetch-emergency
+ExecStartPre=+/usr/bin/install -d -o root -g root -m 0755 /run/pornfetch-emergency-control
+ExecStartPre=+/usr/bin/python3 -c "from pathlib import Path; Path('/run/pornfetch-emergency-control/enabled').unlink(missing_ok=True)"
+ExecStart=/opt/pornfetch-emergency/.venv/bin/uvicorn server:production_app --factory --host 127.0.0.1 --port 8014 --workers 1 --no-access-log --no-proxy-headers --limit-concurrency 64 --timeout-keep-alive 5
+Restart=on-failure
+RestartSec=5
+LoadCredentialEncrypted=signing.pem:/etc/credstore.encrypted/pornfetch-emergency-signing
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+LimitCORE=0
+MemoryMax=256M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

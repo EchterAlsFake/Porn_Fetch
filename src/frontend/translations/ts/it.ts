@@ -897,12 +897,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+455"/>
+        <location line="+463"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-454"/>
+        <location line="-462"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1293,8 +1293,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+1"/>
         <source>No active license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Reactivation required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1303,7 +1308,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+14"/>
+        <source>Offline Permit Expires: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>Refresh license (updates offline permit)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1323,12 +1333,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-43"/>
+        <location line="-50"/>
         <source>Machine Limit: 10 devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+14"/>
         <source>Next Online Check: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3088,22 +3098,12 @@ No subscription.</source>
 <context>
     <name>LicenseWidget</name>
     <message>
-        <location filename="../../UI/LicenseWidget.qml" line="+65"/>
-        <source>Check your device date, time and time zone, enable automatic time synchronization, then try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-2"/>
+        <location filename="../../UI/LicenseWidget.qml" line="+63"/>
         <source>License imported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>License import failed. Check your device clock and try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="+15"/>
         <source>Select license file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3118,7 +3118,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+144"/>
         <source>Paste signed license key or license JSON</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3158,12 +3158,37 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-194"/>
+        <source>License import failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+117"/>
+        <source>License Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reactivation required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>No Valid License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+88"/>
         <source>Your Premium license never expires. Every future Porn Fetch update and feature I release is included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+45"/>
+        <source>Next Online Check:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>How do lifetime Premium &amp; installation limits work?</source>
         <translation type="unfinished"></translation>
     </message>

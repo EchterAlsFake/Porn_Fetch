@@ -28,7 +28,7 @@ def load_production_config() -> dict[str, str]:
         raw = path.read_text(encoding="utf-8")
 
     data = json.loads(raw)
-    allowed = {"public_key", "account_id", "product_id", "policy_id", "base_url"}
+    allowed = {"public_key", "account_id", "product_id", "policy_id", "base_url", "emergency_public_key"}
     if not isinstance(data, dict) or set(data) != allowed or not all(
         isinstance(value, str) and value for value in data.values()
     ):
@@ -82,6 +82,11 @@ class LicenseBridge(QObject):
             return ""
         check_time = self._service.status.next_check_at or self._service.status.expires_at
         return "" if check_time is None else datetime.fromtimestamp(check_time).astimezone().strftime("%Y-%m-%d %H:%M")
+
+    @Property(str, notify=statusChanged)
+    def permitExpiresAt(self) -> str:
+        expiry = self._service.status.expires_at
+        return "" if expiry is None else datetime.fromtimestamp(expiry).astimezone().strftime("%Y-%m-%d %H:%M")
 
     @Property(str, notify=statusChanged)
     def expiresAt(self) -> str:

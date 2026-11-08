@@ -17,6 +17,7 @@ dependencies = [
     "browser-cookie3>=0.20.1",
     "certifi",
     "cryptography",
+    "PyJWT>=2.10.1,<3",
     "curl-cffi",
     "eaf-base-api[hls]>=4.2.6",
     "platformdirs>=4.3",
@@ -48,6 +49,7 @@ porn-fetch-cli = "src.cli.batch:main"
 porn-fetch = "src.backend.application:main"
 
 [project.optional-dependencies]
+emergency-server = ["starlette>=0.49", "uvicorn>=0.38"]
 gui = [
     "PySide6",
     "pydivert>=3.1.3; sys_platform == 'linux' or (sys_platform == 'win32' and (platform_machine == 'AMD64' or platform_machine == 'x86_64'))",

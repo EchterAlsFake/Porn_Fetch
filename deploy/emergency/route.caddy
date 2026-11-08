@@ -1,0 +1,12 @@
+# Import inside the existing echteralsfake.me HTTPS site block.
+handle /api/pornfetch-emergency/v1/permit {
+    request_body {
+        max_size 20KB
+    }
+    reverse_proxy 127.0.0.1:8014 {
+        header_up -Forwarded
+        header_up -X-Forwarded-For
+        header_up -X-Real-IP
+        header_up -CF-Connecting-IP
+    }
+}

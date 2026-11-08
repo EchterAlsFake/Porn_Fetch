@@ -170,6 +170,24 @@ entitlement have been verified against the server. Existing beta records were le
 alone, and renewal checkout requests are rejected. Distributed binaries still need
 an updated build; do not change the account, product, public key or endpoint.
 
+Emergency licensing is implemented at `https://echteralsfake.me/api/pornfetch-emergency/v1/permit`
+on the independent Acer host `asuna@192.168.178.200`. Issuance is disabled by default,
+after every restart, and after deployment. Enable manually only during a real primary
+outage with `sudo pornfetch-emergencyctl enable`; `disable` stops new permits. Any
+valid signed production lifetime key qualifies, including new installations, with
+no revocation or installation-count enforcement. Separate signed seven-day permits
+never extend locally; primary validation/rejection takes precedence. The signing
+key is TPM-sealed on Acer; only its public key ships. Fallback requests require Tor
+Off, with an explicit notice and no automatic direct connection. See
+[the emergency runbook](deploy/emergency/README.md). Existing distributed clients
+need a new build. The origins share the documented VPS edge, so this does not
+cover shared-edge failure.
+Reimporting a deactivated license during an outage reports `reactivation_required`:
+a fresh primary or emergency permit is required, and reimport does not reset grace.
+The license widget displays the actual failure reason without generic clock advice.
+Desktop, mobile and CLI show the signed permit expiry separately from the next
+online check/retry. A failed refresh may reschedule retries but never extends expiry.
+
 Premium feature limits are shared in `src/shared/access.py`. Free use allows
 up to 720p, one active download, and the first five videos of public model,
 channel and playlist URLs. Apply that preview before filters and index ranges.

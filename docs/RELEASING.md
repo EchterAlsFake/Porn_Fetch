@@ -62,6 +62,11 @@ online PEM key. The deployment API uses repository secret `CI_TOKEN`. Website
 publication uses `WEBSITE_RELEASE_TOKEN` and optional variable `WEBSITE_ORIGIN`.
 Do not put private keys, session files or keystores in artifacts or source control.
 
+GitHub release publication uses `RELEASE_TOKEN` from Environment `build`. Grant
+the token Contents and Workflows write access (classic PAT: `repo` and `workflow`)
+so it can create the release tag even if workflow files change on the default
+branch during the build.
+
 ## Windows
 
 `packaging/sign_windows.ps1` signs EXE/DLL/PYD files and verifies Authenticode.

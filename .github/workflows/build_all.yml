@@ -1733,8 +1733,9 @@ jobs:
       (inputs.build_target == 'cli' || inputs.build_target == 'ios' || needs.build-android.result == 'success') &&
       (inputs.build_target == 'cli' || inputs.build_target == 'android' || needs.build-ios.result == 'success')
     runs-on: ubuntu-24.04
+    environment: build
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -1786,10 +1787,11 @@ jobs:
 
       - name: Create or Update GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           COMMIT_SHA: ${{ github.sha }}
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
         run: |
+          : "${GH_TOKEN:?Set RELEASE_TOKEN in the build environment}"
           gh release create "v$RELEASE_VERSION" dist_release/* \
             --title "Porn Fetch $RELEASE_VERSION" \
             --notes-file CHANGELOG_STATIC.md \

@@ -485,7 +485,7 @@ class LicenseClientTests(unittest.IsolatedAsyncioTestCase):
 
     def test_production_configuration_and_release_timestamp(self):
         config = json.loads(Path("src/licensing/production.json").read_text())
-        self.assertEqual(config, {"base_url":"https://licenses.pornfetch.to", "account_id":"b0fab530-8614-45cb-8627-12ee594fb973", "product_id":"5d5e8829-838b-4dd4-8bfc-2491aa0f82d3", "policy_id":"7038281b-2429-4aa4-81db-4f04a87e7184", "public_key":"d24ec8bb5f78cc79f95751a3e1988107379a00cb89246b7f3318977dd2be9477"})
+        self.assertEqual(config, {"base_url":"https://licenses.pornfetch.to", "account_id":"b0fab530-8614-45cb-8627-12ee594fb973", "product_id":"5d5e8829-838b-4dd4-8bfc-2491aa0f82d3", "policy_id":"7038281b-2429-4aa4-81db-4f04a87e7184", "public_key":"d24ec8bb5f78cc79f95751a3e1988107379a00cb89246b7f3318977dd2be9477", "emergency_public_key":"e7e3950f0bf9cda2974372fe68f6c068b138ce205f3915c9fd1c85c8ce8b0569"})
         self.assertEqual(iso(RELEASE_TIMESTAMP), "2026-10-06T00:00:00+00:00")
 
     async def test_denials_with_no_data_or_non_json_body_stay_denied(self):

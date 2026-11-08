@@ -1,0 +1,20 @@
+#!/usr/bin/python3
+"""Privileged local issuance switch; no network administration interface."""
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+flag = Path('/run/pornfetch-emergency-control/enabled')
+if len(sys.argv) != 2 or sys.argv[1] not in {'enable', 'disable', 'status'}:
+    sys.exit('Usage: sudo pornfetch-emergencyctl enable|disable|status')
+action = sys.argv[1]
+if action != 'status' and os.geteuid() != 0:
+    sys.exit('Run this command with sudo.')
+if action == 'enable':
+    subprocess.run(['systemctl', 'is-active', '--quiet', 'pornfetch-emergency'], check=True)
+    flag.parent.mkdir(mode=0o755, exist_ok=True)
+    flag.touch(mode=0o644)
+elif action == 'disable':
+    flag.unlink(missing_ok=True)
+print('Emergency issuance: ' + ('ENABLED' if flag.is_file() else 'disabled'))
