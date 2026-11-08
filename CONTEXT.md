@@ -238,6 +238,9 @@ the runner's default software list does not guarantee that library exists.
 Resolve Homebrew source symlinks before Mach-O detection, preserving the recorded
 ABI basename inside the bundle. `is_macho` skips symlinks during bundle traversal;
 using it directly on a Homebrew dylib alias incorrectly reports a missing library.
+The Universal merger must recreate architecture scratch files before every binary:
+`copy2` preserves signed inputs' read-only permissions, which otherwise prevent
+reuse for the next library. Preserve the original input bundles.
 See [installation](docs/INSTALLATION.md) and [release operations](docs/RELEASING.md).
 
 The Windows convenience script runs the uv installer in a child PowerShell so

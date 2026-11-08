@@ -75,6 +75,9 @@ def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
                 slices = []
                 for source, architecture in sources:
                     thin = Path(temporary) / architecture
+                    # copy2 preserves read-only modes from signed libraries.
+                    # Recreate each scratch file before processing the next binary.
+                    thin.unlink(missing_ok=True)
                     architectures = subprocess.check_output(["lipo", "-archs", str(source)], text=True).split()
                     if architecture not in architectures:
                         raise ValueError(f"Missing {architecture} slice: {source}")

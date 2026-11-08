@@ -596,6 +596,41 @@ class MacBundleTests(unittest.TestCase):
             self.assertEqual(commands[-1], ["lipo", str(output / "main"), "-verify_arch", "x86_64", "arm64"])
             self.assertEqual((output / "arm-resource.txt").read_text(), "resource")
 
+    def test_merge_handles_consecutive_read_only_signed_libraries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            intel, arm, output = (root / name for name in ("intel", "arm", "universal"))
+            originals = {}
+            for bundle in (intel, arm):
+                for relative in ("Contents/Frameworks/liblz4.1.dylib", "Contents/MacOS/package/native.so"):
+                    binary = bundle / relative
+                    binary.parent.mkdir(parents=True, exist_ok=True)
+                    binary.write_bytes(f"{bundle.name}:{relative}".encode())
+                    binary.chmod(0o555)
+                    originals[binary] = binary.read_bytes()
+
+            def check_output(command, **_):
+                return "x86_64" if Path(command[-1]).is_relative_to(intel) else "arm64"
+
+            def run(command, **_):
+                if "-create" in command:
+                    destination = Path(command[-1])
+                    # lipo publishes by replacing the existing output file.
+                    destination.unlink()
+                    destination.write_bytes(b"|".join(Path(path).read_bytes() for path in command[2:4]))
+
+            with patch.object(merger, "is_macho", return_value=True), \
+                 patch.object(merger.subprocess, "check_output", side_effect=check_output), \
+                 patch.object(merger.subprocess, "run", side_effect=run):
+                merger.merge_bundles(intel, arm, output)
+            for source, original in originals.items():
+                self.assertEqual(source.read_bytes(), original)
+                self.assertEqual(source.stat().st_mode & 0o777, 0o555)
+            for binary in sorted(output.rglob("*")):
+                if binary.is_file():
+                    relative = binary.relative_to(output)
+                    self.assertEqual(binary.read_bytes(), originals[intel / relative] + b"|" + originals[arm / relative])
+
     def test_merge_preserves_optional_intel_crypto_accelerators(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

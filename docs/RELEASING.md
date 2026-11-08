@@ -128,6 +128,11 @@ reject remaining absolute non-system library dependencies, even if the build
 runner can load them. A library's own install-name identity is excluded from that
 check. The LZ4 library notice is retained in `LICENSES/LZ4.txt` and legal bundles.
 
+The Universal merger recreates its architecture scratch files before each native
+binary. Signed inputs can be read-only, and preserving those permissions with
+`copy2` must not prevent the next library from being staged. Input bundles remain
+unchanged; the merged app is signed again before publication.
+
 1. Repair native dependencies, sign inner Mach-O files and bundles, then sign
    the app. Use hardened runtime and only the required entitlements.
 2. Notarize and staple the app, then make, sign, notarize and staple its DMG.
