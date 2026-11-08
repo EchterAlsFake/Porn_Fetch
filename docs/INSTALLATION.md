@@ -307,8 +307,10 @@ it: this contains the matching source, notices and build information.
   `deployment/deploy_main.dist` must not be reused as a new Windows build.
 - **QtAsyncio patch fails:** keep the failure visible. Report the PySide6 version
   and patch log; do not continue with a partly patched runtime.
-- **macOS framework error:** run `packaging/repair_macos_bundle.py` with the same
-  Python environment used for that build, then repeat `--smoke-test`.
+- **macOS missing library or framework:** rebuild with
+  `packaging/repair_macos_bundle.py` in the same environment used for that build,
+  then repeat signing and `--smoke-test`. The release must include its native
+  dependencies so users do not need Homebrew libraries to launch it.
 - **Antivirus or Gatekeeper warning:** see the signature section above.
 
 Include your OS, CPU, source commit, command and build log in a bug report.

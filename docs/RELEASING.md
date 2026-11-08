@@ -113,6 +113,16 @@ The macOS deployment template excludes `src/frontend/graphics/ios`: its source
 asset catalog is only used by iOS staging and breaks macOS signing if copied into
 `Contents/MacOS` as an uncompiled nested bundle.
 
+`packaging/repair_macos_bundle.py` runs for every architecture before signing.
+It relinks Homebrew OpenSSL references to the bundled `libssl.dylib` and
+`libcrypto.dylib`, preserving Python's separate versioned copies. Other missing
+native libraries, including liblz4 used by the compression extensions, are copied
+from their recorded build paths into `Contents/Frameworks` and relinked there.
+Their transitive dependencies are repaired too. The repaired and Universal bundles
+reject remaining absolute non-system library dependencies, even if the build
+runner can load them. A library's own install-name identity is excluded from that
+check. The LZ4 library notice is retained in `LICENSES/LZ4.txt` and legal bundles.
+
 1. Repair native dependencies, sign inner Mach-O files and bundles, then sign
    the app. Use hardened runtime and only the required entitlements.
 2. Notarize and staple the app, then make, sign, notarize and staple its DMG.

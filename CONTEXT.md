@@ -219,6 +219,11 @@ Local macOS builds put `LEGAL/` and `LEGAL.zip` directly in `Contents/Resources`
 License inventories have dotted distribution directories such as `boolean.py`;
 leaving those directories under `Contents/MacOS` makes codesign treat them as
 malformed nested bundles, even after individual files are relocated.
+The shared macOS repair stage relinks Homebrew OpenSSL to the bundled unversioned
+copies, separately from Python's OpenSSL, and copies missing native dependencies
+such as liblz4 into `Contents/Frameworks`. Each architecture and the merged
+Universal bundle reject absolute non-system library dependencies before release;
+startup on a runner with Homebrew installed is insufficient verification.
 See [installation](docs/INSTALLATION.md) and [release operations](docs/RELEASING.md).
 
 The Windows convenience script runs the uv installer in a child PowerShell so

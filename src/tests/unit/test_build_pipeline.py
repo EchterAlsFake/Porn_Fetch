@@ -335,6 +335,95 @@ class QmlPackagingTests(unittest.TestCase):
 
 
 class MacBundleTests(unittest.TestCase):
+    def test_single_arch_bundle_relinks_homebrew_openssl_and_keeps_python_copy_separate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "Porn Fetch.app"
+            macos = bundle / "Contents/MacOS"
+            rust = macos / "cryptography/hazmat/bindings/_rust.so"
+            crypto = macos / "libcrypto.dylib"
+            ssl = macos / "libssl.dylib"
+            python_crypto = macos / "libcrypto.3.dylib"
+            for binary in (rust, crypto, ssl, python_crypto):
+                binary.parent.mkdir(parents=True, exist_ok=True)
+                binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            python_crypto.write_bytes(b"\xcf\xfa\xed\xfePython OpenSSL build")
+            old_crypto = "/usr/local/opt/openssl@3/lib/libcrypto.3.dylib"
+            old_ssl = "/usr/local/opt/openssl@3/lib/libssl.3.dylib"
+            ids = {crypto: old_crypto, ssl: old_ssl}
+            dependencies = {rust: [old_crypto, old_ssl], crypto: [old_crypto], ssl: [old_ssl, old_crypto]}
+
+            def otool(command, **_):
+                binary = Path(command[-1])
+                if command[1] == "-D":
+                    return f"{binary}:\n" + ids.get(binary, "") + "\n"
+                return f"{binary}:\n" + "".join(
+                    f"\t{dependency} (compatibility version 3.0.0, current version 3.0.0)\n"
+                    for dependency in dependencies.get(binary, [])
+                )
+
+            def execute(command, **_):
+                if command[0] == "install_name_tool":
+                    replacements = dict(zip(command[2:-1:3], command[3:-1:3], strict=True))
+                    binary = Path(command[-1])
+                    dependencies[binary] = [replacements.get(dep, dep) for dep in dependencies[binary]]
+
+            with patch.object(repairer.subprocess, "check_output", side_effect=otool), \
+                 patch.object(repairer.subprocess, "run", side_effect=execute) as run:
+                self.assertEqual(repairer.repair_bundle(bundle), 2)
+            self.assertEqual(dependencies[rust], ["@loader_path/../../../libcrypto.dylib",
+                                                  "@loader_path/../../../libssl.dylib"])
+            self.assertEqual(dependencies[ssl], [old_ssl, "@loader_path/libcrypto.dylib"])
+            self.assertEqual(python_crypto.read_bytes(), b"\xcf\xfa\xed\xfePython OpenSSL build")
+            self.assertEqual(run.call_args_list[-1].args[0],
+                             ["codesign", "--force", "--deep", "--sign", "-", str(bundle)])
+
+    def test_bundle_repair_rejects_remaining_build_machine_library_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle = Path(temporary) / "Porn Fetch.app"
+            binary = bundle / "Contents/MacOS/package/native.so"
+            binary.parent.mkdir(parents=True)
+            binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            external = "/usr/local/opt/example/lib/libexample.dylib"
+
+            def otool(command, **_):
+                return f"{binary}:\n" + (
+                    f"\t{external} (compatibility version 1.0.0, current version 1.0.0)\n"
+                    if command[1] == "-L" else ""
+                )
+
+            with patch.object(repairer.subprocess, "check_output", side_effect=otool), \
+                 patch.object(repairer.subprocess, "run"):
+                with self.assertRaisesRegex(ValueError, "External library dependency.*libexample"):
+                    repairer.verify_bundle_dependencies(bundle)
+
+    def test_bundle_repair_copies_missing_lz4_and_relinks_its_extensions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundle = root / "Porn Fetch.app"
+            extension = bundle / "Contents/MacOS/lz4/block/_block.so"
+            source = root / "build host/liblz4.1.dylib"
+            for binary in (extension, source):
+                binary.parent.mkdir(parents=True)
+                binary.write_bytes(b"\xcf\xfa\xed\xfetest")
+            target = bundle / "Contents/Frameworks/liblz4.1.dylib"
+            linked = {extension: str(source), source: str(source), target: str(source)}
+
+            def otool(command, **_):
+                binary = Path(command[-1])
+                if command[1] == "-D":
+                    return f"{binary}:\n" + (str(source) if binary != extension else "") + "\n"
+                return f"{binary}:\n\t{linked[binary]} (compatibility version 1.0.0, current version 1.10.0)\n"
+
+            def execute(command, **_):
+                if command[0] == "install_name_tool":
+                    linked[Path(command[-1])] = command[3]
+
+            with patch.object(repairer.subprocess, "check_output", side_effect=otool), \
+                 patch.object(repairer.subprocess, "run", side_effect=execute):
+                self.assertEqual(repairer.repair_bundle(bundle), 1)
+            self.assertEqual(target.read_bytes(), source.read_bytes())
+            self.assertEqual(linked[extension], "@loader_path/../../../Frameworks/liblz4.1.dylib")
+
     def test_repair_relinks_cocoa_and_transitive_framework_dependencies(self):
         with tempfile.TemporaryDirectory() as temporary:
             bundle = Path(temporary) / "Porn Fetch.app"

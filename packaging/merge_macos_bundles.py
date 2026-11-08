@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 import subprocess
 import sys
@@ -13,16 +12,17 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_output  # noqa: E402
+from scripts.macos_bundle import (  # noqa: E402
+    OPENSSL_ALIASES,
+    repair_openssl_references,
+    verify_bundle_dependencies,
+)
 
 # PyCryptodome loads these only when the CPU supports AES-NI or CLMUL.
 # ARM uses _raw_aes and _ghash_portable, which must still have both slices.
 INTEL_ONLY_ACCELERATORS = {
     Path("Contents/MacOS/Cryptodome/Cipher/_raw_aesni.so"),
     Path("Contents/MacOS/Cryptodome/Hash/_ghash_clmul.so"),
-}
-OPENSSL_ALIASES = {
-    Path("Contents/MacOS/libcrypto.dylib"): "libcrypto.3.dylib",
-    Path("Contents/MacOS/libssl.dylib"): "libssl.3.dylib",
 }
 
 
@@ -47,41 +47,6 @@ def verify_openssl_abi(source: Path, expected: str) -> None:
              if line.strip() and not line.endswith(":")}
     if names != {expected}:
         raise ValueError(f"Expected OpenSSL 3 install name {expected}, found {names}: {source}")
-
-
-def repair_openssl_references(binary: Path, output: Path) -> bool:
-    dependencies = subprocess.check_output(["otool", "-L", str(binary)], text=True)
-    replacements = {}
-    for line in dependencies.splitlines():
-        if not line.startswith(("\t", " ")) or " (compatibility version" not in line:
-            continue
-        dependency = line.strip().split(" (compatibility version", 1)[0]
-        path = Path(dependency)
-        # The unversioned Homebrew copies must stay separate from Python's
-        # versioned OpenSSL: cryptography can require different build options.
-        if not path.is_absolute() or not any(
-            marker in dependency for marker in ("/opt/openssl@3/", "/Cellar/openssl@3/")
-        ):
-            continue
-        for relative, versioned in OPENSSL_ALIASES.items():
-            if path.name != versioned:
-                continue
-            target = output / relative
-            if target == binary:
-                continue  # otool -L includes a dylib's own install name.
-            if not target.is_file():
-                raise ValueError(f"Missing bundled OpenSSL library for {dependency}: {binary}")
-            replacements[dependency] = "@loader_path/" + os.path.relpath(target, binary.parent)
-    if not replacements:
-        return False
-    command = ["install_name_tool"]
-    for original, replacement in replacements.items():
-        command.extend(["-change", original, replacement])
-    subprocess.run([*command, str(binary)], check=True)
-    # --deep does not reliably visit native extensions under Contents/MacOS.
-    subprocess.run(["codesign", "--force", "--sign", "-", str(binary)], check=True)
-    build_output.detail(f"Repaired OpenSSL references: {binary.relative_to(output)}")
-    return True
 
 
 def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
@@ -129,6 +94,7 @@ def merge_bundles(intel: Path, arm: Path, output: Path) -> None:
     for binary in sorted(output.rglob("*")):
         if not binary.is_symlink() and binary.is_file() and is_macho(binary):
             repair_openssl_references(binary, output)
+    verify_bundle_dependencies(output)
 
 
 if __name__ == "__main__":

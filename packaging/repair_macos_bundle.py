@@ -1,4 +1,4 @@
-"""Repair Qt framework references left unresolved in a Nuitka macOS bundle."""
+"""Repair native dependencies left unresolved in a Nuitka macOS bundle."""
 from __future__ import annotations
 
 import argparse
@@ -14,19 +14,17 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts import build_output  # noqa: E402
-from scripts.macos_bundle import is_macho, relocate_resources  # noqa: E402
+from scripts.macos_bundle import (  # noqa: E402
+    OPENSSL_ALIASES,
+    dependencies,
+    install_names,
+    is_macho,
+    relocate_resources,
+    repair_openssl_references,
+    verify_bundle_dependencies,
+)
 
 QT_FRAMEWORK = re.compile(r"(?:^|/)(Qt[^/]+)\.framework/(?:Versions/[^/]+/)?\1$")
-
-
-def dependencies(path: Path) -> list[str]:
-    output = subprocess.check_output(["otool", "-L", str(path)], text=True)
-    # Universal binaries list dependencies for each slice; change each name once.
-    return list(dict.fromkeys(
-        line.strip().split(" (compatibility version", 1)[0]
-        for line in output.splitlines()
-        if line.startswith(("\t", " ")) and " (compatibility version" in line
-    ))
 
 
 def pyside_qt_lib_dir() -> Path:
@@ -51,12 +49,38 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
     # Missing frameworks must come from the PySide6 environment used to build it.
     pending = [(binary, binary) for binary in binaries]
     frameworks_to_copy: dict[Path, Path] = {}
+    libraries_to_copy: dict[Path, Path] = {}
     copied_binaries: list[Path] = []
     changes: dict[Path, list[tuple[str, str]]] = {}
     for source_binary, binary in pending:
-        for dependency in dependencies(source_binary):
+        linked = dependencies(source_binary)
+        absolute = [name for name in linked if Path(name).is_absolute()
+                    and not name.startswith(("/System/Library/", "/usr/lib/"))]
+        own_names = install_names(source_binary) if absolute else set()
+        for dependency in linked:
+            if dependency in own_names or dependency.startswith(("/System/Library/", "/usr/lib/")):
+                continue
             match = QT_FRAMEWORK.search(dependency)
-            if not match or dependency.startswith(("/System/Library/", "/usr/lib/")):
+            if not match:
+                if dependency not in absolute:
+                    continue
+                source = Path(dependency)
+                if source.name in OPENSSL_ALIASES.values() and any(
+                    marker in dependency for marker in ("/opt/openssl@3/", "/Cellar/openssl@3/")
+                ):
+                    continue  # Relink Homebrew OpenSSL separately from Python's copy below.
+                target = contents / "MacOS" / source.name
+                if not target.is_file():
+                    target = contents / "Frameworks" / source.name
+                if not target.is_file() and target not in libraries_to_copy:
+                    if not is_macho(source):
+                        raise ValueError(f"Missing source library {dependency}; required by {binary.relative_to(bundle)}")
+                    libraries_to_copy[target] = source
+                    pending.append((source, target))
+                    copied_binaries.append(target)
+                changes.setdefault(binary, []).append((
+                    dependency, "@loader_path/" + os.path.relpath(target, binary.parent),
+                ))
                 continue
             candidates = qt_libraries.get(match[1], [])
             if not candidates:
@@ -97,6 +121,10 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(source, target, symlinks=True)
         build_output.detail(f"Bundled missing Qt framework: {target.relative_to(bundle)}")
+    for target, source in libraries_to_copy.items():
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        build_output.detail(f"Bundled missing native library: {target.relative_to(bundle)}")
 
     for binary, replacements in changes.items():
         command = ["install_name_tool"]
@@ -109,9 +137,15 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
             subprocess.run(command, check=True)
         finally:
             binary.chmod(mode)
-        build_output.detail(f"Repaired Qt dependencies: {binary.relative_to(bundle)}")
+        build_output.detail(f"Repaired native dependencies: {binary.relative_to(bundle)}")
 
-    if changes or frameworks_to_copy or relocated:
+    openssl_changes = {
+        binary for binary in [*binaries, *copied_binaries]
+        if repair_openssl_references(binary, bundle)
+    }
+    verify_bundle_dependencies(bundle)
+
+    if changes or frameworks_to_copy or relocated or openssl_changes:
         # Mach-O edits invalidate the build's signature, including nested code.
         # Nuitka places some libraries under Contents/MacOS, outside the usual
         # framework/plugin directories traversed by codesign --deep.
@@ -120,7 +154,7 @@ def repair_bundle(bundle: Path, qt_lib_dir: Path | None = None) -> int:
         for framework in frameworks_to_copy:
             subprocess.run(["codesign", "--force", "--sign", "-", str(framework)], check=True)
         subprocess.run(["codesign", "--force", "--deep", "--sign", "-", str(bundle)], check=True)
-    return len(changes)
+    return len(set(changes) | openssl_changes)
 
 
 def main() -> None:
@@ -139,7 +173,7 @@ def main() -> None:
         count = repair_bundle(args.bundle, args.qt_lib_dir)
     except (ImportError, OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Bundle repair failed: {error}\n")
-    build_output.message(f"Qt bundle repaired: {count} binaries updated.", "ok")
+    build_output.message(f"Native bundle repaired and dependencies verified: {count} binaries updated.", "ok")
 
 
 if __name__ == "__main__":
