@@ -9,7 +9,7 @@
 <br>
 
 <a href="https://pornfetch.to/checklist">
-  <img src="https://pornfetch.to/checklist/progress.svg" alt="Version 3.9 Development Progress" width="400"/>
+  <img src="https://pornfetch.to/checklist/progress.svg?label=Version%204.0%20Development%20Progress" alt="Version 4.0 Development Progress" width="400"/>
 </a>
 
 ---
