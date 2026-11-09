@@ -1,23 +1,7 @@
-
-# Transition Warning
-I'll transition Porn Fetch's backend and licensing to v3.9 and to the real payment system.
-All sandbox licenses will be deleted and v3.8 will effectively be dead, which is good anyways, because it's insecure.
-During the next 24 hours, please do not use Porn Fetch, do not activate licenses and do not treat any information as accurate.
-
-Thank you all, it was a long run, but I am finally on the finnishing line :) 
-
-# Security Warning v3.8 (DO NOT USE!)
-Porn Fetch v3.8 is affected by the recently discovered Brotli vulnerability. An attacker can theoretically execute code on your machine through a compromised CDN, DNS or website that Porn Fetch requests.
-
-The attack surface is very theoretical, however it is possible. I strongly advice you to use the beta v3.8.2
-instead. You can get it from https://pornfetch.to/download 
-
-The beta is still unstable and being tested, but I would rather give you a broken app, than a working app with a backdoor!
-
-<div align = center>
-<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="160"/>
-<br>
-<h1 align="center">Porn Fetch - Source-Available Adult Media Downloader</h1>
+<div align="center">
+<h1>
+  <img src="docs/images/porn-fetch-showcase.webp" alt="Porn Fetch - Porn Downloader for desktop and mobile" width="780"/>
+</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
@@ -30,7 +14,7 @@ The beta is still unstable and being tested, but I would rather give you a broke
 
 ---
 
-**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9 BETA)&nbsp;<br>&nbsp;</strong></kbd>](https://pornfetch.to/download)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v3.9.0)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Installation Guide&nbsp;<br>&nbsp;</strong></kbd>](docs/INSTALLATION.md)** 
@@ -43,12 +27,6 @@ The beta is still unstable and being tested, but I would rather give you a broke
 > [!CAUTION]
 > Porn Fetch is an unofficial project and is not endorsed, sponsored, nor explicitly approved by its supported Websites. 
 > Certain features of Porn Fetch are prohibited or restricted in [these countries](docs/PROHIBITED_COUNTRIES)
-
-
-> [!IMPORTANT]
-> Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/ANTIVIRUS_FLAGS.md) for an explanation why this is.
-> If your antivirus flags a beta build, check the download source and report the
-> detection before making changes to your security settings.
 
 ## 🚀 Quick Links
 - [Features](#-features)
@@ -63,26 +41,38 @@ The beta is still unstable and being tested, but I would rather give you a broke
 
 ## 🌟 Features
 - Cross-platform
+- 15+ Supported Adult Sites
 - Downloading Videos
 - Downloading Playlists
 - Downloading whole model / channel accounts
+- Login to your accounts and fetch your liked videos, own playlists and more
+- Native Tor Integration to bypass censorship
+- Custom SNI Proxy to hide destination websites
+- Encrypted DNS by default 
+- Statistics tracking with an integrated local database
 - Multithreaded downloading
 - Automatic resuming
 - Installer updates for desktop builds and signed self-updates for standalone CLI builds
 - Custom template for filenames based on video metadata
-- Dark mode and CLI support
-- No ads or mandatory logins
-- Multiple supported websites 
-- modern looking user interface
-- Proxy support
-- Model Batch download with database updating (CLI only)
-- A lot of available settings
+- CLI for experienced users
+- Material UI Interface with theming options
+- Accessibility e.g., high contrast, screen reader support
+- Proxy support for all proxy types and authentication
+- Extremely configurable for experienced users
 - In-App speed limit
+- Bind Porn Fetch to a custom network interface e.g., a VPN
 - Automatic file tagging (metadata)
 - Automatic conversion from MPEG-TS to mp4 (within seconds)
 - Build scripts for supported desktop and CLI targets
 - Independent Open-Source [Server](https://github.com/EchterAlsFake/Server)
 - Source-available application, made with ❤️ in 🇩🇪
+- Actively maintained (yes, also for the next 5 years)
+
+# Privacy and Anonymity
+- The Server for Porn Fetch does NOT log nor track any of your data 
+- You can route Porn Fetch's entire server traffic including error reports, licensing, updating through Tor
+- I actually care about your privacy, which is the reason why I said no to: Cloudflare, Easy VPS routing, Cloud Hosting
+- Porn Fetch's entire infrastructure lives in my home and is fully independent of Big Tech
 
 ## 📦 Installation & Building from Source
 
@@ -169,7 +159,6 @@ To produce distributable single binaries yourself:
   ```
 
 ## Premium license
-
 Pay €29.99 once for a lifetime Premium license on up to ten active installations.
 Every future Porn Fetch update and feature I release is included. Future development
 has no guaranteed duration. Activation and periodic online validation remain required;

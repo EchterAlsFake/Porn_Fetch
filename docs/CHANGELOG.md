@@ -665,11 +665,7 @@ to be refactored.
 
 
 
-# 3.9 (in development)
-
-This version is still in beta. See the [development checklist](https://pornfetch.to/checklist) for release progress.
-
-
+# 3.9
 ### Website Support
 
 - Added RedTube video downloads, public playlists, and pornstar, channel and amateur pages.
