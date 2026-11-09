@@ -121,9 +121,15 @@ def before_apk_assemble(toolchain) -> None:
     notification_call = "org.kivy.android.PornFetchNotifications.install(this);"
     if notification_call not in patched:
         patched = patched.replace(platform_call, platform_call + "\n        " + notification_call, 1)
+    storage_call = "org.kivy.android.PornFetchStorage.install(this);"
+    if storage_call not in patched:
+        # Publish capabilities before Qt starts Python, so QML's constant
+        # availability property cannot observe a half-initialized bridge.
+        anchor = "super.onCreate(savedInstanceState);"
+        patched = patched.replace(anchor, storage_call + "\n        " + anchor, 1)
     helper = Path(__file__).parent / "android" / "PornFetchDisplay.java"
     (activity.parent / helper.name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
-    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java", "PornFetchNotifications.java"):
+    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java", "PornFetchNotifications.java", "PornFetchStorage.java"):
         helper = Path(__file__).parent / "android" / name
         (activity.parent / name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
     for manifest in (Path(toolchain._dist.dist_dir) / "src/main/AndroidManifest.xml",

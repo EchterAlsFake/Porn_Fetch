@@ -16,7 +16,9 @@ else:
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
-from src.backend.android_storage import copy_download_file, folder_destination
+from src.backend.android_storage import (
+    SHARED_DOWNLOADS, copy_download_file, folder_destination, save_shared_download, shared_downloads_available,
+)
 from src.backend.theme_manager import ThemeManager
 from src.backend.app_icon import application_icon
 from src.backend.splashscreen import SplashController
@@ -545,6 +547,10 @@ class Backend(QObject):
     @Slot()
     def open_output_folder(self) -> None:
         from PySide6.QtGui import QDesktopServices
+        if app_settings.android_output_folder == SHARED_DOWNLOADS:
+            self.notifications.publish(self.tr("Completed files are in shared Downloads/Porn Fetch. Open them in a file manager or media player."),
+                                       self.tr("Output folder"), "info", key="output-folder")
+            return
         folder = QUrl(app_settings.android_output_folder) if is_mobile and app_settings.android_output_folder else QUrl.fromLocalFile(str(Path(app_settings.output_path).expanduser().resolve()))
         if not QDesktopServices.openUrl(folder):
             self.notifications.publish(self.tr("Open the configured output folder using your file manager."),
@@ -572,7 +578,23 @@ class Backend(QObject):
         app_settings.android_output_folder = folder.toString(QUrl.ComponentFormattingOption.FullyEncoded)
         self.logger.info("Persisted android output folder: %r", app_settings.android_output_folder)
 
+    @Property(bool, constant=True)
+    def android_shared_downloads_available(self) -> bool:
+        return is_android and shared_downloads_available()
+
+    @Slot()
+    def use_android_shared_downloads(self) -> None:
+        if self.android_shared_downloads_available:
+            app_settings.android_output_folder = SHARED_DOWNLOADS
+
     async def _save_to_output_folder(self, source: Path) -> None:
+        if app_settings.android_output_folder == SHARED_DOWNLOADS:
+            try:
+                await save_shared_download(source, app_settings.skip_existing_files)
+            except Exception as error:
+                self.logger.exception("Could not save download to Android shared Downloads")
+                raise OutputFolderError("Android shared Downloads is unavailable") from error
+            return
         folder_url = QUrl(app_settings.android_output_folder)
         if not folder_url.isValid() or folder_url.scheme() not in ("content", "file"):
             return
@@ -1123,7 +1145,10 @@ class Backend(QObject):
                 if isinstance(source_video, clients.xf_Video):
                     from src.shared.media import xfreehd_quality
                     quality = xfreehd_quality(quality)
-                raw_video_types = (clients.ep_Video, clients.pt_Video, clients.xf_Video, clients.ef_Video, clients.tf_Video)
+                raw_video_types = (
+                    clients.ep_Video, clients.pt_Video, clients.xf_Video,
+                    clients.ef_Video, clients.tf_Video, clients.pd_Video,
+                )
 
                 if isinstance(source_video, raw_video_types):
                     video.is_hls = False
@@ -1622,6 +1647,7 @@ class Backend(QObject):
             "spankbang": "SpankBang",
             "xhamster": "xHamster",
             "porntrex": "PornTrex",
+            "porndoe": "Porndoe",
         }
         normalized_url = url.lower()
         platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")

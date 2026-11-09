@@ -180,6 +180,9 @@ def offline_self_test() -> int:
         "redtube": "https://www.redtube.com/test",
         "thumbzilla": "https://www.thumbzilla.com/video/test/title",
         "tube8": "https://www.tube8.com/test/test/test/",
+        "empflix": "https://www.empflix.com/amateur-porn/example/video123",
+        "tnaflix": "https://www.tnaflix.com/amateur-porn/example/video123",
+        "porndoe": "https://porndoe.com/watch/pd4y7n5e2j8r",
     }
     assert set(PROVIDER_MODULES) == set(examples)
     assert all(route_url(url).provider == provider for provider, url in examples.items())

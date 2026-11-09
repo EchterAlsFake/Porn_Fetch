@@ -834,3 +834,10 @@ to be refactored.
 - Public video lists from RedTube and Tube8 User pages are not confirmed working. Use their supported pornstar, channel or amateur pages.
 - XFreeHD desktop downloads still need a follow-up check that Resume reuses the downloaded bytes correctly.
 - Android device behavior, Android updates, packaged desktop/CLI updates, and Tor/Strict SNI behavior still need checks on their respective devices or networks. Desktop queue recovery covers normal close/reopen; recovery after a forced kill or power loss has not been tested.
+
+
+# v4.0
+
+### Website Support
+- Added Support for Porndoe.com (Video, Pornstar, Channel)
+- 

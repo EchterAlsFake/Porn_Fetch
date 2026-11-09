@@ -150,8 +150,8 @@ class ProcessVideos(QObject):
         return max(parsed_qualities)
 
     @staticmethod
-    async def process_single_video(video_object: str | clients.AllowedVideoType) -> tuple[
-        clients.AllowedVideoType, VideoObject]:
+    async def process_single_video(video_object: str | clients.AnyVideoClass) -> tuple[
+        clients.AnyVideoClass, VideoObject]:
         video = await clients.get_video(video_object)
         video_attributes = await clients.load_video_attributes(video=video)
         return video, video_attributes

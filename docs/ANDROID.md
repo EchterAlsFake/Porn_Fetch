@@ -2,9 +2,17 @@
 
 Porn Fetch has an Android GUI. After the first-launch notices, setup asks you to
 choose a video folder with Android's system picker. Open or create a folder and
-allow Porn Fetch to use it. Cancelling the picker returns to setup so you can try
-again. An existing saved folder skips this step; access is retained across launches.
+allow Porn Fetch to use it. On Android 10+, you can instead select **Use shared
+Downloads/Porn Fetch**, which saves through Android's MediaStore without a picker
+or broad storage permission. This also works on TV and Automotive images whose
+file picker only displays a "not supported" message. Shared files remain after
+uninstalling Porn Fetch. Cancelling the picker returns to setup so you can try
+again or use that alternative. An existing destination skips this step; the
+choice is retained across launches.
 Completed videos are copied there automatically. Change the folder in Settings → Video.
+The MediaStore fallback needs a new APK containing `PornFetchStorage.java`; a
+Python-only update to an older APK cannot add the native helper. Android 9 still
+requires a working document-tree picker.
 Android has no persistent download history or statistics. Notifications do not
 keep downloads running after Android stops the app.
 
@@ -26,6 +34,11 @@ real device. The interface is English-only.
 
 Use Linux and a separate Python 3.15 environment. Install Git, a C/C++ compiler,
 make, CMake, Ninja, zip/unzip, autoconf, automake, libtool, pkg-config and JDK 21.
+Install Apache Ant as well: `sudo pacman -S --needed apache-ant` on Arch Linux,
+or `sudo apt-get install ant` on Debian/Ubuntu. The wrapper finds its installation
+through `ANT_HOME`, the resolved `ant` executable on `PATH`, or a valid configured
+`android.ant_path`. It reports a missing installation before building, rather
+than downloading Buildozer's legacy Ant archive or writing into `/usr/share`.
 The working toolchain uses SDK Platform 36, Build Tools 36.0.0 and
 **NDK r28c (28.2.13676358)**. The minimum Android version is API 28.
 See the [companion setup guide](https://github.com/EchterAlsFake/PySide6-to-Android#environment-setup-sdkndk)
@@ -57,7 +70,9 @@ uv pip install --python "$VIRTUAL_ENV/bin/python" 'PySide6==6.12.0' 'Cython==3.3
   'buildozer @ git+https://github.com/kivy/buildozer.git@fe2a18cfedd28d45329d47eae8545c81c6e8fe9a'
 ```
 
-Buildozer's pinned commit supports Cython 3; the older release requires Cython 2.
+Buildozer's pinned commit supports Cython 3; release 1.6.0 requires Cython <3.
+The wrapper installs that same pinned commit into the selected build environment
+when it is missing or different, preventing the local Cython dependency conflict.
 These host tools must match the selected target wheels. Do not install desktop
 wheels into the Android app.
 

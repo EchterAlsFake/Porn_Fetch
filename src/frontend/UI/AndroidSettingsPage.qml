@@ -238,6 +238,7 @@ Pane {
     readonly property string currentOutputFolderName: {
         var folder = appSettings.android_output_folder
         if (!folder || folder.trim() === "") return qsTr("App storage")
+        if (folder === "mediastore:Download/Porn Fetch") return qsTr("Downloads/Porn Fetch")
         var decoded = decodeURIComponent(folder).replace(/\/+$/, "")
         if (decoded.indexOf("/storage/emulated/0/") !== -1) {
             return decoded.substring(decoded.indexOf("/storage/emulated/0/") + 20)

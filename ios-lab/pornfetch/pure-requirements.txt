@@ -1,6 +1,6 @@
 cachetools==7.2.6
 certifi==2026.10.23
-eaf-base-api==4.2.5
+eaf-base-api==4.2.6
 json5==0.17.3
 m3u8==6.0.0
 markdown-it-py==4.2.0
@@ -22,6 +22,7 @@ tzdata==2026.5
 unofficial-api-for-beeg==1.7.4
 unofficial-api-for-empflix==1.0.1
 unofficial-api-for-eporner==2.5.3
+unofficial-api-for-porndoe==1.0.0
 unofficial-api-for-pornhub==5.4.6
 unofficial-api-for-porntrex==1.8.3
 unofficial-api-for-redtube==1.4.4

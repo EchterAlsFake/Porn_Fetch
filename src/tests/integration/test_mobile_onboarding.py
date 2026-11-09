@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from PySide6.QtCore import QMetaObject, QObject, QSettings, QUrl, Slot
+from PySide6.QtCore import Property, QMetaObject, QObject, QSettings, QUrl, Slot
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtTest import QTest
 
@@ -15,10 +15,18 @@ UI = Path(__file__).resolve().parents[2] / "frontend/UI"
 
 
 class FolderBackend(QObject):
+    android_shared_downloads_available = Property(bool, lambda self: self.shared_downloads, constant=True)
+
     def __init__(self, settings):
         super().__init__()
         self.settings = settings
         self.selections = []
+        self.shared_downloads = False
+
+    @Slot()
+    def use_android_shared_downloads(self):
+        if self.shared_downloads:
+            self.settings.android_output_folder = "mediastore:Download/Porn Fetch"
 
     @Slot(str)
     def set_android_output_folder(self, folder):

@@ -28,7 +28,7 @@ def safe_extractall(zip_ref: zipfile.ZipFile, target_path: Path) -> None:
 
 class PySideRecipe(PythonRecipe):
     version = '6.12.0'
-    wheel_path = '/home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.12.0-6.12.0-cp315-cp315-android_aarch64.whl'
+    wheel_path = '/home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.12.0-6.12.0-cp315-cp315-android_x86_64.whl'
     depends = ["shiboken6"]
     call_hostpython_via_targetpython = False
     install_in_hostpython = False
@@ -66,6 +66,20 @@ class PySideRecipe(PythonRecipe):
             shutil.copyfile(plugin_path,
                             (Path(self.ctx.get_libs_dir(arch.arch)) /
                              f"libplugins_platforms_qtforandroid_{arch.arch}.so"))
+          # noqa: E999
+        plugin_path = (lib_dir.parent / "plugins" / "imageformats" /
+                      f"libplugins_imageformats_qsvg_{arch.arch}.so")
+        if plugin_path.exists():
+            shutil.copyfile(plugin_path,
+                            (Path(self.ctx.get_libs_dir(arch.arch)) /
+                             f"libplugins_imageformats_qsvg_{arch.arch}.so"))
+          # noqa: E999
+        plugin_path = (lib_dir.parent / "plugins" / "iconengines" /
+                      f"libplugins_iconengines_qsvgicon_{arch.arch}.so")
+        if plugin_path.exists():
+            shutil.copyfile(plugin_path,
+                            (Path(self.ctx.get_libs_dir(arch.arch)) /
+                             f"libplugins_iconengines_qsvgicon_{arch.arch}.so"))
           # noqa: E999
 
 

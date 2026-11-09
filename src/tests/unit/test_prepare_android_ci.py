@@ -6,6 +6,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.build_android import update_buildozer_spec, update_pysidedeploy_spec
 
@@ -25,7 +26,8 @@ class AndroidCIPreparationTests(unittest.TestCase):
             original.read(project / "buildozer.spec")
             venv = project.parent / "external-venv"
             prepare(project, venv, "3.9.77")
-            update_buildozer_spec(project / "buildozer.spec", "x86", project / "sdk", project / "ndk", project)
+            with patch("scripts.build_android.find_apache_ant", return_value=Path("/host/ant")):
+                update_buildozer_spec(project / "buildozer.spec", "x86", project / "sdk", project / "ndk", project)
             update_pysidedeploy_spec(project / "pysidedeploy.spec", project / "pyside.whl",
                                     project / "shiboken.whl", project / "sdk", project / "ndk", project)
             build = configparser.ConfigParser(interpolation=None)
@@ -37,7 +39,7 @@ class AndroidCIPreparationTests(unittest.TestCase):
             self.assertEqual(build["app"]["version"], "3.9.77")
             self.assertEqual(build["app"]["android.archs"], "x86")
             self.assertEqual(build["app"]["android.api"], "36")
-            self.assertEqual(build["app"]["android.ant_path"], "/usr/share/ant")
+            self.assertEqual(build["app"]["android.ant_path"], "/host/ant")
             self.assertNotIn("android.add_jars", build["app"])
             self.assertEqual(build["buildozer"]["bin_dir"], str(project))
             self.assertNotIn("/home/asuna/", str(dict(build["app"])))

@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 ProgressCallback = Callable[..., None]
 KNOWN_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
-RAW_VIDEO_MODULES = frozenset({"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api"})
+RAW_VIDEO_MODULES = frozenset({"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api", "porndoe_api"})
 
 
 class DownloadState(StrEnum):

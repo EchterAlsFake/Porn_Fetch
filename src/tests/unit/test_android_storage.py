@@ -1,14 +1,17 @@
 """Offline storage regressions; device SAF permissions still need an Android smoke test."""
+import asyncio
+import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from PySide6.QtCore import QUrl
 
 from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity, prepare_native_libraries
-from src.backend.android_storage import copy_download_file, folder_destination
+from src.backend.android_storage import copy_download_file, folder_destination, save_shared_download
 
 ACTIVITY = '''public class PythonActivity extends QtActivity {
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
@@ -69,6 +72,10 @@ class AndroidActivityTests(unittest.TestCase):
             before_apk_assemble(SimpleNamespace(_dist=SimpleNamespace(dist_dir=directory)))
             self.assertIn('PornFetchDisplay.install(this);', activity.read_text())
             self.assertTrue((activity.parent / 'PornFetchDisplay.java').exists())
+            self.assertTrue((activity.parent / 'PornFetchStorage.java').exists())
+            self.assertIn('PornFetchStorage.install(this);', activity.read_text())
+            self.assertLess(activity.read_text().index('PornFetchStorage.install(this);'),
+                            activity.read_text().index('super.onCreate(savedInstanceState);'))
             first = activity.read_text()
             before_apk_assemble(SimpleNamespace(_dist=SimpleNamespace(dist_dir=directory)))
             self.assertEqual(activity.read_text(), first)
@@ -110,3 +117,32 @@ class StorageCopyTests(unittest.TestCase):
                 with self.assertRaisesRegex(OSError, 'write failed'):
                     copy_download_file(source, 'content://provider/document/1')
                 target.close.assert_called_once()
+
+
+class SharedDownloadsTests(unittest.IsolatedAsyncioTestCase):
+    async def test_native_result_is_awaited_and_export_errors_propagate(self):
+        for result in ({"ok": True, "uri": "content://media/external_primary/downloads/7"},
+                       {"ok": False, "error": "Storage unavailable"}):
+            with self.subTest(result=result), tempfile.TemporaryDirectory() as directory:
+                private = Path(directory)
+                (private / "storage-capabilities.json").write_text('{"sharedDownloads": true}')
+                source = private / "video.mp4"
+                source.write_bytes(b"completed download")
+                watcher = Mock()
+                with patch.dict(os.environ, {"ANDROID_PRIVATE": directory}), \
+                     patch("src.backend.android_storage.QFileSystemWatcher", return_value=watcher):
+                    task = asyncio.create_task(save_shared_download(source, True))
+                    await asyncio.sleep(0)
+                    request, = (private / "storage-requests").glob("*.request.json")
+                    self.assertEqual(json.loads(request.read_text()), {"source": str(source), "skipExisting": True})
+                    response = request.with_name(request.name.replace('.request.json', '.result.json'))
+                    response.write_text(json.dumps(result))
+                    watcher.directoryChanged.connect.call_args.args[0]()
+                    if result['ok']:
+                        self.assertEqual(await task, result['uri'])
+                    else:
+                        with self.assertRaisesRegex(OSError, 'Storage unavailable'):
+                            await task
+                    self.assertFalse(request.exists())
+                    self.assertFalse(response.exists())
+                    self.assertEqual(source.read_bytes(), b"completed download")

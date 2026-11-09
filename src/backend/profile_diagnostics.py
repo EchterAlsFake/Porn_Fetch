@@ -121,7 +121,9 @@ async def verify_stream(source, quality: str | int) -> dict:
     from src.backend import clients
 
     master = clients._safe_getattr(source, "m3u8_base_url")
-    if isinstance(source, clients.yp_Video) and source.is_hls is False:
+    if isinstance(source, clients.pd_Video):
+        url = await clients.get_direct_url_legacy(source, quality)
+    elif isinstance(source, clients.yp_Video) and source.is_hls is False:
         url = master  # This provider stores its MP4 fallback in the same field.
     elif master:
         segments = await source.core.get_segments(master, quality)

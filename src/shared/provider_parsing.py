@@ -139,7 +139,7 @@ def parse_length(
 
     seconds_sources = {
         "pornhub", "phub", "eporner", "xhamster", "spankbang", "youporn", "beeg",
-        "redtube", "tube8", "thumbzilla", "xfreehd", "empflix", "tnaflix",
+        "redtube", "tube8", "thumbzilla", "xfreehd", "empflix", "tnaflix", "porndoe",
     }
     source = (video_source or "").casefold()
 

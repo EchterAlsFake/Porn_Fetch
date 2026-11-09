@@ -9,7 +9,7 @@ icon = src/frontend/graphics/logo.png
 [python]
 python_path =
 packages =
-# CI installs the pinned upstream Buildozer with Cython 3 support; preserve it.
+# The wrapper/CI installs upstream Buildozer with Cython 3 support; preserve it.
 android_packages = buildozer,cython==3.3.0
 
 [qt]

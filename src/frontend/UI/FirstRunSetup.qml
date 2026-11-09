@@ -12,6 +12,7 @@ Dialog {
     required property string reportDisclosure
     property bool fullScreen: false
     property bool requireOutputFolder: Qt.platform.os === "android"
+    readonly property bool sharedDownloadsAvailable: requireOutputFolder && backend.android_shared_downloads_available === true
     property var steps: []
     property int currentIndex: 0
     property int reportingChoice: -1
@@ -64,10 +65,93 @@ Dialog {
     function resetScroll() {
         Qt.callLater(function() {
             pageScroll.contentItem.contentY = 0
-            pageScroll.forceActiveFocus(Qt.TabFocusReason)
+            readerFocus.forceActiveFocus(Qt.TabFocusReason)
         })
     }
+
+    // Keep the remote inside this modal, skipping unavailable choices. Moving
+    // focus across reporting options must never select one implicitly.
+    function navigationItems() {
+        var items = [discoveryButton, pageScroll, buyLicenseButton,
+            reportsOff, reportsBasic, reportsFull, disclosureToggle,
+            chooseFolderButton, sharedDownloadsButton, acceptLicense, backButton, continueButton]
+        return items.filter(function(item) { return item.visible && item.enabled })
+    }
+
+    function moveFocus(item, direction) {
+        var items = navigationItems()
+        var index = items.indexOf(item)
+        var target = items[(index + direction + items.length) % items.length]
+        // ScrollView is a focus scope and otherwise restores its last child,
+        // which can now belong to a hidden setup step.
+        if (target === pageScroll) readerFocus.forceActiveFocus(Qt.TabFocusReason)
+        else target.forceActiveFocus(Qt.TabFocusReason)
+    }
+
+    function revealControl(item) {
+        if (!item.activeFocus) return
+        Qt.callLater(function() {
+            var flick = pageScroll.contentItem
+            var ancestor = item.parent
+            while (ancestor && ancestor !== flick.contentItem) ancestor = ancestor.parent
+            if (!item.activeFocus || !ancestor) return
+            var y = item.mapToItem(flick.contentItem, 0, 0).y
+            var target = flick.contentY
+            if (y < target) target = y
+            else if (y + item.height > target + flick.height) target = y + item.height - flick.height
+            flick.contentY = Math.max(0, Math.min(target, flick.contentHeight - flick.height))
+        })
+    }
+
+    function scrollPage(amount) {
+        var flick = pageScroll.contentItem
+        var target = Math.max(0, Math.min(flick.contentY + amount, flick.contentHeight - flick.height))
+        if (Math.abs(target - flick.contentY) < 1) return false
+        flick.contentY = target
+        return true
+    }
+
+    function activationKey(key) {
+        // Qt maps Android DPAD_CENTER to Enter; a hardware Enter is Return.
+        return key === Qt.Key_Enter || key === Qt.Key_Return || key === Qt.Key_Select || key === Qt.Key_Space
+    }
+
+    function navigationPressed(event, item) {
+        if (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier)) return
+        if (activationKey(event.key) || event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            event.accepted = true // Activate on release, ignoring held-key repeats.
+        } else if (event.key === Qt.Key_Up || event.key === Qt.Key_Down) {
+            var direction = event.key === Qt.Key_Up ? -1 : 1
+            if (item !== pageScroll || !scrollPage(direction * 72 * textScale)) moveFocus(item, direction)
+            event.accepted = true
+        } else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right
+                   || event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab) {
+            var backwards = event.key === Qt.Key_Left || event.key === Qt.Key_Backtab
+                || (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier))
+            moveFocus(item, backwards ? -1 : 1)
+            event.accepted = true
+        } else if (item === pageScroll && (event.key === Qt.Key_PageUp || event.key === Qt.Key_PageDown)) {
+            scrollPage((event.key === Qt.Key_PageUp ? -1 : 1) * pageScroll.height * 0.85)
+            event.accepted = true
+        }
+    }
+
+    function navigationReleased(event, item) {
+        if (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier)) return
+        if (activationKey(event.key)) {
+            event.accepted = true
+            if (event.isAutoRepeat) return
+            if (item === pageScroll) moveFocus(item, 1)
+            else item.click()
+        } else if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+            event.accepted = true
+            if (event.isAutoRepeat) return
+            if (currentIndex) currentIndex -= 1
+            else backButton.forceActiveFocus(Qt.TabFocusReason)
+        }
+    }
     onCurrentIndexChanged: resetScroll()
+    onAboutToShow: resetScroll()
     onOpened: resetScroll()
     font.pointSize: settings.font_size
     Material.theme: settings.dark_mode ? Material.Dark : Material.Light
@@ -137,6 +221,8 @@ Dialog {
                 ToolTip.visible: hovered || activeFocus
                 ToolTip.text: qsTr("Curious?")
                 HoverHandler { cursorShape: Qt.PointingHandCursor }
+                Keys.onPressed: event => root.navigationPressed(event, discoveryButton)
+                Keys.onReleased: event => root.navigationReleased(event, discoveryButton)
                 contentItem: Label {
                     text: discoveryButton.text
                     color: Theme.accent
@@ -196,6 +282,15 @@ Dialog {
             Layout.fillHeight: true
             contentWidth: availableWidth
             clip: true
+            activeFocusOnTab: true
+            Keys.onPressed: event => root.navigationPressed(event, pageScroll)
+            Keys.onReleased: event => root.navigationReleased(event, pageScroll)
+            SetupFocusRing { control: pageScroll }
+            Item {
+                id: readerFocus
+                objectName: "setupTextReader"
+                parent: pageScroll
+            }
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
             ColumnLayout {
                 width: pageScroll.availableWidth
@@ -215,6 +310,9 @@ Dialog {
                         text: root.licenseText
                         textFormat: TextEdit.PlainText
                         readOnly: true
+                        activeFocusOnTab: false
+                        Keys.onPressed: event => root.navigationPressed(event, pageScroll)
+                        Keys.onReleased: event => root.navigationReleased(event, pageScroll)
                         selectByMouse: true
                         wrapMode: TextEdit.Wrap
                         color: Theme.ink
@@ -227,7 +325,8 @@ Dialog {
                     visible: root.step === "offer"
                     Layout.fillWidth: true
                 }
-                AppButton {
+                SetupButton {
+                    id: buyLicenseButton
                     objectName: "setupBuyLicenseButton"
                     visible: root.step === "offer"
                     Layout.fillWidth: true
@@ -253,6 +352,7 @@ Dialog {
                     }
                     ButtonGroup { id: reportOptions }
                     ReportOption {
+                        id: reportsOff
                         objectName: "setupReportsOff"
                         Layout.fillWidth: true
                         text: qsTr("Off: no error reports")
@@ -261,6 +361,7 @@ Dialog {
                         onClicked: root.reportingChoice = 0
                     }
                     ReportOption {
+                        id: reportsBasic
                         objectName: "setupReportsBasic"
                         Layout.fillWidth: true
                         text: qsTr("Basic reports")
@@ -275,6 +376,7 @@ Dialog {
                         wrapMode: Text.Wrap
                     }
                     ReportOption {
+                        id: reportsFull
                         objectName: "setupReportsFull"
                         Layout.fillWidth: true
                         text: qsTr("Full Python tracebacks and video URLs")
@@ -301,8 +403,9 @@ Dialog {
                         color: Theme.ink
                         wrapMode: Text.Wrap
                     }
-                    AppButton {
+                    SetupButton {
                         id: disclosureToggle
+                        objectName: "setupDisclosureToggle"
                         Layout.fillWidth: true
                         checkable: true
                         text: checked ? qsTr("Hide full reporting disclosure") : qsTr("How reports are sent, stored and deleted")
@@ -364,6 +467,13 @@ Dialog {
                         wrapMode: Text.Wrap
                     }
                     Label {
+                        visible: root.sharedDownloadsAvailable
+                        Layout.fillWidth: true
+                        text: qsTr("If this device does not support a folder picker, use shared Downloads/Porn Fetch instead. Completed files will be available to other apps and remain after uninstalling Porn Fetch.")
+                        color: Theme.muted
+                        wrapMode: Text.Wrap
+                    }
+                    Label {
                         objectName: "setupFolderStatus"
                         Layout.fillWidth: true
                         text: root.settings.android_output_folder
@@ -375,12 +485,21 @@ Dialog {
                 }
             }
         }
-        AppButton {
+        SetupButton {
+            id: chooseFolderButton
             objectName: "setupChooseFolderButton"
             visible: root.step === "folder"
             Layout.fillWidth: true
             text: root.settings.android_output_folder ? qsTr("Choose another folder") : qsTr("Choose output folder")
             onClicked: folderPicker.open()
+        }
+        SetupButton {
+            id: sharedDownloadsButton
+            objectName: "setupSharedDownloadsButton"
+            visible: root.step === "folder" && root.sharedDownloadsAvailable
+            Layout.fillWidth: true
+            text: qsTr("Use shared Downloads/Porn Fetch")
+            onClicked: backend.use_android_shared_downloads()
         }
         CheckBox {
             id: acceptLicense
@@ -388,6 +507,9 @@ Dialog {
             visible: root.step === "license"
             Layout.fillWidth: true
             text: qsTr("I have read and accept the Porn Fetch Source-Available License 1.0.")
+            Keys.onPressed: event => root.navigationPressed(event, acceptLicense)
+            Keys.onReleased: event => root.navigationReleased(event, acceptLicense)
+            SetupFocusRing { control: acceptLicense }
             contentItem: Label {
                 text: acceptLicense.text
                 leftPadding: acceptLicense.indicator.width + acceptLicense.spacing
@@ -398,8 +520,32 @@ Dialog {
         }
     }
 
+    component SetupFocusRing: Rectangle {
+        required property Item control
+        parent: control
+        anchors.fill: parent
+        z: 10
+        visible: control === pageScroll ? readerFocus.activeFocus || licenseBody.activeFocus : control.activeFocus
+        color: "transparent"
+        radius: 6
+        border.width: 3
+        border.color: Theme.accent
+    }
+
+    component SetupButton: AppButton {
+        id: control
+        Keys.onPressed: event => root.navigationPressed(event, control)
+        Keys.onReleased: event => root.navigationReleased(event, control)
+        onActiveFocusChanged: root.revealControl(control)
+        SetupFocusRing { control: control }
+    }
+
     component ReportOption: RadioButton {
         id: control
+        Keys.onPressed: event => root.navigationPressed(event, control)
+        Keys.onReleased: event => root.navigationReleased(event, control)
+        onActiveFocusChanged: root.revealControl(control)
+        SetupFocusRing { control: control }
         contentItem: Label {
             text: control.text
             font: control.font
@@ -415,6 +561,9 @@ Dialog {
         objectName: "setupFolderPicker"
         title: qsTr("Choose where to save videos")
         onAccepted: backend.set_android_output_folder(selectedFolder.toString())
+        onVisibleChanged: if (!visible && root.visible) Qt.callLater(function() {
+            chooseFolderButton.forceActiveFocus(Qt.TabFocusReason)
+        })
     }
 
     footer: ColumnLayout {
@@ -425,13 +574,15 @@ Dialog {
             Layout.rightMargin: root.rightPadding
             Layout.topMargin: 10
             Layout.bottomMargin: root.bottomPadding
-            AppButton {
+            SetupButton {
+                id: backButton
                 objectName: "setupBackButton"
                 text: root.currentIndex ? qsTr("Back") : root.step === "license" ? qsTr("Decline and exit") : qsTr("Exit setup")
                 onClicked: root.currentIndex ? root.currentIndex -= 1 : root.quitRequested()
             }
             Item { Layout.fillWidth: true }
-            AppButton {
+            SetupButton {
+                id: continueButton
                 objectName: "setupContinueButton"
                 text: root.currentIndex === root.steps.length - 1 ? qsTr("Finish setup")
                     : root.step === "offer" ? qsTr("Continue free") : qsTr("Continue")

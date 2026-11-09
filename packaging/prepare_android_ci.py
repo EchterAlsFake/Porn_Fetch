@@ -25,9 +25,8 @@ def prepare(project: Path, venv: Path, version: str) -> None:
         "scripts", "packaging", "demos", "p4a-recipes",
     ])))
     app["android.api"] = "36"
-    # CI installs Ubuntu's maintained Ant package. Bypass Buildozer's legacy
-    # Ant 1.9.4 download from archive.apache.org during platform setup.
-    app["android.ant_path"] = "/usr/share/ant"
+    # The build wrapper discovers the host's Ant installation. This preparation
+    # also runs locally, where Ubuntu's /usr/share/ant may not exist.
     app.pop("android.add_jars", None)
     buildozer["buildozer"]["bin_dir"] = str(project)
     with buildozer_path.open("w", encoding="utf-8") as destination:

@@ -15,13 +15,16 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from scripts.build_android import (
+    ANDROID_BUILDOZER_REQUIREMENT,
     ANDROID_NDK_REVISION,
     PATTERN_CAN_READ,
     build_single_arch,
     detect_arch_from_filename,
+    ensure_android_deploy_deps,
     ensure_host_patches,
     extract_qt_jars,
     find_android_ndk,
+    find_apache_ant,
     find_wheels_for_arch,
     main,
     normalize_arch,
@@ -330,7 +333,48 @@ class BuildozerConfig:
         verify_buildozer(patched)
 
 
+class TestAndroidHostDependencies(unittest.TestCase):
+    def test_ant_discovery_supports_home_and_arch_symlink(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ant_home = root / "share/java/apache-ant"
+            executable = ant_home / "bin/ant"
+            executable.parent.mkdir(parents=True)
+            executable.write_text("#!/bin/sh\n")
+            executable.chmod(0o755)
+            link = root / "ant"
+            link.symlink_to(executable)
+            with patch.dict(os.environ, {"ANT_HOME": str(ant_home)}), \
+                 patch("scripts.build_android.shutil.which", return_value=None):
+                self.assertEqual(find_apache_ant("/missing/ubuntu/ant"), ant_home)
+            with patch.dict(os.environ, {"ANT_HOME": ""}), \
+                 patch("scripts.build_android.shutil.which", return_value=str(link)):
+                self.assertEqual(find_apache_ant("/missing/ubuntu/ant"), ant_home)
+
+    def test_missing_ant_reports_installation_instead_of_system_write(self):
+        with patch.dict(os.environ, {"ANT_HOME": ""}), \
+             patch("scripts.build_android.shutil.which", return_value=None):
+            with self.assertRaisesRegex(ValueError, "pacman -S --needed apache-ant"):
+                find_apache_ant("/missing/ubuntu/ant")
+
+    def test_incompatible_buildozer_is_replaced_in_selected_venv(self):
+        results = [subprocess.CompletedProcess([], 0) for _ in range(3)]
+        results.append(subprocess.CompletedProcess([], 1))
+        with patch("scripts.build_android.subprocess.run", side_effect=results), \
+             patch("scripts.build_android.build_output.run") as install:
+            ensure_android_deploy_deps(Path("/external/android-venv"))
+        self.assertEqual(install.call_args.args[0], [
+            "uv", "pip", "install", "--python", "/external/android-venv/bin/python",
+            ANDROID_BUILDOZER_REQUIREMENT, "cython==3.3.0",
+        ])
+
+
 class TestAndroidBuildAutomation(unittest.TestCase):
+    def setUp(self):
+        ant = patch("scripts.build_android.find_apache_ant", return_value=Path("/host/ant"))
+        ant.start()
+        self.addCleanup(ant.stop)
+
     def test_custom_native_recipes_survive_deployment_cleanup(self):
         import logging
         import shutil
@@ -516,6 +560,7 @@ android.ndk_path = /old/ndk
             config.read(spec_path)
             self.assertEqual(config["app"]["android.ndk"], "28c")
             self.assertEqual(config["app"]["android.release_artifact"], "apk")
+            self.assertEqual(config["app"]["android.ant_path"], "/host/ant")
 
     def test_update_pysidedeploy_spec(self) -> None:
         """update_pysidedeploy_spec should update wheel paths and mode."""

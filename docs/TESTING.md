@@ -35,6 +35,46 @@ It launches from a read-only directory on Unix, with disposable logs. macOS CI
 also launches the packaged executable from `/` to catch working-directory writes.
 Native Android picker permissions and external-player access still need a device.
 
+The setup suite also sends real Qt key events through all five pages, including
+explicit reporting selection, text scrolling, focus visibility, Back/Escape,
+Tab/Shift+Tab, and restoring focus after folder-picker cancellation/selection.
+The picker result is simulated at the native-dialog boundary in these tests.
+For a TV build, start with fresh application settings and use only the remote:
+
+1. Use Up/Down to scroll each page's text. Right or center moves from the reader
+   to the next control; Left/Right and Up/Down move between controls.
+2. Use center to check license acceptance, continue free, explicitly choose a
+   reporting option, expand its disclosure, and acknowledge the message. Verify
+   the focus outline stays visible and arrows alone do not select reporting.
+3. Use Back to revisit a page, then return. On the first page Back focuses the
+   exit button; exiting still requires center.
+4. Open the folder picker, cancel with Back, and reopen it with center. Select
+   a writable shared folder and finish setup. Restart to verify completion and
+   retained storage permission.
+
+Some Android TV images have no usable document-tree picker. On the Android 16
+TV emulator checked on 2026-11-09, the following resolves to
+`com.android.tv.frameworkpackagestubs/.Stubs$DocumentsStub`:
+
+```sh
+adb shell cmd package resolve-activity --brief -a android.intent.action.OPEN_DOCUMENT_TREE
+```
+
+That stub cannot supply a folder. Install a compatible document-tree picker or
+use an image/device that supplies one to test custom folder selection. To finish
+setup without a picker on Android 10+, select **Use shared Downloads/Porn Fetch**
+with the D-pad, then Finish setup. Verify a completed file appears in shared
+Downloads/Porn Fetch, can be read by another app, and survives restarting Porn
+Fetch. Test skip-existing as well. No broad storage permission is needed. Native
+export errors must keep the original private download and report failure rather
+than announce completion. The setup suite covers the alternative choice; the
+storage and queue tests cover asynchronous results and routing to the helper.
+The native helper was separately validated with synthetic bytes in an isolated
+APK on TV API 36 and Automotive API 33 on 2026-11-09; a rebuilt Porn Fetch APK
+still needs an integrated device check. Private app storage remains insufficient
+as the final destination. The rest of the application still needs separate TV
+navigation work.
+
 The helper asks before accessing websites, browser sessions or real media.
 Ordinary unit and integration discovery must stay offline.
 
@@ -89,6 +129,9 @@ Examples:
 
 ```sh
 uv run --no-sync python -m src.tests.smoke.download_gui --list
+uv run --no-sync python -m src.tests.smoke.profile_urls --filter porndoe --items 2
+uv run --no-sync python -m src.tests.smoke.download_lifecycle --provider porndoe --scenario pause-resume
+uv run --no-sync python -m src.tests.smoke.download_gui --provider porndoe --scenario pause-resume
 uv run --no-sync python -m src.tests.smoke.download_gui --provider eporner --scenario pause-resume
 uv run --no-sync python -m src.tests.smoke.collections_gui --provider xvideos --kind playlist
 uv run --no-sync python -m src.tests.smoke.application_recovery --offline-only

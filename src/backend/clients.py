@@ -27,6 +27,7 @@ Current APIs:
 13) porntrex      -> https://porntrex.com (pt_client, pt_video)
 14) empflix       -> https://empflix.com (ef_client, ef_video)
 15) tnaflix       -> https://tnaflix.com (tf_client, tf_video)
+16) porndoe       -> https://porndoe.com (pd_client, pd_video)
 """
 
 import os
@@ -61,6 +62,7 @@ from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from empflix_api import Client as ef_Client, Video as ef_Video
 from tnaflix_api import Client as tf_Client, Video as tf_Video
+from porndoe_api import Client as pd_Client, Video as pd_Video
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
 from src.shared.provider_routing import HOST_PATTERNS, ContentKind, eporner_video_id, resolve_video, route_url
@@ -81,7 +83,7 @@ AllowedVideoType: TypeAlias = (
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    xf_Video | ep_Video | pt_Video | ef_Video | tf_Video
+    xf_Video | ep_Video | pt_Video | ef_Video | tf_Video | pd_Video
     # Those are all non HLS streams for now
 )
 
@@ -189,6 +191,7 @@ core_th = MediaCore(configuration=config, settings=app_settings)
 core_tu = MediaCore(configuration=config, settings=app_settings)
 core_ef = MediaCore(configuration=config, settings=app_settings)
 core_tf = MediaCore(configuration=config, settings=app_settings)
+core_pd = MediaCore(configuration=config, settings=app_settings)
 
 ep_client = ep_Client(core=core_ep)
 xv_client = xv_Client(core=core_xv)
@@ -205,14 +208,15 @@ th_client = th_Client(core=core_th)
 tu_client = tu_Client(core=core_tu)
 ef_client = ef_Client(core=core_ef)
 tf_client = tf_Client(core=core_tf)
+pd_client = pd_Client(core=core_pd)
 
 cores = [
     core_ep, core_ph, core_xv, core_xh, core_xn, core_sp, core_yp, core_bg, core_pt, core_xf, core_rt, core_th,
-    core_tu, core_ef, core_tf,
+    core_tu, core_ef, core_tf, core_pd,
 ]
 
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-           rt_Video, th_Video, tu_Video, ef_Video, tf_Video, ph_Short, xh_Short]
+           rt_Video, th_Video, tu_Video, ef_Video, tf_Video, pd_Video, ph_Short, xh_Short]
 
 logger.debug("Successfully initialized all clients and!")
 
@@ -277,17 +281,18 @@ def refresh_clients() -> None:
     core_th.enable_logging(level=level, log_file=log_file_path("BaseCore_TH.log") if debug_mode else None)
     core_ef.enable_logging(level=level, log_file=log_file_path("BaseCore_EF.log") if debug_mode else None)
     core_tf.enable_logging(level=level, log_file=log_file_path("BaseCore_TF.log") if debug_mode else None)
+    core_pd.enable_logging(level=level, log_file=log_file_path("BaseCore_PD.log") if debug_mode else None)
 
     cores_to_update = {
         core, core_ep, core_ph, core_xv, core_xh, core_xn, core_sp,
         core_yp, core_bg, core_pt, core_xf, core_rt, core_th, core_tu,
-        core_ef, core_tf
+        core_ef, core_tf, core_pd
     }
 
     clients_list = [
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
-        ef_client, tf_client
+        ef_client, tf_client, pd_client
     ]
 
     for client in clients_list:
@@ -363,7 +368,7 @@ async def close_all_clients() -> None:
     for client in (
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
-        ef_client, tf_client,
+        ef_client, tf_client, pd_client,
     ):
         unique_cores.add(client.core)
     await asyncio.gather(*(item.close() for item in unique_cores), return_exceptions=True)
@@ -413,6 +418,7 @@ def client_for(provider: str) -> Any:
         "youporn": yp_client, "beeg": bg_client, "porntrex": pt_client,
         "xfreehd": xf_client, "redtube": rt_client, "thumbzilla": th_client,
         "tube8": tu_client, "empflix": ef_client, "tnaflix": tf_client,
+        "porndoe": pd_client,
     }[provider]
 
 
@@ -570,6 +576,15 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         video_id = video.video_id
         publish_date = video.publish_date
 
+    elif isinstance(video, pd_Video):
+        video_source = "porndoe"
+        author = video.author_name or "N/A"
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail_url
+        publish_date = video.publish_date
+        video_id = video.video_id
+
     elif isinstance(video, (ef_Video, tf_Video)):
         video_source = "empflix" if isinstance(video, ef_Video) else "tnaflix"
         author = video.author_name or "N/A"
@@ -657,7 +672,7 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
         await video.load_fields("parsed_urls")
         return video.get_url_by_quality(quality=quality, mode="h264")
 
-    elif isinstance(video, (ef_Video, tf_Video)):
+    elif isinstance(video, (ef_Video, tf_Video, pd_Video)):
         await video.load_fields("video_qualities", "direct_download_urls")
         qn = normalize_quality_value(quality)
         available = video.video_qualities or []
@@ -677,6 +692,12 @@ async def get_available_qualities(video: Any) -> List[int]:
     if isinstance(video, yp_Video) and video.is_hls is False:
         # This provider exposes only its selected fallback MP4 URL in this case.
         return []
+
+    if isinstance(video, pd_Video):
+        # The app downloads this provider's progressive MP4 sources. HLS
+        # variants, when present, can offer a different set of resolutions.
+        await video.load_fields("video_qualities")
+        return sorted({normalize_quality(q) for q in video.video_qualities or []})
 
     # ---- HLS (m3u8) ----
     m3u8_url = getattr(video, "m3u8_base_url", None)

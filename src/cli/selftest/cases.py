@@ -16,6 +16,7 @@ SINGLE_VIDEO_TESTS = [
     ("Porntrex", "https://www.porntrex.com/video/3140379/nikky-dandeli-she-really-loves-to-ride-a-dick-with-her-huge-ass-light-footjob-and-cum-on-feet"),
     ("EMPFlix", "https://www.empflix.com/amateur-porn/ryan-reid-seduces-hot-couple-kylie-rocket-and-mick-in-bnb-threesome/video3728878"),
     ("TNAFlix", "https://www.tnaflix.com/amateur-porn/You%27re-The-Boss-%28full-movie%29/video11751954"),
+    ("Porndoe", "https://porndoe.com/watch/pd4y7n5e2j8r"),
 ]
 
 SHORTS_TESTS = [
@@ -44,6 +45,8 @@ PROFILE_TESTS = [
     ("Porntrex Model", "https://www.porntrex.com/models/rose/"),
     ("EMPFlix Profile", "https://www.empflix.com/profile/dani-daniels"),
     ("TNAFlix Channel", "https://www.tnaflix.com/channel/team-skeet"),
+    ("Porndoe Pornstar", "https://porndoe.com/pornstars-profile/eva-elfie"),
+    ("Porndoe Channel", "https://porndoe.com/channel-profile/blacked-raw"),
 ]
 
 ACTIVE_DOWNLOAD_URL = "https://www.pornhub.com/shorties/6a346596ea4ff"

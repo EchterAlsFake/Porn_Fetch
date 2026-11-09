@@ -23,6 +23,13 @@ Read [the developer guide](docs/FOR_DEVELOPERS.md) for the source map.
   lifecycle tests. Forced-kill/power-loss recovery is outside the requested scope.
   The user will verify GUI/CLI updates using a GitHub build.
 - Preserve existing user work. Keep runtime files, caches and build output out of Git.
+- All new or changed GUI features must support keyboard-only use, including
+  Android TV / Google TV remotes. Provide a visible focus indicator, a predictable
+  arrow/D-pad and Tab focus path, Enter/Return/remote-center activation, and Back
+  or Escape navigation. Keep focused controls visible in scrollable content and
+  restore focus after page changes and dialogs. Preserve mouse/touch input; use
+  native input-method integration for editable fields. Do this as part of UI work
+  without waiting for a separate accessibility or TV-support request.
 - The user specifically reviewed retained application code and translations and
   confirmed that earlier contributions needing additional relicensing permission
   were removed. Treat that ownership review as established for this release;
@@ -49,12 +56,33 @@ acceptance, offer/message acknowledgements, reporting choice and Android folder
 survive preference resets and updates; deleting application settings removes them.
 Licensing, history and startup update requests wait until setup finishes.
 The shared surface scrolls on small screens and respects mobile safe areas.
+Setup supports keyboard and TV D-pad navigation: Up/Down scroll the focused text
+reader, Left/Right or Tab move between available controls, and center/Enter/Space
+activates them. Back/Escape returns to the previous step; on the first step it
+focuses the exit action without quitting. Reporting options require explicit
+activation. Each step resets reader focus, and closing the folder picker restores
+the folder button. The remaining main interface is not yet fully TV navigable.
+On Android 10+, setup also offers an explicit shared Downloads/Porn Fetch choice
+through MediaStore. This completes storage setup on TV/Automotive devices whose
+document-tree intent resolves to a framework stub. The saved destination is
+`mediastore:Download/Porn Fetch`, not a filesystem or document-tree URL. Exports
+use the native `PornFetchStorage` helper and asynchronous private-file requests;
+pending items stay hidden until copied, failures remove incomplete items, and
+skip-existing queries only this app's published rows. Files remain in shared
+storage after uninstall. This needs a rebuilt APK containing the activity hook,
+not just updated Python/QML. API 28 still needs the normal folder picker.
+On 2026-11-09, an isolated native test APK verified copied bytes, publication,
+skip-existing and missing-source errors on the connected TV API 36 and Automotive
+API 33 emulators. This validates the helper, not full Porn Fetch APK integration
+or media playback. The installed Porn Fetch apps and their setup choices were
+preserved.
 A small sparkle button in the upper-right corner of the Ukraine setup step
 opens the music-video Easter egg only when clicked. Its tooltip says "Curious?"
 without revealing the destination. The flag is decorative.
-Android requires a shared output folder: private app files are inaccessible to
-ordinary players/file managers. The system picker retains access for future
-launches. Cancelling keeps setup open. Android packaging must include QtSvg and
+Android requires a shared output destination: private app files are inaccessible
+to ordinary players/file managers. The system picker retains access for future
+launches; MediaStore needs no picker or broad storage permission. Cancelling
+keeps setup open. Android packaging must include QtSvg and
 its image and icon plugins for the bundled SVG artwork.
 Android requirements must include PyJWT: licensing imports `jwt` during startup.
 The APK checker inspects `libpybundle.so` for that package as well as checking
@@ -287,8 +315,13 @@ has no Nuitka percentage information; retain the silent-stage heartbeat.
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
 Android uses Qt/PySide 6.12.0 cp315 wheels, target Python 3.15.2 and NDK r28c.
-Android CI installs Ubuntu's Ant package and sets `android.ant_path` to
-`/usr/share/ant`, avoiding Buildozer's legacy Ant 1.9.4 archive download.
+Android builds require installed Apache Ant. The wrapper discovers its home via
+`ANT_HOME`, the resolved `ant` executable, or a valid configured `android.ant_path`;
+do not hard-code Ubuntu's `/usr/share/ant` for local builds. Missing Ant fails before
+host patches or compilation, avoiding Buildozer's legacy Ant 1.9.4 download.
+CI installs Ubuntu's `ant`; Arch uses `apache-ant`. The wrapper also ensures the
+same pinned upstream Buildozer revision as CI, which supports Cython 3.3.0;
+released Buildozer 1.6.0 requires Cython <3 and conflicts with that toolchain.
 The wrapper regenerates machine paths and patches Qt's preload library names
 for Android 13. All four Python 3.15 CI targets built on 2026-11-03; physical
 device startup of those artifacts was not established by that build result.
@@ -324,6 +357,27 @@ persists Nuitka dependency/compiler caches by build environment; ARM64 Windows
 jobs reuse vcpkg's ABI-validated OpenSSL packages. Windows FFmpeg caches keep the
 unsigned executable with complete legal/source files separately from signing
 staging, and verify hashes, LGPL configuration/license and remuxing before reuse.
+
+## Porndoe integration
+
+Porndoe uses the published `unofficial-api-for-porndoe>=1.0.0` package in GUI,
+CLI and mobile dependency inputs. Support is limited to `/watch/<id>` videos,
+`/pornstars-profile/<slug>` pornstars and `/channel-profile/<slug>` channels,
+including localized hosts. Profiles use the existing Model URL and CLI profile
+flows. There are no Porndoe models, playlists, search, directories, categories
+or related-video controls in Porn Fetch.
+
+Both adapters select playable MP4 qualities and use RAW downloads. Duration is
+reported by the provider in seconds and converted to the app's rounded minutes.
+The provider core participates in settings/session refresh and shutdown. Live
+checks verified two GUI rows from each profile type, MP4 URL resolution, and
+CLI plus desktop stop/resume with retained bytes and FFmpeg-readable output.
+CLI feed preparation also passed for both profile types and a localized German
+pornstar URL with sort/query parameters.
+The working environment needed its old base-api 4.2.2 upgraded to the existing
+project requirement, 4.2.6, for persisted RAW checkpoints. These checks used the
+existing Python 3.14 environment; release requirements remain Python 3.15.
+Native mobile packages were not rebuilt for this integration.
 
 ## Testing and documentation
 

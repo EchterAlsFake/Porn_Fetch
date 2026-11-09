@@ -53,6 +53,9 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
 
 
 async def available_qualities(video: Any) -> list[int]:
+    if type(video).__module__.split(".", 1)[0] == "porndoe_api":
+        await video.load_fields("video_qualities")
+        return sorted({int(item) for item in video.video_qualities or []})
     if _value(video, "is_hls") is False:
         # The YouPorn API exposes one preselected MP4, with no quality variants.
         # Do not send a direct MP4 URL to the HLS manifest parser.

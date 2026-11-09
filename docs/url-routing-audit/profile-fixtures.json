@@ -11,26 +11,26 @@
     "2xx": "HTTP availability only; still verify identity and bounded item preparation in the app."
   },
   "counts": {
-    "total": 89,
-    "primary": 33,
+    "total": 91,
+    "primary": 35,
     "tiers": {
-      "primary": 33,
+      "primary": 35,
       "variant": 49,
       "replacement": 6,
       "diagnostic": 1
     },
     "primary_status_codes": {
-      "200": 30,
+      "200": 32,
       "403": 3
     },
     "all_status_codes": {
-      "200": 76,
+      "200": 78,
       "403": 8,
       "404": 4,
       "0": 1
     },
     "dispositions": {
-      "http_available": 72,
+      "http_available": 74,
       "access_restricted": 8,
       "unavailable_candidate": 4,
       "unsupported_resource": 1,
@@ -5653,6 +5653,128 @@
           }
         ],
         "metadata_requests": 4
+      }
+    },
+    {
+      "id": "porndoe.pornstar",
+      "provider": "porndoe",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://porndoe.com/pornstars-profile/eva-elfie",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-porndoe",
+          "path": "tests/test_live.py",
+          "function": "test_profile_metadata_and_videos",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "Verified through live GUI preparation with two rows and progressive MP4 stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porndoe",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_pornstar",
+      "http": {
+        "checked_at_utc": "2026-11-09T14:24:15.279805+00:00",
+        "method": "GET",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://porndoe.com/pornstars-profile/eva-elfie",
+        "redirects": 0,
+        "canonical_url": "https://porndoe.com/pornstars-profile/eva-elfie",
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "porndoe",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T14:24:14.543725+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Eva Elfie",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 7
+      }
+    },
+    {
+      "id": "porndoe.channel",
+      "provider": "porndoe",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://porndoe.com/channel-profile/blacked-raw",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-porndoe",
+          "path": "tests/test_live.py",
+          "function": "test_profile_metadata_and_videos",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified through live GUI preparation with two rows and progressive MP4 stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porndoe",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-09T14:24:15.733250+00:00",
+        "method": "GET",
+        "curl_exit": 0,
+        "status": 200,
+        "final_url": "https://porndoe.com/channel-profile/blacked-raw",
+        "redirects": 0,
+        "canonical_url": "https://porndoe.com/channel-profile/blacked-raw",
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "porndoe",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T14:24:14.543725+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "BLACKED RAW",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "direct",
+            "url_resolved": true
+          },
+          {
+            "kind": "direct",
+            "url_resolved": true
+          }
+        ],
+        "metadata_requests": 7
       }
     }
   ],

@@ -306,6 +306,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Downloads/Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+11"/>
         <source>Selected folder</source>
         <translation type="unfinished"></translation>
@@ -897,12 +902,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+463"/>
+        <location line="+464"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-462"/>
+        <location line="-463"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -922,7 +927,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Selected folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -993,7 +998,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-97"/>
+        <location line="-230"/>
+        <source>Downloads/Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+133"/>
         <source>Restart Porn Fetch to apply your changed settings.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1824,7 +1834,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+837"/>
+        <location filename="../../../backend/application.py" line="+859"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1844,7 +1854,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-700"/>
+        <location line="-720"/>
         <location line="+200"/>
         <location line="+9"/>
         <location line="+32"/>
@@ -1888,17 +1898,18 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+23"/>
         <source>Open the configured output folder using your file manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-4"/>
+        <location line="+5"/>
         <source>Output folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+92"/>
+        <location line="+108"/>
         <source>Clear files during downloads?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1934,7 +1945,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-186"/>
+        <location line="-206"/>
         <source>Updates are free for everyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1969,7 +1980,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+155"/>
+        <location line="+29"/>
+        <source>Completed files are in shared Downloads/Porn Fetch. Open them in a file manager or media player.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+146"/>
         <source>Open Qt Maintenance Tool?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2634,7 +2650,7 @@ Arrow keys change a focused quality selection or number input.</source>
 <context>
     <name>FirstRunSetup</name>
     <message>
-        <location filename="../../UI/FirstRunSetup.qml" line="+22"/>
+        <location filename="../../UI/FirstRunSetup.qml" line="+23"/>
         <source>Review the license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2659,7 +2675,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+155"/>
         <source>Set up Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2689,7 +2705,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+28"/>
         <source>Setup progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2704,12 +2720,12 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+51"/>
         <source>Full application license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Your reports stay private with me. I never publish them or share them with anyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2719,7 +2735,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+18"/>
         <source>Basic reports</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2729,7 +2745,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Full Python tracebacks and video URLs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2744,7 +2760,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Hide full reporting disclosure</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2779,7 +2795,12 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+7"/>
+        <source>If this device does not support a folder picker, use shared Downloads/Porn Fetch instead. Completed files will be available to other apps and remain after uninstalling Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Choose another folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2789,42 +2810,47 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-12"/>
+        <location line="-13"/>
         <source>Folder selected. Completed videos will be saved there automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-136"/>
+        <location line="-147"/>
         <source>Get a license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Off: no error reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+31"/>
         <source>Full error reports make a significant difference: they often give me the details I need to identify an issue immediately and fix it much faster. Each fix benefits everyone using Porn Fetch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+92"/>
         <source>Choose an output folder to finish setup.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+20"/>
+        <source>Use shared Downloads/Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>I have read and accept the Porn Fetch Source-Available License 1.0.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+53"/>
         <source>Choose where to save videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2839,7 +2865,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Finish setup</source>
         <translation type="unfinished"></translation>
     </message>

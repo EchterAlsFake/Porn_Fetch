@@ -85,6 +85,10 @@ class WebsiteTest:
 
 TESTS = [
     WebsiteTest(
+        name="porndoe",
+        url="https://porndoe.com/watch/pd4y7n5e2j8r",
+    ),
+    WebsiteTest(
         name="PornHub",
         url="https://www.pornhub.com/view_video.php?viewkey=67bd0f66a8fce",
     ),

@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock, Mock, patch
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ["PORN_FETCH_TEST_ENV"] = "1"
 
+from src.backend.android_storage import SHARED_DOWNLOADS
 from src.backend.application import Backend, OutputFolderError
 from src.backend.download_manager import DownloadListModel, DownloadManager
 from src.shared.media import VideoObject
@@ -73,6 +74,18 @@ class QueueNumberingTests(unittest.TestCase):
 
 
 class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
+    async def test_shared_downloads_routes_to_native_export_and_reports_failure(self):
+        source = Path('/private/completed.mp4')
+        backend = SimpleNamespace(logger=Mock())
+        settings = SimpleNamespace(android_output_folder=SHARED_DOWNLOADS, skip_existing_files=True)
+        with patch('src.backend.application.app_settings', settings), \
+             patch('src.backend.application.save_shared_download', new_callable=AsyncMock) as export:
+            await Backend._save_to_output_folder(backend, source)
+            export.assert_awaited_once_with(source, True)
+            export.side_effect = OSError('Storage unavailable')
+            with self.assertRaises(OutputFolderError):
+                await Backend._save_to_output_folder(backend, source)
+
     def backend(self, item):
         model = DownloadListModel()
         manager = DownloadManager()

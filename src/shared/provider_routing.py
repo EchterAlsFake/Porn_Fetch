@@ -31,6 +31,7 @@ PROVIDER_MODULES = {
     "porntrex": "porntrex_api", "xfreehd": "xfreehd_api", "redtube": "redtube_api",
     "thumbzilla": "thumbzilla_api", "tube8": "tube8_api",
     "empflix": "empflix_api", "tnaflix": "tnaflix_api",
+    "porndoe": "porndoe_api",
 }
 
 HOST_PATTERNS = {
@@ -49,6 +50,7 @@ HOST_PATTERNS = {
     "tube8": r"(?:^|\.)tube8\.(?:com|fr|es)$",
     "empflix": r"(?:^|\.)empflix\.com$",
     "tnaflix": r"(?:^|\.)tnaflix\.com$",
+    "porndoe": r"(?:^|\.)porndoe\.com$",
 }
 
 PROFILE_SEGMENTS = {
@@ -65,6 +67,7 @@ PROFILE_SEGMENTS = {
     "tube8": {"pornstar", "channel", "amateur", "user", "users"},
     "empflix": {"profile", "pornstar", "pornstars"},
     "tnaflix": {"profile", "pornstar", "pornstars", "channel", "channels"},
+    "porndoe": {"pornstars-profile", "channel-profile"},
 }
 
 COLLECTION_SEGMENTS = {
@@ -137,6 +140,7 @@ def route_url(url: str) -> Route:
 
 def _is_video_url(provider: str, path: str, query: dict[str, list[str]]) -> bool:
     patterns = {
+        "porndoe": r"^/watch/[a-z0-9]+/?$",
         "eporner": r"^/(?:video-[a-z0-9]+|(?:hd-porn|embed|porno-video)/[a-z0-9]+)(?:/|$)",
         "xnxx": r"^/video-?[a-z0-9]+(?:/|$)",
         "xvideos": r"^/(?:video\.?[a-z0-9]+|embedframe/[a-z0-9]+)(?:/|$)",
@@ -232,6 +236,8 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
         )
     elif route.provider == "porntrex":
         method = "get_channel" if segments & {"channel", "channels"} else "get_model"
+    elif route.provider == "porndoe":
+        method = "get_channel" if section == "channel-profile" else "get_pornstar"
     elif route.provider in {"xvideos", "youporn"}:
         method = "get_pornstar" if segments & {"pornstar", "pornstars", "model", "models", "profiles"} else "get_channel"
     elif route.provider == "xnxx":
