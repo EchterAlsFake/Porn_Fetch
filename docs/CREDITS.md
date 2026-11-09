@@ -93,6 +93,7 @@ and the actual artifact inventory.
 - [pywin32](https://github.com/mhammond/pywin32) (PSF-2.0)
 - [pyav](https://github.com/PyAV-Org/PyAV) (BSD-3-Clause)
 - [porntrex_api](https://github.com/EchterAlsFake/porntrex_api) (LGPLv3)
+- [pornhat_api](https://github.com/EchterAlsFake/unofficial-api-for-pornhat) (AGPL-3.0-only)
 - [porndoe_api](https://github.com/EchterAlsFake/unofficial-api-for-porndoe) (AGPL-3.0-only)
 - [porngo_api](https://github.com/EchterAlsFake/porngo_api) (LGPLv3)
 - [python-dateutil](https://github.com/dateutil/dateutil/) (Apache 2.0)

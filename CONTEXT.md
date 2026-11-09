@@ -46,6 +46,12 @@ The desktop entry point is `main.py`; its backend is `src/backend/application.py
 `AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
 Weblate integration are unfinished; language selectors remain disabled.
 
+Android supports portrait and landscape with manifest orientation `unspecified`,
+letting the system and user rotation settings choose the orientation. The build
+wrapper restores this policy even for regenerated specs. QML adapts by window
+width, without TV/Automotive orientation branches. This requires a rebuilt APK;
+device layout and rotation checks remain pending.
+
 First use runs `FirstRunSetup.qml` before showing the main interface in either
 layout. It presents the full application license with an unchecked acceptance
 box, the €29.99 lifetime Premium offer, Off/Basic/Full error-reporting choices, the Ukraine message,
@@ -357,6 +363,32 @@ persists Nuitka dependency/compiler caches by build environment; ARM64 Windows
 jobs reuse vcpkg's ABI-validated OpenSSL packages. Windows FFmpeg caches keep the
 unsigned executable with complete legal/source files separately from signing
 staging, and verify hashes, LGPL configuration/license and remuxing before reuse.
+
+## Pornhat integration
+
+Pornhat uses the published `unofficial-api-for-pornhat>=0.1.0` package in desktop,
+CLI, Android and iOS dependency inputs. The iOS device staging script installs
+the pure Pornhat wheel from the project requirement alongside PyJWT so restored
+pre-Pornhat vendor snapshots include it. Only `/video/<slug>/` Video,
+`/models/<slug>/` Model and `/sites/<slug>/` Channel are supported. Model/channel
+URLs use the existing Model URL and CLI profile flows; a CLI slug selects Model.
+The shared router rejects search, tags/categories, paysites, directories,
+playlists and account routes. Accepted hosts are bare/www `pornhat.com` and
+`pornhat.one`, plus de/fr/it/es/pt/hi under `pornhat.com`.
+
+The GUI core participates in settings refresh and shutdown; CLI clients use the
+shared pool. Both preparation adapters resolve lazy media through
+`Video.get_available_qualities()` and normalize integer duration seconds to
+rounded minutes. Downloads use existing HLS controls, quality gates, metadata,
+output naming and retained segment stop/resume. User network/concurrency settings
+are preserved. No other Pornhat Client methods or frontend search are exposed.
+
+Live checks on 2026-11-09 passed all ten host variants, four GUI profile cases,
+complete 200/200 Model and 471/471 Channel listings, CLI stop/resume at
+360p/480p/720p, and desktop QML Stop/Resume at 480p with a full readable file.
+The headless desktop check passed with the documented software renderer after
+an initial default-renderer crash. Mobile packages were not rebuilt. See
+[testing](docs/TESTING.md) for repeatable commands and verification scope.
 
 ## Porndoe integration
 

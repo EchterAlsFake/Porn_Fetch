@@ -840,4 +840,5 @@ to be refactored.
 
 ### Website Support
 - Added Support for Porndoe.com (Video, Pornstar, Channel)
+- Added Support for PornHat.com (Video, Pornstar, Channel)
 - 

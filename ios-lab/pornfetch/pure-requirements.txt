@@ -23,6 +23,7 @@ unofficial-api-for-beeg==1.7.4
 unofficial-api-for-empflix==1.0.1
 unofficial-api-for-eporner==2.5.3
 unofficial-api-for-porndoe==1.0.0
+unofficial-api-for-pornhat==0.1.0
 unofficial-api-for-pornhub==5.4.6
 unofficial-api-for-porntrex==1.8.3
 unofficial-api-for-redtube==1.4.4

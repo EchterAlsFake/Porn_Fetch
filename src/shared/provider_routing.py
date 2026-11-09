@@ -32,6 +32,7 @@ PROVIDER_MODULES = {
     "thumbzilla": "thumbzilla_api", "tube8": "tube8_api",
     "empflix": "empflix_api", "tnaflix": "tnaflix_api",
     "porndoe": "porndoe_api",
+    "pornhat": "pornhat_api",
 }
 
 HOST_PATTERNS = {
@@ -51,6 +52,7 @@ HOST_PATTERNS = {
     "empflix": r"(?:^|\.)empflix\.com$",
     "tnaflix": r"(?:^|\.)tnaflix\.com$",
     "porndoe": r"(?:^|\.)porndoe\.com$",
+    "pornhat": r"^(?:(?:www\.)?pornhat\.(?:com|one)|(?:de|fr|it|es|pt|hi)\.pornhat\.com)$",
 }
 
 PROFILE_SEGMENTS = {
@@ -68,6 +70,7 @@ PROFILE_SEGMENTS = {
     "empflix": {"profile", "pornstar", "pornstars"},
     "tnaflix": {"profile", "pornstar", "pornstars", "channel", "channels"},
     "porndoe": {"pornstars-profile", "channel-profile"},
+    "pornhat": {"models", "sites"},
 }
 
 COLLECTION_SEGMENTS = {
@@ -117,6 +120,11 @@ def route_url(url: str) -> Route:
         if len(parts) < offset + 2:
             raise ValueError("An individual profile or channel URL is required")
         name = parts[offset + 1]
+        if provider == "pornhat" and (
+            len(parts) != 2
+            or (section == "models" and (name.isdigit() or name in {"abc", "videos", "updated", "favorites"}))
+        ):
+            raise ValueError("An individual Pornhat model or channel URL is required")
         if ((provider == "xhamster" and name in {"all", "contest", "videos"})
                 or (provider == "pornhub" and section in {"user", "users"} and name in {"search", "discover"})):
             raise ValueError("Profile directories are not supported")
@@ -141,6 +149,7 @@ def route_url(url: str) -> Route:
 def _is_video_url(provider: str, path: str, query: dict[str, list[str]]) -> bool:
     patterns = {
         "porndoe": r"^/watch/[a-z0-9]+/?$",
+        "pornhat": r"^/video/[^/]+/?$",
         "eporner": r"^/(?:video-[a-z0-9]+|(?:hd-porn|embed|porno-video)/[a-z0-9]+)(?:/|$)",
         "xnxx": r"^/video-?[a-z0-9]+(?:/|$)",
         "xvideos": r"^/(?:video\.?[a-z0-9]+|embedframe/[a-z0-9]+)(?:/|$)",
@@ -238,6 +247,8 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
         method = "get_channel" if segments & {"channel", "channels"} else "get_model"
     elif route.provider == "porndoe":
         method = "get_channel" if section == "channel-profile" else "get_pornstar"
+    elif route.provider == "pornhat":
+        method = "get_model" if section == "models" else "get_channel"
     elif route.provider in {"xvideos", "youporn"}:
         method = "get_pornstar" if segments & {"pornstar", "pornstars", "model", "models", "profiles"} else "get_channel"
     elif route.provider == "xnxx":

@@ -23,13 +23,16 @@ shutil.copytree(repo / "src", app / "src", dirs_exist_ok=True,
 shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "*.so", "*.fwork"))
 shutil.copytree(device / "native/packages", vendor, dirs_exist_ok=True)
-# The archived overlay predates PyJWT. Install its pure Python wheel explicitly;
-# resolving dependencies here could replace the matching iOS native packages.
+# The archived overlay predates PyJWT and Pornhat. Install their pure Python
+# wheels explicitly; resolving dependencies could replace matching native packages.
 requirements = tomllib.loads((repo / "pyproject.toml").read_text())["project"]["dependencies"]
-pyjwt_requirement = next(requirement for requirement in requirements if re.match(r"(?i)^pyjwt\b", requirement))
+startup_requirements = [
+    next(requirement for requirement in requirements if re.match(rf"(?i)^{name}\b", requirement))
+    for name in ("pyjwt", "unofficial-api-for-pornhat")
+]
 subprocess.run([str(deploy_venv / "bin/python"), "-m", "pip", "install", "--disable-pip-version-check",
                 "--no-deps", "--only-binary=:all:", "--platform", "any", "--python-version", "3.15",
-                "--upgrade", "--target", str(vendor), pyjwt_requirement], check=True)
+                "--upgrade", "--target", str(vendor), *startup_requirements], check=True)
 subprocess.run([sys.executable, str(device / "patch-ios-ffmpeg.py")], check=True)
 subprocess.run([str(deploy_venv / "bin/pyside6-rcc"), "--binary", str(repo / "src/frontend/resources.qrc"),
                 "-o", str(app / "src/frontend/resources.rcc")], check=True)

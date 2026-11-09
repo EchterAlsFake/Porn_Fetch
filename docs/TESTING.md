@@ -130,6 +130,9 @@ Examples:
 ```sh
 uv run --no-sync python -m src.tests.smoke.download_gui --list
 uv run --no-sync python -m src.tests.smoke.profile_urls --filter porndoe --items 2
+uv run --no-sync python -m src.tests.smoke.profile_urls --filter pornhat --include-variants --items 2
+uv run --no-sync python -m src.tests.smoke.download_lifecycle --provider pornhat --scenario pause-resume --quality 360
+QT_QUICK_BACKEND=software uv run --no-sync python -m src.tests.smoke.download_gui --provider pornhat --scenario pause-resume --quality 480
 uv run --no-sync python -m src.tests.smoke.download_lifecycle --provider porndoe --scenario pause-resume
 uv run --no-sync python -m src.tests.smoke.download_gui --provider porndoe --scenario pause-resume
 uv run --no-sync python -m src.tests.smoke.download_gui --provider eporner --scenario pause-resume
@@ -138,6 +141,24 @@ uv run --no-sync python -m src.tests.smoke.application_recovery --offline-only
 uv run --no-sync python -m src.tests.smoke.settings_gui --help
 uv run --no-sync python Porn_Fetch_CLI.py --test-mode --filter XFreeHD --test-downloads
 ```
+
+Pornhat integration was checked on 2026-11-09 using the published
+`unofficial-api-for-pornhat==0.1.0`, `eaf-base-api==4.2.6` and Python 3.15.2.
+Only Video, Model and Channel are integrated. All ten accepted hosts prepared
+video ID 684951 with a three-minute duration and 360p/480p/720p qualities.
+Four live GUI profile cases passed with no skips: Model, Channel, a German
+model and a `.one` channel. Complete ordered profile listings matched their
+live HTML: 200/200 model IDs across 59,59,59,23 cards, and 471/471 channel IDs
+across seven 59-card pages and a 58-card final page.
+
+CLI pause/resume completed FFmpeg-readable 156.48-second output at every exposed
+quality (360p, 480p, 720p), retaining and reusing segments. The real desktop
+Downloads QML workflow also passed Stop/Resume at 480p with segment reuse,
+completion at 100%, and a readable full output file. Use the documented software
+renderer in headless environments: the initial default-renderer run crashed
+before recording a result, while the software-renderer run passed. These live
+checks use isolated settings, output folders and reports under `/tmp`; they do
+not add network requests to ordinary CI. Native Android/iOS packages were not rebuilt.
 
 ## Free and premium feature tests
 

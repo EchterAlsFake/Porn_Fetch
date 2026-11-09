@@ -1648,6 +1648,7 @@ class Backend(QObject):
             "xhamster": "xHamster",
             "porntrex": "PornTrex",
             "porndoe": "Porndoe",
+            "pornhat": "Pornhat",
         }
         normalized_url = url.lower()
         platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")

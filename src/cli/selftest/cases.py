@@ -1,6 +1,7 @@
 """Live URLs used by the opt-in CLI diagnostics."""
 
 SINGLE_VIDEO_TESTS = [
+    ("Pornhat", "https://www.pornhat.com/video/foot-fucking-trailer-with-cover-girl-gizelle-blanco-and-venus-valencia-from-love-her-feet/"),
     ("PornHub", "https://www.pornhub.com/view_video.php?viewkey=67bd0f66a8fce"),
     ("XHamster", "https://xhamster.com/videos/yoga-instructor-guides-us-during-hardcore-sex-xhLLvCd"),
     ("XNXX", "https://www.xnxx.com/video-1gav4l94/allein_im_seehaus_mit_meiner_stieftochter"),
@@ -35,6 +36,8 @@ COLLECTION_TESTS = [
 ]
 
 PROFILE_TESTS = [
+    ("Pornhat Model", "https://www.pornhat.com/models/armani-black/"),
+    ("Pornhat Channel", "https://www.pornhat.com/sites/60-plus-milfs/"),
     ("PornHub Model", "https://www.pornhub.com/model/teddy-tarantino"),
     ("Eporner Pornstar", "https://www.eporner.com/pornstar/riley-reid/"),
     ("XNXX Pornstar", "https://www.xnxx.com/pornstar/cory-chase"),

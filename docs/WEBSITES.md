@@ -21,6 +21,7 @@ For Porn Fetch 3.9 (desktop, Android, and CLI).
 | Tube8 | Yes | Yes | — | — | — | — | — |
 | EMPFlix | Yes | Yes | — | — | — | — | — |
 | TNAFlix | Yes | Yes | — | — | — | — | — |
+| Pornhat | Yes | Yes | — | — | — | — | — |
 | Porndoe | Yes | Yes | — | — | — | — | — |
 
 
@@ -41,6 +42,15 @@ Downloads use the available MP4 qualities with the usual queue, filters,
 pause/resume, output naming and metadata options. Porndoe does not expose
 separate model or playlist objects. Categories, directories and related-video
 browsing are outside this integration.
+
+Pornhat supports only `/video/<slug>/` videos, `/models/<slug>/` models and
+`/sites/<slug>/` channels. Use the Video URL field for videos and the Model URL
+field for either profile type. The CLI profile flow also accepts a model slug.
+Accepted hosts are `pornhat.com`, `www.pornhat.com`, `pornhat.one`,
+`www.pornhat.one` and `de`, `fr`, `it`, `es`, `pt`, `hi` under `pornhat.com`.
+Downloads resolve the provider's lazy HLS sources and use the existing quality,
+queue, output, metadata and stop/resume controls. Categories/tags, paysite
+collections, search, directories, playlists and account methods are not exposed.
 
 Availability and quality depend on the video, your region, and any required website
 account. Free downloads are limited to 720p; higher qualities require a Porn Fetch

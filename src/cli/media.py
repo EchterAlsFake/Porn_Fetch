@@ -53,6 +53,9 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
 
 
 async def available_qualities(video: Any) -> list[int]:
+    if type(video).__module__.split(".", 1)[0] == "pornhat_api":
+        # Pornhat resolves its player redirects in a separate lazy media source.
+        return await video.get_available_qualities()
     if type(video).__module__.split(".", 1)[0] == "porndoe_api":
         await video.load_fields("video_qualities")
         return sorted({int(item) for item in video.video_qualities or []})

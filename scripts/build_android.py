@@ -415,6 +415,9 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
     ant_home = find_apache_ant(current.get("app", "android.ant_path", fallback=""))
 
     replacements = {
+        # Let Android choose the orientation and respect the user's rotation lock.
+        r"^orientation\s*=.*$": "orientation = portrait, landscape",
+        r"^android\.manifest\.orientation\s*=.*$": "android.manifest.orientation = unspecified",
         r"^p4a\.branch\s*=.*$": "p4a.branch = develop",
         r"^p4a\.commit\s*=.*$": "p4a.commit = HEAD",
         r"^p4a\.hook\s*=.*$": f"p4a.hook = {project_root / 'scripts' / 'android_storage_hook.py'}",

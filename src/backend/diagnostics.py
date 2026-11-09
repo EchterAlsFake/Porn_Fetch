@@ -85,6 +85,10 @@ class WebsiteTest:
 
 TESTS = [
     WebsiteTest(
+        name="pornhat",
+        url="https://www.pornhat.com/video/foot-fucking-trailer-with-cover-girl-gizelle-blanco-and-venus-valencia-from-love-her-feet/",
+    ),
+    WebsiteTest(
         name="porndoe",
         url="https://porndoe.com/watch/pd4y7n5e2j8r",
     ),

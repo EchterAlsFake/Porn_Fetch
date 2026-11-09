@@ -11,26 +11,26 @@
     "2xx": "HTTP availability only; still verify identity and bounded item preparation in the app."
   },
   "counts": {
-    "total": 91,
-    "primary": 35,
+    "total": 95,
+    "primary": 37,
     "tiers": {
-      "primary": 35,
-      "variant": 49,
+      "primary": 37,
+      "variant": 51,
       "replacement": 6,
       "diagnostic": 1
     },
     "primary_status_codes": {
-      "200": 32,
+      "200": 34,
       "403": 3
     },
     "all_status_codes": {
-      "200": 78,
+      "200": 82,
       "403": 8,
       "404": 4,
       "0": 1
     },
     "dispositions": {
-      "http_available": 74,
+      "http_available": 78,
       "access_restricted": 8,
       "unavailable_candidate": 4,
       "unsupported_resource": 1,
@@ -5772,6 +5772,238 @@
           {
             "kind": "direct",
             "url_resolved": true
+          }
+        ],
+        "metadata_requests": 7
+      }
+    },
+    {
+      "id": "pornhat.model",
+      "provider": "pornhat",
+      "profile_type": "model",
+      "tier": "primary",
+      "url": "https://www.pornhat.com/models/armani-black/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhat",
+          "path": "pornhat_api/tests/test_profiles.py",
+          "function": "test_complete_profile_reconciliation",
+          "factory_in_test": "get_model"
+        }
+      ],
+      "note": "Verified through live GUI preparation, Qt row roles/signals, and HLS stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_model",
+      "http": {
+        "checked_at_utc": "2026-11-09T19:18:07.349221+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.pornhat.com/models/armani-black/",
+        "canonical_url": "https://www.pornhat.com/models/armani-black/",
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T19:18:42.407853+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Armani Black",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 166
+          },
+          {
+            "kind": "hls",
+            "segments": 154
+          }
+        ],
+        "metadata_requests": 13
+      }
+    },
+    {
+      "id": "pornhat.channel",
+      "provider": "pornhat",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.pornhat.com/sites/60-plus-milfs/",
+      "sources": [
+        {
+          "kind": "upstream_network_test",
+          "repository": "unofficial-api-for-pornhat",
+          "path": "pornhat_api/tests/test_profiles.py",
+          "function": "test_complete_profile_reconciliation",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified through live GUI preparation, Qt row roles/signals, and HLS stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-09T19:18:07.467427+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.pornhat.com/sites/60-plus-milfs/",
+        "canonical_url": "https://www.pornhat.com/sites/60-plus-milfs/",
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T19:18:42.407853+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "60 Plus MILFs",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 80
+          },
+          {
+            "kind": "hls",
+            "segments": 80
+          }
+        ],
+        "metadata_requests": 13
+      }
+    },
+    {
+      "id": "pornhat.model.de",
+      "provider": "pornhat",
+      "profile_type": "model",
+      "tier": "variant",
+      "url": "https://de.pornhat.com/models/venus-valencia/",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/profile_urls.py",
+          "function": "run",
+          "factory_in_test": "get_model"
+        }
+      ],
+      "note": "Verified through live GUI preparation, Qt row roles/signals, and HLS stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_model",
+      "http": {
+        "checked_at_utc": "2026-11-09T19:18:07.957154+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://de.pornhat.com/models/venus-valencia/",
+        "canonical_url": "https://de.pornhat.com/models/venus-valencia/",
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T19:18:42.407853+00:00",
+        "outcome": "passed",
+        "profile": "Model",
+        "profile_name": "Venus Valencia",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 150
+          },
+          {
+            "kind": "hls",
+            "segments": 150
+          }
+        ],
+        "metadata_requests": 13
+      }
+    },
+    {
+      "id": "pornhat.channel.one",
+      "provider": "pornhat",
+      "profile_type": "channel",
+      "tier": "variant",
+      "url": "https://www.pornhat.one/sites/deep-throat-sirens/",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/profile_urls.py",
+          "function": "run",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified through live GUI preparation, Qt row roles/signals, and HLS stream resolution.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-09T19:18:08.259805+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.pornhat.one/sites/deep-throat-sirens/",
+        "canonical_url": "https://www.pornhat.one/sites/deep-throat-sirens/",
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "pornhat",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-09T19:18:42.407853+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Deep Throat Sirens",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 60
           }
         ],
         "metadata_requests": 7

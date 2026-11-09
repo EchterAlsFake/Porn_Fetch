@@ -2060,7 +2060,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+160"/>
         <source>Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2101,9 +2101,9 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-488"/>
+        <location line="-491"/>
         <location line="+102"/>
-        <location line="+362"/>
+        <location line="+365"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
@@ -4914,7 +4914,7 @@ If you are using only the GUI this will not affect your user experience, but may
     <name>model</name>
     <message>
         <location filename="../../../backend/account_diagnostics.py" line="+390"/>
-        <location filename="../../../backend/profile_diagnostics.py" line="+217"/>
+        <location filename="../../../backend/profile_diagnostics.py" line="+219"/>
         <source>%d min</source>
         <translation type="unfinished"></translation>
     </message>

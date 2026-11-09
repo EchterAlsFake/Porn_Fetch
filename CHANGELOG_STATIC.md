@@ -4,6 +4,8 @@ This version is still in beta. See the [development checklist](https://pornfetch
 
 ### Website Support
 
+- Added Pornhat video downloads and model/channel pages, including verified language hosts and the `.one` alias.
+
 - Added RedTube video downloads, public playlists, and pornstar, channel and amateur pages.
 - Added Thumbzilla video downloads and pornstar, channel and amateur pages.
 - Added Tube8 video downloads and pornstar, channel and amateur pages.

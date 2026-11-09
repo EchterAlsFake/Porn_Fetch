@@ -16,6 +16,12 @@ requires a working document-tree picker.
 Android has no persistent download history or statistics. Notifications do not
 keep downloads running after Android stops the app.
 
+The interface supports portrait and landscape. Android chooses the orientation
+using the device's normal behavior and the user's rotation settings. Layouts
+adapt to the available window width, with no separate orientation rules for
+phones, tablets, TV or Automotive devices. The build wrapper preserves this
+policy when regenerating deployment settings; existing APKs need a rebuild.
+
 The app checks for updates at startup after setup. Under Settings → System & data,
 you can disable startup checks or update dialogs and check manually. Installing
 an offered update downloads and verifies the APK before Android asks you to
