@@ -49,12 +49,16 @@ SUITES = {
         "Online checks plus active download",
         [sys.executable, "Porn_Fetch_CLI.py", "--test-mode", "--test-downloads"],
     ),
+    "bellesa": (
+        "Live Bellesa Video/Channel/Performer integration and complete quality downloads",
+        [sys.executable, "-m", "src.tests.smoke.bellesa"],
+    ),
     "download_lifecycle": (
-        "Live pause/resume and cleanup (14 providers, 28 workflows; SpankBang manual)",
+        "Live pause/resume and cleanup (registered providers; SpankBang manual)",
         [sys.executable, "-m", "src.tests.smoke.download_lifecycle"],
     ),
     "download_gui": (
-        "Live desktop download controls (14 providers, 42 workflows; SpankBang manual)",
+        "Live desktop download controls (registered providers; SpankBang manual)",
         [sys.executable, "-m", "src.tests.smoke.download_gui"],
     ),
     "download_queue": (
@@ -95,10 +99,10 @@ SUITES = {
     ),
 }
 
-ONLINE = {"providers", "gui_profiles", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
+ONLINE = {"bellesa", "providers", "gui_profiles", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
           "statistics_gui", "download_advanced", "application_recovery", "collections_gui", "account_cookies", "account_gui", "sni"}
 
-MEDIA = {"downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
+MEDIA = {"bellesa", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
          "statistics_gui", "download_advanced", "application_recovery", "collections_gui"}
 
 

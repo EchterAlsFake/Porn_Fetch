@@ -53,7 +53,7 @@ def load_profile_cases(*, include_variants: bool = False, pattern: str = "") -> 
 
 
 class MetadataOnlyRequests:
-    """Block download entry points and video/segment GETs during diagnostics."""
+    """Block transfers/segment GETs; allow bounded MP4 resolution metadata reads."""
 
     def __init__(self):
         self.blocked: list[str] = []
@@ -70,7 +70,10 @@ class MetadataOnlyRequests:
 
         async def request(core, url, *args, **kwargs):
             path = urlsplit(url).path.lower()
-            if kwargs.get("method", "GET").upper() != "HEAD" and not path.endswith(".m3u8") and re.search(
+            byte_range = re.fullmatch(r"bytes=(\d+)-(\d+)", (kwargs.get("headers") or {}).get("Range", ""))
+            bounded_metadata = (path.endswith(".mp4") and byte_range is not None
+                                and 0 <= int(byte_range[2]) - int(byte_range[1]) < 2 * 1024 * 1024)
+            if not bounded_metadata and kwargs.get("method", "GET").upper() != "HEAD" and not path.endswith(".m3u8") and re.search(
                 r"\.(?:mp4|m4s|ts|m2ts|webm|mkv|mov|flv|aac|mp3)(?:/|$)", path,
             ):
                 guard.reject("media/segment GET")
@@ -117,7 +120,7 @@ def _http_url(value) -> bool:
 
 
 async def verify_stream(source, quality: str | int) -> dict:
-    """Resolve URLs only. In particular, never GET an MP4 or HLS segment."""
+    """Resolve stream URLs; any MP4 metadata ranges remain bounded by the guard."""
     from src.backend import clients
 
     master = clients._safe_getattr(source, "m3u8_base_url")

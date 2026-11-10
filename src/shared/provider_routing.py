@@ -33,6 +33,8 @@ PROVIDER_MODULES = {
     "empflix": "empflix_api", "tnaflix": "tnaflix_api",
     "porndoe": "porndoe_api",
     "pornhat": "pornhat_api",
+    "redgifs": "redgifs_api",
+    "bellesa": "bellesa_api",
 }
 
 HOST_PATTERNS = {
@@ -53,6 +55,8 @@ HOST_PATTERNS = {
     "tnaflix": r"(?:^|\.)tnaflix\.com$",
     "porndoe": r"(?:^|\.)porndoe\.com$",
     "pornhat": r"^(?:(?:www\.)?pornhat\.(?:com|one)|(?:de|fr|it|es|pt|hi)\.pornhat\.com)$",
+    "redgifs": r"^(?:www\.|media\.)?redgifs\.com$",
+    "bellesa": r"^(?:www\.)?bellesa\.co$",
 }
 
 PROFILE_SEGMENTS = {
@@ -71,13 +75,47 @@ PROFILE_SEGMENTS = {
     "tnaflix": {"profile", "pornstar", "pornstars", "channel", "channels"},
     "porndoe": {"pornstars-profile", "channel-profile"},
     "pornhat": {"models", "sites"},
+    "redgifs": {"users"},
+    "bellesa": {"channels", "performers"},
 }
 
 COLLECTION_SEGMENTS = {
     "pornhub": {"playlist"}, "xvideos": {"playlist", "favorite"},
     "youporn": {"collections", "collection"}, "redtube": {"playlist"},
     "thumbzilla": {"playlist"},
+    "redgifs": {"niches", "collections"},
 }
+
+
+def _bellesa_route(parsed: Any, url: str) -> Route:
+    """Accept only Bellesa's individual Video, Channel and Performer routes."""
+    if parsed.username or parsed.password or parsed.port not in {None, 80, 443}:
+        raise ValueError("Invalid Bellesa URL")
+    if re.fullmatch(r"/videos/[1-9][0-9]*(?:/[^/]+)?/?", parsed.path):
+        return Route("bellesa", ContentKind.VIDEO, url)
+    if (re.fullmatch(r"/channels/[a-z0-9]+(?:-[a-z0-9]+)*/?", parsed.path)
+            or re.fullmatch(r"/performers/[a-z0-9]+(?:[-+][a-z0-9]+)*/?", parsed.path)):
+        return Route("bellesa", ContentKind.PROFILE, url)
+    raise ValueError("Enter an individual Bellesa video, channel or performer URL")
+
+
+def _redgifs_route(parsed: Any, url: str) -> Route:
+    """Keep nested collections out of the User/profile flow."""
+    if parsed.username or parsed.password or parsed.port not in {None, 80, 443}:
+        raise ValueError("Invalid RedGIFs URL")
+    path = parsed.path.strip("/")
+    if parsed.hostname.casefold() == "media.redgifs.com":
+        if re.fullmatch(r"[a-z0-9_-]+\.mp4", path, re.I):
+            return Route("redgifs", ContentKind.VIDEO, url)
+    elif re.fullmatch(r"(?:watch|ifr)/[a-z0-9_-]+", path, re.I):
+        return Route("redgifs", ContentKind.VIDEO, url)
+    elif re.fullmatch(r"niches/[a-z0-9_-]+", path, re.I):
+        return Route("redgifs", ContentKind.COLLECTION, url)
+    elif re.fullmatch(r"users/[a-z0-9_-]+/collections/[a-z0-9_-]+(?:/[^/]+)?", path, re.I):
+        return Route("redgifs", ContentKind.COLLECTION, url)
+    elif re.fullmatch(r"users/[a-z0-9_-]+(?:/videos)?", path, re.I):
+        return Route("redgifs", ContentKind.PROFILE, url)
+    raise ValueError("Enter a RedGIFs video, user, niche or individual public collection URL")
 
 
 def _content_section(provider: str, parts: list[str]) -> str:
@@ -100,6 +138,10 @@ def route_url(url: str) -> Route:
     )
     if provider is None:
         raise ValueError(f"unsupported provider host: {host}")
+    if provider == "bellesa":
+        return _bellesa_route(parsed, url.strip())
+    if provider == "redgifs":
+        return _redgifs_route(parsed, url.strip())
     parts = [segment for segment in parsed.path.casefold().split("/") if segment]
     section = _content_section(provider, parts)
     query = parse_qs(parsed.query)
@@ -206,10 +248,30 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
         ))
     if route.provider == "beeg":
         return await _await_if_needed(client.get_video(route.url, load_api=True))
+    if route.provider == "bellesa":
+        return await _await_if_needed(client.get_video(route.url, load_api=True, load_html=False))
+    if route.provider == "redgifs":
+        return await _await_if_needed(client.get_video(route.url, load_api=True, load_html=True))
     return await _await_if_needed(client.get_video(route.url, load_html=True))
 
 
 async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any:
+    if route.provider == "bellesa":
+        if route.kind != ContentKind.PROFILE:
+            raise ValueError("A Bellesa channel or performer URL is required")
+        method = "get_channel" if urlparse(route.url).path.startswith("/channels/") else "get_performer"
+        return await _await_if_needed(getattr(client, method)(route.url, load_api=True))
+    if route.provider == "redgifs":
+        parsed = urlparse(route.url)
+        parts = [part for part in parsed.path.split("/") if part]
+        if route.kind == ContentKind.COLLECTION:
+            if parts[0].casefold() == "niches":
+                return await client.get_niche(route.url, load_api=True)
+            return await client.get_collection(parts[1], parts[3], load_api=True)
+        if route.kind == ContentKind.PROFILE:
+            user_url = parsed._replace(path="/" + "/".join(parts[:2]), fragment="").geturl()
+            return await client.get_user(user_url, load_api=True)
+        raise ValueError("A RedGIFs user, niche or collection URL is required")
     if route.kind == ContentKind.COLLECTION:
         if route.provider not in COLLECTION_SEGMENTS:
             raise ValueError(f"public playlists are not supported for {route.provider}")
@@ -300,6 +362,9 @@ def container_stream(
 ) -> AsyncIterator[Any]:
     if hasattr(container, "__aiter__"):
         return container
+    if provider == "redgifs":
+        name = "items" if hasattr(container, "collection_id") else "videos"
+        return _redgifs_videos(_call_stream(container, name, pages, iterator_config))
     if provider == "pornhub" and profile_mode in {"uploads", "both"} and hasattr(container, "get_uploads"):
         videos = _call_stream(container, "get_videos", pages, iterator_config) if profile_mode == "both" else None
         uploads = _call_stream(container, "get_uploads", pages, iterator_config)
@@ -308,6 +373,20 @@ def container_stream(
         if getattr(container, name, None):
             return _call_stream(container, name, pages, iterator_config)
     raise ValueError(f"{provider} source does not expose a video stream")
+
+
+async def _redgifs_videos(stream: AsyncIterator[Any]) -> AsyncIterator[Any]:
+    """Collections can contain still images; only video/GIF entries belong here."""
+    from redgifs_api import Image
+
+    try:
+        async for result in stream:
+            if not isinstance(unwrap_scrape_result(result), Image):
+                yield result
+    finally:
+        close = getattr(stream, "aclose", None)
+        if close:
+            await close()
 
 
 def _call_stream(container: Any, name: str, pages: int, iterator_config: Any = None) -> AsyncIterator[Any]:

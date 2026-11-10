@@ -173,18 +173,20 @@ def offline_self_test() -> int:
         "xvideos": "https://www.xvideos.com/video.test/title",
         "xhamster": "https://xhamster.com/videos/title-test",
         "spankbang": "https://spankbang.com/test/video/title",
-        "youporn": "https://www.youporn.com/watch/test/title/",
-        "beeg": "https://beeg.com/-test",
-        "porntrex": "https://www.porntrex.com/video/test/title/",
-        "xfreehd": "https://xfreehd.com/video/test/title",
-        "redtube": "https://www.redtube.com/test",
-        "thumbzilla": "https://www.thumbzilla.com/video/test/title",
-        "tube8": "https://www.tube8.com/test/test/test/",
+        "youporn": "https://www.youporn.com/watch/123/title/",
+        "beeg": "https://beeg.com/-123",
+        "porntrex": "https://www.porntrex.com/video/123/title/",
+        "xfreehd": "https://xfreehd.com/video/123/title",
+        "redtube": "https://www.redtube.com/123",
+        "thumbzilla": "https://www.thumbzilla.com/watch/123/title",
+        "tube8": "https://www.tube8.com/porn-video/123/title/",
         "empflix": "https://www.empflix.com/amateur-porn/example/video123",
         "tnaflix": "https://www.tnaflix.com/amateur-porn/example/video123",
+        "bellesa": "https://www.bellesa.co/videos/7054",
         "porndoe": "https://porndoe.com/watch/pd4y7n5e2j8r",
         "pornhat": "https://www.pornhat.com/video/armani-black-wants-her-husband-s-friend-deep-inside/",
     }
+    examples["redgifs"] = "https://www.redgifs.com/watch/hotpinkacrobatickitfox"
     assert set(PROVIDER_MODULES) == set(examples)
     assert all(route_url(url).provider == provider for provider, url in examples.items())
     settings = CliSettings()

@@ -1,6 +1,8 @@
 """Live URLs used by the opt-in CLI diagnostics."""
 
 SINGLE_VIDEO_TESTS = [
+    ("Bellesa", "https://www.bellesa.co/videos/7054"),
+    ("RedGIFs", "https://www.redgifs.com/watch/hotpinkacrobatickitfox"),
     ("Pornhat", "https://www.pornhat.com/video/foot-fucking-trailer-with-cover-girl-gizelle-blanco-and-venus-valencia-from-love-her-feet/"),
     ("PornHub", "https://www.pornhub.com/view_video.php?viewkey=67bd0f66a8fce"),
     ("XHamster", "https://xhamster.com/videos/yoga-instructor-guides-us-during-hardcore-sex-xhLLvCd"),
@@ -30,12 +32,17 @@ GALLERY_TESTS = [
 ]
 
 COLLECTION_TESTS = [
+    ("RedGIFs Niche", "https://www.redgifs.com/niches/duo-chastity"),
+    ("RedGIFs Collection", "https://www.redgifs.com/users/weirdjack/collections/d7ddef5fb0"),
     ("PornHub Playlist", "https://www.pornhub.com/playlist/119820351"),
     ("XVideos Playlist", "https://de.xvideos.com/favorite/89127817/playlist_3"),
     ("YouPorn Collection", "https://www.youporn.com/collections/videos/38771091/"),
 ]
 
 PROFILE_TESTS = [
+    ("Bellesa Channel", "https://www.bellesa.co/channels/zero-to-hero"),
+    ("Bellesa Performer", "https://www.bellesa.co/performers/lily-starfire"),
+    ("RedGIFs User", "https://www.redgifs.com/users/nickiipeach"),
     ("Pornhat Model", "https://www.pornhat.com/models/armani-black/"),
     ("Pornhat Channel", "https://www.pornhat.com/sites/60-plus-milfs/"),
     ("PornHub Model", "https://www.pornhub.com/model/teddy-tarantino"),

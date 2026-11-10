@@ -109,6 +109,7 @@ Run with `uv run --no-sync python -m src.tests.smoke.NAME`:
 
 | NAME | What it checks |
 | --- | --- |
+| `bellesa` | Bellesa Video/Channel/Performer routes, complete profiles, all measured qualities, metadata and free limits |
 | `profile_urls --include-variants` | Profile URL aliases, real metadata and GUI rows; no media downloads |
 | `download_lifecycle` | CLI HLS/RAW pause, resume, cleanup and restart |
 | `download_gui` | Desktop buttons, progress, quality, stop/remove and finished files |
@@ -268,3 +269,30 @@ In one terminal run `uv run --no-sync python src/tests/smoke/fake_update_server.
 In another, set `PORNFETCH_UPDATE_URL=http://127.0.0.1:8765/update` and start the GUI.
 The server provides fake notes and harmless links, not an installable binary.
 Automatic installation still requires valid signed update metadata.
+
+## RedGIFs integration
+
+[RedGIFs integration checks](REDGIFS.md#validation-on-2026-11-10) cover the
+Video/GIF, User/profile, Niche/playlist and mixed Collection/playlist paths, measured
+RAW quality selection and complete public video listings. The opt-in runner is
+`python -m src.tests.smoke.redgifs`; existing download lifecycle and GUI runners
+also accept `--provider redgifs`. No requests run on import or normal discovery.
+
+## Bellesa integration
+
+The published `unofficial-api-for-bellesa>=1.0.0` package is integrated for Video,
+Channel and Performer only. The `bellesa` helper suite is explicitly online and
+media-enabled. All files and retained state use isolated temporary directories.
+
+```sh
+uv run --no-sync python -m src.tests.smoke.bellesa --report /tmp/bellesa-integration.json
+QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software uv run --no-sync python -m src.tests.smoke.profile_urls --filter bellesa --include-variants --items 2 --report /tmp/bellesa-profiles-gui.json
+uv run --no-sync python -m src.tests.smoke.download_lifecycle --provider bellesa --quality 450 --report /tmp/bellesa-lifecycle.json
+QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software uv run --no-sync python -m src.tests.smoke.download_gui --provider bellesa --quality 450 --report /tmp/bellesa-downloads-gui.json
+```
+
+`bellesa --metadata-only` omits media downloads while retaining real requests and
+complete profile reconciliation. The full runner downloads all six actual
+qualities of video 7054 plus free-best samples at 720p and 600p (an older 4:3
+video). Metadata export, playable dimensions, audio and duration are checked.
+See [the recorded Bellesa results](BELLESA.md) for exact commands and limits.

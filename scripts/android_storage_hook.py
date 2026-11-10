@@ -13,6 +13,31 @@ from pathlib import Path
 MARKER = "porn-fetch-storage-results-v1"
 
 
+def prepare_tv_manifest(source: str) -> str:
+    """Expose the shared Qt activity in both phone and Android TV launchers."""
+    namespace = "http://schemas.android.com/apk/res/android"
+    ET.register_namespace("android", namespace)
+    android = "{" + namespace + "}"
+    manifest = ET.fromstring(source)
+    for name in ("android.software.leanback", "android.hardware.touchscreen"):
+        feature = manifest.find(f"uses-feature[@{android}name='{name}']")
+        if feature is None:
+            feature = ET.Element("uses-feature", {android + "name": name})
+            manifest.insert(0, feature)
+        feature.set(android + "required", "false")
+    application = manifest.find("application")
+    activity = application.find(f"activity[@{android}name='org.kivy.android.PythonActivity']")
+    if activity is None:
+        raise ValueError("Cannot locate Qt activity for Android TV launcher")
+    application.set(android + "banner", "@drawable/tv_banner")
+    category = "android.intent.category.LEANBACK_LAUNCHER"
+    if activity.find(f"intent-filter/category[@{android}name='{category}']") is None:
+        launcher = ET.SubElement(activity, "intent-filter")
+        ET.SubElement(launcher, "action", {android + "name": "android.intent.action.MAIN"})
+        ET.SubElement(launcher, "category", {android + "name": category})
+    return ET.tostring(manifest, encoding="unicode")
+
+
 def prepare_native_libraries(native: Path, resources: Path) -> None:
     """Give Qt's preload copies Android-extractable names, keeping wheel modules intact."""
     renamed = {}
@@ -97,6 +122,9 @@ def before_apk_assemble(toolchain) -> None:
     prepare_native_libraries(dist_dir / "libs", dist_dir / "src/main/res")
     activity = dist_dir / "src/main/java/org/kivy/android/PythonActivity.java"
     project = Path(__file__).resolve().parents[1]
+    banner_dir = dist_dir / "src/main/res/drawable-xhdpi"
+    banner_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(project / "src/frontend/graphics/android_tv_banner.png", banner_dir / "tv_banner.png")
     tor = project / "src/shared/tor/libTor.so"
     if tor.is_file():
         config = configparser.ConfigParser(interpolation=None)
@@ -147,6 +175,6 @@ def before_apk_assemble(toolchain) -> None:
             text = re.sub(r'android:extractNativeLibs="[^"]*"', 'android:extractNativeLibs="true"', text)
             if 'android:extractNativeLibs=' not in text:
                 text = text.replace("<application", '<application android:extractNativeLibs="true"', 1)
-            manifest.write_text(text, encoding="utf-8")
+            manifest.write_text(prepare_tv_manifest(text), encoding="utf-8")
     if patched != source:
         activity.write_text(patched, encoding="utf-8")

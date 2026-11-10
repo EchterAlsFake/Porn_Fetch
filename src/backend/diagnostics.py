@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from src.backend.download_manager import VideoFilters
 from PySide6.QtTest import QAbstractItemModelTester, QSignalSpy
 
-ALLOWED_QUALITIES = {144, 240, 250, 360, 480, 540, 720, 1080, 1440, 2160}
+ALLOWED_QUALITIES = {144, 240, 250, 360, 450, 480, 540, 600, 720, 960, 1080, 1440, 2160}
 
 def normalize_quality(value) -> int | None:
     """
@@ -84,6 +84,8 @@ class WebsiteTest:
 
 
 TESTS = [
+    WebsiteTest(name="bellesa", url="https://www.bellesa.co/videos/7054"),
+    WebsiteTest(name="redgifs", url="https://www.redgifs.com/watch/hotpinkacrobatickitfox"),
     WebsiteTest(
         name="pornhat",
         url="https://www.pornhat.com/video/foot-fucking-trailer-with-cover-girl-gizelle-blanco-and-venus-valencia-from-love-her-feet/",

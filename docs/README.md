@@ -8,6 +8,7 @@ Porn Fetch is English-only. Translations are unfinished.
 - [Licenses and Premium](LICENSING.md) and [emergency service operations](../deploy/emergency/README.md)
 - [Work on the code](FOR_DEVELOPERS.md)
 - [Run tests](TESTING.md)
+- [Bellesa integration and verification](BELLESA.md)
 - [Build and publish releases](RELEASING.md)
 - [Help with future translations](TRANSLATING.md)
 

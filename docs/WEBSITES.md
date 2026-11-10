@@ -14,6 +14,7 @@ For Porn Fetch 3.9 (desktop, Android, and CLI).
 | SpankBang | Yes | Yes | — | — | — | — | — |
 | YouPorn | Yes | Yes | Yes | — | — | — | — |
 | Beeg | Yes | — | — | — | — | — | — |
+| Bellesa | Yes | Channel, Performer | — | — | — | — | — |
 | Porntrex | Yes | Yes | — | — | — | — | — |
 | XFreeHD | Yes | — | — | — | — | — | CLI only |
 | RedTube | Yes | Yes | Yes | — | — | — | — |
@@ -51,6 +52,18 @@ Accepted hosts are `pornhat.com`, `www.pornhat.com`, `pornhat.one`,
 Downloads resolve the provider's lazy HLS sources and use the existing quality,
 queue, output, metadata and stop/resume controls. Categories/tags, paysite
 collections, search, directories, playlists and account methods are not exposed.
+
+Bellesa supports `/videos/<id>` (with an optional title slug),
+`/channels/<handle>`, and `/performers/<handle>` on `bellesa.co` and
+`www.bellesa.co`. Use Video URL for videos and Model URL for channels or
+performers. The CLI profile flow accepts a performer handle; paste a full URL
+for a channel. Only these three object types are integrated.
+
+Bellesa uses the existing HLS download, quality, metadata, output and stop/resume
+controls. Displayed qualities are actual rendition dimensions: a site label of
+480 commonly means 450p, and older 4:3 videos can expose 480p, 600p and 960p.
+The usual free 720p limit and five-video public profile preview apply.
+See [Bellesa integration](BELLESA.md) for scope and live verification.
 
 Availability and quality depend on the video, your region, and any required website
 account. Free downloads are limited to 720p; higher qualities require a Porn Fetch

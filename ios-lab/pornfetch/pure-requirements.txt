@@ -20,12 +20,14 @@ truststore==0.10.5
 tuf==7.0.1
 tzdata==2026.5
 unofficial-api-for-beeg==1.7.4
+unofficial-api-for-bellesa==1.0.0
 unofficial-api-for-empflix==1.0.1
 unofficial-api-for-eporner==2.5.3
 unofficial-api-for-porndoe==1.0.0
 unofficial-api-for-pornhat==0.1.0
 unofficial-api-for-pornhub==5.4.6
 unofficial-api-for-porntrex==1.8.3
+unofficial-api-for-redgifs==1.0.0
 unofficial-api-for-redtube==1.4.4
 unofficial-api-for-spankbang==2.4.4
 unofficial-api-for-thumbzilla==1.4.3

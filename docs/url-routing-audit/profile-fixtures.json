@@ -11,26 +11,26 @@
     "2xx": "HTTP availability only; still verify identity and bounded item preparation in the app."
   },
   "counts": {
-    "total": 95,
-    "primary": 37,
+    "total": 99,
+    "primary": 39,
     "tiers": {
-      "primary": 37,
-      "variant": 51,
+      "primary": 39,
+      "variant": 53,
       "replacement": 6,
       "diagnostic": 1
     },
     "primary_status_codes": {
-      "200": 34,
+      "200": 36,
       "403": 3
     },
     "all_status_codes": {
-      "200": 82,
+      "200": 86,
       "403": 8,
       "404": 4,
       "0": 1
     },
     "dispositions": {
-      "http_available": 78,
+      "http_available": 82,
       "access_restricted": 8,
       "unavailable_candidate": 4,
       "unsupported_resource": 1,
@@ -6007,6 +6007,234 @@
           }
         ],
         "metadata_requests": 7
+      }
+    },
+    {
+      "id": "bellesa.channel.bare",
+      "provider": "bellesa",
+      "profile_type": "channel",
+      "tier": "variant",
+      "url": "https://bellesa.co/channels/zero-to-hero",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/bellesa.py",
+          "function": "run",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified typed identity, real GUI profile preparation, Qt row roles/signals, and HLS stream resolution. Channel landing redirects to the filtered video listing; profile identity comes from its API.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-10T13:07:48.211794+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.bellesa.co/videos?providers=zero-to-hero",
+        "canonical_url": null,
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": null,
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-10T13:08:43.570984+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Zero To Hero",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 9
+          },
+          {
+            "kind": "hls",
+            "segments": 72
+          }
+        ],
+        "metadata_requests": 12
+      }
+    },
+    {
+      "id": "bellesa.performer.bare",
+      "provider": "bellesa",
+      "profile_type": "performer",
+      "tier": "variant",
+      "url": "https://bellesa.co/performers/lily-starfire",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/bellesa.py",
+          "function": "run",
+          "factory_in_test": "get_performer"
+        }
+      ],
+      "note": "Verified typed identity, real GUI profile preparation, Qt row roles/signals, and HLS stream resolution. Channel landing redirects to the filtered video listing; profile identity comes from its API.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_performer",
+      "http": {
+        "checked_at_utc": "2026-11-10T13:07:48.211841+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.bellesa.co/performers/lily-starfire",
+        "canonical_url": null,
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-10T13:08:43.570993+00:00",
+        "outcome": "passed",
+        "profile": "Performer",
+        "profile_name": "Lily Starfire",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 212
+          },
+          {
+            "kind": "hls",
+            "segments": 85
+          }
+        ],
+        "metadata_requests": 11
+      }
+    },
+    {
+      "id": "bellesa.channel.www",
+      "provider": "bellesa",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.bellesa.co/channels/zero-to-hero",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/bellesa.py",
+          "function": "run",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified typed identity, real GUI profile preparation, Qt row roles/signals, and HLS stream resolution. Channel landing redirects to the filtered video listing; profile identity comes from its API.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-10T13:07:48.211873+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.bellesa.co/videos?providers=zero-to-hero",
+        "canonical_url": null,
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": null,
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-10T13:08:43.570996+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Zero To Hero",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 9
+          },
+          {
+            "kind": "hls",
+            "segments": 72
+          }
+        ],
+        "metadata_requests": 3
+      }
+    },
+    {
+      "id": "bellesa.performer.www",
+      "provider": "bellesa",
+      "profile_type": "performer",
+      "tier": "primary",
+      "url": "https://www.bellesa.co/performers/lily-starfire",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/bellesa.py",
+          "function": "run",
+          "factory_in_test": "get_performer"
+        }
+      ],
+      "note": "Verified typed identity, real GUI profile preparation, Qt row roles/signals, and HLS stream resolution. Channel landing redirects to the filtered video listing; profile identity comes from its API.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_performer",
+      "http": {
+        "checked_at_utc": "2026-11-10T13:07:48.211899+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.bellesa.co/performers/lily-starfire",
+        "canonical_url": null,
+        "content_type": "text/html; charset=utf-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "bellesa",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-10T13:08:43.570998+00:00",
+        "outcome": "passed",
+        "profile": "Performer",
+        "profile_name": "Lily Starfire",
+        "profile_metadata": {},
+        "rows": 2,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 212
+          },
+          {
+            "kind": "hls",
+            "segments": 85
+          }
+        ],
+        "metadata_requests": 3
       }
     }
   ],

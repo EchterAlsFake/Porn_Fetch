@@ -1142,12 +1142,15 @@ class Backend(QObject):
 
                 quality = video.selected_quality or "best"
                 source_video = video.source_video
+                if isinstance(source_video, clients.rg_Video):
+                    from src.shared.redgifs import quality_label
+                    quality = await quality_label(source_video, quality)
                 if isinstance(source_video, clients.xf_Video):
                     from src.shared.media import xfreehd_quality
                     quality = xfreehd_quality(quality)
                 raw_video_types = (
                     clients.ep_Video, clients.pt_Video, clients.xf_Video,
-                    clients.ef_Video, clients.tf_Video, clients.pd_Video,
+                    clients.ef_Video, clients.tf_Video, clients.pd_Video, clients.rg_Video,
                 )
 
                 if isinstance(source_video, raw_video_types):
@@ -1649,6 +1652,8 @@ class Backend(QObject):
             "porntrex": "PornTrex",
             "porndoe": "Porndoe",
             "pornhat": "Pornhat",
+            "redgifs": "RedGIFs",
+            "bellesa": "Bellesa",
         }
         normalized_url = url.lower()
         platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")

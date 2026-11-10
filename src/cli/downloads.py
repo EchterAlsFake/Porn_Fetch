@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 ProgressCallback = Callable[..., None]
 KNOWN_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
-RAW_VIDEO_MODULES = frozenset({"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api", "porndoe_api"})
+RAW_VIDEO_MODULES = frozenset({"eporner_api", "porntrex_api", "xfreehd_api", "empflix_api", "tnaflix_api", "porndoe_api", "redgifs_api"})
 
 
 class DownloadState(StrEnum):
@@ -306,7 +306,18 @@ async def download_video(
             progress(100)
         return DownloadOutcome("completed", target, skipped=True)
 
+    module = type(video).__module__.split(".", 1)[0]
     available: Any = available_qualities
+    if module == "bellesa_api":
+        # Resolve real dimensions even when called without prior row preparation.
+        await video.load_fields("available_qualities")
+        available = video.available_qualities or []
+        if not select_allowed_quality(quality, available, has_premium):
+            raise ValueError("This Bellesa video has no rendition permitted by the current quality limit")
+    if module == "redgifs_api":
+        # Labels such as HD/SD cannot establish the 720p entitlement boundary.
+        from src.shared.redgifs import available_qualities as redgifs_qualities
+        available = await redgifs_qualities(video)
     if available is None:
         available = getattr(video, "available_qualities", None)
         if callable(available):
@@ -316,13 +327,17 @@ async def download_video(
             available = fallback() if callable(fallback) else fallback
     available = list(available or [])
     selected = select_allowed_quality(quality, available, has_premium)
+    if module == "redgifs_api" and not selected:
+        raise ValueError("This RedGIFs video has no rendition permitted by the current quality limit")
     if not selected:
         selected = str(quality) if has_premium else select_allowed_quality("720", available, False)
     if not selected:
         selected = "best" if has_premium else "720"
 
     configuration_quality: str | int = selected
-    module = type(video).__module__.split(".", 1)[0]
+    if module == "redgifs_api":
+        from src.shared.redgifs import quality_label
+        configuration_quality = await quality_label(video, selected)
     if module == "xfreehd_api":
         configuration_quality = xfreehd_quality(selected)
 

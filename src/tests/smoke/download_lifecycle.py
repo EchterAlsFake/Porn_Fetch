@@ -17,6 +17,7 @@ import time
 import traceback
 from collections import Counter
 from contextlib import redirect_stderr, redirect_stdout
+from contextvars import ContextVar
 from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
@@ -75,6 +76,7 @@ class ObservedCore(MediaCore):
         self.segment_requests = []
         self.segment_plans = []
         self.raw_urls = set()
+        self._raw_transfer = ContextVar("raw_transfer", default=False)
 
     def initialize_session(self):
         super().initialize_session()
@@ -88,6 +90,12 @@ class ObservedCore(MediaCore):
             entry = {"phase": self.phase, "method": method.upper(), "url": public_url(url),
                      "range": headers.get("Range") or headers.get("range"), "status": None,
                      "body_bytes_read": 0}
+            # RedGIFs inspects small MP4 header ranges outside the downloader.
+            # Preserve those requests as evidence without mistaking them for
+            # resumed output bytes; actual RAW ranges still satisfy every check.
+            entry["metadata_only"] = (not self._raw_transfer.get()
+                                      and urlsplit(str(url)).hostname == "media.redgifs.com"
+                                      and entry["range"] is not None)
             self.requests.append(entry)
             try:
                 response = await original(method, url, **kwargs)
@@ -125,7 +133,11 @@ class ObservedCore(MediaCore):
 
     async def legacy_download(self, url, configuration):
         self.raw_urls.add(public_url(url))
-        return await super().legacy_download(url, configuration)
+        token = self._raw_transfer.set(True)
+        try:
+            return await super().legacy_download(url, configuration)
+        finally:
+            self._raw_transfer.reset(token)
 
 
 async def validate_media(path, ffmpeg, expected_minutes):
@@ -158,7 +170,7 @@ async def validate_media(path, ffmpeg, expected_minutes):
 
 def media_requests(core, phase):
     return [entry for entry in core.requests if entry["phase"] == phase and entry["method"] == "GET"
-            and entry["body_bytes_read"] > 0
+            and entry["body_bytes_read"] > 0 and not entry.get("metadata_only", False)
             and (entry["url"] in core.raw_urls or entry["range"] or "video/" in entry.get("content_type", ""))]
 
 
@@ -439,7 +451,7 @@ async def run(args, workspace, ffmpeg):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--provider", choices=("all", *PROVIDER_MODULES), action="append",
-                        help="Select a provider; repeat for several. Default: all 15 providers")
+                        help="Select a provider; repeat for several. Default: all registered providers")
     parser.add_argument("--scenario", choices=("all", "pause-resume", "cleanup"), default="all")
     parser.add_argument("--quality", type=int, metavar="HEIGHT",
                         help="Require this exact resolution (at most 720p); default: lowest available")

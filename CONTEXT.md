@@ -52,6 +52,11 @@ wrapper restores this policy even for regenerated specs. QML adapts by window
 width, without TV/Automotive orientation branches. This requires a rebuilt APK;
 device layout and rotation checks remain pending.
 
+Android packaging adds a `MAIN`/`LEANBACK_LAUNCHER` entry for the shared Qt
+activity, optional Leanback/touchscreen features and a bundled TV banner through
+`scripts/android_storage_hook.py`. Rebuilt APKs can appear in the Android TV Apps
+menu; launcher visibility still needs verification with a rebuilt APK on TV.
+
 First use runs `FirstRunSetup.qml` before showing the main interface in either
 layout. It presents the full application license with an unchecked acceptance
 box, the €29.99 lifetime Premium offer, Off/Basic/Full error-reporting choices, the Ukraine message,
@@ -410,6 +415,55 @@ The working environment needed its old base-api 4.2.2 upgraded to the existing
 project requirement, 4.2.6, for persisted RAW checkpoints. These checks used the
 existing Python 3.14 environment; release requirements remain Python 3.15.
 Native mobile packages were not rebuilt for this integration.
+
+## RedGIFs integration
+
+RedGIFs uses `unofficial-api-for-redgifs>=1.0.0`. Video/GIF watch/embed links and
+first-party CDN MP4 identity links use the existing Video flow. `/users/<name>`
+uses Model/Pornstar; `/niches/<id>` and `/users/<name>/collections/<id>` use
+Playlist/Collection. Mixed collection still images are filtered out before public
+preview limits. No search, image-gallery or account controls were added.
+
+Both adapters load API metadata plus HTML titles and normalize duration seconds.
+The Qt-free `src/shared/redgifs.py` measures bounded MP4 metadata through the
+injected core, caches rendition mappings in its existing TTL cache, and converts
+numeric app resolutions back to SD/HD labels for RAW transfers. Portrait tiers
+use the short dimension; never invent a 720p SD tier. Existing quality entitlement,
+public preview, progress, stop/resume, naming, metadata and output export apply.
+GUI sessions participate in settings refresh and shutdown. Desktop, Android and
+iOS dependency inputs include the new provider.
+
+Live checks reconciled User 17/17, Niche 5/5 and Collection 244/244 video IDs
+(excluding two public still images). CLI SD/HD and free-best downloads, native GUI
+list rows for all three container types, desktop QML 480p Stop/Resume, and CLI
+480p pause/resume passed. Native mobile packages were not rebuilt. See
+[RedGIFs integration](docs/REDGIFS.md) for exact URLs, measured qualities,
+commands and upstream ordering/count limitations.
+
+## Bellesa integration
+
+Bellesa uses the published `unofficial-api-for-bellesa>=1.0.0` package. Support is
+limited to `/videos/<id>` (optional title slug), `/channels/<handle>` Channel and
+`/performers/<handle>` Performer on bare/www `bellesa.co`. Profiles use Model URL
+and the existing CLI profile flow; entering a handle selects Performer. Search,
+categories, directories, related streams, accounts and other library entry points
+are not exposed.
+
+GUI and CLI prepare API metadata and resolve the lazy media source for actual
+rendition dimensions. They use the first provider/channel as author, convert
+integer duration seconds to rounded minutes, and keep tags, thumbnails, UTC
+publication dates and stable IDs. HLS downloads reuse existing quality gates,
+metadata, naming, queue, output export and retained-segment stop/resume. Site
+labels can differ from dimensions (480 often measures 450p; 4:3 samples expose
+480/600/960p). Do not replace measured qualities with advertising labels.
+
+The GUI core participates in settings/session refresh and shutdown. Desktop,
+Android and iOS dependency inputs include Bellesa; archived iOS overlays install
+its pure wheel explicitly. Live validation passed all six accepted host/type
+routes, five complete profile listings (3/57/4/30/24), four real GUI profile
+checks, eight complete CLI media files through 2160p and free limits, CLI
+pause/resume and cleanup, and three real desktop download-control scenarios.
+Native mobile packages were not rebuilt. See [Bellesa](docs/BELLESA.md).
 
 ## Testing and documentation
 

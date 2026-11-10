@@ -15,9 +15,13 @@ logger = logging.getLogger(__name__)
 
 async def prepare_video(video: Any, provider: str) -> VideoObject:
     loaders = getattr(video, "loader_methods", {}) or {}
-    source = "api" if provider == "beeg" and "api" in loaders else "html"
+    source = "api" if provider in {"beeg", "redgifs", "bellesa"} and "api" in loaders else "html"
     if source in loaders:
         await video.load_sources(source)
+    if provider == "redgifs":
+        if getattr(video, "expected_type", 1) != 1:
+            raise ValueError("RedGIFs still images are not supported in the Video section")
+        await video.load_sources("html")
     config = _value(_value(video, "core"), "configuration")
     if provider == "eporner" and "api" in loaders and not getattr(config, "strict_language", False):
         await video.load_sources("api")
@@ -53,6 +57,12 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
 
 
 async def available_qualities(video: Any) -> list[int]:
+    if type(video).__module__.split(".", 1)[0] == "bellesa_api":
+        await video.load_fields("available_qualities")
+        return list(video.available_qualities or [])
+    if type(video).__module__.split(".", 1)[0] == "redgifs_api":
+        from src.shared.redgifs import available_qualities as redgifs_qualities
+        return await redgifs_qualities(video)
     if type(video).__module__.split(".", 1)[0] == "pornhat_api":
         # Pornhat resolves its player redirects in a separate lazy media source.
         return await video.get_available_qualities()
@@ -88,6 +98,8 @@ async def available_qualities(video: Any) -> list[int]:
 
 
 async def _author(video: Any, provider: str) -> str:
+    if provider == "bellesa":
+        return str(_value(video, "author") or "N/A")
     # 1. Author information dictionary (e.g. PornHub)
     info = _value(video, "author_information")
     if isinstance(info, dict) and info.get("name"):

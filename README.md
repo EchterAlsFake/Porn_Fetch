@@ -223,7 +223,9 @@ Porn Fetch is tested actively on the following devices and systems:
 - [tube8.com](https://tube8.com)
 - [empflix.com](https://empflix.com)
 - [tnaflix.com](https://tnaflix.com)
+- [bellesa.co](https://github.com/EchterAlsFake/unofficial-api-for-bellesa) *
 - [pornhat.com](https://github.com/EchterAlsFake/unofficial-api-for-pornhat) *
+- [redgifs.com](https://github.com/EchterAlsFake/unofficial-api-for-redgifs) *
 - [porndoe.com](https://github.com/EchterAlsFake/unofficial-api-for-porndoe) *
 
 * = Current Development Branch

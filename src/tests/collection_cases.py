@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 
+from src.cli.selftest.cases import COLLECTION_TESTS, PROFILE_TESTS
 from src.shared.provider_routing import COLLECTION_SEGMENTS, PROFILE_SEGMENTS, route_url
 
 
@@ -20,6 +21,14 @@ def collection_cases(overrides=None):
         "redtube": "https://www.redtube.com/playlist/4237321",
         "thumbzilla": None,
     }
+    # New providers also keep verified URLs in the CLI's live inventory. Retain
+    # audited profile and explicit playlist choices when both sources have one.
+    for _, url in PROFILE_TESTS:
+        route = route_url(url)
+        profiles.setdefault(route.provider, url)
+    for _, url in COLLECTION_TESTS:
+        route = route_url(url)
+        playlists.setdefault(route.provider, url)
     for key, url in (overrides or {}).items():
         targets = {"model": profiles, "playlist": playlists}
         provider, separator, kind = key.partition(".")

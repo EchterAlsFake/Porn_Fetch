@@ -11,7 +11,7 @@ import struct
 from pathlib import Path
 
 from PySide6.QtCore import QBuffer, QIODevice, Qt
-from PySide6.QtGui import QImage, QPainter
+from PySide6.QtGui import QColor, QFont, QGuiApplication, QImage, QPainter
 
 GRAPHICS = Path(__file__).resolve().parents[1] / "src/frontend/graphics"
 WINDOWS_SIZES = (16, 20, 24, 32, 40, 48, 64, 96, 128, 256)
@@ -59,11 +59,30 @@ def png(image: QImage) -> bytes:
     return bytes(buffer.data())
 
 
+def render_tv_banner(artwork: QImage) -> QImage:
+    """Android TV uses a 320x180 xhdpi banner with the app name included."""
+    image = QImage(320, 180, QImage.Format.Format_RGB32)
+    image.fill(QColor("#08091b"))
+    logo = artwork.scaled(132, 132, Qt.AspectRatioMode.KeepAspectRatio,
+                          Qt.TransformationMode.SmoothTransformation)
+    painter = QPainter(image)
+    painter.drawImage(16, (180 - logo.height()) // 2, logo)
+    font = QFont("DejaVu Sans")
+    font.setPixelSize(30)
+    font.setBold(True)
+    painter.setFont(font)
+    painter.setPen(QColor("white"))
+    painter.drawText(164, 40, 148, 100, Qt.AlignmentFlag.AlignVCenter, "Porn\nFetch")
+    painter.end()
+    return image
+
+
 def generate(graphics: Path = GRAPHICS) -> None:
     source = QImage(str(graphics / "logo_artwork.png"))
     if source.isNull():
         raise ValueError("Cannot read logo_artwork.png")
     artwork = source.copy(*alpha_bounds(source))
+    (graphics / "android_tv_banner.png").write_bytes(png(render_tv_banner(artwork)))
     for name, size in (("logo.png", 1024), ("logo_transparent.png", 1024), ("logo_square.png", 512)):
         (graphics / name).write_bytes(png(render(artwork, size)))
 
@@ -108,5 +127,6 @@ def generate(graphics: Path = GRAPHICS) -> None:
 
 
 if __name__ == "__main__":
+    app = QGuiApplication(["generate_app_icons", "-platform", "offscreen"])
     generate()
     print("Generated desktop, Android and iOS app icons.")
