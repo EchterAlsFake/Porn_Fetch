@@ -124,6 +124,10 @@ async def verify_stream(source, quality: str | int) -> dict:
     from src.backend import clients
 
     master = clients._safe_getattr(source, "m3u8_base_url")
+    if isinstance(source, clients.yj_Video):
+        from src.shared.youjizz import quality_label
+        label = await quality_label(source, quality)
+        master = source.hls_urls[label]
     if isinstance(source, clients.pd_Video):
         url = await clients.get_direct_url_legacy(source, quality)
     elif isinstance(source, clients.yp_Video) and source.is_hls is False:
@@ -150,7 +154,14 @@ async def test_profile_url(backend, model, case: dict, *, timeout: float = 90, i
         target = await resolve_container(clients.client_for(route.provider), route, pages=1)
         name = getattr(target, "name", None)
         profile_metadata = {}
-        if route.provider == "xnxx" and name is None:
+        if route.provider == "youjizz" and getattr(target, "user_id", None) and name is None:
+            # YouJizz independently permits uploads while hiding the profile
+            # name. Preserve that privacy rather than inventing an identity.
+            if not target.public_videos or target.banned:
+                raise AssertionError("This YouJizz user has no public upload feed")
+            profile_metadata = {"public_videos": True, "profile_public": target.is_public}
+            name = backend._iterator_display_name(target, case["url"], "model / channel")
+        elif route.provider == "xnxx" and name is None:
             # XNXX's public User schema exposes counts, but no name field.
             for field in ("total_videos_count", "total_pages_count"):
                 value = getattr(target, field)
@@ -161,7 +172,7 @@ async def test_profile_url(backend, model, case: dict, *, timeout: float = 90, i
         elif not isinstance(name, str) or name.strip().casefold() in {"", "unknown", "n/a"}:
             raise AssertionError("The profile did not load a meaningful name")
         expected = case.get("expected_factory")
-        if expected and type(target).__name__.casefold() != expected.removeprefix("get_"):
+        if expected and type(target).__name__.casefold() != expected.removeprefix("get_").casefold():
             raise AssertionError(f"Expected {expected}, got {type(target).__name__}")
         before = model.rowCount()
         inserted = QSignalSpy(model.rowsInserted)

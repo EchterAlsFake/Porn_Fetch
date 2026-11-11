@@ -36,7 +36,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
             "Select provider for this username:",
             choices=[
                 "pornhub", "xhamster", "xvideos", "eporner", "spankbang",
-                "porntrex", "porndoe", "pornhat", "redgifs", "bellesa", "xnxx", "youporn", "redtube", "thumbzilla", "tube8",
+                "porntrex", "porn", "porndoe", "pornhat", "redgifs", "bellesa", "youjizz", "xnxx", "youporn", "redtube", "thumbzilla", "tube8",
             ],
             style=WIZARD_STYLE,
         ).ask_async()
@@ -54,10 +54,15 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
             url = f"https://spankbang.com/pornstar/{target_input}"
         elif provider == "porntrex":
             url = f"https://www.porntrex.com/models/{target_input}/"
+        elif provider == "porn":
+            url = f"https://www.porn.com/{target_input}"
         elif provider == "porndoe":
             url = f"https://porndoe.com/pornstars-profile/{target_input}"
         elif provider == "pornhat":
             url = f"https://www.pornhat.com/models/{target_input}/"
+        elif provider == "youjizz":
+            from urllib.parse import quote
+            url = f"https://www.youjizz.com/search/{quote(target_input.replace(' ', '-'), safe='')}-1.html"
         elif provider == "bellesa":
             url = f"https://www.bellesa.co/performers/{target_input}"
         elif provider == "redgifs":

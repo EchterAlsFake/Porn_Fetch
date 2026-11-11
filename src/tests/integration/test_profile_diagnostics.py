@@ -60,8 +60,8 @@ class ProfileDiagnosticTests(unittest.IsolatedAsyncioTestCase):
 
     def test_every_primary_branch_and_replacement_is_recorded(self):
         primary = load_profile_cases()
-        self.assertEqual(len(primary), 37)
-        self.assertEqual(len({case["provider"] for case in primary}), 15)
+        self.assertEqual(len(primary), 43)
+        self.assertEqual(len({case["provider"] for case in primary}), 18)
         self.assertTrue(all(case["expected_factory"] and case["sources"] for case in primary))
         all_cases = load_profile_cases(include_variants=True)
         self.assertTrue(any(case["http"]["status"] == 403 for case in all_cases))

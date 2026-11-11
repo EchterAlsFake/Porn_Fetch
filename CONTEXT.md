@@ -465,6 +465,49 @@ checks, eight complete CLI media files through 2160p and free limits, CLI
 pause/resume and cleanup, and three real desktop download-control scenarios.
 Native mobile packages were not rebuilt. See [Bellesa](docs/BELLESA.md).
 
+## Porn.com integration
+
+Porn.com uses published `unofficial-api-for-porn>=0.1.0` for Video, Collection,
+Channel and Pornstar only. Native `/scene/<id>[/<slug>]` links use Video URL;
+channels/pornstars use Model URL; generic collection pages use Playlist/Collection
+URL. Container URLs share `/<slug>`, so the Qt-free resolver checks their actual
+HTML page type through the injected core. CLI automatic routing returns the
+resolved kind; GUI fields provide the expected kind. Generic lists instantiate
+Collection itself. Source/Category objects, directories, search and other provider
+interfaces are not exposed. Twelve verified hosts retain their locale.
+
+External referral cards are filtered before the five-video public preview.
+Adapters use actual HLS rendition heights, normalized duration minutes and
+channel/performer author labels, preserving tags, posters and stable IDs.
+Shared HLS quality entitlement, queue, metadata, output and retained-segment
+Stop/Resume remain in use. GUI refresh/shutdown and desktop/Android/iOS dependency
+inputs include the provider; archived iOS staging installs its pure wheel.
+
+Live integration passed all twelve hosts, Collection 12/12 native scenes on the
+sample page, complete Channel 1/1 across 14 pages and Pornstar 13/13 across 23,
+three real GUI preparation cases, free/premium complete CLI files, 480p CLI
+pause/resume and cleanup, and desktop QML Stop/Resume. Mobile packages were not
+rebuilt. See [Porn.com](docs/PORN.md) for scope and commands.
+
+## YouJizz integration
+
+YouJizz uses published `unofficial-api-for-youjizz>=0.1.0` for Video, Collection,
+Pornstar and User only. Numbered popular/newest/top/trending/HD lists instantiate
+Collection itself. Pornstar links have `/search/<name>-<page>.html` paths; the
+Qt-free adapter validates them against the real alphabetical directory before
+constructing Pornstar. General keyword search, Category/tag routes, random,
+directories, comments, related content and account methods are not exposed.
+Only `youjizz.com` and `www.youjizz.com` are accepted. Public User upload flags
+are separate from hidden profile names and must be respected.
+
+Both adapters measure every per-quality HLS master, including 288p/368p streams
+missing from Auto. Measured tiers use the shorter dimension; portrait encoding
+labels such as 1920 are translated back only at dispatch. This preserves the
+720p free boundary, five-video preview, normal queue, metadata, output and HLS
+retained-segment Stop/Resume controls. GUI core/client refresh and shutdown and
+desktop/Android/iOS dependency inputs include YouJizz. See [YouJizz](docs/YOUJIZZ.md)
+for maintained verification details. Native mobile artifacts were not rebuilt.
+
 ## Testing and documentation
 
 ```sh

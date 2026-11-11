@@ -1145,6 +1145,9 @@ class Backend(QObject):
                 if isinstance(source_video, clients.rg_Video):
                     from src.shared.redgifs import quality_label
                     quality = await quality_label(source_video, quality)
+                if isinstance(source_video, clients.yj_Video):
+                    from src.shared.youjizz import quality_label
+                    quality = await quality_label(source_video, quality)
                 if isinstance(source_video, clients.xf_Video):
                     from src.shared.media import xfreehd_quality
                     quality = xfreehd_quality(quality)
@@ -1355,7 +1358,8 @@ class Backend(QObject):
             return False
         field = "video" if name.startswith("single") else "model" if name.startswith("model") else "playlist"
         try:
-            route = route_url(url)
+            container_kind = {"model": ContentKind.PROFILE, "playlist": ContentKind.COLLECTION}.get(field)
+            route = route_url(url, container_kind=container_kind)
             allowed = {"video": {ContentKind.VIDEO, ContentKind.GALLERY}, "model": {ContentKind.PROFILE},
                        "playlist": {ContentKind.COLLECTION}}
             if route.kind not in allowed[field]:
@@ -1424,7 +1428,7 @@ class Backend(QObject):
     async def _process_model_url(self, url: str, custom_options: str, filters: VideoFilters,
                                  *, pages: int = 30, iterator_config: IteratorConfig | None = None):
         try:
-            route = route_url(url)
+            route = route_url(url, container_kind=ContentKind.PROFILE)
             if route.kind != ContentKind.PROFILE:
                 raise ValueError("Please enter a supported profile or channel URL.")
             target = await resolve_container(clients.client_for(route.provider), route, pages=pages)
@@ -1455,7 +1459,7 @@ class Backend(QObject):
 
     async def _process_playlist_url(self, url: str, custom_options: str, filters: VideoFilters):
         try:
-            route = route_url(url)
+            route = route_url(url, container_kind=ContentKind.COLLECTION)
             if route.kind != ContentKind.COLLECTION:
                 raise ValueError("Please enter a supported public playlist or collection URL.")
             target = await resolve_container(clients.client_for(route.provider), route, pages=30)
@@ -1642,6 +1646,7 @@ class Backend(QObject):
                     return str(value)
 
         platform_names = {
+            "porn.com": "Porn.com",
             "pornhub": "Pornhub",
             "eporner": "Eporner",
             "xnxx": "XNXX",
@@ -1654,6 +1659,7 @@ class Backend(QObject):
             "pornhat": "Pornhat",
             "redgifs": "RedGIFs",
             "bellesa": "Bellesa",
+            "youjizz": "YouJizz",
         }
         normalized_url = url.lower()
         platform = next((name for key, name in platform_names.items() if key in normalized_url), "Unknown")

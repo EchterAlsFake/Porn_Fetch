@@ -57,6 +57,12 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
 
 
 async def available_qualities(video: Any) -> list[int]:
+    if type(video).__module__.split(".", 1)[0] == "youjizz_api":
+        from src.shared.youjizz import available_qualities as youjizz_qualities
+        return await youjizz_qualities(video)
+    if type(video).__module__.split(".", 1)[0] == "porn_api":
+        from src.shared.porn import available_qualities as porn_qualities
+        return await porn_qualities(video)
     if type(video).__module__.split(".", 1)[0] == "bellesa_api":
         await video.load_fields("available_qualities")
         return list(video.available_qualities or [])
@@ -98,6 +104,11 @@ async def available_qualities(video: Any) -> list[int]:
 
 
 async def _author(video: Any, provider: str) -> str:
+    if provider == "porn":
+        from src.shared.porn import author_name
+        return author_name(video)
+    if provider == "youjizz":
+        return str(_value(video, "author_name") or "N/A")
     if provider == "bellesa":
         return str(_value(video, "author") or "N/A")
     # 1. Author information dictionary (e.g. PornHub)

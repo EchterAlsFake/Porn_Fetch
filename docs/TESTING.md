@@ -110,6 +110,8 @@ Run with `uv run --no-sync python -m src.tests.smoke.NAME`:
 | NAME | What it checks |
 | --- | --- |
 | `bellesa` | Bellesa Video/Channel/Performer routes, complete profiles, all measured qualities, metadata and free limits |
+| `youjizz` | YouJizz Video/Collection/Pornstar/User, complete profiles, measured HLS qualities, free limits and GUI preparation |
+| `porn` | Porn.com Video/Collection/Channel/Pornstar, native scene filtering, complete profiles, free/premium HLS and GUI preparation |
 | `profile_urls --include-variants` | Profile URL aliases, real metadata and GUI rows; no media downloads |
 | `download_lifecycle` | CLI HLS/RAW pause, resume, cleanup and restart |
 | `download_gui` | Desktop buttons, progress, quality, stop/remove and finished files |
@@ -296,3 +298,26 @@ complete profile reconciliation. The full runner downloads all six actual
 qualities of video 7054 plus free-best samples at 720p and 600p (an older 4:3
 video). Metadata export, playable dimensions, audio and duration are checked.
 See [the recorded Bellesa results](BELLESA.md) for exact commands and limits.
+
+## Porn.com integration
+
+[Porn.com integration](PORN.md) records the published-wheel checks for the four
+supported types, twelve hosts, native scene filtering, complete profile feeds,
+free preview, actual qualities, metadata and GUI/CLI downloads. The opt-in
+`python -m src.tests.smoke.porn --gui` runner performs real requests and complete
+downloads by default; `--metadata-only` omits media transfers. Existing lifecycle
+and desktop download runners also accept `--provider porn`. Other provider
+interfaces, keyword search and external referral downloads remain excluded.
+
+
+## YouJizz integration
+
+Only Video, Collection, Pornstar and User are integrated through the published
+`unofficial-api-for-youjizz>=0.1.0` package. The opt-in `youjizz` helper suite
+makes real requests and complete HLS downloads; normal discovery starts no new
+provider traffic. `python -m src.tests.smoke.youjizz --gui` covers both hosts,
+complete pornstar/user listings, typed collections, free previews, all rendition
+tiers on the five media samples, CLI metadata export and real GUI preparation.
+Use `--metadata-only` to omit complete media transfers. Existing CLI lifecycle
+and desktop controls runners accept `--provider youjizz`. See [YouJizz](YOUJIZZ.md)
+for the exact commands, results and platform limits.

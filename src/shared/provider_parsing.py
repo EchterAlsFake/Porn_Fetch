@@ -116,7 +116,7 @@ def parse_length(
 
     Digits-only strings depend on `video_source`:
         - PornHub, Eporner, xHamster, SpankBang, YouPorn, Beeg, Redtube,
-          Tube8, Thumbzilla, XFreeHD, EMPFlix, TNAFlix, Porndoe, Pornhat, RedGIFs, and Bellesa values are
+          Tube8, Thumbzilla, XFreeHD, EMPFlix, TNAFlix, Porn.com, Porndoe, Pornhat, RedGIFs, Bellesa, and YouJizz values are
           interpreted as seconds.
         - Other provider values are interpreted as minutes.
 
@@ -139,7 +139,7 @@ def parse_length(
 
     seconds_sources = {
         "pornhub", "phub", "eporner", "xhamster", "spankbang", "youporn", "beeg",
-        "redtube", "tube8", "thumbzilla", "xfreehd", "empflix", "tnaflix", "porndoe", "pornhat", "redgifs", "bellesa",
+        "redtube", "tube8", "thumbzilla", "xfreehd", "empflix", "tnaflix", "porn", "porndoe", "pornhat", "redgifs", "bellesa", "youjizz",
     }
     source = (video_source or "").casefold()
 

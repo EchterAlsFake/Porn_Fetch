@@ -65,6 +65,9 @@ def select_allowed_quality(
         except (TypeError, ValueError):
             return 0, 0
 
+    if preferred.casefold() in {"worst", "half"}:
+        ordered = sorted(allowed, key=rank)
+        return ordered[0 if preferred.casefold() == "worst" else len(ordered) // 2]
     return max(allowed, key=rank)
 
 

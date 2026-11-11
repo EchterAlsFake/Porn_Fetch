@@ -49,6 +49,10 @@ SUITES = {
         "Online checks plus active download",
         [sys.executable, "Porn_Fetch_CLI.py", "--test-mode", "--test-downloads"],
     ),
+    "youjizz": (
+        "Live YouJizz Video/Collection/Pornstar/User integration and HLS quality downloads",
+        [sys.executable, "-m", "src.tests.smoke.youjizz", "--gui"],
+    ),
     "bellesa": (
         "Live Bellesa Video/Channel/Performer integration and complete quality downloads",
         [sys.executable, "-m", "src.tests.smoke.bellesa"],
@@ -99,10 +103,10 @@ SUITES = {
     ),
 }
 
-ONLINE = {"bellesa", "providers", "gui_profiles", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
+ONLINE = {"youjizz", "bellesa", "providers", "gui_profiles", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
           "statistics_gui", "download_advanced", "application_recovery", "collections_gui", "account_cookies", "account_gui", "sni"}
 
-MEDIA = {"bellesa", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
+MEDIA = {"youjizz", "bellesa", "downloads", "download_lifecycle", "download_gui", "download_queue", "settings_gui",
          "statistics_gui", "download_advanced", "application_recovery", "collections_gui"}
 
 

@@ -84,6 +84,8 @@ class WebsiteTest:
 
 
 TESTS = [
+    WebsiteTest(name="porn", url="https://www.porn.com/scene/208974141"),
+    WebsiteTest(name="youjizz", url="https://www.youjizz.com/videos/video-55374481.html"),
     WebsiteTest(name="bellesa", url="https://www.bellesa.co/videos/7054"),
     WebsiteTest(name="redgifs", url="https://www.redgifs.com/watch/hotpinkacrobatickitfox"),
     WebsiteTest(

@@ -35,6 +35,8 @@ PROVIDER_MODULES = {
     "pornhat": "pornhat_api",
     "redgifs": "redgifs_api",
     "bellesa": "bellesa_api",
+    "porn": "porn_api",
+    "youjizz": "youjizz_api",
 }
 
 HOST_PATTERNS = {
@@ -57,6 +59,8 @@ HOST_PATTERNS = {
     "pornhat": r"^(?:(?:www\.)?pornhat\.(?:com|one)|(?:de|fr|it|es|pt|hi)\.pornhat\.com)$",
     "redgifs": r"^(?:www\.|media\.)?redgifs\.com$",
     "bellesa": r"^(?:www\.)?bellesa\.co$",
+    "youjizz": r"^(?:www\.)?youjizz\.com$",
+    "porn": r"^(?:(?:www|de|es|fr|it|jp|ru|nl|pt|pl|se)\.)?porn\.com$",
 }
 
 PROFILE_SEGMENTS = {
@@ -77,6 +81,8 @@ PROFILE_SEGMENTS = {
     "pornhat": {"models", "sites"},
     "redgifs": {"users"},
     "bellesa": {"channels", "performers"},
+    "youjizz": {"profile", "search"},
+    "porn": set(),  # /<slug> identities are resolved from the actual page type.
 }
 
 COLLECTION_SEGMENTS = {
@@ -84,7 +90,57 @@ COLLECTION_SEGMENTS = {
     "youporn": {"collections", "collection"}, "redtube": {"playlist"},
     "thumbzilla": {"playlist"},
     "redgifs": {"niches", "collections"},
+    "porn": set(),
+    "youjizz": {"most-popular", "newest-clips", "top-rated", "top-rated-week",
+                "top-rated-month", "trending", "highdefinition"},
 }
+
+
+def _youjizz_route(parsed: Any, url: str, expected: ContentKind | None) -> Route:
+    from src.shared.youjizz import COLLECTIONS
+
+    if parsed.username or parsed.password or parsed.port not in {None, 80, 443} or parsed.fragment:
+        raise ValueError("Invalid YouJizz URL")
+    if re.fullmatch(r"/videos/(?:embed/[0-9]+|[^/]*-[0-9]+\.html)/?", parsed.path):
+        return Route("youjizz", ContentKind.VIDEO, url)
+    query = parse_qs(parsed.query, keep_blank_values=True)
+    mode = None
+    if re.fullmatch(r"/profile/user/[0-9]+(?:/videos)?/?", parsed.path):
+        if (set(query) - {"order", "page"} or any(len(v) != 1 for v in query.values())
+                or query.get("order", ["recent"])[0] not in {"recent", "views", "rating", "length"}
+                or not re.fullmatch(r"[1-9][0-9]*", query.get("page", ["1"])[0])):
+            raise ValueError("Unsupported YouJizz user tab or filter")
+        kind = ContentKind.PROFILE
+    elif re.fullmatch(r"/search/[^/]+-[1-9][0-9]*\.html", parsed.path) and not query:
+        kind, mode = ContentKind.PROFILE, "pornstar"
+    elif (re.fullmatch(r"/[a-z-]+/[1-9][0-9]*\.html", parsed.path)
+          and parsed.path.split('/')[1] in COLLECTIONS and not query):
+        kind = ContentKind.COLLECTION
+    else:
+        raise ValueError("Enter a YouJizz video, collection, pornstar directory link or public user URL")
+    if expected is not None and kind != expected:
+        raise ValueError("Use the matching profile or playlist/collection input for this YouJizz URL")
+    return Route("youjizz", kind, url, profile_mode=mode)
+
+
+def _porn_route(parsed: Any, url: str, container_kind: ContentKind | None) -> Route:
+    if parsed.username or parsed.password or parsed.port not in {None, 80, 443}:
+        raise ValueError("Invalid Porn.com URL")
+    if re.fullmatch(r"/scene/[0-9]+(?:/[^/]+)?/?", parsed.path):
+        return Route("porn", ContentKind.VIDEO, url)
+    parts = parsed.path.strip("/").split("/")
+    if len(parts) == 2 and parts[0] in {"gay", "trans"}:
+        parts = parts[1:]
+    blocked = {"", "gay", "trans", "scene", "search", "pornstars", "sites", "categories",
+               "out", "pics", "legal", "report-link", "wp-admin", "wp-json", "login",
+               "signup", "account", "playlist", "playlists"}
+    if (len(parts) == 1 and parts[0].casefold() not in blocked
+            and re.fullmatch(r"[A-Za-z0-9]+(?:[-_+][A-Za-z0-9]+)*", parts[0])):
+        if container_kind not in {None, ContentKind.PROFILE, ContentKind.COLLECTION}:
+            raise ValueError("Unsupported Porn.com container type")
+        return Route("porn", container_kind or ContentKind.PROFILE, url,
+                     profile_mode="auto" if container_kind is None else None)
+    raise ValueError("Enter an individual Porn.com scene, collection, channel or pornstar URL")
 
 
 def _bellesa_route(parsed: Any, url: str) -> Route:
@@ -127,7 +183,7 @@ def _content_section(provider: str, parts: list[str]) -> str:
     return section
 
 
-def route_url(url: str) -> Route:
+def route_url(url: str, *, container_kind: ContentKind | None = None) -> Route:
     parsed = urlparse(url.strip())
     if parsed.scheme.casefold() not in {"http", "https"} or not parsed.hostname:
         raise ValueError("a complete HTTP(S) URL is required")
@@ -138,6 +194,10 @@ def route_url(url: str) -> Route:
     )
     if provider is None:
         raise ValueError(f"unsupported provider host: {host}")
+    if provider == "youjizz":
+        return _youjizz_route(parsed, url.strip(), container_kind)
+    if provider == "porn":
+        return _porn_route(parsed, url.strip(), container_kind)
     if provider == "bellesa":
         return _bellesa_route(parsed, url.strip())
     if provider == "redgifs":
@@ -256,6 +316,13 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
 
 
 async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any:
+    if route.provider == "youjizz":
+        from src.shared.youjizz import resolve_container as resolve_youjizz_container
+        return await resolve_youjizz_container(client, route)
+    if route.provider == "porn":
+        from src.shared.porn import resolve_container as resolve_porn_container
+        expected = None if route.profile_mode == "auto" else str(route.kind)
+        return await resolve_porn_container(client, route.url, expected=expected)
     if route.provider == "bellesa":
         if route.kind != ContentKind.PROFILE:
             raise ValueError("A Bellesa channel or performer URL is required")
@@ -362,6 +429,12 @@ def container_stream(
 ) -> AsyncIterator[Any]:
     if hasattr(container, "__aiter__"):
         return container
+    if provider == "youjizz":
+        from src.shared.youjizz import container_stream as youjizz_stream
+        return youjizz_stream(container, pages=pages, iterator_config=iterator_config)
+    if provider == "porn":
+        from src.shared.porn import playable_videos
+        return playable_videos(_call_stream(container, "videos", pages, iterator_config))
     if provider == "redgifs":
         name = "items" if hasattr(container, "collection_id") else "videos"
         return _redgifs_videos(_call_stream(container, name, pages, iterator_config))

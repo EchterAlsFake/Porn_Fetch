@@ -9,6 +9,8 @@ Porn Fetch is English-only. Translations are unfinished.
 - [Work on the code](FOR_DEVELOPERS.md)
 - [Run tests](TESTING.md)
 - [Bellesa integration and verification](BELLESA.md)
+- [Porn.com integration and verification](PORN.md)
+- [YouJizz integration and verification](YOUJIZZ.md)
 - [Build and publish releases](RELEASING.md)
 - [Help with future translations](TRANSLATING.md)
 

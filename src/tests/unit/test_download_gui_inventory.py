@@ -46,7 +46,7 @@ class DesktopDownloadInventoryTests(unittest.TestCase):
         args = parse_args([])
         automated = {provider for provider, _, _ in args.fixtures}
         self.assertEqual(automated, set(PROVIDER_MODULES) - {"spankbang"})
-        self.assertEqual(len(args.fixtures) * len(args.scenarios), 54)
+        self.assertEqual(len(args.fixtures) * len(args.scenarios), 60)
         self.assertEqual({(c["provider"], c["scenario"], c["status"]) for c in args.manual_checks},
                          {("spankbang", scenario, "MANUAL") for scenario in SCENARIOS})
 

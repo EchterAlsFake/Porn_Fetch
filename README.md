@@ -214,6 +214,7 @@ Porn Fetch is tested actively on the following devices and systems:
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
 - [xhamster.com](https://github.com/EchterAlsFake/xhamster_api)
 - [spankbang.com](https://spankbang.com)
+- [youjizz.com](https://github.com/EchterAlsFake/unofficial-api-for-youjizz) *
 - [youporn.com](https://youporn.com)
 - [beeg.com](https://github.com/echteralsfake/beeg_api)
 - [porntrex.com](https://github.com/echteralsfake/porntrex_api)
@@ -224,6 +225,7 @@ Porn Fetch is tested actively on the following devices and systems:
 - [empflix.com](https://empflix.com)
 - [tnaflix.com](https://tnaflix.com)
 - [bellesa.co](https://github.com/EchterAlsFake/unofficial-api-for-bellesa) *
+- [porn.com](https://github.com/EchterAlsFake/unofficial-api-for-porn) *
 - [pornhat.com](https://github.com/EchterAlsFake/unofficial-api-for-pornhat) *
 - [redgifs.com](https://github.com/EchterAlsFake/unofficial-api-for-redgifs) *
 - [porndoe.com](https://github.com/EchterAlsFake/unofficial-api-for-porndoe) *

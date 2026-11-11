@@ -12,9 +12,11 @@ For Porn Fetch 3.9 (desktop, Android, and CLI).
 | XVideos | Yes | Yes | Yes | — | — | Yes | — |
 | XHamster | Yes | Yes | Account only | Yes | — | Yes | — |
 | SpankBang | Yes | Yes | — | — | — | — | — |
+| YouJizz | Yes | Pornstar, User | Collection | — | — | — | — |
 | YouPorn | Yes | Yes | Yes | — | — | — | — |
 | Beeg | Yes | — | — | — | — | — | — |
 | Bellesa | Yes | Channel, Performer | — | — | — | — | — |
+| Porn.com | Native scenes | Channel, Pornstar | Collection | — | — | — | — |
 | Porntrex | Yes | Yes | — | — | — | — | — |
 | XFreeHD | Yes | — | — | — | — | — | CLI only |
 | RedTube | Yes | Yes | Yes | — | — | — | — |
@@ -71,3 +73,23 @@ license. Some YouPorn MP4-only videos also require a license because their
 resolution is unknown.
 
 HQporner, MissAV, and unlisted websites are not supported.
+
+Porn.com accepts native `/scene/<id>[/<slug>]` videos and individual collection,
+channel and pornstar URLs such as `/yoga-porn`, `/brazzers` and `/mia-khalifa`.
+Use Video URL for scenes, Model URL for channels/pornstars, and Playlist/Collection
+URL for generic collections. The CLI resolves the actual page type automatically.
+Referrals to other websites are excluded before the five-video free preview.
+Only Video, Collection, Channel and Pornstar are integrated; source indexes,
+directories, keyword search and other provider interfaces are not exposed.
+See [Porn.com integration](PORN.md).
+
+YouJizz supports Video, Collection, Pornstar and User only on `youjizz.com` and
+`www.youjizz.com`. Video URLs include `/videos/<slug>-<id>.html` and
+`/videos/embed/<id>`; numbered popular/newest/top/trending/HD lists use the
+Playlist/Collection URL flow. Pornstar directory links use `/search/<name>-1.html`
+and are validated against the actual directory before the Model URL flow loads
+them. Public users use `/profile/user/<id>[/videos]`. General keyword searches,
+category/tag routes, random lists, directories and account methods are excluded.
+HLS downloads use actual measured quality tiers, including older 288p/368p
+renditions, with the existing free preview, quality limits and stop/resume flow.
+See [YouJizz integration](YOUJIZZ.md) for route examples and live evidence.

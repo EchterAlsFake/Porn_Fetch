@@ -4,6 +4,10 @@ This version is still in beta. See the [development checklist](https://pornfetch
 
 ### Website Support
 
+- Added YouJizz videos, public collections, pornstar directory links and public user uploads. General keyword search and other provider methods remain unavailable.
+
+- Added Porn.com video downloads, collections, channels and pornstar pages on verified language hosts. External referral cards are excluded from download lists.
+
 - Added Pornhat video downloads and model/channel pages, including verified language hosts and the `.one` alias.
 
 - Added RedTube video downloads, public playlists, and pornstar, channel and amateur pages.

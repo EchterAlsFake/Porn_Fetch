@@ -31,6 +31,8 @@ Current APIs:
 17) pornhat       -> https://pornhat.com (pht_client, pht_video)
 18) redgifs       -> https://redgifs.com (rg_client, rg_video)
 19) bellesa       -> https://bellesa.co (bl_client, bl_video)
+20) porn          -> https://porn.com (pc_client, pc_video)
+21) youjizz       -> https://youjizz.com (yj_client, yj_video)
 """
 
 import os
@@ -66,6 +68,8 @@ from youporn_api import Client as yp_Client, Video as yp_Video
 from empflix_api import Client as ef_Client, Video as ef_Video
 from tnaflix_api import Client as tf_Client, Video as tf_Video
 from bellesa_api import Client as bl_Client, Video as bl_Video
+from porn_api import Client as pc_Client, Video as pc_Video
+from youjizz_api import Client as yj_Client, Video as yj_Video
 from porndoe_api import Client as pd_Client, Video as pd_Video
 from pornhat_api import Client as pht_Client, Video as pht_Video  # noqa: E402
 from redgifs_api import Client as rg_Client, Video as rg_Video, Image as rg_Image  # noqa: E402
@@ -84,7 +88,7 @@ from curl_cffi.const import CurlOpt
 # Native provider types consumed by the GUI preparation and download adapters.
 AllowedVideoType: TypeAlias = (
     ph_Video | xn_Video | xv_Video | yp_Video | tu_Video | ph_Short |
-    xh_Video | xh_Short | sp_Video | bg_Video | rt_Video | th_Video | pht_Video | bl_Video
+    xh_Video | xh_Short | sp_Video | bg_Video | rt_Video | th_Video | pht_Video | bl_Video | pc_Video | yj_Video
     # Those are all HLS streams
 )
 
@@ -201,6 +205,8 @@ core_pd = MediaCore(configuration=config, settings=app_settings)
 core_pht = MediaCore(configuration=config, settings=app_settings)
 core_rg = MediaCore(configuration=config, settings=app_settings)
 core_bl = MediaCore(configuration=config, settings=app_settings)
+core_pc = MediaCore(configuration=config, settings=app_settings)
+core_yj = MediaCore(configuration=config, settings=app_settings)
 
 ep_client = ep_Client(core=core_ep)
 xv_client = xv_Client(core=core_xv)
@@ -221,14 +227,16 @@ pd_client = pd_Client(core=core_pd)
 pht_client = pht_Client(core=core_pht)
 rg_client = rg_Client(core=core_rg)
 bl_client = bl_Client(core=core_bl)
+pc_client = pc_Client(core=core_pc)
+yj_client = yj_Client(core=core_yj)
 
 cores = [
     core_ep, core_ph, core_xv, core_xh, core_xn, core_sp, core_yp, core_bg, core_pt, core_xf, core_rt, core_th,
-    core_tu, core_ef, core_tf, core_pd, core_pht, core_rg, core_bl,
+    core_tu, core_ef, core_tf, core_pd, core_pht, core_rg, core_bl, core_pc, core_yj,
 ]
 
 video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-           rt_Video, th_Video, tu_Video, ef_Video, tf_Video, pd_Video, pht_Video, rg_Video, bl_Video, ph_Short, xh_Short]
+           rt_Video, th_Video, tu_Video, ef_Video, tf_Video, pd_Video, pht_Video, rg_Video, bl_Video, pc_Video, yj_Video, ph_Short, xh_Short]
 
 logger.debug("Successfully initialized all clients and!")
 
@@ -298,17 +306,20 @@ def refresh_clients() -> None:
 
     core_rg.enable_logging(level=level, log_file=log_file_path("BaseCore_RG.log") if debug_mode else None)
     core_bl.enable_logging(level=level, log_file=log_file_path("BaseCore_BL.log") if debug_mode else None)
+    core_pc.enable_logging(level=level, log_file=log_file_path("BaseCore_PC.log") if debug_mode else None)
+
+    core_yj.enable_logging(level=level, log_file=log_file_path("BaseCore_YJ.log") if debug_mode else None)
 
     cores_to_update = {
         core, core_ep, core_ph, core_xv, core_xh, core_xn, core_sp,
         core_yp, core_bg, core_pt, core_xf, core_rt, core_th, core_tu,
-        core_ef, core_tf, core_pd, core_pht, core_rg, core_bl
+        core_ef, core_tf, core_pd, core_pht, core_rg, core_bl, core_pc, core_yj
     }
 
     clients_list = [
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
-        ef_client, tf_client, pd_client, pht_client, rg_client, bl_client
+        ef_client, tf_client, pd_client, pht_client, rg_client, bl_client, pc_client, yj_client
     ]
 
     for client in clients_list:
@@ -384,7 +395,7 @@ async def close_all_clients() -> None:
     for client in (
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
-        ef_client, tf_client, pd_client, pht_client, rg_client, bl_client,
+        ef_client, tf_client, pd_client, pht_client, rg_client, bl_client, pc_client, yj_client,
     ):
         unique_cores.add(client.core)
     await asyncio.gather(*(item.close() for item in unique_cores), return_exceptions=True)
@@ -440,6 +451,8 @@ def client_for(provider: str) -> Any:
         "pornhat": pht_client,
         "redgifs": rg_client,
         "bellesa": bl_client,
+        "porn": pc_client,
+        "youjizz": yj_client,
     }[provider]
 
 
@@ -610,6 +623,25 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         publish_date = video.publish_date
         video_id = video.video_id
 
+    elif isinstance(video, yj_Video):
+        video_source = "youjizz"
+        author = video.author_name or "N/A"
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail_url
+        publish_date = video.publish_date
+        video_id = video.video_id
+
+    elif isinstance(video, pc_Video):
+        from src.shared.porn import author_name
+        video_source = "porn"
+        author = author_name(video)
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail_url
+        publish_date = None
+        video_id = video.video_id
+
     elif isinstance(video, bl_Video):
         video_source = "bellesa"
         author = video.author or "N/A"
@@ -737,6 +769,14 @@ async def get_available_qualities(video: Any) -> List[int]:
       - HLS videos: video.m3u8_base_url + video.core.list_available_qualities()
       - Legacy videos: video.video_qualities (e.g. ["360", "480", "720"])
     """
+    if isinstance(video, yj_Video):
+        from src.shared.youjizz import available_qualities
+        return await available_qualities(video)
+
+    if isinstance(video, pc_Video):
+        from src.shared.porn import available_qualities
+        return await available_qualities(video)
+
     if isinstance(video, bl_Video):
         await video.load_fields("available_qualities")
         return list(video.available_qualities or [])

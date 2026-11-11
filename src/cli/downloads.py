@@ -308,6 +308,16 @@ async def download_video(
 
     module = type(video).__module__.split(".", 1)[0]
     available: Any = available_qualities
+    if module == "youjizz_api":
+        from src.shared.youjizz import available_qualities as youjizz_qualities
+        available = await youjizz_qualities(video)
+        if not select_allowed_quality(quality, available, has_premium):
+            raise ValueError("This YouJizz video has no rendition permitted by the current quality limit")
+    if module == "porn_api":
+        from src.shared.porn import available_qualities as porn_qualities
+        available = await porn_qualities(video)
+        if not select_allowed_quality(quality, available, has_premium):
+            raise ValueError("This Porn.com video has no rendition permitted by the current quality limit")
     if module == "bellesa_api":
         # Resolve real dimensions even when called without prior row preparation.
         await video.load_fields("available_qualities")
@@ -337,6 +347,9 @@ async def download_video(
     configuration_quality: str | int = selected
     if module == "redgifs_api":
         from src.shared.redgifs import quality_label
+        configuration_quality = await quality_label(video, selected)
+    if module == "youjizz_api":
+        from src.shared.youjizz import quality_label
         configuration_quality = await quality_label(video, selected)
     if module == "xfreehd_api":
         configuration_quality = xfreehd_quality(selected)

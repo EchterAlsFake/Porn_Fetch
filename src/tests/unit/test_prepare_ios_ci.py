@@ -76,7 +76,8 @@ class IOSPreparationTests(unittest.TestCase):
 
             requirements = tomllib.loads((source / "pyproject.toml").read_text())["project"]["dependencies"]
             self.assertEqual(len(installs), 1)
-            self.assertEqual(installs[0][-1], next(req for req in requirements if req.startswith("PyJWT")))
+            for package in ("PyJWT", "unofficial-api-for-porn>="):
+                self.assertIn(next(req for req in requirements if req.startswith(package)), installs[0])
             self.assertEqual(installs[0][0], str(root / "venv/bin/python"))
             self.assertIn("--no-deps", installs[0])
             self.assertIn("--only-binary=:all:", installs[0])

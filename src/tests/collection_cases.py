@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from src.cli.selftest.cases import COLLECTION_TESTS, PROFILE_TESTS
-from src.shared.provider_routing import COLLECTION_SEGMENTS, PROFILE_SEGMENTS, route_url
+from src.shared.provider_routing import COLLECTION_SEGMENTS, PROFILE_SEGMENTS, ContentKind, route_url
 
 
 def collection_cases(overrides=None):
@@ -27,7 +27,7 @@ def collection_cases(overrides=None):
         route = route_url(url)
         profiles.setdefault(route.provider, url)
     for _, url in COLLECTION_TESTS:
-        route = route_url(url)
+        route = route_url(url, container_kind=ContentKind.COLLECTION)
         playlists.setdefault(route.provider, url)
     for key, url in (overrides or {}).items():
         targets = {"model": profiles, "playlist": playlists}
@@ -35,7 +35,7 @@ def collection_cases(overrides=None):
         if not separator or kind not in targets or provider not in targets[kind]:
             raise ValueError(f"Unknown source {key!r}; use a supported PROVIDER.model or PROVIDER.playlist")
         target = targets[kind]
-        route = route_url(url)
+        route = route_url(url, container_kind=ContentKind.PROFILE if kind == "model" else ContentKind.COLLECTION)
         if route.provider != provider or route.kind.value != ("profile" if kind == "model" else "collection"):
             raise ValueError(f"Source URL does not match {key}")
         target[provider] = url
@@ -50,7 +50,7 @@ def collection_cases(overrides=None):
             elif url is None:
                 state, reason = "UNVERIFIED", "No public playlist fixture found or supplied; library route is not claimed verified"
             if url is not None:
-                route = route_url(url)
+                route = route_url(url, container_kind=ContentKind.PROFILE if kind == "model" else ContentKind.COLLECTION)
                 assert route.provider == provider and route.kind.value == ("profile" if kind == "model" else "collection")
             cases.append({"id": f"{provider}.{kind}", "provider": provider, "kind": kind,
                           "url": url, "status": state, "reason": reason})

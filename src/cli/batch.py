@@ -183,6 +183,8 @@ def offline_self_test() -> int:
         "empflix": "https://www.empflix.com/amateur-porn/example/video123",
         "tnaflix": "https://www.tnaflix.com/amateur-porn/example/video123",
         "bellesa": "https://www.bellesa.co/videos/7054",
+        "youjizz": "https://www.youjizz.com/videos/video-55374481.html",
+        "porn": "https://www.porn.com/scene/208974141",
         "porndoe": "https://porndoe.com/watch/pd4y7n5e2j8r",
         "pornhat": "https://www.pornhat.com/video/armani-black-wants-her-husband-s-friend-deep-inside/",
     }

@@ -23,12 +23,12 @@ shutil.copytree(repo / "src", app / "src", dirs_exist_ok=True,
 shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "*.so", "*.fwork"))
 shutil.copytree(device / "native/packages", vendor, dirs_exist_ok=True)
-# The archived overlay predates PyJWT, Pornhat, RedGIFs and Bellesa. Install their pure Python
+# The archived overlay predates PyJWT, Porn.com, Pornhat, RedGIFs, Bellesa and YouJizz. Install their pure Python
 # wheels explicitly; resolving dependencies could replace matching native packages.
 requirements = tomllib.loads((repo / "pyproject.toml").read_text())["project"]["dependencies"]
 startup_requirements = [
     next(requirement for requirement in requirements if re.match(rf"(?i)^{name}\b", requirement))
-    for name in ("pyjwt", "unofficial-api-for-pornhat", "unofficial-api-for-redgifs", "unofficial-api-for-bellesa")
+    for name in ("pyjwt", "unofficial-api-for-porn", "unofficial-api-for-pornhat", "unofficial-api-for-redgifs", "unofficial-api-for-bellesa", "unofficial-api-for-youjizz")
 ]
 subprocess.run([str(deploy_venv / "bin/python"), "-m", "pip", "install", "--disable-pip-version-check",
                 "--no-deps", "--only-binary=:all:", "--platform", "any", "--python-version", "3.15",

@@ -11,26 +11,26 @@
     "2xx": "HTTP availability only; still verify identity and bounded item preparation in the app."
   },
   "counts": {
-    "total": 99,
-    "primary": 39,
+    "total": 105,
+    "primary": 43,
     "tiers": {
-      "primary": 39,
-      "variant": 53,
+      "primary": 43,
+      "variant": 55,
       "replacement": 6,
       "diagnostic": 1
     },
     "primary_status_codes": {
-      "200": 36,
+      "200": 40,
       "403": 3
     },
     "all_status_codes": {
-      "200": 86,
+      "200": 92,
       "403": 8,
       "404": 4,
       "0": 1
     },
     "dispositions": {
-      "http_available": 82,
+      "http_available": 88,
       "access_restricted": 8,
       "unavailable_candidate": 4,
       "unsupported_resource": 1,
@@ -6235,6 +6235,342 @@
           }
         ],
         "metadata_requests": 3
+      }
+    },
+    {
+      "id": "porn.channel",
+      "provider": "porn",
+      "profile_type": "channel",
+      "tier": "primary",
+      "url": "https://www.porn.com/brazzers",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/porn.py",
+          "function": "run",
+          "factory_in_test": "get_channel"
+        }
+      ],
+      "note": "Verified typed identity and real GUI row preparation, HLS stream resolution, complete native scene listing and referral exclusion before public preview.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porn",
+        "kind": "profile",
+        "profile_mode": "auto"
+      },
+      "expected_factory": "get_channel",
+      "http": {
+        "checked_at_utc": "2026-11-11T13:56:02.286259+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.porn.com/brazzers",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "porn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T13:56:02.286259+00:00",
+        "outcome": "passed",
+        "profile": "Channel",
+        "profile_name": "Brazzers",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 64
+          }
+        ],
+        "metadata_requests": 4
+      }
+    },
+    {
+      "id": "porn.pornstar",
+      "provider": "porn",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.porn.com/mia-khalifa",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/porn.py",
+          "function": "run",
+          "factory_in_test": "get_pornstar"
+        }
+      ],
+      "note": "Verified typed identity and real GUI row preparation, HLS stream resolution, complete native scene listing and referral exclusion before public preview.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "porn",
+        "kind": "profile",
+        "profile_mode": "auto"
+      },
+      "expected_factory": "get_pornstar",
+      "http": {
+        "checked_at_utc": "2026-11-11T13:56:02.645124+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.porn.com/mia-khalifa",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "porn",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T13:56:02.645124+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Mia Khalifa",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 62
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "youjizz.pornstar",
+      "provider": "youjizz",
+      "profile_type": "pornstar",
+      "tier": "primary",
+      "url": "https://www.youjizz.com/search/Abby-Marie-1.html",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/youjizz.py",
+          "function": "run",
+          "factory_in_test": "Pornstar"
+        }
+      ],
+      "note": "Directory-backed Pornstar or separately public User upload feed. Profile privacy flags remain respected.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": "pornstar"
+      },
+      "expected_factory": "Pornstar",
+      "http": {
+        "checked_at_utc": "2026-11-11T14:31:22.614164+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.youjizz.com/search/Abby-Marie-1.html",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": "pornstar"
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T14:31:24.219425+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Abby Marie",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 186
+          }
+        ],
+        "metadata_requests": 6
+      }
+    },
+    {
+      "id": "youjizz.user",
+      "provider": "youjizz",
+      "profile_type": "user",
+      "tier": "primary",
+      "url": "https://www.youjizz.com/profile/user/15100401",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/youjizz.py",
+          "function": "run",
+          "factory_in_test": "get_user"
+        }
+      ],
+      "note": "Directory-backed Pornstar or separately public User upload feed. Profile privacy flags remain respected.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "http": {
+        "checked_at_utc": "2026-11-11T14:31:23.029531+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.youjizz.com/profile/user/15100401",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T14:31:24.219425+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "YouJizz model / channel",
+        "profile_metadata": {
+          "public_videos": true,
+          "profile_public": false
+        },
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 5
+          }
+        ],
+        "metadata_requests": 9
+      }
+    },
+    {
+      "id": "youjizz.pornstar.apex",
+      "provider": "youjizz",
+      "profile_type": "pornstar",
+      "tier": "variant",
+      "url": "https://youjizz.com/search/Abby-Marie-1.html",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/youjizz.py",
+          "function": "run",
+          "factory_in_test": "Pornstar"
+        }
+      ],
+      "note": "Directory-backed Pornstar or separately public User upload feed. Profile privacy flags remain respected.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": "pornstar"
+      },
+      "expected_factory": "Pornstar",
+      "http": {
+        "checked_at_utc": "2026-11-11T14:31:23.449645+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.youjizz.com/search/Abby-Marie-1.html",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": "pornstar"
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T14:31:24.219425+00:00",
+        "outcome": "passed",
+        "profile": "Pornstar",
+        "profile_name": "Abby Marie",
+        "profile_metadata": {},
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 186
+          }
+        ],
+        "metadata_requests": 5
+      }
+    },
+    {
+      "id": "youjizz.user.apex",
+      "provider": "youjizz",
+      "profile_type": "user",
+      "tier": "variant",
+      "url": "https://youjizz.com/profile/user/15100401",
+      "sources": [
+        {
+          "kind": "app_network_test",
+          "repository": "Porn_Fetch",
+          "path": "src/tests/smoke/youjizz.py",
+          "function": "run",
+          "factory_in_test": "get_user"
+        }
+      ],
+      "note": "Directory-backed Pornstar or separately public User upload feed. Profile privacy flags remain respected.",
+      "disposition": "http_available",
+      "positive_smoke_candidate": true,
+      "input_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "expected_factory": "get_user",
+      "http": {
+        "checked_at_utc": "2026-11-11T14:31:23.850634+00:00",
+        "method": "GET",
+        "status": 200,
+        "final_url": "https://www.youjizz.com/profile/user/15100401",
+        "canonical_url": null,
+        "content_type": "text/html; charset=UTF-8",
+        "title_indicates_missing": false,
+        "error": null
+      },
+      "resolved_route": {
+        "provider": "youjizz",
+        "kind": "profile",
+        "profile_mode": null
+      },
+      "last_gui_check": {
+        "checked_at_utc": "2026-11-11T14:31:24.219425+00:00",
+        "outcome": "passed",
+        "profile": "User",
+        "profile_name": "YouJizz model / channel",
+        "profile_metadata": {
+          "public_videos": true,
+          "profile_public": false
+        },
+        "rows": 1,
+        "streams": [
+          {
+            "kind": "hls",
+            "segments": 5
+          }
+        ],
+        "metadata_requests": 0
       }
     }
   ],

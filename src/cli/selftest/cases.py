@@ -1,6 +1,8 @@
 """Live URLs used by the opt-in CLI diagnostics."""
 
 SINGLE_VIDEO_TESTS = [
+    ("YouJizz", "https://www.youjizz.com/videos/video-48914471.html"),
+    ("Porn.com", "https://www.porn.com/scene/208974141"),
     ("Bellesa", "https://www.bellesa.co/videos/7054"),
     ("RedGIFs", "https://www.redgifs.com/watch/hotpinkacrobatickitfox"),
     ("Pornhat", "https://www.pornhat.com/video/foot-fucking-trailer-with-cover-girl-gizelle-blanco-and-venus-valencia-from-love-her-feet/"),
@@ -32,6 +34,8 @@ GALLERY_TESTS = [
 ]
 
 COLLECTION_TESTS = [
+    ("YouJizz Collection", "https://www.youjizz.com/most-popular/1.html"),
+    ("Porn.com Collection", "https://www.porn.com/yoga-porn"),
     ("RedGIFs Niche", "https://www.redgifs.com/niches/duo-chastity"),
     ("RedGIFs Collection", "https://www.redgifs.com/users/weirdjack/collections/d7ddef5fb0"),
     ("PornHub Playlist", "https://www.pornhub.com/playlist/119820351"),
@@ -40,6 +44,10 @@ COLLECTION_TESTS = [
 ]
 
 PROFILE_TESTS = [
+    ("YouJizz Pornstar", "https://www.youjizz.com/search/Abby-Marie-1.html"),
+    ("YouJizz User", "https://www.youjizz.com/profile/user/15100401"),
+    ("Porn.com Channel", "https://www.porn.com/brazzers"),
+    ("Porn.com Pornstar", "https://www.porn.com/mia-khalifa"),
     ("Bellesa Channel", "https://www.bellesa.co/channels/zero-to-hero"),
     ("Bellesa Performer", "https://www.bellesa.co/performers/lily-starfire"),
     ("RedGIFs User", "https://www.redgifs.com/users/nickiipeach"),

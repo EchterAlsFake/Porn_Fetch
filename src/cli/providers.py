@@ -1,6 +1,7 @@
 """Own the terminal application's provider sessions."""
 from __future__ import annotations
 
+from dataclasses import replace
 from importlib import import_module
 from typing import Any, AsyncIterator, Callable, Mapping
 
@@ -91,7 +92,12 @@ class ClientPool:
             return route, await resolve_video(client, route)
         if route.kind == ContentKind.GALLERY:
             return route, await _await_if_needed(client.get_album(url, load_html=True))
-        return route, await resolve_container(client, route, pages=pages)
+        target = await resolve_container(client, route, pages=pages)
+        if route.provider == "porn":
+            from porn_api import Channel, Pornstar
+            kind = ContentKind.PROFILE if isinstance(target, (Channel, Pornstar)) else ContentKind.COLLECTION
+            route = replace(route, kind=kind, profile_mode=None)
+        return route, target
 
     async def media_stream(self, url: str, *, pages: int = 5) -> AsyncIterator[Any]:
         route, source = await self.resolve(url, pages=pages)
