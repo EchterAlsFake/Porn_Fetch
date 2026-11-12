@@ -14,7 +14,7 @@
 
 ---
 
-**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v3.9.0)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9.1)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v3.9.1)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Installation Guide&nbsp;<br>&nbsp;</strong></kbd>](docs/INSTALLATION.md)** 
