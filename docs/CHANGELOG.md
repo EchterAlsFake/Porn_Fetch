@@ -836,6 +836,9 @@ to be refactored.
 - Android device behavior, Android updates, packaged desktop/CLI updates, and Tor/Strict SNI behavior still need checks on their respective devices or networks. Desktop queue recovery covers normal close/reopen; recovery after a forced kill or power loss has not been tested.
 
 
+# 3.9.1
+- Fixed PornHub 410 Resource Gone Error
+
 # v4.0
 
 ### Website Support
