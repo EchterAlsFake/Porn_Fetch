@@ -1397,7 +1397,7 @@ jobs:
           python-version: "3.15.2"
 
       - name: Build and smoke test via QEMU
-        uses: uraimo/run-on-arch-action@fa1f3e7de95534497266c7265950b5188355fbfb # v3.2.1
+        uses: uraimo/run-on-arch-action@9893a0f995e5148dcc313ba661820f3992cffcc1 # v3.3
         with:
           arch: riscv64
           distro: ubuntu24.04
