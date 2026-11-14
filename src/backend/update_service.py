@@ -129,8 +129,12 @@ class CheckUpdates:
         ))
         if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
             return None
+        artifact = next(artifact for artifact in release["artifacts"]
+                        if artifact["platform"] == "ios" and artifact["kind"] == "ipa"
+                        and artifact["arch"] == "arm64")
         return {
             "version": release["version"], "source": "ios_catalog", "install_allowed": False,
+            "download_size": artifact.get("size", 0),
             "release_url": "https://pornfetch.to/download/ios",
             "changelog": release.get("notes", ""), "changelog_format": "markdown",
         }
@@ -174,7 +178,10 @@ class CheckUpdates:
                 release = {**release, "changelog": notes.decode("utf-8"), "changelog_format": "markdown"}
             except Exception:
                 logger.warning("Could not fetch the verified release changelog; using the signed manifest's notes.")
-        return {**release, "metadata": metadata, "repository_url": url, "source": "signed_repository"}
+        # Staging downloads every signed target, including optional components.
+        download_size = sum(target.length for target in metadata.signed.targets.values())
+        return {**release, "metadata": metadata, "repository_url": url, "source": "signed_repository",
+                "download_size": download_size}
 
     @staticmethod
     async def check_via_maintenancetool() -> dict | None:
@@ -287,13 +294,8 @@ class AutoUpdater(QObject):
         if is_android_device():
             self.statusReport.emit(self.tr("Downloading and verifying the Android update…"))
             self._android_cancel.clear()
-            downloaded = 0
-            def progress(size):
-                nonlocal downloaded
-                downloaded += size
-                self.updateProgress.emit(downloaded, 0)
             await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__,
-                                    progress, self._android_cancel)
+                                    self.updateProgress.emit, self._android_cancel)
             message = self.tr("APK verified. Waiting for Android's installation confirmation…")
             self.statusReport.emit(message)
             self.outcome.emit("info", message)

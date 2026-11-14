@@ -10,13 +10,15 @@ Supports:
   - Automatic injection of native Java bridge (PythonActivity.java) and theme/splash templates
   - Pre-flight validation of deployment patches
   - Reuse of Buildozer downloads and compiled dependencies unless --clean is requested
-  - Release APK alignment, signing and verification (use --unsigned to skip)
+  - Automatic APK alignment, signing and verification for every build
 
-Release signing defaults to my-release-key.jks / my-key-alias in the project root.
-The signing tools must be on PATH. apksigner prompts for passwords interactively.
-Single-architecture builds produce app-aligned.apk and app-signed.apk in the
+Release signing uses my-release-key.jks / my-key-alias when available, otherwise
+the standard ~/.android/debug.keystore (created automatically when missing).
+Set ANDROID_KEYSTORE_PASSWORD and ANDROID_KEY_PASSWORD for noninteractive release
+signing. Signing tools are found on PATH or in the selected SDK's build-tools.
+Single-architecture builds produce app-signed.apk in the
 project root (or --output-dir). Multi-architecture builds add architecture suffixes.
-Debug builds retain the build tool's debug signature.
+Debug builds use the standard debug key unless --keystore is supplied.
 
 Example invocations:
   ./build_android.sh --architecture=aarch64 --wheel-pyside=<wheel> --wheel-shiboken=<wheel>
@@ -38,6 +40,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+from dataclasses import dataclass
 from pathlib import Path
 
 if __package__ in (None, ""):
@@ -121,6 +124,32 @@ def find_android_sdk(user_sdk: Path | None = None) -> Path | None:
     if default_pyside.is_dir():
         return default_pyside.resolve()
     return None
+
+
+def ensure_android_sdk_tools(sdk_path: Path) -> Path:
+    """Expose modern command-line tools at the path pinned Buildozer expects."""
+    tools = sdk_path / "tools"
+    sdkmanager = tools / "bin" / "sdkmanager"
+    if sdkmanager.is_file():
+        return sdkmanager
+    # Never replace an existing directory or even a dangling user symlink.
+    if tools.exists() or tools.is_symlink():
+        raise ValueError(
+            f"Buildozer requires {sdkmanager}, but {tools} already exists without it. "
+            "Repair that tools path or select another SDK with --sdk-path."
+        )
+    # Qt's download helper extracts directly into cmdline-tools; Android Studio
+    # and CI normally install into cmdline-tools/latest.
+    for candidate in (sdk_path / "cmdline-tools", sdk_path / "cmdline-tools" / "latest"):
+        if (candidate / "bin" / "sdkmanager").is_file():
+            tools.symlink_to(candidate.resolve(), target_is_directory=True)
+            build_output.message(f"Android SDK compatibility link: {tools} -> {candidate}")
+            return sdkmanager
+    raise ValueError(
+        f"Android sdkmanager not found in {sdk_path}: expected tools/bin/sdkmanager, "
+        "cmdline-tools/bin/sdkmanager or cmdline-tools/latest/bin/sdkmanager. "
+        "Install Android command-line tools or select another SDK with --sdk-path."
+    )
 
 
 def find_android_ndk(user_ndk: Path | None = None) -> Path | None:
@@ -765,9 +794,69 @@ def build_single_arch(
     return apk_path
 
 
+@dataclass(frozen=True)
+class ApkSigning:
+    keystore: Path
+    key_alias: str
+    store_password: str | None = None
+    key_password: str | None = None
+
+
+def prepare_apk_signing(project_root: Path, build_mode: str, keystore: Path | None = None,
+                        key_alias: str | None = None, *, dry_run: bool = False) -> ApkSigning:
+    """Select release credentials or reuse a persistent, noninteractive debug key."""
+    release_key = keystore or Path("my-release-key.jks")
+    if not release_key.is_absolute():
+        release_key = project_root / release_key
+    if keystore is not None or (build_mode == "release" and release_key.is_file()):
+        if not dry_run and not release_key.is_file():
+            raise FileNotFoundError(f"Signing keystore not found: {release_key}")
+        return ApkSigning(
+            release_key, key_alias or os.environ.get("ANDROID_KEY_ALIAS") or "my-key-alias",
+            "env:ANDROID_KEYSTORE_PASSWORD" if os.environ.get("ANDROID_KEYSTORE_PASSWORD") else None,
+            "env:ANDROID_KEY_PASSWORD" if os.environ.get("ANDROID_KEY_PASSWORD") else None,
+        )
+
+    debug_key = Path.home() / ".android" / "debug.keystore"
+    build_output.message(f"Using Android debug signing key: {debug_key}")
+    if not dry_run and not debug_key.is_file():
+        keytool = shutil.which("keytool")
+        if not keytool and os.environ.get("JAVA_HOME"):
+            candidate = Path(os.environ["JAVA_HOME"]) / "bin" / "keytool"
+            if candidate.is_file():
+                keytool = str(candidate)
+        if not keytool:
+            raise FileNotFoundError("keytool not found; install a JDK or set JAVA_HOME to create the debug keystore.")
+        debug_key.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([
+            keytool, "-genkeypair", "-noprompt", "-keystore", str(debug_key),
+            "-storepass", "android", "-keypass", "android", "-alias", "androiddebugkey",
+            "-keyalg", "RSA", "-keysize", "2048", "-validity", "10000",
+            "-dname", "CN=Android Debug,O=Android,C=US",
+        ], check=True)
+    return ApkSigning(debug_key, "androiddebugkey", "pass:android", "pass:android")
+
+
+def find_android_build_tool(tool: str, sdk_path: Path) -> str:
+    """Use PATH first, then the newest installed SDK build-tools version."""
+    executable = shutil.which(tool)
+    if executable:
+        return executable
+    versions = sorted((sdk_path / "build-tools").glob("*"),
+                      key=lambda path: tuple(int(value) for value in re.findall(r"\d+", path.name)),
+                      reverse=True)
+    for version in versions:
+        candidate = version / tool
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return str(candidate)
+    raise FileNotFoundError(f"{tool} not found on PATH or in {sdk_path / 'build-tools'}; install Android SDK build-tools.")
+
+
 def sign_apk(apk: Path, output_dir: Path, keystore: Path, key_alias: str,
-             architecture: str | None = None) -> Path:
-    """Align, sign and verify a release APK; inherit stdin for password prompts."""
+             architecture: str | None = None, *, store_password: str | None = None,
+             key_password: str | None = None, zipalign: str = "zipalign",
+             apksigner: str = "apksigner") -> Path:
+    """Align, sign and verify an APK, publishing only the verified signed package."""
     output_dir.mkdir(parents=True, exist_ok=True)
     suffix = f"-{architecture}" if architecture else ""
     aligned = output_dir / f"app-aligned{suffix}.apk"
@@ -776,12 +865,16 @@ def sign_apk(apk: Path, output_dir: Path, keystore: Path, key_alias: str,
     with tempfile.TemporaryDirectory(prefix="apk-sign-", dir=output_dir) as temporary:
         staged_aligned = Path(temporary) / aligned.name
         staged_signed = Path(temporary) / signed.name
-        subprocess.run(["zipalign", "-p", "-f", "-v", "4", str(apk), str(staged_aligned)], check=True)
-        subprocess.run(["apksigner", "sign", "--ks", str(keystore),
-                        "--ks-key-alias", key_alias, "--out", str(staged_signed),
+        subprocess.run([zipalign, "-P", "16", "-f", "-v", "4", str(apk), str(staged_aligned)], check=True)
+        passwords = []
+        if store_password:
+            passwords.extend(["--ks-pass", store_password])
+        if key_password:
+            passwords.extend(["--key-pass", key_password])
+        subprocess.run([apksigner, "sign", "--ks", str(keystore),
+                        "--ks-key-alias", key_alias, *passwords, "--out", str(staged_signed),
                         str(staged_aligned)], check=True)
-        subprocess.run(["apksigner", "verify", "--verbose", str(staged_signed)], check=True)
-        staged_aligned.replace(aligned)
+        subprocess.run([apksigner, "verify", "--verbose", str(staged_signed)], check=True)
         staged_signed.replace(signed)
         signature = Path(str(staged_signed) + ".idsig")
         destination_signature = Path(str(signed) + ".idsig")
@@ -858,10 +951,9 @@ def main() -> int:
         help="Show what would be run without actually compiling APKs",
     )
 
-    parser.add_argument("--keystore", type=Path, default=Path("my-release-key.jks"),
-                        help="Release keystore, relative to project root (default: my-release-key.jks)")
-    parser.add_argument("--key-alias", default="my-key-alias", help="Signing key alias (default: my-key-alias)")
-    parser.add_argument("--unsigned", action="store_true", help="Skip automatic release APK signing")
+    parser.add_argument("--keystore", type=Path,
+                        help="Signing keystore, relative to project root (release default: my-release-key.jks, otherwise Android debug key)")
+    parser.add_argument("--key-alias", help="Signing key alias (release default: ANDROID_KEY_ALIAS or my-key-alias)")
 
     build_output.add_arguments(parser)
     args = parser.parse_args()
@@ -869,17 +961,6 @@ def main() -> int:
 
     # Determine project root
     project_root = Path(__file__).resolve().parent.parent
-
-    signing = args.build_mode == "release" and not args.unsigned
-    keystore = args.keystore if args.keystore.is_absolute() else project_root / args.keystore
-    if signing and not args.dry_run:
-        if not keystore.is_file():
-            build_output.message(f"Signing keystore not found: {keystore}. Use --keystore or --unsigned.", "error")
-            return 1
-        for tool in ("zipalign", "apksigner"):
-            if not shutil.which(tool):
-                build_output.message(f"{tool} not found on PATH; required for release signing.", "error")
-                return 1
 
     # Determine virtual environment
     if args.venv:
@@ -918,6 +999,22 @@ def main() -> int:
         return 1
     if not ndk_path:
         build_output.message("Android NDK r28c not found. Specify --ndk-path or set $ANDROID_NDK_HOME.", "error")
+        return 1
+
+    if not args.dry_run:
+        try:
+            ensure_android_sdk_tools(sdk_path)
+            zipalign = find_android_build_tool("zipalign", sdk_path)
+            apksigner = find_android_build_tool("apksigner", sdk_path)
+        except (ValueError, OSError) as error:
+            build_output.message(str(error), "error")
+            return 1
+
+    try:
+        signing = prepare_apk_signing(project_root, args.build_mode, args.keystore,
+                                      args.key_alias, dry_run=args.dry_run)
+    except (OSError, subprocess.CalledProcessError) as error:
+        build_output.message(f"APK signing setup failed: {error}", "error")
         return 1
 
     # Target architectures
@@ -965,20 +1062,21 @@ def main() -> int:
             build_mode=args.build_mode,
             clean=args.clean,
             dry_run=args.dry_run,
-            output_dir=args.output_dir,
+            output_dir=None,  # Only publish the verified signed APK in --output-dir.
         )
-        if signing:
-            signing_output = args.output_dir.resolve() if args.output_dir else project_root
-            suffix = arch if target_arch == "all" else None
-            if args.dry_run:
-                build_output.message(f"(dry-run) Would zipalign, sign with {keystore} (alias {args.key_alias}), "
-                      f"and verify app-signed{'-' + suffix if suffix else ''}.apk in {signing_output}")
-            elif apk:
-                try:
-                    apk = sign_apk(apk, signing_output, keystore, args.key_alias, suffix)
-                except (OSError, subprocess.CalledProcessError) as error:
-                    build_output.message(f"APK signing failed: {error}", "error")
-                    return 1
+        signing_output = args.output_dir.resolve() if args.output_dir else project_root
+        suffix = arch if target_arch == "all" else None
+        if args.dry_run:
+            build_output.message(f"(dry-run) Would zipalign, sign with {signing.keystore} (alias {signing.key_alias}), "
+                  f"and verify app-signed{'-' + suffix if suffix else ''}.apk in {signing_output}")
+        elif apk:
+            try:
+                apk = sign_apk(apk, signing_output, signing.keystore, signing.key_alias, suffix,
+                               store_password=signing.store_password, key_password=signing.key_password,
+                               zipalign=zipalign, apksigner=apksigner)
+            except (OSError, subprocess.CalledProcessError) as error:
+                build_output.message(f"APK signing failed: {error}", "error")
+                return 1
         if apk:
             built_apks.append((arch, apk))
 

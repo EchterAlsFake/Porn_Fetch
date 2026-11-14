@@ -198,6 +198,10 @@ class CliUpdateTests(unittest.TestCase):
                     executable = base / "installed-cli"
                     executable.write_bytes(b"previous cli")
                     on_staged = Mock()
+                    def confirm_download(_prompt):
+                        self.assertIn(f"Download size: {self_update.decimal(target.length)}", staged_output.getvalue())
+                        return "y"
+
                     with patch.object(self_update, "BUILD_FILE", build), \
                             patch.object(self_update, "ROOT_FILE", root_file), \
                             patch.object(self_update, "REPOSITORY_URL", url), \
@@ -205,9 +209,14 @@ class CliUpdateTests(unittest.TestCase):
                             patch("src.shared.service_transport.ServiceFetcher", lambda settings: self_update._ProgressFetcher()), \
                             patch.object(self_update, "_installation_path", return_value=executable), \
                             patch.object(self_update.sys.stdin, "isatty", return_value=True), \
-                            patch("builtins.input", return_value="y") as confirm, \
+                            patch("builtins.input", side_effect=confirm_download) as confirm, \
                             patch.object(self_update.subprocess, "Popen") as launch, \
                             redirect_stdout(io.StringIO()) as staged_output:
+                        self.assertEqual(self_update.run_self_update(check_only=True, assume_yes=False), 0)
+                        self.assertIn("Download size:", staged_output.getvalue())
+                        confirm.assert_not_called()
+                        staged_output.truncate(0)
+                        staged_output.seek(0)
                         self.assertEqual(self_update.run_self_update(
                             check_only=False, assume_yes=False, on_staged=on_staged), 0)
                     confirm.assert_called_once()

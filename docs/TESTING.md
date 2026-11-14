@@ -91,6 +91,21 @@ the full release notes. Desktop review also exercises Activity. It does not inst
 update or change your normal settings. The native check caught the Qt Quick
 render-thread crash that the software renderer did not reproduce.
 
+Android's native installer handoff must be checked separately from dialog
+presentation. Initialize both `PornFetchPlatform` and `PornFetchNotifications`,
+stage a newer APK signed with the installed test app's key, and atomically rename
+the `install-update.json` request into private files. With unknown-source access
+disabled, verify that Android opens its permission settings; after allowing access
+and returning, verify that the update confirmation opens. Cancel the installation
+and check a notification command is also consumed. Use an isolated test package
+to preserve the user's app and settings. Both command types must share one native
+root-directory FileObserver: Android can replace a callback when a second observer
+watches that same directory.
+On 2026-11-14, this handoff passed on the connected API 36 phone using production
+native helpers in an isolated APK with a synthetic, same-key newer candidate.
+The test installation was cancelled and the probe removed. This validates the
+native prompt and permission-return path, not full Porn Fetch update installation.
+
 `src.tests.integration.test_contrast_theme` renders the real desktop window in
 Material and Fusion styles while toggling dark/light mode and high contrast. It
 checks button foreground/background pairs, field outlines, statistics surfaces,

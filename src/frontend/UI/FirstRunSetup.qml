@@ -10,6 +10,8 @@ Dialog {
     required property var settings
     required property string licenseText
     required property string reportDisclosure
+    property bool keyboardNavigation: true
+    onKeyboardNavigationChanged: if (visible) resetScroll()
     property bool fullScreen: false
     property bool requireOutputFolder: Qt.platform.os === "android"
     readonly property bool sharedDownloadsAvailable: requireOutputFolder && backend.android_shared_downloads_available === true
@@ -65,7 +67,8 @@ Dialog {
     function resetScroll() {
         Qt.callLater(function() {
             pageScroll.contentItem.contentY = 0
-            readerFocus.forceActiveFocus(Qt.TabFocusReason)
+            if (root.keyboardNavigation) readerFocus.forceActiveFocus(Qt.TabFocusReason)
+            else root.contentItem.forceActiveFocus(Qt.OtherFocusReason)
         })
     }
 
@@ -235,8 +238,8 @@ Dialog {
                     color: discoveryButton.down ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.24)
                         : discoveryButton.hovered ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.12) : Theme.surface
                     radius: 12
-                    border.width: discoveryButton.activeFocus ? 2 : 1
-                    border.color: discoveryButton.activeFocus || discoveryButton.hovered ? Theme.accent : Theme.outline
+                    border.width: discoveryButton.visualFocus ? 2 : 1
+                    border.color: discoveryButton.visualFocus || discoveryButton.hovered ? Theme.accent : Theme.outline
                 }
                 onClicked: Qt.openUrlExternally("https://www.youtube.com/watch?v=lV9q901vS6o")
             }
@@ -274,6 +277,8 @@ Dialog {
     }
 
     contentItem: ColumnLayout {
+        Keys.onPressed: event => root.navigationPressed(event, pageScroll)
+        Keys.onReleased: event => root.navigationReleased(event, pageScroll)
         spacing: 12
         SmoothScrollView {
             id: pageScroll
@@ -525,7 +530,9 @@ Dialog {
         parent: control
         anchors.fill: parent
         z: 10
-        visible: control === pageScroll ? readerFocus.activeFocus || licenseBody.activeFocus : control.activeFocus
+        objectName: "setupFocusRing"
+        visible: (root.keyboardNavigation || control.visualFocus)
+            && (control === pageScroll ? readerFocus.activeFocus || licenseBody.activeFocus : control.activeFocus)
         color: "transparent"
         radius: 6
         border.width: 3
@@ -562,7 +569,7 @@ Dialog {
         title: qsTr("Choose where to save videos")
         onAccepted: backend.set_android_output_folder(selectedFolder.toString())
         onVisibleChanged: if (!visible && root.visible) Qt.callLater(function() {
-            chooseFolderButton.forceActiveFocus(Qt.TabFocusReason)
+            if (root.keyboardNavigation) chooseFolderButton.forceActiveFocus(Qt.TabFocusReason)
         })
     }
 

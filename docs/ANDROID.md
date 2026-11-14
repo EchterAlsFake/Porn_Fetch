@@ -62,7 +62,12 @@ fi
 "$ANDROID_HOME/tools/bin/sdkmanager" --version
 ```
 
-If the last command fails, fix the SDK tools path before continuing.
+The build wrapper also creates this compatibility link automatically when
+`tools` is absent. It supports both `cmdline-tools/latest` and the direct
+`cmdline-tools` layout installed by Qt's `cross_compile_android/main.py
+--download-only --auto-accept-license` helper. It links the whole directory so
+sdkmanager can find its libraries. Existing `tools` directories and symlinks are
+preserved; an unusable one produces an error before compilation.
 
 From the repository root, create the host environment outside the checkout:
 
@@ -117,15 +122,29 @@ It also inspects the compressed Python bundle for PyJWT's `jwt` package.
 Licensing imports that package during startup, before the first-use screen;
 missing it prevents the app from opening even when every native library is present.
 
-The default build mode is release. Supply your own keystore with `--keystore`
-and `--key-alias`, or use `--unsigned` to sign later. An unsigned release APK
-cannot be installed. A debug APK uses a development key. Neither has the
-publisher's signature, and neither can update an official installation signed
-with a different key. Keep your own key safe if you want to update your builds.
+Every build is aligned, signed and verified automatically. The default build
+mode is release: it uses `my-release-key.jks` / `my-key-alias` in the project root
+when present, otherwise it uses the standard `~/.android/debug.keystore`.
+Debug builds use that debug key too. The wrapper creates it with JDK `keytool`
+when missing and reuses it on later builds, without password prompts.
+The final output is `app-signed.apk` in the project root or `--output-dir`;
+`--architecture all` adds architecture suffixes. Alignment intermediates stay
+in a temporary directory. Signing tools are found on `PATH` or in the selected
+SDK's `build-tools` directory.
+
+Supply a release key explicitly with `--keystore` and `--key-alias`.
+An explicit missing keystore or a signing failure stops the build, preserving
+any previous signed output. Set `ANDROID_KEYSTORE_PASSWORD` and
+`ANDROID_KEY_PASSWORD` to sign without prompts; `ANDROID_KEY_ALIAS` sets the
+default release alias. Otherwise apksigner asks for release passwords.
+A development key cannot update an official installation signed with a different
+key. Keep your own key safe if you want to update your builds.
 Android or security software may warn about sideloaded or self-built APKs.
 
 The **Cross-Platform Build Pipeline** has an `android` target for all four ABIs.
-It uses the same wrapper. See [release operations](RELEASING.md) for signing
+It uses the same wrapper and release signing credentials when configured.
+Build-only runs without credentials produce debug-signed, installable APKs;
+publishing requires complete release credentials. See [release operations](RELEASING.md) for signing
 secrets and publication. SDK, native recipes and target wheels are updated as a
 set; ordinary Python package resolution uses fresh compatible dependencies.
 

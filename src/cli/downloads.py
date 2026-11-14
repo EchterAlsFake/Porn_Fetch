@@ -401,6 +401,9 @@ async def download_video(
     try:
         if raw:
             result = await video.download(raw_config, mode="h264") if module == "eporner_api" else await video.download(raw_config)
+        elif module == "pornhub_api" and type(video).__name__ == "Video":
+            from src.shared.pornhub_download import download as download_pornhub
+            result = await download_pornhub(video, hls_config, raw_config)
         elif module == "youporn_api":
             result = await video.download(hls_config, backup_configuration=raw_config)
         else:

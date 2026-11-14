@@ -1,17 +1,19 @@
-"""Event-driven adapter for the outline published by the Android activity."""
+"""Event-driven adapter for Android window geometry and keyboard navigation."""
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Property, Signal, QFileSystemWatcher
+from PySide6.QtCore import Property, QFileSystemWatcher, QObject, Signal
 
 
 class AndroidDisplay(QObject):
     outlineChanged = Signal()
+    keyboardNavigationChanged = Signal()
 
     def __init__(self, private_directory: str = "", parent=None):
         super().__init__(parent)
         self._outline = {}
         self._path = Path(private_directory) / "display-outline.json" if private_directory else None
+        self._keyboard_navigation = self._path is None
         self._watcher = QFileSystemWatcher(self)
         if self._path is not None:
             self._watcher.addPath(str(self._path.parent))
@@ -21,6 +23,10 @@ class AndroidDisplay(QObject):
     @Property("QVariantMap", notify=outlineChanged)
     def outline(self):
         return self._outline
+
+    @Property(bool, notify=keyboardNavigationChanged)
+    def keyboardNavigation(self):
+        return self._keyboard_navigation
 
     def refresh(self, *_):
         if self._path is None:
@@ -35,6 +41,10 @@ class AndroidDisplay(QObject):
                 float(corner["x"]), float(corner["y"])
         except (OSError, ValueError, KeyError, TypeError):
             return
+        keyboard_navigation = geometry.get("keyboardNavigation", False) is True
+        if keyboard_navigation != self._keyboard_navigation:
+            self._keyboard_navigation = keyboard_navigation
+            self.keyboardNavigationChanged.emit()
         if geometry != self._outline:
             self._outline = geometry
             self.outlineChanged.emit()

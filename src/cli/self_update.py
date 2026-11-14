@@ -17,6 +17,7 @@ from pathlib import Path
 import certifi
 from platformdirs import user_cache_dir
 from rich.console import Console
+from rich.filesize import decimal
 from rich.progress import (
     BarColumn,
     DownloadColumn,
@@ -243,6 +244,7 @@ def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[
             print(f"Porn Fetch CLI is up to date ({current}).")
             return 0
         print(f"Porn Fetch CLI {latest} is available for {name} (installed: {current}).")
+        print(f"Download size: {decimal(target.length)}")
         released = release_time(target.custom.get("release_timestamp"))
         if check_only:
             return 0

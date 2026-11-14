@@ -60,16 +60,23 @@ def check(settings, current):
     if parts(version) <= parts(current):
         return None
     return {**custom, "release_timestamp": release_time(custom.get("release_timestamp")),
+            "download_size": target.length,
             "source": "signed_android", "release_url": "https://pornfetch.to/download/android",
             "changelog_format": "markdown"}
 
 
 def download_and_request_install(settings, current, progress=None, cancel=None):
+    """Report APK bytes and the signed total; metadata traffic is excluded."""
+    downloaded = 0
+    total = 0
+
     def on_chunk(size):
+        nonlocal downloaded
         if cancel is not None and cancel.is_set():
             raise InterruptedError("Android update cancelled")
-        if progress:
-            progress(size)
+        if progress and total:
+            downloaded += size
+            progress(downloaded, total)
     info = platform_info()
     client = updater(settings, on_chunk)
     target = client.get_targetinfo("android/" + info["abi"] + ".apk")
@@ -81,6 +88,9 @@ def download_and_request_install(settings, current, progress=None, cancel=None):
     if tuple(map(int, custom["version"].split("."))) <= tuple(map(int, current.split("."))):
         raise ValueError("The Android update is not newer")
     release_time(custom.get("release_timestamp"))
+    total = target.length
+    if progress:
+        progress(0, total)
     path = Path(client.download_target(target))
     if cancel is not None and cancel.is_set():
         raise InterruptedError("Android update cancelled")

@@ -13,7 +13,7 @@ class UpdateDialogTests(unittest.TestCase):
     def test_startup_opt_out_and_activity_review_with_long_notes(self):
         script = r'''
 import sys
-from pathlib import Path
+import traceback
 from src.backend.config import app_settings, SettingsManager
 app_settings.update_checks = False
 app_settings.track_videos = False
@@ -37,7 +37,7 @@ def checked(callback):
         try:
             callback()
         except Exception as error:
-            errors.append(repr(error))
+            errors.append(traceback.format_exc())
             application.app.quit()
     return run
 
@@ -46,7 +46,11 @@ def offer():
     backend = application.engine.rootContext().contextProperty('backend')
     verify_startup(window, backend)
     details = dict(version='999.0.0', automatic=True, install_allowed=True,
-                   changelog=Path('CHANGELOG_STATIC.md').read_text(), changelog_format='markdown')
+                   download_size=500_000_000,
+                   changelog=('# Update notes\n\n- Added RedTube\n- **Cleanup on stop**\n\n'
+                              '[development checklist](https://pornfetch.to/checklist)\n\n'
+                              + 'Release notes for offline rendering checks. ' * 100),
+                   changelog_format='markdown')
     state.update(window=window, backend=backend, details=details,
                  dialog=window.findChild(QObject, 'updateDialog'))
     backend._available_update = details
@@ -78,6 +82,19 @@ def verify_startup(window, backend):
 def suppress():
     dialog = state['dialog']
     assert dialog.property('visible'), 'Startup update dialog did not open'
+    size = dialog.findChild(QObject, 'updateDownloadSizeText')
+    assert size.property('visible'), 'Download size must be visible before downloading'
+    expected_size = '500.0 MB' if mobile else '476.8 MiB'
+    assert size.property('text') == 'Download size: ' + expected_size, size.property('text')
+    if mobile:
+        dialog.setProperty('busy', True)
+        state['backend'].updateProgress.emit(125_000_000, 500_000_000)
+        bar = dialog.findChild(QObject, 'androidUpdateProgressBar')
+        assert bar.property('visible') and not bar.property('indeterminate')
+        assert bar.property('value') / bar.property('to') == 0.25
+        label = dialog.findChild(QObject, 'androidUpdateProgressText')
+        assert label.property('visible') and label.property('text') == '125.0 / 500.0 MB'
+        dialog.setProperty('busy', False)
     notes = dialog.findChild(QObject, 'updateChangelogText')
     assert len(notes.property('text')) > 2000
     assert notes.property('readOnly') and notes.property('selectByMouse')
@@ -142,10 +159,12 @@ def verify_html():
     fixed = document.find('Fixed updates')
     assert fixed.block().textList() and fixed.charFormat().fontWeight() >= QFont.Bold
     state['backend'].updateAvailable.emit(dict(state['details'], automatic=False, install_allowed=False,
-        release_url='https://pornfetch.to/download/ios'))
+        download_size=0, release_url='https://pornfetch.to/download/ios'))
     QTimer.singleShot(100, checked(verify_manual_download))
 
 def verify_manual_download():
+    size = state['dialog'].findChild(QObject, 'updateDownloadSizeText')
+    assert size.property('text') == 'Download size: unavailable', 'Unknown size must clear the previous offer'
     button = state['dialog'].findChild(QObject, 'installUpdateButton')
     assert button.property('text') == 'Open downloads', 'Manual updates need a download link'
     assert button.property('enabled'), 'Manual updates must remain actionable'

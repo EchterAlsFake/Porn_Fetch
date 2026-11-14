@@ -25,6 +25,11 @@ public final class PornFetchDisplay {
             org.json.JSONObject geometry = new org.json.JSONObject();
             geometry.put("width", content.getWidth());
             geometry.put("height", content.getHeight());
+            android.content.res.Configuration config = activity.getResources().getConfiguration();
+            boolean television = (config.uiMode & android.content.res.Configuration.UI_MODE_TYPE_MASK)
+                    == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
+            geometry.put("keyboardNavigation", television
+                    || config.touchscreen == android.content.res.Configuration.TOUCHSCREEN_NOTOUCH);
             org.json.JSONArray corners = new org.json.JSONArray();
             android.view.WindowInsets insets = activity.getWindow().getDecorView().getRootWindowInsets();
             // Android positions: top-left, top-right, bottom-right, bottom-left.

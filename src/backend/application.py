@@ -503,6 +503,7 @@ class Backend(QObject):
             "install_allowed": install_allowed,
             "entitlement_message": message,
             "version": str(update.get("version", "")),
+            "download_size": update.get("download_size", 0),
             "release_url": str(update.get("release_url") or GITHUB_RELEASES_URL),
             "important_info": str(update.get("important_info", "")),
             "changelog": str(update.get("changelog") or "Release notes are available on the GitHub releases page."),
@@ -535,7 +536,10 @@ class Backend(QObject):
     @Slot()
     def auto_update(self) -> None:
         """Download and install the available update without blocking QML."""
-        if IS_SOURCE_RUN:
+        from src.shared.android_updates import is_android_device
+
+        # Android APKs embed Python sources and do not use the desktop installer.
+        if IS_SOURCE_RUN and not is_android_device():
             message = self.tr("Automatic updates are only available in installed builds. Use the download link instead.")
             self.updateStatus.emit(message)
             self.notifications.publish(message, self.tr("App updates"), "warning", key="update-install")
@@ -1227,6 +1231,18 @@ class Backend(QObject):
                             configuration,
                             backup_configuration=backup_configuration,
                         )
+                    elif isinstance(source_video, clients.ph_Video):
+                        from src.shared.pornhub_download import download as download_pornhub
+                        raw_configuration = DownloadConfigRAW(
+                            quality=quality, path=output_path, callback=update_progress,
+                            no_title=True, stop_event=stop_event,
+                            max_workers=app_settings.download_workers,
+                            read_timeout=float(app_settings.timeout), max_retries=app_settings.retries,
+                        )
+                        result = await download_pornhub(
+                            source_video, configuration, raw_configuration,
+                            on_raw=lambda: setattr(video, "is_hls", False),
+                        )
                     else:
                         result = await source_video.download(configuration)
 
@@ -1306,6 +1322,9 @@ class Backend(QObject):
             self._downloads_model.set_error(job_id, report_id, details)
             message = (self.tr("Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.")
                        if isinstance(error, OutputFolderError) else f"{type(error).__name__}: {error}")
+            from src.shared.pornhub_download import PornHubSourcesUnavailable
+            if isinstance(error, PornHubSourcesUnavailable):
+                message = self.tr("PornHub did not provide a working HLS or MP4 download after 8 page refreshes. This is an issue with PornHub's video servers, not Porn Fetch. There is no fix available in Porn Fetch for this server-side failure. Please try again later.")
             self.notifications.download_failed(report_id, message)
         finally:
             if download_started and cleanup_on_stop and stop_event.is_set():
@@ -2018,6 +2037,7 @@ def main() -> None:
     from src.backend.tor_status import TorStatus
     tor_status = TorStatus(parent=engine)
     tor_status.installResult.connect(backend_instance.updateStatus)
+    tor_status.installOutcome.connect(backend_instance.auto_updater.outcome)
     engine.rootContext().setContextProperty("torStatus", tor_status)
     engine.rootContext().setContextProperty("androidLayout", is_mobile or args.android)
     from src.backend.android_display import AndroidDisplay

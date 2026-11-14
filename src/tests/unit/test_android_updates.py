@@ -34,10 +34,34 @@ class AndroidUpdatesTests(unittest.TestCase):
         with patch.object(service, "updater", return_value=self.client):
             update = service.check(None, "3.9.1")
             self.assertEqual(update["source"], "signed_android")
+            self.assertEqual(update["download_size"], self.target.length)
+            self.client.download_target.assert_not_called()
             service.download_and_request_install(None, "3.9.1")
         request = json.loads((self.root / "install-update.json").read_text())
         self.assertEqual(request, {"version": "3.9.77", "abi": "arm64-v8a"})
         self.assertEqual((self.root / "pornfetch-update.apk").read_bytes(), b"synthetic APK")
+
+    def test_apk_progress_uses_signed_size_and_excludes_metadata_bytes(self):
+        updates = []
+
+        def make_updater(settings, on_chunk):
+            def metadata(path):
+                on_chunk(1000)
+                return self.target
+
+            def download(target):
+                on_chunk(4)
+                on_chunk(target.length - 4)
+                return str(self.apk)
+
+            self.client.get_targetinfo.side_effect = metadata
+            self.client.download_target.side_effect = download
+            return self.client
+
+        with patch.object(service, "updater", side_effect=make_updater):
+            service.download_and_request_install(None, "3.9.1", lambda current, total: updates.append((current, total)))
+        self.assertEqual(updates, [(0, self.target.length), (4, self.target.length),
+                                  (self.target.length, self.target.length)])
 
     def test_wrong_architecture_tampering_and_cancel_do_not_request_install(self):
         with patch.object(service, "updater", return_value=self.client):

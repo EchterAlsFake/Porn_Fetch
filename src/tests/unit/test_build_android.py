@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import configparser
 import io
+import json
 import os
 import runpy
 import subprocess
 import sys
 import tempfile
+import textwrap
 import unittest
 import zipfile
 from pathlib import Path
@@ -21,14 +23,17 @@ from scripts.build_android import (
     build_single_arch,
     detect_arch_from_filename,
     ensure_android_deploy_deps,
+    ensure_android_sdk_tools,
     ensure_host_patches,
     extract_qt_jars,
     find_android_ndk,
+    find_android_build_tool,
     find_apache_ant,
     find_wheels_for_arch,
     main,
     normalize_arch,
     patch_pyside_wheel_if_needed,
+    prepare_apk_signing,
     sign_apk,
     update_buildozer_spec,
     update_pysidedeploy_spec,
@@ -94,9 +99,9 @@ class TestApkSigning(unittest.TestCase):
                 result = sign_apk(apk, root, root / "key.jks", "alias")
             self.assertEqual(result, root / "app-signed.apk")
             self.assertEqual(result.read_bytes(), b"signed")
-            self.assertEqual((root / "app-aligned.apk").read_bytes(), b"aligned")
+            self.assertFalse((root / "app-aligned.apk").exists())
             self.assertTrue(Path(str(result) + ".idsig").exists())
-            self.assertEqual(commands[0][:6], ["zipalign", "-p", "-f", "-v", "4", str(apk)])
+            self.assertEqual(commands[0][:7], ["zipalign", "-P", "16", "-f", "-v", "4", str(apk)])
             self.assertEqual(commands[1][1:6], ["sign", "--ks", str(root / "key.jks"), "--ks-key-alias", "alias"])
             self.assertEqual(commands[2][:3], ["apksigner", "verify", "--verbose"])
 
@@ -110,6 +115,145 @@ class TestApkSigning(unittest.TestCase):
                 with self.assertRaises(subprocess.CalledProcessError):
                     sign_apk(root / "unsigned.apk", root, root / "key.jks", "alias", "aarch64")
             self.assertEqual(previous.read_bytes(), b"previous release")
+
+    def test_missing_release_key_creates_and_reuses_debug_key_without_prompts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            debug_key = root / ".android/debug.keystore"
+            with patch("scripts.build_android.Path.home", return_value=root), \
+                    patch("scripts.build_android.shutil.which", return_value="keytool"), \
+                    patch("scripts.build_android.subprocess.run") as run:
+                planned = prepare_apk_signing(root, "release", dry_run=True)
+                run.assert_not_called()
+                self.assertFalse(debug_key.parent.exists())
+                signing = prepare_apk_signing(root, "release")
+                command = run.call_args.args[0]
+                self.assertIn("-noprompt", command)
+                self.assertEqual(command[command.index("-keystore") + 1], str(debug_key))
+                debug_key.touch()
+                self.assertEqual(prepare_apk_signing(root, "debug"), signing)
+                self.assertEqual(signing, planned)
+                run.assert_called_once()
+            self.assertEqual(signing.key_alias, "androiddebugkey")
+            self.assertEqual((signing.store_password, signing.key_password), ("pass:android", "pass:android"))
+
+    def test_release_credentials_use_environment_passwords_and_missing_explicit_key_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            key = root / "my-release-key.jks"
+            key.touch()
+            with patch.dict(os.environ, {"ANDROID_KEYSTORE_PASSWORD": "store-secret",
+                                         "ANDROID_KEY_PASSWORD": "key-secret", "ANDROID_KEY_ALIAS": "release"}):
+                signing = prepare_apk_signing(root, "release")
+                self.assertEqual((signing.keystore, signing.key_alias), (key, "release"))
+                self.assertEqual(signing.store_password, "env:ANDROID_KEYSTORE_PASSWORD")
+                self.assertEqual(signing.key_password, "env:ANDROID_KEY_PASSWORD")
+                with self.assertRaises(FileNotFoundError):
+                    prepare_apk_signing(root, "release", Path("missing-ci-key.jks"))
+
+    def test_signing_passes_password_sources_to_apksigner(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def run(command, **kwargs):
+                if command[0] == "zipalign":
+                    Path(command[-1]).touch()
+                elif command[1] == "sign":
+                    Path(command[command.index("--out") + 1]).touch()
+            with patch("scripts.build_android.subprocess.run", side_effect=run) as run:
+                sign_apk(root / "input.apk", root, root / "key.jks", "alias",
+                         store_password="env:ANDROID_KEYSTORE_PASSWORD", key_password="env:ANDROID_KEY_PASSWORD")
+            command = run.call_args_list[1].args[0]
+            self.assertEqual(command[command.index("--ks-pass") + 1], "env:ANDROID_KEYSTORE_PASSWORD")
+            self.assertEqual(command[command.index("--key-pass") + 1], "env:ANDROID_KEY_PASSWORD")
+
+    def test_signing_tools_are_discovered_in_selected_sdk(self):
+        with tempfile.TemporaryDirectory() as directory:
+            sdk = Path(directory)
+            for version in ("9.0.0", "36.0.0"):
+                tools = sdk / "build-tools" / version
+                tools.mkdir(parents=True)
+                for name in ("zipalign", "apksigner"):
+                    (tools / name).touch(mode=0o755)
+            with patch("scripts.build_android.shutil.which", return_value=None):
+                for name in ("zipalign", "apksigner"):
+                    self.assertEqual(find_android_build_tool(name, sdk), str(sdk / "build-tools/36.0.0" / name))
+
+    def test_debug_and_release_builds_both_publish_signed_apks(self):
+        for mode in ("debug", "release"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / "source.properties").write_text(f"Pkg.Revision = {ANDROID_NDK_REVISION}\n")
+                apk = root / "input.apk"
+                apk.touch()
+                signing = prepare_apk_signing(root, mode, dry_run=True)
+                args = ["build_android.py", "--build-mode", mode, "--venv", str(root),
+                        "--sdk-path", str(root), "--ndk-path", str(root), "--output-dir", str(root / "out")]
+                with patch.object(sys, "argv", args), \
+                        patch("scripts.build_android.find_apache_ant"), \
+                        patch("scripts.build_android.ensure_host_patches"), \
+                        patch("scripts.build_android.ensure_android_deploy_deps"), \
+                        patch("scripts.build_android.ensure_android_sdk_tools"), \
+                        patch("scripts.build_android.find_android_build_tool", side_effect=lambda tool, sdk: tool), \
+                        patch("scripts.build_android.prepare_apk_signing", return_value=signing), \
+                        patch("scripts.build_android.find_wheels_for_arch", return_value=(root, root)), \
+                        patch("scripts.build_android.build_single_arch", return_value=apk) as build, \
+                        patch("scripts.build_android.sign_apk", return_value=apk) as sign:
+                    self.assertEqual(main(), 0)
+                self.assertIsNone(build.call_args.kwargs["output_dir"])
+                self.assertEqual(sign.call_args.args[:2], (apk, root / "out"))
+
+
+class TestAndroidWorkflowSigning(unittest.TestCase):
+    def step_script(self, name):
+        workflow = (Path(__file__).resolve().parents[3] / ".github/workflows/build_all.yml").read_text()
+        step = workflow.split(f"      - name: {name}\n", 1)[1].split("      - name:", 1)[0]
+        return textwrap.dedent(step.split("        run: |\n", 1)[1])
+
+    def test_ci_requires_complete_release_credentials_for_publishing(self):
+        script = self.step_script("Validate Android signing credentials")
+        credentials = {name: "" for name in ("ANDROID_KEYSTORE_BASE64", "ANDROID_KEYSTORE_PASSWORD",
+                                             "ANDROID_KEY_ALIAS", "ANDROID_KEY_PASSWORD")}
+        for publish, values, success in (("false", credentials, True), ("true", credentials, False),
+                ("false", {**credentials, "ANDROID_KEY_ALIAS": "partial"}, False),
+                ("true", {name: "configured" for name in credentials}, True)):
+            with self.subTest(publish=publish, success=success):
+                result = subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script],
+                                        env={**os.environ, **values, "REQUIRE_RELEASE_SIGNING": publish},
+                                        capture_output=True, text=True)
+                self.assertEqual(result.returncode == 0, success, result.stdout + result.stderr)
+
+    def test_ci_passes_release_key_to_shared_builder_and_cleans_it_up(self):
+        script = self.step_script("Build release APK")
+        for release_key in (False, True):
+            with self.subTest(release_key=release_key), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                python = root / "python"
+                python.write_text(f"#!{sys.executable}\n" + textwrap.dedent('''\
+                    import json, os, sys
+                    from pathlib import Path
+                    if sys.argv[1] == "-c":
+                        exec(sys.argv[2])
+                    else:
+                        key = Path(os.environ["RUNNER_TEMP"]) / "android-release.jks"
+                        Path(os.environ["RUNNER_TEMP"], "capture.json").write_text(json.dumps({
+                            "args": sys.argv[1:], "key": key.read_text() if key.exists() else None,
+                            "password": os.environ["ANDROID_KEYSTORE_PASSWORD"],
+                        }))
+                    '''))
+                python.chmod(0o755)
+                environment = {**os.environ, "PATH": f"{root}{os.pathsep}{os.environ['PATH']}",
+                               "RUNNER_TEMP": str(root), "ANDROID_ARCH": "aarch64", "VIRTUAL_ENV": str(root),
+                               "ANDROID_HOME": str(root), "ANDROID_NDK_HOME": str(root),
+                               "ANDROID_KEYSTORE_BASE64": "a2V5" if release_key else "",
+                               "ANDROID_KEYSTORE_PASSWORD": "store-secret" if release_key else "",
+                               "ANDROID_KEY_PASSWORD": "key-secret" if release_key else "",
+                               "ANDROID_KEY_ALIAS": "release" if release_key else ""}
+                subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], check=True, env=environment)
+                captured = json.loads((root / "capture.json").read_text())
+                self.assertEqual("--keystore" in captured["args"], release_key)
+                self.assertEqual(captured["key"], "key" if release_key else None)
+                self.assertNotIn("--unsigned", captured["args"])
+                self.assertFalse((root / "android-release.jks").exists())
 
 
 class TestAndroidDeployToolchain(unittest.TestCase):
@@ -334,6 +478,37 @@ class BuildozerConfig:
 
 
 class TestAndroidHostDependencies(unittest.TestCase):
+    def test_sdk_tools_link_supports_qt_and_android_studio_layouts(self):
+        for layout in ("cmdline-tools", "cmdline-tools/latest"):
+            with self.subTest(layout=layout), tempfile.TemporaryDirectory() as directory:
+                sdk = Path(directory)
+                tools = sdk / layout
+                (tools / "bin").mkdir(parents=True)
+                (tools / "bin/sdkmanager").touch()
+                (tools / "lib").mkdir()
+                manager = ensure_android_sdk_tools(sdk)
+                self.assertEqual(manager.resolve(), tools / "bin/sdkmanager")
+                self.assertTrue((sdk / "tools/lib").is_dir())
+                self.assertEqual(ensure_android_sdk_tools(sdk), manager)
+
+    def test_sdk_tools_preserves_existing_tools(self):
+        with tempfile.TemporaryDirectory() as directory:
+            sdk = Path(directory)
+            (sdk / "tools/bin").mkdir(parents=True)
+            manager = sdk / "tools/bin/sdkmanager"
+            manager.touch()
+            self.assertEqual(ensure_android_sdk_tools(sdk), manager)
+            self.assertFalse((sdk / "tools").is_symlink())
+            manager.unlink()
+            with self.assertRaisesRegex(ValueError, "already exists"):
+                ensure_android_sdk_tools(sdk)
+            self.assertTrue((sdk / "tools/bin").is_dir())
+
+    def test_missing_sdk_tools_reports_actionable_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(ValueError, "Install Android command-line tools"):
+                ensure_android_sdk_tools(Path(directory))
+
     def test_ant_discovery_supports_home_and_arch_symlink(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

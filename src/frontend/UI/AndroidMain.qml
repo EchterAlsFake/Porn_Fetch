@@ -58,7 +58,6 @@ ApplicationWindow {
     readonly property bool tablet: contentItem.width >= 600
     readonly property bool expanded: contentItem.width >= 840
     readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
-    readonly property bool moreDetail: !tablet && (pageIndex === 3 || pageIndex === 4 || pageIndex === 6)
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
                                       qsTr("Info"), qsTr("Supported websites"), qsTr("More"), qsTr("Download manager")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
@@ -66,11 +65,70 @@ ApplicationWindow {
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
                                       "qrc:/images/graphics/information.png"]
 
+    readonly property bool keyboardNavigation: androidDisplay.keyboardNavigation
+    property var pageHistory: []
+    property int previousPage: 0
+    property bool restoringPage: false
+    property bool navigationReady: false
+    property var pageFocus: ({})
+    readonly property bool canGoBack: settingsDetail || pageHistory.length > 0 || pageIndex !== 0
+
+    onPageIndexChanged: {
+        if (!navigationReady) return
+        pageFocus[previousPage] = window.activeFocusItem
+        if (!restoringPage)
+            pageHistory = pageHistory.concat([previousPage])
+        previousPage = pageIndex
+        Qt.callLater(restorePageFocus)
+    }
+
+    function restorePageFocus(keyboardRequested) {
+        if (!keyboardNavigation && !keyboardRequested) return
+        function reveal(item) {
+            for (var ancestor = item.parent; ancestor; ancestor = ancestor.parent) {
+                if (ancestor.contentItem && typeof ancestor.contentY === "number") {
+                    var position = item.mapToItem(ancestor.contentItem, 0, 0)
+                    var bottom = position.y + item.height - ancestor.height
+                    ancestor.contentY = Math.max(0, Math.min(ancestor.contentHeight - ancestor.height,
+                        Math.min(position.y, Math.max(ancestor.contentY, bottom))))
+                }
+            }
+        }
+        var saved = pageFocus[pageIndex]
+        if (saved && saved.visible && saved.enabled) {
+            saved.forceActiveFocus(Qt.BacktabFocusReason)
+            reveal(saved)
+            return
+        }
+        function focusFirst(item) {
+            if (!item.visible || !item.enabled) return false
+            if (item.activeFocusOnTab) {
+                item.forceActiveFocus(Qt.TabFocusReason)
+                reveal(item)
+                return true
+            }
+            for (var i = 0; i < item.children.length; ++i)
+                if (focusFirst(item.children[i])) return true
+            return false
+        }
+        focusFirst(pageStack.children[pageIndex])
+    }
+
     function goBack() {
-        if (settingsDetail) settingsPage.goBack()
-        else if (pageIndex === 6) pageIndex = 0
-        else if (moreDetail) pageIndex = 5
-        else if (pageIndex !== 0) pageIndex = 0
+        if (settingsDetail) {
+            settingsPage.goBack()
+            Qt.callLater(restorePageFocus)
+        } else if (pageHistory.length > 0) {
+            var history = pageHistory.slice()
+            var destination = history.pop()
+            pageHistory = history
+            restoringPage = true
+            pageIndex = destination
+            restoringPage = false
+        } else if (pageIndex !== 0) {
+            pageIndex = 0
+            pageHistory = []
+        }
     }
 
     onClosing: function(event) {
@@ -96,8 +154,13 @@ ApplicationWindow {
     Connections {
         target: appSettings
         function onAnonymousModeChanged() {
-            if (appSettings.anonymous_mode && window.pageIndex > 2)
-                window.pageIndex = 0
+            if (appSettings.anonymous_mode) {
+                // Back must not reopen pages hidden by anonymous mode.
+                window.restoringPage = true
+                if (window.pageIndex > 2) window.pageIndex = 0
+                window.restoringPage = false
+                window.pageHistory = window.pageHistory.filter(function(page) { return page < 3 })
+            }
         }
     }
 
@@ -110,11 +173,13 @@ ApplicationWindow {
     }
 
     Component.onCompleted: Qt.callLater(function() {
+        window.navigationReady = true
         if (!setupWizard.begin()) window.continueStartup()
     })
 
     FirstRunSetup {
         id: setupWizard
+        keyboardNavigation: window.keyboardNavigation
         settings: appSettings
         licenseText: applicationLicenseText
         reportDisclosure: backend.errorReportDisclosure
@@ -138,7 +203,7 @@ ApplicationWindow {
         focus: true
         Keys.onReleased: function(event) {
             if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-                if (window.pageIndex !== 0 || window.settingsDetail) {
+                if (window.canGoBack) {
                     window.goBack()
                     event.accepted = true
                 }
@@ -238,7 +303,7 @@ ApplicationWindow {
                 spacing: 0
 
                 Rectangle {
-                    visible: window.settingsDetail || window.moreDetail
+                    visible: window.canGoBack
                     Layout.fillWidth: true
                     Layout.preferredHeight: visible ? 48 : 0
                     color: window.backgroundColor
@@ -249,8 +314,13 @@ ApplicationWindow {
                         anchors.rightMargin: 8
                         spacing: 8
                         AppButton {
-                            visible: window.settingsDetail || window.moreDetail
+                            objectName: "androidBackButton"
+                            Keys.onDownPressed: window.restorePageFocus(true)
+                            Keys.onReturnPressed: window.goBack()
+                            Keys.onEnterPressed: window.goBack()
+                            visible: window.canGoBack
                             Layout.preferredWidth: visible ? 48 : 0
+                            activeFocusOnTab: true
                             Layout.preferredHeight: 48
                             text: "←"
                             font.pixelSize: 25 * appSettings.font_size / 12
@@ -265,6 +335,8 @@ ApplicationWindow {
                             }
                             background: Rectangle {
                                 radius: 24
+                                border.width: parent.visualFocus ? 2 : 0
+                                border.color: window.accentColor
                                 color: Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                window.accentColor.b, 0.18)
                             }
@@ -282,6 +354,7 @@ ApplicationWindow {
                 }
 
                 StackLayout {
+                    id: pageStack
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     currentIndex: window.pageIndex
@@ -363,6 +436,20 @@ ApplicationWindow {
                 }
             }
         }
+        Repeater {
+            model: 2
+            delegate: BackSwipeArea {
+                required property int index
+                objectName: index === 0 ? "leftBackSwipe" : "rightBackSwipe"
+                fromRight: index === 1
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                x: fromRight ? parent.width - width : 0
+                enabled: window.canGoBack
+                accentColor: window.accentColor
+                onBackRequested: window.goBack()
+            }
+        }
     }
     Dialog {
         id: androidUpdateDialog
@@ -385,6 +472,14 @@ ApplicationWindow {
             spacing: 16
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.version ? qsTr("Version %1 is available").arg(androidUpdateDialog.details.version) : qsTr("App updates") }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.entitlement_message || "" }
+            Label {
+                objectName: "updateDownloadSizeText"
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: androidUpdateDialog.details.download_size > 0
+                    ? qsTr("Download size: %1").arg((androidUpdateDialog.details.download_size / 1000000).toFixed(1) + " MB")
+                    : qsTr("Download size: unavailable")
+            }
             ScrollView {
                 id: androidUpdateScroll
                 Layout.fillWidth: true
@@ -406,6 +501,7 @@ ApplicationWindow {
                 }
             }
             ProgressBar {
+                objectName: "androidUpdateProgressBar"
                 Layout.fillWidth: true
                 visible: androidUpdateDialog.busy || androidUpdateDialog.downloadedBytes > 0
                 from: 0
@@ -413,6 +509,16 @@ ApplicationWindow {
                 value: androidUpdateDialog.downloadedBytes
                 indeterminate: androidUpdateDialog.busy && androidUpdateDialog.totalBytes <= 0
                 Accessible.name: qsTr("Update download progress")
+            }
+            Label {
+                objectName: "androidUpdateProgressText"
+                Layout.fillWidth: true
+                visible: androidUpdateDialog.totalBytes > 0
+                text: qsTr("%1 / %2 MB")
+                    .arg((androidUpdateDialog.downloadedBytes / 1000000).toFixed(1))
+                    .arg((androidUpdateDialog.totalBytes / 1000000).toFixed(1))
+                horizontalAlignment: Text.AlignRight
+                Accessible.name: text
             }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.status; textFormat: Text.PlainText }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; visible: appSettings.service_transport !== "direct"; text: torStatus.text }
@@ -456,7 +562,7 @@ ApplicationWindow {
                 androidUpdateDialog.open()
         }
         function onUpdateStatus(status) { androidUpdateDialog.status = status }
-        function onUpdateProgress(current, total) { androidUpdateDialog.downloadedBytes = current; androidUpdateDialog.totalBytes = total }
+        function onUpdateProgress(current, total) { androidUpdateDialog.totalBytes = total; androidUpdateDialog.downloadedBytes = current }
         function onUpdateCheckStarted() { androidUpdateDialog.details = ({}); androidChangelogText.clear(); androidUpdateDialog.status = ""; androidUpdateDialog.downloadedBytes = 0; androidUpdateDialog.totalBytes = 0 }
         function onUpdateFinished() { androidUpdateDialog.busy = false }
     }

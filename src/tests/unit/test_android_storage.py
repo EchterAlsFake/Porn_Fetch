@@ -60,6 +60,17 @@ class AndroidActivityTests(unittest.TestCase):
         self.assertIn('takePersistableUriPermission(intent.getData(), grants)', source)
         self.assertEqual(patch_activity(source), source)
 
+    def test_update_permission_result_forwarded_on_fresh_and_incremental_builds(self):
+        call = 'org.kivy.android.PornFetchPlatform.onActivityResult(this, requestCode);'
+        source = patch_activity(ACTIVITY)
+        self.assertEqual(source.count(call), 1)
+        self.assertLess(source.index(call), source.index('if (this.activityResultListeners'))
+        # Previously patched distributions must also receive the new bridge.
+        previous = source.replace(call, '')
+        upgraded = patch_activity(previous)
+        self.assertEqual(upgraded.count(call), 1)
+        self.assertEqual(patch_activity(upgraded), upgraded)
+
     def test_existing_super_call_is_not_duplicated(self):
         source = ACTIVITY.replace('listener.onActivityResult', 'super.onActivityResult')
         self.assertEqual(patch_activity(source).count('super.onActivityResult('), 1)

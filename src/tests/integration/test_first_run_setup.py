@@ -2,7 +2,7 @@
 import hashlib
 from pathlib import Path
 
-from PySide6.QtCore import QMetaObject, QObject, QSettings, Qt, QUrl
+from PySide6.QtCore import QMetaObject, QObject, QPointF, QSettings, Qt, QUrl
 from PySide6.QtTest import QTest
 
 from src.backend.config import SettingsManager
@@ -17,7 +17,7 @@ class FirstRunSetupTests(mobile.MobileOnboardingTests):
     test_mobile_message_fills_window_in_both_orientations = None
     test_folder_setup_survives_cancellation_and_saves_selection = None
 
-    def open_setup(self, android=False):
+    def open_setup(self, android=False, keyboard_navigation=True):
         self.license = Path('LICENSE').read_text()
         self.engine.rootContext().setContextProperty('applicationLicenseText', self.license)
         self.engine.loadData(f'''
@@ -29,6 +29,7 @@ class FirstRunSetupTests(mobile.MobileOnboardingTests):
                     id: dialog; settings: appSettings
                     licenseText: applicationLicenseText; reportDisclosure: disclosureText
                     fullScreen: {str(android).lower()}; requireOutputFolder: {str(android).lower()}
+                    keyboardNavigation: {str(keyboard_navigation).lower()}
                 }}
                 Component.onCompleted: dialog.begin()
             }}
@@ -99,6 +100,25 @@ class FirstRunSetupTests(mobile.MobileOnboardingTests):
         self.assertFalse(saved.error_reporting_full_traceback)
         QMetaObject.invokeMethod(dialog, 'begin')
         self.assertFalse(dialog.property('visible'))
+        self.assertEqual(self.warnings, [])
+
+    def test_touch_setup_has_no_forced_focus_but_keyboard_still_works(self):
+        dialog = self.open_setup(android=True, keyboard_navigation=False)
+        self.assertFalse(self.control('setupTextReader').property('activeFocus'))
+        rings = dialog.findChildren(QObject, 'setupFocusRing')
+        self.assertTrue(rings)
+        self.assertFalse(any(ring.property('visible') for ring in rings))
+        accept = self.control('setupAcceptLicenseCheckBox')
+        position = accept.mapToScene(QPointF(accept.width() / 2, accept.height() / 2)).toPoint()
+        QTest.mouseClick(self.window, Qt.LeftButton, pos=position)
+        self.assertTrue(accept.property('checked'))
+        self.assertFalse(any(ring.property('visible') for ring in rings))
+        self.advance()
+        self.assertEqual(dialog.property('step'), 'offer')
+        self.assertFalse(self.control('setupTextReader').property('activeFocus'))
+        self.assertFalse(any(ring.property('visible') for ring in rings))
+        self.key(Qt.Key_Right, 'setupBuyLicenseButton')
+        self.assertTrue(any(ring.property('visible') for ring in rings))
         self.assertEqual(self.warnings, [])
 
     def test_interrupted_setup_resumes_without_consuming_offer(self):

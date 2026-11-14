@@ -66,7 +66,8 @@ qualify recipients for this permission.
 No user account or hardware fingerprint is required; activation uses a random
 installation ID and is not tied to an IP address.
 
-Premium enables qualities above 720p, bulk downloading and parallel downloads. Import a signed key or
+Premium enables qualities above 720p, bulk downloading, parallel downloads and
+desktop/CLI [Media Library Export](JELLYFIN_METADATA.md). Import a signed key or
 license file in the GUI, or use License Management in the CLI. The current client
 uses schema 2 and the commercial policy; old beta credentials are rejected.
 Updates themselves are free and do not require a premium license.

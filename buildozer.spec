@@ -9,11 +9,11 @@ package.domain = to.pornfetch
 source.dir = /home/asuna/PycharmProjects/Porn_Fetch
 source.include_exts = py,png,jpg,qml,js,json,txt,rcc
 version = 3.9.0
-requirements = python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cffi==2.1.1,charset-normalizer,chompjs,openssl==3.5.9,cryptography==50.0.2,curl_cffi==0.17.0,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg>=1.7.5,unofficial-api-for-bellesa>=1.0.1,unofficial-api-for-eporner>=2.5.4,unofficial-api-for-porn>=0.1.0,unofficial-api-for-porndoe>=1.0.2,unofficial-api-for-pornhat,unofficial-api-for-pornhub>=5.4.8,unofficial-api-for-porntrex,unofficial-api-for-redgifs,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx>=2.4.5,unofficial-api-for-xvideos>=2.5.4,unofficial-api-for-youporn>=1.8.4,unofficial-api-for-youjizz>=0.1.0,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3,unofficial-api-for-empflix,unofficial-api-for-tnaflix,PyJWT
+requirements = python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cffi==2.1.1,charset-normalizer,chompjs,openssl==3.5.9,cryptography==50.0.2,curl_cffi==0.17.0,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg>=1.7.5,unofficial-api-for-bellesa>=1.0.1,unofficial-api-for-eporner>=2.5.4,unofficial-api-for-porn>=0.1.0,unofficial-api-for-porndoe>=1.0.2,unofficial-api-for-pornhat,unofficial-api-for-pornhub>=5.4.9,unofficial-api-for-porntrex,unofficial-api-for-redgifs,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx>=2.4.5,unofficial-api-for-xvideos>=2.5.4,unofficial-api-for-youporn>=1.8.4,unofficial-api-for-youjizz>=0.1.0,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3,unofficial-api-for-empflix,unofficial-api-for-tnaflix,PyJWT
 orientation = portrait, landscape
 android.manifest.orientation = unspecified
 fullscreen = 0
-android.archs = x86
+android.archs = arm64-v8a
 android.allow_backup = True
 presplash.filename = /home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/logo_square.png
 android.ndk_path = /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r28c

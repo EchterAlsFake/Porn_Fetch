@@ -41,7 +41,8 @@ from source does not give you access to the release signing keys.
   does not identify a developer and is not Apple notarization. Gatekeeper can
   still block the app, especially after it is copied or downloaded.
 - Linux builds do not receive a publisher code-signing certificate.
-- Android and iOS require your own device signing or sideloading setup.
+- Android source builds are signed automatically with a development key unless
+  you configure a release key. iOS requires your own device signing or sideloading setup.
 
 A successful compilation does not prove a file is safe. If a security tool flags
 it, check the source commit, dependency list and build log. Do not disable your

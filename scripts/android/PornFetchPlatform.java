@@ -3,6 +3,7 @@ package org.kivy.android;
 /** Private file bridge between Qt Python and Android's user-confirmed installer. */
 public final class PornFetchPlatform {
     private static android.os.FileObserver observer;
+    private static final int INSTALL_PERMISSION_REQUEST = 19473;
 
     public static void install(android.app.Activity activity) {
         try {
@@ -16,11 +17,16 @@ public final class PornFetchPlatform {
         } catch (Exception error) {
             result(activity, "error", "Could not read Android application identity.");
         }
+        // Android indexes FileObservers by directory watch descriptor. Keep one
+        // root observer so notifications cannot replace the installer callback.
+        if (observer != null) observer.stopWatching();
         observer = new android.os.FileObserver(activity.getFilesDir().getAbsolutePath(),
                 android.os.FileObserver.MOVED_TO | android.os.FileObserver.CLOSE_WRITE) {
             @Override public void onEvent(int event, String path) {
                 if ("install-update.json".equals(path)) {
                     activity.runOnUiThread(() -> requestInstall(activity));
+                } else if ("notifications-request.json".equals(path)) {
+                    activity.runOnUiThread(() -> PornFetchNotifications.consume(activity));
                 }
             }
         };
@@ -51,13 +57,20 @@ public final class PornFetchPlatform {
         }
     }
 
+    public static void onActivityResult(android.app.Activity activity, int requestCode) {
+        if (requestCode == INSTALL_PERMISSION_REQUEST) requestInstall(activity, false);
+    }
+
     private static void requestInstall(android.app.Activity activity) {
+        requestInstall(activity, true);
+    }
+
+    private static void requestInstall(android.app.Activity activity, boolean askPermission) {
         java.io.File request = new java.io.File(activity.getFilesDir(), "install-update.json");
         if (!request.exists()) return;
         try {
             String text = new String(java.nio.file.Files.readAllBytes(request.toPath()),
                     java.nio.charset.StandardCharsets.UTF_8);
-            request.delete();
             org.json.JSONObject command = new org.json.JSONObject(text);
             java.io.File apk = new java.io.File(activity.getFilesDir(), "pornfetch-update.apk");
             android.content.pm.PackageManager manager = activity.getPackageManager();
@@ -81,10 +94,14 @@ public final class PornFetchPlatform {
                 if (!compatible) throw new SecurityException("The APK has the wrong architecture.");
             }
             if (!manager.canRequestPackageInstalls()) {
-                activity.startActivity(new android.content.Intent(
+                if (!askPermission) {
+                    throw new SecurityException("Update installation requires allowing installs from Porn Fetch.");
+                }
+                activity.startActivityForResult(new android.content.Intent(
                         android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
-                        android.net.Uri.parse("package:" + activity.getPackageName())));
-                result(activity, "permission", "Allow installs from Porn Fetch, then select Install update again.");
+                        android.net.Uri.parse("package:" + activity.getPackageName())),
+                        INSTALL_PERMISSION_REQUEST);
+                result(activity, "permission", "Allow installs from Porn Fetch, then return to continue the update.");
                 return;
             }
             android.net.Uri uri = android.net.Uri.parse("content://" + activity.getPackageName() + ".updates/update.apk");
@@ -92,8 +109,10 @@ public final class PornFetchPlatform {
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             intent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(intent);
+            request.delete();
             result(activity, "confirmation", "Confirm the update in Android's installer. Cancelling keeps the current version.");
         } catch (Exception error) {
+            android.util.Log.e("PornFetchUpdate", "Could not launch update installer", error);
             request.delete();
             result(activity, "error", error.getMessage() == null ? "Android could not open the update." : error.getMessage());
         }

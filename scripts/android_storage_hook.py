@@ -63,6 +63,13 @@ def prepare_native_libraries(native: Path, resources: Path) -> None:
 
 
 def patch_activity(source: str) -> str:
+    update_call = "org.kivy.android.PornFetchPlatform.onActivityResult(this, requestCode);"
+    if update_call not in source:
+        source, count = re.subn(
+            r"(protected void onActivityResult\(int requestCode, int resultCode, Intent \w+\)\s*\{)",
+            lambda match: match.group(0) + "\n        " + update_call, source, count=1)
+        if not count:
+            raise ValueError("Cannot locate PythonActivity.onActivityResult for update permissions")
     if MARKER in source:
         return source
     if "extends QtActivity" not in source:

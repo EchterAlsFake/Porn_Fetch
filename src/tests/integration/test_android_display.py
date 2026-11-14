@@ -14,9 +14,11 @@ class AndroidDisplayTests(unittest.TestCase):
     def test_atomic_outline_update_and_desktop_fallback(self):
         self.app = QCoreApplication.instance() or QCoreApplication([])
         self.assertEqual(AndroidDisplay().outline, {})
+        self.assertTrue(AndroidDisplay().keyboardNavigation)
         with tempfile.TemporaryDirectory() as directory:
             bridge = AndroidDisplay(directory)
-            geometry = dict(width=1200, height=2500, corners=[
+            self.assertFalse(bridge.keyboardNavigation)
+            geometry = dict(keyboardNavigation=True, width=1200, height=2500, corners=[
                 dict(x=134, y=50, radius=134), dict(x=1066, y=50, radius=134),
                 dict(x=1066, y=2450, radius=134), dict(x=134, y=2450, radius=134)])
             changes = []
@@ -27,5 +29,14 @@ class AndroidDisplayTests(unittest.TestCase):
             QTest.qWait(100)
             self.assertEqual(bridge.outline, geometry)
             self.assertEqual(len(changes), 1)
+            self.assertTrue(bridge.keyboardNavigation)
             bridge.refresh()
             self.assertEqual(len(changes), 1)
+
+    def test_touch_device_keeps_keyboard_navigation_disabled(self):
+        self.app = QCoreApplication.instance() or QCoreApplication([])
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "display-outline.json"
+            path.write_text(json.dumps(dict(width=400, height=800, keyboardNavigation=False,
+                corners=[dict(x=0, y=0, radius=0)] * 4)))
+            self.assertFalse(AndroidDisplay(directory).keyboardNavigation)

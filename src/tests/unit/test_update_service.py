@@ -26,6 +26,31 @@ class UpdateServiceTests(unittest.TestCase):
         self.assertTrue(CheckUpdates._version_parts("3.9.1") > CheckUpdates._version_parts("3.9.0"))
         self.assertFalse(CheckUpdates._version_parts("3.9.0") > CheckUpdates._version_parts("3.9.0"))
 
+    def test_update_button_allows_android_with_source_flag_and_keeps_desktop_guard(self):
+        from src.backend.application import Backend
+
+        for source_run, android, allowed in [(True, True, True), (True, False, False), (False, False, True)]:
+            with self.subTest(source_run=source_run, android=android):
+                backend = SimpleNamespace(
+                    _auto_update_task=None, _spawn=MagicMock(),
+                    auto_updater=SimpleNamespace(run=MagicMock(return_value="update-operation")),
+                    notifications=MagicMock(), updateStatus=MagicMock(), updateFinished=MagicMock(),
+                    tr=lambda text: text,
+                )
+                with patch("src.backend.application.IS_SOURCE_RUN", source_run), \
+                     patch("src.shared.android_updates.is_android_device", return_value=android):
+                    Backend.auto_update(backend)
+                if allowed:
+                    backend._spawn.assert_called_once_with("update-operation", name="auto-update")
+                    backend.auto_updater.run.assert_called_once_with()
+                    backend.updateFinished.emit.assert_not_called()
+                    backend.notifications.publish.assert_not_called()
+                else:
+                    backend._spawn.assert_not_called()
+                    backend.auto_updater.run.assert_not_called()
+                    backend.updateFinished.emit.assert_called_once_with()
+                    self.assertIn("only available in installed builds", backend.updateStatus.emit.call_args.args[0])
+
     def test_find_maintenance_tool_via_env(self):
         with tempfile.NamedTemporaryFile(suffix=".exe" if sys.platform == "win32" else "", delete=False) as tmp:
             tmp_path = Path(tmp.name)
@@ -60,7 +85,7 @@ class UpdateServiceTests(unittest.TestCase):
 
 class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
     async def test_ios_discovers_only_published_ipas_without_the_desktop_repository(self):
-        ipa = {"platform": "ios", "kind": "ipa", "arch": "arm64"}
+        ipa = {"platform": "ios", "kind": "ipa", "arch": "arm64", "size": 500_000_000}
         release = {"version": "3.10.0", "channel": "stable", "notes": "# New release", "artifacts": [ipa]}
         response = MagicMock()
         response.json.return_value = {"releases": [
@@ -83,6 +108,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(update["release_url"], "https://pornfetch.to/download/ios")
         self.assertEqual(update["changelog"], "# New release")
         self.assertEqual(update["changelog_format"], "markdown")
+        self.assertEqual(update["download_size"], 500_000_000)
 
     async def test_ios_does_not_offer_the_installed_version(self):
         response = MagicMock()
@@ -143,16 +169,23 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_component_discovery_accepts_current_version_but_rejects_older_repository(self):
         release = {"version": "3.9"}
+        metadata = SimpleNamespace(signed=SimpleNamespace(targets={
+            "Updates.xml": SimpleNamespace(length=1_000),
+            "core.7z": SimpleNamespace(length=400_000_000),
+            "optional.7z": SimpleNamespace(length=99_999_000),
+        }))
         core = SimpleNamespace(request=AsyncMock(return_value=SimpleNamespace(status_code=200, content=b"signed")))
         with patch("src.backend.update_service.service_core", core), \
                 patch("src.backend.update_service.QFile") as resource, \
                 patch("src.backend.update_service.ROOT_FILE") as root, \
                 patch("src.backend.update_service.__version__", "3.9.0"), \
-                patch("src.backend.update_service.verify_repository_manifest", return_value=(object(), release)):
+                patch("src.backend.update_service.verify_repository_manifest", return_value=(metadata, release)):
             resource.return_value.exists.return_value = False
             root.read_bytes.return_value = b"root"
             self.assertIsNone(await CheckUpdates.check_signed_repository())
-            self.assertEqual((await CheckUpdates.check_signed_repository(include_current=True))["version"], "3.9")
+            update = await CheckUpdates.check_signed_repository(include_current=True)
+            self.assertEqual(update["version"], "3.9")
+            self.assertEqual(update["download_size"], 500_000_000)
             release["version"] = "3.8"
             with self.assertRaisesRegex(ValueError, "older"):
                 await CheckUpdates.check_signed_repository(include_current=True)
@@ -256,10 +289,12 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                  patch("src.backend.application.find_maintenance_tool", return_value=Path("/tool")), \
                  patch.object(CheckUpdates, "check", AsyncMock(return_value={
                 "source": source, "version": "3.10", "release_timestamp": RELEASE_TIMESTAMP,
+                "download_size": 500_000_000,
             })):
                 await Backend._check_for_updates(backend)
                 details = backend.updateAvailable.emit.call_args.args[0]
                 self.assertTrue(details["automatic"])
+                self.assertEqual(details["download_size"], 500_000_000)
                 self.assertEqual(backend.notifications.publish.call_args.kwargs["action"], "updates")
                 Backend.review_update(backend)
                 self.assertFalse(backend.updateAvailable.emit.call_args.args[0]["automatic"])

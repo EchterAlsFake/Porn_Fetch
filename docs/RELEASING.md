@@ -54,6 +54,10 @@ Environment `signing`:
 
 Android signing uses Environment `beta`: `ANDROID_KEYSTORE_BASE64`,
 `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`.
+The shared Android builder signs and verifies every APK. CI passes the release
+keystore and password environment variables to it; incomplete credentials fail.
+Build-only runs without credentials use the standard debug key, while website
+and GitHub release publication require all four release secrets before building.
 Reuse the same Android key for updates and keep an encrypted backup. See
 [Android](ANDROID.md) for local signing.
 

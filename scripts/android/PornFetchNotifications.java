@@ -3,19 +3,8 @@ package org.kivy.android;
 /** Private, opt-in notification commands from the Qt frontend. */
 public final class PornFetchNotifications {
     private static final String CHANNEL = "download-results";
-    private static android.os.FileObserver observer;
 
     public static void install(android.app.Activity activity) {
-        if (observer != null) observer.stopWatching();
-        observer = new android.os.FileObserver(activity.getFilesDir().getAbsolutePath(),
-                android.os.FileObserver.MOVED_TO | android.os.FileObserver.CLOSE_WRITE) {
-            @Override public void onEvent(int event, String path) {
-                if ("notifications-request.json".equals(path)) {
-                    activity.runOnUiThread(() -> consume(activity));
-                }
-            }
-        };
-        observer.startWatching();
         activity.getWindow().getDecorView().getViewTreeObserver()
                 .addOnWindowFocusChangeListener(focused -> { if (focused) publishStatus(activity); });
         consume(activity);
@@ -44,7 +33,7 @@ public final class PornFetchNotifications {
         }
     }
 
-    private static void consume(android.app.Activity activity) {
+    static void consume(android.app.Activity activity) {
         java.io.File path = new java.io.File(activity.getFilesDir(), "notifications-request.json");
         if (!path.isFile()) return;
         try {

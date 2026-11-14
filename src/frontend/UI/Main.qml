@@ -92,6 +92,7 @@ ApplicationWindow {
 
         function onUpdateAvailable(details) {
             updateDialog.version = details.version || ""
+            updateDialog.downloadSize = details.download_size || 0
             updateDialog.installAllowed = details.install_allowed === true
             updateDialog.entitlementMessage = details.entitlement_message || ""
             updateDialog.releaseUrl = details.release_url || ""
@@ -109,8 +110,9 @@ ApplicationWindow {
         }
 
         function onUpdateProgress(current, total) {
-            updateDialog.downloadedBytes = current
+            // Set the range before the value so ProgressBar does not clamp it.
             updateDialog.totalBytes = total
+            updateDialog.downloadedBytes = current
         }
 
         function onUpdateStatus(status) {
@@ -131,6 +133,7 @@ ApplicationWindow {
         property bool installAllowed: false
         property string entitlementMessage: ""
         property string version: ""
+        property real downloadSize: 0
         property string releaseUrl: ""
         property string importantInfo: ""
         property string changelog: ""
@@ -179,6 +182,15 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 text: updateDialog.entitlementMessage
+                wrapMode: Text.WordWrap
+                color: Theme.ink
+            }
+            Label {
+                objectName: "updateDownloadSizeText"
+                Layout.fillWidth: true
+                text: updateDialog.downloadSize > 0
+                    ? qsTr("Download size: %1").arg(updateDialog.formatBytes(updateDialog.downloadSize))
+                    : qsTr("Download size: unavailable")
                 wrapMode: Text.WordWrap
                 color: Theme.ink
             }

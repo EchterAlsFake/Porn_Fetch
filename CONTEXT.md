@@ -46,6 +46,16 @@ The desktop entry point is `main.py`; its backend is `src/backend/application.py
 `AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
 Weblate integration are unfinished; language selectors remain disabled.
 
+Android navigation keeps an in-memory page history. Back/Escape, the header
+button and inward touch swipes starting within 24 logical pixels of either side
+edge use the same Back action; Settings details return to their category list
+first. Short/vertical drags and modal dialogs do not navigate the underlying
+page. Automatic focus in setup and after page changes is enabled on Android TV
+and devices reporting no touchscreen. Touch devices avoid automatic control focus
+and setup outlines; explicit keyboard use still has visible focus. The native
+activity publishes this device policy with the window geometry. This requires a
+rebuilt APK; native device gesture/focus checks remain pending.
+
 Android supports portrait and landscape with manifest orientation `unspecified`,
 letting the system and user rotation settings choose the orientation. The build
 wrapper restores this policy even for regenerated specs. QML adapts by window
@@ -145,6 +155,10 @@ Wayland/NVIDIA; keep the native rendering setting for long notes. Update payload
 reproducing an HTTP/2 reset at 1 MiB; TUF streams resume with validated ranges.
 The signed maintenance component is required but not Essential, avoiding IFW's
 separate tool-first update/restart. Update launch uses normal async shutdown.
+Update offers show download size before confirmation: desktop sums all signed
+repository targets, CLI uses its signed archive length, and Android uses its
+signed APK length. The mobile iOS offer uses the catalog's IPA size. Missing sizes
+are displayed as unavailable; progress counters stay separate from this preview.
 
 The interactive CLI main menu includes Check for Updates, using the same signed
 updater and confirmation as `self-update`. Only a successfully staged update
@@ -153,7 +167,29 @@ declining, failed checks and up-to-date results return to the menu.
 
 Android and iOS check for updates at startup after first-use setup, respecting
 `Misc/update_checks` and the independent dialog opt-out. Mobile Settings exposes
-both preferences and a manual check. Android keeps its signed APK installer flow.
+both preferences and a manual check. Android update downloads report APK bytes
+against the TUF-signed target length, excluding metadata traffic. The dialog shows
+a determinate bar and downloaded/total MB once that length is known; metadata
+preparation remains indeterminate. Offline progress/presentation checks passed;
+real-device update download verification remains pending.
+Android APKs may retain `IS_SOURCE_RUN=True`; the update button exempts actual
+Android runtimes from the desktop source-run guard. Build origin (local or CI)
+does not control updater eligibility. The native installer requires the update's
+signing certificate to match the installed APK.
+Android keeps its signed APK installer flow. The native installer bridge retains the verified
+install request while Android's unknown-source permission settings are open and
+revalidates the APK before opening installation on return. Denied permission and
+native installer failures publish update notifications as well as dialog status.
+The activity-result hook also upgrades previously generated Android distributions.
+The installer and notification commands share one native root-directory
+FileObserver. Separate observers on the same directory let the later notification
+watch replace the installer callback, leaving verified APKs without a prompt.
+On 2026-11-14, an isolated test APK using the production native helpers reached
+both unknown-source permission settings and the update confirmation screen on
+the connected API 36 phone. Notification commands still worked through the shared
+watcher. The test install was cancelled and the probe removed, preserving the
+installed Porn Fetch app. This requires a rebuilt APK; full app update installation
+still needs device verification.
 iOS discovers published ARM64 IPAs from the website release catalog and offers
 the iOS download page for manual sideloading; it never installs updates in-app.
 
@@ -348,6 +384,13 @@ host patches or compilation, avoiding Buildozer's legacy Ant 1.9.4 download.
 CI installs Ubuntu's `ant`; Arch uses `apache-ant`. The wrapper also ensures the
 same pinned upstream Buildozer revision as CI, which supports Cython 3.3.0;
 released Buildozer 1.6.0 requires Cython <3 and conflicts with that toolchain.
+Every Android wrapper build is aligned, signed and verified; there is no unsigned
+option. Local releases use the project release keystore when available, otherwise
+reuse/create `~/.android/debug.keystore` without prompts, as debug builds do.
+Explicit keystores must exist. Passwords can come from `ANDROID_KEYSTORE_PASSWORD`
+and `ANDROID_KEY_PASSWORD`. CI uses the same signing path with its release key;
+build-only runs can use the debug key, but publishing requires complete release
+credentials. Only the verified signed APK is published to `--output-dir`.
 The wrapper regenerates machine paths and patches Qt's preload library names
 for Android 13. All four Python 3.15 CI targets built on 2026-11-03; physical
 device startup of those artifacts was not established by that build result.
@@ -383,6 +426,21 @@ persists Nuitka dependency/compiler caches by build environment; ARM64 Windows
 jobs reuse vcpkg's ABI-validated OpenSSL packages. Windows FFmpeg caches keep the
 unsigned executable with complete legal/source files separately from signing
 staging, and verify hashes, LGPL configuration/license and remuxing before reuse.
+
+## PornHub download recovery
+
+GUI and CLI use `unofficial-api-for-pornhub>=5.4.9` for regular PornHub Videos,
+with `src/shared/pornhub_download.py` translating its exhausted-source error.
+They try the prepared HLS source and up to four uncached page refreshes before
+resolving the page's remote MP4 definitions for the existing RAW downloader.
+If both sources remain unavailable, recovery stops after eight total page
+refreshes and explains that PornHub's video servers supplied no working source.
+Network, parser and filesystem failures retain their original errors. Numeric
+RAW selections never exceed the selected quality. Retained RAW checkpoints
+bypass HLS so a resumed MP4 cannot be overwritten by an HLS transfer. The
+provider library owns recovery, direct RAW support and the `SourcesUnavailable`
+exception; desktop and Android require 5.4.9. Shorts retain their provider
+download path.
 
 ## Pornhat integration
 

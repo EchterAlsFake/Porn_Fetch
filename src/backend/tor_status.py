@@ -14,6 +14,7 @@ class TorStatus(QObject):
     changed = Signal()
     received = Signal(str, int)
     installResult = Signal(str)
+    installOutcome = Signal(str, str)
     failureReceived = Signal(str)
     failure = Signal(str)
 
@@ -65,6 +66,8 @@ class TorStatus(QObject):
         try:
             value = json.loads(path.read_text())
             path.unlink()
-            self.installResult.emit(str(value["message"]))
+            message = str(value["message"])
+            self.installResult.emit(message)
+            self.installOutcome.emit("error" if value.get("state") == "error" else "info", message)
         except (OSError, ValueError, KeyError):
             pass

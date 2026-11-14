@@ -728,14 +728,22 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Require Android signing credentials before publishing
-        if: inputs.deploy_website || inputs.create_release
+      - name: Validate Android signing credentials
         env:
+          REQUIRE_RELEASE_SIGNING: ${{ inputs.deploy_website || inputs.create_release }}
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
+          configured=0
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -n "${!name}" ]; then configured=$((configured + 1)); fi
+          done
+          if [ "$REQUIRE_RELEASE_SIGNING" != "true" ] && [ "$configured" -eq 0 ]; then
+            echo "::notice::Build-only APKs will use the Android debug key."
+            exit 0
+          fi
           for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
             if [ -z "${!name}" ]; then
               echo "::error::Configure $name in the beta environment to publish signed Android APKs."
@@ -825,20 +833,29 @@ jobs:
 
       - name: Build release APK
         shell: bash
-        run: |
-          python scripts/build_android.py --architecture "$ANDROID_ARCH" \
-            --wheel-pyside "$RUNNER_TEMP/android-wheels/pyside6-6.12.0-6.12.0-cp315-cp315-android_${ANDROID_ARCH}.whl" \
-            --wheel-shiboken "$RUNNER_TEMP/android-wheels/shiboken6-6.12.0-6.12.0-cp315-cp315-android_${ANDROID_ARCH}.whl" \
-            --venv "$VIRTUAL_ENV" --sdk-path "$ANDROID_HOME" --ndk-path "$ANDROID_NDK_HOME" \
-            --build-mode release --unsigned --output-dir "$RUNNER_TEMP/android-output" \
-            < /dev/null 2>&1 | tee "$RUNNER_TEMP/android-build.log"
-
-      - name: Sign APK and collect notices
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          SIGNING_ARGS=()
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            umask 077
+            KEYSTORE="$RUNNER_TEMP/android-release.jks"
+            trap 'rm -f "$KEYSTORE"' EXIT
+            python -c 'import base64, os, pathlib; pathlib.Path(os.environ["RUNNER_TEMP"], "android-release.jks").write_bytes(base64.b64decode(os.environ["ANDROID_KEYSTORE_BASE64"], validate=True))'
+            SIGNING_ARGS=(--keystore "$KEYSTORE" --key-alias "$ANDROID_KEY_ALIAS")
+          fi
+          python scripts/build_android.py --architecture "$ANDROID_ARCH" \
+            --wheel-pyside "$RUNNER_TEMP/android-wheels/pyside6-6.12.0-6.12.0-cp315-cp315-android_${ANDROID_ARCH}.whl" \
+            --wheel-shiboken "$RUNNER_TEMP/android-wheels/shiboken6-6.12.0-6.12.0-cp315-cp315-android_${ANDROID_ARCH}.whl" \
+            --venv "$VIRTUAL_ENV" --sdk-path "$ANDROID_HOME" --ndk-path "$ANDROID_NDK_HOME" \
+            --build-mode release --output-dir "$RUNNER_TEMP/android-output" "${SIGNING_ARGS[@]}" \
+            < /dev/null 2>&1 | tee "$RUNNER_TEMP/android-build.log"
+
+      - name: Verify signed APK and collect notices
+        env:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
         run: |
           mkdir -p android_release
@@ -851,20 +868,8 @@ jobs:
           aapt2 dump xmltree "$APK" --file AndroidManifest.xml > "$RUNNER_TEMP/android-manifest.txt"
           grep -q PornFetchUpdateProvider "$RUNNER_TEMP/android-manifest.txt"
           grep -q REQUEST_INSTALL_PACKAGES "$RUNNER_TEMP/android-manifest.txt"
-          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
-            umask 077
-            KEYSTORE="$RUNNER_TEMP/android-release.jks"
-            trap 'rm -f "$KEYSTORE"' EXIT
-            python -c 'import base64, os, pathlib; pathlib.Path(os.environ["RUNNER_TEMP"], "android-release.jks").write_bytes(base64.b64decode(os.environ["ANDROID_KEYSTORE_BASE64"], validate=True))'
-            zipalign -P 16 -f -v 4 "$APK" "$RUNNER_TEMP/android-aligned.apk"
-            apksigner sign --ks "$KEYSTORE" --ks-key-alias "$ANDROID_KEY_ALIAS" \
-              --ks-pass env:ANDROID_KEYSTORE_PASSWORD --key-pass env:ANDROID_KEY_PASSWORD \
-              --out "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk" "$RUNNER_TEMP/android-aligned.apk"
-            apksigner verify --verbose "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk"
-          else
-            cp "$APK" "android_release/PornFetch_android_GUI_${ANDROID_ABI}_unsigned.apk"
-            echo "::notice::Build-only APK is unsigned. Configure Android signing secrets for installable, publishable APKs."
-          fi
+          apksigner verify --verbose "$APK"
+          cp "$APK" "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk"
           python packaging/collect_legal.py "android_release/PornFetch_android_GUI_${ANDROID_ABI}_LEGAL"
           for file in android_release/*.apk; do python scripts/write_checksum.py "$file"; done
           RELEASE_APKS=(android_release/*.apk)

@@ -693,30 +693,30 @@
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="+12"/>
-        <location line="+168"/>
+        <location line="+233"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-118"/>
-        <location line="+252"/>
+        <location line="-184"/>
+        <location line="+326"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-252"/>
-        <location line="+252"/>
+        <location line="-326"/>
+        <location line="+326"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-252"/>
-        <location line="+252"/>
+        <location line="-326"/>
+        <location line="+326"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-325"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -727,22 +727,22 @@
     </message>
     <message>
         <location line="+0"/>
-        <location line="+251"/>
+        <location line="+325"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-325"/>
         <source>Download manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+265"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+141"/>
         <source>Porn Fetch update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -757,12 +757,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+7"/>
+        <source>Download size: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download size: unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
         <source>Update download progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
+        <source>%1 / %2 MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Don&apos;t show update dialogs again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1366,7 +1381,21 @@
 <context>
     <name>AppStrings</name>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="+52"/>
+        <location filename="../../UI/AppStrings.qml" line="+22"/>
+        <source>The media folder as Porn Fetch sees it. Choose the shared parent folder containing the videos you want Jellyfin to scan, not an individual video.
+
+For example, Porn Fetch may save videos under /home/user/Videos while Jellyfin in Docker sees the same files under /media. Enter /home/user/Videos here. This setting translates paths for notifications; it does not share a folder or transfer files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The same media folder as Jellyfin sees it. This may differ from the path on the computer running Porn Fetch.
+
+For example, if Docker mounts your /home/user/Videos folder at /media, enter /media here and use /media when adding the Jellyfin library. A video at /home/user/Videos/example/video.mp4 is then announced as /media/example/video.mp4. Both paths must refer to the same files. For native installations on the same computer, the two roots may be identical.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>When you stop a download, delete its unfinished video parts and temporary files. This frees storage space.
 
 If you start that video again, it must download from the beginning. Leave this off if you want to keep progress for resuming.</source>
@@ -1714,21 +1743,7 @@ Leave this blank to export metadata without sending notifications. A notificatio
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>The media folder as Porn Fetch sees it. Choose the shared parent folder containing the videos you want Jellyfin to scan, not an individual video.
-
-For example, Porn Fetch may save videos under /home/user/Videos while Jellyfin in Docker sees the same files under /media. Enter /home/user/Videos here. This setting translates paths for notifications; it does not share a folder or transfer files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>The same media folder as Jellyfin sees it. This may differ from the path on the computer running Porn Fetch.
-
-For example, if Docker mounts your /home/user/Videos folder at /media, enter /media here and use /media when adding the Jellyfin library. A video at /home/user/Videos/example/video.mp4 is then announced as /media/example/video.mp4. Both paths must refer to the same files. For native installations on the same computer, the two roots may be identical.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+9"/>
         <source>An API key is a secret credential that lets Porn Fetch send requests to your Jellyfin server without asking you to log in for every notification. Porn Fetch uses it to tell Jellyfin about completed files so the server can scan them.
 
 Create a key in Jellyfin&apos;s administrator Dashboard under Advanced → API Keys; menu names can vary by version. Give it a recognizable name such as Porn Fetch, copy it here and choose Save API key. This is a Jellyfin key, not your Porn Fetch Premium key or your Jellyfin account password.
@@ -1898,7 +1913,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+273"/>
+        <location filename="../../../backend/update_service.py" line="+280"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1913,7 +1928,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+4"/>
         <source>APK verified. Waiting for Android&apos;s installation confirmation…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1941,7 +1956,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+865"/>
+        <location filename="../../../backend/application.py" line="+869"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1961,16 +1976,16 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-720"/>
+        <location line="-724"/>
         <location line="+200"/>
         <location line="+9"/>
-        <location line="+32"/>
-        <location line="+24"/>
+        <location line="+33"/>
+        <location line="+27"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-205"/>
+        <location line="-209"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2000,7 +2015,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+61"/>
         <source>Automatic updates are only available in installed builds. Use the download link instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2052,7 +2067,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-206"/>
+        <location line="-210"/>
         <source>Updates are free for everyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2072,7 +2087,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Version %s is available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2087,7 +2102,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+32"/>
         <source>Completed files are in shared Downloads/Porn Fetch. Open them in a file manager or media player.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2167,19 +2182,24 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+134"/>
-        <location line="+255"/>
+        <location line="+146"/>
+        <location line="+258"/>
         <location line="+4"/>
         <source>Metadata export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-218"/>
+        <location line="-221"/>
         <source>Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+4"/>
+        <source>PornHub did not provide a working HLS or MP4 download after 8 page refreshes. This is an issue with PornHub&apos;s video servers, not Porn Fetch. There is no fix available in Porn Fetch for this server-side failure. Please try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+55"/>
         <source>Loading stopped. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2328,12 +2348,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
-        <source>Export or notification is still unavailable. Check Premium access, the file and connection settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+33"/>
         <source>Library export and notification completed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2344,15 +2359,20 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-646"/>
+        <location line="-661"/>
         <location line="+104"/>
-        <location line="+518"/>
+        <location line="+533"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="-108"/>
+        <source>Export or notification is still unavailable. Check Premium access, the file and connection settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+154"/>
         <source>Your %s login is no longer valid. Please log in again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2893,7 +2913,7 @@ Arrow keys change a focused quality selection or number input.</source>
 <context>
     <name>FirstRunSetup</name>
     <message>
-        <location filename="../../UI/FirstRunSetup.qml" line="+23"/>
+        <location filename="../../UI/FirstRunSetup.qml" line="+25"/>
         <source>Review the license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2918,7 +2938,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+155"/>
+        <location line="+156"/>
         <source>Set up Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2963,7 +2983,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+53"/>
         <source>Full application license</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3088,7 +3108,7 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+55"/>
         <source>Choose where to save videos</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3782,7 +3802,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+176"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3802,12 +3822,22 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-124"/>
+        <location line="-133"/>
         <source>Update available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+17"/>
+        <source>Download size: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Download size: unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+103"/>
         <source>Don&apos;t show update dialogs again</source>
         <translation type="unfinished"></translation>
     </message>

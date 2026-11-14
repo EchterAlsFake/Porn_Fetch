@@ -1,2 +1,11 @@
 # 3.9.1 (hotfix)
 - Fixed PornHub 410 Resource Gone Error
+- Added Premium Jellyfin metadata export with NFO files, JSON records and posters
+- Added metadata preview, repair and retry for existing videos
+- Added help for Jellyfin settings and metadata export
+- Improved PornHub download recovery with MP4 fallback and clearer errors
+- Added Android Back gestures and improved touch and TV navigation
+- Fixed Android update installation and permission handling
+- Added update download sizes and improved download progress
+- Android builds are now signed and verified automatically
+- Updated provider dependencies, documentation and tests
