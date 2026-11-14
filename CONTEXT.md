@@ -248,6 +248,21 @@ Account collections remain exempt. Check parallel limits at the backend and
 queue, not only in QML. Existing public-collection queue rows beyond index five
 also require premium access.
 
+Desktop/CLI Media Library Export is Premium and off by default. Shared provider
+snapshots live in `src/shared/library_metadata.py` and `provider_metadata.py`;
+`library_export.py` owns NFO/JSON/artwork and completion handling, and `jellyfin.py`
+owns optional batched notifications and separate API-key storage. Preserve cast,
+uploader, producer, publisher and credited-provider roles. Unknown or relative
+dates do not become exact NFO dates. Queue checkpoints exclude nested metadata
+and recollect it on resume. GUI/CLI export failures leave completed media intact;
+edited sidecars are preserved, and metadata-only export can regenerate saved JSON
+offline. Mobile bundle publication is not enabled. See
+[Jellyfin usage and design](docs/JELLYFIN_METADATA.md). The eight provider metadata updates were published on GitHub and PyPI on
+2026-11-14: Bellesa 1.0.1, Porndoe 1.0.2, Eporner/XVideos 2.5.4, YouPorn 1.8.4,
+XNXX 2.4.5, Pornhub 5.4.8 and Beeg 1.7.5. Desktop/Android dependency minimums
+require those releases. The local `.venv` still has editable provider installs;
+a normal `uv sync` restores package-index sources.
+
 ## Dependencies and builds
 
 Use `uv sync --upgrade` with the needed extras to resolve current compatible

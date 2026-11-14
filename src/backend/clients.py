@@ -708,6 +708,8 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         tags=normalized_tags
     )
 
+    from src.shared.provider_metadata import collect_library_metadata
+    video_object.library_metadata = collect_library_metadata(video_source, video, video_object)
     return video_object
 
 

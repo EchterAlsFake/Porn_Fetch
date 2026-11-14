@@ -26,6 +26,7 @@ from src.cli.wizard import (
     print_banner,
     run_wizard,
 )
+from src.shared.media import VideoObject
 
 
 class FakeQuestionaryPrompt:
@@ -146,11 +147,9 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         mock_text.return_value = FakeQuestionaryPrompt("https://pornhub.com/view_video.php?viewkey=123")
         mock_select.return_value = FakeQuestionaryPrompt("720")
 
-        mock_video = MagicMock()
-        mock_video.title = "Sample Video"
-        mock_video.author = "Sample Author"
-        mock_video.qualities = [360, 720, 1080]
-        mock_video.length = 10
+        mock_video = VideoObject(url="https://pornhub.com/view_video.php?viewkey=123", title="Sample Video",
+                                 author="Sample Author", qualities=[360, 720, 1080], length=10,
+                                 tags=[], thumbnail_url="", video_id="123", publish_date=None, status="Pending")
         route = Route("pornhub", ContentKind.VIDEO, "https://pornhub.com/view_video.php?viewkey=123")
         self.fake_pool.resolve = AsyncMock(return_value=(route, mock_video))
 
@@ -179,12 +178,9 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
             FakeQuestionaryPrompt("best"),
         ]
 
-        mock_video = MagicMock()
-        mock_video.url = "https://pornhub.com/view_video.php?viewkey=abc"
-        mock_video.title = "Model Clip"
-        mock_video.author = "testmodel"
-        mock_video.qualities = [720]
-        mock_video.length = 5
+        mock_video = VideoObject(url="https://pornhub.com/view_video.php?viewkey=abc", title="Model Clip",
+                                 author="testmodel", qualities=[720], length=5,
+                                 tags=[], thumbnail_url="", video_id="abc", publish_date=None, status="Pending")
 
         async def fake_stream(url, pages=5):
             yield mock_video

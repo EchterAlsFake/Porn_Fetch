@@ -528,6 +528,10 @@ Pane {
                                     }
                                 }
                             }
+                            LibraryExportSettings {
+                                visible: appSettings.library_export_supported && !window.androidLayoutMode
+                                scrollView: scrollviewVideo
+                            }
                         }
                     }
 

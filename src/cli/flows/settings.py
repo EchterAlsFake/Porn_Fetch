@@ -35,6 +35,13 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     "result_limit": ("Video", "Max profile or playlist result count"),
     "skip_existing": ("Video", "Skip downloads if file exists"),
     "write_metadata": ("Video", "Embed metadata tags in downloaded MP4 files"),
+    "metadata_export": ("Video", "Premium library export: off or jellyfin"),
+    "metadata_layout": ("Video", "Library layout: alongside or scene-folder"),
+    "metadata_genres": ("Video", "Export source categories as Jellyfin genres"),
+    "metadata_studio_fallback": ("Video", "Use credited providers/publishers/channels as studios"),
+    "jellyfin_url": ("Video", "Optional Jellyfin server URL (API key: PORNFETCH_JELLYFIN_API_KEY)"),
+    "jellyfin_local_root": ("Video", "Local media root for Jellyfin path mapping"),
+    "jellyfin_server_root": ("Video", "Media root as seen by Jellyfin"),
     "profile_video_mode": ("Video", "Scrape mode: videos, uploads, or both"),
     "locale": ("Video", "Preferred language / locale (e.g. en-US, de-DE)"),
     "strict_language": ("Video", "Strictly enforce language headers"),
@@ -215,6 +222,17 @@ async def handle_settings(ctx: WizardContext) -> None:
                     ctx.console.print(Panel(ALL_TRAFFIC_NOTICE, title="Using Tor for video downloads"))
                     if not await questionary.confirm("Enable Tor for all app traffic?", default=False, style=WIZARD_STYLE).ask_async():
                         continue
+            elif target_setting == "metadata_export":
+                new_val = await questionary.select(
+                    "Automatic library export:",
+                    choices=[questionary.Choice("Off", value="off"),
+                             questionary.Choice("Jellyfin (Premium)", value="jellyfin",
+                                                disabled=None if ctx.license_service.status.allowed else "Requires Premium")],
+                    default=current_val if ctx.license_service.status.allowed else "off", style=WIZARD_STYLE,
+                ).ask_async()
+            elif target_setting == "metadata_layout":
+                new_val = await questionary.select("Library layout:", choices=["alongside", "scene-folder"],
+                                                   default=current_val, style=WIZARD_STYLE).ask_async()
             elif isinstance(current_val, bool):
                 new_val = await questionary.confirm(f"Enable {target_setting}?", default=current_val, style=WIZARD_STYLE).ask_async()
             elif target_setting == "quality":

@@ -139,7 +139,7 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                                 route, source = await ctx.pool.resolve(pending_url)
                                 media = await prepare_video(source, route.provider)
                                 eff_q = select_allowed_quality(ctx.settings.quality, media.qualities, has_premium) or ctx.settings.quality
-                                target = output_path_for(media, ctx.settings)
+                                target = output_path_for(media, ctx.settings, premium=has_premium)
                                 outcome = await download_video(
                                     source,
                                     target,
@@ -153,22 +153,6 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                                 if outcome.status == "completed":
                                     success_count += 1
                                     completed_urls.append(pending_url)
-                                    if (
-                                        ctx.settings.write_metadata
-                                        and not outcome.skipped
-                                        and not outcome.metadata_written
-                                        and outcome.path.suffix.casefold() == ".mp4"
-                                        and outcome.path.exists()
-                                    ):
-                                        try:
-                                            from src.shared.metadata import write_tags
-                                            await asyncio.to_thread(write_tags, str(outcome.path), media)
-                                        except Exception as error:
-                                            await ctx.report(
-                                                error,
-                                                "write download metadata",
-                                                "src.cli.flows.models.handle_batch_management",
-                                            )
                                 else:
                                     fail_count += 1
                                 await record_cli_download(

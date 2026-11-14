@@ -13,7 +13,7 @@ from pathlib import Path
 from src.shared.media import VideoObject
 from src.shared.provider_routing import ContentKind, route_url
 
-SAVED_FIELDS = {field.name for field in fields(VideoObject)} - {"source_video", "thumbnail_data", "thumbnail_url"}
+SAVED_FIELDS = {field.name for field in fields(VideoObject)} - {"source_video", "thumbnail_data", "thumbnail_url", "library_metadata"}
 
 
 def discard_changed_hls_quality(checkpoint: Path, segments: Path, quality: str) -> bool:

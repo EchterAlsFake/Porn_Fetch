@@ -27,6 +27,7 @@ ACTION_DESTINATIONS = {
     "url", "model", "playlist", "add_model_to_database", "remove_model_from_database",
     "update_pending_urls", "update_models", "test_mode", "test_downloads", "resume",
     "info", "quality", "output", "stats",
+    "export_metadata_for", "retry_jellyfin",
 }
 
 
@@ -67,6 +68,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--playlist", "--collection", dest="playlist", action="append", default=[], help="collection URL (repeatable)")
     parser.add_argument("--quality", help="quality override for this invocation")
     parser.add_argument("--output", help="output directory override for this invocation")
+    parser.add_argument("--metadata-export", choices=["off", "jellyfin"], help="Premium media library export")
+    parser.add_argument("--metadata-layout", choices=["alongside", "scene-folder"], help="layout for new downloads")
+    parser.add_argument("--metadata-genres", action=argparse.BooleanOptionalAction, default=None, help="map source categories to genres")
+    parser.add_argument("--metadata-studio-fallback", action=argparse.BooleanOptionalAction, default=None, help="use credited providers/channels as studios")
+    parser.add_argument("--export-metadata-for", action="append", default=[], metavar="FILE", help="export metadata for an existing file without downloading media (repeatable)")
+    parser.add_argument("--source-url", action="append", default=[], help="original video URL for each metadata-only file; omit to regenerate saved JSON")
+    parser.add_argument("--dry-run", action="store_true", help="preview metadata-only export without writing files")
+    parser.add_argument("--replace-metadata", action="store_true", help="explicitly replace edited sidecars during metadata-only export")
+    parser.add_argument("--retry-jellyfin", action="append", default=[], metavar="FILE", help="notify Jellyfin about a previously exported file without rewriting metadata")
+    parser.add_argument("--jellyfin-url", help="optional Jellyfin server URL; API key comes from PORNFETCH_JELLYFIN_API_KEY")
+    parser.add_argument("--jellyfin-local-root", help="local media root")
+    parser.add_argument("--jellyfin-server-root", help="media root as seen by Jellyfin")
     parser.add_argument("--auto-process", "--auto_process", dest="auto_process", action="store_true", help="download every discovered item")
     parser.add_argument("--ignore-errors", "--ignore_errors", dest="ignore_errors", action="store_true", help="continue after a failed item")
     parser.add_argument(
@@ -97,6 +110,12 @@ def main(argv: list[str] | None = None) -> int:
         return apply_from_helper(raw_args[1], raw_args[2])
     parser = build_parser()
     args = parser.parse_args(raw_args)
+    if args.source_url and len(args.source_url) != len(args.export_metadata_for):
+        parser.error("Provide one --source-url for each --export-metadata-for file, or omit URLs to use saved metadata")
+    if (args.dry_run or args.replace_metadata) and not args.export_metadata_for:
+        parser.error("--dry-run and --replace-metadata require --export-metadata-for")
+    if (args.export_metadata_for or args.retry_jellyfin) and (args.url or args.model or args.playlist or args.resume):
+        parser.error("Run metadata-only operations separately from downloads")
     if args.command == "self-update":
         from .self_update import run_self_update
         return run_self_update(check_only=args.check, assume_yes=args.yes)
@@ -250,6 +269,10 @@ async def run_batch(args: argparse.Namespace) -> int:
         "quality": args.quality,
         "output_path": args.output,
     }
+    for name in ("metadata_export", "metadata_layout", "metadata_genres", "metadata_studio_fallback",
+                 "jellyfin_url", "jellyfin_local_root", "jellyfin_server_root"):
+        if getattr(args, name, None) is not None:
+            overrides[name] = getattr(args, name)
     if getattr(args, "track_videos", None) is not None:
         overrides["track_videos"] = args.track_videos
     if getattr(args, "pocketbase_data", None):
@@ -273,6 +296,9 @@ async def run_batch(args: argparse.Namespace) -> int:
         settings.parallel_downloads = download_parallelism(settings.parallel_downloads, license_status.allowed)
         if license_status.server_rejected:
             print(f"License rejected: {rejection_notice(license_status.state)}", file=sys.stderr)
+
+        if getattr(args, "export_metadata_for", None) or getattr(args, "retry_jellyfin", None):
+            return await _metadata_actions(args, pool, settings, license_status.allowed)
 
         if getattr(args, "resume", False):
             paused_items = PausedStore().load()
@@ -397,6 +423,54 @@ async def _scan_model(
         return 1
 
 
+async def _metadata_actions(args, pool, settings, premium) -> int:
+    import json
+
+    from src.shared.access import require_library_export
+    from src.shared.jellyfin import notify_jellyfin
+    from src.shared.library_export import export_library_bundle, prepare_existing_export
+
+    failures = 0
+
+    async def resolve(url):
+        return (await pool.resolve(url))[1]
+
+    for index, filename in enumerate(args.export_metadata_for):
+        try:
+            path = Path(filename).expanduser().resolve()
+            url = args.source_url[index] if args.source_url else ""
+            metadata, core, options = await prepare_existing_export(path, url, settings, premium=premium, resolve_source=resolve)
+            result = await export_library_bundle(path, metadata, options, premium=premium, core=core,
+                                                 force=args.replace_metadata, dry_run=args.dry_run)
+            if args.dry_run:
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+            else:
+                print(f"Exported library metadata: {path}")
+                for warning in result.warnings:
+                    print(warning, file=sys.stderr)
+                if settings.jellyfin_url:
+                    try:
+                        await notify_jellyfin(path, settings)
+                    except Exception:
+                        print("Metadata was saved; Jellyfin notification failed. Use --retry-jellyfin FILE.", file=sys.stderr)
+                        failures += 1
+        except Exception as error:
+            print(f"Metadata export failed: {error}", file=sys.stderr)
+            failures += 1
+    for filename in args.retry_jellyfin:
+        try:
+            require_library_export(premium)
+            path = Path(filename).expanduser().resolve()
+            if not path.is_file():
+                raise ValueError("The completed video file was not found")
+            await notify_jellyfin(path, settings)
+            print(f"Jellyfin notified: {path}")
+        except Exception:
+            print("Jellyfin notification failed. Check Premium access, server settings, API key and path mapping.", file=sys.stderr)
+            failures += 1
+    return 1 if failures else 0
+
+
 async def _download_url(
     pool: ClientPool,
     url: str,
@@ -477,7 +551,7 @@ async def _download_prepared(
     if not quality:
         print(f"No permitted quality is available for {media.title}", file=sys.stderr)
         return False
-    target = Path(target_override) if target_override else output_path_for(media, settings)
+    target = Path(target_override) if target_override else output_path_for(media, settings, premium=premium)
 
     ctrl = controller or DownloadController(
         url=getattr(media, "url", None),
@@ -499,28 +573,6 @@ async def _download_prepared(
         print(f"\nPaused: {media.title} (resume later with --resume)")
         return False
 
-    if (
-        result.status == "completed"
-        and settings.write_metadata
-        and not result.skipped
-        and not getattr(result, "metadata_written", False)
-    ):
-        try:
-            from src.shared.metadata import write_tags
-            await asyncio.to_thread(write_tags, str(result.path), media)
-        except Exception as error:
-            report_id = await report_exception(
-                error,
-                operation="write downloaded video metadata",
-                location="src.cli.batch._download_prepared",
-                context={
-                    "video_url": getattr(media, "url", None),
-                    "provider": type(getattr(media, "source_video", None)).__module__,
-                },
-                enabled=settings.error_reporting,
-                include_traceback=settings.error_reporting_full_traceback,
-            )
-            print(f"Metadata warning for {media.title}: {error} [error {report_id}]", file=sys.stderr)
     print(f"\n{result.status}: {media.title}")
     await record_cli_download(
         settings,

@@ -84,6 +84,7 @@ class SettingsManager(QObject):
     androidOutputFolderChanged = Signal(str)
     skipExistingFilesChanged = Signal(bool)
     writeMetadataChanged = Signal(bool)
+    librarySettingsChanged = Signal()
     resultLimitChanged = Signal(int)
     strictEnforcementChanged = Signal(bool)
     modelVideosChanged = Signal(int)
@@ -369,6 +370,84 @@ class SettingsManager(QObject):
         if val != self.write_metadata:
             self._settings.setValue("Video/write_metadata", val)
             self.writeMetadataChanged.emit(val)
+
+    @Property(bool, constant=True)
+    def library_export_supported(self) -> bool:
+        return not IS_ANDROID and sys.platform != "ios"
+
+    @Property(str, notify=librarySettingsChanged)
+    def metadata_export(self) -> str:
+        return self.get_str("Library/metadata_export", 'off')
+
+    @metadata_export.setter
+    def metadata_export(self, value: str) -> None:
+        if value not in ('off', 'jellyfin'):
+            raise ValueError("Invalid library export setting")
+        if value != self.metadata_export:
+            self._settings.setValue("Library/metadata_export", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(str, notify=librarySettingsChanged)
+    def metadata_layout(self) -> str:
+        return self.get_str("Library/metadata_layout", 'alongside')
+
+    @metadata_layout.setter
+    def metadata_layout(self, value: str) -> None:
+        if value not in ('alongside', 'scene-folder'):
+            raise ValueError("Invalid library export setting")
+        if value != self.metadata_layout:
+            self._settings.setValue("Library/metadata_layout", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(bool, notify=librarySettingsChanged)
+    def metadata_genres(self) -> bool:
+        return self.get_bool("Library/metadata_genres", False)
+
+    @metadata_genres.setter
+    def metadata_genres(self, value: bool) -> None:
+        if value != self.metadata_genres:
+            self._settings.setValue("Library/metadata_genres", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(bool, notify=librarySettingsChanged)
+    def metadata_studio_fallback(self) -> bool:
+        return self.get_bool("Library/metadata_studio_fallback", False)
+
+    @metadata_studio_fallback.setter
+    def metadata_studio_fallback(self, value: bool) -> None:
+        if value != self.metadata_studio_fallback:
+            self._settings.setValue("Library/metadata_studio_fallback", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(str, notify=librarySettingsChanged)
+    def jellyfin_url(self) -> str:
+        return self.get_str("Library/jellyfin_url", '')
+
+    @jellyfin_url.setter
+    def jellyfin_url(self, value: str) -> None:
+        if value != self.jellyfin_url:
+            self._settings.setValue("Library/jellyfin_url", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(str, notify=librarySettingsChanged)
+    def jellyfin_local_root(self) -> str:
+        return self.get_str("Library/jellyfin_local_root", '')
+
+    @jellyfin_local_root.setter
+    def jellyfin_local_root(self, value: str) -> None:
+        if value != self.jellyfin_local_root:
+            self._settings.setValue("Library/jellyfin_local_root", value)
+            self.librarySettingsChanged.emit()
+
+    @Property(str, notify=librarySettingsChanged)
+    def jellyfin_server_root(self) -> str:
+        return self.get_str("Library/jellyfin_server_root", '')
+
+    @jellyfin_server_root.setter
+    def jellyfin_server_root(self, value: str) -> None:
+        if value != self.jellyfin_server_root:
+            self._settings.setValue("Library/jellyfin_server_root", value)
+            self.librarySettingsChanged.emit()
 
     @Property(bool, notify=skipExistingFilesChanged)
     def skip_existing_files(self) -> bool:

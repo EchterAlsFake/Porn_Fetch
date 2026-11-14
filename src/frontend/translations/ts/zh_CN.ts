@@ -1366,7 +1366,7 @@
 <context>
     <name>AppStrings</name>
     <message>
-        <location filename="../../UI/AppStrings.qml" line="+7"/>
+        <location filename="../../UI/AppStrings.qml" line="+52"/>
         <source>When you stop a download, delete its unfinished video parts and temporary files. This frees storage space.
 
 If you start that video again, it must download from the beginning. Leave this off if you want to keep progress for resuming.</source>
@@ -1679,7 +1679,114 @@ High contrast can override these colours when enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-117"/>
+        <location line="-165"/>
+        <source>Jellyfin is a media server that organizes videos and lets you watch them through its apps or a browser. Porn Fetch can save a description file (.nfo), a portable metadata record (.json) and an available cover image beside each completed video. Metadata means details such as title, performers, tags and dates.
+
+Choose Export for Jellyfin to do this for new downloads. You can use these files without connecting Porn Fetch to a server: add their folder to a Jellyfin Movies library and scan it. An API key is only needed for automatic notifications. Export requires Premium; unknown details stay empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Sidecars are companion files stored beside a video. Sidecars beside each video keeps your normal download layout and gives each video its own named metadata files.
+
+One folder per new video groups the video, metadata and cover together, using a source ID to distinguish videos with the same title. This is a convenient starting choice for Jellyfin. Existing videos are not moved or renamed. Keep companion files with the video when copying it to another computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Copy the website&apos;s video categories into Jellyfin&apos;s Genres field so you can browse or filter by them. Source tags are exported separately.
+
+Categories differ between websites. This does not invent categories when the source supplies none.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Normally, the Studio field only uses an explicit producer credit. A website uploader or channel is not automatically the studio that made the video.
+
+Enable this if you want credited content providers, publishers and channels to appear as studios too. These credits may describe who published the video rather than who produced it. Leave this off if you want to keep that distinction. Review the Exported studio value in the metadata preview.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The address where Porn Fetch can contact your Jellyfin server. If both programs run on this computer, this is often http://localhost:8096. For a different computer, use its reachable server address.
+
+Leave this blank to export metadata without sending notifications. A notification tells Jellyfin that a completed file is ready to scan; it does not upload or copy the video, poster or metadata files. Jellyfin must already be able to read their folder. For a remote server, arrange shared storage or copy the complete video folder yourself. All app traffic Tor mode also applies to these requests.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The media folder as Porn Fetch sees it. Choose the shared parent folder containing the videos you want Jellyfin to scan, not an individual video.
+
+For example, Porn Fetch may save videos under /home/user/Videos while Jellyfin in Docker sees the same files under /media. Enter /home/user/Videos here. This setting translates paths for notifications; it does not share a folder or transfer files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The same media folder as Jellyfin sees it. This may differ from the path on the computer running Porn Fetch.
+
+For example, if Docker mounts your /home/user/Videos folder at /media, enter /media here and use /media when adding the Jellyfin library. A video at /home/user/Videos/example/video.mp4 is then announced as /media/example/video.mp4. Both paths must refer to the same files. For native installations on the same computer, the two roots may be identical.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>An API key is a secret credential that lets Porn Fetch send requests to your Jellyfin server without asking you to log in for every notification. Porn Fetch uses it to tell Jellyfin about completed files so the server can scan them.
+
+Create a key in Jellyfin&apos;s administrator Dashboard under Advanced → API Keys; menu names can vary by version. Give it a recognizable name such as Porn Fetch, copy it here and choose Save API key. This is a Jellyfin key, not your Porn Fetch Premium key or your Jellyfin account password.
+
+Keep it private: it can grant broad access to your server. You can revoke it in Jellyfin. You do not need a key for exporting files or scanning the library manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Save the entered Jellyfin API key on this computer for future notifications. It is stored separately from settings and is not included in exported metadata. The input is cleared after saving; that does not remove the saved key.
+
+To remove the stored key, leave the input blank and press Save API key. Removing this local copy does not revoke the key in Jellyfin; revoke it through Jellyfin&apos;s dashboard if needed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Choose a completed video that is already on your computer. This feature adds or rebuilds the companion metadata and artwork files used to describe it in Jellyfin.
+
+It can help when an older download has no metadata or a generated companion file is missing. It does not repair a broken video, recover missing video segments, improve quality or download the video again. Use the original source URL if no saved Porn Fetch JSON record is available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Open the file picker and select the existing video you want to describe. Choose the video file itself, not its .nfo, .json or poster file. The video stays in its current location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The original video page on the source website, for example the same URL you used to download it. This is not a Jellyfin address or a temporary streaming link.
+
+With a URL, Porn Fetch requests the video&apos;s currently available metadata from that website. Leave this blank when a matching Porn Fetch JSON record is saved beside the video; that record can rebuild metadata without contacting the source website. Deleted source pages can only be recovered from information you already saved. Missing source fields are not guessed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read the available information and show it for review before writing companion files. With a source URL, this can contact the original website; with saved Porn Fetch JSON, it can work offline.
+
+Check the title, performers and the distinction between uploader, channel, publisher and producer. Not supplied means the information is unavailable. Preview does not write export files or transfer the video. Turn off Anonymous Mode to view this information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Write the metadata you previewed beside the existing video, together with available artwork. The video itself is not changed or downloaded again. Existing or manually edited metadata and artwork are preserved by default.
+
+If the optional Jellyfin connection is configured, Porn Fetch also sends a scan notification after saving. That notification does not transfer any files. Without a connection, scan the library manually. A successful export cannot add details the website or saved JSON did not supply.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Try failed exports or Jellyfin notifications again for completed downloads remembered during this app session. The video is not downloaded again.
+
+If Jellyfin was offline, start it and retry. If a folder, API key or path mapping was wrong, correct it first. A notification failure does not undo the saved video or metadata.
+
+After restarting Porn Fetch, use Export or repair an existing video to rebuild metadata from saved JSON or the original source URL. This button does not search your library for broken videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Choose the video quality to try first. Higher quality usually needs more storage space and takes longer to download.
 
 If the website does not offer that quality, Porn Fetch chooses an available quality. Free use supports qualities up to 720p. An active premium license unlocks higher qualities. The quality cannot be higher than the source video.</source>
@@ -1834,7 +1941,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+859"/>
+        <location filename="../../../backend/application.py" line="+865"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2045,12 +2152,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+102"/>
+        <location line="+104"/>
         <source>This public-collection download requires an active premium license. The free preview includes the first 5 videos.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+47"/>
         <source>An existing file was kept in your output folder.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2060,7 +2167,14 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+160"/>
+        <location line="+134"/>
+        <location line="+255"/>
+        <location line="+4"/>
+        <source>Metadata export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-218"/>
         <source>Saving to your output folder failed. Choose the folder again in Settings, then retry. The original file remains in app storage.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2080,7 +2194,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Enter a supported video URL.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2095,15 +2209,144 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+26"/>
+        <source>The API key could not be saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Jellyfin API key saved locally.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <location line="+3"/>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+1"/>
+        <source>Not supplied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-11"/>
+        <source>Title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Platform publication date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Performers: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Producer: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Exported studio: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Credited provider: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Publisher: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Channel: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Uploader: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tags: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Categories: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Existing or edited sidecars are preserved. Export does not download the video.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Media Library Export requires an active Premium license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Could not prepare metadata. Check the file and source URL, or choose a file with saved Porn Fetch metadata.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Library metadata saved. The video file was kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Metadata was saved, but Jellyfin notification failed. Check the connection and retry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Premium access is required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Metadata export failed. The video and existing metadata were kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Export or notification is still unavailable. Check Premium access, the file and connection settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Library export and notification completed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+78"/>
         <location line="+25"/>
         <source>Free preview: only the first 5 videos from this model, channel or playlist can be loaded. Activate a premium license for bulk downloading. Account collections are not limited by this preview.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-491"/>
-        <location line="+102"/>
-        <location line="+365"/>
+        <location line="-646"/>
+        <location line="+104"/>
+        <location line="+518"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
@@ -2884,7 +3127,7 @@ Arrow keys change a focused quality selection or number input.</source>
     <name>HelpButton</name>
     <message>
         <location filename="../../UI/HelpButton.qml" line="+9"/>
-        <location line="+35"/>
+        <location line="+39"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2994,6 +3237,209 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
     <message>
         <location line="+18"/>
         <source>Porn Fetch application license</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LibraryExportSettings</name>
+    <message>
+        <location filename="../../UI/LibraryExportSettings.qml" line="+77"/>
+        <source>Preview ready. Review the available metadata before exporting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Metadata operation finished. Details are hidden in Anonymous Mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Choose a completed video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Videos (*.mp4 *.mkv *.webm *.mov *.m4v *.ts)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Media Library Export · Premium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Export available metadata and artwork for Jellyfin. Unknown fields stay empty; uploaders and studios remain separate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Activate Premium to export library metadata. Existing embedded MP4 tags remain available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+32"/>
+        <location line="+32"/>
+        <location line="+27"/>
+        <location line="+29"/>
+        <location line="+27"/>
+        <location line="+27"/>
+        <location line="+27"/>
+        <location line="+26"/>
+        <location line="+27"/>
+        <location line="+28"/>
+        <location line="+24"/>
+        <location line="+27"/>
+        <location line="+47"/>
+        <location line="+26"/>
+        <source>Help: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-389"/>
+        <source>Automatic library export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Automatic export off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Export for Jellyfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>New download library layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sidecars beside each video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>One folder per new video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Use source categories as genres</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Use credited providers, publishers and channels as studios</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Optional Jellyfin connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Jellyfin must already have access to these files. This connection sends scan notifications; it does not transfer videos. All app traffic mode routes these requests through Tor too.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Jellyfin server URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Server URL, for example http://localhost:8096</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Local media root</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Local media root, for example /mnt/media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Media root inside Jellyfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Jellyfin media root, for example /media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Jellyfin API key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>API key (stored locally; leave blank to clear)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Save API key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Export or repair an existing video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+2"/>
+        <source>Completed video file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Choose video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Original video URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Original URL (optional when Porn Fetch metadata is saved)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Preview metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reading metadata…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Library metadata preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Export metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Retry pending exports and notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3532,7 +3978,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+75"/>
         <source>Recent activity (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3595,6 +4041,11 @@ No subscription.</source>
     <message>
         <location line="+0"/>
         <source>Review update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Retry metadata export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3970,13 +4421,13 @@ Stopping downloads and saving application state.</source>
     <message>
         <location line="+5"/>
         <location line="+15"/>
-        <location line="+1295"/>
+        <location line="+1299"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1311"/>
+        <location line="-1315"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4101,7 +4552,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Download workers:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4276,8 +4727,8 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-735"/>
-        <location line="+1297"/>
+        <location line="-739"/>
+        <location line="+1301"/>
         <location line="+6"/>
         <source>Get lifetime Premium</source>
         <translation type="unfinished"></translation>
@@ -4914,7 +5365,7 @@ If you are using only the GUI this will not affect your user experience, but may
     <name>model</name>
     <message>
         <location filename="../../../backend/account_diagnostics.py" line="+390"/>
-        <location filename="../../../backend/profile_diagnostics.py" line="+219"/>
+        <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation type="unfinished"></translation>
     </message>

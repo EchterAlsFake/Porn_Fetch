@@ -9,6 +9,7 @@ SmoothWheelHandler 1.0 SmoothWheelHandler.qml
 ActivityEdge 1.0 ActivityEdge.qml
 
 AppButton 1.0 AppButton.qml
+LibraryExportSettings 1.0 LibraryExportSettings.qml
 ContentLanguageComboBox 1.0 ContentLanguageComboBox.qml
 AppTextField 1.0 AppTextField.qml
 AppComboBox 1.0 AppComboBox.qml

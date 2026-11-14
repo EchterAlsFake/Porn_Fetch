@@ -16,6 +16,10 @@ AppButton {
     icon.width: 22
     icon.height: 22
 
+    Keys.onReturnPressed: function(event) { helpDialog.open(); event.accepted = true }
+    Keys.onEnterPressed: function(event) { helpDialog.open(); event.accepted = true }
+    Keys.onSelectPressed: function(event) { helpDialog.open(); event.accepted = true }
+
     onClicked: {
         helpDialog.open()
     }

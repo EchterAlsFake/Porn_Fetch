@@ -3,6 +3,51 @@ pragma Singleton
 
 // Shared, plain-language explanations for settings.
 QtObject {
+    readonly property string libraryExportHelp:
+        qsTr("Jellyfin is a media server that organizes videos and lets you watch them through its apps or a browser. Porn Fetch can save a description file (.nfo), a portable metadata record (.json) and an available cover image beside each completed video. Metadata means details such as title, performers, tags and dates.\n\nChoose Export for Jellyfin to do this for new downloads. You can use these files without connecting Porn Fetch to a server: add their folder to a Jellyfin Movies library and scan it. An API key is only needed for automatic notifications. Export requires Premium; unknown details stay empty.")
+
+    readonly property string libraryLayoutHelp:
+        qsTr("Sidecars are companion files stored beside a video. Sidecars beside each video keeps your normal download layout and gives each video its own named metadata files.\n\nOne folder per new video groups the video, metadata and cover together, using a source ID to distinguish videos with the same title. This is a convenient starting choice for Jellyfin. Existing videos are not moved or renamed. Keep companion files with the video when copying it to another computer.")
+
+    readonly property string libraryGenresHelp:
+        qsTr("Copy the website's video categories into Jellyfin's Genres field so you can browse or filter by them. Source tags are exported separately.\n\nCategories differ between websites. This does not invent categories when the source supplies none.")
+
+    readonly property string libraryStudiosHelp:
+        qsTr("Normally, the Studio field only uses an explicit producer credit. A website uploader or channel is not automatically the studio that made the video.\n\nEnable this if you want credited content providers, publishers and channels to appear as studios too. These credits may describe who published the video rather than who produced it. Leave this off if you want to keep that distinction. Review the Exported studio value in the metadata preview.")
+
+    readonly property string jellyfinServerHelp:
+        qsTr("The address where Porn Fetch can contact your Jellyfin server. If both programs run on this computer, this is often http://localhost:8096. For a different computer, use its reachable server address.\n\nLeave this blank to export metadata without sending notifications. A notification tells Jellyfin that a completed file is ready to scan; it does not upload or copy the video, poster or metadata files. Jellyfin must already be able to read their folder. For a remote server, arrange shared storage or copy the complete video folder yourself. All app traffic Tor mode also applies to these requests.")
+
+    readonly property string jellyfinLocalRootHelp:
+        qsTr("The media folder as Porn Fetch sees it. Choose the shared parent folder containing the videos you want Jellyfin to scan, not an individual video.\n\nFor example, Porn Fetch may save videos under /home/user/Videos while Jellyfin in Docker sees the same files under /media. Enter /home/user/Videos here. This setting translates paths for notifications; it does not share a folder or transfer files.")
+
+    readonly property string jellyfinServerRootHelp:
+        qsTr("The same media folder as Jellyfin sees it. This may differ from the path on the computer running Porn Fetch.\n\nFor example, if Docker mounts your /home/user/Videos folder at /media, enter /media here and use /media when adding the Jellyfin library. A video at /home/user/Videos/example/video.mp4 is then announced as /media/example/video.mp4. Both paths must refer to the same files. For native installations on the same computer, the two roots may be identical.")
+
+    readonly property string jellyfinApiKeyHelp:
+        qsTr("An API key is a secret credential that lets Porn Fetch send requests to your Jellyfin server without asking you to log in for every notification. Porn Fetch uses it to tell Jellyfin about completed files so the server can scan them.\n\nCreate a key in Jellyfin's administrator Dashboard under Advanced → API Keys; menu names can vary by version. Give it a recognizable name such as Porn Fetch, copy it here and choose Save API key. This is a Jellyfin key, not your Porn Fetch Premium key or your Jellyfin account password.\n\nKeep it private: it can grant broad access to your server. You can revoke it in Jellyfin. You do not need a key for exporting files or scanning the library manually.")
+
+    readonly property string jellyfinSaveKeyHelp:
+        qsTr("Save the entered Jellyfin API key on this computer for future notifications. It is stored separately from settings and is not included in exported metadata. The input is cleared after saving; that does not remove the saved key.\n\nTo remove the stored key, leave the input blank and press Save API key. Removing this local copy does not revoke the key in Jellyfin; revoke it through Jellyfin's dashboard if needed.")
+
+    readonly property string libraryExistingFileHelp:
+        qsTr("Choose a completed video that is already on your computer. This feature adds or rebuilds the companion metadata and artwork files used to describe it in Jellyfin.\n\nIt can help when an older download has no metadata or a generated companion file is missing. It does not repair a broken video, recover missing video segments, improve quality or download the video again. Use the original source URL if no saved Porn Fetch JSON record is available.")
+
+    readonly property string libraryChooseFileHelp:
+        qsTr("Open the file picker and select the existing video you want to describe. Choose the video file itself, not its .nfo, .json or poster file. The video stays in its current location.")
+
+    readonly property string librarySourceUrlHelp:
+        qsTr("The original video page on the source website, for example the same URL you used to download it. This is not a Jellyfin address or a temporary streaming link.\n\nWith a URL, Porn Fetch requests the video's currently available metadata from that website. Leave this blank when a matching Porn Fetch JSON record is saved beside the video; that record can rebuild metadata without contacting the source website. Deleted source pages can only be recovered from information you already saved. Missing source fields are not guessed.")
+
+    readonly property string libraryPreviewHelp:
+        qsTr("Read the available information and show it for review before writing companion files. With a source URL, this can contact the original website; with saved Porn Fetch JSON, it can work offline.\n\nCheck the title, performers and the distinction between uploader, channel, publisher and producer. Not supplied means the information is unavailable. Preview does not write export files or transfer the video. Turn off Anonymous Mode to view this information.")
+
+    readonly property string libraryWriteHelp:
+        qsTr("Write the metadata you previewed beside the existing video, together with available artwork. The video itself is not changed or downloaded again. Existing or manually edited metadata and artwork are preserved by default.\n\nIf the optional Jellyfin connection is configured, Porn Fetch also sends a scan notification after saving. That notification does not transfer any files. Without a connection, scan the library manually. A successful export cannot add details the website or saved JSON did not supply.")
+
+    readonly property string libraryRetryHelp:
+        qsTr("Try failed exports or Jellyfin notifications again for completed downloads remembered during this app session. The video is not downloaded again.\n\nIf Jellyfin was offline, start it and retry. If a folder, API key or path mapping was wrong, correct it first. A notification failure does not undo the saved video or metadata.\n\nAfter restarting Porn Fetch, use Export or repair an existing video to rebuild metadata from saved JSON or the original source URL. This button does not search your library for broken videos.")
+
     readonly property string cleanupOnStopHelp:
         qsTr("When you stop a download, delete its unfinished video parts and temporary files. This frees storage space.\n\nIf you start that video again, it must download from the beginning. Leave this off if you want to keep progress for resuming.")
 

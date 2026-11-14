@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
+from .library_metadata import LibraryMetadata
+
 try:
     from base_api.modules.static_functions import normalize_quality
 except ImportError:  # Keep configuration/self-test imports dependency-light.
@@ -138,5 +140,6 @@ class VideoObject:
     missing_segments: list[int] | None = None
     is_from_account: bool = False
     thumbnail_data: bytes | None = None
+    library_metadata: LibraryMetadata | None = None
 
 

@@ -27,6 +27,13 @@ class CliSettings:
     output_path: str = "."
     path_template: str = "$title"
     write_metadata: bool = True
+    metadata_export: str = "off"
+    metadata_layout: str = "alongside"
+    metadata_genres: bool = False
+    metadata_studio_fallback: bool = False
+    jellyfin_url: str = ""
+    jellyfin_local_root: str = ""
+    jellyfin_server_root: str = ""
     skip_existing: bool = True
     # Performance
     parallel_downloads: int = 2
@@ -74,6 +81,10 @@ class CliSettings:
     legacy_database_path: str = "./downloads.db"
 
     def validate(self) -> None:
+        from src.shared.download_options import title_template
+        title_template(self.path_template)
+        if self.metadata_export not in {"off", "jellyfin"} or self.metadata_layout not in {"alongside", "scene-folder"}:
+            raise ValueError("Invalid media library export mode or layout")
         if self.service_transport not in {"direct", "tor", "tor_all"}:
             raise ValueError("service transport must be direct, tor, or tor_all")
         positive = (

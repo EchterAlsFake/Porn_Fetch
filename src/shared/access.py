@@ -8,6 +8,11 @@ FREE_COLLECTION_PREVIEW = 5
 T = TypeVar("T")
 
 
+def require_library_export(premium: bool) -> None:
+    if not premium:
+        raise PermissionError("Media Library Export requires an active Premium license.")
+
+
 def download_parallelism(requested: int, premium: bool) -> int:
     return max(1, int(requested)) if premium else 1
 

@@ -53,6 +53,8 @@ ColumnLayout {
     function dispatchAction(action) {
         if (action === "retry")
             backend.retry_failed_downloads();
+        else if (action === "metadata")
+            backend.retry_library_exports();
         else if (action === "output")
             backend.open_output_folder();
         else if (action === "updates")
@@ -225,7 +227,7 @@ ColumnLayout {
                             }
                             AppButton {
                                 visible: modelData.action !== ""
-                                text: modelData.action === "retry" ? qsTr("Retry failed downloads") : modelData.action === "updates" ? qsTr("Review update") : qsTr("Open output folder")
+                                text: modelData.action === "retry" ? qsTr("Retry failed downloads") : modelData.action === "metadata" ? qsTr("Retry metadata export") : modelData.action === "updates" ? qsTr("Review update") : qsTr("Open output folder")
                                 implicitHeight: 48
                                 onClicked: root.performAction(modelData.action)
                             }

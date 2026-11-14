@@ -38,9 +38,9 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
         tags = [str(item) for item in (tags or [])]
 
     length = _value(video, "length_seconds") or _value(video, "duration") or _value(video, "length")
-    return VideoObject(
+    prepared = VideoObject(
         url=str(_value(video, "url") or ""),
-        title=_safe_title(str(title)),
+        title=str(title or "Untitled"),
         author=str(author or "N/A"),
         length=parse_length(length, video_source=provider),
         tags=tags,
@@ -54,6 +54,9 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
         status="pending",
         source_video=video,
     )
+    from src.shared.provider_metadata import collect_library_metadata
+    prepared.library_metadata = collect_library_metadata(provider, video, prepared)
+    return prepared
 
 
 async def available_qualities(video: Any) -> list[int]:
@@ -171,10 +174,6 @@ def _value(value: Any, name: str) -> Any:
     except Exception as error:
         logger.debug("Provider attribute %s failed: %s", name, type(error).__name__)
         return None
-
-
-def _safe_title(value: str) -> str:
-    return re.sub(r"[\\/:*?\"<>|\x00-\x1f]", "_", value).strip(" .") or "Untitled"
 
 
 def _date(value: Any) -> datetime | None:

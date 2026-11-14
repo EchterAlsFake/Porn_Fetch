@@ -7,6 +7,8 @@ Porn Fetch is English-only. Translations are unfinished.
 - [Supported websites](WEBSITES.md) and [screenshots](SCREENSHOTS.md)
 - [Licenses and Premium](LICENSING.md) and [emergency service operations](../deploy/emergency/README.md)
 - [Work on the code](FOR_DEVELOPERS.md)
+- [Jellyfin metadata export](JELLYFIN_METADATA.md)
+- [Provider metadata capabilities and source audit](PROVIDER_METADATA.md)
 - [Run tests](TESTING.md)
 - [Bellesa integration and verification](BELLESA.md)
 - [Porn.com integration and verification](PORN.md)

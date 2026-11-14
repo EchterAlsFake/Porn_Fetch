@@ -40468,7 +40468,7 @@ RE OR THE USE OR\
  OTHER DEALINGS \
 IN THE\x0aSOFTWARE.\
 \x0a\
-\x00\x00\x04\xb7\
+\x00\x00\x04\xef\
 A\
 dditional permis\
 sion for Porn Fe\
@@ -40500,53 +40500,56 @@ urce-Available L\
 icense 1.0:\x0a\x0auno\
 fficial-api-for-\
 beeg, unofficial\
--api-for-empflix\
+-api-for-bellesa\
 , unofficial-api\
--for-eporner,\x0aun\
+-for-empflix, un\
 official-api-for\
--porndoe, unoffi\
+-eporner,\x0aunoffi\
 cial-api-for-por\
-nhat, unofficial\
--api-for-pornhub\
+ndoe, unofficial\
+-api-for-pornhat\
 , unofficial-api\
--for-porntrex,\x0au\
-nofficial-api-fo\
-r-redtube, unoff\
-icial-api-for-sp\
-ankbang,\x0aunoffic\
-ial-api-for-thum\
-bzilla, unoffici\
-al-api-for-tnafl\
-ix, unofficial-a\
-pi-for-tube8,\x0aun\
+-for-pornhub, un\
 official-api-for\
--xfreehd, unoffi\
-cial-api-for-xha\
-mster,\x0aunofficia\
-l-api-for-xnxx, \
+-porntrex,\x0aunoff\
+icial-api-for-re\
+dgifs, unofficia\
+l-api-for-redtub\
+e, unofficial-ap\
+i-for-spankbang,\
+\x0aunofficial-api-\
+for-thumbzilla, \
 unofficial-api-f\
-or-xvideos,\x0aunof\
-ficial-api-for-y\
-ouporn.\x0a\x0aThis pe\
-rmission does no\
-t change the AGP\
-L terms of copie\
-s obtained separ\
-ately,\x0adoes not \
-cover another pe\
-rson's copyright\
-ed contributions\
-, and does not r\
-educe\x0arights in \
-any other compon\
-ent. Verify owne\
-rship of every i\
-ncluded contribu\
-tion\x0abefore rely\
-ing on this perm\
-ission for a rel\
-ease.\x0a\
-\x00\x00\x13I\
+or-tnaflix, unof\
+ficial-api-for-t\
+ube8,\x0aunofficial\
+-api-for-xfreehd\
+, unofficial-api\
+-for-xhamster,\x0au\
+nofficial-api-fo\
+r-xnxx, unoffici\
+al-api-for-xvide\
+os,\x0aunofficial-a\
+pi-for-youporn.\x0a\
+\x0aThis permission\
+ does not change\
+ the AGPL terms \
+of copies obtain\
+ed separately,\x0ad\
+oes not cover an\
+other person's c\
+opyrighted contr\
+ibutions, and do\
+es not reduce\x0ari\
+ghts in any othe\
+r component. Ver\
+ify ownership of\
+ every included \
+contribution\x0abef\
+ore relying on t\
+his permission f\
+or a release.\x0a\
+\x00\x00\x13J\
 #\
  Third-party not\
 ices and release\
@@ -40580,283 +40583,283 @@ ence | Distribut\
 ion note |\x0a| ---\
  | --- | --- |\x0a|\
  `eaf_base_api` \
-and the seventee\
-n `unofficial-ap\
-i-for-*` package\
-s in `pyproject.\
-toml` | Installe\
-d metadata: AGPL\
--3.0-or-later fo\
-r `eaf_base_api`\
-; AGPL-3.0-only \
-for the provider\
-s | The [additio\
-nal permission](\
-LICENSES/Provide\
-r-permission.txt\
-) applies only t\
-o portions Johan\
-nes Habel may li\
-cense separately\
-. Audit other co\
-ntributions befo\
-re distribution.\
- |\x0a| PySide6 and\
- Qt 6 | PySide6 \
-metadata: LGPL-3\
-.0-only OR GPL-2\
-.0-only OR GPL-3\
-.0-only; [Qt lic\
-ensing](https://\
-www.qt.io/develo\
-pment/open-sourc\
-e-lgpl-obligatio\
-ns) | Audit each\
- bundled Qt modu\
-le; preserve the\
- LGPL notices an\
-d source availab\
-ility, and verif\
-y that users can\
- replace the LGP\
-L libraries in t\
-he actual instal\
-ler or one-file \
-build. |\x0a| `brow\
-ser-cookie3`, `p\
-ydivert` | Insta\
-lled metadata: L\
-GPL; LGPL-3.0-or\
--later OR GPL-2.\
-0-or-later | Inc\
-lude the exact d\
-istribution lice\
-nses and comply \
-with the chosen \
-LGPL/GPL terms. \
-|\x0a| PocketBase e\
-xecutable | [MIT\
-](https://github\
-.com/pocketbase/\
-pocketbase/blob/\
-master/LICENSE.m\
-d) | Installer a\
-nd CI workflows \
-download and bun\
-dle this executa\
-ble; include its\
- copyright and M\
-IT text with eac\
-h affected artif\
-act. |\x0a| FFmpeg \
-| [LGPL-2.1-or-l\
-ater](https://ff\
-mpeg.org/legal.h\
-tml), built from\
- pinned FFmpeg 9\
-.0.2 source | Th\
-e minimal profil\
-e explicitly dis\
-ables GPL, versi\
-on-3, nonfree, a\
-nd third-party c\
-odec features. D\
-esktop and Andro\
-id builds use a \
-separate executa\
-ble. iOS statica\
-lly links the FF\
-mpeg libraries i\
-nto its replacea\
-ble `_ios_ffmpeg\
-` extension. Rel\
-ease legal bundl\
-es include the c\
-omplete source a\
-rchive, license \
-texts, configure\
- flags, configur\
-ation headers an\
-d build hashes; \
-the iOS bundle a\
-lso includes bri\
-dge sources and \
-`ffmpeg/0/REBUIL\
-D.md` for rebuil\
-ding and replaci\
-ng the extension\
-. Desktop build \
-materials are al\
-so in `third_par\
-ty/ffmpeg-legal`\
-. |\x0a| zlib | [zl\
-ib license](http\
-s://zlib.net/zli\
-b_license.html) \
-| Used for PNG c\
-over probing. Li\
-nux/macOS use th\
-e system library\
-; Windows static\
-ally links the M\
-SYS2 library and\
- includes its `z\
-lib.h` copyright\
-/license text in\
- `ffmpeg-legal`.\
- |\x0a| LZ4 native \
-compression libr\
-ary | [BSD-2-Cla\
-use](LICENSES/LZ\
-4.txt) | macOS b\
-undles the nativ\
-e library when r\
-equired by the P\
-ython compressio\
-n extensions; re\
-tain its copyrig\
-ht and license a\
-longside the Pyt\
-hon package's se\
-parate license. \
-|\x0a| Other Python\
- packages | `pyp\
-roject.toml` and\
- installed packa\
-ge metadata | Ge\
-nerate an artifa\
-ct-specific list\
- and include the\
- packages' licen\
-se and notice fi\
-les; account for\
- platform extras\
- and transitive \
-dependencies. |\x0a\
-| Application gr\
-aphics | [Graphi\
-cs source files]\
-(src/frontend/gr\
-aphics/); Lucide\
- settings-icon a\
-ttribution below\
- | Application-o\
-wned SVGs use th\
-e application li\
-cense; Lucide ic\
-ons retain their\
- MIT notice. Pre\
-serve provenance\
- records for the\
- PNG logo and sp\
-lash assets; rep\
-lace or clear an\
-y uncertain asse\
-t before release\
-. |\x0a| Content-la\
-nguage flag imag\
-es | [flag-icons\
-](https://github\
-.com/lipis/flag-\
-icons), MIT | SV\
-Gs from revision\
- `ac7e0eb3259eb6\
-2aa6100c435607e2\
-fe03896a97`; cop\
-yright and licen\
-se in [LICENSES/\
-FlagIcons.txt](L\
-ICENSES/FlagIcon\
-s.txt). |\x0a\x0aThe o\
-bsolete library \
-list in `docs/CR\
-EDITS.md` is ret\
-ained as histori\
-cal\x0aacknowledgme\
-nt. It does not \
-establish the sh\
-ipped dependency\
- list or license\
-\x0aobligations. Th\
-ird-party notice\
-s and source ava\
-ilability must b\
-e present in the\
-\x0adelivered packa\
-ge, not only in \
-this repository.\
-\x0a\x0a## Settings ic\
-ons\x0a\x0aThe video, \
-gauge, settings,\
- shield, palette\
- and trash SVGs \
-in\x0a`src/frontend\
-/graphics/settin\
-gs/` are by Luci\
-de Icons and Con\
-tributors, from\x0a\
-https://github.c\
-om/lucide-icons/\
-lucide/tree/main\
-/icons (download\
-ed 2026-10-26).\x0a\
-They are distrib\
-uted under the I\
-SC license, with\
- the Feather-der\
-ived icons\x0acover\
-ed by the MIT no\
-tice included in\
- [LICENSES/Lucid\
-e.txt](LICENSES/\
-Lucide.txt).\x0aSee\
- https://lucide.\
-dev/license. The\
- SVG artwork is \
-unmodified.\x0a\x0a###\
- Payment logos\x0a\x0a\
-The Bitcoin, Eth\
-ereum and Liteco\
-in logo vectors \
-in\x0a`src/frontend\
-/graphics/paymen\
-ts/` come from [\
-Simple Icons](ht\
-tps://github.com\
-/simple-icons/si\
-mple-icons)\x0aunde\
-r [CC0-1.0](LICE\
-NSES/SimpleIcons\
-.txt). Display c\
-olours were adde\
-d.\x0a\x0aThe Monero l\
-ogo is by the Mo\
-nero Project, fr\
-om its\x0a[press ki\
-t](https://www.g\
-etmonero.org/pre\
-ss-kit), obtaine\
-d through Simple\
- Icons.\x0aIt uses \
-[CC BY-SA 4.0](L\
-ICENSES/Monero-C\
-C-BY-SA-4.0.txt)\
-. The SVG has an\
- added\x0aorange fi\
-ll; that modifie\
-d vector remains\
- under CC BY-SA \
-4.0. Its editabl\
-e\x0asource is `src\
-/frontend/graphi\
-cs/payments/mone\
-ro.svg`.\x0a\x0aThese \
-names and logos \
-remain the marks\
- of their respec\
-tive owners; no\x0a\
-endorsement is i\
-mplied.\x0a\
+and the twenty-o\
+ne `unofficial-a\
+pi-for-*` packag\
+es in `pyproject\
+.toml` | Install\
+ed metadata: AGP\
+L-3.0-or-later f\
+or `eaf_base_api\
+`; AGPL-3.0-only\
+ for the provide\
+rs | The [additi\
+onal permission]\
+(LICENSES/Provid\
+er-permission.tx\
+t) applies only \
+to portions Joha\
+nnes Habel may l\
+icense separatel\
+y. Audit other c\
+ontributions bef\
+ore distribution\
+. |\x0a| PySide6 an\
+d Qt 6 | PySide6\
+ metadata: LGPL-\
+3.0-only OR GPL-\
+2.0-only OR GPL-\
+3.0-only; [Qt li\
+censing](https:/\
+/www.qt.io/devel\
+opment/open-sour\
+ce-lgpl-obligati\
+ons) | Audit eac\
+h bundled Qt mod\
+ule; preserve th\
+e LGPL notices a\
+nd source availa\
+bility, and veri\
+fy that users ca\
+n replace the LG\
+PL libraries in \
+the actual insta\
+ller or one-file\
+ build. |\x0a| `bro\
+wser-cookie3`, `\
+pydivert` | Inst\
+alled metadata: \
+LGPL; LGPL-3.0-o\
+r-later OR GPL-2\
+.0-or-later | In\
+clude the exact \
+distribution lic\
+enses and comply\
+ with the chosen\
+ LGPL/GPL terms.\
+ |\x0a| PocketBase \
+executable | [MI\
+T](https://githu\
+b.com/pocketbase\
+/pocketbase/blob\
+/master/LICENSE.\
+md) | Installer \
+and CI workflows\
+ download and bu\
+ndle this execut\
+able; include it\
+s copyright and \
+MIT text with ea\
+ch affected arti\
+fact. |\x0a| FFmpeg\
+ | [LGPL-2.1-or-\
+later](https://f\
+fmpeg.org/legal.\
+html), built fro\
+m pinned FFmpeg \
+9.0.2 source | T\
+he minimal profi\
+le explicitly di\
+sables GPL, vers\
+ion-3, nonfree, \
+and third-party \
+codec features. \
+Desktop and Andr\
+oid builds use a\
+ separate execut\
+able. iOS static\
+ally links the F\
+Fmpeg libraries \
+into its replace\
+able `_ios_ffmpe\
+g` extension. Re\
+lease legal bund\
+les include the \
+complete source \
+archive, license\
+ texts, configur\
+e flags, configu\
+ration headers a\
+nd build hashes;\
+ the iOS bundle \
+also includes br\
+idge sources and\
+ `ffmpeg/0/REBUI\
+LD.md` for rebui\
+lding and replac\
+ing the extensio\
+n. Desktop build\
+ materials are a\
+lso in `third_pa\
+rty/ffmpeg-legal\
+`. |\x0a| zlib | [z\
+lib license](htt\
+ps://zlib.net/zl\
+ib_license.html)\
+ | Used for PNG \
+cover probing. L\
+inux/macOS use t\
+he system librar\
+y; Windows stati\
+cally links the \
+MSYS2 library an\
+d includes its `\
+zlib.h` copyrigh\
+t/license text i\
+n `ffmpeg-legal`\
+. |\x0a| LZ4 native\
+ compression lib\
+rary | [BSD-2-Cl\
+ause](LICENSES/L\
+Z4.txt) | macOS \
+bundles the nati\
+ve library when \
+required by the \
+Python compressi\
+on extensions; r\
+etain its copyri\
+ght and license \
+alongside the Py\
+thon package's s\
+eparate license.\
+ |\x0a| Other Pytho\
+n packages | `py\
+project.toml` an\
+d installed pack\
+age metadata | G\
+enerate an artif\
+act-specific lis\
+t and include th\
+e packages' lice\
+nse and notice f\
+iles; account fo\
+r platform extra\
+s and transitive\
+ dependencies. |\
+\x0a| Application g\
+raphics | [Graph\
+ics source files\
+](src/frontend/g\
+raphics/); Lucid\
+e settings-icon \
+attribution belo\
+w | Application-\
+owned SVGs use t\
+he application l\
+icense; Lucide i\
+cons retain thei\
+r MIT notice. Pr\
+eserve provenanc\
+e records for th\
+e PNG logo and s\
+plash assets; re\
+place or clear a\
+ny uncertain ass\
+et before releas\
+e. |\x0a| Content-l\
+anguage flag ima\
+ges | [flag-icon\
+s](https://githu\
+b.com/lipis/flag\
+-icons), MIT | S\
+VGs from revisio\
+n `ac7e0eb3259eb\
+62aa6100c435607e\
+2fe03896a97`; co\
+pyright and lice\
+nse in [LICENSES\
+/FlagIcons.txt](\
+LICENSES/FlagIco\
+ns.txt). |\x0a\x0aThe \
+obsolete library\
+ list in `docs/C\
+REDITS.md` is re\
+tained as histor\
+ical\x0aacknowledgm\
+ent. It does not\
+ establish the s\
+hipped dependenc\
+y list or licens\
+e\x0aobligations. T\
+hird-party notic\
+es and source av\
+ailability must \
+be present in th\
+e\x0adelivered pack\
+age, not only in\
+ this repository\
+.\x0a\x0a## Settings i\
+cons\x0a\x0aThe video,\
+ gauge, settings\
+, shield, palett\
+e and trash SVGs\
+ in\x0a`src/fronten\
+d/graphics/setti\
+ngs/` are by Luc\
+ide Icons and Co\
+ntributors, from\
+\x0ahttps://github.\
+com/lucide-icons\
+/lucide/tree/mai\
+n/icons (downloa\
+ded 2026-10-26).\
+\x0aThey are distri\
+buted under the \
+ISC license, wit\
+h the Feather-de\
+rived icons\x0acove\
+red by the MIT n\
+otice included i\
+n [LICENSES/Luci\
+de.txt](LICENSES\
+/Lucide.txt).\x0aSe\
+e https://lucide\
+.dev/license. Th\
+e SVG artwork is\
+ unmodified.\x0a\x0a##\
+# Payment logos\x0a\
+\x0aThe Bitcoin, Et\
+hereum and Litec\
+oin logo vectors\
+ in\x0a`src/fronten\
+d/graphics/payme\
+nts/` come from \
+[Simple Icons](h\
+ttps://github.co\
+m/simple-icons/s\
+imple-icons)\x0aund\
+er [CC0-1.0](LIC\
+ENSES/SimpleIcon\
+s.txt). Display \
+colours were add\
+ed.\x0a\x0aThe Monero \
+logo is by the M\
+onero Project, f\
+rom its\x0a[press k\
+it](https://www.\
+getmonero.org/pr\
+ess-kit), obtain\
+ed through Simpl\
+e Icons.\x0aIt uses\
+ [CC BY-SA 4.0](\
+LICENSES/Monero-\
+CC-BY-SA-4.0.txt\
+). The SVG has a\
+n added\x0aorange f\
+ill; that modifi\
+ed vector remain\
+s under CC BY-SA\
+ 4.0. Its editab\
+le\x0asource is `sr\
+c/frontend/graph\
+ics/payments/mon\
+ero.svg`.\x0a\x0aThese\
+ names and logos\
+ remain the mark\
+s of their respe\
+ctive owners; no\
+\x0aendorsement is \
+implied.\x0a\
 \x00\x00\x0c!\
 \x00\
 \x00*\xdex\xda\xe5Z\xebo\xdb8\x12\xff\xae\xbf\x82\
@@ -41513,126 +41516,126 @@ qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x06(\x00\x02\x00\x00\x00\x05\x00\x00\x00\x09\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x06B\x00\x00\x00\x00\x00\x01\x00\x0a\x04\xed\
-\x00\x00\x01\xa1\xc1\xbf\x9e\xd3\
-\x00\x00\x06R\x00\x00\x00\x00\x00\x01\x00\x0a\x05\x01\
-\x00\x00\x01\xa1\xc1\xbf\x9f\xb4\
-\x00\x00\x062\x00\x00\x00\x00\x00\x01\x00\x0a\x04\xcb\
-\x00\x00\x01\xa1\xc1\xbf\xa0\x04\
-\x00\x00\x06b\x00\x00\x00\x00\x00\x01\x00\x0a\x060\
-\x00\x00\x01\xa1\xc1\xbf\x9f#\
-\x00\x00\x06x\x00\x00\x00\x00\x00\x01\x00\x0a\x07@\
-\x00\x00\x01\xa1\xc1\xbf\x9fe\
-\x00\x00\x06\x10\x00\x00\x00\x00\x00\x01\x00\x0a\x00.\
-\x00\x00\x01\xa1 02\x96\
+\x00\x00\x06B\x00\x00\x00\x00\x00\x01\x00\x0a\x05&\
+\x00\x00\x01\xa1\xdba\xf9\xe3\
+\x00\x00\x06R\x00\x00\x00\x00\x00\x01\x00\x0a\x05:\
+\x00\x00\x01\xa1\xdba\xfb\x1a\
+\x00\x00\x062\x00\x00\x00\x00\x00\x01\x00\x0a\x05\x04\
+\x00\x00\x01\xa1\xdba\xfb\x82\
+\x00\x00\x06b\x00\x00\x00\x00\x00\x01\x00\x0a\x06i\
+\x00\x00\x01\xa1\xdba\xfaH\
+\x00\x00\x06x\x00\x00\x00\x00\x00\x01\x00\x0a\x07y\
+\x00\x00\x01\xa1\xdba\xfa\xb2\
+\x00\x00\x06\x10\x00\x00\x00\x00\x00\x01\x00\x0a\x00g\
+\x00\x00\x01\xa1\xdba\xbd\x0a\
 \x00\x00\x05\xc4\x00\x02\x00\x00\x00\x01\x00\x00\x00\x10\
 \x00\x00\x00\x00\x00\x00\x00\x00\
-\x00\x00\x05\xd2\x00\x01\x00\x00\x00\x01\x00\x09\xf2z\
-\x00\x00\x01\xa1\xc1\xbf\x10\x9b\
-\x00\x00\x05\xec\x00\x00\x00\x00\x00\x01\x00\x09\xfe\x9f\
-\x00\x00\x01\xa1\xbf\x10\xda\x9d\
+\x00\x00\x05\xd2\x00\x01\x00\x00\x00\x01\x00\x09\xf2\xb3\
+\x00\x00\x01\xa1\xdba\xbc\xf4\
+\x00\x00\x05\xec\x00\x00\x00\x00\x00\x01\x00\x09\xfe\xd8\
+\x00\x00\x01\xa1\xdba\xbd,\
 \x00\x00\x00\x80\x00\x02\x00\x00\x00\x12\x00\x00\x00\x13\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x020\x00\x02\x00\x00\x00\x0e\x00\x00\x000\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x00\xd0\x00\x00\x00\x00\x00\x01\x00\x00H\x22\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x02@\x00\x00\x00\x00\x00\x01\x00\x08d\xef\
-\x00\x00\x01\xa1\x168\xee\x8b\
+\x00\x00\x01\xa1\xdba\xbd\x1d\
 \x00\x00\x00\xb2\x00\x00\x00\x00\x00\x01\x00\x009\x1d\
-\x00\x00\x01\xa1\x168\xa3\xe7\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x01B\x00\x00\x00\x00\x00\x01\x00\x06\x5cd\
-\x00\x00\x01\xa1\x168\xeer\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x01\xc8\x00\x00\x00\x00\x00\x01\x00\x00H\xd8\
-\x00\x00\x01\xa1\xb0\xadH\xd8\
+\x00\x00\x01\xa1\xdba\xbd\x1e\
 \x00\x00\x02\x90\x00\x00\x00\x00\x00\x01\x00\x08\xc3\x08\
-\x00\x00\x01\xa1\x168\xee\x86\
+\x00\x00\x01\xa1\xdba\xbd\x1b\
 \x00\x00\x01\xde\x00\x00\x00\x00\x00\x01\x00\x06\xee\xa0\
-\x00\x00\x01\xa1\x168\xa3\xef\
+\x00\x00\x01\xa1\xdba\xbd\x1b\
 \x00\x00\x02\x02\x00\x00\x00\x00\x00\x01\x00\x06\xf2\xba\
-\x00\x00\x01\xa1\xb0\xadH\xe0\
+\x00\x00\x01\xa1\xdba\xbd$\
 \x00\x00\x00\xf6\x00\x00\x00\x00\x00\x01\x00\x00H\xd8\
-\x00\x00\x01\xa1\xb0\xadH\xe2\
+\x00\x00\x01\xa1\xdba\xbd&\
 \x00\x00\x02V\x00\x01\x00\x00\x00\x01\x00\x08s\xee\
-\x00\x00\x01\xa1\x168\xa3\xdd\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x01\x94\x00\x00\x00\x00\x00\x01\x00\x06\xda\xe6\
-\x00\x00\x01\xa1\x168\xeed\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x01\xb2\x00\x02\x00\x00\x00\x05\x00\x00\x00+\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x01v\x00\x00\x00\x00\x00\x01\x00\x06\x96\xf2\
-\x00\x00\x01\xa1\x168\xee~\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x01$\x00\x00\x00\x00\x00\x01\x00\x06U^\
-\x00\x00\x01\xa1\x168\xa3\xec\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x00\x96\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
-\x00\x00\x01\xa1\x168\xeel\
+\x00\x00\x01\xa1\xdba\xbd\x18\
 \x00\x00\x02t\x00\x00\x00\x00\x00\x01\x00\x08\xc0.\
-\x00\x00\x01\xa1\x168\xa3\xe2\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x01`\x00\x02\x00\x00\x00\x06\x00\x00\x00%\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x04n\x00\x00\x00\x00\x00\x01\x00\x09\x81\xe1\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x04:\x00\x00\x00\x00\x00\x01\x00\x09{\xf2\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x04R\x00\x00\x00\x00\x00\x01\x00\x09}T\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x04\x86\x00\x00\x00\x00\x00\x01\x00\x09\x83j\
-\x00\x00\x01\xa1\xb0\xadH\xe3\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x01$\x00\x00\x00\x00\x00\x01\x00\x09\x7f\x93\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x04\x9e\x00\x00\x00\x00\x00\x01\x00\x09\x84\x84\
-\x00\x00\x01\xa1\xb0\xadH\xe4\
+\x00\x00\x01\xa1\xdba\xbd(\
 \x00\x00\x04\x1c\x00\x00\x00\x00\x00\x01\x00\x09z\xfa\
-\x00\x00\x01\xa1\xb0\xadH\xe3\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x03\xca\x00\x00\x00\x00\x00\x01\x00\x09t\xcc\
-\x00\x00\x01\xa1\xb0\xadH\xe2\
+\x00\x00\x01\xa1\xdba\xbd&\
 \x00\x00\x04\x04\x00\x00\x00\x00\x00\x01\x00\x09z#\
-\x00\x00\x01\xa1\xb0\xadH\xe3\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x03\xe6\x00\x00\x00\x00\x00\x01\x00\x09xl\
-\x00\x00\x01\xa1\xb0\xadH\xe3\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x03\xb0\x00\x00\x00\x00\x00\x01\x00\x09s\x1a\
-\x00\x00\x01\xa1\xb0\xadH\xe3\
+\x00\x00\x01\xa1\xdba\xbd'\
 \x00\x00\x03\x0e\x00\x00\x00\x00\x00\x01\x00\x09b\xfc\
-\x00\x00\x01\xa1\xb0\xadH\xd3\
+\x00\x00\x01\xa1\xdba\xbd\x19\
 \x00\x00\x03 \x00\x00\x00\x00\x00\x01\x00\x09f-\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03D\x00\x00\x00\x00\x00\x01\x00\x09h\xe8\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x02\xc6\x00\x01\x00\x00\x00\x01\x00\x09\x06a\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03z\x00\x00\x00\x00\x00\x01\x00\x09k\xe0\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03V\x00\x00\x00\x00\x00\x01\x00\x09i\xcd\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x032\x00\x00\x00\x00\x00\x01\x00\x09g\x0e\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x02\xfc\x00\x00\x00\x00\x00\x01\x00\x09b\x17\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03\x8c\x00\x00\x00\x00\x00\x01\x00\x09l\xd5\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03\x9e\x00\x00\x00\x00\x00\x01\x00\x09r?\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x02\xea\x00\x00\x00\x00\x00\x01\x00\x09B\xd2\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x02\xb4\x00\x00\x00\x00\x00\x01\x00\x09\x05|\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x03h\x00\x00\x00\x00\x00\x01\x00\x09j\xf2\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1a\
 \x00\x00\x02\xd8\x00\x00\x00\x00\x00\x01\x00\x09@F\
-\x00\x00\x01\xa1\xb0\xadH\xd4\
+\x00\x00\x01\xa1\xdba\xbd\x1b\
 \x00\x00\x05>\x00\x00\x00\x00\x00\x01\x00\x09\xd5\xcc\
-\x00\x00\x01\xa1\xb0\xadH\xaa\
+\x00\x00\x01\xa1\xdba\xbc\xef\
 \x00\x00\x05\x06\x00\x00\x00\x00\x00\x01\x00\x09\xa7z\
-\x00\x00\x01\xa1\xbf\x10\xda\x7f\
-\x00\x00\x05\x92\x00\x00\x00\x00\x00\x01\x00\x09\xdf-\
-\x00\x00\x01\xa1\xc1\xc4\x81\xe7\
+\x00\x00\x01\xa1\xdba\xbc\xee\
+\x00\x00\x05\x92\x00\x00\x00\x00\x00\x01\x00\x09\xdfe\
+\x00\x00\x01\xa1\xdba\xbc\xf0\
 \x00\x00\x05^\x00\x00\x00\x00\x00\x01\x00\x09\xdar\
-\x00\x00\x01\xa1\xc1\xbf\x10\x9b\
+\x00\x00\x01\xa1\xdba\xbc\xef\
 \x00\x00\x05\x1a\x00\x00\x00\x00\x00\x01\x00\x09\xbc\x1f\
-\x00\x00\x01\xa1\xb0\xadH\xab\
+\x00\x00\x01\xa1\xdba\xbc\xef\
 \x00\x00\x04\xb8\x00\x00\x00\x00\x00\x01\x00\x09\x86\x0a\
-\x00\x00\x01\xa1\xb0\xadH\xaa\
+\x00\x00\x01\xa1\xdba\xbc\xef\
 \x00\x00\x04\xd2\x00\x01\x00\x00\x00\x01\x00\x09\x92\x96\
-\x00\x00\x01\xa1\xb0\xadH\xab\
+\x00\x00\x01\xa1\xdba\xbc\xef\
 "
 
 def qInitResources():

@@ -1,7 +1,6 @@
 """Interactive profile and playlist discovery/download workflow."""
 from __future__ import annotations
 
-import asyncio
 from contextlib import aclosing
 from typing import Any
 
@@ -251,7 +250,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
                         concurrency=ctx.settings.videos_concurrency,
                     )
                 else:
-                    target = output_path_for(med, ctx.settings)
+                    target = output_path_for(med, ctx.settings, premium=has_premium)
                     eff_q = select_allowed_quality(quality_choice, med.qualities, has_premium) or quality_choice
                     outcome = await download_video(
                         src,
@@ -265,23 +264,6 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
                     )
                 if outcome.status == "completed":
                     completed_count += 1
-                    if (
-                        med
-                        and ctx.settings.write_metadata
-                        and not outcome.skipped
-                        and not outcome.metadata_written
-                        and outcome.path.suffix.casefold() == ".mp4"
-                        and outcome.path.exists()
-                    ):
-                        try:
-                            from src.shared.metadata import write_tags
-                            await asyncio.to_thread(write_tags, str(outcome.path), med)
-                        except Exception as error:
-                            await ctx.report(
-                                error,
-                                "write download metadata",
-                                "src.cli.flows.scrape.handle_scrape_profile",
-                            )
                 else:
                     failed_count += 1
                 await record_cli_download(

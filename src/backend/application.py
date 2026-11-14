@@ -226,10 +226,16 @@ class Backend(QObject):
     proxySslError = Signal(str, str)
     proxyApplied = Signal(bool)
     shutdown_complete = Signal()
+    libraryExportChanged = Signal()
+    libraryPreviewReady = Signal(str)
+    libraryExportFinished = Signal(str)
 
     def __init__(self, parent: QObject | None = None, *, mobile_layout: bool = False):
         super().__init__(parent)
         self._background_tasks: set[asyncio.Task[object]] = set()
+        self._library_task = None
+        self._library_selection = None
+        self._library_pending = {}
         self._activity_active = False
         self._login_task: asyncio.Task[object] | None = None
         self._login_in_progress = False
@@ -1002,7 +1008,7 @@ class Backend(QObject):
             self._downloads_model.update_progress(job_id, 0)
 
         task = self._spawn(
-            self._download_video(job_id, video, stop_event, cleanup_on_stop),
+            self._download_video(job_id, video, stop_event, cleanup_on_stop, resuming=is_resume),
             name=f"video-download-{job_id}",
         )
         self._download_tasks[job_id] = task
@@ -1052,6 +1058,8 @@ class Backend(QObject):
         video: VideoObject,
         stop_event: asyncio.Event,
         cleanup_on_stop: bool,
+        *,
+        resuming: bool = False,
     ) -> None:
         download_started = False
         try:
@@ -1085,7 +1093,7 @@ class Backend(QObject):
                     quality = select_allowed_quality(video.selected_quality, fresh.qualities, self.has_premium_access())
                     if not quality:
                         raise ValueError("The restored video no longer offers a permitted quality")
-                    for attribute in ("title", "author", "length", "tags", "thumbnail_url", "video_id", "publish_date", "qualities"):
+                    for attribute in ("title", "author", "length", "tags", "thumbnail_url", "video_id", "publish_date", "qualities", "library_metadata"):
                         setattr(video, attribute, getattr(fresh, attribute))
                     video.source_video = source
                     self._downloads_model.refresh_metadata(job_id)
@@ -1102,6 +1110,12 @@ class Backend(QObject):
                 output_path = Path(video.output_path or video.title)
                 from src.shared.download_options import video_file_path
                 output_path = video_file_path(output_path)
+                if not is_mobile and self.has_premium_access():
+                    from src.shared.library_export import ExportOptions, library_video_path
+                    # A restored/paused destination must keep its existing bytes.
+                    if (not resuming and not Path(f"{output_path}.raw-state.json").exists()
+                            and not (Path(TEMP_DIRECTORY_STATES) / job_id).exists()):
+                        output_path = library_video_path(output_path, video, ExportOptions.from_settings(app_settings))
                 output_path.parent.mkdir(parents=True, exist_ok=True)
                 video.output_path = output_path
 
@@ -1232,16 +1246,25 @@ class Backend(QObject):
                 self._downloads_model.set_status(job_id, status)
                 if status == "completed":
                     metadata_written = bool(getattr(result, "metadata_written", False))
-                    if (
-                        app_settings.write_metadata
-                        and not FORCE_DISABLE_AV
-                        and not metadata_written
-                        and output_path.exists()
-                    ):
-                        try:
-                            await asyncio.to_thread(write_tags, str(output_path), video)
-                        except Exception:
-                            self.logger.exception("Could not write metadata for download %s", job_id)
+                    if is_mobile:
+                        if app_settings.write_metadata and not FORCE_DISABLE_AV and not metadata_written and output_path.exists():
+                            try:
+                                await asyncio.to_thread(write_tags, str(output_path), video)
+                            except Exception:
+                                self.logger.exception("Could not write metadata for download %s", job_id)
+                    else:
+                        from src.shared.library_export import ExportOptions, finalize_video
+                        finalized = await finalize_video(output_path, video, app_settings, premium=self.has_premium_access(),
+                                                         metadata_written=metadata_written, write_embedded=not FORCE_DISABLE_AV)
+                        if finalized.warnings:
+                            retryable = (app_settings.metadata_export != "off" and video.library_metadata is not None
+                                         and (finalized.export is None or finalized.export.retryable or finalized.export.notification_error))
+                            if retryable:
+                                self._library_pending[str(output_path)] = (
+                                    video.library_metadata, ExportOptions.from_settings(app_settings),
+                                    bool(finalized.export and finalized.export.notification_error and not finalized.export.retryable))
+                            self.notifications.publish("\n".join(finalized.warnings), self.tr("Metadata export"), "warning",
+                                                       key="library-export", action="metadata" if retryable else "")
                     self._downloads_model.update_progress(job_id, 100)
                     if is_mobile or "--android" in sys.argv:
                         await self._save_to_output_folder(output_path)
@@ -1375,6 +1398,137 @@ class Backend(QObject):
         self._input_errors.clear()
         self.inputErrorsChanged.emit()
         return self._start_video_fetch(operation(url, custom_options, filters), name=name) is not None
+
+    @Property(bool, notify=libraryExportChanged)
+    def libraryExportBusy(self):
+        return self._library_task is not None and not self._library_task.done()
+
+    @Slot()
+    def clear_library_preview(self):
+        self._library_selection = None
+        self.libraryPreviewReady.emit("")
+
+    @Slot(str, result=bool)
+    def save_jellyfin_api_key(self, token):
+        if is_mobile:
+            return False
+        try:
+            from src.shared.jellyfin import save_api_key
+            save_api_key(token)
+        except ValueError:
+            self.libraryExportFinished.emit(self.tr("The API key could not be saved."))
+            return False
+        self.libraryExportFinished.emit(self.tr("Jellyfin API key saved locally."))
+        return True
+
+    @Slot(str, str)
+    def preview_library_export(self, filename, source_url):
+        if is_mobile or self.libraryExportBusy:
+            return
+        self.clear_library_preview()
+
+        async def prepare():
+            try:
+                from src.shared.library_export import prepare_existing_export
+                path = Path(QUrl(filename).toLocalFile() if filename.startswith("file:") else filename).expanduser().resolve()
+                metadata, core, options = await prepare_existing_export(
+                    path, source_url, app_settings, premium=self.has_premium_access(), resolve_source=clients.get_video)
+                self._library_selection = path, metadata, core, options
+                def names(credits):
+                    return ", ".join(credit.name for credit in credits) or self.tr("Not supplied")
+                studios = metadata.producers + (metadata.content_providers + metadata.publishers + metadata.channels if options.studio_fallback else [])
+                summary = [self.tr("Title: ") + metadata.title,
+                           self.tr("Description: ") + (metadata.description or self.tr("Not supplied")),
+                           self.tr("Platform publication date: ") + (metadata.publication_date or self.tr("Unknown")),
+                           self.tr("Performers: ") + names(metadata.performers),
+                           self.tr("Producer: ") + names(metadata.producers),
+                           self.tr("Exported studio: ") + names(studios),
+                           self.tr("Credited provider: ") + names(metadata.content_providers),
+                           self.tr("Publisher: ") + names(metadata.publishers),
+                           self.tr("Channel: ") + names(metadata.channels),
+                           self.tr("Uploader: ") + (metadata.uploader.name if metadata.uploader else self.tr("Not supplied")),
+                           self.tr("Tags: ") + (", ".join(metadata.tags) or self.tr("Not supplied")),
+                           self.tr("Categories: ") + (", ".join(metadata.categories) or self.tr("Not supplied")),
+                           self.tr("Existing or edited sidecars are preserved. Export does not download the video.")]
+                self.libraryPreviewReady.emit("\n\n".join(summary))
+            except Exception as error:
+                message = (self.tr("Media Library Export requires an active Premium license.") if isinstance(error, PermissionError)
+                           else self.tr("Could not prepare metadata. Check the file and source URL, or choose a file with saved Porn Fetch metadata."))
+                self.libraryExportFinished.emit(message)
+            finally:
+                self._library_task = None
+                self.libraryExportChanged.emit()
+
+        self._library_task = self._spawn(prepare(), name="library-export-preview")
+        self.libraryExportChanged.emit()
+
+    @Slot()
+    def export_library_metadata(self):
+        if is_mobile or self.libraryExportBusy or self._library_selection is None:
+            return
+        selection = self._library_selection
+
+        async def export():
+            try:
+                from src.shared.library_export import export_library_bundle
+                path, metadata, core, options = selection
+                result = await export_library_bundle(path, metadata, options, premium=self.has_premium_access(), core=core)
+                message = self.tr("Library metadata saved. The video file was kept.")
+                if result.warnings:
+                    message += "\n" + "\n".join(result.warnings)
+                if app_settings.jellyfin_url:
+                    try:
+                        from src.shared.jellyfin import notify_jellyfin
+                        await notify_jellyfin(path, app_settings)
+                    except Exception:
+                        result.notification_error = "Jellyfin notification failed."
+                        message += "\n" + self.tr("Metadata was saved, but Jellyfin notification failed. Check the connection and retry.")
+                if result.retryable or result.notification_error:
+                    self._library_pending[str(path)] = metadata, options, bool(result.notification_error and not result.retryable)
+                self.libraryExportFinished.emit(message)
+            except Exception as error:
+                self.libraryExportFinished.emit(self.tr("Premium access is required.") if isinstance(error, PermissionError)
+                                               else self.tr("Metadata export failed. The video and existing metadata were kept."))
+            finally:
+                self._library_task = None
+                self.libraryExportChanged.emit()
+
+        self._library_task = self._spawn(export(), name="library-export-existing")
+        self.libraryExportChanged.emit()
+
+    @Slot()
+    def retry_library_exports(self):
+        if is_mobile or self.libraryExportBusy:
+            return
+
+        async def retry():
+            try:
+                from src.shared.access import require_library_export
+                from src.shared.jellyfin import notify_jellyfin
+                from src.shared.library_export import export_library_bundle
+                for filename, (metadata, options, notification_only) in list(self._library_pending.items()):
+                    try:
+                        require_library_export(self.has_premium_access())
+                        if not notification_only:
+                            result = await export_library_bundle(Path(filename), metadata, options,
+                                                                 premium=self.has_premium_access(), core=clients.client_for(metadata.provider).core)
+                            if result.retryable:
+                                raise RuntimeError("Artwork is still unavailable")
+                        if app_settings.jellyfin_url:
+                            await notify_jellyfin(Path(filename), app_settings)
+                    except Exception:
+                        self.notifications.publish(self.tr("Export or notification is still unavailable. Check Premium access, the file and connection settings."),
+                                                   self.tr("Metadata export"), "warning", key="library-export", action="metadata")
+                    else:
+                        self._library_pending.pop(filename, None)
+                        self.notifications.publish(self.tr("Library export and notification completed."),
+                                                   self.tr("Metadata export"), "success", key="library-export")
+            finally:
+                self._library_task = None
+                self.libraryExportChanged.emit()
+
+        self._library_task = self._spawn(retry(), name="library-export-retry")
+        self.libraryExportChanged.emit()
 
     @Slot(str, str, dict, result=bool)
     def process_single_url(self, url: str, custom_options: str, filters: dict):

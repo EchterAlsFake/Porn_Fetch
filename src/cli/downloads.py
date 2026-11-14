@@ -8,6 +8,7 @@ import json
 import logging
 import re
 import shutil
+import sys
 from contextlib import aclosing
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -268,6 +269,7 @@ class DownloadOutcome:
     missing_segments: tuple[int, ...] = ()
     skipped: bool = False
     metadata_written: bool = False
+    export_warnings: tuple[str, ...] = ()
 
 
 def progress_percentage(position: int, total: int) -> int | None:
@@ -294,13 +296,16 @@ async def download_video(
     from base_api.modules.errors import DownloadCancelled
 
     target = Path(path)
-    target.parent.mkdir(parents=True, exist_ok=True)
     state_directory = controller.state_directory if controller else None
     paused_store = controller.paused_store if controller else PausedStore()
     resuming = has_resume_state(target, state_directory=state_directory) or any(
         item.get("target") and Path(item["target"]).resolve() == target.resolve()
         for item in paused_store.load()
     )
+    if metadata is not None and has_premium and not resuming:
+        from src.shared.library_export import ExportOptions, library_video_path
+        target = library_video_path(target, metadata, ExportOptions.from_settings(settings))
+    target.parent.mkdir(parents=True, exist_ok=True)
     if target.exists() and settings.skip_existing and not resuming:
         if progress:
             progress(100)
@@ -437,7 +442,15 @@ async def download_video(
 
     if status == "completed" and progress:
         _dispatch_progress(progress, 100, 100)
-    return DownloadOutcome(status, target, missing, metadata_written=metadata_written)
+    warnings = ()
+    if status == "completed" and metadata is not None:
+        from src.shared.library_export import finalize_video
+        finalized = await finalize_video(target, metadata, settings, premium=has_premium, metadata_written=metadata_written)
+        metadata_written = metadata_written or finalized.embedded_written
+        warnings = tuple(finalized.warnings)
+        for warning in warnings:
+            print(warning, file=sys.stderr)
+    return DownloadOutcome(status, target, missing, metadata_written=metadata_written, export_warnings=warnings)
 
 
 async def download_gallery(

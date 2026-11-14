@@ -112,7 +112,7 @@ async def handle_download_single(ctx: WizardContext) -> None:
 
     # Determine destination
     if media is not None:
-        target = output_path_for(media, ctx.settings)
+        target = output_path_for(media, ctx.settings, premium=has_premium)
     else:
         target = Path(ctx.settings.output_path) / title
 
@@ -192,24 +192,6 @@ async def handle_download_single(ctx: WizardContext) -> None:
             return
 
     if outcome.status == "completed":
-        if (
-            media is not None
-            and ctx.settings.write_metadata
-            and not outcome.skipped
-            and not outcome.metadata_written
-            and outcome.path.suffix.casefold() == ".mp4"
-            and outcome.path.exists()
-        ):
-            try:
-                from src.shared.metadata import write_tags
-                await asyncio.to_thread(write_tags, str(outcome.path), media)
-            except Exception as error:
-                await ctx.report(
-                    error, "write downloaded video metadata",
-                    "src.cli.wizard.handle_download_single",
-                    video_url=getattr(media, "url", url), provider=route.provider,
-                )
-                ctx.console.print(f"[yellow]Metadata write warning: {error}[/]")
         print_success(
             ctx.console,
             "Download Completed",
