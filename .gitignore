@@ -8,7 +8,7 @@ __pycache__/
 .coverage
 coverage.xml
 htmlcov/
-
+uv.lock
 # Virtual environments and Python tooling
 .venv/
 .venv-termux/
