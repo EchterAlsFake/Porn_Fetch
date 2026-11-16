@@ -379,7 +379,8 @@ class Backend(QObject):
         license_bridge.entitlementChanged.connect(self._apply_premium_quality_default)
         license_bridge.statusChanged.connect(self._enforce_parallel_access)
         license_bridge.statusChanged.connect(self._update_activity)
-        license_bridge.statusChanged.connect(lambda: self.creator_bridge.refreshAccess() if self.creator_bridge else None)
+        license_bridge.statusChanged.connect(
+            lambda: self.creator_bridge.refreshAccess() if getattr(self, "creator_bridge", None) else None)
         self._enforce_quality_access()
         self._apply_premium_quality_default()
         self._enforce_parallel_access()

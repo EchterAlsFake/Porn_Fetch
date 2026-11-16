@@ -1,18 +1,19 @@
 """Remote-only navigation through real download controls and representative Qt popups."""
 import os
-from pathlib import Path
 import unittest
+from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QUICK_BACKEND", "software")
 os.environ["QML_DISABLE_DISK_CACHE"] = "1"
 
-from PySide6.QtCore import QObject, QMetaObject, Qt, QUrl
+from PySide6.QtCore import QObject, Qt, QUrl
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 from PySide6.QtQuick import QQuickItem
 from PySide6.QtTest import QTest
-from src.tests.integration import test_android_download_layout as downloads
+
 from src.backend.android_display import AndroidDisplay
+from src.tests.integration import test_android_download_layout as downloads
 
 UI = Path(__file__).resolve().parents[2] / "frontend/UI"
 

@@ -1,13 +1,15 @@
 """Android car packaging must stay optional and preserve existing activity handlers."""
-from pathlib import Path
 import tempfile
-from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
 import xml.etree.ElementTree as ET
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from scripts.android_storage_hook import (
-    before_apk_assemble, patch_automotive_activity, prepare_automotive_manifest,
+    before_apk_assemble,
+    patch_automotive_activity,
+    prepare_automotive_manifest,
 )
 
 ANDROID = "{http://schemas.android.com/apk/res/android}"
