@@ -1,5 +1,6 @@
 """Release signatures, artifact binding, and license-free installation."""
 import json
+import os
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -8,6 +9,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 from urllib.parse import unquote
+
+from base_api.modules.errors import HTTPStatusError
 
 from src.backend.update_service import AutoUpdater, CheckUpdates
 from src.cli import self_update
@@ -22,6 +25,30 @@ from src.tests.unit.test_cli_self_update import keys_script, load_script
 
 signer = load_script("sign_desktop_release")
 deployment = load_script("verify_deployment")
+
+
+class DesktopRefreshTests(unittest.IsolatedAsyncioTestCase):
+    async def test_unpublished_channels_are_skipped_without_uploading(self):
+        refresh = load_script("refresh_desktop_updates")
+        core = AsyncMock()
+        core.request.side_effect = HTTPStatusError("Not found", 404, "https://example.invalid/")
+        with patch.dict(os.environ, {"CI_TOKEN": "test-token"}), \
+                patch.object(refresh, "BaseCore") as factory:
+            factory.return_value.__aenter__.return_value = core
+            await refresh.refresh(Path("unused-key"), "beta")
+        self.assertEqual(core.request.await_count, len(refresh.PLATFORMS))
+        self.assertTrue(all(call.kwargs.get("method", "GET") == "GET" for call in core.request.await_args_list))
+        core.fetch_bytes.assert_not_awaited()
+
+    async def test_server_errors_still_fail_refresh(self):
+        refresh = load_script("refresh_desktop_updates")
+        core = AsyncMock()
+        core.request.side_effect = HTTPStatusError("Server error", 500, "https://example.invalid/")
+        with patch.dict(os.environ, {"CI_TOKEN": "test-token"}), \
+                patch.object(refresh, "BaseCore") as factory:
+            factory.return_value.__aenter__.return_value = core
+            with self.assertRaises(HTTPStatusError):
+                await refresh.refresh(Path("unused-key"), "beta")
 
 
 @contextmanager

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from base_api import BaseCore
+from base_api.modules.errors import HTTPStatusError
 from securesystemslib.signer import Signer
 from tuf.api.metadata import Metadata, Root
 
@@ -43,7 +44,13 @@ async def refresh(private_key, channel):
         for platform in PLATFORMS:
             prefix = (channel + "/") if channel else ""
             url = f"https://api.pornfetch.to/repo/{prefix}{platform}/release.json"
-            response = await core.request(url, allow_redirects=False)
+            try:
+                response = await core.request(url, allow_redirects=False)
+            except HTTPStatusError as error:
+                if error.status_code != 404:
+                    raise
+                print(f"No desktop release published yet: {prefix}{platform}")
+                continue
             if response.status_code == 404:
                 continue
             response.raise_for_status()

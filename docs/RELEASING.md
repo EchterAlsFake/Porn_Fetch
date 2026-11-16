@@ -42,6 +42,49 @@ Start with publication disabled. Inspect the build logs, signatures and platform
 smoke checks. Then test the actual artifacts on clean systems. Passing Python
 tests is not a substitute for installation and device tests.
 
+## First v4.0 Beta test run
+
+Run the workflow from the updated `master`, with these inputs:
+
+| Input | First artifact test | Later public Beta/update test |
+| --- | --- | --- |
+| `release_version` | An unused version such as `3.99.1` | A newer unused version such as `3.99.2` |
+| `release_channel` | `beta` | `beta` |
+| `build_target` | `both` | `both` |
+| `experimental_builds` | `false` initially | Enable separately when testing those targets |
+| `create_release` | `false` | `true` only to publish a GitHub prerelease |
+| `deploy_repositories` | `false` | `true` for desktop update delivery |
+| `deploy_cli_updates` | `false` | `true` for CLI update delivery |
+| `deploy_website` | `false` | `true` for the catalog, mobile packages and Android feed |
+| `legal_review_complete` | `false` is sufficient for artifact-only builds | Set according to the completed review when publishing |
+
+These example Beta numbers leave `4.0.0` available for the final Stable release.
+The workflow accepts numeric versions only, not `4.0.0-beta.1`. Publishing Beta
+`4.0.0` would require a higher numeric version for the later Stable release;
+the same version cannot be promoted or rebuilt with different bytes.
+
+`both` covers desktop GUI/CLI plus Android and iOS. Verify the downloaded artifacts'
+version and Beta identity, run the manual checklist, and explicitly select Beta
+in an existing installation: existing preferences intentionally remain Stable.
+An artifact-only run does not publish feeds or test update delivery.
+
+For an update test, first install an older candidate, publish a newer Beta with
+the required switches above, then verify that Beta subscribers see it while
+Stable subscribers do not. Check actual installation, including Android signing
+identity and permission return. Website-only retry is available through the
+separate publication workflow; it must reuse the original build identity.
+`create_release=true` also requests desktop/CLI feed publication for applicable
+targets, so it is not a build-only switch.
+
+There is no automatic Beta build schedule. **Refresh Update Metadata** runs
+`19 3 */3 * *`: at 03:19 UTC on days 1, 4, 7, and so on of each month, subject to
+GitHub scheduling delays. It renews signatures/expiry and metadata counters;
+it does not build, promote or publish new application versions. It can also be
+dispatched manually. Before the first publication, missing channel feeds are
+skipped. After publication, run it and verify that release versions and payload
+hashes remain unchanged while metadata versions/expiry advance. A successful
+empty-feed run alone does not verify renewal of a published Beta.
+
 ## Stable and Beta channels
 
 Choose `release_channel` in the build workflow. It stamps `BUILD_CHANNEL`, the
