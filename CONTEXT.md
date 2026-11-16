@@ -147,6 +147,21 @@ The interactive CLI shares one PocketBase tracker between downloads and history
 inspection. Close it before changing database configuration or disabling tracking;
 starting a second service on the same database resets its shared credentials.
 
+Update channels are Stable (default for existing settings) and Beta (opt-in;
+fresh Beta builds default to Beta). `src/shared/update_channels.py` owns numeric
+version comparison and selection. Beta checks independent Stable and Beta feeds
+and chooses the newer release; switching never downgrades. Signed metadata binds
+each offer to its actual channel. GUI/CLI preferences remain separate from
+`BUILD_CHANNEL`; a CLI `--channel` override is temporary. Desktop offers pin the
+verified manifest; Android pins the offered version and APK hash. Channel changes
+check again. iOS uses the same selection policy for manual sideloading.
+CI's one `release_channel` stamps all builds, feeds, catalog and GitHub prerelease
+status. New versions remain numeric and increase for every release. The existing
+public trust root is retained. Deploy the adjacent Server Android routes/Caddy
+and infrastructure intake changes before publishing these clients. Stable bridge
+publication and scheduled metadata renewal retain legacy endpoints for older
+clients. See [release operations](docs/RELEASING.md) for paths and rollout order.
+
 Desktop update discovery opens a dialog by default. `Misc/update_prompts` saves
 the opt-out independently of startup checks; manual review remains available.
 Release notes use selectable TextArea readers with explicit Markdown/HTML formats

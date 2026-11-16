@@ -26,6 +26,7 @@ from .context import WizardContext
 from .ui import WIZARD_STYLE, print_error, print_screen, print_success
 
 SETTINGS_METADATA: dict[str, tuple[str, str]] = {
+    "update_channel": ("Updates", "Stable releases only, or the newest Beta/Stable release. Switching never downgrades."),
     # Video
     "quality": ("Video", "Preferred download quality (best, 1080, 720, worst)"),
     "output_path": ("Video", "Output directory for media files"),
@@ -279,7 +280,13 @@ async def handle_settings(ctx: WizardContext) -> None:
             current_val = getattr(ctx.settings, target_setting)
             new_val: Any = None
 
-            if target_setting == "service_transport":
+            if target_setting == "update_channel":
+                new_val = await questionary.select(
+                    "Update channel:", choices=[questionary.Choice("Stable", value="stable"),
+                                               questionary.Choice("Beta", value="beta")],
+                    default=current_val, style=WIZARD_STYLE,
+                ).ask_async()
+            elif target_setting == "service_transport":
                 new_val = await questionary.select(
                     "Tor routing:",
                     choices=[questionary.Choice("Off", value="direct"),
@@ -415,6 +422,9 @@ async def handle_settings(ctx: WizardContext) -> None:
                     ctx.settings = updated
                     await ctx.refresh_pool()
                     print_success(ctx.console, "Setting Updated", f"{setting_name(target_setting)}: {setting_value(ctx.settings, target_setting)}")
+                    if target_setting == "update_channel":
+                        from ..self_update import run_self_update
+                        await asyncio.to_thread(run_self_update, check_only=True, assume_yes=False)
                 except Exception as error:
                     print_error(ctx.console, "Validation Error", str(error))
 

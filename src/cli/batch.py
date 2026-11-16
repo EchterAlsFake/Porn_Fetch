@@ -37,6 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="Porn Fetch terminal application and batch downloader. Keyword search is unavailable for legal reasons.",
     )
     parser.add_argument("command", nargs="?", choices=["self-update"], help="update a standalone CLI build")
+    parser.add_argument("--channel", choices=("stable", "beta"), help="update channel for this self-update invocation")
     parser.add_argument("--check", action="store_true", help="check for a signed CLI update without installing it")
     parser.add_argument("--yes", action="store_true", help="install a CLI update without a confirmation prompt")
     parser.add_argument("--batch", action="store_true", help="force headless compatibility mode")
@@ -118,9 +119,9 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Run metadata-only operations separately from downloads")
     if args.command == "self-update":
         from .self_update import run_self_update
-        return run_self_update(check_only=args.check, assume_yes=args.yes)
-    if args.check or args.yes:
-        parser.error("--check and --yes require self-update")
+        return run_self_update(check_only=args.check, assume_yes=args.yes, channel=args.channel)
+    if args.check or args.yes or args.channel:
+        parser.error("--check, --yes and --channel require self-update")
     if args.info:
         parser.print_help()
         return 0

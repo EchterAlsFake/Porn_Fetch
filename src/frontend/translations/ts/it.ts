@@ -762,6 +762,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Installed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+7"/>
         <source>Download size: %1</source>
         <translation type="unfinished"></translation>
@@ -927,12 +932,12 @@
     </message>
     <message>
         <location line="+205"/>
-        <location line="+464"/>
+        <location line="+465"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-463"/>
+        <location line="-464"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1298,7 +1303,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Check for updates at startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1923,7 +1928,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>AutoUpdater</name>
     <message>
-        <location filename="../../../backend/update_service.py" line="+280"/>
+        <location filename="../../../backend/update_service.py" line="+283"/>
         <source>Update cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1966,7 +1971,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+881"/>
+        <location filename="../../../backend/application.py" line="+893"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1986,16 +1991,16 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-736"/>
-        <location line="+211"/>
+        <location line="-747"/>
+        <location line="+220"/>
         <location line="+9"/>
-        <location line="+33"/>
+        <location line="+35"/>
         <location line="+27"/>
         <source>App updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-219"/>
+        <location line="-230"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2015,17 +2020,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+125"/>
         <source>The update check failed. Check your connection and try again later.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>No update available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+61"/>
+        <location line="+71"/>
         <source>Automatic updates are only available in installed builds. Use the download link instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2077,7 +2077,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-211"/>
+        <location line="-224"/>
+        <source>No newer update is available on the selected channel. Stable subscribers receive only newer Stable releases.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Updates are free for everyone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2097,7 +2102,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+19"/>
         <source>Version %s is available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4860,7 +4865,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+176"/>
+        <location line="+181"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4880,12 +4885,17 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-133"/>
+        <location line="-138"/>
         <source>Update available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+9"/>
+        <source>Installed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Download size: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6607,13 +6617,13 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
     <message>
         <location line="+5"/>
         <location line="+15"/>
-        <location line="+1299"/>
+        <location line="+1300"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1315"/>
+        <location line="-1316"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6882,7 +6892,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Show a dialog when an update is available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6913,8 +6923,8 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-739"/>
-        <location line="+1301"/>
+        <location line="-740"/>
+        <location line="+1302"/>
         <location line="+6"/>
         <source>Get lifetime Premium</source>
         <translation type="unfinished"></translation>
@@ -7531,6 +7541,35 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
     <message>
         <location line="+42"/>
         <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UpdateChannelSelector</name>
+    <message>
+        <location filename="../../UI/UpdateChannelSelector.qml" line="+7"/>
+        <location line="+8"/>
+        <source>Update channel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-2"/>
+        <source>Stable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+57"/>
+        <source>Stable receives Stable releases only. Beta receives the newest Beta or Stable release. Switching never downgrades your installation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -37,6 +37,69 @@ Start with publication disabled. Inspect the build logs, signatures and platform
 smoke checks. Then test the actual artifacts on clean systems. Passing Python
 tests is not a substitute for installation and device tests.
 
+## Stable and Beta channels
+
+Choose `release_channel` in the build workflow. It stamps `BUILD_CHANNEL`, the
+frozen CLI build identity, signed update metadata, the website catalog and the
+GitHub prerelease flag. Stable is the default, including numeric tag builds.
+The GitHub Environment named `beta` still stores signing/deployment credentials;
+its name does not select an application's update channel.
+
+Versions remain numeric `major.minor.patch`, with a newer version for each build:
+for example Stable 3.9.1, Beta 3.9.2, then Stable 3.9.3. Do not republish different
+bytes or promote a Beta build under the same version. The immutable website
+catalog rejects conflicting reuse. An existing-build website retry must match
+that build's `release-identity` artifact, including channel, commit and timestamp.
+Builds predating that artifact require a new build for this publication workflow.
+
+Stable subscribers check only Stable. Beta subscribers check both signed feeds
+and receive the newer eligible release, including a newer Stable release. Both
+frontends save their preference independently of the installed build's channel.
+Existing settings migrate to Stable; fresh installations follow `BUILD_CHANNEL`.
+Switching to Stable never downgrades a newer Beta installation. Component
+management also refuses repositories older than the installed application.
+
+The application uses these independent feeds and metadata caches:
+
+- Desktop: `https://api.pornfetch.to/repo/{channel}/{platform}/`
+- CLI: `https://api.pornfetch.to/repo/cli/{channel}/`
+- Android: `https://pornfetch.to/repo/android/{channel}/`
+- iOS: the existing website catalog, filtered by the same eligibility policy;
+  installation remains manual sideloading.
+
+Every signed release/target identifies its actual channel. Clients reject a
+channel mismatch and never fall back to unsigned discovery. An accepted desktop
+offer pins its manifest and payload hashes. Android rechecks the offered version
+and APK hash before installation. CLI overrides such as `self-update --channel
+beta --check` apply only to that invocation; interactive Settings saves a choice.
+For a development CLI repository override, `PORNFETCH_CLI_UPDATE_REPO_URL` is an
+exact feed URL; `{channel}` in that URL enables testing two independent feeds.
+
+Deploy in this order:
+
+1. Deploy the Server's Android publication/routes and both Caddy snippets.
+   The channel is part of `/ci/android-updates/{channel}` and
+   `/repo/android/{channel}/...`; publication verifies it against the catalog.
+2. Deploy `pornfetch-infrastructure/ops/release_intake.py`. Desktop and CLI
+   uploads use `X-CI-Channel`; Caddy's existing `/repo/*` static mapping already
+   serves the new desktop/CLI directories. The metadata refresh endpoint is
+   `/ci/deploy/ifw-metadata` and may only renew an unchanged release and targets.
+3. Publish and verify the first channel repositories, then distribute the clients.
+   Missing feeds return no offer; invalid or expired feeds remain errors.
+
+Stable desktop publication also updates the legacy desktop endpoint when its
+version is newer. Stable CLI publication signs a separate legacy snapshot with
+its own advancing TUF counters. These bridge builds let older clients upgrade
+and acquire the channel setting. A higher legacy version is retained until
+Stable overtakes it. Beta publications do not replace those compatibility feeds.
+The legacy Android publisher retains its prior Stable-preference behavior.
+
+The scheduled **Refresh Update Metadata** workflow renews Stable, Beta and legacy
+feeds. Desktop, CLI and Android refresh jobs share concurrency groups with their
+respective publishers. Desktop renewal preserves the release and every payload
+reference. Keys and trust roots are shared with existing releases; never
+initialize replacement trust roots for a channel.
+
 ## Signing credentials
 
 PR tests never need production signing keys. Desktop signing uses the GitHub

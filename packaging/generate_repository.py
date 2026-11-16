@@ -21,7 +21,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from scripts import build_output  # noqa: E402
 from src.database.installer import resolve_platform  # noqa: E402
-from src.shared.version import RELEASE_TIMESTAMP, __version__  # noqa: E402
+from src.shared.version import BUILD_CHANNEL, RELEASE_TIMESTAMP, __version__  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("qt_ifw_builder")
@@ -89,7 +89,7 @@ def prepare_staging_directory(
     # 1. Render config.xml
     repo_tag = f"{target_platform}_{target_arch}"
     config_xml_text = template_config.read_text(encoding="utf-8")
-    config_xml_text = config_xml_text.replace("@TARGET_REPO@", repo_tag)
+    config_xml_text = config_xml_text.replace("@TARGET_REPO@", BUILD_CHANNEL + "/" + repo_tag)
     config_xml_text = config_xml_text.replace("<Version>3.9.0</Version>", f"<Version>{version}</Version>")
     if target_platform == "darwin":
         config_xml_text = config_xml_text.replace(

@@ -30,7 +30,7 @@ class BuildVersionTests(unittest.TestCase):
     def test_workflow_version_and_timestamp_are_stable_on_rerun(self):
         with tempfile.TemporaryDirectory() as temporary:
             source = Path(temporary) / "version.py"
-            source.write_text('__version__ = "3.9"\nBUILD_VERSION = "3.9.0"\nRELEASE_TIMESTAMP = 1791244800\n')
+            source.write_text('__version__ = "3.9"\nBUILD_VERSION = "3.9.0"\nBUILD_CHANNEL = "stable"\nRELEASE_TIMESTAMP = 1791244800\n')
             writer.write_build_version("3.9.66", 1792264598, source)
             first_build = source.read_text()
             writer.write_build_version("3.9.66", 1792264598, source)

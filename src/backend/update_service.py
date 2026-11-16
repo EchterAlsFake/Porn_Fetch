@@ -22,6 +22,7 @@ from src.shared.logging_setup import configure_app_logging
 from src.shared.paths import shared_data_dir
 from src.shared.release import ROOT_FILE, validate_ifw_packages, verify_repository_manifest
 from src.shared.service_transport import ServiceCore
+from src.shared.update_channels import eligible_channels, newest, validate_release, version_parts
 from src.shared.version import BUILD_VERSION as __version__
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
@@ -93,57 +94,60 @@ class CheckUpdates:
     """Checks for available updates via Qt IFW maintenancetool or the remote update server."""
 
     @staticmethod
-    async def check() -> dict | None:
+    async def check(*, channel: str | None = None) -> dict | None:
+        channel = channel or clients.app_settings.update_channel
         from src.shared.android_updates import check, is_android_device
         if is_android_device():
-            return await asyncio.to_thread(check, clients.app_settings, __version__)
+            return await asyncio.to_thread(check, clients.app_settings, __version__, channel=channel)
         if sys.platform == "ios":
-            return await CheckUpdates.check_ios_release()
-        try:
-            return await CheckUpdates.check_signed_repository()
-        except Exception:
-            if service_core.tor_enabled:
-                raise
-            logger.warning("Signed release metadata is unavailable. Falling back to informational update discovery; automatic installation remains disabled.")
-            # Legacy discovery is informational only; installation requires a signed repository.
-            update = await CheckUpdates.check_via_http()
-            if update:
-                update.update(install_allowed=False, entitlement_message="Release metadata could not be authenticated. Automatic installation is unavailable.")
-            return update
+            return await CheckUpdates.check_ios_release(channel=channel)
+        return await CheckUpdates.check_signed_repository(channel=channel)
 
     @staticmethod
-    async def check_ios_release() -> dict | None:
+    async def check_ios_release(*, channel: str | None = None) -> dict | None:
         """Discover published IPAs for manual sideloading, without an installer feed."""
         response = await service_core.request(url="https://pornfetch.to/download/catalog.json")
         response.raise_for_status()
+        channel = channel or clients.app_settings.update_channel
         releases = [
             release for release in response.json()["releases"]
-            if any(artifact["platform"] == "ios" and artifact["kind"] == "ipa"
+            if release["channel"] in eligible_channels(channel) and any(artifact["platform"] == "ios" and artifact["kind"] == "ipa"
                    and artifact["arch"] == "arm64" for artifact in release["artifacts"])
         ]
         if not releases:
             return None
-        # Match the website and Android feed's preference for stable releases.
-        release = max(releases, key=lambda item: (
-            item["channel"] == "stable", CheckUpdates._version_parts(item["version"]),
-        ))
-        if CheckUpdates._version_parts(release["version"]) <= CheckUpdates._version_parts(__version__):
+        release = newest(releases)
+        if version_parts(release["version"]) <= version_parts(__version__):
             return None
         artifact = next(artifact for artifact in release["artifacts"]
                         if artifact["platform"] == "ios" and artifact["kind"] == "ipa"
                         and artifact["arch"] == "arm64")
         return {
-            "version": release["version"], "source": "ios_catalog", "install_allowed": False,
+            "version": release["version"], "channel": release["channel"], "source": "ios_catalog", "install_allowed": False,
             "download_size": artifact.get("size", 0),
-            "release_url": "https://pornfetch.to/download/ios",
+            "release_url": "https://pornfetch.to/download/ios" + ("?channel=beta" if release["channel"] == "beta" else ""),
             "changelog": release.get("notes", ""), "changelog_format": "markdown",
         }
 
     @staticmethod
-    async def check_signed_repository(*, include_current: bool = False) -> dict | None:
+    async def check_signed_repository(*, include_current: bool = False, channel: str | None = None) -> dict | None:
+        selected = channel or clients.app_settings.update_channel
+        releases = []
+        for feed in eligible_channels(selected):
+            update = await CheckUpdates._check_repository(feed, include_current=include_current)
+            if update is not None:
+                releases.append(update)
+        if include_current and not releases:
+            raise ValueError("The component repositories are older than this installation or unavailable. Try again after its release repository is published.")
+        return newest(releases)
+
+    @staticmethod
+    async def _check_repository(channel: str, *, include_current: bool = False) -> dict | None:
         tag = platform.system().lower() + "_" + {"x86_64": "amd64", "x64": "amd64", "aarch64": "arm64"}.get(platform.machine().lower(), platform.machine().lower())
-        url = DEFAULT_REPO_BASE_URL + "/" + tag + "/"
+        url = DEFAULT_REPO_BASE_URL + "/" + channel + "/" + tag + "/"
         response = await service_core.request(url=url + "release.json", allow_redirects=False)
+        if response.status_code == 404:
+            return None
         if response.status_code != 200:
             raise _metadata_error(f"The update metadata request returned HTTP {response.status_code}; expected HTTP 200.")
         resource = QFile(":/updates/root.json")
@@ -163,10 +167,9 @@ class CheckUpdates:
             logger.error("Unreadable signed update metadata from %s (HTTP %s, Content-Type %s)",
                          url + "release.json", response.status_code, content_type)
             raise _metadata_error("The update server returned a response that could not be read as signed JSON metadata.") from error
-        published = CheckUpdates._version_parts(release["version"])
-        installed = CheckUpdates._version_parts(__version__)
-        if include_current and published < installed:
-            raise ValueError("The published component repository is older than this installation. Try again after its release repository is published.")
+        validate_release(release, channel)
+        published = version_parts(release["version"])
+        installed = version_parts(__version__)
         if published < installed or (published == installed and not include_current):
             return None
         if changelog_path := release.get("changelog_path"):
@@ -272,9 +275,9 @@ class AutoUpdater(QObject):
         self.request_shutdown = request_shutdown
         self._android_cancel = threading.Event()
 
-    async def run(self, mode: str = "update") -> None:
+    async def run(self, mode: str = "update", update: dict | None = None) -> None:
         try:
-            await self._run(mode)
+            await self._run(mode, update)
         except asyncio.CancelledError:
             self._android_cancel.set()
             self.outcome.emit("info", self.tr("Update cancelled."))
@@ -287,7 +290,7 @@ class AutoUpdater(QObject):
         finally:
             self.finished.emit()
 
-    async def _run(self, mode: str = "update") -> None:
+    async def _run(self, mode: str = "update", update: dict | None = None) -> None:
         if mode not in {"update", "components"}:
             raise ValueError(f"Unsupported maintenance mode: {mode}")
         from src.shared.android_updates import download_and_request_install, is_android_device
@@ -295,7 +298,7 @@ class AutoUpdater(QObject):
             self.statusReport.emit(self.tr("Downloading and verifying the Android update…"))
             self._android_cancel.clear()
             await asyncio.to_thread(download_and_request_install, clients.app_settings, __version__,
-                                    self.updateProgress.emit, self._android_cancel)
+                                    self.updateProgress.emit, self._android_cancel, update)
             message = self.tr("APK verified. Waiting for Android's installation confirmation…")
             self.statusReport.emit(message)
             self.outcome.emit("info", message)
@@ -307,8 +310,8 @@ class AutoUpdater(QObject):
             self.outcome.emit("warning", message)
             return
 
-        update = (await CheckUpdates.check_signed_repository(include_current=True)
-                  if mode == "components" else await CheckUpdates.check_signed_repository())
+        if update is None:
+            update = await CheckUpdates.check_signed_repository(include_current=mode == "components")
         if update is None:
             message = self.tr("No update available.")
             self.statusReport.emit(message)

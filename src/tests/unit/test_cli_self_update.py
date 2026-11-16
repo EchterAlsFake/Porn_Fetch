@@ -55,7 +55,7 @@ class CliUpdateTests(unittest.TestCase):
                         patch.object(self_update, "BUILD_FILE", build), \
                         patch.object(self_update, "user_cache_dir", return_value=temporary), \
                         patch.object(self_update, "Updater") as updater, redirect_stdout(io.StringIO()) as output:
-                    updater.return_value.get_targetinfo.return_value.custom = {"version": "3.9.1"}
+                    updater.return_value.get_targetinfo.return_value.custom = {"version": "3.9.1", "channel": "stable"}
                     self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False), 0)
                     if configured:
                         for key, value in configured.items():
@@ -65,7 +65,7 @@ class CliUpdateTests(unittest.TestCase):
                     else:
                         self.assertEqual(os.environ["SSL_CERT_FILE"], self_update.certifi.where())
                         self.assertTrue(Path(os.environ["SSL_CERT_FILE"]).is_file())
-                    self.assertIn("up to date (3.9.1)", output.getvalue())
+                    self.assertIn("No newer stable update is available", output.getvalue())
 
     def test_download_failure_reports_the_underlying_cause(self):
         error = DownloadError("Failed to download metadata")
@@ -189,7 +189,7 @@ class CliUpdateTests(unittest.TestCase):
                         self.assertEqual(self_update.run_self_update(
                             check_only=False, assume_yes=False, on_staged=on_staged), 0)
                         on_staged.assert_not_called()
-                    self.assertIn("up to date (3.9.1)", output.getvalue())
+                    self.assertIn("No newer stable update is available", output.getvalue())
                     license_service.assert_not_called()
 
                     # The menu can exit only once the verified update and helper
@@ -240,6 +240,18 @@ class CliUpdateTests(unittest.TestCase):
                     publisher.publish(artifact_dir, url, second, private_dir / "online.pem", "3.9.2")
                     shutil.copytree(second, public, dirs_exist_ok=True)
                     self.assertEqual(json.loads((public / "metadata" / "timestamp.json").read_text())["signed"]["version"], 2)
+
+                    # A Stable bridge has its own advancing legacy metadata; an
+                    # older Stable candidate must retain the existing target.
+                    bridge = base / "bridge"
+                    publisher.publish(artifact_dir, url, bridge, private_dir / "online.pem", "3.9.3", legacy=True)
+                    bridge_targets = json.loads((bridge / "metadata/targets.json").read_text())["signed"]
+                    self.assertEqual(bridge_targets["version"], 3)
+                    self.assertEqual(bridge_targets["targets"]["linux/amd64.zip"]["custom"]["channel"], "stable")
+                    retained = base / "retained"
+                    publisher.publish(artifact_dir, url, retained, private_dir / "online.pem", "3.9.1", legacy=True)
+                    retained_target = json.loads((retained / "metadata/targets.json").read_text())["signed"]["targets"]["linux/amd64.zip"]
+                    self.assertEqual(retained_target["custom"]["version"], "3.9.2")
             finally:
                 server.shutdown()
                 server.server_close()

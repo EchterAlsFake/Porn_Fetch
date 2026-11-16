@@ -4,4 +4,5 @@
 # creation time into these constants before building, including workflow reruns.
 __version__ = "3.9"
 BUILD_VERSION = "3.9.0"
+BUILD_CHANNEL = "stable"
 RELEASE_TIMESTAMP = 1791244800

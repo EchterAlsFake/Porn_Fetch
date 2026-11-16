@@ -91,7 +91,7 @@ ApplicationWindow {
         target: backend
 
         function onUpdateAvailable(details) {
-            updateDialog.version = details.version || ""
+            updateDialog.version = (details.version || "") + " " + (details.channel || "")
             updateDialog.downloadSize = details.download_size || 0
             updateDialog.installAllowed = details.install_allowed === true
             updateDialog.entitlementMessage = details.entitlement_message || ""
@@ -179,6 +179,11 @@ ApplicationWindow {
                 horizontalAlignment: Text.AlignHCenter
             }
 
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Installed: %1").arg(backend.installed_release)
+                wrapMode: Text.Wrap
+            }
             Label {
                 Layout.fillWidth: true
                 text: updateDialog.entitlementMessage

@@ -20,6 +20,9 @@ class AndroidPublisherTests(unittest.TestCase):
                      "notes": "notes", "artifacts": [artifact]} for version, channel in (("3.9.78", "beta"), ("3.9.77", "stable"))]
         targets = publisher.select_targets(releases)
         self.assertEqual(targets["android/arm64-v8a.apk"].custom["version"], "3.9.77")
+        beta = publisher.select_targets(list(reversed(releases)), "beta")
+        self.assertEqual(beta["android/arm64-v8a.apk"].custom["version"], "3.9.78")
+        self.assertEqual(beta["android/arm64-v8a.apk"].custom["channel"], "beta")
         offline, online = CryptoSigner.generate_ed25519(), CryptoSigner.generate_ed25519()
         root = Metadata(Root(expires=datetime.now(timezone.utc) + timedelta(days=365)))
         root.signed.add_key(offline.public_key, "root")

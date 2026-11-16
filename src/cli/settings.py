@@ -12,12 +12,15 @@ from typing import Any
 
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 from src.shared.paths import config_dir
+from src.shared.update_channels import validate_channel
+from src.shared.version import BUILD_CHANNEL
 
 SETTINGS_VERSION = 2
 
 
 @dataclass(slots=True)
 class CliSettings:
+    update_channel: str = BUILD_CHANNEL
     # Video
     quality: str = "best"
     profile_video_mode: str = "videos"
@@ -81,6 +84,7 @@ class CliSettings:
     legacy_database_path: str = "./downloads.db"
 
     def validate(self) -> None:
+        validate_channel(self.update_channel)
         from src.shared.download_options import title_template
         title_template(self.path_template)
         if self.metadata_export not in {"off", "jellyfin"} or self.metadata_layout not in {"alongside", "scene-folder"}:
@@ -191,6 +195,7 @@ class SettingsStore:
         if self.path.exists():
             raw = json.loads(self.path.read_text(encoding="utf-8"))
             values = raw.get("settings", raw)
+            values = {"update_channel": "stable", **values}
             known = {field.name for field in fields(CliSettings)}
             settings = CliSettings(**{k: v for k, v in values.items() if k in known})
             if ("error_reporting_full_traceback" not in values and settings.error_reporting
@@ -207,7 +212,7 @@ class SettingsStore:
         candidates = legacy_paths if legacy_paths is not None else _legacy_candidates()
         legacy = next((path for path in candidates if path.is_file()), None)
         if legacy:
-            settings = _migrate_ini(legacy, settings)
+            settings = _migrate_ini(legacy, replace(settings, update_channel="stable"))
         self.save(settings)
         return settings
 

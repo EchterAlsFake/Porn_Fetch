@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src.shared.version import BUILD_VERSION, RELEASE_TIMESTAMP
+from src.shared.version import BUILD_CHANNEL, BUILD_VERSION, RELEASE_TIMESTAMP
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -19,5 +19,6 @@ if __name__ == "__main__":
     output.write_text(json.dumps({
         "release_timestamp": RELEASE_TIMESTAMP,
         "version": BUILD_VERSION,
+        "channel": BUILD_CHANNEL,
         "target": f"{system}/{architecture}.zip",
     }), encoding="utf-8")

@@ -251,6 +251,7 @@ class Backend(QObject):
         self._update_check_requested = False
         self._update_check_manual = False
         self._available_update = None
+        self._verified_update = None
         self._services_started = False
         self._auto_update_task: asyncio.Task[object] | None = None
         self._shutdown_task: asyncio.Task[None] | None = None
@@ -421,6 +422,11 @@ class Backend(QObject):
     def toggle_update_checks(self, value: bool) -> None:
         ...
 
+    @Property(str, constant=True)
+    def installed_release(self):
+        from src.shared.version import BUILD_VERSION, BUILD_CHANNEL
+        return f"{BUILD_VERSION} {BUILD_CHANNEL.title()}"
+
     @Slot()
     def check_for_updates(self) -> None:
         """Request an update check, deferring it until QtAsyncio is running."""
@@ -469,6 +475,7 @@ class Backend(QObject):
             return
 
         self._available_update = None
+        self._verified_update = None
         self.updateCheckStarted.emit()
 
         self._update_check_task = self._spawn(
@@ -478,7 +485,11 @@ class Backend(QObject):
 
     async def _check_for_updates(self) -> None:
         try:
-            update = await CheckUpdates.check()
+            while True:
+                channel = app_settings.update_channel
+                update = await CheckUpdates.check(channel=channel)
+                if channel == app_settings.update_channel:
+                    break
         except Exception as error:
             self.logger.exception("Update check failed")
             message = (str(error) if isinstance(error, TorUnavailable) else
@@ -490,7 +501,7 @@ class Backend(QObject):
             self._update_check_manual = False
             return
         if update is None:
-            message = self.tr("No update available.")
+            message = self.tr("No newer update is available on the selected channel. Stable subscribers receive only newer Stable releases.")
             self.updateStatus.emit(message)
             if self._update_check_manual:
                 self.notifications.publish(message, self.tr("App updates"), "info", key="update-check", direct=True)
@@ -514,6 +525,7 @@ class Backend(QObject):
             "install_allowed": install_allowed,
             "entitlement_message": message,
             "version": str(update.get("version", "")),
+            "channel": str(update.get("channel", "")),
             "download_size": update.get("download_size", 0),
             "release_url": str(update.get("release_url") or GITHUB_RELEASES_URL),
             "important_info": str(update.get("important_info", "")),
@@ -521,6 +533,7 @@ class Backend(QObject):
             "changelog_format": str(update.get("changelog_format", "html")),
         }
         self._update_check_manual = False
+        self._verified_update = update
         self._available_update = details
         self.logger.info("New update found: %s", details["version"])
         self.updateAvailable.emit(details)
@@ -561,7 +574,7 @@ class Backend(QObject):
             return
 
         self._auto_update_task = self._spawn(
-            self.auto_updater.run(),
+            self.auto_updater.run(update=self._verified_update),
             name="auto-update",
         )
 

@@ -44,6 +44,7 @@ class SettingsManager(QObject):
     anonymousModeChanged = Signal(bool)
     updateChecksChanged = Signal(bool)
     updatePromptsChanged = Signal(bool)
+    updateChannelChanged = Signal(str)
     languageChanged = Signal(int)
     accessibilityChanged = Signal()
     sniProxyChanged = Signal(str)
@@ -124,6 +125,11 @@ class SettingsManager(QObject):
         super().__init__()
         self._custom_settings = settings
         self._settings = settings if settings is not None else QSettings(__org_name__, __app_name__)
+        if not self._settings.contains("Misc/update_channel"):
+            from src.shared.version import BUILD_CHANNEL
+            # Existing settings migrate to Stable; a fresh Beta install follows its build.
+            self._settings.setValue("Misc/update_channel", "stable" if self._settings.allKeys() else BUILD_CHANNEL)
+            self._settings.sync()
         self._normalize_sni_obfuscation_mode()
         # Runtime-only URL owned by SNIProxyManager; never persist ephemeral ports.
         self.active_sni_proxy_url: str | None = None
@@ -749,6 +755,20 @@ class SettingsManager(QObject):
     @Property(bool, notify=updateChecksChanged)
     def update_checks(self) -> bool:
         return self.get_bool("Misc/update_checks", True)
+
+    @Property(str, notify=updateChannelChanged)
+    def update_channel(self) -> str:
+        value = self.get_str("Misc/update_channel", "stable")
+        return value if value in {"stable", "beta"} else "stable"
+
+    @update_channel.setter
+    def update_channel(self, value):
+        from src.shared.update_channels import validate_channel
+        validate_channel(value)
+        if value != self.update_channel:
+            self._settings.setValue("Misc/update_channel", value)
+            self._settings.sync()
+            self.updateChannelChanged.emit(value)
 
     @update_checks.setter
     def update_checks(self, val):

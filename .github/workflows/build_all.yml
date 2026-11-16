@@ -27,24 +27,24 @@ on:
         type: boolean
         default: false
       deploy_repositories:
-        description: "Upload Qt IFW repositories to the configured beta server"
+        description: "Publish signed desktop repositories for the selected channel"
         type: boolean
         default: false
       deploy_cli_updates:
-        description: "Publish signed CLI update bundles to the beta server"
+        description: "Publish signed CLI updates for the selected channel"
         type: boolean
         default: false
       deploy_website:
         description: "Publish built packages to the independent Porn Fetch website"
         type: boolean
         default: false
-      website_channel:
-        description: "Website release channel (independent of updater feeds)"
+      release_channel:
+        description: "Release channel for all artifacts and update feeds"
         type: choice
         options:
           - beta
           - stable
-        default: beta
+        default: stable
       benchmark_compression:
         description: "Compare IFW compression levels 5/7/9 (slower)"
         type: boolean
@@ -71,6 +71,7 @@ env:
   PYTHONUNBUFFERED: "1"
   UV_NO_SYNC: "1"
   PORN_FETCH_BUILD_VERBOSE: "1"
+  RELEASE_CHANNEL: ${{ inputs.release_channel || 'stable' }}
 
 jobs:
   validate:
@@ -112,7 +113,7 @@ jobs:
           python -c 'import re, sys; assert re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", sys.argv[1]), "Use a three-part release version (major.minor.patch) for all platforms"' "$RELEASE_VERSION"
           RELEASE_CREATED_AT=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq .created_at)
           RELEASE_TIMESTAMP=$(python -c 'import sys; from datetime import datetime; print(int(datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00")).timestamp()))' "$RELEASE_CREATED_AT")
-          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP" --channel "${{ env.RELEASE_CHANNEL }}"
           echo "timestamp=$RELEASE_TIMESTAMP" >> "$GITHUB_OUTPUT"
           echo "version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
 
@@ -120,7 +121,25 @@ jobs:
         if: env.CHECK_CLI_RELEASE == 'true'
         env:
           RELEASE_VERSION: ${{ steps.release.outputs.version }}
-        run: uv run --no-sync python packaging/check_cli_release_version.py "$RELEASE_VERSION"
+        run: uv run --no-sync python packaging/check_cli_release_version.py "$RELEASE_VERSION" --remote-url "https://api.pornfetch.to/repo/cli/$RELEASE_CHANNEL/"
+
+      - name: Record immutable release identity
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_TIMESTAMP: ${{ steps.release.outputs.timestamp }}
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          Path("release-identity.json").write_text(json.dumps({
+              "version": os.environ["RELEASE_VERSION"], "channel": os.environ["RELEASE_CHANNEL"],
+              "timestamp": int(os.environ["RELEASE_TIMESTAMP"]), "commit": os.environ["GITHUB_SHA"],
+          }))
+          PYCODE
+      - uses: ./.github/actions/upload-artifact
+        with:
+          name: release-identity
+          path: release-identity.json
 
   # ==========================================
   # 1. GUI BUILDS (PySide6)
@@ -357,7 +376,7 @@ jobs:
           uv run --no-sync python scripts/write_checksum.py third_party/ffmpeg
 
       - name: Embed workflow release and artifact version
-        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
 
       - name: Apply and verify required QtAsyncio compatibility patch
         run: |
@@ -822,7 +841,7 @@ jobs:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
           RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
         run: |
-          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP" --channel "${{ env.RELEASE_CHANNEL }}"
           python packaging/prepare_android_ci.py --venv "$VIRTUAL_ENV" --version "$RELEASE_VERSION"
           # Regenerate recipes and JARs from this ABI's patched wheel. The tracked
           # deployment cache contains paths from a local developer environment.
@@ -1054,7 +1073,7 @@ jobs:
 
       - name: Stamp version and generate the app project
         run: |
-          python packaging/write_build_version.py "$IOS_APP_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+          python packaging/write_build_version.py "$IOS_APP_VERSION" --release-timestamp "$RELEASE_TIMESTAMP" --channel "${{ env.RELEASE_CHANNEL }}"
           python "$IOS_WORK_ROOT/lab/device/prepare-application.py"
 
       - name: Build device app and package IPA for re-signing
@@ -1237,7 +1256,7 @@ jobs:
           CERTUM_EMAIL: ${{ matrix.platform == 'windows' && secrets.CERTUM_EMAIL || '' }}
           CERTUM_OTP: ${{ matrix.platform == 'windows' && secrets.CERTUM_OTP || '' }}
         run: |
-          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
           uv run --no-sync python packaging/write_cli_build_version.py ${{ matrix.platform }} ${{ matrix.arch }}
           uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
             uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
@@ -1415,7 +1434,7 @@ jobs:
             export UV_NO_PROGRESS=1
             uv python install 3.15.2
             uv sync --upgrade --no-dev --extra build --python 3.15.2
-            uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+            uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
             uv run --no-sync python packaging/write_cli_build_version.py linux riscv64
             uv run --no-sync python scripts/build_output.py --label "Compile CLI" -- \
             uv run --no-sync pyinstaller --clean packaging/pyinstaller_cli.spec
@@ -1620,7 +1639,7 @@ jobs:
         run: uv sync --upgrade --no-dev
 
       - name: Embed workflow release and artifact version
-        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+        run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
 
       - name: Configure online signing key
         shell: bash
@@ -1651,14 +1670,14 @@ jobs:
             test -f "dist/ifw_repo/$target/Updates.xml"
             uv run --no-sync python packaging/sign_desktop_release.py \
               --repository "dist/ifw_repo/$target" --platform "$target" \
-              --version "$APP_VERSION" \
+              --version "$APP_VERSION" --channel "${{ env.RELEASE_CHANNEL }}" \
               --private-key "$RUNNER_TEMP/cli_online.pem"
           done
           for target in linux_amd64 windows_amd64 darwin_amd64 darwin_arm64; do
-            bash scripts/deploy_ifw_repositories.sh "$target" "dist/ifw_repo/$target"
+            bash scripts/deploy_ifw_repositories.sh "$target" "dist/ifw_repo/$target" "$RELEASE_CHANNEL"
             uv run --no-sync python packaging/verify_deployment.py desktop \
               --repository "dist/ifw_repo/$target" --platform "$target" \
-              --remote-url "https://api.pornfetch.to/repo/$target/"
+              --remote-url "https://api.pornfetch.to/repo/$RELEASE_CHANNEL/$target/"
           done
 
       - name: Download Installers
@@ -1725,7 +1744,7 @@ jobs:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
         run: |
           set -euo pipefail
-          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }}
+          uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
           test -n "$CLI_UPDATE_SIGNING_KEY"
           umask 077
           SIGNING_KEY_FILE=$(mktemp "$RUNNER_TEMP/cli-online.XXXXXX.pem")
@@ -1736,19 +1755,30 @@ jobs:
           APP_VERSION=$(uv run --no-sync python -c 'from src.shared.version import __version__; print(__version__)')
           uv run --no-sync python packaging/publish_cli_updates.py \
             --artifacts dist/cli_artifacts \
-            --remote-url https://api.pornfetch.to/repo/cli/ \
+            --remote-url "https://api.pornfetch.to/repo/cli/$RELEASE_CHANNEL/" \
             --output dist/cli_tuf \
             --private-key "$SIGNING_KEY_FILE" \
-            --version "$APP_VERSION"
+            --version "$APP_VERSION" --channel "${{ env.RELEASE_CHANNEL }}"
+          if [ "$RELEASE_CHANNEL" = stable ]; then
+            uv run --no-sync python packaging/publish_cli_updates.py \
+              --artifacts dist/cli_artifacts --remote-url https://api.pornfetch.to/repo/cli/ \
+              --output dist/cli_legacy_tuf --private-key "$SIGNING_KEY_FILE" \
+              --version "$APP_VERSION" --channel stable --legacy-feed
+          fi
 
       - name: Deploy CLI TUF Repo
         env:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
-          bash scripts/deploy_cli_updates.sh dist/cli_tuf
+          bash scripts/deploy_cli_updates.sh dist/cli_tuf "$RELEASE_CHANNEL"
+          if [ "$RELEASE_CHANNEL" = stable ]; then
+            bash scripts/deploy_cli_updates.sh dist/cli_legacy_tuf
+            uv run --no-sync python packaging/verify_deployment.py cli \
+              --repository dist/cli_legacy_tuf --remote-url https://api.pornfetch.to/repo/cli/
+          fi
 
       - name: Verify published CLI repository
-        run: uv run --no-sync python packaging/verify_deployment.py cli --repository dist/cli_tuf --remote-url https://api.pornfetch.to/repo/cli/
+        run: uv run --no-sync python packaging/verify_deployment.py cli --repository dist/cli_tuf --remote-url "https://api.pornfetch.to/repo/cli/$RELEASE_CHANNEL/"
 
   # ==========================================
   # 8. PUBLISH RELEASE (TAGS & DISPATCH)
@@ -1827,11 +1857,11 @@ jobs:
           gh release create "v$RELEASE_VERSION" dist_release/* \
             --title "Porn Fetch $RELEASE_VERSION" \
             --notes-file CHANGELOG_STATIC.md \
-            --prerelease \
+            --prerelease="$([ "$RELEASE_CHANNEL" = beta ] && echo true || echo false)" \
             --target "$COMMIT_SHA" \
             --draft=false
 
-  # Independent website distribution; existing update publishers are unchanged.
+  # Website distribution uses the same release identity as the updater feeds.
   publish-website:
     name: Publish Website Downloads
     needs: [validate, build-gui, build-android, build-ios, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, build-macos-universal, release-metadata]
@@ -1866,7 +1896,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
           RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
-        run: uv run --no-sync python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+        run: uv run --no-sync python packaging/write_build_version.py "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP" --channel "${{ env.RELEASE_CHANNEL }}"
       - name: Publish and verify website release
         env:
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
@@ -1874,14 +1904,14 @@ jobs:
           WEBSITE_ORIGIN: ${{ vars.WEBSITE_ORIGIN || 'https://pornfetch.to' }}
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
           RELEASE_TIMESTAMP: ${{ needs.release-metadata.outputs.timestamp }}
-          RELEASE_CHANNEL: ${{ inputs.website_channel }}
+          RELEASE_CHANNEL: ${{ inputs.release_channel || 'stable' }}
           BUILD_COMMIT: ${{ github.sha }}
           RELEASE_BUILD_TARGET: ${{ inputs.build_target }}
         run: |
           uv run --no-sync python packaging/publish_website_release.py \
             --artifacts website_artifacts --output website_release --source-root . \
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
-            --channel "$RELEASE_CHANNEL" --commit "$BUILD_COMMIT" \
+            --channel "${{ env.RELEASE_CHANNEL }}" --commit "$BUILD_COMMIT" \
             --notes CHANGELOG_STATIC.md --origin "$WEBSITE_ORIGIN"
           if [ "$RELEASE_BUILD_TARGET" != cli ] && [ "$RELEASE_BUILD_TARGET" != ios ]; then
             test -n "$CLI_UPDATE_SIGNING_KEY"
@@ -1890,5 +1920,8 @@ jobs:
             trap 'rm -f "$SIGNING_KEY_FILE"' EXIT
             printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
             unset CLI_UPDATE_SIGNING_KEY
-            uv run --no-sync python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
+            uv run --no-sync python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --channel "${{ env.RELEASE_CHANNEL }}"
+            if [ "$RELEASE_CHANNEL" = stable ]; then
+              uv run --no-sync python packaging/publish_android_updates.py --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --legacy-feed
+            fi
           fi

@@ -8,10 +8,12 @@ import sys
 import tempfile
 from pathlib import Path
 
+from tuf.api.exceptions import DownloadHTTPError
 from tuf.ngclient import Updater
 
 from .release import ROOT_FILE, release_time
 from .service_transport import ServiceFetcher
+from .update_channels import eligible_channels, newest, validate_channel, validate_release, version_parts
 
 REPOSITORY = "https://pornfetch.to/repo/android/"
 
@@ -34,38 +36,46 @@ def platform_info():
     return value
 
 
-def updater(settings, progress=None):
-    cache = android_private() / "verified-updates"
+def updater(settings, progress=None, *, channel="stable"):
+    validate_channel(channel)
+    repository = REPOSITORY + channel + "/"
+    cache = android_private() / "verified-updates" / channel
     metadata, targets = cache / "metadata", cache / "targets"
     metadata.mkdir(parents=True, exist_ok=True, mode=0o700)
     targets.mkdir(exist_ok=True, mode=0o700)
     fetcher = ServiceFetcher(settings)
     fetcher.on_chunk = progress
-    return Updater(str(metadata), REPOSITORY + "metadata/", str(targets), REPOSITORY + "targets/",
+    return Updater(str(metadata), repository + "metadata/", str(targets), repository + "targets/",
                    fetcher=fetcher, bootstrap=ROOT_FILE.read_bytes())
 
 
-def check(settings, current):
+def check(settings, current, *, channel=None):
     info = platform_info()
-    client = updater(settings)
-    target = client.get_targetinfo("android/" + info["abi"] + ".apk")
-    if target is None:
-        return None
-    custom = target.custom or {}
-    version = custom.get("version", "")
-    def parts(value):
-        return tuple(int(part) for part in value.split("."))
-    if custom.get("package") != info["package"] or custom.get("abi") != info["abi"]:
-        raise ValueError("Android update does not match this application")
-    if parts(version) <= parts(current):
-        return None
-    return {**custom, "release_timestamp": release_time(custom.get("release_timestamp")),
-            "download_size": target.length,
-            "source": "signed_android", "release_url": "https://pornfetch.to/download/android",
-            "changelog_format": "markdown"}
+    offers = []
+    selected = channel or getattr(settings, "update_channel", "stable")
+    for feed in eligible_channels(selected):
+        client = updater(settings, channel=feed)
+        try:
+            target = client.get_targetinfo("android/" + info["abi"] + ".apk")
+        except DownloadHTTPError as error:
+            if error.status_code == 404:
+                continue
+            raise
+        if target is None:
+            continue
+        custom = validate_release(target.custom or {}, feed)
+        if custom.get("package") != info["package"] or custom.get("abi") != info["abi"]:
+            raise ValueError("Android update does not match this application")
+        if version_parts(custom["version"]) <= version_parts(current):
+            continue
+        offers.append({**custom, "release_timestamp": release_time(custom.get("release_timestamp")),
+                       "download_size": target.length, "sha256": target.hashes["sha256"],
+                       "source": "signed_android", "release_url": "https://pornfetch.to/download/android",
+                       "changelog_format": "markdown"})
+    return newest(offers)
 
 
-def download_and_request_install(settings, current, progress=None, cancel=None):
+def download_and_request_install(settings, current, progress=None, cancel=None, offer=None):
     """Report APK bytes and the signed total; metadata traffic is excluded."""
     downloaded = 0
     total = 0
@@ -78,14 +88,19 @@ def download_and_request_install(settings, current, progress=None, cancel=None):
             downloaded += size
             progress(downloaded, total)
     info = platform_info()
-    client = updater(settings, on_chunk)
+    offer = offer or check(settings, current)
+    if offer is None:
+        raise ValueError("No signed Android update available")
+    client = updater(settings, on_chunk, channel=offer["channel"])
     target = client.get_targetinfo("android/" + info["abi"] + ".apk")
     if target is None:
         raise ValueError("No signed Android update available")
-    custom = target.custom or {}
+    custom = validate_release(target.custom or {}, offer["channel"])
+    if custom["version"] != offer["version"] or target.hashes["sha256"] != offer["sha256"]:
+        raise ValueError("The published update changed. Check for updates again.")
     if custom.get("abi") != info["abi"] or custom.get("package") != info["package"]:
         raise ValueError("Android update has the wrong identity")
-    if tuple(map(int, custom["version"].split("."))) <= tuple(map(int, current.split("."))):
+    if version_parts(custom["version"]) <= version_parts(current):
         raise ValueError("The Android update is not newer")
     release_time(custom.get("release_timestamp"))
     total = target.length

@@ -472,7 +472,8 @@ ApplicationWindow {
         onRejected: if (busy) backend.cancel_update()
         contentItem: ColumnLayout {
             spacing: 16
-            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.version ? qsTr("Version %1 is available").arg(androidUpdateDialog.details.version) : qsTr("App updates") }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.version ? qsTr("Version %1 is available").arg(androidUpdateDialog.details.version + " " + (androidUpdateDialog.details.channel || "")) : qsTr("App updates") }
+            Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: qsTr("Installed: %1").arg(backend.installed_release) }
             Label { Layout.fillWidth: true; wrapMode: Text.WordWrap; text: androidUpdateDialog.details.entitlement_message || "" }
             Label {
                 objectName: "updateDownloadSizeText"

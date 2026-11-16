@@ -32,6 +32,15 @@ class _TestBackend(QObject):
         super().__init__()
         self.settings = settings_manager
         self.bridge = bridge
+        self.update_checks = 0
+
+    @Property(str, constant=True)
+    def installed_release(self):
+        return "3.9.0 Stable"
+
+    @Slot()
+    def check_for_updates(self):
+        self.update_checks += 1
 
     @Property(bool, constant=True)
     def maintenance_available(self):

@@ -32,7 +32,7 @@ class UpdateServiceTests(unittest.TestCase):
         for source_run, android, allowed in [(True, True, True), (True, False, False), (False, False, True)]:
             with self.subTest(source_run=source_run, android=android):
                 backend = SimpleNamespace(
-                    _auto_update_task=None, _spawn=MagicMock(),
+                    _auto_update_task=None, _verified_update=None, _spawn=MagicMock(),
                     auto_updater=SimpleNamespace(run=MagicMock(return_value="update-operation")),
                     notifications=MagicMock(), updateStatus=MagicMock(), updateFinished=MagicMock(),
                     tr=lambda text: text,
@@ -42,7 +42,7 @@ class UpdateServiceTests(unittest.TestCase):
                     Backend.auto_update(backend)
                 if allowed:
                     backend._spawn.assert_called_once_with("update-operation", name="auto-update")
-                    backend.auto_updater.run.assert_called_once_with()
+                    backend.auto_updater.run.assert_called_once_with(update=None)
                     backend.updateFinished.emit.assert_not_called()
                     backend.notifications.publish.assert_not_called()
                 else:
@@ -168,7 +168,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
         shutdown.assert_not_called()
 
     async def test_component_discovery_accepts_current_version_but_rejects_older_repository(self):
-        release = {"version": "3.9"}
+        release = {"version": "3.9", "channel": "stable"}
         metadata = SimpleNamespace(signed=SimpleNamespace(targets={
             "Updates.xml": SimpleNamespace(length=1_000),
             "core.7z": SimpleNamespace(length=400_000_000),
@@ -193,7 +193,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
     async def test_tor_metadata_errors_report_the_response_without_unsigned_fallback(self):
         from src.shared.service_transport import ServicePolicy, TorServiceFailure
 
-        for status in (302, 404, 502, 200):
+        for status in (302, 502, 200):
             with self.subTest(status=status):
                 policy = ServicePolicy(SimpleNamespace(service_transport="tor"))
                 core = SimpleNamespace(
@@ -311,7 +311,7 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
         ):
             await updater._run()
             install.assert_called_once()
-            self.assertIs(install.call_args.args[-1], updater._android_cancel)
+            self.assertIs(install.call_args.args[-2], updater._android_cancel)
 
     async def test_check_via_maintenancetool_with_updates(self):
         xml_output = (

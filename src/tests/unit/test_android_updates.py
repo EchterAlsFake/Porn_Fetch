@@ -24,7 +24,7 @@ class AndroidUpdatesTests(unittest.TestCase):
         self.apk = self.root / "verified.apk"
         self.apk.write_bytes(b"synthetic APK")
         self.target = TargetFile.from_file("android/arm64-v8a.apk", str(self.apk))
-        self.target.unrecognized_fields["custom"] = {"version": "3.9.77", "abi": "arm64-v8a",
+        self.target.unrecognized_fields["custom"] = {"version": "3.9.77", "channel": "stable", "abi": "arm64-v8a",
                                                    "package": "to.pornfetch.app", "release_timestamp": 1792886400}
         self.client = MagicMock()
         self.client.get_targetinfo.return_value = self.target
@@ -44,9 +44,10 @@ class AndroidUpdatesTests(unittest.TestCase):
     def test_apk_progress_uses_signed_size_and_excludes_metadata_bytes(self):
         updates = []
 
-        def make_updater(settings, on_chunk):
+        def make_updater(settings, on_chunk=None, *, channel="stable"):
             def metadata(path):
-                on_chunk(1000)
+                if on_chunk:
+                    on_chunk(1000)
                 return self.target
 
             def download(target):

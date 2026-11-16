@@ -19,7 +19,8 @@ from src.shared.release import (
     safe_repo_path,
     validate_ifw_packages,
 )
-from src.shared.version import RELEASE_TIMESTAMP
+from src.shared.update_channels import validate_channel
+from src.shared.version import BUILD_CHANNEL, RELEASE_TIMESTAMP
 
 
 def release_notes(path: Path) -> str:
@@ -30,7 +31,8 @@ def release_notes(path: Path) -> str:
     return text.strip()
 
 
-def sign_repository(repository, platform, version, private_key, root_file=ROOT_FILE, *, changelog=""):
+def sign_repository(repository, platform, version, private_key, root_file=ROOT_FILE, *, changelog="", channel=BUILD_CHANNEL):
+    validate_channel(channel)
     repository = Path(repository)
     xml = ET.parse(repository / "Updates.xml")
     validate_ifw_packages(xml, version, RELEASE_TIMESTAMP)
@@ -43,6 +45,7 @@ def sign_repository(repository, platform, version, private_key, root_file=ROOT_F
     metadata = Metadata(Targets(expires=datetime.now(timezone.utc) + timedelta(days=30), targets=targets))
     metadata.signed.unrecognized_fields["release"] = {
         "version": version, "release_timestamp": RELEASE_TIMESTAMP, "platform": platform,
+        "channel": channel,
         "changelog": changelog, "changelog_format": "markdown", "release_url": GITHUB_RELEASES_URL,
         "changelog_path": STATIC_CHANGELOG_NAME,
     }
@@ -58,10 +61,12 @@ if __name__ == "__main__":
     parser.add_argument("--repository", type=Path, required=True)
     parser.add_argument("--platform", required=True, help="Qt repo tag, e.g. linux_amd64")
     parser.add_argument("--version", required=True)
+    parser.add_argument("--channel", choices=("stable", "beta"), default=BUILD_CHANNEL)
     parser.add_argument("--private-key", type=Path, required=True)
     parser.add_argument("--changelog-file", type=Path, default=Path(__file__).resolve().parents[1] / STATIC_CHANGELOG_NAME)
     args = parser.parse_args()
     sign_repository(
         args.repository, args.platform, args.version, args.private_key,
         changelog=release_notes(args.changelog_file),
+        channel=args.channel,
     )

@@ -11,11 +11,11 @@ on:
         description: Exact version used by that build
         required: true
         type: string
-      website_channel:
-        description: Website release channel
+      release_channel:
+        description: Must match the original build channel
         type: choice
         options: [beta, stable]
-        default: beta
+        default: stable
       legal_review_complete:
         description: Confirm redistribution review for these artifacts
         required: true
@@ -85,18 +85,38 @@ jobs:
           pattern: PornFetch_*
           path: website_artifacts
           merge-multiple: false
+      - name: Download original release identity
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.build_run_id }}
+          name: release-identity
+          path: identity
+      - name: Verify original release identity
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+          RELEASE_CHANNEL: ${{ inputs.release_channel }}
+          RELEASE_TIMESTAMP: ${{ steps.build.outputs.timestamp }}
+          BUILD_COMMIT: ${{ steps.build.outputs.commit }}
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          identity = json.load(open("identity/release-identity.json"))
+          assert identity == {"version": os.environ["RELEASE_VERSION"], "channel": os.environ["RELEASE_CHANNEL"],
+                              "timestamp": int(os.environ["RELEASE_TIMESTAMP"]), "commit": os.environ["BUILD_COMMIT"]}, "Release inputs differ from the original build"
+          PYCODE
       - name: Publish and verify website release and Android feed
         env:
           WEBSITE_RELEASE_TOKEN: ${{ secrets.WEBSITE_RELEASE_TOKEN }}
           CLI_UPDATE_SIGNING_KEY: ${{ secrets.CLI_UPDATE_SIGNING_KEY }}
           WEBSITE_ORIGIN: ${{ vars.WEBSITE_ORIGIN || 'https://pornfetch.to' }}
           RELEASE_VERSION: ${{ inputs.release_version }}
-          RELEASE_CHANNEL: ${{ inputs.website_channel }}
+          RELEASE_CHANNEL: ${{ inputs.release_channel }}
           RELEASE_TIMESTAMP: ${{ steps.build.outputs.timestamp }}
           BUILD_COMMIT: ${{ steps.build.outputs.commit }}
         run: |
           uv run --project tooling --no-sync python source/packaging/write_build_version.py \
-            "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP"
+            "$RELEASE_VERSION" --release-timestamp "$RELEASE_TIMESTAMP" --channel "$RELEASE_CHANNEL"
           uv run --project tooling --no-sync python tooling/packaging/publish_website_release.py \
             --artifacts website_artifacts --output website_release --source-root source \
             --version "$RELEASE_VERSION" --timestamp "$RELEASE_TIMESTAMP" \
@@ -110,5 +130,9 @@ jobs:
             printf '%s\n' "$CLI_UPDATE_SIGNING_KEY" > "$SIGNING_KEY_FILE"
             unset CLI_UPDATE_SIGNING_KEY
             uv run --project tooling --no-sync python tooling/packaging/publish_android_updates.py \
-              --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE"
+              --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --channel "$RELEASE_CHANNEL"
+            if [ "$RELEASE_CHANNEL" = stable ]; then
+              uv run --project tooling --no-sync python tooling/packaging/publish_android_updates.py \
+                --origin "$WEBSITE_ORIGIN" --private-key "$SIGNING_KEY_FILE" --legacy-feed
+            fi
           fi

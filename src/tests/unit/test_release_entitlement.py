@@ -92,6 +92,18 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(Exception):
             verify_repository_manifest(json.dumps(payload).encode(), self.root.read_bytes(), "linux_amd64")
 
+    def test_desktop_refresh_preserves_release_and_payloads(self):
+        refresh = load_script("refresh_desktop_updates")
+        before = (self.repo / "release.json").read_bytes()
+        after = refresh.renew(before, self.root.read_bytes(), self.base / "keys/online.pem", "linux_amd64", "stable")
+        original, release = self.verify()
+        renewed, renewed_release = verify_repository_manifest(after, self.root.read_bytes(), "linux_amd64")
+        self.assertEqual(renewed_release, release)
+        self.assertEqual(renewed.signed.targets, original.signed.targets)
+        self.assertGreater(renewed.signed.version, original.signed.version)
+        with self.assertRaisesRegex(ValueError, "channel"):
+            refresh.renew(before, self.root.read_bytes(), self.base / "keys/online.pem", "linux_amd64", "beta")
+
     async def test_update_fetches_and_verifies_server_changelog(self):
         notes = "### Fixes\n- Current release notes."
         signer.sign_repository(
@@ -116,7 +128,7 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             update = await CheckUpdates.check_signed_repository()
             self.assertEqual(update["changelog"].strip(), notes)
             fetch.assert_awaited_once_with(
-                "https://api.pornfetch.to/repo/linux_amd64/CHANGELOG_STATIC.md",
+                "https://api.pornfetch.to/repo/stable/linux_amd64/CHANGELOG_STATIC.md",
                 allow_redirects=False,
             )
             fetch.return_value = b"Unverified replacement notes"
@@ -224,13 +236,14 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_unsigned_discovery_never_offers_install(self):
         with patch.object(CheckUpdates,"check_signed_repository", AsyncMock(side_effect=ValueError)), patch.object(CheckUpdates,"check_via_http", AsyncMock(return_value={"version":"4.0"})):
-            self.assertFalse((await CheckUpdates.check())["install_allowed"])
+            with self.assertRaises(ValueError):
+                await CheckUpdates.check()
 
 
 class CliFreeUpdateTests(unittest.TestCase):
     def test_cli_installs_without_license(self):
         from unittest.mock import MagicMock
-        target = SimpleNamespace(custom={"version": "999.0", "release_timestamp": RELEASE_TIMESTAMP})
+        target = SimpleNamespace(length=123, custom={"version": "999.0", "channel": "stable", "release_timestamp": RELEASE_TIMESTAMP})
         updater = MagicMock()
         updater.get_targetinfo.return_value = target
         with tempfile.TemporaryDirectory() as cache:

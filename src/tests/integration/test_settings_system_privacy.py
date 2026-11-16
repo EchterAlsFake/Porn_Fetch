@@ -6,6 +6,75 @@ from src.tests.integration.settings_support import SettingsGUITestBase
 class TestSystemTabGUI(SettingsGUITestBase):
     """Verifies that every change made on the System settings tab modifies the actual settings file."""
 
+    def test_update_channel_selection_persists_and_checks_again(self):
+        self.simulate_combobox("updateChannelSelector", 1)
+        self.assertEqual(self.settings_manager.update_channel, "beta")
+        self.assert_file_value("Misc/update_channel", "beta")
+        self.assertEqual(self.backend.update_checks, 1)
+        self.simulate_combobox("updateChannelSelector", 0)
+        self.assert_file_value("Misc/update_channel", "stable")
+        self.assertEqual(self.backend.update_checks, 2)
+
+    def test_update_channel_keyboard_and_remote_activation(self):
+        from pathlib import Path
+
+        from PySide6.QtCore import Qt, QUrl
+        from PySide6.QtQml import QQmlProperty
+        from PySide6.QtQuick import QQuickItem
+        from PySide6.QtTest import QTest
+
+        from src.tests.integration.settings_support import _app
+
+        self.engine.loadData(b'''
+            import QtQuick
+            import QtQuick.Controls
+            import QtQuick.Layouts
+            ApplicationWindow {
+                id: channelWindow
+                width: 600; height: 400; visible: true
+                property int backCount: 0
+                ColumnLayout {
+                    anchors.fill: parent
+                    Keys.onReleased: function(event) {
+                        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) channelWindow.backCount += 1
+                    }
+                    AppButton { text: "Before" }
+                    UpdateChannelSelector {}
+                    AppButton { objectName: "afterChannel"; text: "After" }
+                }
+            }
+        ''', QUrl.fromLocalFile(str(Path("src/frontend/UI/ChannelKeyboardHarness.qml").resolve())))
+        window = self.engine.rootObjects()[-1]
+        selector = window.findChild(QQuickItem, "updateChannelSelector")
+        after = window.findChild(QQuickItem, "afterChannel")
+        _app.processEvents()
+        selector.forceActiveFocus()
+        QTest.keyClick(window, Qt.Key_Return)
+        self.assertTrue(QQmlProperty(selector, "popup.visible").read())
+        QTest.keyClick(window, Qt.Key_Down)
+        self.assertEqual(self.settings_manager.update_channel, "stable")
+        QTest.keyClick(window, Qt.Key_Select)
+        self.assertEqual(self.settings_manager.update_channel, "beta")
+        self.assertEqual(self.backend.update_checks, 1)
+        QTest.qWait(250)  # Let the popup exit transition finish before reopening.
+        QTest.keyClick(window, Qt.Key_Select)
+        self.assertTrue(QQmlProperty(selector, "popup.visible").read())
+        QTest.keyClick(window, Qt.Key_Back)
+        QTest.qWait(250)
+        self.assertFalse(QQmlProperty(selector, "popup.visible").read())
+        self.assertEqual(window.property("backCount"), 0)
+        self.assertTrue(selector.hasActiveFocus())
+        QTest.keyClick(window, Qt.Key_Return)
+        QTest.keyClick(window, Qt.Key_Escape)
+        QTest.qWait(250)
+        self.assertFalse(QQmlProperty(selector, "popup.visible").read())
+        self.assertEqual(window.property("backCount"), 0)
+        QTest.keyClick(window, Qt.Key_Down)
+        self.assertTrue(after.hasActiveFocus())
+        QTest.keyClick(window, Qt.Key_Back)
+        self.assertEqual(window.property("backCount"), 1)
+        window.close()
+
     def test_update_checks_checkbox(self) -> None:
         self.simulate_checkbox("updateChecksCheckBox", False)
         self.assertFalse(self.settings_manager.update_checks)

@@ -17,18 +17,24 @@ from tuf.api.metadata import Metadata, MetaFile, Root, Snapshot, TargetFile, Tar
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from publish_cli_updates import ROOT_FILE, previous_metadata
 
+from src.shared.update_channels import validate_channel, version_parts
+
 ABIS = {"arm64": "arm64-v8a", "armv7": "armeabi-v7a", "x64": "x86_64", "x86": "x86"}
 
 
-def select_targets(releases):
+def select_targets(releases, channel="stable"):
+    if channel is not None:
+        validate_channel(channel)
     chosen = {}
-    for release in releases:
+    for release in sorted(releases, key=lambda item: version_parts(item["version"]), reverse=True):
+        if channel is not None and release["channel"] != channel:
+            continue
         for artifact in release["artifacts"]:
             abi = ABIS.get(artifact["arch"])
             if artifact["kind"] != "apk" or artifact["platform"] != "android" or not abi:
                 continue
             previous = chosen.get(abi)
-            if previous and (previous[0]["channel"] == "stable" or release["channel"] != "stable"):
+            if previous and (channel is not None or previous[0]["channel"] == "stable" or release["channel"] != "stable"):
                 continue
             chosen[abi] = release, artifact
     targets = {}
@@ -67,14 +73,16 @@ def signed_files(root_bytes, targets, signer, previous=None):
             "snapshot.json": snapshot_bytes, "timestamp.json": timestamp.to_bytes()}
 
 
-def publish(origin, private_key, *, allow_empty=False):
+def publish(origin, private_key, *, allow_empty=False, channel="stable", legacy=False):
+    validate_channel(channel)
+    repository = "/repo/android/" + ("" if legacy else channel + "/")
     from publish_website_release import send
     token = os.environ.get("WEBSITE_RELEASE_TOKEN", "")
     if not token:
         raise ValueError("WEBSITE_RELEASE_TOKEN is required")
     # send() validates the HTTPS origin and refuses redirecting the bearer token.
     releases = json.loads(send(origin, "GET", "/download/catalog.json", ""))["releases"]
-    targets = select_targets(releases)
+    targets = select_targets(releases, None if legacy else channel)
     if not targets:
         if allow_empty:
             print("No Android release published yet")
@@ -86,19 +94,19 @@ def publish(origin, private_key, *, allow_empty=False):
     signer = Signer.from_priv_key_uri(f"file2:{private_key.resolve()}", root.signed.keys[keyid])
     with tempfile.TemporaryDirectory() as cache:
         try:
-            previous = previous_metadata(origin + "/repo/android/", root_bytes, Path(cache))
+            previous = previous_metadata(origin + repository, root_bytes, Path(cache))
         except ExpiredMetadataError:
             # Publisher recovery is allowed to renew expired, still-authentic
             # metadata. Clients continue to reject expired metadata normally.
-            previous = tuple(Metadata.from_bytes(send(origin, "GET", "/repo/android/metadata/" + role + ".json", ""))
+            previous = tuple(Metadata.from_bytes(send(origin, "GET", repository + "metadata/" + role + ".json", ""))
                              for role in ("targets", "snapshot", "timestamp"))
             for role, metadata in zip(("targets", "snapshot", "timestamp"), previous):
                 root.signed.verify_delegate(role, metadata.signed_bytes, metadata.signatures)
     files = signed_files(root_bytes, targets, signer, previous)
     payload = {"files": {name: base64.b64encode(data).decode("ascii") for name, data in files.items()}}
-    send(origin, "POST", "/ci/android-updates", token, json.dumps(payload).encode())
+    send(origin, "POST", "/ci/android-updates" + ("" if legacy else "/" + channel), token, json.dumps(payload).encode())
     for name, data in files.items():
-        if send(origin, "GET", "/repo/android/metadata/" + name, "") != data:
+        if send(origin, "GET", repository + "metadata/" + name, "") != data:
             raise RuntimeError("Published Android metadata does not match the signed snapshot")
     print("Published and verified Android update metadata")
 
@@ -107,6 +115,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--origin", default="https://pornfetch.to")
     parser.add_argument("--private-key", type=Path, required=True)
+    parser.add_argument("--channel", choices=("stable", "beta"), default="stable")
+    parser.add_argument("--legacy-feed", action="store_true")
     parser.add_argument("--allow-empty", action="store_true")
     args = parser.parse_args()
-    publish(args.origin, args.private_key, allow_empty=args.allow_empty)
+    publish(args.origin, args.private_key, allow_empty=args.allow_empty, channel=args.channel, legacy=args.legacy_feed)

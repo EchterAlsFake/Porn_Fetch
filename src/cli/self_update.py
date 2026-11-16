@@ -17,11 +17,13 @@ from pathlib import Path
 import certifi
 from platformdirs import user_cache_dir
 from rich.filesize import decimal
+from tuf.api.exceptions import DownloadHTTPError
 from tuf.api.metadata import TargetFile
 from tuf.ngclient import Updater
 from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
 from src.shared.release import release_time
+from src.shared.update_channels import eligible_channels, validate_release, version_parts
 
 from .terminal import make_download_progress, terminal_console
 
@@ -75,12 +77,6 @@ def target_name(system: str | None = None, machine: str | None = None) -> str:
     return f"{system}/{machine}.zip"
 
 
-def version_parts(version: str) -> tuple[int, ...]:
-    parts = version.split(".")
-    if not parts or not all(part.isdecimal() for part in parts):
-        raise ValueError(f"Invalid CLI update version: {version}")
-    return tuple(int(part) for part in parts)
-
 
 def _installation_path() -> Path:
     if not getattr(sys, "frozen", False):
@@ -104,12 +100,14 @@ def _safe_name(name: str) -> str:
     return name
 
 
-def _stage_bundle(archive: Path, destination: Path, expected_target: str, expected_version: str, executable: Path, expected_release: int | None = None) -> Path:
+def _stage_bundle(archive: Path, destination: Path, expected_target: str, expected_version: str, executable: Path, expected_release: int | None = None, expected_channel: str | None = None) -> Path:
     with zipfile.ZipFile(archive) as bundle:
         names = bundle.namelist()
         if len(names) != len(set(names)) or "manifest.json" not in names:
             raise ValueError("Invalid CLI update archive")
         manifest = json.loads(bundle.read("manifest.json"))
+        if expected_channel is not None and manifest.get("channel") != expected_channel:
+            raise ValueError("CLI archive channel does not match signed metadata")
         if expected_release is not None and manifest.get("release_timestamp") != expected_release:
             raise ValueError("CLI archive release date does not match signed metadata")
         files = manifest.get("files")
@@ -189,7 +187,7 @@ def apply_from_helper(stage_arg: str, executable_arg: str) -> int:
     return _apply_update(stage, executable)
 
 
-def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[], None] | None = None) -> int:
+def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[], None] | None = None, channel: str | None = None) -> int:
     try:
         from src.cli.settings import SettingsStore
         from src.shared.service_transport import ServiceFetcher
@@ -197,37 +195,46 @@ def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[
         build = json.loads(BUILD_FILE.read_text(encoding="utf-8"))
         current = build["version"]
         name = build.get("target") or target_name()
-        cache = Path(user_cache_dir("PornFetch")) / "cli-update"
-        metadata_dir = cache / "metadata"
-        target_dir = cache / "targets"
-        metadata_dir.mkdir(parents=True, exist_ok=True)
-        target_dir.mkdir(parents=True, exist_ok=True)
-        # Frozen OpenSSL can retain the build machine's CA paths. Use the
-        # bundled roots unless the user configured a certificate store.
+        selected = channel or settings.update_channel
         if getattr(sys, "frozen", False) and not (
             os.environ.get("SSL_CERT_FILE") or os.environ.get("SSL_CERT_DIR")
         ):
             os.environ["SSL_CERT_FILE"] = certifi.where()
-        fetcher = ServiceFetcher(settings)
-        updater = Updater(
-            metadata_dir=str(metadata_dir),
-            metadata_base_url=REPOSITORY_URL + "metadata/",
-            target_dir=str(target_dir),
-            target_base_url=REPOSITORY_URL + "targets/",
-            bootstrap=ROOT_FILE.read_bytes(),
-            fetcher=fetcher,
-        )
-        target = updater.get_targetinfo(name)
-        if target is None or not isinstance(target.custom, dict):
-            print(f"No signed CLI update is published for {name}.")
+        offers = []
+        for feed in eligible_channels(selected):
+            cache = Path(user_cache_dir("PornFetch")) / "cli-update" / feed
+            metadata_dir, target_dir = cache / "metadata", cache / "targets"
+            metadata_dir.mkdir(parents=True, exist_ok=True)
+            target_dir.mkdir(parents=True, exist_ok=True)
+            fetcher = ServiceFetcher(settings)
+            repository = (REPOSITORY_URL + feed + "/" if REPOSITORY_URL == UPDATE_REPO_URL + "/"
+                          else REPOSITORY_URL.replace("{channel}", feed))
+            updater = Updater(
+                metadata_dir=str(metadata_dir), metadata_base_url=repository + "metadata/",
+                target_dir=str(target_dir), target_base_url=repository + "targets/",
+                bootstrap=ROOT_FILE.read_bytes(), fetcher=fetcher,
+            )
+            try:
+                target = updater.get_targetinfo(name)
+            except DownloadHTTPError as error:
+                if error.status_code == 404:
+                    continue
+                raise
+            if target is not None:
+                validate_release(target.custom or {}, feed)
+                offers.append((target, updater, fetcher))
+        if not offers:
+            print(f"No signed CLI update is published for {name} on {selected}.")
             return 0
+        target, updater, fetcher = max(offers, key=lambda item: (
+            version_parts(item[0].custom["version"]), item[0].custom["channel"] == "stable"))
         latest = target.custom.get("version")
         if not isinstance(latest, str):
             raise ValueError("Signed CLI target has no version")
         if version_parts(latest) <= version_parts(current):
-            print(f"Porn Fetch CLI is up to date ({current}).")
+            print(f"No newer {selected} update is available (installed: {current}). Stable subscribers receive only newer Stable releases.")
             return 0
-        print(f"Porn Fetch CLI {latest} is available for {name} (installed: {current}).")
+        print(f"Porn Fetch CLI {latest} {target.custom['channel'].title()} is available for {name} (installed: {current} {build.get('channel', 'stable').title()}).")
         print(f"Download size: {decimal(target.length)}")
         released = release_time(target.custom.get("release_timestamp"))
         if check_only:
@@ -239,7 +246,7 @@ def run_self_update(*, check_only: bool, assume_yes: bool, on_staged: Callable[[
                 return 0
         archive = _download_update(updater, target, fetcher)
         stage = Path(tempfile.mkdtemp(prefix=".pornfetch-update-", dir=executable.parent))
-        _stage_bundle(archive, stage, name, latest, executable, released)
+        _stage_bundle(archive, stage, name, latest, executable, released, target.custom["channel"])
         helper = stage / ("pornfetch-update-helper.exe" if sys.platform == "win32" else "pornfetch-update-helper")
         shutil.copy2(executable, helper)
         if sys.platform != "win32":

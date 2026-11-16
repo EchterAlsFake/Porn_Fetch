@@ -639,6 +639,7 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Maintenance")
+                UpdateChannelSelector {}
                 ToggleRow { label: qsTr("Check for updates at startup"); value: appSettings.update_checks; onChanged: function(v) { appSettings.update_checks = v } }
                 ToggleRow { label: qsTr("Show a dialog when an update is available"); value: appSettings.update_prompts; onChanged: function(v) { appSettings.update_prompts = v } }
                 AppButton { Layout.fillWidth: true; text: qsTr("Check for app updates"); onClicked: backend.check_for_updates() }

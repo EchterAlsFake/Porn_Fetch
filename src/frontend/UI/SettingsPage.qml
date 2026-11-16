@@ -869,6 +869,7 @@ Pane {
                                 checked: appSettings.update_checks
                                 onToggled: appSettings.update_checks = checked
                             }
+                            UpdateChannelSelector { Layout.columnSpan: 2 }
                             AppButton {
                                 text: qsTr("Check for app updates")
                                 Layout.columnSpan: 2

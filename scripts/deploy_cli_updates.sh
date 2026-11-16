@@ -3,6 +3,13 @@ set -euo pipefail
 
 CLI_DIR="${1:-dist/cli_tuf}"
 
+CHANNEL="${2:-}"
+CHANNEL_HEADER=()
+if [[ -n "$CHANNEL" ]]; then
+  [[ "$CHANNEL" == stable || "$CHANNEL" == beta ]] || { echo "Invalid channel" >&2; exit 1; }
+  CHANNEL_HEADER=(-H "X-CI-Channel: $CHANNEL")
+fi
+
 if [[ ! -d "$CLI_DIR" ]]; then
   echo "Usage: $0 <path_to_cli_tuf_dir>" >&2
   exit 1
@@ -30,7 +37,7 @@ tar -czf "$BUNDLE_TAR" -C "$CLI_DIR" "${CONTENTS[@]}"
 
 echo "Uploading CLI updates to https://api.pornfetch.to/ci/deploy/cli..."
 curl -f -sS -X POST \
-  -H "X-CI-TOKEN: $CI_TOKEN" \
+  -H "X-CI-TOKEN: $CI_TOKEN" "${CHANNEL_HEADER[@]}" \
   -H "Content-Type: application/gzip" \
   --data-binary @"$BUNDLE_TAR" \
   https://api.pornfetch.to/ci/deploy/cli

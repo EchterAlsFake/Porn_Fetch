@@ -1,4 +1,4 @@
-"""Build signed, static TUF metadata and CLI update bundles for the beta server."""
+"""Build signed TUF metadata and CLI bundles for one update channel."""
 
 from __future__ import annotations
 
@@ -21,7 +21,8 @@ from tuf.ngclient import Updater
 from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.shared.version import RELEASE_TIMESTAMP
+from src.shared.update_channels import validate_channel, validate_release, version_parts
+from src.shared.version import BUILD_CHANNEL, RELEASE_TIMESTAMP
 
 ROOT_FILE = Path(__file__).resolve().parents[1] / "src/cli/update_root.json"
 ARTIFACT_TARGETS = {
@@ -78,12 +79,14 @@ def fetch_previous_metadata(remote_url: str, root_bytes: bytes, cache_dir: Path)
     )
 
 
-def create_bundle(artifact: Path, target_name: str, version: str, destination: Path) -> TargetFile:
+def create_bundle(artifact: Path, target_name: str, version: str, destination: Path, *, channel=BUILD_CHANNEL) -> TargetFile:
+    validate_channel(channel)
     binary = artifact / (artifact.name + (".exe" if target_name.startswith("windows/") else ""))
     if not binary.is_file():
         raise FileNotFoundError(f"CLI executable missing: {binary}")
     files = sorted(path for path in artifact.iterdir() if path.is_file() and not path.name.endswith(".sha256"))
     manifest = {"release_timestamp": RELEASE_TIMESTAMP, "version": version, "target": target_name, "executable": binary.name, "files": [path.name for path in files]}
+    manifest["channel"] = channel
     destination.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
         bundle.writestr("manifest.json", json.dumps(manifest, separators=(",", ":")))
@@ -94,12 +97,15 @@ def create_bundle(artifact: Path, target_name: str, version: str, destination: P
             with path.open("rb") as source, bundle.open(info, "w") as output:
                 shutil.copyfileobj(source, output)
     target = TargetFile.from_file(target_name, str(destination))
-    target.unrecognized_fields["custom"] = {"version": version, "release_timestamp": RELEASE_TIMESTAMP}
+    target.unrecognized_fields["custom"] = {"version": version, "release_timestamp": RELEASE_TIMESTAMP, "channel": channel}
     return target
 
 
 def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, private_key: Path, version: str | None,
-            *, allow_empty: bool = False, root_file: Path | None = None) -> None:
+            *, allow_empty: bool = False, root_file: Path | None = None, channel=BUILD_CHANNEL, legacy=False) -> None:
+    validate_channel(channel)
+    if legacy and artifact_dir is not None and channel != "stable":
+        raise ValueError("Only Stable builds can update the compatibility feed")
     root_bytes = (root_file or ROOT_FILE).read_bytes()
     root = Metadata[Root].from_bytes(root_bytes)
     online_keyid = root.signed.roles["targets"].keyids[0]
@@ -109,6 +115,9 @@ def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, privat
         previous = previous_metadata(remote_url, root_bytes, Path(temporary))
         old_targets, old_snapshot, old_timestamp = previous if previous else (None, None, None)
         targets = dict(old_targets.signed.targets) if old_targets else {}
+        if not legacy:
+            for target in targets.values():
+                validate_release(target.custom or {}, channel)
         new_files: list[tuple[Path, TargetFile]] = []
         if artifact_dir is not None:
             if not version:
@@ -118,13 +127,15 @@ def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, privat
                 if not artifact.is_dir() or target_name is None:
                     continue
                 existing = targets.get(target_name)
-                if existing and tuple(map(int, existing.custom["version"].split("."))) >= tuple(map(int, version.split("."))):
+                if existing and version_parts(existing.custom["version"]) >= version_parts(version):
+                    if legacy:
+                        continue  # Older clients wait until Stable overtakes their existing feed.
                     raise ValueError(f"Target version must increase: {target_name}")
                 archive = Path(temporary) / "bundles" / artifact.name
-                target = create_bundle(artifact, target_name, version, archive)
+                target = create_bundle(artifact, target_name, version, archive, channel=channel)
                 targets[target_name] = target
                 new_files.append((archive, target))
-            if not new_files:
+            if not new_files and not (legacy and targets):
                 raise ValueError("No recognized CLI artifact directories found; do not merge artifact downloads")
         if not targets:
             if allow_empty and artifact_dir is None:
@@ -180,8 +191,10 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--private-key", required=True, type=Path)
     parser.add_argument("--version", help="Monotonic application build version")
+    parser.add_argument("--channel", choices=("stable", "beta"), default=BUILD_CHANNEL)
+    parser.add_argument("--legacy-feed", action="store_true", help="Refresh the compatibility feed or publish a newer Stable bridge build")
     parser.add_argument("--allow-empty", action="store_true", help="Succeed if a scheduled refresh has no repository yet")
     parser.add_argument("--root-file", type=Path, default=ROOT_FILE, help="Local public trust anchor")
     args = parser.parse_args()
     publish(args.artifacts, args.remote_url, args.output, args.private_key, args.version,
-            allow_empty=args.allow_empty, root_file=args.root_file)
+            allow_empty=args.allow_empty, root_file=args.root_file, channel=args.channel, legacy=args.legacy_feed)
