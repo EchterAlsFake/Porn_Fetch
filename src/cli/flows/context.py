@@ -14,6 +14,7 @@ from ..accounts import AccountService
 from ..model_store import ModelStore
 from ..providers import ClientPool
 from ..settings import CliSettings, SettingsStore
+from ..terminal import terminal_console
 from ..tracker import close_cli_tracker
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,7 @@ class WizardContext:
         self.settings = settings
         configure_tor_transport(settings)
         self.settings_store = settings_store
-        self.console = console or Console()
+        self.console = console or terminal_console()
         self.model_store = model_store or ModelStore()
         config = self.settings.to_runtime_config()
         self.pool = pool or ClientPool(config)

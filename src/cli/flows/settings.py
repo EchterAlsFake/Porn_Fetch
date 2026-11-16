@@ -8,10 +8,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import questionary
-from rich.panel import Panel
-from rich.table import Table
-
 from src.database.installer import (
     DEFAULT_POCKETBASE_VERSION,
     check_system_path,
@@ -23,9 +19,11 @@ from src.licensing.service import rejection_notice
 from src.shared.media import quality_requires_premium
 from src.shared.tor_transport import ALL_TRAFFIC_NOTICE
 
-from ..settings import CliSettings
+from .. import prompts as questionary
+from ..settings import CliSettings, prompt_error_reporting_consent
+from ..terminal import Panel, Table
 from .context import WizardContext
-from .ui import WIZARD_STYLE, print_error, print_success
+from .ui import WIZARD_STYLE, print_error, print_screen, print_success
 
 SETTINGS_METADATA: dict[str, tuple[str, str]] = {
     # Video
@@ -70,16 +68,94 @@ SETTINGS_METADATA: dict[str, tuple[str, str]] = {
 }
 
 
+# Keys are unchanged. Internal consent fields remain visible but cannot be edited
+# independently of the disclosure that owns them.
+SETTINGS_METADATA.update({
+    "request_delay": ("Performance", "Delay between requests in seconds"),
+    "retry_initial_delay": ("Performance", "Initial retry delay in seconds"),
+    "retry_max_delay": ("Performance", "Maximum retry delay in seconds"),
+    "retry_multiplier": ("Performance", "Backoff multiplier between retries"),
+    "retry_jitter": ("Performance", "Random retry delay adjustment"),
+    "pages_concurrency": ("Performance", "Concurrent listing pages"),
+    "videos_concurrency": ("Performance", "Concurrent video metadata requests"),
+    "response_cache_mb": ("Cache", "Maximum response cache size in MB"),
+    "response_cache_ttl": ("Cache", "Response cache lifetime in seconds"),
+    "segment_cache_mb": ("Cache", "Maximum segment cache size in MB"),
+    "segment_cache_ttl": ("Cache", "Segment cache lifetime in seconds"),
+    "proxy_auth": ("Network", "Proxy authentication credentials; hidden in lists"),
+    "custom_ja3": ("Network", "Custom JA3 TLS fingerprint, empty to use impersonation"),
+    "interface": ("Network", "Network interface to bind, empty for automatic"),
+    "doh_endpoint": ("Network", "DNS-over-HTTPS resolver endpoint"),
+    "trust_environment": ("Network", "Use environment proxy and certificate settings"),
+    "encrypted_client_hello": ("Network", "Enable encrypted TLS ClientHello when supported"),
+    "error_reporting": ("Logging", "Choose Off, Basic or Full private error reports with the full disclosure"),
+    "error_reporting_full_traceback": ("Logging", "Full reports include tracebacks and video URLs; opens consent choices"),
+    "error_reporting_decided": ("Logging", "Read only: whether an explicit reporting choice has been saved"),
+    "error_reporting_consent_version": ("Logging", "Read only: disclosure version recorded with the reporting choice"),
+    "legacy_database_path": ("Database", "Legacy database path retained for configuration compatibility"),
+})
+for _key in ("metadata_export", "metadata_layout", "metadata_genres", "metadata_studio_fallback",
+             "jellyfin_url", "jellyfin_local_root", "jellyfin_server_root"):
+    SETTINGS_METADATA[_key] = ("Library export", SETTINGS_METADATA[_key][1])
+
+SETTING_NAMES = {
+    "quality": "Quality", "output_path": "Output folder", "path_template": "File naming",
+    "result_limit": "Result limit", "profile_video_mode": "Profile content",
+    "bandwidth_limit_mb": "Speed limit (MB/s)", "service_transport": "Tor routing",
+    "verify_ssl": "Verify certificates", "dns_over_https": "DNS over HTTPS",
+    "pocketbase_binary": "PocketBase executable", "pocketbase_data_path": "Database folder",
+    "error_reporting": "Automatic error reports", "error_reporting_full_traceback": "Detailed error reports",
+}
+READ_ONLY_SETTINGS = {"error_reporting_decided", "error_reporting_consent_version"}
+
+
+def setting_name(key: str) -> str:
+    return SETTING_NAMES.get(key, key.replace("_", " ").capitalize())
+
+
+def setting_value(settings: CliSettings, key: str) -> str:
+    value = getattr(settings, key)
+    if key in {"proxy_auth", "proxy"} and value:
+        return "Configured (hidden)"
+    if isinstance(value, bool):
+        return "On" if value else "Off"
+    return str(value) if value != "" else "Not set"
+
+
+async def choose_setting(ctx: WizardContext, category: str | None = None, default: str | None = None) -> str | None:
+    print_screen(ctx.console, "Settings", category or "Search all")
+    choices = []
+    for key, (group, description) in SETTINGS_METADATA.items():
+        if category and group != category:
+            continue
+        value = setting_value(ctx.settings, key)
+        if key == "quality" and not ctx.license_service.status.allowed and quality_requires_premium(str(ctx.settings.quality)):
+            value += " (Premium required)"
+        label = f"{setting_name(key)}: {value}"
+        # Keep values concise; the focused description retains the full value.
+        if len(label) > 64:
+            label = label[:61] + "..."
+        choices.append(questionary.Choice(
+            label, value=key,
+            description=f"{description}\n{group} / {key} | Current: {value}",
+        ))
+    choices.append(questionary.Choice("Back", value="__cancel__", description="Return to settings categories"))
+    return await questionary.select(
+        "Select a setting to modify:", choices=choices, searchable=True, default=default, style=WIZARD_STYLE,
+    ).ask_async()
+
+
 async def handle_pocketbase_install_flow(ctx: WizardContext) -> Path | None:
     """Check PATH or auto-download PocketBase and update settings."""
     path_binary = check_system_path()
     if path_binary:
+        ctx.console.print(f"PocketBase detected: {path_binary}", markup=False)
         choice = await questionary.select(
-            f"PocketBase was detected on PATH:\n  [bold cyan]{path_binary}[/]\nWhat would you like to do?",
+            "Choose a PocketBase executable:",
             choices=[
-                questionary.Choice("✅ Use detected system PATH binary", value="use_path"),
-                questionary.Choice("📥 Download & install dedicated binary", value="download"),
-                questionary.Choice("🔙 Cancel", value="cancel"),
+                questionary.Choice("Use detected system PATH binary", value="use_path"),
+                questionary.Choice("Download & install dedicated binary", value="download"),
+                questionary.Choice("Cancel", value="cancel"),
             ],
             style=WIZARD_STYLE,
         ).ask_async()
@@ -138,44 +214,36 @@ async def handle_pocketbase_install_flow(ctx: WizardContext) -> Path | None:
 
 
 async def handle_settings(ctx: WizardContext) -> None:
-    """Display configuration table, allow inline editing, and persist changes."""
+    """Browse categories and edit through the existing validation/save path."""
+    category = None
+    focused = None
+    selected_keys = {}
     while True:
-        action = await questionary.select(
-            "Settings & Configuration:",
-            choices=[
-                questionary.Choice("📄 View All Settings", value="view"),
-                questionary.Choice("✏️  Modify a Setting", value="edit"),
-                questionary.Choice("📦 Auto-Install / Detect PocketBase", value="install_pb"),
-                questionary.Choice("🔄 Reset to Default Settings", value="reset"),
-                questionary.Choice("🔙 Back to Main Menu", value="back"),
-            ],
-            style=WIZARD_STYLE,
-        ).ask_async()
-
-        if not action or action == "back":
-            break
+        if category is None:
+            print_screen(ctx.console, "Settings")
+        categories = list(dict.fromkeys(group for group, _ in SETTINGS_METADATA.values()))
+        choices = [questionary.Choice("Search all settings", value="edit")]
+        choices.extend(questionary.Choice(group, value=group) for group in categories)
+        choices.extend([
+            questionary.Separator("Administration"),
+            questionary.Choice("Install or detect PocketBase", value="install_pb"),
+            questionary.Choice("Reset settings to defaults", value="reset"),
+            questionary.Choice("Back", value="back"),
+        ])
+        if category is None:
+            action = await questionary.select(
+                "Settings & Configuration:", choices=choices, default=focused, style=WIZARD_STYLE,
+            ).ask_async()
+            if not action or action == "back":
+                break
+            focused = action
+        else:
+            action = category
 
         if action == "install_pb":
             await handle_pocketbase_install_flow(ctx)
             continue
-
-        if action == "view":
-            table = Table(title="Configuration Settings", border_style="#00e5ff", header_style="bold #ff2a85")
-            table.add_column("Category", style="bold cyan")
-            table.add_column("Setting", style="bold white")
-            table.add_column("Value", style="bold green")
-            table.add_column("Description", style="dim")
-
-            has_premium = ctx.license_service.status.allowed
-            for name, (category, desc) in SETTINGS_METADATA.items():
-                val = getattr(ctx.settings, name, "")
-                val_str = str(val)
-                if name == "quality" and not has_premium and quality_requires_premium(val_str):
-                    val_str = f"{val_str} [bold yellow](Locked: Free tier <=720p)[/]"
-                table.add_row(category, name, val_str, desc)
-            ctx.console.print(table)
-
-        elif action == "reset":
+        if action == "reset":
             confirm = await questionary.confirm("Reset all settings to defaults?", default=False, style=WIZARD_STYLE).ask_async()
             if confirm:
                 defaults = CliSettings()
@@ -183,30 +251,31 @@ async def handle_settings(ctx: WizardContext) -> None:
                 ctx.settings = defaults
                 await ctx.refresh_pool()
                 print_success(ctx.console, "Reset Settings", "Settings restored to defaults.")
+            continue
 
-        elif action == "edit":
-            has_premium = ctx.license_service.status.allowed
-            choices = []
-            for name, (category, desc) in SETTINGS_METADATA.items():
-                current_val = getattr(ctx.settings, name)
-                tag = ""
-                if name == "quality" and not has_premium and quality_requires_premium(str(current_val)):
-                    tag = " (Locked: >720p requires license)"
-                choices.append(questionary.Choice(
-                    f"[{category}] {name} = {current_val}{tag}",
-                    value=name,
-                ))
-            choices.append(questionary.Choice("🔙 Cancel", value="__cancel__"))
-
-            target_setting = await questionary.select(
-                "Select a setting to modify:",
-                choices=choices,
-                style=WIZARD_STYLE,
-            ).ask_async()
-
+        if action == "edit" or action in categories:
+            category = action if action in categories else None
+            target_setting = await choose_setting(ctx, category, selected_keys.get(category))
             if not target_setting or target_setting == "__cancel__":
+                category = None
                 continue
-
+            selected_keys[category] = target_setting
+            if target_setting in READ_ONLY_SETTINGS:
+                ctx.console.print("[dim]This value is managed by the reporting consent choice.[/]")
+                continue
+            if target_setting in {"error_reporting", "error_reporting_full_traceback"}:
+                previous = ctx.settings
+                updated = await prompt_error_reporting_consent(
+                    ctx.settings.overridden(error_reporting_decided=False), ctx.settings_store, console=ctx.console,
+                )
+                if updated.error_reporting_decided:
+                    ctx.settings = updated
+                    await ctx.refresh_pool()
+                else:
+                    ctx.settings = previous
+                continue
+            print_screen(ctx.console, "Settings", category or "Search all", setting_name(target_setting))
+            ctx.console.print(SETTINGS_METADATA[target_setting][1], markup=False)
             current_val = getattr(ctx.settings, target_setting)
             new_val: Any = None
 
@@ -243,7 +312,7 @@ async def handle_settings(ctx: WizardContext) -> None:
                     req_prem = quality_requires_premium(q)
                     is_locked = req_prem and not has_premium
                     disabled_msg = "Locked: Requires License" if is_locked else None
-                    title = f"🎬 {q}p" if q.isdigit() else f"🌟 {q}"
+                    title = f"{q}p" if q.isdigit() else q
                     quality_choices.append(questionary.Choice(
                         title=title,
                         value=q,
@@ -275,7 +344,7 @@ async def handle_settings(ctx: WizardContext) -> None:
             elif target_setting == "ip_preference":
                 new_val = await questionary.select("Select IP preference:", choices=["auto", "ipv4", "ipv6"], default=current_val, style=WIZARD_STYLE).ask_async()
             elif target_setting == "log_level":
-                new_val = await questionary.select("Select log level:", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default=current_val, style=WIZARD_STYLE).ask_async()
+                new_val = await questionary.select("Select log level:", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default=current_val, style=WIZARD_STYLE).ask_async()
             elif isinstance(current_val, int):
                 raw = await questionary.text(
                     f"Enter new integer value for {target_setting}:",
@@ -298,10 +367,10 @@ async def handle_settings(ctx: WizardContext) -> None:
                 pb_action = await questionary.select(
                     "PocketBase binary configuration:",
                     choices=[
-                        questionary.Choice("🚀 Auto-detect or Auto-install", value="auto"),
-                        questionary.Choice("✏️  Enter custom path manually", value="manual"),
-                        questionary.Choice("🔄 Clear (use auto-detect)", value="clear"),
-                        questionary.Choice("🔙 Cancel", value="cancel"),
+                        questionary.Choice("Auto-detect or Auto-install", value="auto"),
+                        questionary.Choice("Enter custom path manually", value="manual"),
+                        questionary.Choice("Clear (use auto-detect)", value="clear"),
+                        questionary.Choice("Cancel", value="cancel"),
                     ],
                     style=WIZARD_STYLE,
                 ).ask_async()
@@ -321,8 +390,8 @@ async def handle_settings(ctx: WizardContext) -> None:
                 else:
                     continue
             else:
-                raw = await questionary.text(
-                    f"Enter new value for {target_setting}:",
+                raw = await (questionary.password if target_setting == "proxy_auth" else questionary.text)(
+                    f"Enter new value for {setting_name(target_setting)}:",
                     default=str(current_val),
                     style=WIZARD_STYLE,
                 ).ask_async()
@@ -345,7 +414,7 @@ async def handle_settings(ctx: WizardContext) -> None:
                     ctx.settings_store.save(updated)
                     ctx.settings = updated
                     await ctx.refresh_pool()
-                    print_success(ctx.console, "Setting Updated", f"Set [bold cyan]{target_setting}[/] = [bold white]{new_val}[/]")
+                    print_success(ctx.console, "Setting Updated", f"{setting_name(target_setting)}: {setting_value(ctx.settings, target_setting)}")
                 except Exception as error:
                     print_error(ctx.console, "Validation Error", str(error))
 
@@ -356,6 +425,7 @@ async def handle_settings(ctx: WizardContext) -> None:
 
 async def handle_license_management(ctx: WizardContext) -> None:
     """Check license validity, import schema-2 keys/files, and deactivate."""
+    print_screen(ctx.console, "License")
     ctx.console.print(
         "[cyan]Lifetime Premium:[/] Buy once, use forever. EUR 29.99 at https://pornfetch.to/porn_fetch. "
         "Import the license file here.\n"
@@ -364,23 +434,25 @@ async def handle_license_management(ctx: WizardContext) -> None:
         "with up to 7 days offline after a successful check. If I permanently close the licensing service, "
         "I will provide an offline unlock before closure so existing buyers can continue using Premium.[/dim]"
     )
+    focused = None
     while True:
         action = await questionary.select(
             "License Management:",
             choices=[
-                questionary.Choice("🔍 Check / Refresh License Status", value="check"),
-                questionary.Choice("📥 Import License Key / File", value="import"),
-                questionary.Choice("⚠️  Deactivate Current License (frees 1 of 10 machine seats)", value="deactivate"),
-                questionary.Choice("🔙 Back to Main Menu", value="back"),
+                questionary.Choice("Check / Refresh License Status", value="check"),
+                questionary.Choice("Import License Key / File", value="import"),
+                questionary.Choice("Deactivate Current License (frees 1 of 10 machine seats)", value="deactivate"),
+                questionary.Choice("Back to Main Menu", value="back"),
             ],
-            style=WIZARD_STYLE,
+            default=focused, style=WIZARD_STYLE,
         ).ask_async()
+        focused = action
 
         if not action or action == "back":
             break
 
         if action == "check":
-            with ctx.console.status("[bold green]Checking license status with server...[/]", spinner="dots"):
+            with ctx.console.status("[bold cyan]Checking license status with server...[/]", spinner="dots"):
                 status = await ctx.check_license(force=True)
 
             license_expiry_str = "-"
@@ -428,7 +500,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
                 continue
             path_or_key = path_or_key.strip()
 
-            with ctx.console.status("[bold green]Importing and verifying license...[/]", spinner="dots"):
+            with ctx.console.status("[bold cyan]Importing and verifying license...[/]", spinner="dots"):
                 try:
                     if len(path_or_key) < 240 and not path_or_key.startswith(("key/", "{")) and Path(path_or_key).is_file():
                         status = await ctx.license_service.import_file(path_or_key)
@@ -457,7 +529,7 @@ async def handle_license_management(ctx: WizardContext) -> None:
             if not confirm:
                 continue
 
-            with ctx.console.status("[bold green]Deactivating license...[/]", spinner="dots"):
+            with ctx.console.status("[bold cyan]Deactivating license...[/]", spinner="dots"):
                 try:
                     status = await ctx.license_service.deactivate()
                     print_success(ctx.console, "License Deactivated", f"State: {status.state}\n{ctx.license_service.reason}")

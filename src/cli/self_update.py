@@ -16,22 +16,14 @@ from pathlib import Path
 
 import certifi
 from platformdirs import user_cache_dir
-from rich.console import Console
 from rich.filesize import decimal
-from rich.progress import (
-    BarColumn,
-    DownloadColumn,
-    Progress,
-    TaskProgressColumn,
-    TextColumn,
-    TimeRemainingColumn,
-    TransferSpeedColumn,
-)
 from tuf.api.metadata import TargetFile
 from tuf.ngclient import Updater
 from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
 
 from src.shared.release import release_time
+
+from .terminal import make_download_progress, terminal_console
 
 UPDATE_REPO_URL = "https://api.pornfetch.to/repo/cli"
 REPOSITORY_URL = os.environ.get("PORNFETCH_CLI_UPDATE_REPO_URL", UPDATE_REPO_URL).rstrip("/") + "/"
@@ -53,16 +45,8 @@ class _ProgressFetcher(Urllib3Fetcher):
 
 
 def _download_update(updater: Updater, target: TargetFile, fetcher: _ProgressFetcher) -> Path:
-    with Progress(
-        TextColumn("[bold cyan]Downloading update[/]"),
-        BarColumn(),
-        TaskProgressColumn(),
-        DownloadColumn(),
-        TransferSpeedColumn(),
-        TimeRemainingColumn(),
-        console=Console(stderr=True),
-    ) as progress:
-        task = progress.add_task("update", total=target.length)
+    with make_download_progress(terminal_console(stderr=True)) as progress:
+        task = progress.add_task("Downloading update", total=target.length, unit="bytes")
         fetcher.on_chunk = lambda size: progress.advance(task, size)
         try:
             return Path(updater.download_target(target))

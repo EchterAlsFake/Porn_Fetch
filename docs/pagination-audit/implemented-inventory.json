@@ -1,0 +1,632 @@
+[
+  {
+    "source": "unofficial-api-for-bellesa/bellesa_api/api.py",
+    "methods": [
+      {
+        "method": "_listing",
+        "line": 69,
+        "signature": "core, url, cls, kind, *, pages=1, start_page=1, iterator_config=None"
+      },
+      {
+        "method": "Video.related_videos",
+        "line": 256,
+        "signature": "self, *, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Channel.videos",
+        "line": 316,
+        "signature": "self, *, sort: Sort | str=Sort.RECENT, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Performer.videos",
+        "line": 381,
+        "signature": "self, *, sort: Sort | str=Sort.RECENT, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Category.videos",
+        "line": 436,
+        "signature": "self, *, sort: Sort | str=Sort.RECENT, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.get_videos",
+        "line": 507,
+        "signature": "self, *, sort: Sort | str=Sort.RECENT, categories: Sequence[str]=(), channels: Sequence[str]=(), performers: Sequence[str]=(), tags: Sequence[str]=(), min_duration: int | None=None, max_duration: int | None=None, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.get_performers",
+        "line": 562,
+        "signature": "self, *, gender: Literal['female', 'male', 'all']='female', pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.search",
+        "line": 586,
+        "signature": "self, query: str, *, kind: Literal['video', 'performer', 'channel']='video', sort: Sort | str=Sort.RELEVANCE, pages: PageCount=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-empflix/empflix_api/api.py",
+    "methods": [
+      {
+        "method": "BaseProfileChannel.videos",
+        "line": 390,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 710,
+        "signature": "self, query: str, sorting_sort: str | Sort=Sort.Sort_relevance, sorting_date: str | SortDate=SortDate.Sort_all, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-eporner/eporner_api/api.py",
+    "methods": [
+      {
+        "method": "BaseProfile.videos",
+        "line": 397,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 707,
+        "signature": "self, query: str, sorting_gay: str | Gay=Gay.include_gay_content, sorting_order: str | Order=Order.latest, sorting_low_quality: str | LowQuality=LowQuality.include_low_quality_content, per_page: int=30, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_videos_by_category",
+        "line": 757,
+        "signature": "self, category: str | Category, iterator_config=None, *, pages=1, start_page=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-porn/porn_api/api.py",
+    "methods": [
+      {
+        "method": "Collection.videos",
+        "line": 315,
+        "signature": "self, *, pages: int | Literal['all']=1, start_page: int=1, filters: Filters | None=None, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "_listing",
+        "line": 410,
+        "signature": "core, url, constructor, extractor, *, pages=1, start_page=1, iterator_config=None"
+      },
+      {
+        "method": "Client.search",
+        "line": 545,
+        "signature": "self, query: str, *, pages: int | Literal['all']=1, start_page: int=1, filters: Filters | None=None, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.pornstars",
+        "line": 570,
+        "signature": "self, *, pages=1, start_page=1, iterator_config=None"
+      },
+      {
+        "method": "Client.channels",
+        "line": 582,
+        "signature": "self, *, pages=1, start_page=1, iterator_config=None"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-porndoe/porndoe_api/api.py",
+    "methods": [
+      {
+        "method": "_listing",
+        "line": 62,
+        "signature": "core, url, constructor, extractor, pages, iterator_config, start_page=1"
+      },
+      {
+        "method": "BaseChannelPornstar.videos",
+        "line": 212,
+        "signature": "self, pages: int | str=1, sorting_sort: str | Sort | None=None, iterator_config: IteratorConfig | None=None, start_page: int=1"
+      },
+      {
+        "method": "Pornstar.get_channels",
+        "line": 247,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "Channel.get_pornstars",
+        "line": 271,
+        "signature": "self, gender: str='female', pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Category.videos",
+        "line": 314,
+        "signature": "self, pages: int | str=1, sorting_sort: str | Sort | None=None, iterator_config: IteratorConfig | None=None, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 374,
+        "signature": "self, query: str, sorting_sort: str | Sort=Sort.Sort_relevance, pages: int | str=1, iterator_config: IteratorConfig | None=None, start_page: int=1"
+      },
+      {
+        "method": "Client.get_videos",
+        "line": 396,
+        "signature": "self, url: str=BASE_URL + '/videos', pages: int | str=1, sorting_sort: str | Sort | None=None, iterator_config: IteratorConfig | None=None, start_page: int=1"
+      },
+      {
+        "method": "Client.get_pornstars",
+        "line": 418,
+        "signature": "self, pages: int | str=1, sorting_sort: str | SortPornstar=SortPornstar.Sort_famous, iterator_config: IteratorConfig | None=None, gender: str | None=None, country: str | None=None, start_page: int=1"
+      },
+      {
+        "method": "Client.get_channels",
+        "line": 444,
+        "signature": "self, pages: int | str=1, sorting_sort: str | SortChannel=SortChannel.Sort_ranking, iterator_config: IteratorConfig | None=None, section: str='', start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-pornhat/pornhat_api/api.py",
+    "methods": [
+      {
+        "method": "_listing",
+        "line": 50,
+        "signature": "core, url, constructor, extractor, *, pages, start_page, iterator_config"
+      },
+      {
+        "method": "Collection.videos",
+        "line": 330,
+        "signature": "self, *, pages: int | Literal['all']=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.search",
+        "line": 419,
+        "signature": "self, query: str, *, pages: int | Literal['all']=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.get_videos",
+        "line": 441,
+        "signature": "self, *, sort: Sort=Sort.NEW, pages: int | Literal['all']=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client._profiles",
+        "line": 462,
+        "signature": "self, kind, *, sort, letter, pages, start_page, iterator_config"
+      },
+      {
+        "method": "Client.get_models",
+        "line": 490,
+        "signature": "self, *, sort: ProfileSort=ProfileSort.RANK, letter: str | None=None, pages: int | Literal['all']=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.get_channels",
+        "line": 509,
+        "signature": "self, *, sort: ProfileSort=ProfileSort.RANK, letter: str | None=None, pages: int | Literal['all']=1, start_page: int=1, iterator_config: IteratorConfig | None=None"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-pornhub/pornhub_api/api.py",
+    "methods": [
+      {
+        "method": "UserHelper.get_videos",
+        "line": 649,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "UserHelper.get_uploads",
+        "line": 677,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "UserHelper.get_gifs",
+        "line": 705,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "Album.get_photos",
+        "line": 1142,
+        "signature": "self, pages: int | str=1, *, start_page=1"
+      },
+      {
+        "method": "Channel.get_videos",
+        "line": 2204,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "Playlist.get_videos",
+        "line": 2594,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_recommended",
+        "line": 3185,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_history",
+        "line": 3197,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_favorites",
+        "line": 3209,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_feed",
+        "line": 3221,
+        "signature": "self, section: str='videos', pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_subscriptions",
+        "line": 3237,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_recommended",
+        "line": 3344,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_history",
+        "line": 3371,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_favorites",
+        "line": 3399,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_feed",
+        "line": 3427,
+        "signature": "self, section: str='videos', pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_subscriptions",
+        "line": 3454,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_gifs",
+        "line": 3539,
+        "signature": "self, query: str, category: Literal['gay', 'transgender'] | None=None, search_filter: Literal['mr', 'mv', 'tr'] | None=None, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 3571,
+        "signature": "self, query: str, production_type: Literal['professional', 'homemade'] | None=None, sort_by: Literal['mr', 'mv', 'tr'] | None=None, duration_min: Literal['10', '20', '30'] | None=None, duration_max: Literal['10', '20', '30'] | None=None, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_hubtraffic",
+        "line": 3609,
+        "signature": "self, query: str, category: str | None=None, sort_by: Literal['newest', 'mostviewed', 'rating'] | None=None, period: Literal['weekly', 'monthly', 'alltime'] | None=None, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-porntrex/porntrex_api/api.py",
+    "methods": [
+      {
+        "method": "ChannelModelHelper.videos",
+        "line": 366,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 437,
+        "signature": "self, query: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-redgifs/redgifs_api/api.py",
+    "methods": [
+      {
+        "method": "User.videos",
+        "line": 228,
+        "signature": "self, *, pages: int | Literal['all']=1, start_page: int=1, count: int=40, sort: ProfileSort | str=ProfileSort.NEW, tags: list[str] | None=None, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "User.images",
+        "line": 250,
+        "signature": "self, *, pages=1, start_page=1, count=40, iterator_config=None"
+      },
+      {
+        "method": "User.collections",
+        "line": 264,
+        "signature": "self, *, pages=1, start_page=1, count=40, iterator_config=None"
+      },
+      {
+        "method": "Niche.videos",
+        "line": 312,
+        "signature": "self, *, pages=1, start_page=1, count=40, sort='new', iterator_config=None"
+      },
+      {
+        "method": "Collection.items",
+        "line": 355,
+        "signature": "self, *, pages=1, start_page=1, count=40, iterator_config=None"
+      },
+      {
+        "method": "_listing",
+        "line": 393,
+        "signature": "api, path, kind, params, pages, start_page, iterator_config, *, key='gifs', mixed=False"
+      },
+      {
+        "method": "Client.search",
+        "line": 510,
+        "signature": "self, query: str='', *, tags: list[str] | None=None, sort: Sort | str=Sort.TRENDING, pages=1, start_page=1, count=40, verified=False, iterator_config=None"
+      },
+      {
+        "method": "Client.search_images",
+        "line": 540,
+        "signature": "self, query='', *, tags=None, pages=1, start_page=1, count=40, iterator_config=None"
+      },
+      {
+        "method": "Client.search_users",
+        "line": 567,
+        "signature": "self, query='', *, pages=1, start_page=1, count=40, verified=False, iterator_config=None"
+      },
+      {
+        "method": "Client.get_niches",
+        "line": 589,
+        "signature": "self, *, pages=1, start_page=1, count=40, iterator_config=None"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-redtube/redtube_api/api.py",
+    "methods": [
+      {
+        "method": "Playlist.get_videos",
+        "line": 620,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "UserHelper.get_videos",
+        "line": 776,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "User.get_videos",
+        "line": 802,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "User.get_playlists",
+        "line": 808,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 940,
+        "signature": "self, query: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "_user_videos",
+        "line": 966,
+        "signature": "owner, pages, start_page, iterator_config"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-spankbang/spankbang_api/api.py",
+    "methods": [
+      {
+        "method": "PornstarHelper.videos",
+        "line": 173,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 514,
+        "signature": "self, query, filter: Literal['trending', 'new', 'featured', 'popular'] | None=None, quality: Literal['hd', 'fhd', 'uhd'] | None=None, duration: Literal['10', '20', '40'] | None=None, date: Literal['d', 'w', 'm', 'y'] | None=None, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-thumbzilla/thumbzilla_api/api.py",
+    "methods": [
+      {
+        "method": "Playlist.get_videos",
+        "line": 373,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "UserHelper.get_videos",
+        "line": 508,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, iterator_configuration: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 653,
+        "signature": "self, query: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, iterator_configuration: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-tnaflix/tnaflix_api/api.py",
+    "methods": [
+      {
+        "method": "BaseProfileChannel.videos",
+        "line": 390,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 708,
+        "signature": "self, query: str, sorting_sort: str | Sort=Sort.Sort_relevance, sorting_date: str | SortDate=SortDate.Sort_all, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-tube8/tube8_api/api.py",
+    "methods": [
+      {
+        "method": "UserHelper.get_videos",
+        "line": 427,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "User.get_videos",
+        "line": 453,
+        "signature": "self, pages: int | str=1, iterator_config=None, *, start_page=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 631,
+        "signature": "self, query: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "_user_videos",
+        "line": 658,
+        "signature": "owner, pages, start_page, iterator_config"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-xfreehd/xfreehd_api/api.py",
+    "methods": [
+      {
+        "method": "Album.get_all_images",
+        "line": 445,
+        "signature": "self, pages: int | str='all', *, start_page=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 490,
+        "signature": "self, query: str, pages: int | str=1, sort_by: str | None=None, time_frame: str | None=None, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-xhamster/xhamster_api/api.py",
+    "methods": [
+      {
+        "method": "Something.videos",
+        "line": 213,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Something.get_shorts",
+        "line": 239,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_liked_videos",
+        "line": 286,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_account_playlist",
+        "line": 313,
+        "signature": "self, url: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 938,
+        "signature": "self, query: str, minimum_quality: Literal['720p', '1080p', '2160p']='720p', sort_by: Literal['views', 'newest', 'best', 'longest'] | None=None, category: Literal['german', 'amateur', '18-year-old', 'granny', 'anal', 'old-young', 'mature', 'mom', 'milf', 'big-tits', 'big-natural-tits', 'lesbian', 'teen', 'cum-in-mouth', 'bdsm', 'porn-for-women', 'russian', 'vintage', 'hairy', 'brutal-sex'] | list[str] | None=None, vr: bool=False, full_length_only: bool=False, min_duration: Literal['2', '5', '10', '30', '40'] | None=None, date: Literal['latest', 'weekly', 'monthly', 'yearly'] | None=None, production: Literal['studios', 'creators'] | None=None, fps: Literal['30', '60'] | None=None, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-xnxx/xnxx_api/api.py",
+    "methods": [
+      {
+        "method": "User.videos",
+        "line": 295,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 357,
+        "signature": "self, query: str, pages: int | str=1, mode: Mode | str='', upload_time: UploadTime | str='', length: Length | str='', searching_quality: SearchingQuality | str='', iterator_config=None, *, start_page=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-xvideos/xvideos_api/api.py",
+    "methods": [
+      {
+        "method": "Account.get_recommended_videos",
+        "line": 88,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_liked_videos",
+        "line": 112,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Account.get_watch_later_videos",
+        "line": 136,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "BaseChannelPornstar.videos",
+        "line": 568,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search",
+        "line": 662,
+        "signature": "self, query: str, sorting_sort: str | Sort=Sort.Sort_relevance, sorting_date: str | SortDate=SortDate.Sort_all, sorting_time: str | SortVideoTime=SortVideoTime.Sort_all, sort_quality: str | SortQuality=SortQuality.Sort_all, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.get_playlist",
+        "line": 705,
+        "signature": "self, url: str, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-youjizz/youjizz_api/api.py",
+    "methods": [
+      {
+        "method": "bounds",
+        "line": 56,
+        "signature": "start_page, pages"
+      },
+      {
+        "method": "video_stream",
+        "line": 79,
+        "signature": "core, url, *, pages=1, start_page=1, iterator_config=None"
+      },
+      {
+        "method": "Collection.videos",
+        "line": 264,
+        "signature": "self, pages=1, *, start_page=1, iterator_config=None"
+      },
+      {
+        "method": "User.videos",
+        "line": 333,
+        "signature": "self, pages=1, *, start_page=1, sort=Sort.NEWEST, iterator_config=None"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 410,
+        "signature": "self, query: str, pages=1, *, start_page=1, sort=Sort.RELEVANCE, duration=Duration.ANY, phrase=Phrase.ALL, title_only=False, date_from: date | None=None, date_to: date | None=None, iterator_config: IteratorConfig | None=None"
+      },
+      {
+        "method": "Client.videos",
+        "line": 460,
+        "signature": "self, listing=Listing.POPULAR, pages=1, *, start_page=1, iterator_config=None"
+      }
+    ]
+  },
+  {
+    "source": "unofficial-api-for-youporn/youporn_api/api.py",
+    "methods": [
+      {
+        "method": "BaseProfile.videos",
+        "line": 157,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Collection.videos",
+        "line": 296,
+        "signature": "self, pages: int | str=1, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      },
+      {
+        "method": "Client.search_videos",
+        "line": 761,
+        "signature": "self, query: str, pages: int | str=1, filter_relevance: Literal['views', 'rating', 'date', 'duration'] | None=None, filter_duration_minimum: Literal['10', '20', '30', '40', '50', '60'] | None=None, filter_duration_maximum: Literal['10', '20', '30', '40', '50', '60'] | None=None, filter_resolution: Literal['VR', 'HD'] | None=None, iterator_config: IteratorConfig | None=None, *, start_page: int=1"
+      }
+    ]
+  }
+]

@@ -245,14 +245,14 @@ async def prompt_error_reporting_consent(
     ):
         return settings
 
-    import questionary
-    from rich.console import Console
-    from rich.panel import Panel
     from rich.text import Text
 
     from src.shared.error_reporting import ERROR_REPORT_DISCLOSURE, ERROR_REPORT_EXAMPLE
 
-    output = console or Console()
+    from . import prompts as questionary
+    from .terminal import Panel, terminal_console
+
+    output = console or terminal_console()
     output.print(Panel(
         Text(ERROR_REPORT_DISCLOSURE),
         title="[bold cyan]Optional automatic error reports[/]",

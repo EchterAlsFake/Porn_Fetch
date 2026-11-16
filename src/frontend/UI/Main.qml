@@ -397,6 +397,13 @@ ApplicationWindow {
                     ToolTip.visible: hovered
                     ToolTip.text: Accessible.name
                 }
+                TabButton {
+                    objectName: "creatorsTab"
+                    text: qsTr("Creators")
+                    Accessible.name: qsTr("Creator library")
+                    onClicked: Qt.callLater(function() { creatorsPage.focusInitial() })
+                }
+
 
             }
             NotificationPanel {
@@ -443,6 +450,7 @@ ApplicationWindow {
 
             }
             DownloadManagerPage {}
+            CreatorsPage { id: creatorsPage }
         }
     }
 }

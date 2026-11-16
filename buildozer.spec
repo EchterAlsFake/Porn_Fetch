@@ -9,7 +9,7 @@ package.domain = to.pornfetch
 source.dir = /home/asuna/PycharmProjects/Porn_Fetch
 source.include_exts = py,png,jpg,qml,js,json,txt,rcc
 version = 3.9.0
-requirements = python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cffi==2.1.1,charset-normalizer,chompjs,openssl==3.5.9,cryptography==50.0.2,curl_cffi==0.17.0,eaf_base_api,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg>=1.7.5,unofficial-api-for-bellesa>=1.0.1,unofficial-api-for-eporner>=2.5.4,unofficial-api-for-porn>=0.1.0,unofficial-api-for-porndoe>=1.0.2,unofficial-api-for-pornhat,unofficial-api-for-pornhub>=5.4.9,unofficial-api-for-porntrex,unofficial-api-for-redgifs,unofficial-api-for-redtube,unofficial-api-for-spankbang,unofficial-api-for-thumbzilla,unofficial-api-for-tube8,unofficial-api-for-xfreehd,unofficial-api-for-xhamster,unofficial-api-for-xnxx>=2.4.5,unofficial-api-for-xvideos>=2.5.4,unofficial-api-for-youporn>=1.8.4,unofficial-api-for-youjizz>=0.1.0,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3,unofficial-api-for-empflix,unofficial-api-for-tnaflix,PyJWT
+requirements = python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cffi==2.1.1,charset-normalizer,chompjs,openssl==3.5.9,cryptography==50.0.2,curl_cffi==0.17.0,eaf_base_api>=4.3.0,filelock,idna,m3u8,markdown-it-py,python-dateutil,selectolax,unofficial-api-for-beeg>=1.7.5,unofficial-api-for-bellesa>=1.1.0,unofficial-api-for-eporner>=3.0.0,unofficial-api-for-porn>=0.2.0,unofficial-api-for-porndoe>=2.0.0,unofficial-api-for-pornhat>=0.2.0,unofficial-api-for-pornhub>=6.0.0,unofficial-api-for-porntrex>=2.0.0,unofficial-api-for-redgifs>=1.1.0,unofficial-api-for-redtube>=2.0.0,unofficial-api-for-spankbang>=3.0.0,unofficial-api-for-thumbzilla>=2.0.0,unofficial-api-for-tube8>=2.0.0,unofficial-api-for-xfreehd>=2.0.0,unofficial-api-for-xhamster>=3.0.0,unofficial-api-for-xnxx>=3.0.0,unofficial-api-for-xvideos>=3.0.0,unofficial-api-for-youporn>=2.0.0,unofficial-api-for-youjizz>=0.2.0,cachetools,tenacity,json5,six,platformdirs,tuf,securesystemslib,urllib3,unofficial-api-for-empflix>=2.0.0,unofficial-api-for-tnaflix>=2.0.0,PyJWT
 orientation = portrait, landscape
 android.manifest.orientation = unspecified
 fullscreen = 0
@@ -31,7 +31,7 @@ p4a.commit = HEAD
 android.permissions = android.permission.INTERNET, android.permission.ACCESS_NETWORK_STATE, android.permission.WRITE_EXTERNAL_STORAGE
 p4a.extra_args = --qt-libs=Core,Network,Gui,OpenGL,Widgets,Qml,Quick,QuickControls2,Test --load-local-libs=plugins_platforms_qtforandroid --init-classes=
 icon.filename = /home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/logo_square.png
-source.exclude_dirs = src/tests,src/frontend/screenshots,src/frontend/translations/ts,scripts,packaging,demos,p4a-recipes
+source.exclude_dirs = src/tests,src/frontend/screenshots,src/frontend/translations/ts,scripts,packaging,demos,p4a-recipes,build,native
 android.ant_path = /usr/share/ant
 
 [buildozer]

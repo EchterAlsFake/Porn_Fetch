@@ -21,6 +21,26 @@ async def source():
 
 
 class GuiPremiumFeatures(unittest.IsolatedAsyncioTestCase):
+    def test_first_premium_access_selects_best_once_and_preserves_later_choices(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = str(Path(directory) / "settings.ini")
+            settings = SettingsManager(QSettings(path, QSettings.IniFormat))
+            settings.quality = 6
+            backend = SimpleNamespace(has_premium_access=lambda: False)
+            with patch("src.backend.application.app_settings", settings):
+                Backend._apply_premium_quality_default(backend)
+                self.assertEqual(settings.quality, 6)
+                backend.has_premium_access = lambda: True
+                Backend._apply_premium_quality_default(backend)
+                self.assertEqual(settings.mappings_quality[settings.quality], "best")
+                settings.quality = 8
+                Backend._apply_premium_quality_default(backend)
+                self.assertEqual(settings.quality, 8)
+            settings.sync()
+            reloaded = SettingsManager(QSettings(path, QSettings.IniFormat))
+            reloaded.apply_premium_quality_default()
+            self.assertEqual(reloaded.quality, 8)
+
     async def test_live_download_fixture_uses_the_same_entitlement_in_qml_and_backend(self):
         from PySide6.QtGui import QGuiApplication
 

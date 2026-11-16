@@ -65,3 +65,37 @@ migrate((app) => {
     app.delete(app.findCollectionByNameOrId("origin_iterators"))
 })
 '''.lstrip()
+
+CREATOR_COLLECTION = "creator_subscriptions"
+CREATOR_ITEM_COLLECTION = "creator_items"
+CREATOR_MIGRATION_NAME = "202611140000_creator_dashboard.js"
+CREATOR_MIGRATION = r'''
+migrate((app) => {
+    app.save(new Collection({
+        name: "creator_subscriptions", type: "base",
+        fields: [
+            {type: "text", name: "url", required: true},
+            {type: "text", name: "provider", required: true},
+            {type: "text", name: "status"},
+            {type: "text", name: "error"},
+            {type: "text", name: "last_scan"},
+            {type: "bool", name: "automatic"},
+        ], indexes: ["CREATE UNIQUE INDEX idx_creator_url ON creator_subscriptions (url)"]
+    }))
+    app.save(new Collection({
+        name: "creator_items", type: "base",
+        fields: [
+            {type: "text", name: "subscription", required: true},
+            {type: "text", name: "identity", required: true},
+            {type: "text", name: "url", required: true},
+            {type: "text", name: "title"},
+            {type: "text", name: "status"},
+            {type: "text", name: "job"},
+            {type: "text", name: "error"},
+        ], indexes: ["CREATE UNIQUE INDEX idx_creator_membership ON creator_items (subscription, identity)"]
+    }))
+}, (app) => {
+    app.delete(app.findCollectionByNameOrId("creator_items"))
+    app.delete(app.findCollectionByNameOrId("creator_subscriptions"))
+})
+'''

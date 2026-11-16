@@ -11,8 +11,11 @@ import sys
 from pathlib import Path
 
 from .client import PocketBaseClient
-from .constants import _SCHEMA_MIGRATION, MIGRATION_NAME, SUPERUSER_EMAIL
+from .constants import (_SCHEMA_MIGRATION, MIGRATION_NAME, SUPERUSER_EMAIL,
+                        CREATOR_MIGRATION, CREATOR_MIGRATION_NAME)
 from .errors import PocketBaseError
+from .creators import (MIGRATION as LIBRARY_MIGRATION, MIGRATION_NAME as LIBRARY_MIGRATION_NAME,
+                       POLISH_MIGRATION, POLISH_MIGRATION_NAME)
 
 
 def _find_original_executable() -> Path | None:
@@ -41,6 +44,10 @@ class PocketBaseService:
         self.migrations_directory = self.data_directory / "_porn_fetch_migrations"
         self.process: subprocess.Popen[bytes] | None = None
         self.client: PocketBaseClient | None = None
+
+    @property
+    def is_running(self):
+        return self.process is not None and self.process.poll() is None
 
     def find_binary(self, custom_path: str | Path | None = None) -> Path:
         target_path = custom_path or self.binary_path
@@ -79,7 +86,7 @@ class PocketBaseService:
                 return candidate.resolve()
         searched = ", ".join(str(path) for path in candidates)
         raise PocketBaseError(
-            "PocketBase tracking is enabled, but the PocketBase binary was not found. "
+            "The PocketBase binary was not found. "
             "Place it beside the Porn Fetch executable, install it on PATH, or set "
             f"PORN_FETCH_POCKETBASE_BINARY. Searched: {searched}"
         )
@@ -89,9 +96,7 @@ class PocketBaseService:
             return self.client
         if self.data_directory.exists() and not self.data_directory.is_dir():
             raise PocketBaseError(f"PocketBase data path is not a directory: {self.data_directory}")
-        self.migrations_directory.mkdir(parents=True, exist_ok=True)
-        migration_path = self.migrations_directory / MIGRATION_NAME
-        await asyncio.to_thread(migration_path.write_text, _SCHEMA_MIGRATION, "utf-8")
+        await self.write_migrations()
 
         binary = self.find_binary()
         password = secrets.token_urlsafe(32)
@@ -119,6 +124,16 @@ class PocketBaseService:
             raise
         self.client = client
         return client
+
+    async def write_migrations(self):
+        self.migrations_directory.mkdir(parents=True, exist_ok=True)
+        for name, source in self.migration_sources():
+            await asyncio.to_thread((self.migrations_directory / name).write_text, source, "utf-8")
+
+    @staticmethod
+    def migration_sources():
+        return [(MIGRATION_NAME, _SCHEMA_MIGRATION), (CREATOR_MIGRATION_NAME, CREATOR_MIGRATION),
+                (LIBRARY_MIGRATION_NAME, LIBRARY_MIGRATION), (POLISH_MIGRATION_NAME, POLISH_MIGRATION)]
 
     async def _run_command(self, binary: Path, *arguments: str) -> None:
         creation_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0

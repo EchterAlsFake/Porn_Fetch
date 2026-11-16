@@ -4,36 +4,37 @@ from __future__ import annotations
 import asyncio
 from contextlib import aclosing
 
-import questionary
-from rich.panel import Panel
-from rich.table import Table
-
 from src.shared.access import public_collection_items
 from src.shared.media import select_allowed_quality
 
+from .. import prompts as questionary
 from ..downloads import download_video
 from ..media import prepare_video
 from ..output import output_path_for
+from ..terminal import Panel, Table
 from ..tracker import record_cli_download
 from .context import WizardContext
-from .ui import WIZARD_STYLE, make_download_progress, print_success
+from .ui import WIZARD_STYLE, make_download_progress, print_screen, print_success
 
 
 async def handle_batch_management(ctx: WizardContext) -> None:
     """Review tracked models, scan for new URLs, and process pending queues."""
+    print_screen(ctx.console, "Queue")
+    focused = None
     while True:
         action = await questionary.select(
             "Batch & Queue Management:",
             choices=[
-                questionary.Choice("📊 View Tracked Models & Status", value="view"),
-                questionary.Choice("➕ Add Profile / Model URL to Track", value="add"),
-                questionary.Choice("🔍 Scan Tracked Models for New Videos", value="scan"),
-                questionary.Choice("⚡ Download All Pending Videos", value="download"),
-                questionary.Choice("➖ Remove a Tracked Model", value="remove"),
-                questionary.Choice("🔙 Back to Main Menu", value="back"),
+                questionary.Choice("View Tracked Models & Status", value="view"),
+                questionary.Choice("Add Profile / Model URL to Track", value="add"),
+                questionary.Choice("Scan Tracked Models for New Videos", value="scan"),
+                questionary.Choice("Download All Pending Videos", value="download"),
+                questionary.Choice("Remove a Tracked Model", value="remove"),
+                questionary.Choice("Back to Main Menu", value="back"),
             ],
-            style=WIZARD_STYLE,
+            default=focused, style=WIZARD_STYLE,
         ).ask_async()
+        focused = action
 
         if not action or action == "back":
             break
@@ -43,7 +44,7 @@ async def handle_batch_management(ctx: WizardContext) -> None:
             if not models:
                 ctx.console.print(Panel("[yellow]No models are currently tracked.[/]", border_style="yellow"))
                 continue
-            table = Table(title="Tracked Profiles & Models", border_style="#00e5ff", header_style="bold #ff2a85")
+            table = Table(title="Tracked Profiles & Models", border_style="#00e5ff", header_style="bold cyan")
             table.add_column("Profile / Model URL", style="white", overflow="ellipsis")
             table.add_column("Downloaded", style="green", justify="center")
             table.add_column("Pending", style="bold yellow", justify="center")
@@ -68,7 +69,7 @@ async def handle_batch_management(ctx: WizardContext) -> None:
                 ctx.console.print("[yellow]No models available to remove.[/]")
                 continue
             choices = [questionary.Choice(url, value=url) for url, _ in models]
-            choices.append(questionary.Choice("🔙 Cancel", value="__cancel__"))
+            choices.append(questionary.Choice("Cancel", value="__cancel__"))
             target = await questionary.select("Select model to remove:", choices=choices, style=WIZARD_STYLE).ask_async()
             if target and target != "__cancel__":
                 ctx.model_store.remove(target)
@@ -79,11 +80,11 @@ async def handle_batch_management(ctx: WizardContext) -> None:
             if not models:
                 ctx.console.print("[yellow]No tracked models found to scan.[/]")
                 continue
-            scan_table = Table(title="Scan Results", border_style="#00e5ff", header_style="bold #ff2a85")
+            scan_table = Table(title="Scan Results", border_style="#00e5ff", header_style="bold cyan")
             scan_table.add_column("Model URL", style="white")
             scan_table.add_column("New Pending Discovered", style="bold green", justify="center")
 
-            with ctx.console.status("[bold green]Scanning tracked models for new videos...[/]", spinner="dots"):
+            with ctx.console.status("[bold cyan]Scanning tracked models for new videos...[/]", spinner="dots"):
                 for model_url, _ in models:
                     found_urls: list[str] = []
                     try:
@@ -125,7 +126,7 @@ async def handle_batch_management(ctx: WizardContext) -> None:
             fail_count = 0
 
             with make_download_progress(ctx.console) as progress:
-                overall_task = progress.add_task("[bold #ff2a85]Downloading Pending...[/]", total=total_pending)
+                overall_task = progress.add_task("[bold cyan]Downloading Pending...[/]", total=total_pending)
                 for model_url, state in models:
                     completed_urls = []
                     try:

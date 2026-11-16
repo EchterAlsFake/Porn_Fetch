@@ -29,7 +29,7 @@ Controls.Button {
         visible: Theme.highContrast
         color: control.enabled && control.highlighted ? Theme.accent : Theme.background
         radius: 6
-        border.width: control.visualFocus ? 3 : 2
+        border.width: control.visualFocus || (control.enabled && control.hovered) ? 3 : 2
         border.color: !control.enabled ? Theme.disabledInk : control.visualFocus ? Theme.accent : Theme.ink
     }
 }

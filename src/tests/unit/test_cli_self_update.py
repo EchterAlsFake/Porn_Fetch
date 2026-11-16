@@ -164,7 +164,7 @@ class CliUpdateTests(unittest.TestCase):
                     self.assertEqual(target.custom["version"], "3.9.1")
                     rendered = io.StringIO()
                     progress = Progress(console=Console(file=rendered, width=160), auto_refresh=False)
-                    with patch.object(self_update, "Progress", return_value=progress), \
+                    with patch.object(self_update, "make_download_progress", return_value=progress), \
                             patch.object(progress, "advance", wraps=progress.advance) as advance:
                         archive = self_update._download_update(updater, target, fetcher)
                     self.assertTrue(archive.is_file())

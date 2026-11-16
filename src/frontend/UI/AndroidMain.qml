@@ -59,7 +59,7 @@ ApplicationWindow {
     readonly property bool expanded: contentItem.width >= 840
     readonly property bool settingsDetail: pageIndex === 2 && !settingsPage.tablet && settingsPage.section >= 0
     readonly property var pageNames: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"),
-                                      qsTr("Info"), qsTr("Supported websites"), qsTr("More"), qsTr("Download manager")]
+                                      qsTr("Info"), qsTr("Supported websites"), qsTr("More"), qsTr("Download manager"), qsTr("Creators")]
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
                                       "qrc:/images/graphics/settings.png",
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
@@ -71,7 +71,7 @@ ApplicationWindow {
     property bool restoringPage: false
     property bool navigationReady: false
     property var pageFocus: ({})
-    readonly property bool canGoBack: settingsDetail || pageHistory.length > 0 || pageIndex !== 0
+    readonly property bool canGoBack: (pageIndex === 7 && creatorsPage.detailOpen) || settingsDetail || pageHistory.length > 0 || pageIndex !== 0
 
     onPageIndexChanged: {
         if (!navigationReady) return
@@ -115,6 +115,7 @@ ApplicationWindow {
     }
 
     function goBack() {
+        if (pageIndex === 7 && creatorsPage.goBack()) return
         if (settingsDetail) {
             settingsPage.goBack()
             Qt.callLater(restorePageFocus)
@@ -250,21 +251,21 @@ ApplicationWindow {
                     }
 
                     Repeater {
-                        model: window.pageNames.slice(0, 5)
+                        model: [0, 1, 7, 2, 3, 4]
                         delegate: ItemDelegate {
                             required property int index
-                            required property string modelData
+                            required property int modelData
                             Layout.fillWidth: true
                             Layout.preferredHeight: window.expanded ? 54 : 72
-                            enabled: !appSettings.anonymous_mode || index < 3
-                            Accessible.name: modelData
+                            enabled: !appSettings.anonymous_mode || modelData < 3 || modelData === 7
+                            Accessible.name: window.pageNames[modelData]
                             onClicked: {
-                                if (index === 4) Qt.openUrlExternally("https://pornfetch.to/#websites")
-                                else window.pageIndex = index
+                                if (modelData === 4) Qt.openUrlExternally("https://pornfetch.to/#websites")
+                                else window.pageIndex = modelData
                             }
                             background: Rectangle {
                                 radius: 18
-                                color: window.pageIndex === index
+                                color: window.pageIndex === modelData
                                        ? Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                  window.accentColor.b, 0.20)
                                        : "transparent"
@@ -274,7 +275,7 @@ ApplicationWindow {
                                 rowSpacing: 2
                                 columnSpacing: 12
                                 Image {
-                                    source: window.pageIcons[index]
+                                    source: window.pageIcons[modelData] || "qrc:/images/graphics/account.png"
                                     Layout.alignment: Qt.AlignHCenter
                                     Layout.preferredWidth: 28
                                     Layout.preferredHeight: 28
@@ -282,12 +283,12 @@ ApplicationWindow {
                                 }
                                 Label {
                                     Layout.fillWidth: true
-                                    text: modelData
+                                    text: window.pageNames[modelData]
                                     horizontalAlignment: window.expanded ? Text.AlignLeft : Text.AlignHCenter
                                     font.pixelSize: window.expanded ? 14 : 11
-                                    color: window.pageIndex === index
+                                    color: window.pageIndex === modelData
                                            ? window.accentColor : window.primaryTextColor
-                                    font.bold: window.pageIndex === index
+                                    font.bold: window.pageIndex === modelData
                                     elide: Text.ElideRight
                                 }
                             }
@@ -370,6 +371,7 @@ ApplicationWindow {
                         onOpenPage: function(index) { window.pageIndex = index }
                     }
                     DownloadManagerPage {}
+                    CreatorsPage { id: creatorsPage }
                 }
 
                 Rectangle {

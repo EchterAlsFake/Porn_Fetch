@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 from PySide6.QtCore import QUrl
 
-from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity, prepare_native_libraries
+from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity, prepare_native_libraries, stage_pocketbase
 from src.backend.android_storage import copy_download_file, folder_destination, save_shared_download
 
 ACTIVITY = '''public class PythonActivity extends QtActivity {
@@ -23,6 +23,21 @@ ACTIVITY = '''public class PythonActivity extends QtActivity {
 
 
 class AndroidActivityTests(unittest.TestCase):
+    def test_embedded_pocketbase_staging_requires_the_selected_architecture_and_notices(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            build = root / "build/android-pocketbase/x86"
+            (build / "legal").mkdir(parents=True)
+            (build / "libpornfetch_pocketbase.so").write_bytes(b"source-built runtime")
+            (build / "legal/modules.json").write_text("[]")
+            (build / "build.json").write_text('{"abi":"x86"}')
+            dist = root / "dist"
+            stage_pocketbase(root, dist, "x86")
+            self.assertEqual((dist / "libs/x86/libpornfetch_pocketbase.so").read_bytes(), b"source-built runtime")
+            self.assertTrue((dist / "src/main/assets/pocketbase-legal/modules.json").is_file())
+            with self.assertRaisesRegex(FileNotFoundError, "arm64-v8a"):
+                stage_pocketbase(root, dist, "arm64-v8a")
+
     def test_qt_preloads_use_extractable_names_for_every_android_abi(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -76,7 +91,7 @@ class AndroidActivityTests(unittest.TestCase):
         self.assertEqual(patch_activity(source).count('super.onActivityResult('), 1)
 
     def test_hook_updates_generated_distribution(self):
-        with tempfile.TemporaryDirectory() as directory:
+        with tempfile.TemporaryDirectory() as directory, patch("scripts.android_storage_hook.stage_pocketbase"):
             activity = Path(directory) / 'src/main/java/org/kivy/android/PythonActivity.java'
             activity.parent.mkdir(parents=True)
             activity.write_text(ACTIVITY)

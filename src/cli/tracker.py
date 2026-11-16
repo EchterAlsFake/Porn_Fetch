@@ -8,14 +8,13 @@ from pathlib import Path
 from typing import Any
 
 from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
 
 from src.database import PocketBaseError, PocketBaseTracker
 from src.shared.media import VideoObject
 
 from .downloads import DownloadOutcome
 from .settings import CliSettings
+from .terminal import Panel, Table, terminal_console
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +132,7 @@ async def record_cli_download(
 
 def print_dashboard_stats(stats: dict[str, Any], console: Console | None = None) -> None:
     """Render a styled Rich dashboard table and overview panel for statistics."""
-    out = console or Console()
+    out = console or terminal_console()
     enabled = stats.get("enabled", False)
     total = stats.get("total", 0)
     successful = stats.get("successful", 0)
@@ -159,7 +158,7 @@ def print_dashboard_stats(stats: dict[str, Any], console: Console | None = None)
 
     panel = Panel(
         grid,
-        title="[bold #ff2a85]📊 PocketBase Download Statistics[/]",
+        title="[bold cyan] PocketBase Download Statistics[/]",
         subtitle="[dim]Shared persistence with Porn Fetch GUI[/]",
         border_style="#00e5ff",
         padding=(1, 2),
@@ -170,7 +169,7 @@ def print_dashboard_stats(stats: dict[str, Any], console: Console | None = None)
     if sources:
         table = Table(
             title="Download Sources Breakdown",
-            title_style="bold #ff2a85",
+            title_style="bold cyan",
             border_style="bright_black",
             header_style="bold #00e5ff",
         )
@@ -193,16 +192,16 @@ def print_dashboard_stats(stats: dict[str, Any], console: Console | None = None)
 
 def print_failed_downloads(failed_records: list[dict[str, Any]], console: Console | None = None) -> None:
     """Render a table displaying failed downloads."""
-    out = console or Console()
+    out = console or terminal_console()
     if not failed_records:
-        out.print("[bold green]✓ No failed downloads recorded in the database.[/]")
+        out.print("[bold green] No failed downloads recorded in the database.[/]")
         return
 
     table = Table(
         title=f"Failed Downloads ({len(failed_records)} records)",
         title_style="bold red",
         border_style="red",
-        header_style="bold #ff2a85",
+        header_style="bold cyan",
     )
     table.add_column("Title", style="bold white", max_width=36)
     table.add_column("Video ID", style="cyan", max_width=18)
@@ -221,7 +220,7 @@ def print_failed_downloads(failed_records: list[dict[str, Any]], console: Consol
 
 def print_origin_iterators(iterators: list[dict[str, Any]], console: Console | None = None) -> None:
     """Render a table of tracked origin iterators (profiles and collections)."""
-    out = console or Console()
+    out = console or terminal_console()
     if not iterators:
         out.print("[dim]No origin iterators or collections recorded yet.[/]")
         return
@@ -230,7 +229,7 @@ def print_origin_iterators(iterators: list[dict[str, Any]], console: Console | N
         title=f"Tracked Origins & Collections ({len(iterators)})",
         title_style="bold #00e5ff",
         border_style="bright_black",
-        header_style="bold #ff2a85",
+        header_style="bold cyan",
     )
     table.add_column("Name", style="bold white", min_width=20)
     table.add_column("Source URL", style="cyan", overflow="fold")

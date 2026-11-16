@@ -42,6 +42,26 @@ otherwise leave bindings alive after their context objects disappear.
 Do not edit generated `resources.py` or QM files by hand. Draft translation
 catalogs are kept for contributors; the released interface stays English.
 
+The desktop and Android Creators page uses PocketBase subscriptions and the normal download
+engine. History recording and creator persistence share one process; disabling
+history does not discard subscriptions. See [creator subscriptions](CREATORS.md)
+for scanning, resume behavior and opt-in live verification.
+
+The isolated UI preview still uses session-only mock data. Open it with:
+
+```sh
+.venv/bin/python scripts/preview_creators.py
+.venv/bin/python scripts/preview_creators.py --width 390 --height 844 --light
+```
+
+Use `--contrast` to review focus and high contrast. The mock adapter is
+`CreatorPreviewModel.qml`; the normal app injects `creatorBridge` and uses
+`CreatorController.qml`. Keep real service calls out of the standalone preview.
+Android embeds a source-built PocketBase shared library for all four supported
+ABIs, reusing the tracker/client/schema with history disabled. The Android build
+wrapper compiles and stages it automatically; see `native/pocketbase/README.md`.
+iOS still displays the storage availability message. QML preview checks are `src.tests.integration.test_creators_preview`.
+
 App icon artwork lives in `src/frontend/graphics/logo_artwork.png`. After changing
 it, run `python scripts/generate_app_icons.py` in the GUI environment before
 rebuilding resources. Commit the generated square PNGs, multi-size Windows ICO,
@@ -123,7 +143,8 @@ current scope.
 
 Desktop history uses PocketBase. Android history/statistics are disabled. Do not
 add another database backend for mobile. Queue checkpoints use the writable cache
-folder and are separate from history. Clearing temporary files can destroy saved
+on desktop and private application data on Android, separate from history.
+Clearing temporary files can destroy saved
 progress; active downloads receive a warning with an option to continue anyway.
 
 Installation changes belong to Qt Maintenance Tool. Never copy a running app's

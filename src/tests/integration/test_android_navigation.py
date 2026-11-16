@@ -56,6 +56,7 @@ QtObject {
             "AndroidInfoPage": "",
             "AndroidMorePage": "signal openActivity(); signal openPage(int index)",
             "DownloadManagerPage": "",
+            "CreatorsPage": 'objectName: "creatorsPage"; property bool detailOpen: false; function goBack() { if (!detailOpen) return false; detailOpen = false; return true }',
         }
         for name, body in stubs.items():
             (root / f"{name}.qml").write_text("import QtQuick\nimport QtQuick.Controls\nItem { " + body + " }")
@@ -116,6 +117,16 @@ QtObject {
             QTest.qWait(10)
         QTest.touchEvent(self.window, self.device).release(0, QPoint(*end), self.window).commit()
         QTest.qWait(10)
+
+    def test_creator_detail_returns_to_library_before_leaving_page(self):
+        self.window.setProperty("pageIndex", 7)
+        page = self.window.findChild(QObject, "creatorsPage")
+        page.setProperty("detailOpen", True)
+        self.back()
+        self.assertEqual(self.window.property("pageIndex"), 7)
+        self.assertFalse(page.property("detailOpen"))
+        self.back()
+        self.assertEqual(self.window.property("pageIndex"), 0)
 
     def test_back_retraces_pages_and_settings_detail(self):
         self.window.setProperty("pageIndex", 1)

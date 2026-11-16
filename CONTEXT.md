@@ -581,6 +581,77 @@ retained-segment Stop/Resume controls. GUI core/client refresh and shutdown and
 desktop/Android/iOS dependency inputs include YouJizz. See [YouJizz](docs/YOUJIZZ.md)
 for maintained verification details. Native mobile artifacts were not rebuilt.
 
+## Creator subscriptions
+
+Desktop Creators now uses a Qt-free PocketBase repository and scan service,
+`src/backend/creator_bridge.py`, and the existing provider download engine.
+Creator persistence starts independently of history recording and shares the
+same tracker-owned PocketBase process. Startup scans run after first-use setup
+and initial entitlement checking; subsequent scans are manual, with no polling.
+Full listing traversal uses `pages="all"`, one-based start page one and strict
+visible errors. Discovered identities are committed in transactional batches;
+retrying an interrupted scan replays from page one against persisted membership.
+The UI reads twelve videos per page rather than loading every prepared media
+object. Creator workers are bounded to twice the configured parallel limit.
+Full archives and automation require Premium. Free users can scan, download and
+resume the same five videos per subscription at up to 720p. Eligibility uses the
+first five durable memberships (including ignored/completed rows), checked at
+queueing, individual actions and native dispatch. Free counts/pages show this
+preview. Ordinary engine collection/quality gates remain active via indices 1–5;
+Premium jobs use index 6. A saved higher-resolution checkpoint remains paused in
+free mode. Automatic downloads remain Premium-only. A live five-item scan/rescan,
+720p Bellesa HLS and 480p RedGIFs RAW pause/close/reopen/resume passed, including
+FFmpeg readability checks.
+Completed identities are shared across subscriptions. Removing a subscription
+keeps downloaded files and shared jobs. On normal close/reopen, interrupted
+jobs restore paused and retain their job ID, output filename, quality and native
+HLS/RAW checkpoints. Automatic downloading starts with additions after the first
+successful baseline, only when explicitly enabled. Native completion must be
+captured synchronously before the engine removes the queue row.
+
+Creators checks PocketBase proactively after setup, including executable/native
+loading, database migrations and batch API readiness, before enabling Add.
+Unavailable storage has a persistent setup/repair panel, selectable details,
+Check again, and Manage components for installer builds. The check does not
+require entering a URL. New subscriptions always default to Best available;
+editing retains their saved quality. A persistent Premium/trial banner and dialog copy explain full-archive licensing.
+Detail counters and quality/destination/scan dates have separate colored cards.
+Creator buttons have 48-pixel minimum height, 14-pixel scaled semibold text, more
+padding and luminance-selected black/white text on a lighter dark-theme or darker
+light-theme primary fill. They animate hover/press color and scale; reduced
+motion/high contrast disable the scale effect.
+
+On the GUI's first Premium unlock, the global quality setting changes to index
+zero (Best available, including 4K when offered). This is driven by entitlement
+changes, not the activation-help signal. `Onboarding/premium_quality_initialized`
+persists the one-time default across relaunches and settings resets, so later
+user choices survive checks and reactivation. Licensing core/protocol is unchanged.
+
+The normal app injects `creatorBridge`; only the standalone `CreatorsPreview.qml`
+uses mock data. Desktop polish persists page/discovery progress and the scan's
+initial free/Premium mode, distinguishes last attempt from last complete scan,
+and shows the latest ten attempts. A preview cannot become a full baseline if
+Premium activates during traversal.
+
+Android Creators uses `src/database/android.py` and `native/pocketbase`, a ctypes
+C ABI over the same PocketBase 0.40.4 runtime and JavaScript schema. The APK embeds
+`libpornfetch_pocketbase.so`; its loopback service shares the existing tracker.
+History/statistics remain disabled. `scripts/build_android_pocketbase.py` builds
+all four ABIs with NDK r28c/API 28 and 16 KiB ELF alignment; the normal wrapper
+calls it, auto-provisions verified Go 1.27.4 if needed, and packages Go/dependency
+notices. All four compiled successfully. Native x86 TV API 36 and x86_64 Automotive
+API 33 checks applied migrations, authenticated and committed 30 records; x86
+also reopened with all records retained. The host embedded-runtime integration
+checks queue/destination/checkpoint recovery. Full APK and ARM device behavior
+remain unverified and require a rebuilt APK; iOS Creators stays unavailable.
+
+Android now binds DownloadRecovery, storing queue/HLS/RAW state in private app
+data instead of cache. Creator downloads stage privately and persist the shared
+SAF/MediaStore destination with each prepared job. Resume retains that destination
+even after global settings change. Android OS background/process limits remain;
+there is no new foreground service or closed-app scheduler.
+See [creator subscriptions](docs/CREATORS.md) for verification commands and limits.
+
 ## Testing and documentation
 
 ```sh

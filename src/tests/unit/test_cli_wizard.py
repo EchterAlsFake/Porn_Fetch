@@ -140,8 +140,8 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         await self.ctx.close()
         self.temp_dir.cleanup()
 
-    @patch("questionary.select")
-    @patch("questionary.text")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.text")
     @patch("src.cli.flows.single_download.download_video", new_callable=AsyncMock)
     async def test_download_single_url_flow(self, mock_download_video, mock_text, mock_select):
         mock_text.return_value = FakeQuestionaryPrompt("https://pornhub.com/view_video.php?viewkey=123")
@@ -163,9 +163,9 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(args[2], "720")
         self.assertTrue(kwargs["has_premium"])
 
-    @patch("questionary.select")
-    @patch("questionary.checkbox")
-    @patch("questionary.text")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.checkbox")
+    @patch("src.cli.prompts.text")
     @patch("src.cli.flows.scrape.download_video", new_callable=AsyncMock)
     async def test_scrape_profile_flow(self, mock_download_video, mock_text, mock_checkbox, mock_select):
         mock_text.return_value = FakeQuestionaryPrompt("https://pornhub.com/model/testmodel")
@@ -193,8 +193,8 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
 
         mock_download_video.assert_called_once()
 
-    @patch("questionary.select")
-    @patch("questionary.text")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.text")
     async def test_batch_management_flow(self, mock_text, mock_select):
         # 1: Add model, 2: View, 3: Back
         mock_select.side_effect = [
@@ -210,8 +210,8 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(models), 1)
         self.assertEqual(models[0][0], "https://pornhub.com/model/newbie")
 
-    @patch("questionary.select")
-    @patch("questionary.confirm")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.confirm")
     async def test_settings_modification_flow(self, mock_confirm, mock_select):
         # Edit setting 'skip_existing' from True to False, then Back
         mock_select.side_effect = [
@@ -227,9 +227,20 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         reloaded = self.settings_store.load()
         self.assertFalse(reloaded.skip_existing)
 
-    @patch("questionary.select")
-    @patch("questionary.text")
-    @patch("questionary.password")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.confirm")
+    async def test_settings_category_edit_and_back_restore_focus(self, mock_confirm, mock_select):
+        mock_select.side_effect = [FakeQuestionaryPrompt(value) for value in
+                                   ["Video", "skip_existing", "__cancel__", "back"]]
+        mock_confirm.return_value = FakeQuestionaryPrompt(False)
+        await handle_settings(self.ctx)
+        self.assertFalse(self.settings_store.load().skip_existing)
+        self.assertEqual(mock_select.call_args_list[2].kwargs["default"], "skip_existing")
+        self.assertEqual(mock_select.call_args_list[3].kwargs["default"], "Video")
+
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.text")
+    @patch("src.cli.prompts.password")
     async def test_account_login_credentials_flow(self, mock_password, mock_text, mock_select):
         mock_select.side_effect = [
             FakeQuestionaryPrompt("credentials"),
@@ -247,8 +258,8 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
             "PornHub", username="testuser", password="secretpass",
         )
 
-    @patch("questionary.select")
-    @patch("questionary.confirm")
+    @patch("src.cli.prompts.select")
+    @patch("src.cli.prompts.confirm")
     async def test_license_management_flow(self, mock_confirm, mock_select):
         self.console.width = 160
         mock_select.side_effect = [
@@ -269,14 +280,14 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("all future updates and features included", output)
         self.assertIn("Offline Permit Expires:", output)
 
-    @patch("questionary.select")
+    @patch("src.cli.prompts.select")
     async def test_unlicensed_quality_locked_in_settings(self, mock_select):
         # License is unallowed
         self.fake_license.status.allowed = False
         captured_choices = []
         action_seq = ["edit", "back"]
 
-        def fake_select(prompt, choices=None, default=None, style=None):
+        def fake_select(prompt, choices=None, default=None, style=None, **kwargs):
             if "Settings & Configuration" in prompt:
                 return FakeQuestionaryPrompt(action_seq.pop(0))
             elif "setting to modify" in prompt:
@@ -303,13 +314,13 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         # The setting must NOT have been updated to 2160
         self.assertNotEqual(self.ctx.settings.quality, "2160")
 
-    @patch("questionary.select")
+    @patch("src.cli.prompts.select")
     async def test_licensed_quality_allowed_in_settings(self, mock_select):
         self.fake_license.status.allowed = True
         captured_choices = []
         action_seq = ["edit", "back"]
 
-        def fake_select(prompt, choices=None, default=None, style=None):
+        def fake_select(prompt, choices=None, default=None, style=None, **kwargs):
             if "Settings & Configuration" in prompt:
                 return FakeQuestionaryPrompt(action_seq.pop(0))
             elif "setting to modify" in prompt:
@@ -329,7 +340,7 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNone(locked_map.get("1080"))
         self.assertEqual(self.ctx.settings.quality, "2160")
 
-    @patch("questionary.select")
+    @patch("src.cli.prompts.select")
     async def test_menu_update_uses_confirmation_and_exits_only_after_staging(self, mock_select):
         self.settings_store.save(self.settings.overridden(error_reporting_decided=True))
         for staged, result in ((True, 0), (False, 0), (False, 1)):
@@ -347,7 +358,7 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
                 with (
                     patch("src.cli.wizard.SettingsStore", return_value=self.settings_store),
                     patch("src.cli.wizard.WizardContext", return_value=self.ctx),
-                    patch("src.cli.wizard.Console", return_value=self.console),
+                    patch("src.cli.wizard.terminal_console", return_value=self.console),
                     patch("src.cli.wizard.PausedStore.load", return_value=[]),
                     patch("src.cli.self_update.run_self_update", side_effect=update) as updater,
                     patch.object(self.ctx, "close", wraps=self.ctx.close) as close,
@@ -361,7 +372,7 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
                 self.assertTrue(any(choice.value == "update" and "Check for Updates" in choice.title
                                     for choice in choices))
 
-    @patch("questionary.select")
+    @patch("src.cli.prompts.select")
     async def test_run_wizard_immediate_exit(self, mock_select):
         mock_select.return_value = FakeQuestionaryPrompt("exit")
         self.settings_store.save(self.settings.overridden(

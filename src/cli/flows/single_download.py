@@ -4,23 +4,22 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-import questionary
-from rich.panel import Panel
-from rich.table import Table
-
 from src.shared.media import quality_requires_premium, select_allowed_quality
 
+from .. import prompts as questionary
 from ..downloads import DownloadController, download_gallery, download_video, has_resume_state
 from ..media import prepare_video
 from ..output import output_path_for
 from ..providers import ContentKind
+from ..terminal import Panel, Table
 from ..tracker import record_cli_download
 from .context import WizardContext
-from .ui import WIZARD_STYLE, make_download_progress, print_error, print_success
+from .ui import WIZARD_STYLE, make_download_progress, print_error, print_screen, print_success
 
 
 async def handle_download_single(ctx: WizardContext) -> None:
     """Prompt for a single URL, display metadata, select quality, and download."""
+    print_screen(ctx.console, "Download")
     url = await questionary.text(
         "Enter video, album, or direct URL:",
         validate=lambda val: True if val.strip().startswith(("http://", "https://")) else "Please enter a valid HTTP or HTTPS URL",
@@ -31,7 +30,7 @@ async def handle_download_single(ctx: WizardContext) -> None:
     url = url.strip()
 
     try:
-        with ctx.console.status("[bold green]Fetching metadata...[/]", spinner="dots"):
+        with ctx.console.status("[bold cyan]Fetching metadata...[/]", spinner="dots"):
             route, source = await ctx.pool.resolve(url)
             if route.kind == ContentKind.GALLERY:
                 media = None
@@ -69,7 +68,7 @@ async def handle_download_single(ctx: WizardContext) -> None:
     else:
         choices = [
             questionary.Choice(
-                "🌟 best (Highest available quality)",
+                "Best available quality",
                 value="best",
                 disabled="Locked: Requires License" if not has_premium else None,
             ),
@@ -78,13 +77,13 @@ async def handle_download_single(ctx: WizardContext) -> None:
             req_prem = quality_requires_premium(q)
             is_locked = req_prem and not has_premium
             choices.append(questionary.Choice(
-                f"🎬 {q}p",
+                f"{q}p",
                 value=str(q),
                 disabled="Locked: Requires License" if is_locked else None,
             ))
         choices.extend([
-            questionary.Choice("📻 audio only / worst video", value="worst"),
-            questionary.Choice("🔙 Cancel", value="__cancel__"),
+            questionary.Choice("audio only / worst video", value="worst"),
+            questionary.Choice("Cancel", value="__cancel__"),
         ])
 
         default_val = "best" if has_premium else "720"
@@ -165,15 +164,15 @@ async def handle_download_single(ctx: WizardContext) -> None:
             interrupt_choice = await questionary.select(
                 "Choose action for interrupted download:",
                 choices=[
-                    questionary.Choice("⏸️  Pause and save progress (resume later)", value="pause"),
-                    questionary.Choice("🗑️  Cancel and delete partial files", value="cancel_clean"),
-                    questionary.Choice("❌ Cancel without deleting partial files", value="cancel"),
+                    questionary.Choice("Pause and save progress (resume later)", value="pause"),
+                    questionary.Choice("Cancel and delete partial files", value="cancel_clean"),
+                    questionary.Choice("Cancel without deleting partial files", value="cancel"),
                 ],
                 style=WIZARD_STYLE,
             ).ask_async()
             if interrupt_choice == "pause":
                 controller.pause()
-                ctx.console.print("[yellow]⏸️  Download paused and progress saved. You can resume it from the Main Menu.[/]")
+                ctx.console.print("[yellow]  Download paused and progress saved. You can resume it from the Main Menu.[/]")
                 return
             elif interrupt_choice == "cancel_clean":
                 controller.cancel(cleanup=True)
@@ -198,7 +197,7 @@ async def handle_download_single(ctx: WizardContext) -> None:
             f"Successfully saved to:\n[bold white]{outcome.path}[/]",
         )
     elif outcome.status == "paused":
-        ctx.console.print("[yellow]⏸️  Download paused and saved. You can resume it anytime from the Main Menu.[/]")
+        ctx.console.print("[yellow]  Download paused and saved. You can resume it anytime from the Main Menu.[/]")
     elif outcome.status == "cancelled":
         ctx.console.print("[yellow]Download was cancelled.[/]")
     else:

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
@@ -54,7 +55,7 @@ class PocketBaseTracker:
 
     @property
     def is_running(self) -> bool:
-        return self._service is not None and self._service.process is not None and self._service.process.poll() is None
+        return self._service is not None and self._service.is_running
 
     def schedule_startup(self) -> asyncio.Task[None]:
         if self._startup_task is None:
@@ -76,8 +77,9 @@ class PocketBaseTracker:
         assert self._service is not None
         try:
             self._client = await self._service.start()
-            await self._import_legacy_sqlite()
-            await self.refresh_cache()
+            if self.enabled:
+                await self._import_legacy_sqlite()
+                await self.refresh_cache()
         except asyncio.CancelledError:
             raise
         except Exception as error:
@@ -85,6 +87,18 @@ class PocketBaseTracker:
             self._initialization_error = str(error)
             if self.on_initialization_failed:
                 self.on_initialization_failed(str(error))
+
+    async def open_database(self) -> PocketBaseClient:
+        """Share persistence with subscriptions even when history recording is off."""
+        if self._service is None:
+            if sys.platform == "android" or hasattr(sys, "getandroidapilevel"):
+                from .android import AndroidPocketBaseService
+                self._service = AndroidPocketBaseService(self.data_path)
+            else:
+                self._service = PocketBaseService(self.data_path, binary_path=self.binary_path)
+        if self._client is None and self._startup_task is not None and self._startup_task.done():
+            self._startup_task = None
+        return await self._ensure_client()
 
     async def _ensure_client(self) -> PocketBaseClient:
         if self._client is not None:

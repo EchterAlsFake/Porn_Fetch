@@ -1,0 +1,2217 @@
+{
+  "date": "2026-11-15",
+  "scope": "20 providers with pagination; Beeg has no paginated listing API",
+  "completion_gate": "NOT_COMPLETE: upstream caps, unverified legacy Thumbzilla playlist, unavailable current RedTube/Tube8 sessions and nonempty fixtures",
+  "complete_public_profiles": [
+    {
+      "provider": "empflix",
+      "kind": "Profile",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 3,
+      "expected": 119,
+      "actual": 119,
+      "unique_items": 119,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 2,
+      "last_page_items": 59,
+      "beyond_page": 3,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 5,
+      "expected": 77,
+      "actual": 77,
+      "unique_items": 77,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 4,
+      "last_page_items": 5,
+      "beyond_page": 5,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Model",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 4,
+      "expected": 138,
+      "actual": 138,
+      "unique_items": 138,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 4,
+      "last_page_items": 18,
+      "beyond_page": 5,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "eporner",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 41,
+      "expected": 1558,
+      "actual": 1558,
+      "unique_items": 1558,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 41,
+      "last_page_items": 38,
+      "beyond_page": 42,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "porntrex",
+      "kind": "Model",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 28,
+      "expected": 3331,
+      "actual": 3331,
+      "unique_items": 3325,
+      "source_duplicate_items": 6,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 28,
+      "last_page_items": 91,
+      "beyond_page": 29,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "redtube",
+      "kind": "Channel",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 40,
+      "expected": 793,
+      "actual": 793,
+      "unique_items": 793,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 40,
+      "last_page_items": 13,
+      "beyond_page": 41,
+      "beyond_behavior": "visible_http_404"
+    },
+    {
+      "provider": "tube8",
+      "kind": "Channel",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 23,
+      "expected": 460,
+      "actual": 460,
+      "unique_items": 459,
+      "source_duplicate_items": 1,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 23,
+      "last_page_items": 20,
+      "beyond_page": 24,
+      "beyond_behavior": "visible_http_404"
+    },
+    {
+      "provider": "thumbzilla",
+      "kind": "Channel",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 71,
+      "expected": 1418,
+      "actual": 1418,
+      "unique_items": 1059,
+      "source_duplicate_items": 359,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 71,
+      "last_page_items": 18,
+      "beyond_page": 72,
+      "beyond_behavior": "visible_http_404"
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Creator",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 6,
+      "expected": 233,
+      "actual": 233,
+      "unique_items": 229,
+      "source_duplicate_items": 4,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 6,
+      "last_page_items": 3,
+      "beyond_page": 7,
+      "beyond_behavior": "visible_http_404"
+    },
+    {
+      "provider": "xvideos",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 8,
+      "expected": 270,
+      "actual": 270,
+      "unique_items": 270,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 8,
+      "last_page_items": 18,
+      "beyond_page": 9,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "youporn",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 17,
+      "expected": 393,
+      "actual": 393,
+      "unique_items": 387,
+      "source_duplicate_items": 6,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 17,
+      "last_page_items": 9,
+      "beyond_page": 18,
+      "beyond_behavior": "visible_http_404"
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 2,
+      "expected": 30,
+      "actual": 30,
+      "unique_items": 30,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 2,
+      "last_page_items": 6,
+      "beyond_page": 3,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 4,
+      "expected": 83,
+      "actual": 83,
+      "unique_items": 83,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 4,
+      "last_page_items": 11,
+      "beyond_page": 5,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "pornhat",
+      "kind": "Model",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 4,
+      "expected": 202,
+      "actual": 202,
+      "unique_items": 202,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 4,
+      "last_page_items": 25,
+      "beyond_page": 5,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "xnxx",
+      "kind": "User",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 72,
+      "expected": 3568,
+      "actual": 3568,
+      "unique_items": 3568,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 72,
+      "last_page_items": 19,
+      "beyond_page": 73,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "youjizz",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 6,
+      "actual": 6,
+      "unique_items": 6,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 1,
+      "last_page_items": 6,
+      "beyond_page": 2,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "spankbang",
+      "kind": "Creator",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 8,
+      "actual": 8,
+      "unique_items": 8,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 1,
+      "last_page_items": 8,
+      "beyond_page": 2,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "redgifs",
+      "kind": "User",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 17,
+      "actual": 17,
+      "unique_items": 17,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 1,
+      "last_page_items": 17,
+      "beyond_page": 2,
+      "beyond_behavior": "empty"
+    },
+    {
+      "provider": "porn",
+      "kind": "Collection",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 235,
+      "expected": 12919,
+      "actual": 12919,
+      "unique_items": 12915,
+      "source_duplicate_items": 4,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 234,
+      "last_page_items": 37,
+      "beyond_page": 235,
+      "beyond_behavior": "empty"
+    }
+  ],
+  "additional_complete_public_profiles": [
+    {
+      "provider": "empflix",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 3,
+      "expected": 119,
+      "actual": 119,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "empflix",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 5,
+      "expected": 230,
+      "actual": 230,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "Profile",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 117,
+      "expected": 6952,
+      "actual": 6952,
+      "unique_items": 6952,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 117,
+      "expected": 6952,
+      "actual": 6952,
+      "unique_items": 6952,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "porntrex",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 20,
+      "actual": 20,
+      "unique_items": 20,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "redtube",
+      "kind": "Pornstar",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 7,
+      "expected": 182,
+      "actual": 182,
+      "unique_items": 182,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "thumbzilla",
+      "kind": "Pornstar",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 13,
+      "expected": 322,
+      "actual": 322,
+      "unique_items": 322,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "tube8",
+      "kind": "Pornstar",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 17,
+      "expected": 419,
+      "actual": 419,
+      "unique_items": 419,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "redtube",
+      "kind": "Playlist",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 61,
+      "expected": 1457,
+      "actual": 1457,
+      "unique_items": 1457,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "youporn",
+      "kind": "Collection",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 3,
+      "expected": 46,
+      "actual": 46,
+      "unique_items": 46,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Performer",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 3,
+      "actual": 3,
+      "unique_items": 3,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "youporn",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 17,
+      "expected": 437,
+      "actual": 437,
+      "unique_items": 437,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "pornhat",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 9,
+      "expected": 473,
+      "actual": 473,
+      "unique_items": 472,
+      "source_duplicate_items": 1,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 25,
+      "expected": 730,
+      "actual": 730,
+      "unique_items": 730,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Category",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 18,
+      "expected": 410,
+      "actual": 410,
+      "unique_items": 410,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Channel",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 3,
+      "expected": 93,
+      "actual": 93,
+      "unique_items": 93,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 10,
+      "expected": 480,
+      "actual": 480,
+      "unique_items": 480,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Pornstar",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 24,
+      "expected": 947,
+      "actual": 947,
+      "unique_items": 947,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 10,
+      "expected": 435,
+      "actual": 435,
+      "unique_items": 432,
+      "source_duplicate_items": 3,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "porn",
+      "kind": "Channel",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 15,
+      "expected": 1638,
+      "actual": 1638,
+      "unique_items": 1629,
+      "source_duplicate_items": 9,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "porn",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 23,
+      "expected": 1424,
+      "actual": 1424,
+      "unique_items": 1422,
+      "source_duplicate_items": 2,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Model",
+      "method": "get_uploads",
+      "status": "PASS",
+      "source_pages": 10,
+      "expected": 369,
+      "actual": 369,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Playlist",
+      "method": "get_videos",
+      "status": "PASS",
+      "source_pages": 51,
+      "expected": 1991,
+      "actual": 1991,
+      "unique_items": 1991,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "xvideos",
+      "kind": "Pornstar",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 16,
+      "expected": 562,
+      "actual": 562,
+      "unique_items": 562,
+      "source_duplicate_items": 0,
+      "ordered_match": true,
+      "terminal_verified": true
+    },
+    {
+      "provider": "youjizz",
+      "kind": "User",
+      "method": "videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 557,
+      "actual": 557,
+      "unique_items": 557,
+      "source_duplicate_items": 0,
+      "thumbnail_batches": 24,
+      "ordered_match": true,
+      "terminal_verified": true,
+      "last_nonempty_page": 24,
+      "last_page_items": 5,
+      "beyond_page": 25,
+      "beyond_behavior": "empty"
+    }
+  ],
+  "search_pages": [
+    {
+      "provider": "eporner",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        30,
+        30,
+        60
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        58,
+        60,
+        118
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "empflix",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        60,
+        60,
+        120
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "porntrex",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        85,
+        85,
+        170
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "pornhub",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        31,
+        43,
+        74
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "redtube",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        32,
+        32,
+        64
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "thumbzilla",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        32,
+        32,
+        64
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "tube8",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        32,
+        32,
+        64
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": true,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "xnxx",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        36,
+        36,
+        72
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "xhamster",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        46,
+        46,
+        92
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "xvideos",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        26,
+        27,
+        53
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "bellesa",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "youporn",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        32,
+        32,
+        64
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "porndoe",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        31,
+        31,
+        62
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "pornhat",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        59,
+        59,
+        118
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "porn",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        117,
+        117,
+        234
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "youjizz",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "redgifs",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        37,
+        39,
+        76
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "spankbang",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        64,
+        64,
+        128
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    },
+    {
+      "provider": "xfreehd",
+      "kind": "search",
+      "status": "PASS",
+      "counts": [
+        30,
+        30,
+        60
+      ],
+      "independent_same_response_match": true,
+      "volatile_ranking": false,
+      "tracked_watch_route_verified": false
+    }
+  ],
+  "client_listings": [
+    {
+      "provider": "bellesa",
+      "method": "get_performers",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        12,
+        12,
+        24
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "bellesa",
+      "method": "get_videos",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "bellesa",
+      "method": "search",
+      "options": {
+        "kind": "performer"
+      },
+      "status": "PASS",
+      "counts": [
+        16,
+        0,
+        16
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "bellesa",
+      "method": "search",
+      "options": {
+        "kind": "channel"
+      },
+      "status": "PASS",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "porndoe",
+      "method": "get_videos",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        31,
+        31,
+        62
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "porndoe",
+      "method": "get_pornstars",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        96,
+        96,
+        192
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "porndoe",
+      "method": "get_channels",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        36,
+        36,
+        72
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "pornhat",
+      "method": "get_videos",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        59,
+        59,
+        118
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "pornhat",
+      "method": "get_models",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        60,
+        60,
+        120
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "pornhat",
+      "method": "get_channels",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        50,
+        50,
+        100
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "porn",
+      "method": "pornstars",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        120,
+        120,
+        240
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "porn",
+      "method": "channels",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        119,
+        97,
+        216
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "redgifs",
+      "method": "search_images",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "redgifs",
+      "method": "search_users",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "redgifs",
+      "method": "get_niches",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "youjizz",
+      "method": "videos",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "xvideos",
+      "method": "get_playlist",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        25,
+        22,
+        47
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "eporner",
+      "method": "get_videos_by_category",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        63,
+        61,
+        124
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "pornhub",
+      "method": "search_gifs",
+      "options": {},
+      "status": "PASS",
+      "counts": [
+        37,
+        37,
+        74
+      ],
+      "independent_same_response_match": false
+    },
+    {
+      "provider": "pornhub",
+      "method": "search_hubtraffic",
+      "options": {
+        "sort_by": "newest"
+      },
+      "status": "PASS",
+      "counts": [
+        30,
+        30,
+        60
+      ],
+      "independent_same_response_match": true
+    }
+  ],
+  "images": [
+    {
+      "provider": "xfreehd",
+      "kind": "Album",
+      "status": "PASS",
+      "pages": 2,
+      "page_counts": [
+        12,
+        1
+      ],
+      "expected": 13,
+      "actual": 13
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Album",
+      "status": "PASS",
+      "pages": 3,
+      "page_counts": [
+        96,
+        96,
+        5
+      ],
+      "expected": 197,
+      "actual": 197
+    }
+  ],
+  "account_listings": [
+    {
+      "provider": "xvideos",
+      "method": "get_recommended_videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 17,
+      "actual": 17,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "xvideos",
+      "method": "get_liked_videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 8,
+      "actual": 8,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "xvideos",
+      "method": "get_watch_later_videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 0,
+      "actual": 0,
+      "empty_fixture": true,
+      "ordered_match": true
+    },
+    {
+      "provider": "xhamster",
+      "method": "get_liked_videos",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 11,
+      "actual": 11,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "xhamster",
+      "method": "get_account_playlist",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 11,
+      "actual": 11,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_history",
+      "status": "PASS",
+      "source_pages": 2,
+      "expected": 84,
+      "actual": 84,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_favorites",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 12,
+      "actual": 12,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_recommended",
+      "status": "PASS",
+      "source_pages": 18,
+      "expected": 378,
+      "actual": 378,
+      "empty_fixture": false,
+      "ordered_match": true
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_feed",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 0,
+      "actual": 0,
+      "empty_fixture": true,
+      "ordered_match": true
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_subscriptions",
+      "status": "PASS",
+      "source_pages": 1,
+      "expected": 0,
+      "actual": 0,
+      "empty_fixture": true,
+      "ordered_match": true
+    }
+  ],
+  "negative_and_empty_checks": [
+    {
+      "provider": "pornhub",
+      "method": "get_videos",
+      "status": "EMPTY_CONFIRMED",
+      "source_empty_section": true,
+      "unrelated_cards_excluded": true,
+      "offset_and_all_checked": true,
+      "nonempty_advancement_verified": false
+    },
+    {
+      "provider": "pornhub",
+      "method": "get_uploads",
+      "status": "EMPTY_CONFIRMED",
+      "source_empty_section": true,
+      "unrelated_cards_excluded": true,
+      "offset_and_all_checked": true,
+      "nonempty_advancement_verified": false
+    },
+    {
+      "provider": "thumbzilla",
+      "check": "wrong_resource_type_rejected",
+      "status": "EXPECTED_UNAVAILABLE",
+      "playlist_pagination_verified": false
+    }
+  ],
+  "lifecycle_and_upstream_limits": [
+    {
+      "check": "shared_lifecycle",
+      "status": "PASS",
+      "complete_items": 30,
+      "complete_pages": 2,
+      "response_reuse": true,
+      "partial_close": true,
+      "invalid_parameters": true,
+      "offset_and_beyond": true
+    },
+    {
+      "provider": "thumbzilla",
+      "check": "upstream_page_101_limit",
+      "status": "EXPECTED_UPSTREAM_FAILURE",
+      "accessible_page_100_items": 20,
+      "page_101_http_status": 404,
+      "summary": "incomplete",
+      "false_exhaustion_prevented": true
+    },
+    {
+      "provider": "tube8",
+      "check": "upstream_page_101_limit",
+      "status": "EXPECTED_UPSTREAM_FAILURE",
+      "accessible_page_100_items": 20,
+      "page_101_http_status": 404,
+      "summary": "incomplete",
+      "false_exhaustion_prevented": true
+    },
+    {
+      "provider": "thumbzilla",
+      "check": "upstream_page_101_limit",
+      "status": "EXPECTED_UPSTREAM_FAILURE",
+      "accessible_page_100_items": 20,
+      "page_101_http_status": 404,
+      "summary": "incomplete",
+      "false_exhaustion_prevented": true
+    }
+  ],
+  "creator_scan": {
+    "status": "PASS",
+    "provider": "pornhat",
+    "check": "app_creator_scan",
+    "source_entries": 473,
+    "unique_entries": 472,
+    "source_pages": 9,
+    "ordered_membership_match": true
+  },
+  "indexed_boundaries": [
+    {
+      "provider": "xvideos",
+      "status": "PASS",
+      "pages": 8,
+      "expected": 270,
+      "actual": 270,
+      "boundary_pages": [
+        1,
+        2,
+        8,
+        9
+      ],
+      "ordered_match": true
+    },
+    {
+      "provider": "xnxx",
+      "status": "PASS",
+      "pages": 72,
+      "expected": 3568,
+      "actual": 3568,
+      "boundary_pages": [
+        1,
+        2,
+        72,
+        73
+      ],
+      "ordered_match": true
+    },
+    {
+      "provider": "bellesa",
+      "status": "PASS",
+      "source_pages": [
+        24,
+        6,
+        0
+      ],
+      "expected": 30,
+      "actual": 30,
+      "ordered_match": true
+    },
+    {
+      "provider": "redgifs",
+      "status": "PASS",
+      "pages": 7,
+      "expected": 246,
+      "actual": 246,
+      "ordered_match": true
+    }
+  ],
+  "current_user_feed_checks": [
+    {
+      "provider": "redtube",
+      "kind": "User.videos",
+      "status": "FAIL",
+      "error_type": "AssertionError",
+      "reason": "No authenticated session"
+    },
+    {
+      "provider": "tube8",
+      "kind": "User.videos",
+      "status": "FAIL",
+      "error_type": "AssertionError",
+      "reason": "No authenticated session"
+    }
+  ],
+  "wheels": [
+    {
+      "package": "eaf_base_api",
+      "version": "4.3.0",
+      "wheel": "eaf_base_api-4.3.0-py3-none-any.whl",
+      "sha256": "87e38a3b6e36039d654429ee36b0d78e026a6b91e08164f1725c46e2fec73e72",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-bellesa",
+      "version": "1.1.0",
+      "wheel": "unofficial_api_for_bellesa-1.1.0-py3-none-any.whl",
+      "sha256": "d6c83fd71a09f80e189a43a8b96ddcbef55356a8514dc041fd4b6f93390f87af",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-empflix",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_empflix-2.0.0-py3-none-any.whl",
+      "sha256": "1fec6658bc898de8f0371e58124d20673a559c399db52cb042fbf1b0b97ad3f8",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-eporner",
+      "version": "3.0.0",
+      "wheel": "unofficial_api_for_eporner-3.0.0-py3-none-any.whl",
+      "sha256": "8adb1af18458b391ea4321ae70f440fc03a10c8c214687da6f29badbd7207333",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-porn",
+      "version": "0.2.0",
+      "wheel": "unofficial_api_for_porn-0.2.0-py3-none-any.whl",
+      "sha256": "eee574a654d9097fef7274544e7520362ab8c8e053be82e1b4e89ad57483aabc",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-porndoe",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_porndoe-2.0.0-py3-none-any.whl",
+      "sha256": "15601a568e829423bf11c34f10415c73beb2de0158d6978dc60bb9fa71251a99",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-pornhat",
+      "version": "0.2.0",
+      "wheel": "unofficial_api_for_pornhat-0.2.0-py3-none-any.whl",
+      "sha256": "b8577c8895d9d0870361fe0e32f637e975b7b71f99fbac68fa2226a457d48a42",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-pornhub",
+      "version": "6.0.0",
+      "wheel": "unofficial_api_for_pornhub-6.0.0-py3-none-any.whl",
+      "sha256": "fa61a17ba47f5f2d137922c9f82f0d68ee71a0cddd31f5e9ce5930a2f8dc3c93",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-porntrex",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_porntrex-2.0.0-py3-none-any.whl",
+      "sha256": "91cc72a10ff9eeeecc92ed10f53adfad703760acea30a93e6bae599ee122ecda",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-redgifs",
+      "version": "1.1.0",
+      "wheel": "unofficial_api_for_redgifs-1.1.0-py3-none-any.whl",
+      "sha256": "b8549d0b8656b29a01e5cc0521bff6b7bf0d67fc24e268bfebf138c8d61d92bb",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-redtube",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_redtube-2.0.0-py3-none-any.whl",
+      "sha256": "7c7b61d0eff71a5bbd4cd9d09b1dda71ad76234836ed7580e8b081b7176d79a6",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-spankbang",
+      "version": "3.0.0",
+      "wheel": "unofficial_api_for_spankbang-3.0.0-py3-none-any.whl",
+      "sha256": "3db796bc790ac97e9acf5a9d43f8556082c2b1f23a9539c17a4ce7754845d043",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-thumbzilla",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_thumbzilla-2.0.0-py3-none-any.whl",
+      "sha256": "d22a1537648bad628bafb9b8154b0cd73b1f297aba5a478bc51e2076776b09ff",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-tnaflix",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_tnaflix-2.0.0-py3-none-any.whl",
+      "sha256": "3ab926a553df4e08ff54ff77f43dba5529ab0eeb227946bcb313446cccbdd202",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-tube8",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_tube8-2.0.0-py3-none-any.whl",
+      "sha256": "66cf4c4cdc68cc2fa6178bd0f74ee029de97cbbd3a37aac2cef751753b6eb775",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-xfreehd",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_xfreehd-2.0.0-py3-none-any.whl",
+      "sha256": "24671d8d59ead981f58d022da700fb75701f8fa926ddd12e87a6d40fd349c6da",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-xhamster",
+      "version": "3.0.0",
+      "wheel": "unofficial_api_for_xhamster-3.0.0-py3-none-any.whl",
+      "sha256": "7fa01bb33a530096162a7815cd11b1c169ecc3acb78bd3969e0ff4ad74a4b3cf",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-xnxx",
+      "version": "3.0.0",
+      "wheel": "unofficial_api_for_xnxx-3.0.0-py3-none-any.whl",
+      "sha256": "db5ce404e54b8780025fce14a54bf3a8801c0e329220fd40aea76f3bfd793e8d",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-xvideos",
+      "version": "3.0.0",
+      "wheel": "unofficial_api_for_xvideos-3.0.0-py3-none-any.whl",
+      "sha256": "fe2b7addfc22edc799312a28e8648266affa822c7723ef9ad1f20c6aa25735c6",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-youjizz",
+      "version": "0.2.0",
+      "wheel": "unofficial_api_for_youjizz-0.2.0-py3-none-any.whl",
+      "sha256": "d1f0d14fd63f4e039095c111b4bd5e17b89300c2a3e83fa86f0358a3a451e8dd",
+      "local_installed_version_matches": true
+    },
+    {
+      "package": "unofficial-api-for-youporn",
+      "version": "2.0.0",
+      "wheel": "unofficial_api_for_youporn-2.0.0-py3-none-any.whl",
+      "sha256": "51e41789629e66effa9587a99bdfc407892860d8065a6a9e63832dd117fa57b4",
+      "local_installed_version_matches": true
+    }
+  ],
+  "regression": {
+    "base_passed": 59,
+    "base_skipped": 238,
+    "app_passed": 42,
+    "compatibility_passed": 6
+  },
+  "unverified": [
+    "Thumbzilla legacy Playlist: no working public URL discovered online or in primary navigation",
+    "Large Thumbzilla/Tube8 channels: source advertises page 101, which returns HTTP 404",
+    "RedTube/Tube8 user feeds: current Brave sessions absent; earlier authorized accounts were source-confirmed empty",
+    "Nonempty advancement unavailable for empty PornHub public-user videos/uploads, subscriptions/feed and XVideos watch-later",
+    "Private xHamster playlist fixture has one page; its complete membership, first and beyond-last behavior pass",
+    "Other sort/filter combinations and locale variants beyond the recorded fixtures are not exhaustively verified"
+  ],
+  "registry_check": [
+    {
+      "package": "eaf-base-api",
+      "version": "4.3.0",
+      "registry_url": "https://pypi.org/pypi/eaf-base-api/4.3.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-bellesa",
+      "version": "1.1.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-bellesa/1.1.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-empflix",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-empflix/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-eporner",
+      "version": "3.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-eporner/3.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-porn",
+      "version": "0.2.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-porn/0.2.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-porndoe",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-porndoe/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-pornhat",
+      "version": "0.2.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-pornhat/0.2.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-pornhub",
+      "version": "6.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-pornhub/6.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-porntrex",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-porntrex/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-redgifs",
+      "version": "1.1.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-redgifs/1.1.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-redtube",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-redtube/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-spankbang",
+      "version": "3.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-spankbang/3.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-thumbzilla",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-thumbzilla/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-tnaflix",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-tnaflix/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-tube8",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-tube8/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-xfreehd",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-xfreehd/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-xhamster",
+      "version": "3.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-xhamster/3.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-xnxx",
+      "version": "3.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-xnxx/3.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-xvideos",
+      "version": "3.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-xvideos/3.0.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-youjizz",
+      "version": "0.2.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-youjizz/0.2.0/json",
+      "http_status": 404,
+      "published": false
+    },
+    {
+      "package": "unofficial-api-for-youporn",
+      "version": "2.0.0",
+      "registry_url": "https://pypi.org/pypi/unofficial-api-for-youporn/2.0.0/json",
+      "http_status": 404,
+      "published": false
+    }
+  ],
+  "stable_watch_routes": [
+    {
+      "provider": "xvideos",
+      "requested": "https://www.xvideos.com/video.omdlima1eca/video",
+      "resolved": "https://www.xvideos.com/video.omdlima1eca/the_massage_ended_in_a_fuck",
+      "status": "PASS"
+    },
+    {
+      "provider": "xnxx",
+      "requested": "https://www.xnxx.com/video-1h6m5v8a/video",
+      "resolved": "https://www.xnxx.com/video-1h6m5v8a/a_modest_masseuse_s_huge_ass_accepted_a_dick_for_an_additional_fee_from_a_client",
+      "status": "PASS"
+    }
+  ],
+  "release_gate": "Coordinated publication and lock regeneration required for provider/application registry installs; no publication performed",
+  "finite_extra_checks": [
+    {
+      "provider": "empflix",
+      "kind": "Channel.videos",
+      "url": "https://www.empflix.com/profile/21erotica",
+      "status": "PASS",
+      "counts": [
+        60,
+        60,
+        120
+      ]
+    },
+    {
+      "provider": "empflix",
+      "kind": "Pornstar.videos",
+      "url": "https://www.empflix.com/profile/dani-daniels",
+      "status": "PASS",
+      "counts": [
+        60,
+        59,
+        119
+      ]
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "Pornstar.videos",
+      "url": "https://www.tnaflix.com/profile/lisa-ann",
+      "status": "PASS",
+      "counts": [
+        60,
+        60,
+        120
+      ]
+    },
+    {
+      "provider": "tnaflix",
+      "kind": "Profile.videos",
+      "url": "https://www.tnaflix.com/profile/lisa-ann",
+      "status": "PASS",
+      "counts": [
+        60,
+        60,
+        120
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Channel.get_videos",
+      "url": "https://www.pornhub.com/channels/candyai",
+      "status": "PASS",
+      "counts": [
+        36,
+        36,
+        72
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "kind": "User",
+      "status": "FAIL",
+      "error": "AssertionError: EMPTY_UNVERIFIED: selected listing is empty"
+    },
+    {
+      "provider": "pornhub",
+      "kind": "User",
+      "status": "FAIL",
+      "error": "AssertionError: EMPTY_UNVERIFIED: selected listing is empty"
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Pornstar.get_videos",
+      "url": "https://www.pornhub.com/pornstar/danny-d",
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Playlist.get_videos",
+      "url": "https://www.pornhub.com/playlist/119820351",
+      "status": "PASS",
+      "counts": [
+        36,
+        40,
+        76
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Model.get_uploads",
+      "url": "https://www.pornhub.com/model/teddy-tarantino",
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ]
+    },
+    {
+      "provider": "porntrex",
+      "kind": "Channel.videos",
+      "url": "https://www.porntrex.com/channels/virginmassage/",
+      "status": "PASS",
+      "counts": [
+        20,
+        0,
+        20
+      ]
+    },
+    {
+      "provider": "pornhub",
+      "kind": "Model.get_gifs",
+      "url": "https://www.pornhub.com/model/teddy-tarantino",
+      "status": "PASS",
+      "counts": [
+        51,
+        0,
+        51
+      ]
+    },
+    {
+      "provider": "redtube",
+      "kind": "Pornstar.get_videos",
+      "url": "https://www.redtube.com/pornstar/eva+elfie",
+      "status": "PASS",
+      "counts": [
+        26,
+        26,
+        52
+      ]
+    },
+    {
+      "provider": "redtube",
+      "kind": "User.get_playlists",
+      "url": "https://www.redtube.com/users/emilscc",
+      "status": "PASS",
+      "counts": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "provider": "redtube",
+      "kind": "Playlist.get_videos",
+      "url": "https://www.redtube.com/playlist/4237321",
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ]
+    },
+    {
+      "provider": "redtube",
+      "kind": "User",
+      "status": "FAIL",
+      "error": "PageFetchError: Failed to process page 0 at https://www.redtube.com/user/emilscc/videos-data?f=all&page=1 on attempt 3: Request blocked (HTTP 401) for https://www.redtube.com/user/emilscc/videos-data?f=all&page=1"
+    },
+    {
+      "provider": "thumbzilla",
+      "kind": "Pornstar.get_videos",
+      "url": "https://www.thumbzilla.com/pornstar/nancy-a/",
+      "status": "PASS",
+      "counts": [
+        26,
+        26,
+        52
+      ]
+    },
+    {
+      "provider": "tube8",
+      "kind": "Pornstar.get_videos",
+      "url": "https://www.tube8.com/pornstar/nancy-a/",
+      "status": "PASS",
+      "counts": [
+        26,
+        26,
+        52
+      ]
+    },
+    {
+      "provider": "tube8",
+      "kind": "User",
+      "status": "FAIL",
+      "error": "PageFetchError: Failed to process page 0 at https://www.tube8.com/user/31618721/videos-data/?f=all&page=1 on attempt 3: The site did not expose this user video collection"
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Channel.videos",
+      "url": "https://xhamster.com/channels/family-xxx",
+      "status": "PASS",
+      "counts": [
+        48,
+        48,
+        96
+      ]
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Creator.get_shorts",
+      "url": "https://xhamster.com/creators/comatozze",
+      "status": "PASS",
+      "counts": [
+        48,
+        48,
+        96
+      ]
+    },
+    {
+      "provider": "xhamster",
+      "kind": "Pornstar.videos",
+      "url": "https://xhamster.com/pornstars/polly-yangs",
+      "status": "PASS",
+      "counts": [
+        46,
+        46,
+        92
+      ]
+    },
+    {
+      "provider": "xvideos",
+      "kind": "Pornstar.videos",
+      "url": "https://de.xvideos.com/pornstars/sweetie-fox1",
+      "status": "PASS",
+      "counts": [
+        36,
+        36,
+        72
+      ]
+    },
+    {
+      "provider": "youporn",
+      "kind": "Pornstar.videos",
+      "url": "https://www.youporn.com/pornstar/nancy-a/",
+      "status": "PASS",
+      "counts": [
+        26,
+        26,
+        52
+      ]
+    },
+    {
+      "provider": "youporn",
+      "kind": "Collection.videos",
+      "url": "https://www.youporn.com/collections/videos/38771091/",
+      "status": "PASS",
+      "counts": [
+        20,
+        20,
+        40
+      ]
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Performer.videos",
+      "url": "https://www.bellesa.co/performers/lily-starfire",
+      "status": "PASS",
+      "counts": [
+        3,
+        0,
+        3
+      ]
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Pornstar.get_channels",
+      "url": "https://porndoe.com/pornstars-profile/eva-elfie",
+      "status": "PASS",
+      "counts": [
+        19,
+        0,
+        19
+      ]
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Channel.videos",
+      "url": "https://porndoe.com/channel-profile/blacked-raw",
+      "status": "PASS",
+      "counts": [
+        30,
+        30,
+        60
+      ]
+    },
+    {
+      "provider": "pornhat",
+      "kind": "Channel.videos",
+      "url": "https://www.pornhat.com/sites/60-plus-milfs/",
+      "status": "PASS",
+      "counts": [
+        59,
+        59,
+        118
+      ]
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Channel.get_pornstars",
+      "url": "https://porndoe.com/channel-profile/blacked-raw",
+      "status": "PASS",
+      "counts": [
+        96,
+        96,
+        192
+      ]
+    },
+    {
+      "provider": "porn",
+      "kind": "Channel.videos",
+      "url": "https://www.porn.com/brazzers",
+      "status": "PASS",
+      "counts": [
+        117,
+        117,
+        234
+      ]
+    },
+    {
+      "provider": "porn",
+      "kind": "Pornstar.videos",
+      "url": "https://www.porn.com/mia-khalifa",
+      "status": "PASS",
+      "counts": [
+        117,
+        117,
+        234
+      ]
+    },
+    {
+      "provider": "youjizz",
+      "kind": "User.videos",
+      "url": "https://www.youjizz.com/profile/user/15100401",
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ]
+    },
+    {
+      "provider": "redgifs",
+      "kind": "Niche.videos",
+      "url": "https://www.redgifs.com/niches/duo-chastity",
+      "status": "PASS",
+      "counts": [
+        4,
+        0,
+        4
+      ]
+    },
+    {
+      "provider": "redgifs",
+      "kind": "User.images",
+      "url": "https://www.redgifs.com/users/nickiipeach",
+      "status": "PASS",
+      "counts": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "provider": "redgifs",
+      "kind": "User.collections",
+      "url": "https://www.redgifs.com/users/weirdjack",
+      "status": "PASS",
+      "counts": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "provider": "redgifs",
+      "kind": "Collection.items",
+      "url": "https://www.redgifs.com/users/weirdjack/collections/d7ddef5fb0",
+      "status": "PASS",
+      "counts": [
+        40,
+        40,
+        80
+      ]
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Category.videos",
+      "url": "https://www.bellesa.co/videos/categories/sensual",
+      "status": "PASS",
+      "counts": [
+        24,
+        24,
+        48
+      ]
+    },
+    {
+      "provider": "bellesa",
+      "kind": "Video.related_videos",
+      "url": "https://www.bellesa.co/videos/7054",
+      "status": "PASS",
+      "counts": [
+        5,
+        0,
+        5
+      ]
+    },
+    {
+      "provider": "porndoe",
+      "kind": "Category.videos",
+      "url": "https://porndoe.com/category/32/hd-videos",
+      "status": "PASS",
+      "counts": [
+        30,
+        30,
+        60
+      ]
+    },
+    {
+      "provider": "pornhat",
+      "kind": "Category.videos",
+      "url": "https://www.pornhat.com/tags/blowjob/",
+      "status": "PASS",
+      "counts": [
+        59,
+        59,
+        118
+      ]
+    },
+    {
+      "provider": "pornhat",
+      "kind": "Site.videos",
+      "url": "https://www.pornhat.com/paysite/naughty-america/",
+      "status": "PASS",
+      "counts": [
+        59,
+        59,
+        118
+      ]
+    },
+    {
+      "provider": "porn",
+      "kind": "Source.videos",
+      "url": "https://www.porn.com/xnxx",
+      "status": "PASS",
+      "counts": [
+        117,
+        117,
+        234
+      ]
+    }
+  ]
+}

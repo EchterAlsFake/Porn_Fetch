@@ -85,7 +85,7 @@ class ClientPool:
     async def __aexit__(self, *_: object) -> None:
         await self.close()
 
-    async def resolve(self, url: str, *, pages: int = 5) -> tuple[Route, Any]:
+    async def resolve(self, url: str, *, pages: int | str = 5) -> tuple[Route, Any]:
         route = route_url(url)
         client = self.client(route.provider)
         if route.kind == ContentKind.VIDEO:
@@ -99,7 +99,7 @@ class ClientPool:
             route = replace(route, kind=kind, profile_mode=None)
         return route, target
 
-    async def media_stream(self, url: str, *, pages: int = 5) -> AsyncIterator[Any]:
+    async def media_stream(self, url: str, *, pages: int | str = 5) -> AsyncIterator[Any]:
         route, source = await self.resolve(url, pages=pages)
         if route.kind in {ContentKind.VIDEO, ContentKind.GALLERY}:
             yield source

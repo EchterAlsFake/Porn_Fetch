@@ -5,12 +5,9 @@ import argparse
 import asyncio
 from typing import Any
 
-import questionary
-from rich.console import Console
-from rich.panel import Panel
-
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
 
+from . import prompts as questionary
 from .downloads import PausedStore
 from .flows import (
     handle_account_auth,
@@ -30,9 +27,11 @@ from .flows.ui import (
     make_download_progress,
     print_banner,
     print_error,
+    print_screen,
     print_success,
 )
 from .settings import SettingsStore, prompt_error_reporting_consent
+from .terminal import terminal_console
 
 __all__ = [
     "DownloadSpeedColumn",
@@ -72,7 +71,7 @@ async def handle_self_update() -> bool:
 
 async def run_wizard(args: argparse.Namespace | None = None) -> int:
     """Run the interactive terminal menu and close session resources cleanly."""
-    console = Console()
+    console = terminal_console()
     store = SettingsStore()
     settings = store.load()
     explicit_reporting_choice = getattr(args, "error_reporting", None) if args else None
@@ -98,38 +97,40 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
     ctx = WizardContext(settings, store, console)
     await ctx.check_license(force=True)
 
+    focused = None
     try:
         while True:
-            console.print()
             print_banner(console, license_state=ctx.license_service.status.state)
-            console.print()
+            print_screen(console)
 
             paused_items = PausedStore().load()
             main_choices = [
-                questionary.Choice("📥 Download Single URL (Video, album, or direct link)", value="single"),
+                questionary.Separator("Downloads"),
+                questionary.Choice("Download URL", value="single", description="Video, album or direct media link"),
             ]
             if paused_items:
                 main_choices.append(questionary.Choice(
-                    f"⏯️  Resume Paused Downloads ({len(paused_items)} saved job{'s' if len(paused_items) > 1 else ''})",
-                    value="resume",
+                    f"Resume paused downloads ({len(paused_items)})", value="resume",
+                    description="Resume saved jobs or remove their partial files",
                 ))
             main_choices.extend([
-                questionary.Choice("👤 Scrape Profile / Playlist (Fetch model or playlist content)", value="scrape"),
-                questionary.Choice("📋 Batch / Queue Management (Review tracked models or queued links)", value="batch"),
-                questionary.Choice("📊 Download Statistics & History (PocketBase dashboard & tracking)", value="stats"),
-                questionary.Choice("🔑 Account & Authentication (Login credentials, browser cookie import)", value="auth"),
-                questionary.Choice("⚙️  Settings & Configuration (Output path, naming templates, preferred quality)", value="settings"),
-                questionary.Choice("📜 License Management (Check status, import key/file, deactivate)", value="license"),
-                questionary.Choice("⬆️  Check for Updates (Download and install CLI updates)", value="update"),
-                questionary.Choice("🧪 Run Self-Test Suite (Automated check for supported sites & features)", value="test"),
-                questionary.Choice("❌ Exit", value="exit"),
+                questionary.Choice("Scrape profile or playlist", value="scrape"),
+                questionary.Choice("Queue and tracked profiles", value="batch"),
+                questionary.Separator("Tools and preferences"),
+                questionary.Choice("Statistics and history", value="stats"),
+                questionary.Choice("Accounts and authentication", value="auth"),
+                questionary.Choice("Settings", value="settings"),
+                questionary.Choice("License", value="license"),
+                questionary.Choice("Check for Updates", value="update"),
+                questionary.Choice("Diagnostics", value="test", description="Run the existing supported-site self-tests"),
+                questionary.Separator(),
+                questionary.Choice("Exit", value="exit"),
             ])
 
             action = await questionary.select(
-                "Main Menu (use arrow keys to navigate):",
-                choices=main_choices,
-                style=WIZARD_STYLE,
+                "Choose an action:", choices=main_choices, default=focused, style=WIZARD_STYLE,
             ).ask_async()
+            focused = action
 
             if action in {None, "exit"}:
                 break
@@ -155,7 +156,7 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
                     if await handle_self_update():
                         break
                 elif action == "test":
-                    from .tests import run_cli_self_test
+                    from .selftest import run_cli_self_test
                     await run_cli_self_test()
             except asyncio.CancelledError:
                 console.print("\n[yellow]Operation cancelled.[/]")
@@ -168,11 +169,6 @@ async def run_wizard(args: argparse.Namespace | None = None) -> int:
     finally:
         await ctx.close()
         console.print()
-        console.print(Panel(
-            "[bold #ff2a85]Thank you for using Porn Fetch CLI![/]\n"
-            "[dim]All tasks completed. Session closed cleanly.[/]",
-            border_style="#00e5ff",
-            padding=(0, 2),
-        ))
+        console.print("[dim]Session closed.[/]")
 
     return 0

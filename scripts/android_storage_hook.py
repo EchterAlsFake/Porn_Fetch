@@ -121,6 +121,19 @@ def before_apk_build(toolchain) -> None:
             build_py.write_text(source, encoding="utf-8")
 
 
+def stage_pocketbase(project: Path, dist_dir: Path, abi: str) -> None:
+    """Stage the source-built runtime and its notices for the selected ABI."""
+    pocketbase = project / "build/android-pocketbase" / abi
+    library = pocketbase / "libpornfetch_pocketbase.so"
+    if not library.is_file() or not (pocketbase / "legal/modules.json").is_file():
+        raise FileNotFoundError(f"Embedded PocketBase is missing for {abi}. Build using scripts/build_android.py.")
+    native = dist_dir / "libs" / abi
+    native.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(library, native / library.name)
+    shutil.copytree(pocketbase / "legal", dist_dir / "src/main/assets/pocketbase-legal", dirs_exist_ok=True)
+    shutil.copy2(pocketbase / "build.json", dist_dir / "src/main/assets/pocketbase-legal/build.json")
+
+
 def before_apk_assemble(toolchain) -> None:
     """p4a invokes this for APK and AAB builds, after generating Java sources."""
     dist_dir = Path(toolchain._dist.dist_dir)
@@ -129,6 +142,12 @@ def before_apk_assemble(toolchain) -> None:
     prepare_native_libraries(dist_dir / "libs", dist_dir / "src/main/res")
     activity = dist_dir / "src/main/java/org/kivy/android/PythonActivity.java"
     project = Path(__file__).resolve().parents[1]
+    config = configparser.ConfigParser(interpolation=None)
+    config.read(project / "buildozer.spec")
+    abi = config["app"]["android.archs"]
+    if abi not in {"arm64-v8a", "armeabi-v7a", "x86", "x86_64"}:
+        raise ValueError("Embedded PocketBase requires a single supported Android ABI")
+    stage_pocketbase(project, dist_dir, abi)
     banner_dir = dist_dir / "src/main/res/drawable-xhdpi"
     banner_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy2(project / "src/frontend/graphics/android_tv_banner.png", banner_dir / "tv_banner.png")

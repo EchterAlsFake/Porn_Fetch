@@ -1,8 +1,7 @@
 """Interactive PocketBase statistics and history flow."""
 from __future__ import annotations
 
-import questionary
-
+from .. import prompts as questionary
 from ..tracker import (
     close_cli_tracker,
     get_cli_tracker,
@@ -11,29 +10,32 @@ from ..tracker import (
     print_origin_iterators,
 )
 from .context import WizardContext
-from .ui import WIZARD_STYLE, print_error, print_success
+from .ui import WIZARD_STYLE, print_error, print_screen, print_success
 
 
 async def handle_statistics_dashboard(ctx: WizardContext) -> None:
     """Display PocketBase download statistics, history, and tracked origins."""
+    print_screen(ctx.console, "History")
+    focused = None
     while True:
-        status_badge = "[bold green]Active[/]" if ctx.settings.track_videos else "[dim yellow]Disabled[/]"
+        status_badge = "Active" if ctx.settings.track_videos else "Disabled"
         action = await questionary.select(
             f"PocketBase Statistics & History (Tracking: {status_badge}):",
             choices=[
-                questionary.Choice("📊 View Overview Statistics & Source Breakdown", value="overview"),
-                questionary.Choice("⚠️  View Failed Downloads", value="failed"),
-                questionary.Choice("📁 View Tracked Sources / Collections", value="origins"),
+                questionary.Choice("View Overview Statistics & Source Breakdown", value="overview"),
+                questionary.Choice("View Failed Downloads", value="failed"),
+                questionary.Choice("View Tracked Sources / Collections", value="origins"),
                 questionary.Choice(
-                    f"{'🛑 Disable' if ctx.settings.track_videos else '✅ Enable'} Download Tracking",
+                    f"{'Disable' if ctx.settings.track_videos else 'Enable'} Download Tracking",
                     value="toggle",
                 ),
-                questionary.Choice("📦 Auto-Install / Verify PocketBase Binary", value="install_pb"),
-                questionary.Choice("⚙️  Configure Database Paths", value="config"),
-                questionary.Choice("🔙 Back to Main Menu", value="back"),
+                questionary.Choice("Auto-Install / Verify PocketBase Binary", value="install_pb"),
+                questionary.Choice("Configure Database Paths", value="config"),
+                questionary.Choice("Back to Main Menu", value="back"),
             ],
-            style=WIZARD_STYLE,
+            default=focused, style=WIZARD_STYLE,
         ).ask_async()
+        focused = action
 
         if not action or action == "back":
             break

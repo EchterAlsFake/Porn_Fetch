@@ -1,4 +1,4 @@
-"""Restore paused rows locally and coalesce desktop queue saves off the GUI thread."""
+"""Restore paused rows locally and coalesce queue saves off the GUI thread."""
 from __future__ import annotations
 
 import asyncio

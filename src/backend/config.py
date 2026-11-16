@@ -33,6 +33,7 @@ IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
 
 _smoke_state = TemporaryDirectory(prefix="pornfetch-smoke-") if "--smoke-test" in sys.argv else None
 TEMP_DIRECTORY = (Path(_smoke_state.name) / "cache" if _smoke_state else
+                  Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)) / "download-state" if IS_ANDROID else
                   Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.GenericCacheLocation)) / "PornFetch")
 TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
 TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
@@ -164,6 +165,15 @@ class SettingsManager(QObject):
 
     def sync(self):
         self._settings.sync()
+
+    def apply_premium_quality_default(self):
+        """Choose the highest offered quality once when Premium first unlocks."""
+        key = "Onboarding/premium_quality_initialized"
+        if self.get_bool(key):
+            return
+        self._settings.setValue(key, True)
+        self.quality = 0  # Best available, including 4K when offered.
+        self.sync()
 
     def reset(self):
         preserved = {key: self._settings.value(key) for key in self._settings.allKeys()

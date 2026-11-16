@@ -277,6 +277,7 @@ class Backend(QObject):
                                                                   key="update-install"))
         self.showMessage.connect(self.handle_message)
         app_settings.restartRequired.connect(self.setting_requires_restart)
+        self.creator_bridge = None
         self.database_bridge: DatabaseBridge | None = None
         self._pending_pocketbase_move: tuple[Path, Path] | None = None
         app_settings.movePocketBaseData.connect(self.pocketbase_data_changed)
@@ -288,7 +289,7 @@ class Backend(QObject):
         # refresh them immediately when the content locale changes.
         self.load_clients()
         self.bind_runtime_settings()
-        if not mobile_layout:
+        if not mobile_layout or is_android:
             self.bind_download_recovery()
         if sni_proxy_manager and sni_proxy_manager.last_error:
             QTimer.singleShot(
@@ -345,6 +346,7 @@ class Backend(QObject):
             self._background_tasks
             or (self._license_bridge is not None and self._license_bridge.busy)
             or (self.database_bridge is not None and self.database_bridge.busy)
+            or (getattr(self, "creator_bridge", None) is not None and self.creator_bridge.activity)
             or self._is_shutting_down
         )
         if active != self._activity_active:
@@ -367,11 +369,18 @@ class Backend(QObject):
                 message, self.tr("License imported") if success else self.tr("License import failed"),
                 "success" if success else "error", key="license-import"))
         license_bridge.statusChanged.connect(self._enforce_quality_access)
+        license_bridge.entitlementChanged.connect(self._apply_premium_quality_default)
         license_bridge.statusChanged.connect(self._enforce_parallel_access)
         license_bridge.statusChanged.connect(self._update_activity)
+        license_bridge.statusChanged.connect(lambda: self.creator_bridge.refreshAccess() if self.creator_bridge else None)
         self._enforce_quality_access()
+        self._apply_premium_quality_default()
         self._enforce_parallel_access()
         self._update_activity()
+
+    def _apply_premium_quality_default(self) -> None:
+        if self.has_premium_access():
+            app_settings.apply_premium_quality_default()
 
     def _enforce_quality_access(self) -> None:
         preferred_quality = app_settings.mappings_quality.get(app_settings.quality, "best")
@@ -450,6 +459,8 @@ class Backend(QObject):
             self._license_bridge.start()
         if self.database_bridge is not None:
             self.database_bridge.start()
+        if getattr(self, "creator_bridge", None) is not None:
+            self.creator_bridge.start()
         self.start_async_services()
 
     def _start_update_check(self) -> None:
@@ -597,17 +608,18 @@ class Backend(QObject):
         if self.android_shared_downloads_available:
             app_settings.android_output_folder = SHARED_DOWNLOADS
 
-    async def _save_to_output_folder(self, source: Path) -> None:
-        if app_settings.android_output_folder == SHARED_DOWNLOADS:
+    async def _save_to_output_folder(self, source: Path, destination: str | None = None) -> None:
+        destination = destination or app_settings.android_output_folder
+        if destination == SHARED_DOWNLOADS:
             try:
                 await save_shared_download(source, app_settings.skip_existing_files)
             except Exception as error:
                 self.logger.exception("Could not save download to Android shared Downloads")
                 raise OutputFolderError("Android shared Downloads is unavailable") from error
             return
-        folder_url = QUrl(app_settings.android_output_folder)
+        folder_url = QUrl(destination)
         if not folder_url.isValid() or folder_url.scheme() not in ("content", "file"):
-            return
+            raise OutputFolderError("Choose a download destination in Settings")
         target_path = folder_destination(folder_url, source.name)
         try:
             def copy_to_folder() -> None:
@@ -1128,7 +1140,7 @@ class Backend(QObject):
                         and not Path(f"{output_path}.raw-state.json").exists()
                         and not (Path(TEMP_DIRECTORY_STATES) / job_id).exists()):
                     if is_mobile or "--android" in sys.argv:
-                        await self._save_to_output_folder(output_path)
+                        await self._save_to_output_folder(output_path, video.export_destination)
                     self._downloads_model.update_progress(job_id, 100)
                     self._downloads_model.set_status(job_id, "completed")
                     self.download_manager.update_status(job_id, "completed")
@@ -1283,7 +1295,7 @@ class Backend(QObject):
                                                        key="library-export", action="metadata" if retryable else "")
                     self._downloads_model.update_progress(job_id, 100)
                     if is_mobile or "--android" in sys.argv:
-                        await self._save_to_output_folder(output_path)
+                        await self._save_to_output_folder(output_path, video.export_destination)
                 self.download_manager.update_status(job_id, status)
                 if status == "completed":
                     self.notifications.download_completed()
@@ -1856,6 +1868,8 @@ class Backend(QObject):
     async def _teardown_routine(self):
         """Stop writers, persist recovery/history, then close their transports."""
         try:
+            if getattr(self, "creator_bridge", None) is not None:
+                await self.creator_bridge.stop()
             downloads = set(self._download_tasks.values())
             for job in tuple(self._download_tasks):
                 self.stop_download(job)
@@ -1887,6 +1901,8 @@ class Backend(QObject):
             recovery = getattr(self, "_download_recovery", None)
             if recovery is not None:
                 await close_component("download recovery", recovery.close)
+            if getattr(self, "creator_bridge", None) is not None:
+                await close_component("creator library", self.creator_bridge.close)
             if self.database_bridge is not None:
                 await close_component("database service", self.database_bridge.close)
             app_settings.sync()
@@ -2011,6 +2027,11 @@ def main() -> None:
 
     database_bridge = DatabaseBridge(parent=engine, tracking_supported=not is_mobile)
     backend_instance.bind_database_bridge(database_bridge)
+    from src.backend.creator_bridge import CreatorBridge
+    creator_bridge = CreatorBridge(backend_instance, database_bridge.tracker, supported=not is_ios, parent=engine)
+    backend_instance.creator_bridge = creator_bridge
+    creator_bridge.changed.connect(backend_instance._update_activity)
+    engine.rootContext().setContextProperty("creatorBridge", creator_bridge)
 
     license_service = create_license_service(
         app_settings,

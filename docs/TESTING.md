@@ -6,6 +6,10 @@ clean machine.
 
 ## Offline checks
 
+The focused [terminal interface checks](CLI.md#presentation-architecture-and-checks)
+exercise keyboard navigation, search, plain prompts and layouts from 32x8 to
+120x40 without contacting providers or licensing servers.
+
 ```sh
 uv sync --upgrade --extra gui --group dev
 uv run --no-sync python scripts/patch_qtasyncio.py .venv

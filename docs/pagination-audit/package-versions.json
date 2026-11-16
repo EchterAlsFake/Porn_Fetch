@@ -1,0 +1,25 @@
+{
+  "base": "4.3.0",
+  "providers": {
+    "bellesa": "1.1.0",
+    "empflix": "2.0.0",
+    "eporner": "3.0.0",
+    "porn": "0.2.0",
+    "porndoe": "2.0.0",
+    "pornhat": "0.2.0",
+    "pornhub": "6.0.0",
+    "porntrex": "2.0.0",
+    "redgifs": "1.1.0",
+    "redtube": "2.0.0",
+    "spankbang": "3.0.0",
+    "thumbzilla": "2.0.0",
+    "tnaflix": "2.0.0",
+    "tube8": "2.0.0",
+    "xfreehd": "2.0.0",
+    "xhamster": "3.0.0",
+    "xnxx": "3.0.0",
+    "xvideos": "3.0.0",
+    "youjizz": "0.2.0",
+    "youporn": "2.0.0"
+  }
+}

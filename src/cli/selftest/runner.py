@@ -5,12 +5,9 @@ import asyncio
 import time
 from typing import Any, Coroutine
 
-from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
-
 from ..providers import ClientPool
 from ..settings import CliSettings
+from ..terminal import Panel, Table, print_screen, terminal_console
 from .cases import COLLECTION_TESTS, GALLERY_TESTS, PROFILE_TESTS, SHORTS_TESTS, SINGLE_VIDEO_TESTS
 from .downloads import test_active_download, test_active_gallery_download
 from .models import TestResult
@@ -23,7 +20,8 @@ async def run_cli_self_test(
     concurrency: int = 2,
     include_downloads: bool = False,
 ) -> int:
-    console = Console()
+    console = terminal_console()
+    print_screen(console, "Diagnostics")
     started = time.perf_counter()
     pattern = filter_pattern.casefold().strip() if filter_pattern else ""
     offline_only = pattern in {"offline", "unit", "core"}
@@ -48,7 +46,8 @@ async def run_cli_self_test(
             operations += [limited(test_gallery(name, url, pool)) for name, url in selected(GALLERY_TESTS)]
             operations += [limited(test_stream("Collection", name, url, pool)) for name, url in selected(COLLECTION_TESTS)]
             operations += [limited(test_stream("Profile", name, url, pool)) for name, url in selected(PROFILE_TESTS)]
-            results.extend(await asyncio.gather(*operations))
+            with console.status("[cyan]Running provider diagnostics...[/]"):
+                results.extend(await asyncio.gather(*operations))
             if include_downloads:
                 results.append(await test_active_download(pool, settings))
                 for name, url in selected(GALLERY_TESTS):
@@ -56,7 +55,7 @@ async def run_cli_self_test(
         finally:
             await pool.close()
 
-    table = Table(title="Porn Fetch test results", border_style="#ff2a85")
+    table = Table(title="Porn Fetch test results", border_style="dim")
     table.add_column("Result")
     table.add_column("Category")
     table.add_column("Test")

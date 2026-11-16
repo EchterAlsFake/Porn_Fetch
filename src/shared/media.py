@@ -141,5 +141,6 @@ class VideoObject:
     is_from_account: bool = False
     thumbnail_data: bytes | None = None
     library_metadata: LibraryMetadata | None = None
+    export_destination: str | None = None
 
 

@@ -20,6 +20,11 @@ Pane {
         spacing: 8
         AppButton {
             Layout.fillWidth: true
+            text: qsTr("Creators")
+            onClicked: root.openPage(7)
+        }
+        AppButton {
+            Layout.fillWidth: true
             text: qsTr("Recent activity")
             onClicked: root.openActivity()
         }

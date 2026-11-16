@@ -35,7 +35,7 @@ class DatabaseBridge(QObject):
         self._tasks: set[asyncio.Task[Any]] = set()
         self._refresh_task: asyncio.Task[None] | None = None
         self._closing = False
-        # Reuse the disabled tracker contract on Android; no database is created or started.
+        # Android history stays disabled; Creators explicitly opens the same tracker.
         self._tracker = tracker or PocketBaseTracker(
             data_path=app_settings.pocketbase_data_path,
             enabled=tracking_supported and not IS_ANDROID and bool(app_settings.track_videos),

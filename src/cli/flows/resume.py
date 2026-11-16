@@ -4,25 +4,25 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-import questionary
-from rich.table import Table
-
+from .. import prompts as questionary
 from ..downloads import DownloadController, PausedStore, clear_resume_state, download_gallery, download_video
 from ..media import prepare_video
+from ..terminal import Table
 from ..tracker import record_cli_download
 from .context import WizardContext
-from .ui import WIZARD_STYLE, make_download_progress, print_success
+from .ui import WIZARD_STYLE, make_download_progress, print_screen, print_success
 
 
 async def handle_resume_paused(ctx: WizardContext) -> None:
     """Review, resume, or purge saved paused downloads."""
+    print_screen(ctx.console, "Paused downloads")
     store = PausedStore()
     paused_items = store.load()
     if not paused_items:
         ctx.console.print("[yellow]No paused downloads found.[/]")
         return
 
-    table = Table(title=f"Paused Downloads ({len(paused_items)} saved)", border_style="#ff2a85")
+    table = Table(title=f"Paused Downloads ({len(paused_items)} saved)", border_style="dim")
     table.add_column("#", style="cyan", justify="right")
     table.add_column("Title", style="bold white")
     table.add_column("Quality", style="magenta")
@@ -48,11 +48,11 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
     action = await questionary.select(
         "Choose an action:",
         choices=[
-            questionary.Choice("▶️  Resume all paused downloads", value="resume_all"),
-            questionary.Choice("▶️  Resume a specific download", value="resume_single"),
-            questionary.Choice("🗑️  Cancel and delete a paused job", value="delete_single"),
-            questionary.Choice("🧹 Clear all paused jobs and purge temporary files", value="clear_all"),
-            questionary.Choice("🔙 Back to Main Menu", value="back"),
+            questionary.Choice("Resume all paused downloads", value="resume_all"),
+            questionary.Choice("Resume a specific download", value="resume_single"),
+            questionary.Choice("Cancel and delete a paused job", value="delete_single"),
+            questionary.Choice("Clear all paused jobs and purge temporary files", value="clear_all"),
+            questionary.Choice("Back to Main Menu", value="back"),
         ],
         style=WIZARD_STYLE,
     ).ask_async()
@@ -83,7 +83,7 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
             )
             for i, item in enumerate(paused_items, 1)
         ]
-        item_choices.append(questionary.Choice("🔙 Cancel", value=None))
+        item_choices.append(questionary.Choice("Cancel", value=None))
         picked = await questionary.select("Select job to remove:", choices=item_choices, style=WIZARD_STYLE).ask_async()
         if picked:
             target = picked.get("target")
@@ -104,7 +104,7 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
             )
             for i, item in enumerate(paused_items, 1)
         ]
-        item_choices.append(questionary.Choice("🔙 Cancel", value=None))
+        item_choices.append(questionary.Choice("Cancel", value=None))
         picked = await questionary.select("Select job to resume:", choices=item_choices, style=WIZARD_STYLE).ask_async()
         if not picked:
             return
@@ -118,7 +118,7 @@ async def handle_resume_paused(ctx: WizardContext) -> None:
         title = item.get("title") or target_path.name
         kind = item.get("kind", "video")
 
-        ctx.console.print(f"\n[cyan]▶ Resuming: [bold white]{title}[/][/]")
+        ctx.console.print(f"\n[cyan] Resuming: [bold white]{title}[/][/]")
         controller = DownloadController(
             url=url, target=target_path, title=title, quality=quality, kind=kind,
         )

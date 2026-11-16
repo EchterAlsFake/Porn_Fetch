@@ -315,7 +315,7 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
     return await _await_if_needed(client.get_video(route.url, load_html=True))
 
 
-async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any:
+async def resolve_container(client: Any, route: Route, *, pages: int | str = 5, iterator_config: Any = None) -> Any:
     if route.provider == "youjizz":
         from src.shared.youjizz import resolve_container as resolve_youjizz_container
         return await resolve_youjizz_container(client, route)
@@ -343,7 +343,7 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
         if route.provider not in COLLECTION_SEGMENTS:
             raise ValueError(f"public playlists are not supported for {route.provider}")
         if route.provider == "xvideos":
-            return client.get_playlist(route.url, pages=pages)
+            return client.get_playlist(route.url, pages=pages, **({"iterator_config": iterator_config} if iterator_config is not None else {}))
         name = {
             "youporn": "get_collection",
         }.get(route.provider, "get_playlist")
@@ -424,7 +424,7 @@ async def resolve_container(client: Any, route: Route, *, pages: int = 5) -> Any
 
 
 def container_stream(
-    container: Any, *, pages: int, provider: str, profile_mode: str = "videos",
+    container: Any, *, pages: int | str, provider: str, profile_mode: str = "videos",
     iterator_config: Any = None,
 ) -> AsyncIterator[Any]:
     if hasattr(container, "__aiter__"):
@@ -462,7 +462,7 @@ async def _redgifs_videos(stream: AsyncIterator[Any]) -> AsyncIterator[Any]:
             await close()
 
 
-def _call_stream(container: Any, name: str, pages: int, iterator_config: Any = None) -> AsyncIterator[Any]:
+def _call_stream(container: Any, name: str, pages: int | str, iterator_config: Any = None) -> AsyncIterator[Any]:
     method = getattr(container, name)
     options: dict[str, Any] = {"pages": pages}
     if iterator_config is not None:

@@ -4,24 +4,23 @@ from __future__ import annotations
 from contextlib import aclosing
 from typing import Any
 
-import questionary
-from rich.panel import Panel
-from rich.table import Table
-
 from src.shared.access import public_collection_items
 from src.shared.media import VideoObject, quality_requires_premium, select_allowed_quality
 
+from .. import prompts as questionary
 from ..downloads import download_gallery, download_video
 from ..media import prepare_video
 from ..output import output_path_for
 from ..providers import ContentKind, Route, route_url
+from ..terminal import Panel, Table
 from ..tracker import record_cli_download
 from .context import WizardContext
-from .ui import WIZARD_STYLE, make_download_progress, print_error, print_success
+from .ui import WIZARD_STYLE, make_download_progress, print_error, print_screen, print_success
 
 
 async def handle_scrape_profile(ctx: WizardContext) -> None:
     """Prompt for profile/playlist URL or username, preview items, and download."""
+    print_screen(ctx.console, "Scrape")
     target_input = await questionary.text(
         "Enter profile / playlist URL (or model username):",
         style=WIZARD_STYLE,
@@ -97,7 +96,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     if not premium and route.kind in {ContentKind.PROFILE, ContentKind.COLLECTION}:
         ctx.console.print("[yellow]Free bulk preview: only the first 5 videos are available. Activate a premium license for the full model, channel or playlist.[/]")
     items: list[tuple[Route, Any, VideoObject | None]] = []
-    with ctx.console.status(f"[bold green]Scraping {route.provider.title()} ({url})...[/]", spinner="dots"):
+    with ctx.console.status(f"[bold cyan]Scraping {route.provider.title()} ({url})...[/]", spinner="dots"):
         ctx.pool.runtime_config.profile_video_mode = mode
         try:
             stream = ctx.pool.media_stream(url, pages=5)
@@ -134,7 +133,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     preview_table = Table(
         title=f"Discovered Content ({len(items)} items)",
         border_style="#00e5ff",
-        header_style="bold #ff2a85",
+        header_style="bold cyan",
     )
     preview_table.add_column("Index", style="bold cyan", justify="right")
     preview_table.add_column("Title", style="white", max_width=45, overflow="ellipsis")
@@ -155,10 +154,10 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     action = await questionary.select(
         "Action for discovered items:",
         choices=[
-            questionary.Choice(f"📥 Download All ({len(items)} items)", value="all"),
-            questionary.Choice("🎯 Select specific items to download", value="select"),
-            questionary.Choice("📋 Save model to Tracked Models database", value="track"),
-            questionary.Choice("🔙 Back to Main Menu", value="cancel"),
+            questionary.Choice(f"Download All ({len(items)} items)", value="all"),
+            questionary.Choice("Select specific items to download", value="select"),
+            questionary.Choice("Save model to Tracked Models database", value="track"),
+            questionary.Choice("Back to Main Menu", value="cancel"),
         ],
         style=WIZARD_STYLE,
     ).ask_async()
@@ -201,7 +200,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     for q in ["best", "1080", "720", "480", "360", "worst"]:
         req_prem = quality_requires_premium(q)
         is_locked = req_prem and not has_premium
-        title = f"🎬 {q}p" if q.isdigit() else f"🌟 {q}"
+        title = f"{q}p" if q.isdigit() else q
         q_choices.append(questionary.Choice(
             title=title,
             value=q,
@@ -232,7 +231,7 @@ async def handle_scrape_profile(ctx: WizardContext) -> None:
     failed_count = 0
 
     with make_download_progress(ctx.console) as progress:
-        overall_task = progress.add_task("[bold #ff2a85]Queue Progress[/]", total=len(selected_items))
+        overall_task = progress.add_task("[bold cyan]Queue Progress[/]", total=len(selected_items))
 
         for rt, src, med in selected_items:
             item_title = med.title if med else getattr(src, "title", "Album")

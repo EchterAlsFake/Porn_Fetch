@@ -28,10 +28,11 @@ class AndroidApkTests(unittest.TestCase):
                 apk = Path(directory) / "app.apk"
                 with zipfile.ZipFile(apk, "w") as archive:
                     for name in ("libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so",
-                                 "libpython3.15.so", "libTor.so", f"libQt6Svg_{abi}.so",
+                                 "libpython3.15.so", "libTor.so", "libpornfetch_pocketbase.so", f"libQt6Svg_{abi}.so",
                                  f"libplugins_imageformats_qsvg_{abi}.so",
                                  f"libplugins_iconengines_qsvgicon_{abi}.so"):
                         archive.writestr(f"lib/{abi}/{name}", b"native library")
+                    archive.writestr("assets/pocketbase-legal/modules.json", b"[]")
                     archive.writestr(f"lib/{abi}/libpybundle.so", python_bundle("jwt"))
                 checker.check_apk(apk, abi)
                 with zipfile.ZipFile(apk, "a") as archive:
@@ -45,10 +46,11 @@ class AndroidApkTests(unittest.TestCase):
             apk = Path(directory) / "app.apk"
             with zipfile.ZipFile(apk, "w") as archive:
                 for name in ("libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so",
-                             "libpython3.15.so", "libTor.so", f"libQt6Svg_{abi}.so",
+                             "libpython3.15.so", "libTor.so", "libpornfetch_pocketbase.so", f"libQt6Svg_{abi}.so",
                              f"libplugins_imageformats_qsvg_{abi}.so",
                              f"libplugins_iconengines_qsvgicon_{abi}.so"):
                     archive.writestr(f"lib/{abi}/{name}", b"native library")
+                archive.writestr("assets/pocketbase-legal/modules.json", b"[]")
                 archive.writestr(f"lib/{abi}/libpybundle.so", python_bundle("cryptography", "tuf"))
             with self.assertRaisesRegex(ValueError, "jwt.*PyJWT"):
                 checker.check_apk(apk, abi)
@@ -59,7 +61,7 @@ class AndroidApkTests(unittest.TestCase):
             apk = Path(directory) / "app.apk"
             with zipfile.ZipFile(apk, "w") as archive:
                 for name in ("libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so",
-                             "libpython3.15.so", "libTor.so", f"libQt6Svg_{abi}.so"):
+                             "libpython3.15.so", "libTor.so", "libpornfetch_pocketbase.so", f"libQt6Svg_{abi}.so"):
                     archive.writestr(f"lib/{abi}/{name}", b"native library")
             with self.assertRaisesRegex(ValueError, "libplugins_imageformats_qsvg"):
                 checker.check_apk(apk, abi)

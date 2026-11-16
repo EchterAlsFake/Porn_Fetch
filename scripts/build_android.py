@@ -492,6 +492,9 @@ def update_buildozer_spec(spec_path: Path, buildozer_arch: str, sdk_path: Path, 
         "shiboken6", "PySide6", *extras,
     ])
     replacements[r"^requirements\s*=.*$"] = f"requirements = {requirements}"
+    excluded = current.get("app", "source.exclude_dirs", fallback="").split(",")
+    excluded = list(dict.fromkeys([item.strip() for item in excluded if item.strip()] + ["build", "native"]))
+    replacements[r"^source\.exclude_dirs\s*=.*$"] = "source.exclude_dirs = " + ",".join(excluded)
 
     jar_dir = project_root / "deployment" / "jar" / "PySide6" / "jar"
     if jar_dir.is_dir():
@@ -712,6 +715,8 @@ def build_single_arch(
     ndk_stamp.write_text(ANDROID_NDK_REVISION + "\n", encoding="utf-8")
     python_stamp.write_text(ANDROID_PYTHON_VERSION + "\n", encoding="utf-8")
     prepare_android_settings(project_root, venv_dir)
+    from scripts.build_android_pocketbase import build as build_pocketbase
+    build_pocketbase(project_root, canon_arch, ndk_path)
     extract_qt_jars(wheel_pyside, project_root)
     update_buildozer_spec(buildozer_spec, buildozer_arch, sdk_path, ndk_path, project_root)
     update_pysidedeploy_spec(pysidedeploy_spec, wheel_pyside, wheel_shiboken, sdk_path, ndk_path, project_root, mode=build_mode)
