@@ -270,9 +270,10 @@ async def finalize_video(video_path, video, settings, *, premium, metadata_writt
     try:
         source = video.source_video
         core = getattr(source, "core", None)
-        result.export = await export_library_bundle(Path(video_path), snapshot_for(video), options,
+        exported = await export_library_bundle(Path(video_path), snapshot_for(video), options,
                                                      premium=premium, core=core, thumbnail=video.thumbnail_data)
-        result.warnings.extend(result.export.warnings)
+        result.export = exported
+        result.warnings.extend(exported.warnings)
     except PermissionError:
         result.warnings.append("Media Library Export requires an active Premium license. The video was saved.")
         return result
@@ -285,6 +286,6 @@ async def finalize_video(video_path, video, settings, *, premium, metadata_writt
             from .jellyfin import notify_jellyfin
             await notify_jellyfin(Path(video_path), settings)
         except Exception:
-            result.export.notification_error = "Metadata was saved, but Jellyfin could not be notified. Retry the notification."
-            result.warnings.append(result.export.notification_error)
+            exported.notification_error = "Metadata was saved, but Jellyfin could not be notified. Retry the notification."
+            result.warnings.append(exported.notification_error)
     return result

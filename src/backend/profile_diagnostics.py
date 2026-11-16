@@ -295,4 +295,8 @@ def make_test_backend(*, premium=False):
     backend.download_manager = DownloadManager()
     backend._downloads_model = DownloadListModel(backend)
     backend.download_manager.video_added.connect(backend.video_added_signal)
+    backend.creator_bridge = None
+    backend._library_task = None
+    backend._library_selection = None
+    backend._library_pending = {}
     return backend

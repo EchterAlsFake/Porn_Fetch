@@ -46,6 +46,17 @@ The desktop entry point is `main.py`; its backend is `src/backend/application.py
 `AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
 Weblate integration are unfinished; language selectors remain disabled.
 
+Creators is beside Account in desktop navigation, the tablet sidebar and phone
+bottom navigation. Its bundled Lucide user-round-star icon is credited in the
+in-app credits and third-party notices, with the ISC notice in LICENSES/Lucide.txt.
+
+Supported websites now opens the shared offline QML catalog on desktop and mobile,
+including the tablet sidebar. It lists the router's 21 providers with name/domain
+filtering, profile/collection capability filters and expandable link guidance.
+Cards adapt to width and support Tab, D-pad, center/Enter and Back/Escape with
+focus visibility and scrolling. Source layout checks passed; mobile artifacts
+still need rebuilding for device verification.
+
 Android navigation keeps an in-memory page history. Back/Escape, the header
 button and inward touch swipes starting within 24 logical pixels of either side
 edge use the same Back action; Settings details return to their category list
@@ -82,7 +93,56 @@ reader, Left/Right or Tab move between available controls, and center/Enter/Spac
 activates them. Back/Escape returns to the previous step; on the first step it
 focuses the exit action without quitting. Reporting options require explicit
 activation. Each step resets reader focus, and closing the folder picker restores
-the folder button. The remaining main interface is not yet fully TV navigable.
+the folder button. The main Android interface now uses `RemoteNavigation.qml` for
+spatial D-pad focus, independent focus outlines, scroll visibility, lazy list
+navigation, center activation and popup Back/focus restoration, including nested
+dialogs. The TV sidebar has explicit Up/Down and Right-to-page paths. Creators
+handles Back on release so returning from a detail does not also leave its page.
+On devices without touch, editable fields use center to start native editing and
+Back to finish; read-only readers scroll with Up/Down and exit with Left/Right.
+Sliders and editable number controls also use center/Back to enter/leave adjustment,
+so their native arrow handlers cannot trap navigation.
+The native display policy now publishes `television` separately from keyboard
+navigation. TV adds larger default text and a 24-pixel screen-edge margin.
+HTTP(S) links on TV display their address in a remote-navigable dialog for opening
+on another device; other Android devices retain normal URL handling. The URL
+handlers are removed before QML teardown. Android Settings accepts pasted license
+file contents through the existing licensing bridge, without requiring a picker.
+Shared Downloads is also selectable in Settings and Add videos. These changes
+require a rebuilt APK. Offline remote tests and startup checks do not establish
+native TV launcher/IME/Back/update/download behavior.
+
+Automotive now has `PornFetchAutomotive.java` and the AAOS-only
+`PornFetchCarService.java`. The APK keeps the automotive feature and public
+`android.car` SDK library optional, opts into display compatibility mode and never
+marks activities distraction-optimized. The car service connects asynchronously
+and monitors `CarUxRestrictionsManager`; its restriction boolean blocks the QML
+interface and external web links, preserving setup/page history. Native lifecycle
+updates exit editing/adjustment on pause. Missing car libraries retain AAOS's
+ordinary activity blocking; losing an established car-service connection blocks
+the interface pending status. Native events/state use `automotive-state.json` in
+private app data, watched by the existing display adapter.
+Raw encoder scroll events become private QML navigation commands, preserving
+fractional/multiple detents. Delivered system-navigation nudges map to D-pad keys;
+mouse, volume, media and Home retain system behavior. Rotation traverses controls
+and adjusts a selected slider/number control; switching to touch drops controller
+focus policy. This does not install the native FocusParkingView/FocusArea wrappers
+required by OEM-managed RotaryService; that accessibility path remains outside
+the verified input support. The app uses system safe areas, car margins/larger
+default text and 64-pixel minimum heights on shared controls. It supplies root
+Close app/Back controls unless system display compatibility already supplies
+navigation. `UI/car_controls` provides an explicit Car layout fallback for generic
+head units; it does not claim vehicle-state monitoring without AAOS. Car web links
+use the existing local-address dialog. No driving media service, ignition worker,
+wake lock or new background scheduler was added. Android Auto has no applicable
+parked-app category for this downloader; CarPlay is a separate iOS integration.
+See [Automotive](docs/AUTOMOTIVE.md) for researched platform sources and native
+versus offline verification scope. An isolated API 33 AAOS native probe read the
+real UX service's initial parked-use status and checked delivered encoder input,
+fractional/multiple detents, mouse preservation, touch switching and Home/resume.
+A synthetic restriction callback checked state transport, not an actual vehicle
+driving transition. The existing Porn Fetch installation was preserved. A rebuilt
+APK is required for full application and OEM verification.
 On Android 10+, setup also offers an explicit shared Downloads/Porn Fetch choice
 through MediaStore. This completes storage setup on TV/Automotive devices whose
 document-tree intent resolves to a framework stub. The saved destination is
@@ -392,6 +452,16 @@ has no Nuitka percentage information; retain the silent-stage heartbeat.
 Ordinary dependency ranges and GitHub actions are updated frequently. Matching
 native toolchains and checksummed archives stay pinned until replaced together.
 Android uses Qt/PySide 6.12.0 cp315 wheels, target Python 3.15.2 and NDK r28c.
+On 2026-11-16, the connected ARM64 phone's locally rebuilt 3.9.0 APK failed
+before Python started: libshiboken6.abi3.so required libpython3.14.so while the
+APK supplied Python 3.15. The local folder/spec used cp314 Android wheels.
+Wheel discovery now selects cp315 and rejects explicitly supplied older ABIs;
+the APK checker also rejects stale Python references in Qt bindings and runs
+before local signing. Replacing Qt wheels requires `--clean` once to discard
+the cached bindings. Correct ARM64 cp315 downloads were checksum-verified;
+the installed app/data were preserved. A rebuilt corrected APK needs device
+verification.
+
 Android builds require installed Apache Ant. The wrapper discovers its home via
 `ANT_HOME`, the resolved `ant` executable, or a valid configured `android.ant_path`;
 do not hard-code Ubuntu's `/usr/share/ant` for local builds. Missing Ant fails before
@@ -688,3 +758,14 @@ consolidated into the maintained guides; Git history retains the originals.
 Release readiness belongs at <https://pornfetch.to/checklist>, not a new local
 status document. Release notes are `CHANGELOG_STATIC.md`; older notes are in
 `docs/CHANGELOG.md`. Source tests do not establish payment-server readiness.
+
+## Packaging publication policy
+
+Release builds intentionally resolve newest dependencies without `uv.lock`, and
+Android keeps python-for-android `develop`/`HEAD` for Qt compatibility. Website
+publishers re-sign downloaded APKs with GitHub's release keystore after building;
+the Android build wrapper is unchanged. Already-correct APK signatures retain
+identical bytes on publication retries. Release Python distributions have their
+own stamped packaging job and an installed-wheel offline CLI check. See
+`docs/RELEASING.md` for retry behavior, checksummed PocketBase inputs and target
+Android notice collection.

@@ -1,9 +1,9 @@
 """Real PocketBase and QML adapter, with controlled media transfers."""
 import asyncio
-from concurrent.futures import ThreadPoolExecutor  # Resolve Python 3.15 lazy import before Shiboken.
 import os
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor  # noqa: F401 - resolve Python 3.15 lazy import before Shiboken
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -13,17 +13,17 @@ os.environ.setdefault("QT_QUICK_BACKEND", "software")
 os.environ["QML_DISABLE_DISK_CACHE"] = "1"
 os.environ.setdefault("PORN_FETCH_TEST_ENV", "1")
 
+import shiboken6
 from PySide6.QtCore import QObject, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
-from PySide6.QtQuick import QQuickWindow
-import shiboken6
+from PySide6.QtQuick import QQuickWindow  # noqa: F401 - register the concrete QML window wrapper
 
 from src.backend.creator_bridge import CreatorBridge
 from src.backend.download_manager import DownloadListModel, DownloadManager
-from src.database.creators import MEMBERSHIPS, SUBSCRIPTIONS, VIDEOS
-from src.database.tracker import PocketBaseTracker
+from src.database.creators import SUBSCRIPTIONS, VIDEOS
 from src.database.errors import PocketBaseError
+from src.database.tracker import PocketBaseTracker
 from src.shared.media import VideoObject
 
 _app = QGuiApplication.instance() or QGuiApplication([])

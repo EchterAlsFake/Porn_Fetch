@@ -80,7 +80,7 @@ def public_url(raw, base="") -> str | None:
     # Public page identities need viewkey on Pornhub; other query values may
     # include account/session/tracking tokens and are not portable metadata.
     query = parse_qs(url.query)
-    kept = {"viewkey": query["viewkey"][0]} if "viewkey" in query and "pornhub" in url.hostname else {}
+    kept = {"viewkey": query["viewkey"][0]} if "viewkey" in query and "pornhub" in (url.hostname or "") else {}
     return urlunsplit((url.scheme, url.netloc, url.path, urlencode(kept), ""))
 
 

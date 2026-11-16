@@ -36,7 +36,9 @@ jobs:
           curl -LsSf https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/actionlint.tar.gz
           echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum -c -
           tar -xzf /tmp/actionlint.tar.gz -C /tmp
-          /tmp/actionlint -color
+          # actionlint 1.7.12 predates GitHub's documented concurrency.queue field.
+          # Suppress only this known schema gap; all other lint checks remain active.
+          /tmp/actionlint -color -ignore 'unexpected key "queue" for "concurrency" section'
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -95,7 +97,7 @@ jobs:
       - name: Upload Python Package Artifacts
         uses: ./.github/actions/upload-artifact
         with:
-          name: dist
+          name: development-python
           path: dist/*
 
       - name: Audit installed dependencies

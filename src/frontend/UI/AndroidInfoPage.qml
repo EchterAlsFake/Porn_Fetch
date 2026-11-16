@@ -70,6 +70,7 @@ Pane {
         title: showNotices ? qsTr("Third-party notices") : qsTr("Application license")
         standardButtons: Dialog.Close
         modal: true
+        focus: true
         contentItem: ScrollView {
             TextArea {
                 readOnly: true

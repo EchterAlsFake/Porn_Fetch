@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import argparse
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 
 def main():
@@ -21,10 +21,10 @@ def main():
     args = parser.parse_args()
     os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Material")
     os.environ.setdefault("QT_QUICK_BACKEND", "software")
-    from PySide6.QtCore import QObject, Property, QTimer, QUrl
+    from PySide6.QtCore import Property, QObject, QTimer, QUrl
     from PySide6.QtGui import QGuiApplication
     from PySide6.QtQml import QQmlApplicationEngine
-    from PySide6.QtQuick import QQuickWindow  # Register the concrete window wrapper before loading QML.
+    from PySide6.QtQuick import QQuickWindow  # noqa: F401 - register the concrete QML window wrapper
 
     app = QGuiApplication(sys.argv[:1])
     class PreviewSettings(QObject):

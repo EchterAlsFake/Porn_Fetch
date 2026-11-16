@@ -77,7 +77,8 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, download_workers=1,
                                    timeout=30, retries=1, write_metadata=True)
         backend = SimpleNamespace(_download_semaphore=asyncio.Semaphore(1), _downloads_model=Mock(),
-                                  download_manager=Mock(), logger=Mock(), notifications=Mock())
+                                  download_manager=Mock(), logger=Mock(), notifications=Mock(),
+                                  has_premium_access=lambda: False, tr=lambda text: text)
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "video.mp4"
             output.write_bytes(b"downloaded")
@@ -90,7 +91,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
                     patch("src.backend.application.FORCE_DISABLE_AV", False), \
                     patch("src.backend.application.asyncio.to_thread", new_callable=AsyncMock,
                           side_effect=lambda function, *args: function(*args)), \
-                    patch("src.backend.application.write_tags", return_value=True) as writer:
+                    patch("src.shared.metadata.write_tags", return_value=True) as writer:
                 await Backend._download_video(backend, "job", video, asyncio.Event(), False)
             self.assertEqual(source.download.call_args.args[0].quality, "hd")
             self.assertEqual(video.status, "completed")
@@ -106,7 +107,8 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
         settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, download_workers=1,
                                    timeout=30, retries=1, write_metadata=True)
         backend = SimpleNamespace(_download_semaphore=asyncio.Semaphore(1), _downloads_model=Mock(),
-                                  download_manager=Mock(), logger=Mock(), notifications=Mock())
+                                  download_manager=Mock(), logger=Mock(), notifications=Mock(),
+                                  has_premium_access=lambda: False, tr=lambda text: text)
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "hls_video.mp4"
             output.write_bytes(b"downloaded")
@@ -117,7 +119,7 @@ class GuiProviderTests(unittest.IsolatedAsyncioTestCase):
                                 source_video=source)
             with patch("src.backend.application.app_settings", settings), \
                     patch("src.backend.application.FORCE_DISABLE_AV", False), \
-                    patch("src.backend.application.write_tags", return_value=True) as writer:
+                    patch("src.shared.metadata.write_tags", return_value=True) as writer:
                 await Backend._download_video(backend, "job", video, asyncio.Event(), False)
             dl_config = source.download.call_args.args[0]
             self.assertIs(dl_config.metadata, video)

@@ -4,8 +4,9 @@ from dataclasses import replace
 from urllib.parse import parse_qs, urlsplit
 
 from base_api import ErrorMode, ResultOrder, make_iterator_config
-from src.shared.provider_routing import unwrap_scrape_result
+
 from src.shared.creator_library import identity, loaded
+from src.shared.provider_routing import unwrap_scrape_result
 
 
 def listing_config(config=None):

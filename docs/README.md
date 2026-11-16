@@ -4,7 +4,7 @@ Porn Fetch is English-only. Translations are unfinished.
 
 - [Install or build the app](INSTALLATION.md)
 - [Terminal interface and keyboard navigation](CLI.md)
-- [Android](ANDROID.md) and [iOS](iOS.md)
+- [Android](ANDROID.md), [Automotive](AUTOMOTIVE.md) and [iOS](iOS.md)
 - [Supported websites](WEBSITES.md) and [screenshots](SCREENSHOTS.md)
 - [Licenses and Premium](LICENSING.md) and [emergency service operations](../deploy/emergency/README.md)
 - [Work on the code](FOR_DEVELOPERS.md)

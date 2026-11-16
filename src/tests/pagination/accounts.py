@@ -1,10 +1,16 @@
-import sys, pathlib, asyncio, json, logging, importlib
-from .common import *
-from base_api import BaseCore, IteratorConfig, ResultOrder, ErrorMode
-from base_api.modules.config import RuntimeConfig
-from src.shared.provider_accounts import connect_pornhub_cookies, connect_xvideos_cookies, verify_account_session
+import asyncio
+import importlib
+import json
+import logging
 from contextlib import aclosing
+
 import browser_cookie3
+from base_api import BaseCore, ErrorMode, IteratorConfig, ResultOrder
+from base_api.modules.config import RuntimeConfig
+
+from src.shared.provider_accounts import connect_pornhub_cookies, connect_xvideos_cookies, verify_account_session
+
+from .common import OUTPUT
 
 logging.disable(logging.CRITICAL)
 

@@ -93,7 +93,8 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
         manager.add_video(item)
         backend = SimpleNamespace(_downloads_model=model, download_manager=manager,
                                   _download_semaphore=asyncio.Semaphore(1), _download_tasks={},
-                                  _download_stop_events={}, logger=Mock(), notifications=Mock())
+                                  _download_stop_events={}, logger=Mock(), notifications=Mock(),
+                                  has_premium_access=lambda: False, tr=lambda text: text)
         for method in ("remove_video", "stop_download", "_download_task_finished"):
             setattr(backend, method, MethodType(getattr(Backend, method), backend))
         return backend

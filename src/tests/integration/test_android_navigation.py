@@ -24,7 +24,7 @@ class AndroidNavigationTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory(prefix="android-navigation-")
         root = Path(self.directory.name)
-        for name in ("AndroidMain.qml", "BackSwipeArea.qml"):
+        for name in ("AndroidMain.qml", "BackSwipeArea.qml", "RemoteNavigation.qml"):
             (root / name).write_text((UI / name).read_text())
         (root / "qmldir").write_text("singleton Theme 1.0 Theme.qml\n")
         (root / "Theme.qml").write_text('''pragma Singleton
@@ -54,9 +54,10 @@ QtObject {
                 property var titles: ["Downloads", "Performance"]
                 function goBack() { section = -1 }''',
             "AndroidInfoPage": "",
+            "SupportedWebsitesPage": "property bool showBackButton: true; signal backRequested()",
             "AndroidMorePage": "signal openActivity(); signal openPage(int index)",
             "DownloadManagerPage": "",
-            "CreatorsPage": 'objectName: "creatorsPage"; property bool detailOpen: false; function goBack() { if (!detailOpen) return false; detailOpen = false; return true }',
+            "CreatorsPage": 'objectName: "creatorsPage"; property bool showBackButton: true; property bool detailOpen: false; function goBack() { if (!detailOpen) return false; detailOpen = false; return true }',
         }
         for name, body in stubs.items():
             (root / f"{name}.qml").write_text("import QtQuick\nimport QtQuick.Controls\nItem { " + body + " }")
@@ -79,7 +80,12 @@ QtObject {
                 signal updateStatus(string status); signal updateProgress(real current, real total)
                 signal updateCheckStarted(); signal updateFinished()
                 function initiate_shutdown() {}''',
-            "androidDisplay": "property var outline: []; property bool keyboardNavigation: true",
+            "androidDisplay": '''property var outline: []; property bool keyboardNavigation: true
+                property bool television: false; property bool carMode: false
+                property bool systemNavigation: false; property bool interactionBlocked: false
+                property bool restrictionsKnown: true; property bool foreground: true
+                property int pauseGeneration: 0
+                signal webLinkRequested(string address); signal carStateChanged()''',
             "torStatus": "property string text: ''",
         }
         for name, body in definitions.items():
@@ -104,6 +110,17 @@ QtObject {
         _app.processEvents()
         self.directory.cleanup()
 
+    def visual_item(self, name):
+        def find(item):
+            if item.objectName() == name:
+                return item
+            for child in item.childItems():
+                found = find(child)
+                if found is not None:
+                    return found
+            return None
+        return find(self.window.contentItem())
+
     def back(self):
         QMetaObject.invokeMethod(self.window, "goBack")
         QTest.qWait(10)
@@ -127,6 +144,79 @@ QtObject {
         self.assertFalse(page.property("detailOpen"))
         self.back()
         self.assertEqual(self.window.property("pageIndex"), 0)
+
+    def test_tv_sidebar_and_web_link_dialog_use_remote_controls(self):
+        self.context_objects[2].setProperty("television", True)
+        self.window.resize(1280, 720)
+        QTest.qWait(60)
+        sidebar = self.visual_item("sidebarNavigation-0")
+        sidebar.forceActiveFocus(Qt.TabFocusReason)
+        QTest.keyClick(self.window, Qt.Key_Down)
+        account = self.visual_item("sidebarNavigation-1")
+        self.assertTrue(account.hasActiveFocus())
+        QTest.keyClick(self.window, Qt.Key_Select)
+        QTest.qWait(30)
+        self.assertEqual(self.window.property("pageIndex"), 1)
+        button = self.window.findChild(QQuickItem, "accountButton")
+        self.assertTrue(button.hasActiveFocus())
+        self.context_objects[2].webLinkRequested.emit("https://pornfetch.to/")
+        QTest.qWait(100)
+        dialog = self.window.findChild(QObject, "tvWebLinkDialog")
+        self.assertTrue(dialog.property("visible"))
+        self.assertEqual(dialog.property("address"), "https://pornfetch.to/")
+        QTest.keyClick(self.window, Qt.Key_Back)
+        QTest.qWait(350)
+        self.assertFalse(dialog.property("visible"))
+        self.assertTrue(button.hasActiveFocus())
+        self.assertEqual(self.window.property("pageIndex"), 1)
+        self.assertEqual(self.warnings, [])
+
+    def test_car_layout_provides_exit_and_defers_to_system_navigation(self):
+        display = self.context_objects[2]
+        display.setProperty("carMode", True)
+        self.window.resize(1080, 600)
+        QTest.qWait(50)
+        close = self.window.findChild(QQuickItem, "androidCloseButton")
+        self.assertTrue(close.isVisible())
+        self.window.setProperty("pageIndex", 1)
+        QTest.qWait(30)
+        back = self.window.findChild(QQuickItem, "androidBackButton")
+        self.assertTrue(back.isVisible())
+        display.setProperty("systemNavigation", True)
+        QTest.qWait(30)
+        self.assertFalse(back.isVisible())
+        self.assertFalse(close.isVisible())
+        self.assertEqual(self.warnings, [])
+
+    def test_vehicle_restrictions_block_the_current_page_and_preserve_history(self):
+        display = self.context_objects[2]
+        display.setProperty("carMode", True)
+        self.window.setProperty("pageIndex", 1)
+        QTest.qWait(50)
+        button = self.window.findChild(QQuickItem, "accountButton")
+        button.forceActiveFocus(Qt.TabFocusReason)
+        display.setProperty("interactionBlocked", True)
+        display.carStateChanged.emit()
+        QTest.qWait(100)
+        dialog = self.window.findChild(QObject, "vehicleRestrictionDialog")
+        self.assertTrue(dialog.property("visible"))
+        self.assertFalse(button.isEnabled())
+        QTest.keyClick(self.window, Qt.Key_Back)
+        self.assertEqual(self.window.property("pageIndex"), 1)
+        self.assertTrue(dialog.property("visible"))
+        display.setProperty("interactionBlocked", False)
+        display.carStateChanged.emit()
+        QTest.qWait(350)
+        self.assertFalse(dialog.property("visible"))
+        self.assertTrue(button.isEnabled())
+        self.assertTrue(button.hasActiveFocus())
+        navigator = next(item for item in self.window.findChildren(QObject)
+                         if item.metaObject().className().startswith("RemoteNavigation"))
+        navigator.setProperty("editingItem", button)
+        display.setProperty("pauseGeneration", 1)
+        display.carStateChanged.emit()
+        self.assertIsNone(navigator.property("editingItem"))
+        self.assertEqual(self.warnings, [])
 
     def test_back_retraces_pages_and_settings_detail(self):
         self.window.setProperty("pageIndex", 1)

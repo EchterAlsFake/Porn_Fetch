@@ -109,6 +109,7 @@ Pane {
         x: (parent.width - width) / 2
         height: Math.min(parent.height, 720)
         modal: true
+        focus: true
         dragMargin: 0
         padding: 16
         background: Rectangle {
@@ -216,6 +217,12 @@ Pane {
                         }
                     }
 
+                    AppButton {
+                        Layout.fillWidth: true
+                        visible: backend.android_shared_downloads_available === true
+                        text: qsTr("Use shared Downloads/Porn Fetch")
+                        onClicked: backend.use_android_shared_downloads()
+                    }
                     AppButton {
                         Layout.fillWidth: true
                         implicitHeight: 48
@@ -379,6 +386,8 @@ Pane {
         }
         ListView {
             id: downloadList
+            // The shared remote navigator focuses the action within each row.
+            keyNavigationEnabled: false
             objectName: "mobileDownloadList"
             Layout.fillWidth: true
             Layout.fillHeight: true

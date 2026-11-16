@@ -1,10 +1,15 @@
-import sys, pathlib, asyncio, json, logging, importlib
-from urllib.parse import urljoin, urlsplit
+import asyncio
+import importlib
+import json
+import logging
 from contextlib import aclosing
-from .common import *
-from base_api import BaseCore, IteratorConfig, ResultOrder, ErrorMode
+from urllib.parse import urljoin
+
+from base_api import BaseCore, ErrorMode, IteratorConfig, ResultOrder
 from base_api.modules.config import RuntimeConfig
 from selectolax.lexbor import LexborHTMLParser
+
+from .common import OUTPUT
 
 logging.disable(logging.CRITICAL)
 ic = IteratorConfig(order=ResultOrder.ORIGINAL, page_error_mode=ErrorMode.RAISE, item_error_mode=ErrorMode.RAISE)

@@ -7,12 +7,12 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QUICK_BACKEND", "software")
 os.environ["QML_DISABLE_DISK_CACHE"] = "1"
 
+import shiboken6
 from PySide6.QtCore import QObject, QPoint, Qt, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent, QQmlExpression
-from PySide6.QtQuick import QQuickWindow
+from PySide6.QtQuick import QQuickWindow  # noqa: F401 - register the concrete QML window wrapper
 from PySide6.QtTest import QTest
-import shiboken6
 
 _app = QGuiApplication.instance() or QGuiApplication([])
 UI = Path(__file__).resolve().parents[2] / "frontend/UI"

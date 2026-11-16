@@ -5,6 +5,7 @@ import QtQuick.Layouts
 
 Pane {
     id: root
+    property bool showBackButton: true
     readonly property real fontScale: typeof appSettings !== "undefined" && appSettings ? Math.max(1, appSettings.font_size / 12) : 1
     objectName: "creatorsPage"
     padding: width < 600 ? 12 : 24
@@ -86,7 +87,10 @@ Pane {
     function openSource(id, focusItem) {
         selectedId = id; videoFilter = 0; videoPage = 0
         scroll.contentItem.contentY = 0
-        Qt.callLater(function() { backButton.forceActiveFocus(Qt.TabFocusReason) })
+        Qt.callLater(function() {
+            if (root.showBackButton) backButton.forceActiveFocus(Qt.TabFocusReason)
+            else videoStatusFilter.forceActiveFocus(Qt.TabFocusReason)
+        })
     }
     function goBack() {
         if (!detailOpen) return false
@@ -111,7 +115,7 @@ Pane {
     // Retain native text editing and ComboBox navigation; handle unconsumed D-pad keys.
     Keys.priority: Keys.AfterItem
     Keys.onPressed: function(event) {
-        if (event.key === Qt.Key_Escape || event.key === Qt.Key_Back) { event.accepted = goBack(); return }
+        if (event.key === Qt.Key_Escape || event.key === Qt.Key_Back) { event.accepted = detailOpen; return }
         if ([Qt.Key_Down, Qt.Key_Up, Qt.Key_Left, Qt.Key_Right].indexOf(event.key) >= 0) {
             var current = root.Window.window.activeFocusItem
             if (!current) return
@@ -120,6 +124,9 @@ Pane {
             while (next && (!next.activeFocusOnTab || !next.visible || !next.enabled) && guard++ < 300) next = next.nextItemInFocusChain((event.key === Qt.Key_Down || event.key === Qt.Key_Right))
             if (next) { next.forceActiveFocus(Qt.TabFocusReason); event.accepted = true }
         }
+    }
+    Keys.onReleased: function(event) {
+        if (event.key === Qt.Key_Escape || event.key === Qt.Key_Back) event.accepted = goBack()
     }
     Connections {
         target: root.Window.window
@@ -311,7 +318,7 @@ Pane {
             // Source detail
             ColumnLayout {
                 visible: root.detailOpen; Layout.fillWidth: true; spacing: 16
-                CreatorButton { id: backButton; objectName: "creatorBackButton"; text: qsTr("‹ All subscriptions"); flat: true; onClicked: root.goBack() }
+                CreatorButton { id: backButton; visible: root.showBackButton; objectName: "creatorBackButton"; text: qsTr("‹ All subscriptions"); flat: true; onClicked: root.goBack() }
                 RowLayout {
                     Layout.fillWidth: true
                     ColumnLayout {

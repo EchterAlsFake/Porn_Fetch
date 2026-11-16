@@ -304,6 +304,12 @@ class Backend(QObject):
     def has_premium_access(self) -> bool:
         return bool(getattr(self, "_license_bridge", None) and self._license_bridge.isPremium)
 
+    @Property("QVariantList", constant=True)
+    def supportedWebsites(self) -> list[dict]:
+        from src.shared.supported_websites import supported_websites
+
+        return supported_websites()
+
     @Property(str, constant=True)
     def errorReportDisclosure(self) -> str:
         return ERROR_REPORT_DISCLOSURE
@@ -2077,6 +2083,8 @@ def main() -> None:
     from src.backend.android_display import AndroidDisplay
     display_geometry = AndroidDisplay(os.environ.get("ANDROID_PRIVATE", "") if is_android else "", parent=engine)
     engine.rootContext().setContextProperty("androidDisplay", display_geometry)
+    if is_android:
+        display_geometry.install_url_handlers()
     for context_name, resource_path in (
         ("applicationLicenseText", ":/legal/LICENSE"),
         ("thirdPartyNoticesText", ":/legal/THIRD_PARTY_NOTICES.md"),
@@ -2137,6 +2145,7 @@ def main() -> None:
         finally:
             from src.backend.qml_lifecycle import destroy_qml_engine
             system_notifier.close()
+            display_geometry.close()
             destroy_qml_engine(engine)
             splash = None
             engine = None
@@ -2159,6 +2168,7 @@ def main() -> None:
     finally:
         from src.backend.qml_lifecycle import destroy_qml_engine
         system_notifier.close()
+        display_geometry.close()
         destroy_qml_engine(engine)
         splash = None
         engine = None

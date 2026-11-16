@@ -11,11 +11,11 @@ import sys
 from pathlib import Path
 
 from .client import PocketBaseClient
-from .constants import (_SCHEMA_MIGRATION, MIGRATION_NAME, SUPERUSER_EMAIL,
-                        CREATOR_MIGRATION, CREATOR_MIGRATION_NAME)
+from .constants import _SCHEMA_MIGRATION, CREATOR_MIGRATION, CREATOR_MIGRATION_NAME, MIGRATION_NAME, SUPERUSER_EMAIL
+from .creators import MIGRATION as LIBRARY_MIGRATION
+from .creators import MIGRATION_NAME as LIBRARY_MIGRATION_NAME
+from .creators import POLISH_MIGRATION, POLISH_MIGRATION_NAME
 from .errors import PocketBaseError
-from .creators import (MIGRATION as LIBRARY_MIGRATION, MIGRATION_NAME as LIBRARY_MIGRATION_NAME,
-                       POLISH_MIGRATION, POLISH_MIGRATION_NAME)
 
 
 def _find_original_executable() -> Path | None:

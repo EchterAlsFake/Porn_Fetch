@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    readonly property bool carMode: typeof androidDisplay !== "undefined" && androidDisplay.carMode === true
     property real globalPointSize: 14
     readonly property bool highContrast: typeof appSettings !== "undefined" && appSettings && appSettings.high_contrast === true
     readonly property bool dark: typeof appSettings === "undefined" || !appSettings || appSettings.dark_mode !== false

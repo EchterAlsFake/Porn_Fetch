@@ -26,8 +26,15 @@ TextArea {
         function onDarkChanged() { control.updateHighlighting(); }
         function onHighContrastChanged() { control.updateHighlighting(); }
     }
-    Keys.onReturnPressed: function(event) { event.accepted = true; }
-    Keys.onEnterPressed: function(event) { event.accepted = true; }
+    function activateEditor(event) {
+        var window = control.Window.window
+        var navigation = window && window.remoteNavigation
+        if (navigation && navigation.automaticFocus && navigation.editingItem !== control)
+            navigation.editorPressed(event)
+        event.accepted = true
+    }
+    Keys.onReturnPressed: function(event) { activateEditor(event); }
+    Keys.onEnterPressed: function(event) { activateEditor(event); }
 
     background: Rectangle {
         color: Theme.surface

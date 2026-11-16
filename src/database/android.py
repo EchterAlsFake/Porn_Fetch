@@ -66,13 +66,15 @@ class AndroidPocketBaseService(PocketBaseService):
 
     def _call(self, name, *arguments):
         self._load()
-        pointer = getattr(self._native, name)(*arguments)
+        native = self._native
+        assert native is not None  # _load either initializes the runtime or raises.
+        pointer = getattr(native, name)(*arguments)
         if not pointer:
             raise PocketBaseError("PocketBase returned an empty native result")
         try:
             result = json.loads(ctypes.string_at(pointer))
         finally:
-            self._native.PFFree(pointer)
+            native.PFFree(pointer)
         if result.get("error"):
             raise PocketBaseError(result["error"])
         return result

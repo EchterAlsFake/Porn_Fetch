@@ -10,7 +10,13 @@ from unittest.mock import Mock, patch
 
 from PySide6.QtCore import QUrl
 
-from scripts.android_storage_hook import before_apk_assemble, before_apk_build, patch_activity, prepare_native_libraries, stage_pocketbase
+from scripts.android_storage_hook import (
+    before_apk_assemble,
+    before_apk_build,
+    patch_activity,
+    prepare_native_libraries,
+    stage_pocketbase,
+)
 from src.backend.android_storage import copy_download_file, folder_destination, save_shared_download
 
 ACTIVITY = '''public class PythonActivity extends QtActivity {

@@ -8,8 +8,8 @@ import argparse
 import asyncio
 import json
 import os
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
 
 async def run(args, workspace, report, pump):

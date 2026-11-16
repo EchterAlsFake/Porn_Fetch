@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
+import json
 import platform
 import stat
 import sys
@@ -84,6 +86,10 @@ def download_pocketbase(
     )
     with urllib.request.urlopen(request) as resp:
         zip_bytes = resp.read()
+
+    checksums = json.loads((Path(__file__).resolve().parents[1] / "packaging/pocketbase_checksums.json").read_text())
+    if hashlib.sha256(zip_bytes).hexdigest() != checksums.get(asset_name):
+        raise ValueError(f"Unrecognized PocketBase archive: {asset_name}")
 
     destination.mkdir(parents=True, exist_ok=True)
     target_file = destination / binary_name

@@ -29,6 +29,7 @@ permissions:
 concurrency:
   group: website-release-deploy
   cancel-in-progress: false
+  queue: max
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -85,6 +86,16 @@ jobs:
           pattern: PornFetch_*
           path: website_artifacts
           merge-multiple: false
+      - name: Re-sign Android packages for website publication
+        uses: ./tooling/.github/actions/sign-website-apks
+        with:
+          artifacts: website_artifacts
+          tooling: tooling
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - name: Download original release identity
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:

@@ -127,9 +127,9 @@ Dialog {
             var direction = event.key === Qt.Key_Up ? -1 : 1
             if (item !== pageScroll || !scrollPage(direction * 72 * textScale)) moveFocus(item, direction)
             event.accepted = true
-        } else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right
+        } else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right || event.key === Qt.Key_F11 || event.key === Qt.Key_F12
                    || event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab) {
-            var backwards = event.key === Qt.Key_Left || event.key === Qt.Key_Backtab
+            var backwards = event.key === Qt.Key_Left || event.key === Qt.Key_F12 || event.key === Qt.Key_Backtab
                 || (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier))
             moveFocus(item, backwards ? -1 : 1)
             event.accepted = true

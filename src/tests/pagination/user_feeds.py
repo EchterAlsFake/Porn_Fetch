@@ -1,9 +1,16 @@
 """Read-only live user-feed checks with explicitly selected Brave sessions."""
 
-from .common import *
+import asyncio
+import importlib
+import json
+from urllib.parse import urljoin, urlsplit
+
 import browser_cookie3
-from urllib.parse import urlsplit, urljoin
+from base_api import BaseCore
+from base_api.modules.config import RuntimeConfig
 from selectolax.lexbor import LexborHTMLParser
+
+from .common import OUTPUT, collect, config
 
 
 class UserCore(BaseCore):
@@ -24,7 +31,7 @@ async def main():
             async with UserCore(configuration=settings) as core:
                 core.pages = []
                 module = importlib.import_module(site + "_api.api")
-                client = module.Client(core=core)
+                module.Client(core=core)
                 core.session.cookies.update(jar)
                 homepage = await core.fetch_text("https://www." + site + ".com/")
                 tree = LexborHTMLParser(homepage)

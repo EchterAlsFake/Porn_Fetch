@@ -1,14 +1,13 @@
 """Opt-in host checks of the exact embedded Go runtime, with disposable app data."""
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import os
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor  # noqa: F401 - resolve Python 3.15 lazy import before native runtime loading
 from pathlib import Path
 from unittest.mock import patch
 
 from src.database.android import AndroidPocketBaseService
-from src.database.creators import CreatorRepository, SCANS, SUBSCRIPTIONS, VIDEOS
+from src.database.creators import SCANS, SUBSCRIPTIONS, VIDEOS, CreatorRepository
 from src.database.tracker import PocketBaseTracker
 from src.shared.creator_library import CreatorLibrary
 from src.shared.download_recovery import queue_record, read_queue, write_queue

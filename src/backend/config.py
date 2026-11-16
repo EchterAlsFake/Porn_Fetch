@@ -1157,6 +1157,15 @@ class SettingsManager(QObject):
             self.languageChanged.emit(val)
 
     @Property(bool, notify=accessibilityChanged)
+    def car_controls(self):
+        return self._settings.value("UI/car_controls", False, type=bool)
+
+    @car_controls.setter
+    def car_controls(self, enabled):
+        self._settings.setValue("UI/car_controls", bool(enabled))
+        self.accessibilityChanged.emit()
+
+    @Property(bool, notify=accessibilityChanged)
     def reduced_motion(self):
         return self._settings.value("UI/reduced_motion", False, type=bool)
 

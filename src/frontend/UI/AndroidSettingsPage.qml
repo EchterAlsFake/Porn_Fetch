@@ -94,6 +94,8 @@ Pane {
             }
         }
         Switch {
+            Layout.minimumHeight: Theme.carMode ? 64 : 0
+            Layout.minimumWidth: Theme.carMode ? 64 : 0
             checked: row.value
             Accessible.name: row.label
             onToggled: row.changed(checked)
@@ -473,6 +475,12 @@ Pane {
                 }
                 AppButton {
                     Layout.fillWidth: true
+                    visible: backend.android_shared_downloads_available === true
+                    text: qsTr("Use shared Downloads/Porn Fetch")
+                    onClicked: backend.use_android_shared_downloads()
+                }
+                AppButton {
+                    Layout.fillWidth: true
                     visible: Qt.platform.os !== "android" && appSettings.android_output_folder !== ""
                     text: qsTr("Use app storage")
                     flat: true
@@ -580,6 +588,12 @@ Pane {
                 LightThemeBrightness { Layout.fillWidth: true }
                 ToggleRow { label: qsTr("High contrast"); value: appSettings.high_contrast; onChanged: function(v) { appSettings.high_contrast = v } }
                 ToggleRow { label: qsTr("Reduce motion"); value: appSettings.reduced_motion; onChanged: function(v) { appSettings.reduced_motion = v } }
+                ToggleRow {
+                    label: qsTr("Car layout")
+                    detail: qsTr("Larger controls for Android head units that do not identify themselves as cars. Vehicle restriction monitoring is available only on Android Automotive OS.")
+                    value: appSettings.car_controls
+                    onChanged: function(v) { appSettings.car_controls = v }
+                }
                 ToggleRow {
                     label: qsTr("Activity glow")
                     detail: qsTr("Show a glowing border while the app is busy.")
@@ -691,6 +705,32 @@ Pane {
                     Layout.fillWidth: true
                     text: qsTr("Import license file")
                     onClicked: licenseFileDialog.open()
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: qsTr("You can also paste the contents of your license file here. A file picker is not required.")
+                    wrapMode: Text.WordWrap
+                    color: root.mutedColor
+                }
+                TextArea {
+                    id: licenseText
+                    objectName: "androidLicenseText"
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 120
+                    placeholderText: qsTr("License file contents")
+                    Accessible.name: placeholderText
+                    wrapMode: TextEdit.WrapAnywhere
+                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
+                }
+                AppButton {
+                    Layout.fillWidth: true
+                    text: qsTr("Import pasted license")
+                    enabled: licenseText.text.trim().length > 0 && !bridge.busy
+                    onClicked: {
+                        bridge.installFromText(licenseText.text.trim())
+                        licenseText.clear()
+                        Qt.inputMethod.hide()
+                    }
                 }
                 AppButton {
                     Layout.fillWidth: true

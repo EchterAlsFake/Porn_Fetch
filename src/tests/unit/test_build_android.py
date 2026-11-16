@@ -26,8 +26,8 @@ from scripts.build_android import (
     ensure_android_sdk_tools,
     ensure_host_patches,
     extract_qt_jars,
-    find_android_ndk,
     find_android_build_tool,
+    find_android_ndk,
     find_apache_ant,
     find_wheels_for_arch,
     main,
@@ -197,9 +197,11 @@ class TestApkSigning(unittest.TestCase):
                         patch("scripts.build_android.prepare_apk_signing", return_value=signing), \
                         patch("scripts.build_android.find_wheels_for_arch", return_value=(root, root)), \
                         patch("scripts.build_android.build_single_arch", return_value=apk) as build, \
+                        patch("scripts.build_android.verify_apk_runtime") as verify, \
                         patch("scripts.build_android.sign_apk", return_value=apk) as sign:
                     self.assertEqual(main(), 0)
                 self.assertIsNone(build.call_args.kwargs["output_dir"])
+                verify.assert_called_once_with(apk, "arm64-v8a", Path(__file__).resolve().parents[3])
                 self.assertEqual(sign.call_args.args[:2], (apk, root / "out"))
 
 
@@ -693,6 +695,21 @@ class AndroidConfig:
             for package in ("pyside6", "shiboken6"):
                 (directory / f"{package}-6.11.2-cp315-cp315-android_x86_64.whl").touch()
             self.assertEqual(find_wheels_for_arch("i686", [directory], None, None), (None, None))
+
+    def test_wheel_discovery_ignores_previous_python_abi(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            for package in ("pyside6", "shiboken6"):
+                (directory / f"{package}-6.12.0-cp314-cp314-android_aarch64.whl").touch()
+            self.assertEqual(find_wheels_for_arch("aarch64", [directory], None, None), (None, None))
+            expected = tuple(directory / f"{package}-6.12.0-cp315-cp315-android_aarch64.whl"
+                             for package in ("pyside6", "shiboken6"))
+            for wheel in expected:
+                wheel.touch()
+            self.assertEqual(find_wheels_for_arch("aarch64", [directory], None, None), expected)
+            old = directory / "pyside6-6.12.0-cp314-cp314-android_aarch64.whl"
+            with self.assertRaisesRegex(ValueError, "incompatible.*3.15.2"):
+                find_wheels_for_arch("aarch64", [directory], old, None)
 
     def test_dry_run_does_not_patch_host(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

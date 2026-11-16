@@ -36,6 +36,46 @@ uv run --no-sync main.py --android
 This checks the layout only. Android storage, signing and notifications need a
 real device. The interface is English-only.
 
+## Android TV and Google TV
+
+The APK includes a TV launcher entry and banner and does not require a touchscreen.
+On TV, the interface uses larger default text and a screen-edge margin. The shared
+remote navigator supplies directional focus and a visible outline across Downloads,
+Account, Settings, Info, Creators, the website catalog and their dialogs.
+
+- Use the D-pad to move between controls and center/Enter to activate them. In
+  the sidebar, Up/Down selects a navigation control; center opens its page and
+  Right returns focus to the page. Tab and Shift+Tab remain available.
+- Focus follows controls as content scrolls. Download lists support navigation
+  through rows created while scrolling, including their individual actions.
+- On devices without touch, center starts editing a text field using Android's
+  input method. Back finishes editing; arrows then move between controls again.
+  Long document readers scroll with Up/Down and let Left/Right leave the reader.
+- Sliders and number controls use center to enter adjustment, arrows to change
+  the value, and Back to return to navigation.
+- Center opens a combo box. Its popup uses native arrow selection. Back closes
+  a popup before navigating the page, restoring the opener after the transition.
+- Web links on TV show their address in the app so they can be opened on a phone
+  or computer. They do not require a browser installed on the TV. The Android
+  license section also accepts pasted license-file contents without a file picker.
+- **Use shared Downloads/Porn Fetch** is available in setup, Settings and the
+  Add videos panel on Android 10+ so a missing folder picker does not block storage.
+
+Offline checks cover the shared navigation behavior and Android startup. Native
+TV launcher appearance, the Android keyboard, system Back returning home, update
+installation and complete downloads still require a rebuilt APK on a TV device.
+Android Automotive OS also uses the shared interface, with car layout,
+vehicle-restriction monitoring and delivered rotary-input support. See
+[Automotive](AUTOMOTIVE.md) for research, platform distinctions and the separate
+OEM-managed rotary integration limits.
+
+For a device check, complete setup and then add a URL, select a quality, start,
+stop and resume a download using only a remote. Visit every sidebar page, open
+and close help/error/update dialogs, scroll a long queue, and verify the focused
+control stays visible. Return home using Back from the root page. Repeat ordinary
+touch entry on a phone to check that the native keyboard and touch layout remain
+usable. Do not clear an existing installation's data to repeat setup.
+
 ## Build an APK
 
 Use Linux and a separate Python 3.15 environment. Install Git, a C/C++ compiler,
@@ -112,6 +152,12 @@ Architectures are `aarch64`, `armv7a`, `x86_64`, `i686`, or `all`.
 The wrapper regenerates machine paths from the tracked templates, patches Qt
 and QtAsyncio, extracts the required JARs and checks the APK. Use `--clean`
 after changing native recipes or Qt wheels. Downloaded archives are retained.
+Wheel discovery skips older Python ABIs, and explicitly supplied incompatible
+wheels fail with an explanation. A Python 3.14 Shiboken wheel with the Python
+3.15 runtime fails in Android's native loader before Python starts, reporting
+`libpython3.14.so not found`. After replacing such wheels, use `--clean` once
+to remove their cached native libraries. Local builds now run the same APK
+runtime check as CI before signing, including Python references in Qt bindings.
 The wrapper keeps `.buildozer/` between runs. Qt preload libraries must be named
 `libQt*.abi3.so` in the APK so Android 13 extracts them; the assembly hook does this.
 The deployment patch preserves the template's Qt modules during PySide's base

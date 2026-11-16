@@ -249,7 +249,8 @@ class PocketBaseServiceTests(unittest.TestCase):
     def test_find_binary_not_found(self):
         service = PocketBaseService("/tmp/nonexistent_data")
         with patch.dict("os.environ", {}, clear=True):
-            with patch("shutil.which", return_value=None):
+            with patch("shutil.which", return_value=None), \
+                    patch("src.database.service.Path.is_file", return_value=False):
                 with self.assertRaises(PocketBaseError):
                     service.find_binary(custom_path="/tmp/nonexistent_pocketbase_binary")
 

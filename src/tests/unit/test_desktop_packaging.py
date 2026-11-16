@@ -168,7 +168,7 @@ class QtIFWStagingTests(unittest.TestCase):
                 self.assertEqual(settings.findtext("WizardStyle"), "Modern")
                 self.assertTrue((config.parent / settings.findtext("StyleSheet")).is_file())
                 self.assertEqual(settings.findtext("RemoteRepositories/Repository/Url"),
-                                 f"https://api.pornfetch.to/repo/{platform}_amd64")
+                                 f"https://api.pornfetch.to/repo/stable/{platform}_amd64")
                 data = packages / core / "data"
                 relative_app = app_dir.relative_to(dist) / f"Porn Fetch{suffix}"
                 self.assertEqual((data / relative_app).read_bytes(), b"application")

@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from securesystemslib.signer import Signer
-from tuf.api.exceptions import DownloadError, DownloadLengthMismatchError
+from tuf.api.exceptions import DownloadError, DownloadLengthMismatchError, ExpiredMetadataError
 from tuf.api.metadata import Metadata, MetaFile, Root, Snapshot, TargetFile, Targets, Timestamp
 from tuf.ngclient import Updater
 from tuf.ngclient.urllib3_fetcher import Urllib3Fetcher
@@ -71,7 +71,26 @@ def fetch_previous_metadata(remote_url: str, root_bytes: bytes, cache_dir: Path)
         bootstrap=root_bytes,
         fetcher=Urllib3Fetcher(socket_timeout=60),
     )
-    updater.refresh()
+    try:
+        updater.refresh()
+    except ExpiredMetadataError:
+        root = Metadata[Root].from_bytes(root_bytes)
+        if root.signed.is_expired():
+            raise ValueError("The update trust root has expired") from None
+        recovered = {}
+        for role in ("timestamp", "snapshot", "targets"):
+            with urllib.request.urlopen(f"{remote_url.rstrip('/')}/metadata/{role}.json", timeout=60) as response:
+                blob = response.read()
+            metadata = Metadata.from_bytes(blob)
+            root.signed.verify_delegate(role, metadata.signed_bytes, metadata.signatures)
+            recovered[role] = metadata, blob
+        for parent, child in (("timestamp", "snapshot"), ("snapshot", "targets")):
+            parent_md = recovered[parent][0]
+            reference = parent_md.signed.snapshot_meta if parent == "timestamp" else parent_md.signed.meta["targets.json"]
+            reference.verify_length_and_hashes(recovered[child][1])
+            if reference.version != recovered[child][0].signed.version:
+                raise ValueError("Inconsistent expired repository metadata")
+        return tuple(recovered[role][0] for role in ("targets", "snapshot", "timestamp"))
     return (
         Metadata[Targets].from_file(str(metadata_dir / "targets.json")),
         Metadata[Snapshot].from_file(str(metadata_dir / "snapshot.json")),
@@ -127,12 +146,15 @@ def publish(artifact_dir: Path | None, remote_url: str, output_dir: Path, privat
                 if not artifact.is_dir() or target_name is None:
                     continue
                 existing = targets.get(target_name)
-                if existing and version_parts(existing.custom["version"]) >= version_parts(version):
-                    if legacy:
-                        continue  # Older clients wait until Stable overtakes their existing feed.
+                if existing and legacy and version_parts(existing.custom["version"]) >= version_parts(version):
+                    continue  # Older clients wait until Stable overtakes their existing feed.
+                if existing and version_parts(existing.custom["version"]) > version_parts(version):
                     raise ValueError(f"Target version must increase: {target_name}")
                 archive = Path(temporary) / "bundles" / artifact.name
                 target = create_bundle(artifact, target_name, version, archive, channel=channel)
+                if existing and version_parts(existing.custom["version"]) == version_parts(version):
+                    if existing.to_dict() != target.to_dict():
+                        raise ValueError(f"Same release version has different bytes or identity: {target_name}")
                 targets[target_name] = target
                 new_files.append((archive, target))
             if not new_files and not (legacy and targets):

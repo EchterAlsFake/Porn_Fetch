@@ -1,8 +1,12 @@
 """Live requests and explicit result unwrapping; no response replay."""
 
-import sys, pathlib, asyncio, json, importlib, inspect, logging, argparse
+import importlib
+import json
+import logging
+import pathlib
 from contextlib import aclosing
-from base_api import BaseCore, IteratorConfig, ResultOrder, ErrorMode
+
+from base_api import BaseCore, ErrorMode, IteratorConfig, ResultOrder
 from base_api.modules.config import RuntimeConfig
 
 logging.disable(logging.CRITICAL)
@@ -102,9 +106,11 @@ async def run(site, cls, url, method):
 
 def search_source_keys(site, requested, resolved, content):
     """Independent IDs from actual responses; production extractors are not used."""
-    from .complete_profiles import identity, source_rows
-    from selectolax.lexbor import LexborHTMLParser
     from urllib.parse import urljoin
+
+    from selectolax.lexbor import LexborHTMLParser
+
+    from .complete_profiles import identity, source_rows
 
     base = resolved or requested
     if site in {"eporner", "bellesa", "redgifs"}:
@@ -148,8 +154,9 @@ def search_source_keys(site, requested, resolved, content):
 
 
 async def runsearch(site):
-    from .complete_profiles import identity
     from selectolax.lexbor import LexborHTMLParser
+
+    from .complete_profiles import identity
 
     runtime = RuntimeConfig()
     runtime.request_attempts = 3

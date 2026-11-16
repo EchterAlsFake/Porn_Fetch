@@ -4,7 +4,7 @@ import os
 import tempfile
 import unittest
 
-from src.database.creators import CreatorRepository, MEMBERSHIPS, SCANS, SUBSCRIPTIONS, VIDEOS
+from src.database.creators import MEMBERSHIPS, SCANS, SUBSCRIPTIONS, VIDEOS, CreatorRepository
 from src.database.tracker import PocketBaseTracker
 from src.shared.creator_library import CreatorLibrary
 from src.shared.provider_routing import route_url
@@ -100,7 +100,8 @@ class CreatorLibraryTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_draft_migration_preserves_existing_membership(self):
         from pathlib import Path
-        from src.database.constants import _SCHEMA_MIGRATION, MIGRATION_NAME, CREATOR_MIGRATION, CREATOR_MIGRATION_NAME
+
+        from src.database.constants import _SCHEMA_MIGRATION, CREATOR_MIGRATION, CREATOR_MIGRATION_NAME, MIGRATION_NAME
         from src.database.service import PocketBaseService
         with tempfile.TemporaryDirectory(prefix="creator-draft-upgrade-") as folder:
             service = PocketBaseService(folder, binary_path=BINARY)
@@ -164,7 +165,8 @@ migrate((app) => {
         self.assertFalse(source["baseline"])
         self.assertEqual(source["scan_discovered"], 5)
         self.assertEqual(source["scan_pages"], 1)
-        gate.clear(); started.clear()
+        gate.clear()
+        started.clear()
         self.library.scan(id)
         await started.wait()
         premium = False  # A running full traversal still reports its true coverage.

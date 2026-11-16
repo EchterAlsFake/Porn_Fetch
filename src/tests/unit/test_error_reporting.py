@@ -6,7 +6,6 @@ import traceback
 import unittest
 from io import StringIO
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from base_api.modules.errors import MediaLoadErrors
@@ -181,13 +180,9 @@ class ErrorReportConsentTests(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as directory:
             store = SettingsStore(Path(directory) / "settings.json")
             selector = MagicMock()
-            selector.ask_async = AsyncMock(return_value=True)
+            selector.ask_async = AsyncMock(return_value=1)
             console = Console(file=StringIO(), force_terminal=False)
-            questionary = SimpleNamespace(
-                Choice=lambda label, value: (label, value),
-                select=lambda *args, **kwargs: selector,
-            )
-            with patch.dict("sys.modules", {"questionary": questionary}):
+            with patch("src.cli.prompts.select", return_value=selector):
                 updated = await prompt_error_reporting_consent(
                     CliSettings(), store, console=console,
                 )
@@ -195,6 +190,7 @@ class ErrorReportConsentTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertTrue(updated.error_reporting)
         self.assertTrue(updated.error_reporting_decided)
+        self.assertFalse(updated.error_reporting_full_traceback)
         self.assertTrue(loaded.error_reporting)
         self.assertTrue(loaded.error_reporting_decided)
         self.assertEqual(loaded.error_reporting_consent_version, ERROR_REPORT_CONSENT_VERSION)
@@ -204,11 +200,7 @@ class ErrorReportConsentTests(unittest.IsolatedAsyncioTestCase):
             store = SettingsStore(Path(directory) / "settings.json")
             selector = MagicMock()
             selector.ask_async = AsyncMock(return_value=None)
-            questionary = SimpleNamespace(
-                Choice=lambda label, value: (label, value),
-                select=lambda *args, **kwargs: selector,
-            )
-            with patch.dict("sys.modules", {"questionary": questionary}):
+            with patch("src.cli.prompts.select", return_value=selector):
                 updated = await prompt_error_reporting_consent(
                     CliSettings(),
                     store,

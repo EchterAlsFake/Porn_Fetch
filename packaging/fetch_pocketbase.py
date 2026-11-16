@@ -15,11 +15,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from scripts.fetch_pocketbase import download_pocketbase  # noqa: E402
 from src.database.installer import (  # noqa: E402
     DEFAULT_POCKETBASE_VERSION,
-    download_and_extract_pocketbase,
     resolve_platform,
 )
+
+
+def download_and_extract_pocketbase(*, target_dir, version, os_name, machine):
+    binary = download_pocketbase(os_name, machine, target_dir, version)
+    if binary is None:
+        raise ValueError(f"Unsupported PocketBase target: {os_name}/{machine}")
+    return binary
+
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("fetch_pocketbase")

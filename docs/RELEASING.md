@@ -20,6 +20,11 @@ CI resolves current compatible Python dependencies with `uv sync --upgrade`.
 It does not use a committed `uv.lock`. Each job keeps its environment unchanged
 after setup and records dependency information with its legal/build output.
 GitHub Actions are pinned to verified commits, with daily Dependabot updates.
+Keep this latest-dependency policy and python-for-android's `develop`/`HEAD`
+selection: Qt currently requires that branch. Release jobs deliberately do not
+use `uv.lock`. PocketBase build downloads are checked against the committed
+`packaging/pocketbase_checksums.json`; update that manifest when changing its
+version. Both build-time fetch entry points share the verified downloader.
 Native mobile wheels and checksum-verified tool/source downloads keep matching
 versions and hashes. Review and update those together.
 
@@ -51,6 +56,11 @@ bytes or promote a Beta build under the same version. The immutable website
 catalog rejects conflicting reuse. An existing-build website retry must match
 that build's `release-identity` artifact, including channel, commit and timestamp.
 Builds predating that artifact require a new build for this publication workflow.
+The separate Python packaging job stamps the same release version/channel before
+building its wheel and sdist, installs the wheel into a fresh environment and
+runs the offline CLI checks outside the checkout. These distributions are included
+in GitHub releases; ordinary validation artifacts are named `development-python`.
+Requested experimental CLI builds must pass before any CLI/GitHub publication.
 
 Stable subscribers check only Stable. Beta subscribers check both signed feeds
 and receive the newer eligible release, including a newer Stable release. Both
@@ -121,6 +131,11 @@ The shared Android builder signs and verifies every APK. CI passes the release
 keystore and password environment variables to it; incomplete credentials fail.
 Build-only runs without credentials use the standard debug key, while website
 and GitHub release publication require all four release secrets before building.
+Before website publication, both workflows re-sign downloaded APKs using these
+GitHub keystore secrets. This publication step leaves the Android build script
+unchanged. It checks the resulting signer against the certificate exported from
+the keystore, then the website publisher calculates final payload hashes. APKs
+already signed by this key are verified and retained byte-for-byte on retries.
 Reuse the same Android key for updates and keep an encrypted backup. See
 [Android](ANDROID.md) for local signing.
 
@@ -270,6 +285,14 @@ Publish signed repositories before announcing a release. The pipeline runs
 payload downloads. Do not ignore a stale, expired or invalid feed. The scheduled
 refresh workflow renews metadata between releases; monitor failures before the
 seven-day timestamp expiry. CLI publishing and refresh share a concurrency group.
+Publication groups use
+`queue: max` to retain pending runs. The pinned actionlint predates this field;
+CI suppresses only its unknown-`concurrency.queue` schema error.
+CLI publishers can renew expired, authenticated metadata after checking its
+signatures and snapshot links; client expiry checks remain unchanged. Retrying
+an existing CLI version requires identical bundle bytes and release identity.
+GitHub publication resumes draft uploads, checks the tag commit/channel and
+compares existing asset bytes before publishing the completed draft.
 
 Use **Publish website release** to retry publication from an eligible existing
 build without compiling again. Android-only and iOS-only publication retain desktop variants from earlier releases. iOS publishes the native ARM64 IPA for iOS 15+, its checksum and dependency notices. Users re-sign and provision it with their sideloading tool. Public APKs must be signed; `_unsigned.apk` files are diagnostics.
@@ -277,7 +300,10 @@ build without compiling again. Android-only and iOS-only publication retain desk
 ## Notices, logs and size
 
 Run `packaging/collect_legal.py` on each build environment and distribute its
-output. Include exact dependency notices, Qt license information, FFmpeg source
+output. Android uses `packaging/collect_android_legal.py` to read the target's
+installed metadata and native recipe notices, including embedded PocketBase
+notices, instead of inventorying host packages. Include exact dependency notices,
+Qt license information, FFmpeg source
 and build files, and the app license. Review contribution/provider permissions
 before distribution; see [licensing](LICENSING.md).
 

@@ -38,6 +38,7 @@ ApplicationWindow {
     title: qsTr("Video Downloader")
     property alias safeToClose: shutdownController.safeToClose
     property bool startupContinued: false
+    property bool showingWebsites: false
     readonly property bool onboardingActive: setupWizard.active
 
     ServiceTorFailureDialog { presentationBlocked: window.onboardingActive }
@@ -347,11 +348,13 @@ ApplicationWindow {
             TabBar {
                 id: navigation
                 objectName: "mainNavigation"
+                onCurrentIndexChanged: window.showingWebsites = false
 
                 Layout.fillWidth: true
 
                 TabButton {
                     Accessible.name: qsTr("Downloads")
+                    onClicked: window.showingWebsites = false
                     icon.source: "qrc:/images/graphics/download.svg"
                     icon.width: 24
                     icon.height: 24
@@ -361,6 +364,7 @@ ApplicationWindow {
 
                 TabButton {
                     Accessible.name: qsTr("Account")
+                    onClicked: window.showingWebsites = false
                     icon.source: "qrc:/images/graphics/account.svg"
                     icon.width: 24
                     icon.height: 24
@@ -369,7 +373,28 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    objectName: "creatorsTab"
+                    text: qsTr("Creators")
+                    icon.source: "qrc:/images/graphics/creators.svg"
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: Theme.ink
+                    ToolTip.visible: hovered
+                    ToolTip.text: Accessible.name
+                    Accessible.name: qsTr("Creator library")
+                    Keys.onReturnPressed: clicked()
+                    Keys.onEnterPressed: clicked()
+                    Keys.onSelectPressed: clicked()
+                    onClicked: {
+                        navigation.currentIndex = 2
+                        window.showingWebsites = false
+                        Qt.callLater(function() { creatorsPage.focusInitial() })
+                    }
+                }
+
+                TabButton {
                     Accessible.name: qsTr("Statistics")
+                    onClicked: window.showingWebsites = false
                     icon.source: "qrc:/images/graphics/database.svg"
                     icon.width: 24
                     icon.height: 24
@@ -378,7 +403,9 @@ ApplicationWindow {
                 }
 
                 TabButton {
+                    objectName: "settingsTab"
                     Accessible.name: qsTr("Settings")
+                    onClicked: window.showingWebsites = false
                     icon.source: "qrc:/images/graphics/settings.svg"
                     icon.width: 24
                     icon.height: 24
@@ -388,6 +415,7 @@ ApplicationWindow {
 
                 TabButton {
                     Accessible.name: qsTr("Information")
+                    onClicked: window.showingWebsites = false
                     icon.source: "qrc:/images/graphics/information.svg"
                     icon.width: 24
                     icon.height: 24
@@ -397,26 +425,24 @@ ApplicationWindow {
 
                 TabButton {
                     objectName: "downloadManagerTab"
+                    onClicked: window.showingWebsites = false
                     text: qsTr("Manager")
                     Accessible.name: qsTr("Download manager")
                     ToolTip.visible: hovered
                     ToolTip.text: Accessible.name
                 }
-                TabButton {
-                    objectName: "creatorsTab"
-                    text: qsTr("Creators")
-                    Accessible.name: qsTr("Creator library")
-                    onClicked: Qt.callLater(function() { creatorsPage.focusInitial() })
-                }
-
-
             }
             NotificationPanel {
                 blocked: window.onboardingActive
             }
             AppButton {
-                text: qsTr("SUPPORTED WEBSITES")
-                onClicked: Qt.openUrlExternally("https://pornfetch.to/#websites")
+                id: websitesButton
+                text: qsTr("Supported websites")
+                highlighted: window.showingWebsites
+                onClicked: {
+                    window.showingWebsites = true
+                    Qt.callLater(function() { websitesPage.focusInitial() })
+                }
             }
         }
 
@@ -424,7 +450,8 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            currentIndex: navigation.currentIndex
+            // Preserve page identities while placing Creators beside Account.
+            currentIndex: window.showingWebsites ? 7 : [0, 1, 6, 2, 3, 4, 5][navigation.currentIndex]
 
             DownloadsPage {
             }
@@ -456,6 +483,13 @@ ApplicationWindow {
             }
             DownloadManagerPage {}
             CreatorsPage { id: creatorsPage }
+            SupportedWebsitesPage {
+                id: websitesPage
+                onBackRequested: {
+                    window.showingWebsites = false
+                    websitesButton.forceActiveFocus(Qt.BacktabFocusReason)
+                }
+            }
         }
     }
 }

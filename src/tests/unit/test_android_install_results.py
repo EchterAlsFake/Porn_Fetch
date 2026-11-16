@@ -13,7 +13,7 @@ from src.backend.tor_status import TorStatus
 
 class AndroidInstallResultTests(unittest.TestCase):
     def test_permission_and_errors_reach_update_outcomes(self):
-        app = QCoreApplication.instance() or QCoreApplication([])
+        self.app = QCoreApplication.instance() or QCoreApplication([])
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"ANDROID_PRIVATE": directory}):
             status = TorStatus()
             outcomes = []

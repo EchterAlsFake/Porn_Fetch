@@ -1,8 +1,14 @@
 """Live checks that empty/unavailable resources cannot become unrelated videos."""
 
-from .common import *
-from .complete_profiles import SourceCore
+import asyncio
+import json
+
+from base_api import BaseCore
+from base_api.modules.config import RuntimeConfig
 from selectolax.lexbor import LexborHTMLParser
+
+from .common import OUTPUT, collect, config
+from .complete_profiles import SourceCore
 
 
 async def main():

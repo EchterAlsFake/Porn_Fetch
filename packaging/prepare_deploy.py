@@ -16,6 +16,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.patch_nuitka import patch_installed_nuitka  # noqa: E402
+from src.shared.version import BUILD_VERSION  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CONTROL_STYLES = ("Basic", "Fusion", "Material", "Universal", "Windows", "macOS")
@@ -92,6 +93,11 @@ def prepare_spec(template: Path, output: Path, project: Path, pyside: Path) -> N
     config = configparser.ConfigParser(interpolation=None)
     config.read(template, encoding="utf-8")
     arguments = shlex.split(config.get("nuitka", "extra_args"))
+    arguments = [
+        f"{argument.split('=', 1)[0]}={BUILD_VERSION}"
+        if argument.startswith(("--file-version=", "--product-version=")) else argument
+        for argument in arguments
+    ]
     # Avoid costly ARM64 link-time optimization in the hosted build.
     if sys.platform == "win32" and platform.machine().lower() in {"arm64", "aarch64"}:
         patch_installed_nuitka()

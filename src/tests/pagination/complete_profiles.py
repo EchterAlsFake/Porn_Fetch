@@ -1,9 +1,18 @@
 """Compare complete live streams with independently selected source listing IDs."""
 
-from .common import *
-from urllib.parse import parse_qs, urljoin, urlsplit
-from selectolax.lexbor import LexborHTMLParser
+import argparse
+import asyncio
+import importlib
+import json
 import re
+from contextlib import aclosing
+from urllib.parse import parse_qs, urljoin, urlsplit
+
+from base_api import BaseCore
+from base_api.modules.config import RuntimeConfig
+from selectolax.lexbor import LexborHTMLParser
+
+from .common import OUTPUT, cases, collect, config
 
 
 def identity(site, url):

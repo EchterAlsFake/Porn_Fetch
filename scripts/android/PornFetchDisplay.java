@@ -28,6 +28,7 @@ public final class PornFetchDisplay {
             android.content.res.Configuration config = activity.getResources().getConfiguration();
             boolean television = (config.uiMode & android.content.res.Configuration.UI_MODE_TYPE_MASK)
                     == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
+            geometry.put("television", television);
             geometry.put("keyboardNavigation", television
                     || config.touchscreen == android.content.res.Configuration.TOUCHSCREEN_NOTOUCH);
             org.json.JSONArray corners = new org.json.JSONArray();

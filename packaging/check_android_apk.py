@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import tarfile
 import zipfile
 from pathlib import Path
@@ -40,6 +41,15 @@ def check_apk(apk: Path, abi: str) -> None:
         missing = required - set(archive.namelist())
         if missing:
             raise ValueError(f"Missing native Android runtime libraries: {', '.join(sorted(missing))}")
+        for name in ("libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so"):
+            references = set(re.findall(rb"libpython3\.[0-9]+\.so\x00", archive.read(f"lib/{abi}/{name}")))
+            incompatible = references - {b"libpython3.15.so\x00"}
+            if incompatible:
+                raise ValueError(
+                    f"{name} references incompatible Python runtime: "
+                    + ", ".join(sorted(value.rstrip(b"\x00").decode() for value in incompatible))
+                    + "; rebuild PySide6/Shiboken6 with Python 3.15 wheels and clear stale native build output"
+                )
         if "assets/pocketbase-legal/modules.json" not in archive.namelist():
             raise ValueError("Missing embedded PocketBase dependency notices")
         check_python_bundle(archive, abi)

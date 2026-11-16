@@ -131,6 +131,7 @@ ColumnLayout {
         width: Math.max(1, Math.min(680, parent.width - 32))
         height: Math.max(1, Math.min(640, parent.height - 32))
         modal: true
+        focus: true
         closePolicy: Popup.CloseOnEscape
         title: qsTr("Recent activity")
         property var previousFocus: null

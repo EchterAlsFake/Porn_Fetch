@@ -65,7 +65,8 @@ permissions:
 concurrency:
   # Publishing runs have their own queue and cannot be cancelled by another build.
   group: builds-${{ github.ref }}-${{ (inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates || inputs.deploy_website) && 'publish' || 'build' }}
-  cancel-in-progress: ${{ !(inputs.create_release || inputs.deploy_repositories || inputs.deploy_cli_updates || inputs.deploy_website) }}
+  cancel-in-progress: false
+  queue: max
 
 env:
   PYTHONUNBUFFERED: "1"
@@ -140,6 +141,29 @@ jobs:
         with:
           name: release-identity
           path: release-identity.json
+
+  build-python:
+    needs: [validate, release-metadata]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+      - run: uv python install 3.15.2
+      - run: uv sync --upgrade --no-dev
+      - run: uv run --no-sync python packaging/write_build_version.py ${{ needs.release-metadata.outputs.version }} --release-timestamp ${{ needs.release-metadata.outputs.timestamp }} --channel "${{ env.RELEASE_CHANNEL }}"
+      - run: uv build
+      - name: Test the installed release wheel outside the checkout
+        shell: bash
+        run: |
+          uv venv --python 3.15.2 "$RUNNER_TEMP/wheel-smoke"
+          uv pip install --python "$RUNNER_TEMP/wheel-smoke/bin/python" dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/wheel-smoke/bin/porn-fetch-cli" --test-mode --filter offline
+      - uses: ./.github/actions/upload-artifact
+        with:
+          name: release-python
+          path: dist/*
+          if-no-files-found: error
 
   # ==========================================
   # 1. GUI BUILDS (PySide6)
@@ -889,7 +913,7 @@ jobs:
           grep -q REQUEST_INSTALL_PACKAGES "$RUNNER_TEMP/android-manifest.txt"
           apksigner verify --verbose "$APK"
           cp "$APK" "android_release/PornFetch_android_GUI_${ANDROID_ABI}.apk"
-          python packaging/collect_legal.py "android_release/PornFetch_android_GUI_${ANDROID_ABI}_LEGAL"
+          python packaging/collect_android_legal.py --abi "$ANDROID_ABI" --output "android_release/PornFetch_android_GUI_${ANDROID_ABI}_LEGAL"
           for file in android_release/*.apk; do python scripts/write_checksum.py "$file"; done
           RELEASE_APKS=(android_release/*.apk)
           test "${#RELEASE_APKS[@]}" -eq 1
@@ -1372,6 +1396,7 @@ jobs:
             --workdir /workspace \
             --env BUILD_RELEASE_VERSION="${{ needs.release-metadata.outputs.version }}" \
             --env BUILD_RELEASE_TIMESTAMP="${{ needs.release-metadata.outputs.timestamp }}" \
+            --env RELEASE_CHANNEL \
             --env PORN_FETCH_BUILD_VERBOSE \
             debian:bookworm bash packaging/build_linux_x86.sh
 
@@ -1626,6 +1651,7 @@ jobs:
     concurrency:
       group: ifw-repository-deploy
       cancel-in-progress: false
+      queue: max
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -1712,12 +1738,14 @@ jobs:
     needs: [validate, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.build_target != 'gui' && inputs.build_target != 'android' && inputs.build_target != 'ios' && inputs.legal_review_complete &&
-      (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success'
+      (inputs.deploy_cli_updates || inputs.create_release) && needs.validate.result == 'success' && needs.build-cli.result == 'success' &&
+      (!inputs.experimental_builds || (needs.build-cli-linux-x32.result == 'success' && needs.build-cli-linux-riscv64.result == 'success'))
     runs-on: ubuntu-latest
     environment: beta
     concurrency:
       group: cli-update-deploy
       cancel-in-progress: false
+      queue: max
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -1785,10 +1813,11 @@ jobs:
   # ==========================================
   publish-release:
     name: Publish GitHub Release
-    needs: [validate, build-gui, build-android, build-ios, build-cli, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
+    needs: [validate, build-python, build-gui, build-android, build-ios, build-cli, build-cli-linux-x32, build-cli-linux-riscv64, build-macos-universal, deploy-repositories, deploy-cli-updates, release-metadata]
     if: >-
       !cancelled() && github.event_name == 'workflow_dispatch' && inputs.create_release && inputs.legal_review_complete &&
-      needs.validate.result == 'success' &&
+      needs.validate.result == 'success' && needs.build-python.result == 'success' &&
+      (!inputs.experimental_builds || inputs.build_target != 'cli' && inputs.build_target != 'both' || (needs.build-cli-linux-x32.result == 'success' && needs.build-cli-linux-riscv64.result == 'success')) &&
       (inputs.build_target == 'cli' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-gui.result == 'success' &&
         needs.build-macos-universal.result == 'success' && needs.deploy-repositories.result == 'success')) &&
       (inputs.build_target == 'gui' || inputs.build_target == 'android' || inputs.build_target == 'ios' || (needs.build-cli.result == 'success' && needs.deploy-cli-updates.result == 'success')) &&
@@ -1811,6 +1840,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist_release
+          if [ -d all_artifacts/release-python ]; then cp all_artifacts/release-python/* dist_release/; fi
           shopt -s nullglob
           for artifact_dir in all_artifacts/*; do
             artifact_name="${artifact_dir##*/}"
@@ -1830,7 +1860,8 @@ jobs:
             # Only CLI payloads need bundling with their helpers and notices.
             # GUI archives, installers and mobile packages are already packaged.
             if [[ "$artifact_name" == PornFetch_*_CLI_* ]]; then
-              (cd "$artifact_dir" && zip -q -r "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" .)
+              find "$artifact_dir" -exec touch -t 198001010000 {} +
+              (cd "$artifact_dir" && find . -type f -print | LC_ALL=C sort | zip -X -q "$GITHUB_WORKSPACE/dist_release/$artifact_name.zip" -@)
             fi
             for file in "$artifact_dir"/*; do
               [[ -f "$file" ]] || continue
@@ -1854,12 +1885,9 @@ jobs:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}
         run: |
           : "${GH_TOKEN:?Set RELEASE_TOKEN in the build environment}"
-          gh release create "v$RELEASE_VERSION" dist_release/* \
-            --title "Porn Fetch $RELEASE_VERSION" \
-            --notes-file CHANGELOG_STATIC.md \
-            --prerelease="$([ "$RELEASE_CHANNEL" = beta ] && echo true || echo false)" \
-            --target "$COMMIT_SHA" \
-            --draft=false
+          python packaging/publish_github_release.py --assets dist_release \
+            --version "$RELEASE_VERSION" --commit "$COMMIT_SHA" --channel "$RELEASE_CHANNEL" \
+            --notes CHANGELOG_STATIC.md
 
   # Website distribution uses the same release identity as the updater feeds.
   publish-website:
@@ -1878,6 +1906,7 @@ jobs:
     concurrency:
       group: website-release-deploy
       cancel-in-progress: false
+      queue: max
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
@@ -1892,6 +1921,16 @@ jobs:
           pattern: PornFetch_*
           path: website_artifacts
           merge-multiple: false
+      - name: Re-sign Android packages for website publication
+        uses: ./.github/actions/sign-website-apks
+        with:
+          artifacts: website_artifacts
+          tooling: .
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - name: Stamp source archive version
         env:
           RELEASE_VERSION: ${{ needs.release-metadata.outputs.version }}

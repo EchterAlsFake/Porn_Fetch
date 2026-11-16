@@ -76,6 +76,7 @@ ALL_CANONICAL_ARCHS = ["aarch64", "armv7a", "x86_64", "i686"]
 ANDROID_NDK_VERSION = "28c"
 ANDROID_NDK_REVISION = "28.2.13676358"
 ANDROID_PYTHON_VERSION = "3.15.2"
+ANDROID_PYTHON_TAG = "cp" + "".join(ANDROID_PYTHON_VERSION.split(".")[:2])
 ANDROID_BUILDOZER_COMMIT = "fe2a18cfedd28d45329d47eae8545c81c6e8fe9a"
 ANDROID_BUILDOZER_REQUIREMENT = f"buildozer @ git+https://github.com/kivy/buildozer.git@{ANDROID_BUILDOZER_COMMIT}"
 
@@ -621,24 +622,39 @@ def find_wheels_for_arch(
 
     if user_pyside and user_pyside.is_file():
         if detect_arch_from_filename(user_pyside.name) == canon_arch:
+            validate_wheel_python(user_pyside)
             pyside_whl = user_pyside
     if user_shiboken and user_shiboken.is_file():
         if detect_arch_from_filename(user_shiboken.name) == canon_arch:
+            validate_wheel_python(user_shiboken)
             shiboken_whl = user_shiboken
 
     for search_dir in search_dirs:
         if not search_dir.is_dir():
             continue
-        for whl in search_dir.glob("*.whl"):
+        for whl in sorted(search_dir.glob("*.whl")):
             # Avoid .tmp or other files
             lower = whl.name.lower()
             if "android" in lower and detect_arch_from_filename(whl.name) == canon_arch:
+                if f"-{ANDROID_PYTHON_TAG}-{ANDROID_PYTHON_TAG}-" not in lower:
+                    continue
                 if "pyside6" in lower and not pyside_whl:
                     pyside_whl = whl
                 elif "shiboken6" in lower and not shiboken_whl:
                     shiboken_whl = whl
 
+    if pyside_whl and shiboken_whl and pyside_whl.name.split("-")[1] != shiboken_whl.name.split("-")[1]:
+        raise ValueError("PySide6 and Shiboken6 wheels must have the same version")
     return pyside_whl, shiboken_whl
+
+
+def validate_wheel_python(wheel: Path) -> None:
+    if f"-{ANDROID_PYTHON_TAG}-{ANDROID_PYTHON_TAG}-" not in wheel.name.lower():
+        raise ValueError(
+            f"{wheel.name} is incompatible with Android Python {ANDROID_PYTHON_VERSION}. "
+            f"Use matching PySide6 and Shiboken6 {ANDROID_PYTHON_TAG}-{ANDROID_PYTHON_TAG} wheels; "
+            "mixing Python ABIs causes an immediate native startup failure."
+        )
 
 
 def restore_buildozer_cache(project_root: Path) -> None:
@@ -653,6 +669,11 @@ def restore_buildozer_cache(project_root: Path) -> None:
             )
         build_output.message(f"Restoring Buildozer cache from {previous_cache}")
         shutil.move(str(previous_cache), str(build_dir))
+
+
+def verify_apk_runtime(apk: Path, abi: str, project_root: Path) -> None:
+    checker = runpy.run_path(str(project_root / "packaging" / "check_android_apk.py"))
+    checker["check_apk"](apk, abi)
 
 
 def build_single_arch(
@@ -1075,6 +1096,7 @@ def main() -> int:
             build_output.message(f"(dry-run) Would zipalign, sign with {signing.keystore} (alias {signing.key_alias}), "
                   f"and verify app-signed{'-' + suffix if suffix else ''}.apk in {signing_output}")
         elif apk:
+            verify_apk_runtime(apk, str(ARCH_MAP[arch]["buildozer_arch"]), project_root)
             try:
                 apk = sign_apk(apk, signing_output, signing.keystore, signing.key_alias, suffix,
                                store_password=signing.store_password, key_password=signing.key_password,

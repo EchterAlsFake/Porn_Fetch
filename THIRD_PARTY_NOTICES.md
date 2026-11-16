@@ -16,7 +16,7 @@ is an inventory, not a substitute for those license texts.
 | zlib | [zlib license](https://zlib.net/zlib_license.html) | Used for PNG cover probing. Linux/macOS use the system library; Windows statically links the MSYS2 library and includes its `zlib.h` copyright/license text in `ffmpeg-legal`. |
 | LZ4 native compression library | [BSD-2-Clause](LICENSES/LZ4.txt) | macOS bundles the native library when required by the Python compression extensions; retain its copyright and license alongside the Python package's separate license. |
 | Other Python packages | `pyproject.toml` and installed package metadata | Generate an artifact-specific list and include the packages' license and notice files; account for platform extras and transitive dependencies. |
-| Application graphics | [Graphics source files](src/frontend/graphics/); Lucide settings-icon attribution below | Application-owned SVGs use the application license; Lucide icons retain their MIT notice. Preserve provenance records for the PNG logo and splash assets; replace or clear any uncertain asset before release. |
+| Application graphics | [Graphics source files](src/frontend/graphics/); Lucide icon attribution below | Application-owned SVGs use the application license; Lucide icons retain their ISC and applicable Feather MIT notices. Preserve provenance records for the PNG logo and splash assets; replace or clear any uncertain asset before release. |
 | Content-language flag images | [flag-icons](https://github.com/lipis/flag-icons), MIT | SVGs from revision `ac7e0eb3259eb62aa6100c435607e2fe03896a97`; copyright and license in [LICENSES/FlagIcons.txt](LICENSES/FlagIcons.txt). |
 
 The obsolete library list in `docs/CREDITS.md` is retained as historical
@@ -24,7 +24,15 @@ acknowledgment. It does not establish the shipped dependency list or license
 obligations. Third-party notices and source availability must be present in the
 delivered package, not only in this repository.
 
-## Settings icons
+## Lucide icons
+
+The Creators navigation icon, `src/frontend/graphics/creators.svg`, is Lucide's
+`user-round-star`, by Lucide Icons and Contributors, copyright (c) 2026, under
+the ISC license in [LICENSES/Lucide.txt](LICENSES/Lucide.txt). Source:
+https://github.com/lucide-icons/lucide/blob/3920f67e0fd8b731df848cda270d82f7200a94b5/icons/user-round-star.svg
+(downloaded 2026-11-16). The stroke color was changed; the geometry is unmodified.
+
+### Settings icons
 
 The video, gauge, settings, shield, palette and trash SVGs in
 `src/frontend/graphics/settings/` are by Lucide Icons and Contributors, from

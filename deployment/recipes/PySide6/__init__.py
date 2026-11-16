@@ -28,7 +28,7 @@ def safe_extractall(zip_ref: zipfile.ZipFile, target_path: Path) -> None:
 
 class PySideRecipe(PythonRecipe):
     version = '6.12.0'
-    wheel_path = '/home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.12.0-6.12.0-cp314-cp314-android_aarch64.whl'
+    wheel_path = '/home/asuna/PycharmProjects/Porn_Fetch/pyside6-6.12.0-6.12.0-cp315-cp315-android_aarch64.whl'
     depends = ["shiboken6"]
     call_hostpython_via_targetpython = False
     install_in_hostpython = False

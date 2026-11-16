@@ -326,14 +326,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+59"/>
-        <location line="+216"/>
-        <location line="+271"/>
+        <location line="+60"/>
+        <location line="+222"/>
+        <location line="+273"/>
         <source>Add videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-482"/>
+        <location line="-490"/>
         <source>Close</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
@@ -384,6 +384,11 @@
     </message>
     <message>
         <location line="+9"/>
+        <source>Use shared Downloads/Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Hide filters and options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -483,7 +488,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+119"/>
         <source>Download %1 progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -693,30 +698,27 @@
     <name>AndroidMain</name>
     <message>
         <location filename="../../UI/AndroidMain.qml" line="+12"/>
-        <location line="+234"/>
+        <location line="+292"/>
         <source>Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-185"/>
-        <location line="+328"/>
+        <location line="-243"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-328"/>
-        <location line="+328"/>
+        <location line="+0"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-328"/>
-        <location line="+328"/>
+        <location line="+0"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-327"/>
+        <location line="+1"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -727,12 +729,11 @@
     </message>
     <message>
         <location line="+0"/>
-        <location line="+327"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-327"/>
+        <location line="+0"/>
         <source>Download manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -742,12 +743,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+266"/>
+        <location line="+340"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+29"/>
+        <location line="+150"/>
+        <source>Close app</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-17"/>
+        <source>Available while parked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>The vehicle currently restricts this screen. Continue when the vehicle allows parked apps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Waiting for the vehicle&apos;s parked-use status.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Open on your phone or computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Open this address on your phone or computer to continue.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Website address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Copy address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>Porn Fetch update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -810,17 +852,17 @@
 <context>
     <name>AndroidMorePage</name>
     <message>
-        <location filename="../../UI/AndroidMorePage.qml" line="+23"/>
+        <location filename="../../UI/AndroidMorePage.qml" line="+25"/>
         <source>Creators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Recent activity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+21"/>
         <source>About Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -830,13 +872,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+30"/>
         <source>Supported websites</source>
         <translation type="unfinished">Siti supportati</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>See where downloads work</source>
+        <source>Explore websites and supported links</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -931,13 +973,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+205"/>
-        <location line="+465"/>
+        <location line="+207"/>
+        <location line="+477"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-464"/>
+        <location line="-476"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1054,6 +1096,11 @@
     </message>
     <message>
         <location line="+18"/>
+        <source>Use shared Downloads/Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Use app storage</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1199,6 +1246,16 @@
     </message>
     <message>
         <location line="+5"/>
+        <source>Car layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Larger controls for Android head units that do not identify themselves as cars. Vehicle restriction monitoring is available only on Android Automotive OS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Activity glow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1248,7 +1305,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-16"/>
+        <location line="-22"/>
         <source>Reduce motion</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1258,7 +1315,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+25"/>
         <source>English only. Translations are not available yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1354,6 +1411,21 @@
     </message>
     <message>
         <location line="+18"/>
+        <source>You can also paste the contents of your license file here. A file picker is not required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>License file contents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Import pasted license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Refresh license (updates offline permit)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1373,7 +1445,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-50"/>
+        <location line="-76"/>
         <source>Machine Limit: 10 devices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1383,7 +1455,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+44"/>
         <source>Deactivate license (frees 1 of 10 machine seats)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1971,7 +2043,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+893"/>
+        <location filename="../../../backend/application.py" line="+900"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1991,8 +2063,8 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-747"/>
-        <location line="+220"/>
+        <location line="-754"/>
+        <location line="+227"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2000,7 +2072,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-231"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2020,7 +2092,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+125"/>
+        <location line="+126"/>
         <source>The update check failed. Check your connection and try again later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2956,12 +3028,12 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
 <context>
     <name>CreatorsPage</name>
     <message>
-        <location filename="../../UI/CreatorsPage.qml" line="+53"/>
+        <location filename="../../UI/CreatorsPage.qml" line="+54"/>
         <source>Not yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+125"/>
         <source>Remove subscription?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3322,7 +3394,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-367"/>
+        <location line="-373"/>
         <source>Best available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3337,7 +3409,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+320"/>
+        <location line="+326"/>
         <source>Videos</source>
         <translation type="unfinished">Video</translation>
     </message>
@@ -4865,7 +4937,7 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+182"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4930,32 +5002,32 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+30"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+11"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4965,22 +5037,22 @@ No subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-53"/>
         <source>Creators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>Creator library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>SUPPORTED WEBSITES</source>
-        <translation type="unfinished"></translation>
+        <location line="+56"/>
+        <source>Supported websites</source>
+        <translation type="unfinished">Siti supportati</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+38"/>
         <source>Widget is hidden due to your privacy settings...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6044,7 +6116,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+34"/>
         <source>Recent activity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6526,6 +6598,29 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <location line="+6"/>
         <location line="+1"/>
         <source>Use proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RemoteNavigation</name>
+    <message>
+        <location filename="../../UI/RemoteNavigation.qml" line="+425"/>
+        <source>Use the arrows to adjust. Press Back when finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Press center to adjust. Use the arrows to move between controls.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Press Back to finish editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Press center to edit. Use the arrows to move between controls.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7364,6 +7459,89 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
     </message>
 </context>
 <context>
+    <name>SupportedWebsitesPage</name>
+    <message>
+        <location filename="../../UI/SupportedWebsitesPage.qml" line="+54"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Back from supported websites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Supported websites</source>
+        <translation type="unfinished">Siti supportati</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Find your website. See which links you can use.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Filter by website name or domain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>All websites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Profiles and channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Playlists and collections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Filter by supported link type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>%1 of %2 websites · Select a card for link guidance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>No matching websites. Try another name or choose All websites.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Activate to show supported link guidance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Videos</source>
+        <translation type="unfinished">Video</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Profiles / channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Playlists / collections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Use Video URL for individual videos, Model URL for profiles or channels, and Playlist/Collection URL for supported lists. Website homepages and keyword search are not download sources.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SystemNotifications</name>
     <message>
         <location filename="../../../backend/system_notifications.py" line="+45"/>
@@ -7563,7 +7741,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+85"/>
         <source>Stable receives Stable releases only. Beta receives the newest Beta or Stable release. Switching never downgrades your installation.</source>
         <translation type="unfinished"></translation>
     </message>

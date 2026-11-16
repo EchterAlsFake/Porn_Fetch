@@ -1,8 +1,11 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls as Controls
 
 Controls.Button {
     id: control
+    Layout.minimumHeight: Theme.carMode ? 64 : 0
+    Layout.minimumWidth: Theme.carMode ? 64 : 0
 
     // Keep the platform style and its sizing. Override only the rendered colors
     // while high contrast is active; disabling it restores the style's bindings.

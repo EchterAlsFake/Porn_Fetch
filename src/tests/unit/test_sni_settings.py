@@ -14,6 +14,12 @@ class _MemorySettings:
     def value(self, key: str, defaultValue: object = None) -> object:
         return self.values.get(key, defaultValue)
 
+    def contains(self, key: str) -> bool:
+        return key in self.values
+
+    def allKeys(self) -> list[str]:
+        return list(self.values)
+
     def setValue(self, key: str, value: object) -> None:
         self.values[key] = value
 
@@ -27,7 +33,8 @@ class _MemorySettings:
 class SNISettingsTests(unittest.TestCase):
     @staticmethod
     def manager(values: dict[str, object]) -> tuple[SettingsManager, _MemorySettings]:
-        storage = _MemorySettings(values)
+        # These tests isolate SNI normalization from update-channel migration.
+        storage = _MemorySettings({"Misc/update_channel": "stable", **values})
         with patch("src.backend.config.QSettings", return_value=storage):
             manager = SettingsManager()
         return manager, storage

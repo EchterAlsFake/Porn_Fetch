@@ -24,7 +24,7 @@ ApplicationWindow {
     palette.mid: Theme.outline
     palette.disabled.text: Theme.disabledInk
     palette.disabled.buttonText: Theme.disabledInk
-    font.pointSize: Math.max(12, appSettings.font_size)
+    font.pointSize: Math.max(television || carInterface ? 16 : 12, appSettings.font_size)
     Material.theme: appSettings.dark_mode ? Material.Dark : Material.Light
     Material.accent: Theme.accent
     Material.foreground: Theme.ink
@@ -63,9 +63,23 @@ ApplicationWindow {
     readonly property var pageIcons: ["qrc:/images/graphics/download.png", "qrc:/images/graphics/account.png",
                                       "qrc:/images/graphics/settings.png",
                                       "qrc:/images/graphics/information.png", "qrc:/images/graphics/information.png",
-                                      "qrc:/images/graphics/information.png"]
+                                      "qrc:/images/graphics/information.png", "qrc:/images/graphics/download.svg",
+                                      "qrc:/images/graphics/creators.svg"]
 
     readonly property bool keyboardNavigation: androidDisplay.keyboardNavigation
+    readonly property bool television: androidDisplay.television === true
+    readonly property bool carInterface: androidDisplay.carMode === true
+    readonly property bool vehicleBlocked: androidDisplay.interactionBlocked === true
+    readonly property bool systemNavigation: androidDisplay.systemNavigation === true
+    property int lastVehiclePause: 0
+    readonly property var remoteNavigation: remoteNavigator
+    RemoteNavigation {
+        id: remoteNavigator
+        targetWindow: window
+        onNavigationKeyRequested: key => androidDisplay.sendNavigationKey(window, key)
+        automaticFocus: window.keyboardNavigation
+        suspended: window.onboardingActive && !tvWebLinkDialog.visible && !vehicleRestrictionDialog.visible
+    }
     property var pageHistory: []
     property int previousPage: 0
     property bool restoringPage: false
@@ -75,7 +89,12 @@ ApplicationWindow {
 
     onPageIndexChanged: {
         if (!navigationReady) return
-        pageFocus[previousPage] = window.activeFocusItem
+        for (var item = window.activeFocusItem; item; item = item.parent) {
+            if (item === pageStack) {
+                pageFocus[previousPage] = window.activeFocusItem
+                break
+            }
+        }
         if (!restoringPage)
             pageHistory = pageHistory.concat([previousPage])
         previousPage = pageIndex
@@ -174,12 +193,45 @@ ApplicationWindow {
     }
 
     Component.onCompleted: Qt.callLater(function() {
+        window.syncCarControls()
         window.navigationReady = true
         if (!setupWizard.begin()) window.continueStartup()
+        window.updateCarState()
     })
+
+    function syncCarControls() {
+        if (typeof androidDisplay.setCarControls === "function")
+            androidDisplay.setCarControls(appSettings.car_controls === true)
+    }
+    function updateCarState() {
+        var generation = typeof androidDisplay.pauseGeneration === "number" ? androidDisplay.pauseGeneration : 0
+        if (generation !== lastVehiclePause) {
+            lastVehiclePause = generation
+            remoteNavigator.editingItem = null
+            Qt.inputMethod.hide()
+        }
+        if (!window.keyboardNavigation) remoteNavigator.editingItem = null
+        if (window.vehicleBlocked) vehicleRestrictionDialog.open()
+        else vehicleRestrictionDialog.close()
+        if (window.vehicleBlocked || androidDisplay.foreground === false) {
+            remoteNavigator.editingItem = null
+            Qt.inputMethod.hide()
+        }
+    }
+    Connections {
+        target: appSettings
+        ignoreUnknownSignals: true
+        function onAccessibilityChanged() { window.syncCarControls() }
+    }
+    Connections {
+        target: androidDisplay
+        ignoreUnknownSignals: true
+        function onCarStateChanged() { window.updateCarState() }
+    }
 
     FirstRunSetup {
         id: setupWizard
+        enabled: !window.vehicleBlocked
         keyboardNavigation: window.keyboardNavigation
         settings: appSettings
         licenseText: applicationLicenseText
@@ -199,9 +251,15 @@ ApplicationWindow {
 
     Item {
         visible: !window.onboardingActive
-        enabled: visible
+        enabled: visible && !window.vehicleBlocked
         anchors.fill: parent
+        anchors.leftMargin: parent.SafeArea.margins.left + (window.television || window.carInterface ? 24 : 0)
+        anchors.rightMargin: parent.SafeArea.margins.right + (window.television || window.carInterface ? 24 : 0)
+        anchors.topMargin: parent.SafeArea.margins.top + (window.television || window.carInterface ? 24 : 0)
+        anchors.bottomMargin: parent.SafeArea.margins.bottom + (window.television || window.carInterface ? 24 : 0)
         focus: true
+        Keys.onBackPressed: event => { event.accepted = window.canGoBack }
+        Keys.onEscapePressed: event => { event.accepted = window.canGoBack }
         Keys.onReleased: function(event) {
             if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
                 if (window.canGoBack) {
@@ -251,20 +309,36 @@ ApplicationWindow {
                     }
 
                     Repeater {
+                        id: sidebarNavigation
                         model: [0, 1, 7, 2, 3, 4]
                         delegate: ItemDelegate {
                             required property int index
                             required property int modelData
+                            objectName: "sidebarNavigation-" + modelData
+                            Keys.onUpPressed: {
+                                for (var i = index - 1; i >= 0; --i) {
+                                    var item = sidebarNavigation.itemAt(i)
+                                    if (item.enabled) { item.forceActiveFocus(Qt.TabFocusReason); break }
+                                }
+                            }
+                            Keys.onDownPressed: {
+                                for (var i = index + 1; i < sidebarNavigation.count; ++i) {
+                                    var item = sidebarNavigation.itemAt(i)
+                                    if (item.enabled) { item.forceActiveFocus(Qt.TabFocusReason); break }
+                                }
+                            }
+                            Keys.onRightPressed: window.restorePageFocus(true)
                             Layout.fillWidth: true
-                            Layout.preferredHeight: window.expanded ? 54 : 72
+                            Layout.preferredHeight: window.carInterface ? 64 : window.expanded ? 54 : 72
                             enabled: !appSettings.anonymous_mode || modelData < 3 || modelData === 7
                             Accessible.name: window.pageNames[modelData]
                             onClicked: {
-                                if (modelData === 4) Qt.openUrlExternally("https://pornfetch.to/#websites")
-                                else window.pageIndex = modelData
+                                window.pageIndex = modelData
                             }
                             background: Rectangle {
                                 radius: 18
+                                border.width: parent.visualFocus ? 3 : 0
+                                border.color: Theme.accent
                                 color: window.pageIndex === modelData
                                        ? Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                  window.accentColor.b, 0.20)
@@ -285,7 +359,7 @@ ApplicationWindow {
                                     Layout.fillWidth: true
                                     text: window.pageNames[modelData]
                                     horizontalAlignment: window.expanded ? Text.AlignLeft : Text.AlignHCenter
-                                    font.pixelSize: window.expanded ? 14 : 11
+                                    font.pixelSize: window.television || window.carInterface ? 18 : window.expanded ? 14 : 11
                                     color: window.pageIndex === modelData
                                            ? window.accentColor : window.primaryTextColor
                                     font.bold: window.pageIndex === modelData
@@ -304,9 +378,9 @@ ApplicationWindow {
                 spacing: 0
 
                 Rectangle {
-                    visible: window.canGoBack
+                    visible: !window.systemNavigation && (window.canGoBack || window.carInterface)
                     Layout.fillWidth: true
-                    Layout.preferredHeight: visible ? 48 : 0
+                    Layout.preferredHeight: visible ? (window.carInterface ? 64 : 48) : 0
                     color: window.backgroundColor
 
                     RowLayout {
@@ -322,7 +396,7 @@ ApplicationWindow {
                             visible: window.canGoBack
                             Layout.preferredWidth: visible ? 48 : 0
                             activeFocusOnTab: true
-                            Layout.preferredHeight: 48
+                            Layout.preferredHeight: window.carInterface ? 64 : 48
                             text: "←"
                             font.pixelSize: 25 * appSettings.font_size / 12
                             Accessible.name: qsTr("Back")
@@ -351,6 +425,12 @@ ApplicationWindow {
                             font.bold: true
                             elide: Text.ElideRight
                         }
+                        AppButton {
+                            objectName: "androidCloseButton"
+                            visible: window.carInterface
+                            text: qsTr("Close app")
+                            onClicked: backend.initiate_shutdown()
+                        }
                     }
                 }
 
@@ -364,14 +444,14 @@ ApplicationWindow {
                     AndroidAccountPage {}
                     AndroidSettingsPage { id: settingsPage; objectName: "androidSettingsPage" }
                     AndroidInfoPage { visible: !appSettings.anonymous_mode }
-                    Item {} // Keep existing page indices stable; website support opens in the browser.
+                    SupportedWebsitesPage { showBackButton: !window.systemNavigation; onBackRequested: window.goBack() }
                     AndroidMorePage {
                         onOpenActivity: feedback.openActivity()
                         visible: !appSettings.anonymous_mode
                         onOpenPage: function(index) { window.pageIndex = index }
                     }
                     DownloadManagerPage {}
-                    CreatorsPage { id: creatorsPage }
+                    CreatorsPage { id: creatorsPage; showBackButton: !window.systemNavigation }
                 }
 
                 Rectangle {
@@ -386,18 +466,27 @@ ApplicationWindow {
                         anchors.rightMargin: 4
                         spacing: 0
                         Repeater {
-                            model: [qsTr("Downloads"), qsTr("Account"), qsTr("Settings"), qsTr("More")]
+                            id: mobileNavigation
+                            model: [0, 1, 7, 2, 5]
                             delegate: AbstractButton {
                                 required property int index
-                                required property string modelData
+                                required property int modelData
+                                readonly property bool selected: window.pageIndex === modelData
+                                    || (modelData === 5 && [3, 4, 5, 6].includes(window.pageIndex))
+                                objectName: "mobileNavigation-" + modelData
                                 Layout.fillWidth: true
                                 Layout.preferredWidth: 1
                                 Layout.fillHeight: true
-                                Accessible.name: modelData
-                                enabled: index !== 3 || !appSettings.anonymous_mode
+                                Accessible.name: window.pageNames[modelData]
+                                enabled: modelData !== 5 || !appSettings.anonymous_mode
+                                Keys.onLeftPressed: mobileNavigation.itemAt(Math.max(0, index - 1)).forceActiveFocus(Qt.TabFocusReason)
+                                Keys.onRightPressed: mobileNavigation.itemAt(Math.min(mobileNavigation.count - 1, index + 1)).forceActiveFocus(Qt.TabFocusReason)
+                                Keys.onUpPressed: window.restorePageFocus(true)
+                                Keys.onReturnPressed: clicked()
+                                Keys.onEnterPressed: clicked()
+                                Keys.onSelectPressed: clicked()
                                 onClicked: {
-                                    if (index === 3) window.pageIndex = 5
-                                    else window.pageIndex = index
+                                    window.pageIndex = modelData
                                 }
                                 background: Rectangle {
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -406,7 +495,9 @@ ApplicationWindow {
                                     width: 56
                                     height: 34
                                     radius: 17
-                                    color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
+                                    border.width: parent.visualFocus ? 3 : 0
+                                    border.color: Theme.accent
+                                    color: selected
                                            ? Qt.rgba(window.accentColor.r, window.accentColor.g,
                                                      window.accentColor.b, 0.22) : "transparent"
                                 }
@@ -416,19 +507,19 @@ ApplicationWindow {
                                         Layout.alignment: Qt.AlignHCenter
                                         Layout.preferredWidth: 28
                                         Layout.preferredHeight: 28
-                                        source: window.pageIcons[index]
+                                        source: window.pageIcons[modelData]
                                         fillMode: Image.PreserveAspectFit
                                     }
                                     Label {
                                         Layout.alignment: Qt.AlignHCenter
-                                        text: modelData
+                                        text: window.pageNames[modelData]
                                         Layout.fillWidth: true
                                         horizontalAlignment: Text.AlignHCenter
                                         elide: Text.ElideRight
-                                        color: (window.pageIndex === index || (index === 3 && window.pageIndex >= 3))
+                                        color: selected
                                                ? window.accentColor : window.secondaryTextColor
                                         font.pixelSize: 11 * appSettings.font_size / 12
-                                        font.bold: window.pageIndex === index
+                                        font.bold: selected
                                     }
                                 }
                             }
@@ -454,6 +545,87 @@ ApplicationWindow {
         }
     }
     Dialog {
+        id: vehicleRestrictionDialog
+        objectName: "vehicleRestrictionDialog"
+        parent: Overlay.overlay
+        width: parent.width
+        height: parent.height
+        margins: 0
+        padding: 32
+        z: 20000
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle { color: Theme.background }
+        contentItem: ColumnLayout {
+            Item { Layout.fillHeight: true }
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Available while parked")
+                font.bold: true
+                font.pixelSize: 28
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+            }
+            Label {
+                Layout.fillWidth: true
+                text: androidDisplay.restrictionsKnown === true
+                    ? qsTr("The vehicle currently restricts this screen. Continue when the vehicle allows parked apps.")
+                    : qsTr("Waiting for the vehicle's parked-use status.")
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+            }
+            AppButton {
+                objectName: "vehicleRestrictionCloseButton"
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Close app")
+                onClicked: backend.initiate_shutdown()
+            }
+            Item { Layout.fillHeight: true }
+        }
+    }
+    Dialog {
+        id: tvWebLinkDialog
+        objectName: "tvWebLinkDialog"
+        property string address: ""
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(window.width - 48, 720)
+        modal: true
+        focus: true
+        title: qsTr("Open on your phone or computer")
+        standardButtons: Dialog.Close
+        contentItem: ColumnLayout {
+            spacing: 16
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Open this address on your phone or computer to continue.")
+                wrapMode: Text.WordWrap
+            }
+            TextArea {
+                id: tvWebAddress
+                Layout.fillWidth: true
+                text: tvWebLinkDialog.address
+                textFormat: TextEdit.PlainText
+                readOnly: true
+                selectByMouse: true
+                wrapMode: TextEdit.WrapAnywhere
+                Accessible.name: qsTr("Website address")
+            }
+            AppButton {
+                text: qsTr("Copy address")
+                onClicked: { tvWebAddress.selectAll(); tvWebAddress.copy(); tvWebAddress.deselect() }
+            }
+        }
+    }
+    Connections {
+        target: androidDisplay
+        function onWebLinkRequested(address) {
+            tvWebLinkDialog.address = address
+            tvWebLinkDialog.open()
+        }
+    }
+    Dialog {
         id: androidUpdateDialog
         objectName: "updateDialog"
         ContrastPopupBackground { popup: androidUpdateDialog }
@@ -467,6 +639,7 @@ ApplicationWindow {
         width: Math.min(window.width - 32, 520)
         height: Math.min(window.height - 48, 600)
         modal: true
+        focus: true
         title: qsTr("Porn Fetch update")
         standardButtons: Dialog.Close
         onRejected: if (busy) backend.cancel_update()

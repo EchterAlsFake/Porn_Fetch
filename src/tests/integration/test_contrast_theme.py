@@ -114,7 +114,7 @@ def verify_flags():
     assert image.property('source').toString().endswith('/flags/us.svg')
     for code in ('cz', 'de', 'us', 'es', 'ph', 'fr', 'it', 'nl', 'jp', 'pl', 'pt', 'ru', 'ua', 'cn'):
         assert not QImage(':/images/graphics/flags/' + code + '.svg').isNull(), code
-    window.findChild(QObject, 'mainNavigation').setProperty('currentIndex', 3)
+    window.findChild(QObject, 'mainNavigation').setProperty('currentIndex', 4)
     expression = QQmlExpression(application.engine.rootContext(), combo, 'popup.open()')
     expression.evaluate()
     assert not expression.hasError(), expression.error().toString()

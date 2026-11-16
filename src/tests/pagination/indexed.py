@@ -1,4 +1,12 @@
-from .common import *
+import asyncio
+import importlib
+import json
+from contextlib import aclosing
+
+from base_api import BaseCore
+from base_api.modules.config import RuntimeConfig
+
+from .common import OUTPUT, ic
 
 
 async def check_profile(site, url):
@@ -86,7 +94,6 @@ async def check_redgifs():
         m = importlib.import_module("redgifs_api.api")
         client = m.Client(core=core)
         obj = await client.get_collection("weirdjack", "d7ddef5fb0", load_api=False)
-        path = "v2/users/weirdjack/collections/d7ddef5fb0/gifs"  # inspect runtime route below if endpoint differs
         # Observe raw listing via the transport without invoking the production extractor.
         orig = client._api.fetch_text
         responses = []

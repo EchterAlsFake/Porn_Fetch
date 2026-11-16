@@ -1,8 +1,16 @@
 """Live shared pagination lifecycle and upstream-limit checks."""
 
+import asyncio
+import importlib
+import json
+from contextlib import aclosing
 from dataclasses import replace
-from .common import *
 from urllib.parse import parse_qs, urlsplit
+
+from base_api import BaseCore, ErrorMode
+from base_api.modules.config import RuntimeConfig
+
+from .common import OUTPUT, collect, config
 
 
 class CountingCore(BaseCore):
@@ -68,11 +76,13 @@ async def upstream_limit(site, url, *, terminal_hook=False):
         cfg = replace(config, page_error_mode=ErrorMode.YIELD)
         stream = obj.get_videos(pages="all", start_page=100, iterator_config=cfg)
         if terminal_hook:
-            from base_api import paginated_stream, update_url_query
-            from base_api.modules.pagination import http_status_is
             from functools import partial
 
-            page_url = lambda page: update_url_query(url, page=page)
+            from base_api import paginated_stream, update_url_query
+            from base_api.modules.pagination import http_status_is
+
+            def page_url(page):
+                return update_url_query(url, page=page)
             stream = paginated_stream(
                 core=core,
                 constructor=module.Video,

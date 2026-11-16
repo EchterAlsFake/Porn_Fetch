@@ -65,3 +65,16 @@ class AndroidApkTests(unittest.TestCase):
                     archive.writestr(f"lib/{abi}/{name}", b"native library")
             with self.assertRaisesRegex(ValueError, "libplugins_imageformats_qsvg"):
                 checker.check_apk(apk, abi)
+
+    def test_python314_bindings_rejected_with_python315_runtime_present(self):
+        abi = "arm64-v8a"
+        with tempfile.TemporaryDirectory() as directory:
+            apk = Path(directory) / "app.apk"
+            with zipfile.ZipFile(apk, "w") as archive:
+                for name in ("libQtCore.abi3.so", "libpyside6.abi3.so", "libshiboken6.abi3.so",
+                             "libpython3.15.so", "libTor.so", "libpornfetch_pocketbase.so", f"libQt6Svg_{abi}.so",
+                             f"libplugins_imageformats_qsvg_{abi}.so", f"libplugins_iconengines_qsvgicon_{abi}.so"):
+                    data = b"libpython3.14.so\x00" if name == "libshiboken6.abi3.so" else b"native library"
+                    archive.writestr(f"lib/{abi}/{name}", data)
+            with self.assertRaisesRegex(ValueError, "libshiboken6.*incompatible.*3.14"):
+                checker.check_apk(apk, abi)

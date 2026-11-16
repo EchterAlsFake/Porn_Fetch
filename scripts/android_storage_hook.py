@@ -13,6 +13,67 @@ from pathlib import Path
 MARKER = "porn-fetch-storage-results-v1"
 
 
+def prepare_automotive_manifest(source: str) -> str:
+    """Keep the multi-device APK optional on AAOS, with system compatibility UI."""
+    namespace = "http://schemas.android.com/apk/res/android"
+    ET.register_namespace("android", namespace)
+    android = "{" + namespace + "}"
+    manifest = ET.fromstring(source)
+    name = "android.hardware.type.automotive"
+    feature = manifest.find(f"uses-feature[@{android}name='{name}']")
+    if feature is None:
+        feature = ET.SubElement(manifest, "uses-feature", {android + "name": name})
+    feature.set(android + "required", "false")
+    application = manifest.find("application")
+    for tag, name, attribute, value in (
+        ("uses-library", "android.car", "required", "false"),
+        ("meta-data", "android.software.car.display_compatibility", "value", "true"),
+    ):
+        node = application.find(f"{tag}[@{android}name='{name}']")
+        if node is None:
+            node = ET.SubElement(application, tag, {android + "name": name})
+        node.set(android + attribute, value)
+    # This downloader has no driver-safe activity or projected Android Auto category.
+    for activity in application.findall("activity"):
+        for metadata in activity.findall("meta-data"):
+            if metadata.get(android + "name") == "distractionOptimized":
+                activity.remove(metadata)
+    return ET.tostring(manifest, encoding="unicode")
+
+
+def patch_automotive_activity(source: str) -> str:
+    call = "org.kivy.android.PornFetchAutomotive.install(this);"
+    if call not in source:
+        anchor = "super.onCreate(savedInstanceState);"
+        if anchor not in source:
+            raise ValueError("Cannot locate Qt activity onCreate for car input")
+        source = source.replace(anchor, anchor + "\n        " + call, 1)
+    for method, event_type, statement in (
+        ("dispatchGenericMotionEvent", "MotionEvent", "if (org.kivy.android.PornFetchAutomotive.onGenericMotion(this, event)) return true;"),
+        ("dispatchKeyEvent", "KeyEvent", "if (org.kivy.android.PornFetchAutomotive.onKey(this, event)) return true;"),
+        ("dispatchTouchEvent", "MotionEvent", "org.kivy.android.PornFetchAutomotive.onTouch(this, event);"),
+    ):
+        marker = f"// porn-fetch-car-{method}"
+        if marker in source:
+            continue
+        pattern = rf"(public boolean {method}\((?:android\.view\.)?{event_type} (\w+)\)\s*\{{)"
+        match = re.search(pattern, source)
+        if match:
+            source = source[:match.end()] + "\n        " + marker + "\n        " + statement.replace("event", match.group(2)) + source[match.end():]
+        else:
+            end = source.rfind("}")
+            if end < 0:
+                raise ValueError("Cannot locate activity class closing brace")
+            source = source[:end] + f"""
+    @Override public boolean {method}(android.view.{event_type} event) {{
+        {marker}
+        {statement}
+        return super.{method}(event);
+    }}
+""" + source[end:]
+    return source
+
+
 def prepare_tv_manifest(source: str) -> str:
     """Expose the shared Qt activity in both phone and Android TV launchers."""
     namespace = "http://schemas.android.com/apk/res/android"
@@ -162,7 +223,7 @@ def before_apk_assemble(toolchain) -> None:
         native.mkdir(parents=True, exist_ok=True)
         shutil.copy2(tor, native / "libTor.so")
     source = activity.read_text(encoding="utf-8")
-    patched = patch_activity(source)
+    patched = patch_automotive_activity(patch_activity(source))
     call = "org.kivy.android.PornFetchDisplay.install(this);"
     if call not in patched:
         anchor = "super.onCreate(savedInstanceState);"
@@ -183,7 +244,8 @@ def before_apk_assemble(toolchain) -> None:
         patched = patched.replace(anchor, storage_call + "\n        " + anchor, 1)
     helper = Path(__file__).parent / "android" / "PornFetchDisplay.java"
     (activity.parent / helper.name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
-    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java", "PornFetchNotifications.java", "PornFetchStorage.java"):
+    for name in ("PornFetchPlatform.java", "PornFetchUpdateProvider.java", "PornFetchNotifications.java", "PornFetchStorage.java",
+                 "PornFetchAutomotive.java", "PornFetchCarService.java"):
         helper = Path(__file__).parent / "android" / name
         (activity.parent / name).write_text(helper.read_text(encoding="utf-8"), encoding="utf-8")
     for manifest in (Path(toolchain._dist.dist_dir) / "src/main/AndroidManifest.xml",
@@ -201,6 +263,16 @@ def before_apk_assemble(toolchain) -> None:
             text = re.sub(r'android:extractNativeLibs="[^"]*"', 'android:extractNativeLibs="true"', text)
             if 'android:extractNativeLibs=' not in text:
                 text = text.replace("<application", '<application android:extractNativeLibs="true"', 1)
-            manifest.write_text(prepare_tv_manifest(text), encoding="utf-8")
+            manifest.write_text(prepare_automotive_manifest(prepare_tv_manifest(text)), encoding="utf-8")
+    # The public car API is supplied by the SDK and optional at runtime. No car-ui
+    # Maven dependencies or platform signing privileges are needed for this bridge.
+    gradle = dist_dir / "app/build.gradle"
+    if not gradle.is_file():
+        gradle = dist_dir / "build.gradle"
+    if gradle.is_file():
+        text = gradle.read_text(encoding="utf-8")
+        block = "android { useLibrary 'android.car' }"
+        if block not in text:
+            gradle.write_text(text + "\n" + block + "\n", encoding="utf-8")
     if patched != source:
         activity.write_text(patched, encoding="utf-8")

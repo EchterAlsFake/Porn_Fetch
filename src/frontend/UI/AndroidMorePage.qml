@@ -19,16 +19,26 @@ Pane {
         anchors.top: parent.top
         spacing: 8
         AppButton {
+            id: creatorsButton
+            KeyNavigation.down: activityButton
             Layout.fillWidth: true
             text: qsTr("Creators")
+            icon.source: "qrc:/images/graphics/creators.svg"
+            icon.color: Theme.ink
             onClicked: root.openPage(7)
         }
         AppButton {
+            id: activityButton
+            KeyNavigation.up: creatorsButton
+            KeyNavigation.down: aboutEntry
             Layout.fillWidth: true
             text: qsTr("Recent activity")
             onClicked: root.openActivity()
         }
         ItemDelegate {
+            id: aboutEntry
+            KeyNavigation.up: activityButton
+            KeyNavigation.down: websitesEntry
             Layout.fillWidth: true
             Layout.preferredHeight: 88
             onClicked: root.openPage(3)
@@ -50,10 +60,20 @@ Pane {
             }
         }
         ItemDelegate {
+            id: websitesEntry
+            KeyNavigation.up: aboutEntry
             Layout.fillWidth: true
             Layout.preferredHeight: 88
-            onClicked: Qt.openUrlExternally("https://pornfetch.to/#websites")
-            background: Rectangle { color: root.cardColor; radius: 20 }
+            onClicked: root.openPage(4)
+            Keys.onReturnPressed: root.openPage(4)
+            Keys.onEnterPressed: root.openPage(4)
+            Keys.onSelectPressed: root.openPage(4)
+            background: Rectangle {
+                color: root.cardColor
+                radius: 20
+                border.width: parent.visualFocus ? 3 : 0
+                border.color: Theme.accent
+            }
             contentItem: RowLayout {
                 spacing: 16
                 Image {
@@ -65,7 +85,7 @@ Pane {
                 ColumnLayout {
                     Layout.fillWidth: true
                     Label { text: qsTr("Supported websites"); color: root.textColor; font.bold: true }
-                    Label { text: qsTr("See where downloads work"); color: root.mutedColor }
+                    Label { text: qsTr("Explore websites and supported links"); color: root.mutedColor; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 }
                 Label { text: "›"; color: root.mutedColor; font.pixelSize: 26 * appSettings.font_size / 12 }
             }

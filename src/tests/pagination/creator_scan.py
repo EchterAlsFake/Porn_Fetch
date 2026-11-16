@@ -1,10 +1,17 @@
 """Verify app full-scan integration against real source pages with duplicates."""
 
-from .common import *
-from .complete_profiles import SourceCore
+import asyncio
+import json
+from contextlib import aclosing
+from urllib.parse import urlsplit
+
+from base_api.modules.config import RuntimeConfig
+
 from src.shared.creator_scans import discover
 from src.shared.provider_routing import route_url
-from urllib.parse import urlsplit
+
+from .common import OUTPUT, config
+from .complete_profiles import SourceCore
 
 
 async def main():

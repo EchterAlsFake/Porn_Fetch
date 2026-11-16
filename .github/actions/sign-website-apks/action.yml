@@ -1,0 +1,21 @@
+name: Sign website APKs
+description: Re-sign downloaded Android packages with the release keystore before hashing or publication.
+inputs:
+  artifacts:
+    required: true
+    description: Downloaded artifact directory
+  tooling:
+    default: .
+    description: Checkout containing packaging tools
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        if find "$ARTIFACTS" -name '*.apk' -print -quit | grep -q .; then
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'build-tools;36.0.0'
+          python "$TOOLING/packaging/sign_website_apks.py" "$ARTIFACTS"
+        fi
+      env:
+        ARTIFACTS: ${{ inputs.artifacts }}
+        TOOLING: ${{ inputs.tooling }}
