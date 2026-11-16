@@ -15,7 +15,7 @@ async def resolve_container(client: Any, url: str, *, expected: str | None = Non
     # studio or generic collection. Inspect the real page through the same core.
     page = page_parser(await get_html_content(client.core, url))
     body = page.css_first("body")
-    classes = set(body.attributes.get("class", "").split()) if body else set()
+    classes = set((body.attributes.get("class") or "").split()) if body else set()
     if "single-channel" in classes:
         kind = "profile"
         target = await client.get_channel(url, load_html=True)
