@@ -4,6 +4,9 @@ import QtQuick.Layouts
 
 Pane {
     id: root
+    // The parent supplies the actual width. Deriving its size hint from the
+    // responsive content feeds that width back into StackLayout/Pane sizing.
+    implicitWidth: 640
     objectName: "supportedWebsitesPage"
     signal backRequested()
     property bool showBackButton: true
