@@ -59,6 +59,7 @@ Pane {
     readonly property bool privateMode: typeof appSettings !== "undefined" && appSettings && appSettings.anonymous_mode === true
     readonly property var selectedSource: { var all = dataSource.sources; return dataSource.source(selectedId) }
     readonly property var selectedCounts: dataSource.counts(selectedSource)
+    readonly property int downloadTotal: Math.max(0, selectedCounts.total - selectedCounts.ignored)
     readonly property bool detailOpen: selectedSource !== null
     readonly property var visibleSources: dataSource.sources.filter(function(s) {
         if (sourceFilter === 1) return dataSource.counts(s).newCount > 0
@@ -153,6 +154,9 @@ Pane {
             var item = root.Window.window.activeFocusItem
             root.pendingFocusName = item && item.objectName ? item.objectName : ""
         }
+        function onIntegrityMessageChanged() {
+            Qt.callLater(function() { root.reveal(root.Window.window.activeFocusItem) })
+        }
         function onSourcesChanged() {
             var name = root.pendingFocusName
             root.pendingFocusName = ""
@@ -162,12 +166,13 @@ Pane {
                 if (current && current.objectName && current.objectName !== name) return
                 var item = root.findControl(root, name)
                 if (item && item.visible && item.enabled) item.forceActiveFocus(Qt.TabFocusReason)
-                else if (name.indexOf("creatorVideoAction-") === 0) videoStatusFilter.forceActiveFocus(Qt.TabFocusReason)
+                else if (name === "creatorDownloadButton" || name.indexOf("creatorVideoAction-") === 0) videoStatusFilter.forceActiveFocus(Qt.TabFocusReason)
             })
         }
     }
     CreatorPreviewModel { id: mockData; active: root.visible && root.dataSource.isPreview }
     CreatorSubscriptionDialog { id: subscriptionDialog; preview: root.dataSource }
+    LibraryStorageDialog { id: storageDialog }
     Dialog {
         id: removeDialog
         property var returnFocusItem
@@ -193,14 +198,47 @@ Pane {
         ColumnLayout {
             width: scroll.availableWidth
             spacing: 20
-            RowLayout {
+            ColumnLayout {
                 Layout.fillWidth: true; spacing: 12
                 ColumnLayout {
                     Layout.fillWidth: true; spacing: 5
                     Label { text: qsTr("Your creator library"); color: Theme.ink; font.pixelSize: (root.compact ? 26 : 32) * root.fontScale; font.weight: Font.DemiBold; Layout.fillWidth: true; wrapMode: Text.WordWrap }
                     Label { text: qsTr("Follow once. Keep your collection up to date."); color: Theme.muted; Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 }
-                CreatorButton { id: addButton; objectName: "creatorAddButton"; enabled: root.dataSource.available; text: root.compact ? qsTr("+ Add") : qsTr("+ Add subscription"); highlighted: true; onClicked: subscriptionDialog.present("", this) }
+                Flow {
+                    objectName: "creatorLibraryActions"
+                    Layout.fillWidth: true; spacing: 8
+                    CreatorButton { id: addButton; objectName: "creatorAddButton"; enabled: root.dataSource.available && !root.dataSource.transferBusy; text: root.compact ? qsTr("+ Add") : qsTr("+ Add subscription"); highlighted: true; onClicked: subscriptionDialog.present("", this) }
+                    CreatorButton { objectName: "creatorImportButton"; text: qsTr("Import library"); enabled: root.dataSource.available && !root.dataSource.transferBusy; onClicked: storageDialog.presentMigration("import", this) }
+                    CreatorButton { objectName: "creatorExportButton"; text: qsTr("Export library"); enabled: root.dataSource.available && !root.dataSource.transferBusy; onClicked: storageDialog.presentMigration("export", this) }
+                }
+            }
+            Frame {
+                objectName: "creatorIntegrityNotice"
+                visible: root.dataSource.integrityBusy || root.dataSource.integrityMessage.length > 0
+                Layout.fillWidth: true
+                background: Rectangle { color: Theme.surface; radius: 10; border.width: 1; border.color: root.dataSource.integrityIssues > 0 ? root.waitingTone : Theme.outline }
+                contentItem: ColumnLayout {
+                    spacing: 8
+                    Label { Layout.fillWidth: true; text: qsTr("Download integrity"); color: Theme.ink; font.bold: true }
+                    Label { objectName: "creatorIntegrityMessage"; Layout.fillWidth: true; text: root.dataSource.integrityMessage; textFormat: Text.PlainText; color: Theme.ink; wrapMode: Text.WordWrap }
+                    ProgressBar {
+                        objectName: "creatorIntegrityProgress"; Layout.fillWidth: true
+                        visible: root.dataSource.integrityBusy
+                        from: 0; to: Math.max(1, root.dataSource.integrityTotal); value: root.dataSource.integrityDone
+                        indeterminate: root.dataSource.integrityTotal === 0
+                        Accessible.name: qsTr("Checking downloaded files")
+                        Accessible.description: qsTr("%1 of %2 files checked").arg(root.dataSource.integrityDone).arg(root.dataSource.integrityTotal)
+                    }
+                    Label { Layout.fillWidth: true; visible: root.dataSource.integrityBusy && root.dataSource.integrityTotal > 0; text: qsTr("%1 of %2 files checked").arg(root.dataSource.integrityDone).arg(root.dataSource.integrityTotal); color: Theme.muted; wrapMode: Text.WordWrap }
+                    Label { Layout.fillWidth: true; visible: root.dataSource.integrityPaused; text: qsTr("Content verification is paused during downloads or library storage operations."); color: Theme.muted; wrapMode: Text.WordWrap }
+                    Label { Layout.fillWidth: true; text: qsTr("Quick checks use file metadata. Full verification reads every byte and runs only when you request it."); color: Theme.muted; wrapMode: Text.WordWrap }
+                    Flow {
+                        Layout.fillWidth: true; spacing: 8
+                        CreatorButton { objectName: "creatorCheckIntegrityButton"; text: qsTr("Quick check"); enabled: !root.dataSource.integrityBusy && !root.dataSource.transferBusy; onClicked: root.dataSource.checkIntegrity() }
+                        CreatorButton { objectName: "creatorFullVerificationButton"; text: qsTr("Full verification"); enabled: !root.dataSource.integrityBusy && !root.dataSource.transferBusy; onClicked: root.dataSource.fullVerification() }
+                    }
+                }
             }
             Rectangle {
                 Layout.fillWidth: true; implicitHeight: premiumNotice.implicitHeight + 32
@@ -221,6 +259,7 @@ Pane {
                 border.color: Theme.highContrast ? Theme.ink : Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.35); border.width: 1
                 Label { id: previewNotice; anchors.fill: parent; anchors.margins: 12; text: qsTr("INTERACTIVE PREVIEW  ·  Sample subscriptions and videos. Changes reset when the app closes; scans and downloads are simulated."); color: Theme.muted; wrapMode: Text.WordWrap; font.pixelSize: 12 * root.fontScale }
             }
+
             Label { Layout.fillWidth: true; visible: dataSource.message.length > 0; text: dataSource.message; color: Theme.ink; wrapMode: Text.WordWrap; Accessible.role: Accessible.AlertMessage }
             Rectangle {
                 objectName: "creatorAvailabilityNotice"
@@ -345,10 +384,44 @@ Pane {
                 }
                 Flow {
                     Layout.fillWidth: true; spacing: 8
-                    CreatorButton { objectName: "creatorDownloadButton"; text: !root.dataSource.premium ? (root.selectedCounts.paused > 0 ? qsTr("Resume free preview") : qsTr("Download free preview")) : root.selectedCounts.paused > 0 ? qsTr("Resume / download pending") : qsTr("Download pending"); highlighted: true; enabled: root.selectedCounts.newCount + root.selectedCounts.pending + root.selectedCounts.paused > 0; onClicked: dataSource.bulk(root.selectedId, "download") }
+                    CreatorButton { objectName: "creatorDownloadButton"; text: !root.dataSource.premium ? (root.selectedCounts.paused > 0 ? qsTr("Resume free preview") : qsTr("Download free preview")) : qsTr("Download all videos"); highlighted: true; enabled: root.selectedCounts.newCount + root.selectedCounts.paused + root.selectedCounts.failed > 0; onClicked: dataSource.bulk(root.selectedId, "download") }
                     CreatorButton { text: qsTr("Pause downloads"); enabled: root.selectedCounts.pending + root.selectedCounts.downloading > 0; onClicked: dataSource.bulk(root.selectedId, "pause") }
                     CreatorButton { objectName: "creatorScanButton"; text: root.selectedSource && root.selectedSource.scan === "scanning" ? qsTr("Stop scan") : qsTr("Scan now"); onClicked: dataSource.scan(root.selectedId) }
                     CreatorButton { text: qsTr("Settings"); onClicked: subscriptionDialog.present(root.selectedId, this) }
+                    CreatorButton { objectName: "creatorMoveLocationButton"; text: qsTr("Move location…"); enabled: !root.dataSource.transferBusy; onClicked: storageDialog.present(root.selectedSource ? root.selectedSource.folder : "", this) }
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: root.dataSource.premium
+                        ? qsTr("Downloads all discovered videos across every page, resumes paused downloads and retries failures. Downloaded and ignored videos are skipped.")
+                        : qsTr("Downloads the five-video free preview, resumes paused downloads and retries failures. Premium unlocks the full library.")
+                    color: Theme.muted; wrapMode: Text.WordWrap
+                }
+                ColumnLayout {
+                    Layout.fillWidth: true; spacing: 8
+                    Label {
+                        objectName: "creatorTotalProgressLabel"
+                        Layout.fillWidth: true
+                        text: qsTr("%1 of %2 videos downloaded").arg(root.selectedCounts.completed).arg(root.downloadTotal)
+                        color: Theme.ink; font.bold: true; wrapMode: Text.WordWrap
+                    }
+                    ProgressBar {
+                        objectName: "creatorTotalProgressBar"
+                        Layout.fillWidth: true
+                        from: 0; to: Math.max(1, root.downloadTotal); value: root.selectedCounts.completed
+                        Accessible.name: qsTr("Total download progress")
+                        Accessible.description: qsTr("%1 of %2 videos downloaded").arg(root.selectedCounts.completed).arg(root.downloadTotal)
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("%1 active · %2 queued · %3 failed").arg(root.selectedCounts.downloading).arg(root.selectedCounts.pending).arg(root.selectedCounts.failed)
+                        color: Theme.muted; wrapMode: Text.WordWrap
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Downloads follow the library order, one video at a time per creator. Ignored videos are excluded from progress.")
+                        color: Theme.muted; wrapMode: Text.WordWrap
+                    }
                 }
                 Flow {
                     objectName: "creatorSummary"; Layout.fillWidth: true; spacing: 10

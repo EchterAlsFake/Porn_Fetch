@@ -7,6 +7,15 @@ listens only on an ephemeral loopback port and uses the application's private
 data directory. The existing Python client and JavaScript migrations are shared
 with desktop; history/statistics remain disabled on Android.
 
+The embedded runtime uses `github.com/mattn/go-sqlite3`, compiled against the
+Android NDK libc, through PocketBase's `DBConnect` interface. The default
+`modernc.org/sqlite` driver is excluded with `no_default_driver`: its translated
+Linux libc issues raw `stat`/`lstat` syscalls on x86_64, which Android's app
+seccomp policy rejects with a fatal SIGSYS. Keep this tag on native builds.
+The connection hook preserves PocketBase's PRAGMAs, including setting the busy
+timeout before enabling WAL. Android compilation also enables SQLite's default
+defensive mode. Existing SQLite database files require no conversion.
+
 `PFStart(dataDir, migrationsDir, email, password)` and `PFStop()` return allocated
 UTF-8 JSON strings. Call `PFFree(pointer)` after reading each result. Retain the
 library until process exit; never unload an active Go runtime. Stop HTTP requests
@@ -34,7 +43,8 @@ source URLs and the Go license. It is included as APK assets/pocketbase-legal.
 PocketBase and its dependencies retain their upstream licenses. The bridge is
 covered by the repository's root LICENSE.
 
-For host integration checks, run `go build -buildmode=c-shared -o /tmp/pb.so .`
+For host integration checks, run
+`CGO_CFLAGS=-DSQLITE_DEFAULT_DEFENSIVE=1 go build -tags no_default_driver -buildmode=c-shared -o /tmp/pb.so .`
 here and set `PORN_FETCH_TEST_POCKETBASE_LIBRARY=/tmp/pb.so` for
 `src.tests.integration.test_android_pocketbase`. Native compilation and host
 checks do not establish device behavior; validate rebuilt APK startup and

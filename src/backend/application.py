@@ -997,6 +997,9 @@ class Backend(QObject):
     def download_video(self, job_id: str, cleanup_on_stop: bool = False) -> None:
         if self._is_shutting_down:
             return
+        if getattr(self, "creator_bridge", None) is not None and self.creator_bridge.transferBusy:
+            self.notifications.publish(self.tr("Wait for the library storage operation to finish before downloading."))
+            return
         if is_android and not app_settings.android_output_folder:
             self.notifications.publish(
                 self.tr("Choose an output folder in Settings → Video before downloading. Android's private app directory cannot be opened by normal file managers or video players."),
@@ -1159,6 +1162,14 @@ class Backend(QObject):
                         and video.status not in {"cancelled", "failed"}
                         and not Path(f"{output_path}.raw-state.json").exists()
                         and not (Path(TEMP_DIRECTORY_STATES) / job_id).exists()):
+                    database = getattr(self, "database_bridge", None)
+                    history = getattr(database.tracker, "_videos", {}).get(video.url, {}) if database is not None else {}
+                    if not is_mobile and history.get("sha256") and history.get("output_path") == str(output_path):
+                        from src.shared.file_integrity import file_digest
+                        actual, fingerprint = await asyncio.to_thread(file_digest, output_path, stop_event)
+                        if actual != history["sha256"]:
+                            raise RuntimeError("The existing file does not match its saved checksum. Restore the original or disable Skip existing files to download a fresh copy.")
+                        video.sha256, video.file_fingerprint = actual, fingerprint
                     if is_mobile or "--android" in sys.argv:
                         await self._save_to_output_folder(output_path, video.export_destination)
                     self._downloads_model.update_progress(job_id, 100)
@@ -1290,8 +1301,11 @@ class Backend(QObject):
                 else:
                     status = "completed"
 
+                if status == "completed" and not output_path.is_file():
+                    raise RuntimeError("The downloader reported completion but the output file was not created. Retry the download.")
                 video.status = status
-                self._downloads_model.set_status(job_id, status)
+                if status != "completed":
+                    self._downloads_model.set_status(job_id, status)
                 if status == "completed":
                     metadata_written = bool(getattr(result, "metadata_written", False))
                     if is_mobile:
@@ -1313,9 +1327,23 @@ class Backend(QObject):
                                     bool(finalized.export and finalized.export.notification_error and not finalized.export.retryable))
                             self.notifications.publish("\n".join(finalized.warnings), self.tr("Metadata export"), "warning",
                                                        key="library-export", action="metadata" if retryable else "")
+                        database = getattr(self, "database_bridge", None)
+                        creators = getattr(self, "creator_bridge", None)
+                        if ((database is not None and database.tracker.enabled)
+                                or (creators is not None and job_id in creators._job_videos)):
+                            from src.shared.file_integrity import file_digest
+                            # Hash the final bytes after metadata tagging, before
+                            # any consumer records successful completion.
+                            try:
+                                video.sha256, video.file_fingerprint = await asyncio.to_thread(file_digest, output_path, stop_event)
+                            except InterruptedError:
+                                if stop_event.is_set():
+                                    raise asyncio.CancelledError
+                                raise
                     self._downloads_model.update_progress(job_id, 100)
                     if is_mobile or "--android" in sys.argv:
                         await self._save_to_output_folder(output_path, video.export_destination)
+                    self._downloads_model.set_status(job_id, "completed")
                 self.download_manager.update_status(job_id, status)
                 if status == "completed":
                     self.notifications.download_completed()

@@ -206,6 +206,140 @@ property bool anonymous_mode: false; property bool reduced_motion: true }''', QU
             self.assertEqual(self.backend.starts, 1)
             self.assertEqual(self.backend._downloads_model.rowCount(), 0)
 
+    async def test_downloads_follow_library_pages_one_at_a_time(self):
+        await self.bridge.repo.remember_many(self.source, [
+            {"identity": f"bellesa:video:{i}", "provider": "bellesa", "url": f"https://www.bellesa.co/videos/{i}"}
+            for i in range(1, 15)], "2026-11-17")
+        expected = []
+        for page in (1, 2):
+            result = await self.bridge.repo.video_page(self.source["id"], page=page)
+            expected.extend(m["expand"]["video"]["url"] for m in result["items"])
+        prepared = []
+        async def metadata(url):
+            prepared.append(url)
+            self.backend.gate.clear()
+            return VideoObject(url=url, title="Ordered download", author="", length=1, tags=[], thumbnail_url="",
+                video_id=url.rsplit("/", 1)[-1], publish_date=None, qualities=[720], status="pending")
+        with (
+            patch("src.backend.creator_bridge.clients.get_video", AsyncMock(side_effect=lambda url: url)),
+            patch("src.backend.creator_bridge.clients.load_video_attributes", metadata),
+        ):
+            await self.bridge.library.queue(self.source["id"], "download")
+            for count in range(1, len(expected) + 1):
+                async def started():
+                    return self.backend.starts == count
+                await self.wait_for(started)
+                await asyncio.sleep(.03)
+                self.assertEqual(prepared, expected[:count])
+                self.assertEqual(len(self.bridge._workers), 1)
+                self.backend.gate.set()
+            async def completed():
+                return (await self.bridge.repo.page(VIDEOS, filter='status = "completed"'))["totalItems"] == len(expected)
+            await self.wait_for(completed)
+        self.assertEqual(prepared, expected)
+
+    async def test_storage_import_previews_existing_subscriptions_before_confirmation(self):
+        export = Path(self.folder.name) / "library.zip"
+        previews, messages = [], []
+        self.bridge.transferPreview.connect(lambda kind, details: previews.append((kind, details)))
+        self.bridge.transferFinished.connect(messages.append)
+        async def finished():
+            return not self.bridge.transferBusy
+        self.bridge.exportLibrary(str(export))
+        await self.wait_for(finished)
+        self.assertTrue(export.is_file(), messages)
+        self.bridge.previewImport(str(export))
+        await self.wait_for(finished)
+        self.assertEqual(previews[-1][0], "import")
+        self.assertEqual(previews[-1][1]["existing"], 1)
+        self.assertEqual((await self.bridge.repo.page(SUBSCRIPTIONS))["totalItems"], 1)
+        self.bridge.confirmTransfer("merge")
+        await self.wait_for(finished)
+        self.assertIn("Library imported", messages[-1])
+        self.assertEqual((await self.bridge.repo.page(SUBSCRIPTIONS))["totalItems"], 1)
+        self.assertEqual(len(await self.bridge.repo.client.request("GET", "/api/backups")), 1)
+
+    async def test_move_publishes_progress_and_destination_before_finished_signal(self):
+        old = Path(self.folder.name) / "media"
+        new = Path(self.folder.name) / "relocated"
+        old.mkdir()
+        video = (await self.bridge.repo.page(VIDEOS))["items"][0]
+        output = old / "completed.mp4"
+        output.write_bytes(b"completed media" * 100000)
+        await self.bridge.repo.remember_many(self.source, [{"identity": "bellesa:video:124", "provider": "bellesa",
+            "url": "https://bellesa.co/videos/124", "title": "Missing old file"}], "2026-11-15")
+        absent = (await self.bridge.repo.page(VIDEOS, filter='identity = "bellesa:video:124"'))["items"][0]
+        await self.bridge.repo.put(VIDEOS, absent["id"], {"status": "completed", "output_path": str(old / "missing.mp4")})
+        await self.bridge.repo.put(SUBSCRIPTIONS, self.source["id"], {"folder": str(old)})
+        await self.bridge.repo.put(VIDEOS, video["id"], {"status": "completed", "output_path": str(output)})
+        await self.bridge._refresh()
+        folders, progress = [], []
+        previews = []
+        self.bridge.transferPreview.connect(lambda kind, details: previews.append(details))
+        self.bridge.transferProgressChanged.connect(lambda: progress.append(self.bridge.transferProgress))
+        self.bridge.transferFinished.connect(lambda message: folders.append(self.bridge.sources[0]["folder"]))
+        async def finished():
+            return not self.bridge.transferBusy
+        self.bridge.previewRelocation(str(old), str(new), "move")
+        await self.wait_for(finished)
+        self.bridge.confirmTransfer("")
+        await self.wait_for(finished)
+        self.assertEqual(folders, [str(new)])
+        self.assertEqual(previews[0]["missing"], 1)
+        self.assertEqual((await self.bridge.repo.get(VIDEOS, absent["id"]))["status"], "failed")
+        self.assertIn(0, progress)
+        self.assertIn(1, progress)
+        self.assertTrue((new / output.name).is_file())
+        self.assertFalse(output.exists())
+
+    async def test_startup_checks_hashes_and_manual_check_recognizes_restored_files(self):
+        row = (await self.bridge.repo.page(VIDEOS))["items"][0]
+        output = Path(self.folder.name) / "completed.mp4"
+        output.write_bytes(b"verified original bytes")
+        await self.bridge.repo.put(VIDEOS, row["id"], {"status": "completed", "output_path": str(output)})
+        self.bridge.start()
+        await self.bridge._availability_task
+        await self.bridge._integrity_task
+        self.assertEqual(self.bridge.integrityTotal, 1)
+        self.assertEqual(self.bridge.integrityIssues, 0)
+        self.assertTrue((await self.bridge.repo.get(VIDEOS, row["id"]))["sha256"])
+        with patch("src.database.integrity.file_digest", side_effect=AssertionError("Quick checks must use metadata")):
+            self.bridge.checkIntegrity()
+            await self.bridge._integrity_task
+        self.assertIn("1 files unchanged", self.bridge.integrityMessage)
+        self.bridge.fullVerification()
+        await self.bridge._integrity_task
+        self.assertIn("Full verification: 1 files hashed", self.bridge.integrityMessage)
+        output.unlink()
+        self.bridge.checkIntegrity()
+        await self.bridge._integrity_task
+        self.assertEqual(self.bridge.integrityIssues, 1)
+        self.assertEqual((await self.bridge.repo.get(VIDEOS, row["id"]))["status"], "failed")
+        output.write_bytes(b"verified original bytes")
+        self.bridge.checkIntegrity()
+        await self.bridge._integrity_task
+        self.assertEqual(self.bridge.integrityIssues, 0)
+        self.assertEqual((await self.bridge.repo.get(VIDEOS, row["id"]))["status"], "completed")
+
+    async def test_full_verification_pauses_while_another_download_is_active(self):
+        row = (await self.bridge.repo.page(VIDEOS))["items"][0]
+        output = Path(self.folder.name) / "complete.mp4"
+        output.write_bytes(b"completed media")
+        await self.bridge.repo.put(VIDEOS, row["id"], {"status": "completed", "output_path": str(output)})
+        active = VideoObject(url="https://bellesa.co/videos/999", title="Active", author="", length=1,
+            tags=[], thumbnail_url="", video_id="999", publish_date=None, qualities=[720], status="pending", identifier="active")
+        self.backend._downloads_model.add_video(active, "720")
+        self.backend._downloads_model.set_status("active", "downloading")
+        self.bridge.fullVerification()
+        await asyncio.sleep(.05)
+        self.assertTrue(self.bridge.integrityBusy)
+        self.assertTrue(self.bridge.integrityPaused)
+        self.backend._downloads_model.remove_video("active")
+        await asyncio.wait_for(self.bridge._integrity_task, 4)
+        self.assertFalse(self.bridge.integrityBusy)
+        self.assertFalse(self.bridge.integrityPaused)
+        self.assertEqual(self.bridge.integrityIssues, 0)
+
     async def test_resume_refreshes_metadata_and_retains_path_and_job(self):
         video = (await self.bridge.repo.page(VIDEOS))["items"][0]
         snapshot = {"url": video["url"], "title": "Old title", "author": "", "length": 10, "tags": [], "video_id": "123",
@@ -261,6 +395,7 @@ property bool anonymous_mode: false; property bool reduced_motion: true }''', QU
         self.assertEqual(self.backend.starts, 0)
 
     async def test_completed_history_matches_stable_id_across_url_variants(self):
+        (Path(self.folder.name) / "already-downloaded.mp4").write_bytes(b"completed")
         await self.bridge.repo.create("video_records", {"url": "https://bellesa.co/videos/123/old-title", "video_id": "123", "status": "completed", "output_path": str(Path(self.folder.name) / "already-downloaded.mp4")})
         with patch("src.backend.creator_bridge.clients.get_video", AsyncMock(side_effect=AssertionError("Completed history must not start a transfer"))):
             await self.bridge.library.queue(self.source["id"], "download")
@@ -268,6 +403,12 @@ property bool anonymous_mode: false; property bool reduced_motion: true }''', QU
                 return (await self.bridge.repo.page(VIDEOS, filter='status = "completed"'))["totalItems"] == 1
             await self.wait_for(completed)
         self.assertEqual(self.backend.starts, 0)
+
+    async def test_missing_history_file_does_not_suppress_a_download(self):
+        record = (await self.bridge.repo.page(VIDEOS))["items"][0]
+        await self.bridge.repo.create("video_records", {"url": record["url"], "video_id": "123",
+            "status": "completed", "output_path": str(Path(self.folder.name) / "absent.mp4")})
+        self.assertIsNone(await self.bridge._completed_history(record))
 
     async def test_free_preview_downloads_five_at_720p_and_does_not_expand_after_rescan(self):
         from src.shared.access import bulk_video_requires_premium

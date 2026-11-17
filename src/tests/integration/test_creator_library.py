@@ -69,6 +69,25 @@ class CreatorLibraryTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.repo.page(MEMBERSHIPS))["totalItems"], 31)
         self.assertFalse(self.tracker.enabled)
 
+    async def test_download_all_queues_archive_and_preserves_skipped_rows(self):
+        id = await self.add()
+        await self.finish(id)
+        members = [m async for m in self.repo.all(MEMBERSHIPS, filter=f'subscription = "{id}"')]
+        for member, status in zip(members, ["paused", "failed", "completed", "downloading", "queued", "pending"]):
+            await self.repo.put(VIDEOS, member["video"], {"status": status, "error": "Previous error"})
+        await self.repo.put(MEMBERSHIPS, members[-1]["id"], {"ignored": True})
+        await self.library.queue(id, "download")
+        self.assertEqual((await self.repo.page(VIDEOS, filter='status = "pending"'))["totalItems"], 26)
+        for member in members[:2]:
+            video = await self.repo.get(VIDEOS, member["video"])
+            self.assertEqual(video["status"], "pending")
+            self.assertEqual(video["error"], "")
+        for member, status in zip(members[2:6], ["completed", "downloading", "queued", "pending"]):
+            video = await self.repo.get(VIDEOS, member["video"])
+            self.assertEqual(video["status"], status)
+            self.assertEqual(video["error"], "Previous error")
+        self.assertEqual((await self.repo.get(VIDEOS, members[-1]["video"]))["status"], "new")
+
     async def test_cancel_reopen_replay_and_incomplete_scan(self):
         self.gate = asyncio.Event()
         id = await self.add()

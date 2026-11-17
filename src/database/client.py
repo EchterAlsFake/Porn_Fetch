@@ -65,7 +65,8 @@ class PocketBaseClient:
             with urlopen(request, timeout=self.timeout) as response:
                 payload = response.read()
         except HTTPError as error:
-            details = error.read().decode("utf-8", errors="replace")
+            with error:
+                details = error.read().decode("utf-8", errors="replace")
             raise PocketBaseError(
                 f"PocketBase returned HTTP {error.code} for {method} {path}: {details}"
             ) from error

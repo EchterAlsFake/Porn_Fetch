@@ -16,7 +16,14 @@ playlist and collection URLs. Add a URL, name, output folder and quality. Source
 type is resolved through the actual provider API. New subscriptions always default
 to **Best available**, independently of the global quality setting. Editing an
 existing subscription retains its saved quality. A first scan creates the local
-catalogue; **Download pending** requests the existing catalogue. Premium is
+catalogue; **Download all videos** queues new videos, resumes paused downloads and
+retries failures across every catalogue page. Completed, ignored and active videos
+are skipped. The detail progress bar shows completed videos out of the discovered
+catalogue, excluding ignored videos, with active, queued and failed counts. These
+counts cover all pages and do not change with the status filter. Each creator's
+downloads follow the unfiltered library order, one video at a time, including
+metadata preparation. Different creators can still download in parallel within
+the configured worker limit. Use **Scan now** first to discover any newer uploads. Premium is
 required for full creator archives, higher resolutions and automatic downloads.
 Free users can scan, download, pause and resume five videos per subscription at
 up to 720p. The same five membership identities remain eligible across rescans,
@@ -34,6 +41,18 @@ exposes it, separate last-attempt/last-complete timestamps in local time, and th
 latest ten scan attempts with trigger, outcome, completion time and errors. Page
 counts are pages reached, not a promised remote total or a percentage.
 
+PornHub subscriptions default to uploads. Some models alias `/videos/upload`
+to `/videos` while publishing pagination links only under `/videos`. The shared
+API (6.0.1 or later) accepts that change only when the response's canonical link
+confirms the same profile. Porn Fetch calls the upstream API directly, with no
+compatibility adapter. Distinct upload/public tabs retain their own routes.
+This fixes first-page-only scans without changing saved identities or completed
+states; run **Scan now** on an existing subscription to discover the remaining
+videos. The opt-in live regression is
+`python -m src.tests.pagination.pornhub_uploads`; on 2026-11-17 Porn Force matched
+419 videos across 11 pages in exact source order, including creator discovery,
+shared routing, page two and the partial last page.
+
 **Scan when Porn Fetch starts** runs once per launch after first-use setup and
 the initial entitlement check. **Scan now** performs another full traversal.
 There is no periodic or closed-app scheduler. **Automatically download new videos**
@@ -41,7 +60,7 @@ is opt-in and applies to additions after the first successful full scan. An
 incomplete initial scan does not establish that baseline.
 
 Pause downloads before closing, or close normally and let the application stop
-its writers. Interrupted transfers reopen paused; **Resume / download pending**
+its writers. Interrupted transfers reopen paused; **Download all videos**
 reuses their saved identifiers, filenames, selected quality and native checkpoints.
 Changing subscription settings affects videos that have not yet been prepared.
 Downloaded videos remain completed if a file is later deliberately moved/deleted.
@@ -62,6 +81,113 @@ switches to **Best available** (including 4K when offered). An onboarding marker
 persists this one-time change across restarts and preference resets. Subsequent
 license refreshes and unlocks preserve quality choices the user makes afterward.
 This preference change does not alter the licensing protocol or entitlement rules.
+
+## Quick startup checks and manual full verification
+
+Desktop startup runs a **Quick check** in the background after setup and
+PocketBase startup. For each distinct saved creator/history file, it compares
+existence, size, nanosecond modification time and file identity with the metadata
+saved by its last successful checksum read. Unix metadata change time is included
+as well. Unchanged files need no content reads, individual record fetches or
+database writes. Known checksum failures remain flagged even when their metadata
+has not changed. Missing/unreadable files are checked again so restored files or
+reconnected drives can recover.
+
+New files, changed metadata and records missing trusted metadata are hashed against
+the saved SHA-256 checksum. New tracked downloads save both checksum and metadata
+after final tagging, avoiding another full read at the next startup. Libraries
+from before metadata caching need one initial hash pass to populate the cache.
+Existing files without a checksum receive an explicitly reported first baseline,
+which cannot detect earlier corruption or prove the original download was valid.
+
+**Full verification** is manual only: its button reads every file regardless of
+metadata. There is no periodic full scan or automatic full-scan resume on launch.
+**Quick check** can also be run manually, for example after restoring files from
+Trash. Summaries distinguish files unchanged since the last checksum check from
+files actually hashed. Metadata checks cannot detect content changes that leave
+all observed metadata unchanged; use Full verification for that assurance.
+
+Content hashing is sequential, limited to 64 MiB/s, and pauses during active
+GUI downloads or library storage operations. It runs in asyncio's worker pool
+with cooperative shutdown. Database updates are coalesced into batches of up to
+100 records; unchanged records, including repeated missing-file verdicts, are
+not rewritten. Updates are rechecked under the library/history locks so a move,
+import or retry cannot receive a stale verdict. The UI shows progress and pause
+status without blocking navigation.
+
+Missing files and checksum mismatches become failed/attention records, correcting
+completed counts. Mismatches retain the original expected checksum and are
+labelled as possibly edited or corrupted. Verification never deletes, overwrites
+or automatically downloads media. Restoring the original bytes and checking again
+recovers completion. Expected hashes survive moves and exports; copied files get
+their new metadata validated before the quick path can reuse it. Skip existing
+files cannot accept a tracked file with a mismatching checksum as a new success.
+Native mobile SAF/MediaStore files are not checked by this desktop verifier.
+Downloads without a persistent creator/history record cannot be checked later.
+
+## Moving files and migrating the library
+
+Desktop **Creators** has **Import library** and **Export library** beside
+**Add subscription** at the top of the page. Each opens its file chooser directly,
+with no intermediate menu or duplicate Import/Export buttons. Cancelling restores
+focus to the originating button. After a file is selected, a compact progress/result
+dialog appears; importing also shows the required preview and merge/replace choice. Each creator has a separate **Move location…** dialog for relocation only,
+which fills in that subscription's current folder.
+Stop scans and pause downloads before a storage operation. Import additionally
+requires an empty Downloads queue.
+
+Choose an old root and a new root, preserving filenames and relative subfolders:
+
+- **Move files** copies completed media and known NFO, manifest and poster
+  sidecars. Existing destination files are refused. All matching creator output
+  paths, completed history paths, completed snapshots and subscription destinations
+  are updated in one PocketBase transaction before originals are removed. The
+  global output folder follows the move if it is under the old root. A progress
+  bar remains visible at the top of the dialog throughout the move, with byte-based
+  copying percentages and a persistent result/error display. The preview reports
+  files missing at both locations; confirming **Move available files** moves the
+  available media and marks missing records for retry, instead of aborting the
+  whole move. Records are unchanged until confirmation. Choose **Download all
+  videos** afterward to fetch missing media into the new destination. Files already
+  at their exact expected new paths are relinked without another copy. The displayed
+  destination updates as soon as new paths are committed, before cleanup and the
+  completion notification. Partial
+  downloads and their checkpoints remain at their original locations.
+- **Locate moved files** verifies that every affected completed video exists
+  under the new root, then updates the same saved paths without moving files.
+  Use this after a file-manager move or after transferring files to a new computer.
+  Old Windows paths can be relinked on a POSIX host as well. Filenames and relative
+  subfolders must stay unchanged; files are verified for existence, not content.
+
+**Export PocketBase library** creates a ZIP containing a versioned `library.json`
+manifest and a native PocketBase `pocketbase.zip` backup. The portable manifest
+contains origins/history, subscriptions, video identities/statuses, memberships
+and scan attempts. Video files, native download checkpoints, app preferences,
+provider cookies and license activation are not migrated. The native snapshot
+contains PocketBase's internal database/settings and authentication records too;
+treat the entire archive as private. Export requires a new destination filename.
+Native snapshots use the [PocketBase backup API](https://pocketbase.io/docs/api-backups/).
+
+**Import library** previews incoming and existing counts. When subscriptions or
+history already exist, the dialog offers **Merge**, **Replace** and **Cancel**:
+
+- Merge matches subscriptions/origins/history by URL and creator videos by stable
+  identity, remapping relations when IDs differ. It preserves local preferences
+  and memberships, and preserves completion from either library.
+- Replace replaces application library records and history. It leaves downloaded
+  media, application settings and licensing untouched.
+
+Both modes import data into the app's current schema; they do not execute schema
+or migration code from the archive. Imported subscriptions have automatic
+and startup scanning disabled, interrupted scans become cancelled, and imported
+active downloads become paused without old device jobs/checkpoints. A failed
+record transaction rolls back the whole import, including replacement deletions.
+A native safety backup is retained in the active PocketBase data folder's
+`backups/` directory before import or relocation. No restart is required. Move
+video files separately, import the library, then use **Locate moved files** to
+map old roots to the new computer's folders. Review destinations before enabling
+scans or downloads. The management UI currently requires desktop filesystem
+access; Android SAF/MediaStore relocation/import is not implemented.
 
 ## Storage and execution
 
@@ -104,6 +230,13 @@ SHA-256-verified Go 1.27.4 toolchain if needed. Go module checksums are committe
 The APK hook stages the library and dependency notices; publication checks require
 both. Build outputs stay in `build/android-pocketbase/<ABI>/`. See the
 [native build instructions](../native/pocketbase/README.md).
+
+The embedded build uses PocketBase's custom `DBConnect` interface with
+`mattn/go-sqlite3` compiled against Android libc, and excludes the default
+modernc driver using `no_default_driver`. The latter's translated Linux code
+issues raw x86_64 `lstat` calls rejected by app-process seccomp. Keep the build
+tag and SQLite defensive-mode compiler flag when rebuilding. The same SQLite
+files, migrations and connection PRAGMAs are retained.
 
 `src/database/android.py` loads the extracted APK library through ctypes. The Go
 server binds only an ephemeral loopback port, applies the same JavaScript
@@ -174,16 +307,23 @@ API 33 emulators applied real migrations, authenticated and committed 30 videos
 through the batch API. The x86 check also stopped/reopened and retained all rows.
 An isolated host test of the same Go bridge verifies Android tracker selection,
 creator scans, private partial files/checkpoints and queue/destination recovery.
-These checks do not establish full APK startup or real Android media exports;
-a rebuilt APK still needs that end-to-end device test. ARM/ARM64 runtime testing
-also remains pending. iOS Creators remains unavailable pending its native runtime;
+On 2026-11-17, full x86_64 Automotive API 33 APK startup exposed a SIGSYS during
+database initialization that the earlier dlopen probes did not catch. Android
+app-process seccomp rejected modernc's raw Linux `lstat` syscall. A rebuilt APK
+using the C SQLite driver was installed over the existing app, preserving setup.
+It opened the update dialog, enabled Creators and its Add subscription dialog,
+closed normally and reopened successfully without a new native crash. Its
+packaged library hash matched the rebuilt binary, and the host recovery test
+passed. This verifies startup/reopening in the actual app sandbox, not real
+Android media exports. ARM/ARM64 and x86 APK runtime testing with the replacement
+driver remain pending. iOS Creators remains unavailable pending its native runtime;
 the existing iOS downloader is unchanged.
 
 The embedded host test is opt-in:
 
 ```sh
 cd native/pocketbase
-go build -buildmode=c-shared -o /tmp/pornfetch-pocketbase-host.so .
+CGO_CFLAGS=-DSQLITE_DEFAULT_DEFENSIVE=1 go build -tags no_default_driver -buildmode=c-shared -o /tmp/pornfetch-pocketbase-host.so .
 cd ../..
 PORN_FETCH_TEST_POCKETBASE_LIBRARY=/tmp/pornfetch-pocketbase-host.so .venv/bin/python -m unittest src.tests.integration.test_android_pocketbase
 ```

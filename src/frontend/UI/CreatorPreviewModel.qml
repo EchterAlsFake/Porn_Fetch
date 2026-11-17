@@ -10,6 +10,13 @@ QtObject {
     readonly property string availabilityError: ""
     readonly property string availabilityHelp: ""
     readonly property bool canManageComponents: false
+    readonly property bool transferBusy: false
+    property bool integrityPaused: false
+    property bool integrityBusy: false
+    property string integrityMessage: ""
+    property int integrityDone: 0
+    property int integrityTotal: 0
+    property int integrityIssues: 0
     readonly property bool saving: false
     property bool premium: true
     readonly property bool mobileStorage: false
@@ -47,6 +54,14 @@ QtObject {
     }
     Component.onCompleted: seed()
     function source(id) { return sources.find(function(s) { return s.id === id }) || null }
+    function fullVerification() {
+        integrityMessage = qsTr("Sample full verification. No local files are read in this preview.")
+        integrityIssues = 0
+    }
+    function checkIntegrity() {
+        integrityMessage = qsTr("Sample integrity check. No local files are read in this preview.")
+        integrityIssues = 0
+    }
     function counts(source) {
         var result = {total: 0, newCount: 0, pending: 0, downloading: 0, paused: 0, failed: 0, completed: 0, ignored: 0}
         if (!source) return result
@@ -82,7 +97,7 @@ QtObject {
     function bulk(id, action) {
         update(id, function(s) {
             s.videos.forEach(function(v) {
-                if (action === "download" && ["new", "pending", "paused"].indexOf(v.status) >= 0) v.status = "pending"
+                if (action === "download" && ["new", "paused", "failed"].indexOf(v.status) >= 0) v.status = "pending"
                 if (action === "pause" && ["pending", "downloading"].indexOf(v.status) >= 0) v.status = "paused"
                 if (action === "retry" && v.status === "failed") v.status = "pending"
             })

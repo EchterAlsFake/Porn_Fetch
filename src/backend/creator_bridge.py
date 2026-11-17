@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import threading
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -28,6 +29,10 @@ class CreatorBridge(QObject):
     changed = Signal()
     aboutToChange = Signal()
     saveFinished = Signal(str, str)
+    transferPreview = Signal(str, "QVariantMap")
+    transferFinished = Signal(str)
+    transferProgressChanged = Signal()
+    integrityChanged = Signal()
 
     def __init__(self, backend, tracker, *, supported=True, parent=None):
         super().__init__(parent)
@@ -43,21 +48,36 @@ class CreatorBridge(QObject):
         self._availability_error = ""
         self._availability_task = None
         self._saving = False
+        self._transfer_busy = False
+        self._transfer_progress = -1.0
+        self._transfer_stage = ""
+        self._pending_transfer = None
+        self._integrity_task = None
+        self._integrity_stop = threading.Event()
+        self._integrity_pause = threading.Event()
+        self._integrity_busy = False
+        self._integrity_message = ""
+        self._integrity_done = self._integrity_total = self._integrity_issues = 0
         self._tasks = set()
         self._workers = {}
+        self._worker_sources = {}
         self._job_videos = {}
         self._dirty_jobs = set()
         self._job_states = {}
         self._job_errors = {}
         self._event = asyncio.Event()
         self._start_lock = asyncio.Lock()
+        self._dispatch_lock = asyncio.Lock()
         self._job_write_lock = asyncio.Lock()
+        self._refresh_lock = asyncio.Lock()
         self._refresh_task = None
         self._refresh_dirty = False
         self._dispatcher = None
         self._closing = False
         self._started = False
         backend._downloads_model.dataChanged.connect(self._downloads_changed)
+        backend._downloads_model.rowsRemoved.connect(lambda *args: self._update_integrity_pause())
+        backend._downloads_model.modelReset.connect(self._update_integrity_pause)
         backend.download_manager.video_updated.connect(self._video_updated)
         app_settings.outputPathChanged.connect(self._defaults_changed)
         app_settings.androidOutputFolderChanged.connect(self._defaults_changed)
@@ -148,6 +168,235 @@ class CreatorBridge(QObject):
     def mobileStorage(self):
         return IS_ANDROID
 
+    @Property(bool, notify=changed)
+    def transferBusy(self):
+        return self._transfer_busy
+
+    @Property(float, notify=transferProgressChanged)
+    def transferProgress(self):
+        return self._transfer_progress
+
+    @Property(str, notify=transferProgressChanged)
+    def transferStage(self):
+        return self._transfer_stage
+
+    def _relocation_progress(self, done, total):
+        self._transfer_progress = min(1.0, done / total) if total else -1.0
+        self._transfer_stage = self.tr("Copying files…") if total else self.tr("Saving new destinations…")
+        self.transferProgressChanged.emit()
+
+    @Property(bool, constant=True)
+    def transferSupported(self):
+        return self.supported and not IS_ANDROID
+
+    @Property(bool, notify=integrityChanged)
+    def integrityBusy(self):
+        return self._integrity_busy
+
+    @Property(str, notify=integrityChanged)
+    def integrityMessage(self):
+        return self._integrity_message
+
+    @Property(int, notify=integrityChanged)
+    def integrityDone(self):
+        return self._integrity_done
+
+    @Property(int, notify=integrityChanged)
+    def integrityTotal(self):
+        return self._integrity_total
+
+    @Property(int, notify=integrityChanged)
+    def integrityIssues(self):
+        return self._integrity_issues
+
+    @Property(bool, notify=integrityChanged)
+    def integrityPaused(self):
+        return self._integrity_busy and self._integrity_pause.is_set()
+
+    def _update_integrity_pause(self):
+        if self._closing:
+            return
+        active = self._transfer_busy or any(row.get("status") in {"queued", "downloading", "stopping"} for row in self.backend._downloads_model._items)
+        previous = self._integrity_pause.is_set()
+        self._integrity_pause.set() if active else self._integrity_pause.clear()
+        if active != previous:
+            self.integrityChanged.emit()
+
+    @Slot()
+    def checkIntegrity(self):
+        self._start_integrity(False)
+
+    @Slot()
+    def fullVerification(self):
+        self._start_integrity(True)
+
+    def _start_integrity(self, full):
+        if self._closing or self._integrity_busy or self._transfer_busy or not self.available or not self.transferSupported:
+            return
+        self._integrity_stop.clear()
+        self._integrity_busy = True
+        self._integrity_done = self._integrity_total = self._integrity_issues = 0
+        self._update_integrity_pause()
+        self._integrity_message = self.tr("Full verification: reading every file and comparing SHA-256 checksums…") if full else self.tr("Quick check: checking file metadata and hashing only new or changed files…")
+        self.integrityChanged.emit()
+        self._integrity_task = self._spawn(self._verify_integrity(full))
+
+    async def _verify_integrity(self, full=False):
+        from src.database.integrity import verify_downloads
+        last_report = 0
+        def progress(done, total):
+            nonlocal last_report
+            total_changed = total != self._integrity_total
+            self._integrity_done, self._integrity_total = done, total
+            stamp = asyncio.get_running_loop().time()
+            if total_changed or done == total or stamp - last_report >= .1:
+                last_report = stamp
+                self.integrityChanged.emit()
+        try:
+            result = await verify_downloads(self.repo, self.library.write_lock, self.tracker._save_lock,
+                self._integrity_stop, full=full, pause=self._integrity_pause, progress=progress, changed=self.request_refresh)
+            if result is None:
+                return
+            self._integrity_issues = result["missing"] + result["changed"] + result["unreadable"]
+            self._integrity_message = self.tr("Checked %s files: %s missing, %s changed, %s unreadable.") % (
+                result["checked"], result["missing"], result["changed"], result["unreadable"])
+            self._integrity_message = (self.tr("Full verification: %s files hashed.") % result["hashed"] if full else self.tr("Quick check: %s files unchanged since their last checksum check; %s files hashed.") % (result["unchanged"], result["hashed"])) + " " + self._integrity_message
+            if result["baselines"]:
+                self._integrity_message += " " + self.tr("Saved %s first-time checksums. These establish a baseline; they cannot detect earlier corruption.") % result["baselines"]
+            if result["skipped"]:
+                self._integrity_message += " " + self.tr("Skipped %s files that changed during the check; check again when transfers and moves have finished.") % result["skipped"]
+            notifications = getattr(self.backend, "notifications", None)
+            if notifications is not None and self._integrity_issues:
+                notifications.publish(self._integrity_message, self.tr("Download integrity"), "warning", key="download-integrity")
+            if self.tracker.enabled:
+                await self.tracker.refresh_cache()
+        except Exception as exc:
+            self._integrity_message = self.tr("Could not complete the integrity check: %s") % str(exc)
+        finally:
+            self._integrity_busy = False
+            self.integrityChanged.emit()
+            self.request_refresh()
+
+    def _transfer(self, operation):
+        if self._closing or self._transfer_busy:
+            return
+        self._transfer_busy = True
+        self._update_integrity_pause()
+        self._message = ""
+        self._transfer_progress = -1.0
+        self._transfer_stage = self.tr("Preparing storage operation…")
+        self.transferProgressChanged.emit()
+        self.changed.emit()
+        async def run():
+            try:
+                if not self.transferSupported:
+                    raise ValueError("Library migration and file relocation currently require desktop filesystem access.")
+                library = await self.ensure_ready()
+                async with self._dispatch_lock:
+                    if self._saving or self._workers or any(not t.done() for t in library.scan_tasks.values()) or any(not t.done() for t in self.backend._download_tasks.values()):
+                        raise ValueError("Stop scans and pause downloads before managing library storage.")
+                    job_save = getattr(self, "_job_save_task", None)
+                    if job_save is not None and not job_save.done():
+                        await job_save
+                    writes = [t for t in self.tracker._tasks if not t.done()]
+                    if writes:
+                        await asyncio.gather(*writes)
+                    async with library.write_lock, self.tracker._save_lock:
+                        await operation()
+            except Exception as exc:
+                self._message = str(exc)
+                self._transfer_progress = 0.0
+                self._transfer_stage = self.tr("Storage operation stopped")
+                self.transferProgressChanged.emit()
+                self.transferFinished.emit(str(exc))
+            finally:
+                self._transfer_busy = False
+                self._update_integrity_pause()
+                self.request_refresh()
+                self.changed.emit()
+        self._spawn(run())
+
+    @Slot(str)
+    def exportLibrary(self, destination):
+        async def export():
+            from src.database.transfer import export_library
+            count = await export_library(self.repo, self.tracker.data_path, destination)
+            self._transfer_progress = 1.0
+            self._transfer_stage = self.tr("Storage operation complete")
+            self.transferProgressChanged.emit()
+            self.transferFinished.emit(self.tr("Exported %s library records. Video files are not included.") % count)
+        self._transfer(export)
+
+    @Slot(str)
+    def previewImport(self, filename):
+        async def preview():
+            from src.database.transfer import read_library
+            tables = await asyncio.to_thread(read_library, filename)
+            existing = (await self.repo.page(SUBSCRIPTIONS, size=1))["totalItems"]
+            history = (await self.repo.page("video_records", size=1))["totalItems"]
+            self._pending_transfer = ("import", tables)
+            self.transferPreview.emit("import", {"subscriptions": len(tables[SUBSCRIPTIONS]), "videos": len(tables[VIDEOS]),
+                "existing": existing, "history": history})
+        self._transfer(preview)
+
+    @Slot(str, str, str)
+    def previewRelocation(self, old_folder, new_folder, mode):
+        async def preview():
+            from src.database.relocate import plan_relocation
+            plan = await plan_relocation(self.repo, old_folder, new_folder, mode)
+            self._pending_transfer = ("relocate", (old_folder, new_folder, mode), plan["missing"])
+            self.transferPreview.emit("relocate", {"videos": plan["videos"], "folders": plan["folders"],
+                "missing": len(plan["missing"]), "mode": mode})
+        self._transfer(preview)
+
+    @Slot(str)
+    def confirmTransfer(self, mode):
+        if self._closing or self._transfer_busy:
+            return
+        pending = self._pending_transfer
+        self._pending_transfer = None
+        async def apply():
+            from src.database.transfer import import_library, native_backup
+            if pending is None:
+                raise ValueError("Preview the operation first.")
+            if pending[0] == "import" and self.backend._downloads_model.rowCount():
+                raise ValueError("Clear the Downloads queue before importing a library. Saved completed files are kept.")
+            backup = await native_backup(self.repo, self.tracker.data_path)
+            if pending[0] == "import":
+                await import_library(self.repo, pending[1], mode)
+                self._job_videos = {r["job"]: r["id"] async for r in self.repo.all(VIDEOS, filter='job != "" && status != "completed"')}
+                self._job_states.clear()
+                self._job_errors.clear()
+                self._dirty_jobs.clear()
+                message = self.tr("Library imported. Imported subscriptions have startup scans and automatic downloads turned off. Use Locate moved files to update paths on this device.")
+            else:
+                from src.database.relocate import apply_relocation, mapped_path, plan_relocation
+                plan = await plan_relocation(self.repo, *pending[1])
+                if plan["missing"] != pending[2]:
+                    raise ValueError("Files changed since the preview. Preview the move again before continuing.")
+                retained = await apply_relocation(self.repo, plan, progress=self._relocation_progress, paths_updated=self._refresh)
+                output = mapped_path(app_settings.output_path, Path(plan["old"]), Path(plan["new"]))
+                if output is not None:
+                    app_settings.output_path = str(output)
+                message = self.tr("Updated %s completed video records and %s subscription destinations.") % (plan["videos"], plan["folders"])
+                if plan["missing"]:
+                    message += " " + self.tr("%s missing files were marked for retry. Choose Download all videos to fetch them into the new destination.") % len(plan["missing"])
+                if retained:
+                    message += " " + self.tr("Some originals could not be removed; the new copies and paths are saved.")
+            if self.tracker.enabled:
+                await self.tracker.refresh_cache()
+            self._message = message + " " + self.tr("A safety backup was saved in the PocketBase backups folder: %s") % backup.name
+            await self._refresh()
+            self._transfer_progress = 1.0
+            self._transfer_stage = self.tr("Storage operation complete")
+            self.transferProgressChanged.emit()
+            self.transferFinished.emit(self._message)
+        self._transfer(apply)
+
+    @Slot()
+    def cancelTransfer(self):
+        self._pending_transfer = None
+
     def _spawn(self, coroutine):
         task = asyncio.create_task(coroutine)
         self._tasks.add(task)
@@ -232,8 +481,9 @@ class CreatorBridge(QObject):
         while self.backend._license_bridge is not None and self.backend._license_bridge.busy and not self._closing:
             await asyncio.sleep(.1)
         await self._refresh()
+        self.checkIntegrity()
         for source in self._sources:
-            if source.get("startup") and not self._closing:
+            if source.get("startup") and not self._closing and not self._transfer_busy:
                 self._watch_scan(library.scan(source["id"], "startup"))
 
     def request_refresh(self):
@@ -249,6 +499,10 @@ class CreatorBridge(QObject):
             await self._refresh()
 
     async def _refresh(self):
+        async with self._refresh_lock:
+            await self._refresh_view()
+
+    async def _refresh_view(self):
         if self.library is None:
             return
         sources = await self.library.subscriptions()
@@ -287,7 +541,7 @@ class CreatorBridge(QObject):
 
     @Slot(str, "QVariantMap")
     def save(self, id, values):
-        if self._saving or self._closing:
+        if self._saving or self._closing or self._transfer_busy:
             return
         self._saving = True
         self.changed.emit()
@@ -320,7 +574,7 @@ class CreatorBridge(QObject):
 
     @Slot(str)
     def scan(self, id):
-        if self._closing:
+        if self._closing or self._transfer_busy:
             return
         async def action():
             library = await self.ensure_ready()
@@ -333,7 +587,7 @@ class CreatorBridge(QObject):
 
     @Slot(str, str)
     def bulk(self, id, action):
-        if self._closing:
+        if self._closing or self._transfer_busy:
             return
         async def apply():
             library = await self.ensure_ready()
@@ -360,7 +614,7 @@ class CreatorBridge(QObject):
 
     @Slot(str, str, str)
     def videoAction(self, source_id, member_id, action):
-        if self._closing:
+        if self._closing or self._transfer_busy:
             return
         async def apply():
             await self.ensure_ready()
@@ -384,7 +638,7 @@ class CreatorBridge(QObject):
 
     @Slot(str)
     def remove(self, id):
-        if self._closing:
+        if self._closing or self._transfer_busy:
             return
         async def apply():
             library = await self.ensure_ready()
@@ -406,19 +660,28 @@ class CreatorBridge(QObject):
     async def _dispatch(self):
         while not self._closing:
             self._event.clear()
-            capacity = (max(1, int(app_settings.parallel_downloads)) if self.premium else 1) * 2 - len(self._workers)
-            if capacity > 0:
-                rows = await self.repo.page(VIDEOS, size=capacity, filter='status = "pending"', sort="id")
-                for video in rows["items"]:
-                    if video["id"] in self._workers:
-                        continue
-                    if await self._download_index(video) is None:
-                        self._event.set()  # Continue past older Premium-only pending jobs.
-                        continue
-                    await self.repo.put(VIDEOS, video["id"], {"status": "preparing"})
-                    task = self._spawn(self._run_video(video))
-                    self._workers[video["id"]] = task
-                    task.add_done_callback(lambda done, id=video["id"]: self._worker_done(id))
+            async with self._dispatch_lock:
+                capacity = (max(1, int(app_settings.parallel_downloads)) if self.premium else 1) * 2 - len(self._workers)
+                if capacity > 0 and not self._transfer_busy:
+                    # Keep each creator sequential, including metadata preparation, so
+                    # slower preparation cannot let later library pages jump ahead.
+                    async for source in self.repo.all(SUBSCRIPTIONS):
+                        if source["id"] in self._worker_sources.values():
+                            continue
+                        video = await self.repo.next_pending_video(source["id"])
+                        if video is None or video["id"] in self._workers:
+                            continue
+                        if await self._download_index(video) is None:
+                            self._event.set()  # Continue past older Premium-only pending jobs.
+                            continue
+                        await self.repo.put(VIDEOS, video["id"], {"status": "preparing"})
+                        task = self._spawn(self._run_video(video))
+                        self._workers[video["id"]] = task
+                        self._worker_sources[video["id"]] = source["id"]
+                        task.add_done_callback(lambda done, id=video["id"]: self._worker_done(id))
+                        capacity -= 1
+                        if capacity <= 0:
+                            break
             await self._event.wait()
 
     async def _download_index(self, record):
@@ -432,17 +695,20 @@ class CreatorBridge(QObject):
 
     def _worker_done(self, id):
         self._workers.pop(id, None)
+        self._worker_sources.pop(id, None)
         self.request_refresh()
 
     async def _completed_history(self, record):
         history = await self.repo.find("video_records", f"url = {quoted(record['url'])} && status = \"completed\"")
-        if history:
+        async def file_present(row):
+            return IS_ANDROID or bool(row.get("output_path") and await asyncio.to_thread(Path(row["output_path"]).is_file))
+        if history and await file_present(history):
             return history
         key = record["identity"].split(":video:", 1)[-1]
         async for candidate in self.repo.all("video_records", filter=f"video_id = {quoted(key)} && status = \"completed\""):
             try:
                 provider = route_url(candidate["url"]).provider
-                if provider == record["provider"] and identity(provider, candidate["url"], candidate.get("video_id")) == record["identity"]:
+                if provider == record["provider"] and identity(provider, candidate["url"], candidate.get("video_id")) == record["identity"] and await file_present(candidate):
                     return candidate
             except ValueError:
                 continue
@@ -476,7 +742,12 @@ class CreatorBridge(QObject):
             if video is None:
                 history = await self._completed_history(record)
                 if history:
-                    await self.repo.put(VIDEOS, record["id"], {"status": "completed", "progress": 100, "output_path": history.get("output_path", "")})
+                    await self.repo.put(VIDEOS, record["id"], {"status": "completed", "progress": 100,
+                        "output_path": history.get("output_path", ""), "sha256": history.get("sha256", ""),
+                        "file_fingerprint": history.get("file_fingerprint"),
+                        "integrity": history.get("integrity", ""), "integrity_checked": history.get("integrity_checked", ""),
+                        "job": "", "snapshot": None})
+                    self._job_videos.pop(job, None)
                     return
                 snapshot = record.get("snapshot")
                 if snapshot:
@@ -572,6 +843,7 @@ class CreatorBridge(QObject):
                 await self.repo.put(VIDEOS, record["id"], {"status": "failed", "error": str(exc)})
 
     def _downloads_changed(self, first, last, roles):
+        self._update_integrity_pause()
         for row in range(first.row(), last.row() + 1):
             job = self.backend._downloads_model.data(self.backend._downloads_model.index(row, 0), self.backend._downloads_model.JobIdRole)
             if job in self._job_videos:
@@ -614,6 +886,9 @@ class CreatorBridge(QObject):
             "title": video.title, "quality": str(video.selected_quality or ""),
             "snapshot": queue_record(video, progress), "output_path": str(video.output_path),
             "error": self._job_errors.get(job, "Download failed. Open Downloads for error details.") if status == "failed" else ""}
+        self._job_states[job].update(sha256=video.sha256, file_fingerprint=video.file_fingerprint,
+            integrity="ok" if status == "completed" and video.sha256 else "",
+            integrity_checked=datetime.now().astimezone().isoformat() if status == "completed" and video.sha256 else "")
 
     async def _save_job(self, job):
         async with self._job_write_lock:
@@ -632,6 +907,9 @@ class CreatorBridge(QObject):
 
     async def stop(self):
         self._closing = True
+        self._integrity_stop.set()
+        if self._integrity_task is not None and not self._integrity_task.done():
+            await self._integrity_task
         if self.library:
             await self.library.close()
         tasks = [t for t in [self._dispatcher, *self._workers.values()] if t is not None and not t.done()]

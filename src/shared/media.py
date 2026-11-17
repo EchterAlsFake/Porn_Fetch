@@ -142,5 +142,7 @@ class VideoObject:
     thumbnail_data: bytes | None = None
     library_metadata: LibraryMetadata | None = None
     export_destination: str | None = None
+    sha256: str = ""
+    file_fingerprint: dict | None = None
 
 

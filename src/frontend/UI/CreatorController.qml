@@ -10,6 +10,13 @@ QtObject {
     readonly property string availabilityError: bridge ? bridge.availabilityError : ""
     readonly property string availabilityHelp: bridge ? bridge.availabilityHelp : ""
     readonly property bool canManageComponents: bridge && bridge.canManageComponents
+    readonly property bool transferBusy: bridge && bridge.transferBusy
+    readonly property bool integrityPaused: bridge && bridge.integrityPaused
+    readonly property bool integrityBusy: bridge && bridge.integrityBusy
+    readonly property string integrityMessage: bridge ? bridge.integrityMessage : ""
+    readonly property int integrityDone: bridge ? bridge.integrityDone : 0
+    readonly property int integrityTotal: bridge ? bridge.integrityTotal : 0
+    readonly property int integrityIssues: bridge ? bridge.integrityIssues : 0
     readonly property bool saving: bridge && bridge.saving
     readonly property bool premium: bridge && bridge.premium
     readonly property var sources: bridge ? bridge.sources : []
@@ -37,6 +44,8 @@ QtObject {
     function videoAction(id, member, action) { bridge.videoAction(id, member, action) }
     function save(id, values) { bridge.save(id, values) }
     function remove(id) { bridge.remove(id) }
+    function fullVerification() { if (bridge) bridge.fullVerification() }
+    function checkIntegrity() { if (bridge) bridge.checkIntegrity() }
     function checkAvailability() { if (bridge) bridge.checkAvailability() }
     function manageComponents() { if (bridge) bridge.manageComponents() }
 }

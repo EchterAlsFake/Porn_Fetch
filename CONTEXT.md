@@ -676,8 +676,18 @@ and initial entitlement checking; subsequent scans are manual, with no polling.
 Full listing traversal uses `pages="all"`, one-based start page one and strict
 visible errors. Discovered identities are committed in transactional batches;
 retrying an interrupted scan replays from page one against persisted membership.
+PornHub uses upstream `unofficial-api-for-pornhub>=6.0.1`, which follows `/videos`
+navigation when a `/videos/upload` response's canonical link confirms that exact
+same-profile alias. No application compatibility adapter remains. Separate
+upload/public tabs remain separate. Live Porn Force
+reconciliation matched 419 videos across 11 pages, including creator scans and
+shared GUI/CLI routing. Existing subscriptions recover missing membership on rescan.
 The UI reads twelve videos per page rather than loading every prepared media
-object. Creator workers are bounded to twice the configured parallel limit.
+object. Creator downloads follow the unfiltered library order, with one worker
+per subscription so metadata preparation cannot reorder transfers. Different
+creators can run in parallel, bounded to twice the configured parallel limit.
+The detail progress bar shows completed/discovered videos across all pages,
+excluding ignored entries, alongside active, queued and failed counts.
 Full archives and automation require Premium. Free users can scan, download and
 resume the same five videos per subscription at up to 720p. Eligibility uses the
 first five durable memberships (including ignored/completed rows), checked at
@@ -727,14 +737,64 @@ calls it, auto-provisions verified Go 1.27.4 if needed, and packages Go/dependen
 notices. All four compiled successfully. Native x86 TV API 36 and x86_64 Automotive
 API 33 checks applied migrations, authenticated and committed 30 records; x86
 also reopened with all records retained. The host embedded-runtime integration
-checks queue/destination/checkpoint recovery. Full APK and ARM device behavior
-remain unverified and require a rebuilt APK; iOS Creators stays unavailable.
+checks queue/destination/checkpoint recovery. On 2026-11-17 the full x86_64
+Automotive API 33 app crashed after setup because modernc SQLite issued raw
+Linux `lstat`, blocked by Android app-process seccomp (SIGSYS). The embedded
+runtime now uses `mattn/go-sqlite3` through PocketBase's custom DBConnect,
+compiled against Android libc with `no_default_driver` and SQLite defensive
+mode. It retains the existing database format and PocketBase connection PRAGMAs.
+A rebuilt and signed x86_64 APK was installed over the app, preserving setup;
+update-dialog display, Creators readiness/Add dialog, normal close and cold
+reopening passed without a new native crash. Host recovery and Android build
+unit tests passed. The packaged library matched the rebuilt binary. Other ABIs
+and real mobile creator downloads remain unverified with this driver; iOS
+Creators stays unavailable. See `native/pocketbase/README.md` for build flags.
 
 Android now binds DownloadRecovery, storing queue/HLS/RAW state in private app
 data instead of cache. Creator downloads stage privately and persist the shared
 SAF/MediaStore destination with each prepared job. Resume retains that destination
 even after global settings change. Android OS background/process limits remain;
 there is no new foreground service or closed-app scheduler.
+Desktop Creators exposes Import library and Export library beside Add subscription
+at the top of the page, with responsive wrapping. They open only a file chooser
+initially, restoring the originating button's focus on cancel. After selection,
+a compact progress/result dialog handles feedback and import confirmation, with
+no duplicate Import/Export buttons. These actions are separate from the per-creator
+Move location dialog and are not in Settings/Video.
+Move files copies completed media and known sidecars before one transactional
+path update, then deletes originals; Locate moved files verifies the new paths.
+Both update history, completed snapshots and subscription destinations, with the
+global output folder following when applicable. Move progress stays visible in
+the dialog header and reports copied bytes as a percentage. Destinations refresh
+immediately after path commit, before cleanup/completion signals. The move preview
+reports missing files and asks to move available files while marking missing
+records for retry, with no changes before confirmation. Exact files already at
+the new location are relinked. Progress/results stay visible after completion or
+failure. Desktop history reuse checks file existence; native download completion
+also requires an actual output file. Partial jobs remain in place.
+Desktop startup runs metadata-based Quick check for completed creator/history
+files. Unchanged files cause no content reads or per-record database requests or
+writes. New/changed/uncached files are SHA-256 checked; legacy records need one
+initial metadata-cache pass. Full verification is manual only, with its own button
+and no periodic scheduling or automatic full-scan resume. New completions retain
+both checksum and fingerprint after final tagging. Fingerprint timestamps/file IDs
+are JSON strings to preserve nanosecond precision through PocketBase.
+Verification hashing is sequential, capped at 64 MiB/s, and paused during active
+downloads/storage operations. Changed records are revalidated and written in batches
+of at most 100; unchanged/missing repeated verdicts are not rewritten. Original
+hashes survive mismatches, moves and exports. Metadata-only checks do not prove
+byte integrity; summaries distinguish unchanged files from hashed files. Missing,
+changed and unreadable records are flagged without deleting or automatically
+re-downloading files. Restoring original bytes and checking again recovers completion.
+Desktop Skip existing files checks known hashes; queueing the same history path
+preserves its baseline until fresh completion. Mobile shared-storage verification
+is not implemented.
+Exports contain a portable versioned manifest plus a native PocketBase snapshot.
+Import previews counts and asks Merge/Replace when local data exists, remaps IDs,
+preserves completion on merge, disables imported startup/automatic flags, and
+clears device-specific jobs/checkpoints. Replacement is transactional. Native
+safety backups precede imports/relocations. Imported schema/code is never executed.
+Desktop filesystem access is required; mobile storage migration is not implemented.
 See [creator subscriptions](docs/CREATORS.md) for verification commands and limits.
 
 ## Testing and documentation

@@ -26,7 +26,7 @@ unofficial-api-for-eporner==3.0.0
 unofficial-api-for-porn==0.2.0
 unofficial-api-for-porndoe==2.0.0
 unofficial-api-for-pornhat==0.2.0
-unofficial-api-for-pornhub==6.0.0
+unofficial-api-for-pornhub==6.0.1
 unofficial-api-for-porntrex==2.0.0
 unofficial-api-for-redgifs==1.1.0
 unofficial-api-for-redtube==2.0.0

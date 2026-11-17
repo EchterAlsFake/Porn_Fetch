@@ -10,6 +10,7 @@ VIDEOS = "creator_videos"
 MEMBERSHIPS = "creator_memberships"
 SCANS = "creator_scans"
 COUNTS = "creator_source_counts"
+VIDEO_ORDER = "-first_seen,id"
 MIGRATION_NAME = "202611160000_creator_library.js"
 
 # The earlier draft remains immutable. This migration also preserves any draft data.
@@ -171,7 +172,16 @@ class CreatorRepository:
             if status == "pending":
                 states = '(video.status = "pending" || video.status = "preparing" || video.status = "queued")'
             filter += f" && ignored = false && ({states})"
-        return await self.page(MEMBERSHIPS, page=page, size=12, filter=filter, sort="-first_seen,id", expand="video")
+        return await self.page(MEMBERSHIPS, page=page, size=12, filter=filter, sort=VIDEO_ORDER, expand="video")
+
+    async def next_pending_video(self, subscription):
+        # Dispatch in the same order as the unfiltered library, across all pages.
+        result = await self.page(MEMBERSHIPS, size=1,
+            filter=f"subscription = {quoted(subscription)} && ignored = false"
+                   f' && video.owner = {quoted(subscription)} && video.status = "pending"',
+            sort=VIDEO_ORDER, expand="video")
+        return result["items"][0]["expand"]["video"] if result["items"] else None
+
 
 POLISH_MIGRATION_NAME = "202611180000_creator_scan_progress.js"
 POLISH_MIGRATION = r'''

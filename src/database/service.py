@@ -16,6 +16,9 @@ from .creators import MIGRATION as LIBRARY_MIGRATION
 from .creators import MIGRATION_NAME as LIBRARY_MIGRATION_NAME
 from .creators import POLISH_MIGRATION, POLISH_MIGRATION_NAME
 from .errors import PocketBaseError
+from .integrity import FINGERPRINT_MIGRATION, FINGERPRINT_MIGRATION_NAME
+from .integrity import MIGRATION as INTEGRITY_MIGRATION
+from .integrity import MIGRATION_NAME as INTEGRITY_MIGRATION_NAME
 
 
 def _find_original_executable() -> Path | None:
@@ -133,7 +136,8 @@ class PocketBaseService:
     @staticmethod
     def migration_sources():
         return [(MIGRATION_NAME, _SCHEMA_MIGRATION), (CREATOR_MIGRATION_NAME, CREATOR_MIGRATION),
-                (LIBRARY_MIGRATION_NAME, LIBRARY_MIGRATION), (POLISH_MIGRATION_NAME, POLISH_MIGRATION)]
+                (LIBRARY_MIGRATION_NAME, LIBRARY_MIGRATION), (POLISH_MIGRATION_NAME, POLISH_MIGRATION),
+                (INTEGRITY_MIGRATION_NAME, INTEGRITY_MIGRATION), (FINGERPRINT_MIGRATION_NAME, FINGERPRINT_MIGRATION)]
 
     async def _run_command(self, binary: Path, *arguments: str) -> None:
         creation_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0

@@ -121,7 +121,7 @@ Dialog {
             Label { visible: root.preview.mobileStorage; Layout.fillWidth: true; text: qsTr("Choose a shared download folder in app Settings. This subscription keeps its destination when you resume it."); color: Theme.muted; wrapMode: Text.WordWrap; font.pixelSize: 12 * root.fontScale }
             CreatorCheckBox { id: startup; KeyNavigation.up: root.preview.mobileStorage ? useAppFolderButton : folder; KeyNavigation.down: automatic; text: qsTr("Scan when Porn Fetch starts"); Layout.fillWidth: true }
             CreatorCheckBox { id: automatic; enabled: root.preview.premium || checked; KeyNavigation.up: startup; KeyNavigation.down: saveButton; text: qsTr("Automatically download new videos (Premium)"); Layout.fillWidth: true }
-            Label { Layout.fillWidth: true; text: qsTr("The first scan builds your library. Choose Download pending to download existing videos. New uploads can be downloaded after future startup or manual scans."); wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12 * root.fontScale }
+            Label { Layout.fillWidth: true; text: qsTr("The first scan builds your library. Choose Download all videos to download existing videos. New uploads can be downloaded after future startup or manual scans."); wrapMode: Text.WordWrap; color: Theme.muted; font.pixelSize: 12 * root.fontScale }
             Label { Layout.fillWidth: true; visible: root.errorText.length > 0; text: root.errorText; wrapMode: Text.WordWrap; color: Theme.ink; font.bold: true; Accessible.role: Accessible.AlertMessage }
         }
     }

@@ -2043,7 +2043,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+900"/>
+        <location filename="../../../backend/application.py" line="+901"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2058,13 +2058,13 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+115"/>
         <source>No permitted quality is available for this video.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-754"/>
-        <location line="+227"/>
+        <location line="-758"/>
+        <location line="+228"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2072,7 +2072,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-231"/>
+        <location line="-232"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2092,7 +2092,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+126"/>
+        <location line="+127"/>
         <source>The update check failed. Check your connection and try again later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2239,7 +2239,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+28"/>
+        <source>Wait for the library storage operation to finish before downloading.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Choose an output folder in Settings → Video before downloading. Android&apos;s private app directory cannot be opened by normal file managers or video players.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2259,7 +2264,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+55"/>
         <source>An existing file was kept in your output folder.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2269,8 +2274,8 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+146"/>
-        <location line="+258"/>
+        <location line="+149"/>
+        <location line="+272"/>
         <location line="+4"/>
         <source>Metadata export</source>
         <translation type="unfinished"></translation>
@@ -2446,9 +2451,9 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-661"/>
+        <location line="-686"/>
         <location line="+104"/>
-        <location line="+533"/>
+        <location line="+558"/>
         <location line="+25"/>
         <source>Bulk downloading</source>
         <translation type="unfinished"></translation>
@@ -2520,7 +2525,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>CreatorBridge</name>
     <message>
-        <location filename="../../../backend/creator_bridge.py" line="+104"/>
+        <location filename="../../../backend/creator_bridge.py" line="+124"/>
         <source>Creator subscriptions need a native PocketBase runtime. This is not available on iOS yet.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2546,11 +2551,112 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
 3. Choose Check again. If PocketBase is already installed, open the error details and check its executable and database folder permissions.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+56"/>
+        <source>Copying files…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Saving new destinations…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Full verification: reading every file and comparing SHA-256 checksums…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Quick check: checking file metadata and hashing only new or changed files…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Checked %s files: %s missing, %s changed, %s unreadable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Full verification: %s files hashed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Quick check: %s files unchanged since their last checksum check; %s files hashed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Saved %s first-time checksums. These establish a baseline; they cannot detect earlier corruption.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Skipped %s files that changed during the check; check again when transfers and moves have finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Download integrity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Could not complete the integrity check: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Preparing storage operation…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Storage operation stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Exported %s library records. Video files are not included.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Library imported. Imported subscriptions have startup scans and automatic downloads turned off. Use Locate moved files to update paths on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Updated %s completed video records and %s subscription destinations.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%s missing files were marked for retry. Choose Download all videos to fetch them into the new destination.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Some originals could not be removed; the new copies and paths are saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>A safety backup was saved in the PocketBase backups folder: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-63"/>
+        <location line="+66"/>
+        <source>Storage operation complete</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CreatorPreviewModel</name>
     <message>
-        <location filename="../../UI/CreatorPreviewModel.qml" line="+18"/>
+        <location filename="../../UI/CreatorPreviewModel.qml" line="+25"/>
         <source>A page could not be reached. Scan again to retry.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2666,7 +2772,17 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+6"/>
+        <source>Sample full verification. No local files are read in this preview.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Sample integrity check. No local files are read in this preview.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
         <source>Preview scan updated. No website was contacted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2720,7 +2836,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
 <context>
     <name>CreatorSourceCard</name>
     <message>
-        <location filename="../../UI/CreatorSourceCard.qml" line="+16"/>
+        <location filename="../../UI/CreatorSourceCard.qml" line="+17"/>
         <source>Subscription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3001,7 +3117,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     </message>
     <message>
         <location line="+1"/>
-        <source>The first scan builds your library. Choose Download pending to download existing videos. New uploads can be downloaded after future startup or manual scans.</source>
+        <source>The first scan builds your library. Choose Download all videos to download existing videos. New uploads can be downloaded after future startup or manual scans.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3033,18 +3149,18 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+125"/>
+        <location line="+130"/>
         <source>Remove subscription?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+268"/>
+        <location line="+336"/>
         <source>Remove subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-267"/>
+        <location line="-335"/>
         <source>This removes the subscription from your library. Downloaded files and history are kept.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3059,7 +3175,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>+ Add</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3069,7 +3185,23 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
+        <source>Download integrity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Checking downloaded files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+2"/>
+        <source>%1 of %2 files checked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Premium creator archives</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3104,7 +3236,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Checking PocketBase…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3171,20 +3303,20 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     </message>
     <message>
         <location line="+0"/>
-        <location line="+80"/>
+        <location line="+114"/>
         <location line="+44"/>
         <source>Downloaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-124"/>
+        <location line="-158"/>
         <location line="+15"/>
-        <location line="+109"/>
+        <location line="+143"/>
         <source>Needs attention</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-109"/>
+        <location line="-143"/>
         <source>All sources</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3260,33 +3392,23 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     </message>
     <message>
         <location line="+1"/>
-        <location line="+51"/>
+        <location line="+85"/>
         <source>%1 videos found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-51"/>
-        <location line="+51"/>
+        <location line="-85"/>
+        <location line="+85"/>
         <source> · %1 pages reached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-50"/>
+        <location line="-84"/>
         <source>Finish sample scan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>Resume / download pending</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Download pending</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
         <source>Resume free preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3316,7 +3438,33 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+1"/>
+        <source>Move location…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <location line="+8"/>
+        <source>%1 of %2 videos downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Total download progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>%1 active · %2 queued · %3 failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Downloads follow the library order, one video at a time per creator. Ignored videos are excluded from progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
         <source>Destination hidden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3394,7 +3542,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-373"/>
+        <location line="-446"/>
         <source>Best available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3409,7 +3557,52 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+326"/>
+        <location line="+181"/>
+        <source>Import library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Export library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Content verification is paused during downloads or library storage operations.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Quick checks use file metadata. Full verification reads every byte and runs only when you request it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Quick check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Full verification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+148"/>
+        <source>Download all videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloads all discovered videos across every page, resumes paused downloads and retries failures. Downloaded and ignored videos are skipped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Downloads the five-video free preview, resumes paused downloads and retries failures. Premium unlocks the full library.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Videos</source>
         <translation type="unfinished">Video</translation>
     </message>
@@ -4596,6 +4789,196 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
         <location line="+26"/>
         <source>Retry pending exports and notifications</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LibraryStorageDialog</name>
+    <message>
+        <location filename="../../UI/LibraryStorageDialog.qml" line="+132"/>
+        <source>Choose a video folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Export PocketBase library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+11"/>
+        <source>Porn Fetch library (*.zip)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Import PocketBase library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Moving files and library migration currently require the desktop app and local filesystem folders.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-149"/>
+        <location line="+154"/>
+        <source>Move or locate downloaded videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-131"/>
+        <source>Working…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+132"/>
+        <source>Keep filenames and subfolders unchanged. This updates all completed records and subscription destinations under the old folder, including shared history. Paused downloads keep their original locations.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Old folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Old video folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Choose old folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>New folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>New video folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Choose new folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Move files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Locate moved files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Move files copies completed videos and known metadata/artwork, saves the new paths, then removes the originals. Existing destination files are never overwritten. Locate moved files only verifies and updates paths.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-167"/>
+        <source>Import library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+231"/>
+        <source>Move available files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-214"/>
+        <source>Library storage operation in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-17"/>
+        <source>Export library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+150"/>
+        <source>Stop scans and pause downloads before continuing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>The archive includes your library and download history, without video files. Keep it private.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Review the import preview before continuing. A safety backup is created before changes are applied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Close</source>
+        <translation type="unfinished">Chiudi</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Import this library?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Update video locations?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>The export contains %1 subscriptions and %2 creator videos. This device has %3 subscriptions and %4 history records. Choose how to import. Replace removes current library records and history; video files are kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Update %1 completed video records and %2 subscription destinations? %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Files will be moved after copying them safely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Files are already at the new location; only saved paths will change.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 recorded files could not be found at either location. They will be skipped and marked for retry. Available files will move and the destination will update. Choose Download all videos afterward to fetch the missing videos again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Apply</source>
+        <translation type="unfinished">Applica</translation>
     </message>
 </context>
 <context>
@@ -7461,7 +7844,7 @@ Alcuni siti non possono essere raggiunti. Qui&apos; e&apos; presente un rapporto
 <context>
     <name>SupportedWebsitesPage</name>
     <message>
-        <location filename="../../UI/SupportedWebsitesPage.qml" line="+54"/>
+        <location filename="../../UI/SupportedWebsitesPage.qml" line="+57"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>

@@ -121,6 +121,12 @@ class PocketBaseTracker:
             payload = await asyncio.to_thread(self.create_video_payload, video, iterator_record)
             existing = await client.find_by_url(VIDEO_COLLECTION, video.url)
             if existing:
+                if (video.status != "completed" and existing.get("sha256")
+                        and existing.get("output_path") == payload["output_path"]):
+                    # Queueing/retrying the same path must not discard its
+                    # trusted baseline before a fresh transfer completes.
+                    for field in ("sha256", "file_fingerprint", "integrity", "integrity_checked"):
+                        payload.pop(field, None)
                 record = await client.update_record(VIDEO_COLLECTION, existing["id"], payload)
             else:
                 record = await client.create_record(VIDEO_COLLECTION, payload)
@@ -212,6 +218,13 @@ class PocketBaseTracker:
                     file_size_mb = sum(f.stat().st_size for f in p.rglob("*") if f.is_file()) / (1024 * 1024)
             except OSError:
                 pass
+        checksum, fingerprint = video.sha256, video.file_fingerprint
+        if video.status == "completed" and video.output_path and not checksum:
+            from src.shared.file_integrity import file_digest
+            try:
+                checksum, fingerprint = file_digest(video.output_path)
+            except OSError:
+                pass  # The next integrity check reports absent/unreadable files.
         return {
             "url": video.url,
             "title": video.title or "",
@@ -233,6 +246,10 @@ class PocketBaseTracker:
             "is_from_account": bool(getattr(video, "is_from_account", False)),
             "origin_iterator_url": video.origin_iterator_url or "",
             "origin_iterator": iterator_record["id"] if iterator_record else "",
+            "sha256": checksum,
+            "file_fingerprint": fingerprint,
+            "integrity": "ok" if video.status == "completed" and checksum else "",
+            "integrity_checked": datetime.now().astimezone().isoformat() if checksum else "",
         }
 
     async def refresh_cache(self) -> None:

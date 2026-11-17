@@ -42,7 +42,7 @@ func PFStart(dataDir, migrationsDir, email, password *C.char) *C.char {
 	if application != nil {
 		return result("", fmt.Errorf("PocketBase is already running"))
 	}
-	app := core.NewBaseApp(core.BaseAppConfig{DataDir: C.GoString(dataDir)})
+	app := core.NewBaseApp(core.BaseAppConfig{DataDir: C.GoString(dataDir), DBConnect: connectDatabase})
 	if err := jsvm.Register(app, jsvm.Config{MigrationsDir: C.GoString(migrationsDir), HooksFilesPattern: `a^`}); err != nil {
 		return result("", err)
 	}

@@ -260,7 +260,7 @@ class CreatorLibrary:
         premium = self.premium()
         if not premium and action == "automatic":
             raise PermissionError("Automatic creator downloads require Premium. Try five videos manually at up to 720p.")
-        states = {"new", "paused", "pending"} if action == "download" else {"failed"} if action == "retry" else {"new"}
+        states = {"new", "paused", "failed"} if action == "download" else {"failed"} if action == "retry" else {"new"}
         filter = f"subscription = {quoted(id)} && ignored = false"
         if not premium:
             preview = await self.repo.preview_memberships(id)

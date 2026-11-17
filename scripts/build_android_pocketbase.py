@@ -67,7 +67,7 @@ def collect_notices(go: Path, source: Path, destination: Path, environment: dict
     """Retain Go/PocketBase/dependency notices alongside the APK's Python notices."""
     shutil.rmtree(destination, ignore_errors=True)
     destination.mkdir(parents=True)
-    for name in ("main.go", "go.mod", "go.sum", "README.md"):
+    for name in ("main.go", "sqlite.go", "go.mod", "go.sum", "README.md"):
         shutil.copy2(source / name, destination / name)
     goroot = Path(subprocess.check_output([str(go), "env", "GOROOT"], text=True, env=environment).strip())
     shutil.copy2(goroot / "LICENSE", destination / "Go-LICENSE")
@@ -106,11 +106,14 @@ def build(root: Path, architecture: str, ndk: Path, *, go: Path | None = None) -
     destination.mkdir(parents=True, exist_ok=True)
     environment = dict(os.environ, GOOS="android", GOARCH=goarch, CGO_ENABLED="1", CC=str(compiler),
                        GOARM="7", GOTOOLCHAIN="local")
-    command = [str(go), "build", "-mod=readonly", "-buildmode=c-shared", "-trimpath",
+    # Preserve the default driver's defensive SQLite configuration.
+    environment["CGO_CFLAGS"] = (environment.get("CGO_CFLAGS", "") + " -DSQLITE_DEFAULT_DEFENSIVE=1").strip()
+    command = [str(go), "build", "-mod=readonly", "-tags=no_default_driver", "-buildmode=c-shared", "-trimpath",
                "-ldflags=-s -w -extldflags=-Wl,-z,max-page-size=16384", "-o", str(destination / LIBRARY), "."]
     build_output.run(command, label=f"Build Android PocketBase {abi}", cwd=source, env=environment)
     collect_notices(go, source, destination / "legal", environment)
     manifest = {"pocketbase": "0.40.4", "go": GO_VERSION, "abi": abi, "api": 28,
+                "sqlite_driver": "github.com/mattn/go-sqlite3",
                 "sha256": hashlib.file_digest((destination / LIBRARY).open("rb"), "sha256").hexdigest()}
     (destination / "build.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     build_output.message(f"Embedded PocketBase ready: {destination / LIBRARY}", "ok")

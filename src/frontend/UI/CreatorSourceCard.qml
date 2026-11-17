@@ -9,6 +9,7 @@ ItemDelegate {
     required property var sourceData
     required property var counts
     property bool privateMode: false
+    readonly property int downloadTotal: Math.max(0, counts.total - counts.ignored)
     readonly property color tint: Theme.highContrast ? Theme.accent : sourceData.provider === "Bellesa" ? (Theme.dark ? "#b5a6ff" : "#6752ba") : Theme.accent
     padding: 20
     implicitHeight: cardContent.implicitHeight + 40
@@ -51,8 +52,8 @@ ItemDelegate {
             Label { text: qsTr("%1 videos").arg(root.counts.total); color: Theme.muted; font.pixelSize: 12 * root.fontScale }
         }
         ProgressBar {
-            Layout.fillWidth: true; from: 0; to: Math.max(1, root.counts.total); value: root.counts.completed
-            Accessible.name: qsTr("%1 of %2 downloaded").arg(root.counts.completed).arg(root.counts.total)
+            Layout.fillWidth: true; from: 0; to: Math.max(1, root.downloadTotal); value: root.counts.completed
+            Accessible.name: qsTr("%1 of %2 downloaded").arg(root.counts.completed).arg(root.downloadTotal)
         }
         RowLayout {
             Layout.fillWidth: true

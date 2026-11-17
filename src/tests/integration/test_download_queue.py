@@ -103,8 +103,12 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as directory:
             item = video("job")
             item.output_path = Path(directory) / "output.mp4"
-            item.source_video = SimpleNamespace(download=AsyncMock(return_value=SimpleNamespace(status="completed")))
+            async def transfer(configuration):
+                configuration.path.write_bytes(b"completed media")
+                return SimpleNamespace(status="completed")
+            item.source_video = SimpleNamespace(download=AsyncMock(side_effect=transfer))
             backend = self.backend(item)
+            backend.database_bridge = SimpleNamespace(tracker=SimpleNamespace(enabled=True))
             statuses = []
             backend.download_manager.video_updated.connect(lambda entry: statuses.append(entry.status))
             settings = SimpleNamespace(processing_delay=0, skip_existing_files=False, write_metadata=False)
@@ -113,8 +117,45 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
                   patch("src.backend.application.TEMP_DIRECTORY_SEGMENTS", Path(directory) / "segments")):
                 await Backend._download_video(backend, "job", item, asyncio.Event(), False)
             self.assertEqual(statuses, ["completed"])
+            from hashlib import sha256
+            self.assertEqual(item.sha256, sha256(b"completed media").hexdigest())
             self.assertEqual(backend._downloads_model.rowCount(), 0)
             self.assertIsNone(backend.download_manager.get_video("job"))
+
+    async def test_completion_without_an_output_file_stays_failed_and_retryable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            item = video("job")
+            item.output_path = Path(directory) / "missing.mp4"
+            item.source_video = SimpleNamespace(download=AsyncMock(return_value=SimpleNamespace(status="completed")))
+            backend = self.backend(item)
+            settings = SimpleNamespace(processing_delay=0, skip_existing_files=False,
+                write_metadata=False, enable_logging=False, error_reporting_full_traceback=False)
+            with (patch("src.backend.application.app_settings", settings),
+                  patch("src.backend.application.report_exception", AsyncMock(return_value="missing-output"))):
+                await Backend._download_video(backend, "job", item, asyncio.Event(), False)
+            self.assertEqual(backend._downloads_model.get_status("job"), "failed")
+            backend.notifications.download_completed.assert_not_called()
+            self.assertIn("output file was not created", backend._downloads_model.error_details("job"))
+
+    async def test_skip_existing_does_not_accept_a_file_with_a_wrong_saved_checksum(self):
+        from hashlib import sha256
+        with tempfile.TemporaryDirectory() as directory:
+            item = video("job")
+            item.output_path = Path(directory) / "output.mp4"
+            item.output_path.write_bytes(b"changed bytes")
+            item.source_video = SimpleNamespace(download=AsyncMock())
+            backend = self.backend(item)
+            backend.database_bridge = SimpleNamespace(tracker=SimpleNamespace(_videos={item.url: {
+                "output_path": str(item.output_path), "sha256": sha256(b"original bytes").hexdigest()}}))
+            settings = SimpleNamespace(processing_delay=0, skip_existing_files=True,
+                write_metadata=False, enable_logging=False, error_reporting_full_traceback=False)
+            with (patch("src.backend.application.app_settings", settings),
+                  patch("src.backend.application.report_exception", AsyncMock(return_value="changed-output"))):
+                await Backend._download_video(backend, "job", item, asyncio.Event(), False)
+            self.assertEqual(backend._downloads_model.get_status("job"), "failed")
+            self.assertEqual(item.output_path.read_bytes(), b"changed bytes")
+            item.source_video.download.assert_not_awaited()
+            backend.notifications.download_completed.assert_not_called()
 
     async def test_free_queue_stays_serial_even_with_an_old_larger_semaphore(self):
         for premium in (False, True):
@@ -127,6 +168,7 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
                     maximum = max(maximum, active)
                     await asyncio.sleep(0.02)
                     active -= 1
+                    configuration.path.write_bytes(b"completed media")
                     return SimpleNamespace(status="completed")
 
                 first, second = video("one"), video("two")
