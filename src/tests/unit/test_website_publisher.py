@@ -1,9 +1,11 @@
 """Website packaging checks use synthetic artifacts and no publishing credentials."""
 
+import base64
 import hashlib
 import importlib.util
 import json
 import os
+import runpy
 import subprocess
 import tarfile
 import tempfile
@@ -105,6 +107,36 @@ class WebsitePublisherTests(unittest.TestCase):
         for kind in ("apk", "notices"):
             self.assertEqual({a["arch"] for a in manifest["artifacts"] if a["kind"] == kind},
                              {"arm64", "armv7", "x64", "x86"})
+
+    def test_apk_signer_verifies_the_file_inside_a_same_named_artifact_directory(self):
+        name = "PornFetch_android_GUI_arm64-v8a.apk"
+        apk = self.artifact(name, {name: b"release-signed APK"}) / name
+        sdk = self.root / "android-sdk"
+        certificate = b"release certificate"
+        fingerprint = hashlib.sha256(certificate).hexdigest()
+        credentials = {
+            "ANDROID_HOME": str(sdk),
+            "ANDROID_KEYSTORE_BASE64": base64.b64encode(b"test keystore").decode(),
+            "ANDROID_KEYSTORE_PASSWORD": "test-password",
+            "ANDROID_KEY_ALIAS": "test",
+            "ANDROID_KEY_PASSWORD": "test-password",
+        }
+        signer = runpy.run_path(str(PUBLISHER.with_name("sign_website_apks.py")))["sign"]
+        for labels in (("Signer #1",), ("V2 Signer #1:", "V3.0 Signer:")):
+            with self.subTest(labels=labels):
+                output = "".join(f"{label} certificate SHA-256 digest: {fingerprint}\n" for label in labels)
+                result = subprocess.CompletedProcess([], 0, stdout=output)
+                with (
+                    patch.dict(os.environ, credentials),
+                    patch.object(subprocess, "check_output", return_value=certificate),
+                    patch.object(subprocess, "run", return_value=result) as verify,
+                ):
+                    signer(self.artifacts)
+                verify.assert_called_once_with(
+                    [str(sdk / "build-tools/36.0.0/apksigner"), "verify", "--print-certs", str(apk)],
+                    capture_output=True, text=True,
+                )
+        self.assertEqual(apk.read_bytes(), b"release-signed APK")
 
     def test_native_ios_raw_ipa_and_notices_are_published(self):
         name = "PornFetch_ios_GUI_arm64_resign.ipa"

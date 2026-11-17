@@ -12,7 +12,7 @@ runs:
   steps:
     - shell: bash
       run: |
-        if find "$ARTIFACTS" -name '*.apk' -print -quit | grep -q .; then
+        if find "$ARTIFACTS" -type f -name '*.apk' -print -quit | grep -q .; then
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'build-tools;36.0.0'
           python "$TOOLING/packaging/sign_website_apks.py" "$ARTIFACTS"
         fi

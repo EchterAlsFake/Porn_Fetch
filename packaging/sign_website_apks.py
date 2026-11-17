@@ -10,7 +10,8 @@ from pathlib import Path
 
 
 def sign(artifacts: Path) -> None:
-    apks = sorted(artifacts.rglob('*.apk'))
+    # GitHub can place each downloaded APK inside a directory with the same name.
+    apks = sorted(path for path in artifacts.rglob('*.apk') if path.is_file(follow_symlinks=False))
     if not apks:
         return
     required = ('ANDROID_KEYSTORE_BASE64', 'ANDROID_KEYSTORE_PASSWORD', 'ANDROID_KEY_ALIAS', 'ANDROID_KEY_PASSWORD')
@@ -35,8 +36,12 @@ def sign(artifacts: Path) -> None:
                                     capture_output=True, text=True)
             if result.returncode:
                 return None
-            fingerprints = re.findall(r'Signer #\d+ certificate SHA-256 digest: ([0-9a-fA-F]+)', result.stdout)
-            return fingerprints[0].lower() if len(fingerprints) == 1 else None
+            # Newer apksigner versions can print the same certificate per scheme.
+            fingerprints = set(re.findall(
+                r'^(?:v[0-9.]+ )?signer(?: #\d+)?:? certificate sha-256 digest: ([0-9a-f]{64})$',
+                result.stdout.lower(), re.MULTILINE,
+            ))
+            return fingerprints.pop() if len(fingerprints) == 1 else None
 
         for apk in apks:
             if signer(apk) == expected:
