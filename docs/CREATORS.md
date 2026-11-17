@@ -149,7 +149,8 @@ Choose an old root and a new root, preserving filenames and relative subfolders:
   available media and marks missing records for retry, instead of aborting the
   whole move. Records are unchanged until confirmation. Choose **Download all
   videos** afterward to fetch missing media into the new destination. Files already
-  at their exact expected new paths are relinked without another copy. The displayed
+  at their exact expected new paths are relinked without another copy after the
+  saved checksum is verified when available. The displayed
   destination updates as soon as new paths are committed, before cleanup and the
   completion notification. Partial
   downloads and their checkpoints remain at their original locations.
@@ -157,7 +158,8 @@ Choose an old root and a new root, preserving filenames and relative subfolders:
   under the new root, then updates the same saved paths without moving files.
   Use this after a file-manager move or after transferring files to a new computer.
   Old Windows paths can be relinked on a POSIX host as well. Filenames and relative
-  subfolders must stay unchanged; files are verified for existence, not content.
+  subfolders must stay unchanged. Confirmation checks any saved checksums before
+  committing paths. Older records without a checksum are checked for existence.
 
 **Export PocketBase library** creates a ZIP containing a versioned `library.json`
 manifest and a native PocketBase `pocketbase.zip` backup. The portable manifest

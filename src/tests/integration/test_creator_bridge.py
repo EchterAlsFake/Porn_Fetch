@@ -379,7 +379,10 @@ property bool anonymous_mode: false; property bool reduced_motion: true }''', QU
         output.write_bytes(b"retained-partial-data")
         saved = VideoObject(url=row["url"], title="Saved title", author="", length=10, tags=[], thumbnail_url="", video_id="123",
             publish_date=None, qualities=[720], status="cancelled", identifier="qualityjob", output_path=output, selected_quality="720")
-        await self.bridge.repo.put(VIDEOS, row["id"], {"status": "pending", "owner": self.source["id"], "job": "qualityjob", "snapshot": queue_record(saved)})
+        baseline = {"sha256": "a" * 64, "file_fingerprint": {"size": "21"}, "integrity": "changed",
+                    "integrity_checked": "2026-11-17T12:00:00Z"}
+        await self.bridge.repo.put(VIDEOS, row["id"], {"status": "pending", "owner": self.source["id"],
+            "job": "qualityjob", "snapshot": queue_record(saved), "output_path": str(output), **baseline})
         fresh = VideoObject(url=row["url"], title="New metadata", author="", length=10, tags=[], thumbnail_url="", video_id="123",
             publish_date=None, qualities=[1080], status="pending")
         with patch("src.backend.creator_bridge.clients.get_video", AsyncMock(return_value=object())), patch("src.backend.creator_bridge.clients.load_video_attributes", AsyncMock(return_value=fresh)):
@@ -391,6 +394,7 @@ property bool anonymous_mode: false; property bool reduced_motion: true }''', QU
         latest = await self.bridge.repo.get(VIDEOS, row["id"])
         self.assertEqual(latest["status"], "failed")
         self.assertIn("saved quality", latest["error"])
+        self.assertEqual({field: latest[field] for field in baseline}, baseline)
         self.assertEqual(output.read_bytes(), b"retained-partial-data")
         self.assertEqual(self.backend.starts, 0)
 

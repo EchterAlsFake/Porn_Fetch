@@ -783,7 +783,7 @@ class CreatorBridge(QObject):
                     else:
                         video.output_path = Path(source["folder"]) / filename
                 video.status = "cancelled"
-                await self.repo.put(VIDEOS, record["id"], {"title": video.title, "quality": str(video.selected_quality),
+                await self._save_download_state(record["id"], {"title": video.title, "quality": str(video.selected_quality),
                     "output_path": str(video.output_path), "snapshot": queue_record(video)})
                 if (await self.repo.get(VIDEOS, record["id"]))["status"] != "preparing" or self._closing:
                     return
@@ -886,9 +886,21 @@ class CreatorBridge(QObject):
             "title": video.title, "quality": str(video.selected_quality or ""),
             "snapshot": queue_record(video, progress), "output_path": str(video.output_path),
             "error": self._job_errors.get(job, "Download failed. Open Downloads for error details.") if status == "failed" else ""}
-        self._job_states[job].update(sha256=video.sha256, file_fingerprint=video.file_fingerprint,
-            integrity="ok" if status == "completed" and video.sha256 else "",
-            integrity_checked=datetime.now().astimezone().isoformat() if status == "completed" and video.sha256 else "")
+        if status == "completed" and video.sha256:
+            self._job_states[job].update(
+                sha256=video.sha256, file_fingerprint=video.file_fingerprint,
+                integrity="ok", integrity_checked=datetime.now().astimezone().isoformat(),
+            )
+
+    async def _save_download_state(self, video_id, payload):
+        async with self.library.write_lock:
+            if "sha256" not in payload:
+                current = await self.repo.get(VIDEOS, video_id)
+                # The baseline belongs to the recorded path. Keep it through
+                # retries at that path until a verified completion replaces it.
+                if current["output_path"] != payload["output_path"]:
+                    payload = dict(payload, sha256="", file_fingerprint=None, integrity="", integrity_checked="")
+            await self.repo.put(VIDEOS, video_id, payload)
 
     async def _save_job(self, job):
         async with self._job_write_lock:
@@ -898,7 +910,7 @@ class CreatorBridge(QObject):
             payload = self._job_states.get(job)
             if payload is None:
                 return
-            await self.repo.put(VIDEOS, self._job_videos[job], payload)
+            await self._save_download_state(self._job_videos[job], payload)
             if payload["status"] == "completed":
                 self._job_states.pop(job, None)
                 self._job_errors.pop(job, None)

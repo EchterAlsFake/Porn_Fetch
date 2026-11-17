@@ -196,6 +196,30 @@ class LibraryStorageTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(self.file.exists())
         self.assertEqual((await self.repo.get(VIDEOS, self.video["id"]))["output_path"], str(self.file))
 
+    async def test_relink_requires_a_matching_saved_checksum(self):
+        new = self.root / "new"
+        target = new / "nested/completed.mp4"
+        target.parent.mkdir(parents=True)
+        original = self.file.read_bytes()
+        self.file.rename(target)
+        target.write_bytes(b"different-media")
+
+        for mode in ("move", "locate"):
+            with self.subTest(mode=mode):
+                plan = await plan_relocation(self.repo, str(self.old), str(new), mode)
+                with self.assertRaisesRegex(ValueError, "saved checksum"):
+                    await apply_relocation(self.repo, plan)
+                creator = await self.repo.get(VIDEOS, self.video["id"])
+                history = (await self.repo.page("video_records"))["items"][0]
+                self.assertEqual(creator["output_path"], str(self.file))
+                self.assertEqual(history["output_path"], str(self.file))
+                self.assertEqual(target.read_bytes(), b"different-media")
+
+        target.write_bytes(original)
+        plan = await plan_relocation(self.repo, str(self.old), str(new), "move")
+        await apply_relocation(self.repo, plan)
+        self.assertEqual((await self.repo.get(VIDEOS, self.video["id"]))["output_path"], str(target))
+
     @unittest.skipIf(os.name == "nt", "POSIX-side migration from Windows paths")
     async def test_locate_can_map_windows_paths_on_a_new_posix_computer(self):
         windows_root = "C:\\Users\\example\\Videos"

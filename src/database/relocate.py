@@ -7,6 +7,8 @@ import shutil
 import time
 from pathlib import Path, PureWindowsPath
 
+from src.shared.file_integrity import file_digest, file_fingerprint
+
 from .constants import VIDEO_COLLECTION
 from .creators import SUBSCRIPTIONS, VIDEOS
 from .transfer import batch, request
@@ -50,7 +52,7 @@ async def plan_relocation(repo, old_folder, new_folder, mode):
     new = Path(new_folder).expanduser().resolve()
     if old == new or old in new.parents or new in old.parents:
         raise ValueError("Choose separate folders that are not inside one another.")
-    operations, files = [], {}
+    operations, files, relinks = [], {}, {}
     completed_paths, missing = set(), set()
     for collection in (VIDEOS, VIDEO_COLLECTION):
         async for row in repo.all(collection, filter='status = "completed" || (status = "failed" && integrity != "")'):
@@ -58,21 +60,22 @@ async def plan_relocation(repo, old_folder, new_folder, mode):
             if target is None:
                 continue
             source = Path(row["output_path"])
-            if mode == "locate":
-                if not await asyncio.to_thread(target.is_file):
-                    raise ValueError(f"A completed video is missing from the new folder: {target.name}. Keep the same filenames and subfolders.")
+            if mode == "move" and await asyncio.to_thread(source.is_file):
+                files[source] = target
+            elif await asyncio.to_thread(target.is_file):
+                expected = relinks.setdefault(target, set())
+                if row.get("sha256"):
+                    expected.add(row["sha256"])
+            elif mode == "locate":
+                raise ValueError(f"A completed video is missing from the new folder: {target.name}. Keep the same filenames and subfolders.")
             else:
-                if not await asyncio.to_thread(source.is_file):
-                    if not await asyncio.to_thread(target.is_file):
-                        missing.add(str(source))
-                        payload = {"status": "failed", "output_path": ""}
-                        if collection == VIDEOS:
-                            payload.update(progress=0, job="", snapshot=None,
-                                error="The recorded file is missing. Download again to save it to the new destination.")
-                        operations.append(request("PATCH", collection, row["id"], payload))
-                        continue
-                else:
-                    files[source] = target
+                missing.add(str(source))
+                payload = {"status": "failed", "output_path": ""}
+                if collection == VIDEOS:
+                    payload.update(progress=0, job="", snapshot=None,
+                        error="The recorded file is missing. Download again to save it to the new destination.")
+                operations.append(request("PATCH", collection, row["id"], payload))
+                continue
             completed_paths.add(str(target))
             payload = {"output_path": str(target)}
             if collection == VIDEOS:
@@ -102,7 +105,7 @@ async def plan_relocation(repo, old_folder, new_folder, mode):
                 raise ValueError("Moving files through symbolic links is not supported. Choose the actual folder.")
             if target.exists():
                 raise ValueError(f"The destination already contains {target.name}. No files were changed.")
-    return {"operations": operations, "files": files, "videos": len(completed_paths), "folders": folders,
+    return {"operations": operations, "files": files, "relinks": relinks, "videos": len(completed_paths), "folders": folders,
             "missing": sorted(missing), "mode": mode, "old": str(old), "new": str(new)}
 
 
@@ -110,6 +113,19 @@ async def apply_relocation(repo, plan, *, progress=lambda done, total: None, pat
     copied = []
     loop = asyncio.get_running_loop()
     def copy():
+        # Verify existing destinations once at confirmation, before copying
+        # or committing paths. Several records may reference the same file.
+        verified = {}
+        for target, expected in plan["relinks"].items():
+            try:
+                fingerprint = file_fingerprint(target)
+                if expected:
+                    digest, fingerprint = file_digest(target)
+                    if expected != {digest}:
+                        raise ValueError(f"The file at the new location does not match its saved checksum: {target.name}.")
+                verified[target] = fingerprint
+            except OSError as error:
+                raise ValueError(f"Could not verify the file at the new location: {target.name}.") from error
         total = sum(source.stat().st_size for source in plan["files"])
         done, last_report = 0, 0
         loop.call_soon_threadsafe(progress, done, total)
@@ -128,6 +144,9 @@ async def apply_relocation(repo, plan, *, progress=lambda done, total: None, pat
                                 loop.call_soon_threadsafe(progress, done, total)
                                 last_report = stamp
                 shutil.copystat(source, target)
+            for target, fingerprint in verified.items():
+                if file_fingerprint(target) != fingerprint:
+                    raise ValueError(f"The file at the new location changed during the operation: {target.name}.")
             loop.call_soon_threadsafe(progress, done, total)
         except BaseException:
             for path in copied:
