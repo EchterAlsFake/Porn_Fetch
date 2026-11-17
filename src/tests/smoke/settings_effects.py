@@ -522,6 +522,13 @@ async def profiles(gui, lab):
 
     active = {"pages": 0, "items": 0}
     peaks = {"pages": 0, "items": 0}
+    limits = set()
+    original_iterator = Helper.iterator
+
+    def iterator(helper, *args, iterator_config, **options):
+        resolved = iterator_config.resolve(helper.core.configuration)
+        limits.add((resolved.max_page_concurrency, resolved.max_item_concurrency))
+        return original_iterator(helper, *args, iterator_config=iterator_config, **options)
 
     def observe_worker(original, kind):
         async def observed(helper, *params, **options):
@@ -535,6 +542,7 @@ async def profiles(gui, lab):
 
     rows = []
     with (patch.object(application, "container_stream", stream),
+          patch.object(Helper, "iterator", iterator),
           patch.object(Helper, "_process_page", observe_worker(Helper._process_page, "pages")),
           patch.object(Helper, "_process_item", observe_worker(Helper._process_item, "items"))):
         for maximum, mode in ((1, 1), (2, 2)):
@@ -542,12 +550,14 @@ async def profiles(gui, lab):
                                 "pages_concurrency": maximum, "videos_concurrency": maximum}.items():
                 await change(gui, prop, value)
             peaks.update(pages=0, items=0)
+            limits.clear()
             await gui.backend._process_model_url(url, "profile-$index", VideoFilters(), pages=2,
                                                   iterator_config=make_iterator_config(load_specific_sources=("html",)))
             require(gui.model.rowCount() == maximum and not gui.errors, "Result limit did not bound real profile rows")
             require(all(gui.model.get_video(gui.model.data(gui.model.index(i, 0), gui.model.JobIdRole)).source_video is not None
                         for i in range(gui.model.rowCount())), "Profile rows lost native videos")
-            require(peaks["pages"] == maximum and peaks["items"] == maximum,
+            require(limits == {(maximum, maximum)}, "The native scraper did not receive the changed concurrency limits")
+            require(all(0 < peak <= maximum for peak in peaks.values()),
                     "Native scraper exceeded changed page/item concurrency")
             rows.append({"limit": maximum, "rows": gui.model.rowCount(), "native_request_peaks": dict(peaks)})
             await clear(gui)
@@ -738,13 +748,32 @@ print(json.dumps({'saved':saved,'active':QQuickStyle.name()}))
 
 
 async def updates(gui, lab):
-    from PySide6.QtCore import QUrl
-    from PySide6.QtQml import QQmlComponent
-
     from src.backend.account_diagnostics import UI
     source = (UI / "Main.qml").read_text()
     function = re.search(r"function continueStartup\(\)\s*\{.*?\n    \}", source, re.S)
     assert function is not None, "Startup update gate disappeared from the production page"
+    settings = gui.settings._settings
+    onboarding = {"Onboarding/setup_completed": True, "Onboarding/license_accepted_sha256": "fixture"}
+    original = {key: settings.value(key) for key in onboarding}
+    for key, value in onboarding.items():
+        settings.setValue(key, value)
+    try:
+        with patch.object(gui.backend, "_services_started", True, create=True):
+            scheduled = await check_update_scheduling(gui, function[0])
+    finally:
+        for key, value in original.items():
+            if value is None:
+                settings.remove(key)
+            else:
+                settings.setValue(key, value)
+    return {"native_update_tasks_scheduled": scheduled,
+            "scope": "Startup scheduling gate; no production update/install action is performed"}
+
+
+async def check_update_scheduling(gui, startup):
+    from PySide6.QtCore import QUrl
+    from PySide6.QtQml import QQmlComponent
+
     scheduled = []
     for enabled in (False, True):
         await change(gui, "update_checks", enabled)
@@ -752,7 +781,7 @@ async def updates(gui, lab):
         gui.backend._update_check_task = None
         component = QQmlComponent(gui.engine)
         component.setData(('import QtQml; QtObject { property bool startupContinued: false; '
-                           + function[0] + ' }').encode(), QUrl())
+                           + startup + ' }').encode(), QUrl())
         obj = component.create()
         require(obj is not None, "Production startup gate did not load")
         QMetaObject.invokeMethod(obj, "continueStartup")
@@ -764,8 +793,7 @@ async def updates(gui, lab):
             await asyncio.gather(task, return_exceptions=True)
         obj.deleteLater()
         await asyncio.sleep(0)
-    return {"native_update_tasks_scheduled": scheduled,
-            "scope": "Startup scheduling gate; no production update/install action is performed"}
+    return scheduled
 
 
 async def database(gui, lab):

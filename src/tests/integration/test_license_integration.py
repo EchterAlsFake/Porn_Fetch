@@ -2,13 +2,13 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
-from types import SimpleNamespace
 
 from PySide6.QtCore import QCoreApplication, QFile
 
 from src.backend.download_manager import DownloadListModel
 from src.backend.license_bridge import LicenseBridge, load_production_config
 from src.licensing import LicenseError, LicenseStatus
+from src.shared.media import VideoObject
 
 
 class FakeLicenseClient:
@@ -80,14 +80,10 @@ class LicenseIntegrationTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_download_model_uses_license_status_allowed(self) -> None:
         model = DownloadListModel(premium_access=lambda: self.bridge.isPremium)
-        video = SimpleNamespace(selected_quality="720")
-        model._items.append({
-            "jobId": "one",
-            "availableQualities": ["720", "1080"],
-            "selectedQuality": "720",
-            "_video": video,
-        })
-        model._row_by_id["one"] = 0
+        video = VideoObject(url="https://example.test/video", title="Example", author="",
+                            length=None, tags=[], thumbnail_url="", video_id="one",
+                            publish_date=None, qualities=[720, 1080], status="pending", identifier="one")
+        model.add_video(video, "720")
 
         self.assertFalse(model.set_video_quality("one", "1080"))
         self.bridge._set_status(LicenseStatus("valid", True))

@@ -14,6 +14,8 @@ def collection_cases(overrides=None):
             profiles.setdefault(fixture["provider"], fixture["url"])
     # The former Cory Chase fixture's native profile endpoint returns HTTP 500.
     profiles["xnxx"] = "https://www.xnxx.com/pornstar/alex_adams69"
+    # Brazzers now lists mostly referrals and has too few native scenes for range checks.
+    profiles["porn"] = "https://www.porn.com/mia-khalifa"
     playlists = {
         "pornhub": "https://www.pornhub.com/playlist/119820351",
         "xvideos": "https://de.xvideos.com/favorite/89127817/playlist_3",

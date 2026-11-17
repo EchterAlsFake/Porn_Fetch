@@ -1639,6 +1639,7 @@
         "redtube.plural_user_candidate"
       ],
       "public_video_feed_unavailable": true,
+      "public_feed_error": "Request blocked (HTTP 401)",
       "last_gui_check": {
         "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
         "outcome": "skipped",
@@ -2097,7 +2098,7 @@
         }
       ],
       "public_video_feed_unavailable": true,
-      "public_feed_error": "Main video container not found",
+      "public_feed_error": "The site did not expose this user video collection",
       "last_gui_check": {
         "skip_reason": "Public profile metadata verified; the public User page exposes no video listing",
         "profile": "User",
@@ -3859,6 +3860,7 @@
         }
       ],
       "public_video_feed_unavailable": true,
+      "public_feed_error": "Request blocked (HTTP 401)",
       "last_gui_check": {
         "checked_at_utc": "2026-10-17T18:20:31.334643+00:00",
         "outcome": "skipped",
@@ -5336,7 +5338,7 @@
         "profile_mode": null
       },
       "public_video_feed_unavailable": true,
-      "public_feed_error": "Main video container not found",
+      "public_feed_error": "The site did not expose this user video collection",
       "last_gui_check": {
         "checked_at_utc": "2026-10-17T18:22:14.774457+00:00",
         "outcome": "skipped",

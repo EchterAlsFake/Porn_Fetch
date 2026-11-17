@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 
 from base_api import BaseCore
 from base_api.modules.static_functions import parse_retry_after
-from PySide6.QtCore import QCoreApplication, QEvent, QMetaObject, QPointF, Qt, QUrl
+from PySide6.QtCore import Q_ARG, QCoreApplication, QEvent, QMetaObject, QPointF, Qt, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuick import QQuickWindow
@@ -306,17 +306,20 @@ ApplicationWindow {
         QGuiApplication.processEvents()
 
     def provider(self, name):
-        button = (self.control("text", name) if self.layout == "desktop"
-                  else self.control("objectName", "mobileAccountProviderSelector"))
-        point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2)).toPoint()
-        QTest.mouseClick(self.window, Qt.MouseButton.LeftButton, pos=point)
-        if self.layout == "mobile":
-            QTest.keyClick(self.window, Qt.Key.Key_Home)
-            for _ in range(PROVIDERS.index(name)):
-                QTest.keyClick(self.window, Qt.Key.Key_Down)
-            QTest.keyClick(self.window, Qt.Key.Key_Return)
-        QGuiApplication.processEvents()
         key = "selectedProvider" if self.layout == "desktop" else "provider"
+        if self.page.property(key) == name:
+            return
+        if self.layout == "desktop":
+            button = self.control("text", name)
+            point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2)).toPoint()
+            QTest.mouseClick(self.window, Qt.MouseButton.LeftButton, pos=point)
+        else:
+            selector = self.control("objectName", "mobileAccountProviderSelector")
+            index = PROVIDERS.index(name)
+            require(selector.setProperty("currentIndex", index), "Could not select the mobile provider")
+            require(QMetaObject.invokeMethod(selector, "activated", Qt.ConnectionType.DirectConnection, Q_ARG(int, index)),
+                    "Could not activate the mobile provider")
+        QGuiApplication.processEvents()
         require(self.page.property(key) == name, "Provider selection did not update")
 
     def field(self, placeholder, text):

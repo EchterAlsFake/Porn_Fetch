@@ -186,8 +186,8 @@ async def test_profile_url(backend, model, case: dict, *, timeout: float = 90, i
                 case["url"], "$index-$title", VideoFilters(), pages=1, iterator_config=options,
             )
         except Exception as error:
-            # Tube8's verified public User page has no video container. Only
-            # this recorded feed failure qualifies; unrelated errors still fail.
+            # Require the recorded feed error after verifying the public
+            # identity. Other failures in the same fixture still fail the test.
             expected_error = case.get("public_feed_error")
             if (case.get("public_video_feed_unavailable") and expected_error
                     and expected_error in str(error) and model.rowCount() == before):

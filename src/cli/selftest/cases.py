@@ -1,5 +1,8 @@
 """Live URLs used by the opt-in CLI diagnostics."""
 
+EPORNER_VIDEO = "https://www.eporner.com/video-pGbH30fhDxD/"
+XFREEHD_VIDEO = "https://beta.xfreehd.com/video/955181"
+
 SINGLE_VIDEO_TESTS = [
     ("YouJizz", "https://www.youjizz.com/videos/video-48914471.html"),
     ("Porn.com", "https://www.porn.com/scene/208974141"),
@@ -10,14 +13,14 @@ SINGLE_VIDEO_TESTS = [
     ("XHamster", "https://xhamster.com/videos/yoga-instructor-guides-us-during-hardcore-sex-xhLLvCd"),
     ("XNXX", "https://www.xnxx.com/video-1gav4l94/allein_im_seehaus_mit_meiner_stieftochter"),
     ("XVideos", "https://de.xvideos.com/video.omtdluc3e5f/52563166/0/"),
-    ("Eporner", "https://www.eporner.com/video-5cgl1zr2c8b/"),
+    ("Eporner", EPORNER_VIDEO),
     ("SpankBang", "https://spankbang.com/a4u5v/video/"),
     ("YouPorn", "https://www.youporn.com/watch/196323191/"),
     ("Beeg", "https://beeg.com/-0785353135636417"),
     ("RedTube", "https://de.redtube.com/191071081"),
     ("Thumbzilla", "https://www.thumbzilla.com/watch/264561861/"),
     ("Tube8", "https://www.tube8.com/porn-video/264330411/"),
-    ("XFreeHD", "https://beta.xfreehd.com/video/1092426/jmonn-omg-the-latest-cchd-23-10-26"),
+    ("XFreeHD", XFREEHD_VIDEO),
     ("Porntrex", "https://www.porntrex.com/video/3140379/nikky-dandeli-she-really-loves-to-ride-a-dick-with-her-huge-ass-light-footjob-and-cum-on-feet"),
     ("EMPFlix", "https://www.empflix.com/amateur-porn/ryan-reid-seduces-hot-couple-kylie-rocket-and-mick-in-bnb-threesome/video3728878"),
     ("TNAFlix", "https://www.tnaflix.com/amateur-porn/You%27re-The-Boss-%28full-movie%29/video11751954"),

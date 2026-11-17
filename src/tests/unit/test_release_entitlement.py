@@ -1,10 +1,11 @@
 """Release signatures, artifact binding, and license-free installation."""
+import io
 import json
 import os
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
-from contextlib import asynccontextmanager, contextmanager
+from contextlib import asynccontextmanager, contextmanager, redirect_stderr
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -152,14 +153,14 @@ class SignedReleaseTests(unittest.IsolatedAsyncioTestCase):
             )) as fetch,
         ):
             resource.return_value.exists.return_value = False
-            update = await CheckUpdates.check_signed_repository()
+            update = await CheckUpdates.check_signed_repository(channel="stable")
             self.assertEqual(update["changelog"].strip(), notes)
             fetch.assert_awaited_once_with(
                 "https://api.pornfetch.to/repo/stable/linux_amd64/CHANGELOG_STATIC.md",
                 allow_redirects=False,
             )
             fetch.return_value = b"Unverified replacement notes"
-            update = await CheckUpdates.check_signed_repository()
+            update = await CheckUpdates.check_signed_repository(channel="stable")
             self.assertEqual(update["changelog"], notes)
 
     def test_changed_release_date_and_wrong_root_rejected(self):
@@ -285,7 +286,7 @@ class CliFreeUpdateTests(unittest.TestCase):
                 patch.object(self_update, "_stage_bundle") as stage,
                 patch("subprocess.Popen") as launch,
             ):
-                self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=True), 0)
+                self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=True, channel="stable"), 0)
                 download.assert_called_once()
                 stage.assert_called_once()
                 launch.assert_called_once()
@@ -294,7 +295,13 @@ class CliFreeUpdateTests(unittest.TestCase):
     def test_cli_missing_release_date_cannot_install(self):
         from unittest.mock import MagicMock
         updater = MagicMock()
-        updater.get_targetinfo.return_value = SimpleNamespace(custom={"version":"999.0"})
-        with tempfile.TemporaryDirectory() as cache, patch.object(self_update, "Updater", return_value=updater), patch.object(self_update,"user_cache_dir",return_value=cache):
-            self.assertEqual(self_update.run_self_update(check_only=False,assume_yes=True),1)
+        updater.get_targetinfo.return_value = SimpleNamespace(length=123, custom={"version": "999.0", "channel": "stable"})
+        with (
+            tempfile.TemporaryDirectory() as cache,
+            patch.object(self_update, "Updater", return_value=updater),
+            patch.object(self_update, "user_cache_dir", return_value=cache),
+            redirect_stderr(io.StringIO()) as errors,
+        ):
+            self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=True, channel="stable"), 1)
+            self.assertIn("Release timestamp is missing or invalid", errors.getvalue())
             updater.download_target.assert_not_called()

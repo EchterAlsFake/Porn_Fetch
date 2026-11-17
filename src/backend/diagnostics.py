@@ -8,6 +8,7 @@ import asyncio
 from dataclasses import dataclass
 from src.backend.download_manager import VideoFilters
 from PySide6.QtTest import QAbstractItemModelTester, QSignalSpy
+from src.cli.selftest.cases import EPORNER_VIDEO, XFREEHD_VIDEO
 
 ALLOWED_QUALITIES = {144, 240, 250, 360, 450, 480, 540, 600, 720, 960, 1080, 1440, 2160}
 
@@ -114,7 +115,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="eporner",
-        url="https://www.eporner.com/video-5cgl1zr2c8b/"
+        url=EPORNER_VIDEO,
     ),
     WebsiteTest(
         name="spankbang",
@@ -142,7 +143,7 @@ TESTS = [
     ),
     WebsiteTest(
         name="xfreehd",
-        url="https://beta.xfreehd.com/video/1092426/jmonn-omg-the-latest-cchd-23-10-26"
+        url=XFREEHD_VIDEO,
     ),
     WebsiteTest(
         name="porntrex",

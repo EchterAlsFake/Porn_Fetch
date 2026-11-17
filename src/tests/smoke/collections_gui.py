@@ -25,6 +25,7 @@ class CollectionProbe:
     def __init__(self):
         self.stage = ""
         self.pages, self.items, self.candidates = [], {}, []
+        self.page_counts, self.page_indices = {}, {}
         self.stack = ExitStack()
 
     def __enter__(self):
@@ -36,12 +37,20 @@ class CollectionProbe:
 
         async def page(helper, job, *args, **options):
             stage = self.stage
+            # Indexed providers create a separate Helper for each page. Each
+            # Helper starts at index zero, even on a later source page.
+            index = self.page_counts.get(stage, 0)
+            self.page_counts[stage] = index + 1
+            self.page_indices[stage, helper, job.index] = index
             result = await page_method(helper, job, *args, **options)
             query = parse_qs(urlsplit(job.url).query)
-            self.pages.append({"stage": stage, "index": job.index, "url": public_url(job.url),
+            items = result.items
+            if helper.constructor.__module__.split(".", 1)[0] == "porn_api":
+                items = [item for item in items if not urlsplit(item.data.get("link_url") or "").path.startswith("/out/")]
+            self.pages.append({"stage": stage, "index": index, "url": public_url(job.url),
                                "pagination_query": {key: query[key] for key in ("page", "p") if key in query},
-                               "items": len(result.items),
-                               "video_keys": [video_key(item.url) for item in result.items],
+                               "items": len(items), "listing_cards": len(result.items),
+                               "video_keys": [video_key(item.url) for item in items],
                                "error": str(result.result.error) if result.result is not None else None})
             return result
 
@@ -49,7 +58,7 @@ class CollectionProbe:
             stage = self.stage
             result = await item_method(helper, job, *args, **options)
             if result.result is not None and result.result.succeeded:
-                self.items[stage, id(result.result.item)] = job.page_index
+                self.items[stage, id(result.result.item)] = self.page_indices[stage, helper, job.page_index]
             return result
 
         async def prepare(value):

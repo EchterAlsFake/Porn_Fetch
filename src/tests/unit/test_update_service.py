@@ -182,13 +182,13 @@ class AsyncUpdateServiceTests(unittest.IsolatedAsyncioTestCase):
                 patch("src.backend.update_service.verify_repository_manifest", return_value=(metadata, release)):
             resource.return_value.exists.return_value = False
             root.read_bytes.return_value = b"root"
-            self.assertIsNone(await CheckUpdates.check_signed_repository())
-            update = await CheckUpdates.check_signed_repository(include_current=True)
+            self.assertIsNone(await CheckUpdates.check_signed_repository(channel="stable"))
+            update = await CheckUpdates.check_signed_repository(include_current=True, channel="stable")
             self.assertEqual(update["version"], "3.9")
             self.assertEqual(update["download_size"], 500_000_000)
             release["version"] = "3.8"
             with self.assertRaisesRegex(ValueError, "older"):
-                await CheckUpdates.check_signed_repository(include_current=True)
+                await CheckUpdates.check_signed_repository(include_current=True, channel="stable")
 
     async def test_tor_metadata_errors_report_the_response_without_unsigned_fallback(self):
         from src.shared.service_transport import ServicePolicy, TorServiceFailure

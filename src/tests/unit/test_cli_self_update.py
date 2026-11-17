@@ -56,7 +56,7 @@ class CliUpdateTests(unittest.TestCase):
                         patch.object(self_update, "user_cache_dir", return_value=temporary), \
                         patch.object(self_update, "Updater") as updater, redirect_stdout(io.StringIO()) as output:
                     updater.return_value.get_targetinfo.return_value.custom = {"version": "3.9.1", "channel": "stable"}
-                    self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False), 0)
+                    self.assertEqual(self_update.run_self_update(check_only=False, assume_yes=False, channel="stable"), 0)
                     if configured:
                         for key, value in configured.items():
                             self.assertEqual(os.environ[key], value)
@@ -187,7 +187,7 @@ class CliUpdateTests(unittest.TestCase):
                             redirect_stdout(io.StringIO()) as output:
                         on_staged = Mock()
                         self.assertEqual(self_update.run_self_update(
-                            check_only=False, assume_yes=False, on_staged=on_staged), 0)
+                            check_only=False, assume_yes=False, on_staged=on_staged, channel="stable"), 0)
                         on_staged.assert_not_called()
                     self.assertIn("No newer stable update is available", output.getvalue())
                     license_service.assert_not_called()
@@ -212,13 +212,13 @@ class CliUpdateTests(unittest.TestCase):
                             patch("builtins.input", side_effect=confirm_download) as confirm, \
                             patch.object(self_update.subprocess, "Popen") as launch, \
                             redirect_stdout(io.StringIO()) as staged_output:
-                        self.assertEqual(self_update.run_self_update(check_only=True, assume_yes=False), 0)
+                        self.assertEqual(self_update.run_self_update(check_only=True, assume_yes=False, channel="stable"), 0)
                         self.assertIn("Download size:", staged_output.getvalue())
                         confirm.assert_not_called()
                         staged_output.truncate(0)
                         staged_output.seek(0)
                         self.assertEqual(self_update.run_self_update(
-                            check_only=False, assume_yes=False, on_staged=on_staged), 0)
+                            check_only=False, assume_yes=False, on_staged=on_staged, channel="stable"), 0)
                     confirm.assert_called_once()
                     launch.assert_called_once()
                     on_staged.assert_called_once_with()

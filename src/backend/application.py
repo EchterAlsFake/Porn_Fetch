@@ -8,11 +8,18 @@ from pathlib import Path
 import multiprocessing as mp
 
 from PySide6.QtCore import QResource
+_native_android = (
+    sys.platform == "android" or hasattr(sys, "getandroidapilevel")
+    or "ANDROID_ARGUMENT" in os.environ or "ANDROID_BOOTSTRAP" in os.environ
+)
 _rcc_candidate = Path(__file__).resolve().parents[1] / "frontend" / "resources.rcc"
-if _rcc_candidate.is_file():
-    QResource.registerResource(str(_rcc_candidate))
-else:
-    import src.frontend.UI.resources # Fallback when binary resource is not pre-compiled
+_packaged_resources = (
+    "__compiled__" in globals() or getattr(sys, "frozen", False)
+    or _native_android or sys.platform == "ios"
+)
+if not (_packaged_resources and _rcc_candidate.is_file()
+        and QResource.registerResource(str(_rcc_candidate))):
+    import src.frontend.UI.resources  # Use the tracked resources in source runs.
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
@@ -28,13 +35,7 @@ from src.backend.qt_logging import install_wayland_message_filter
 # --- MULTIPROCESSING SAFE SPLASH SCREEN ---
 # We check if this is the main process. If so, we initialize the GUI.
 # If it's a child process, we skip GUI initialization and set them to None.
-is_android = (
-    sys.platform == "android"
-    or hasattr(sys, "getandroidapilevel")
-    or "ANDROID_ARGUMENT" in os.environ
-    or "ANDROID_BOOTSTRAP" in os.environ
-    or "--android" in sys.argv
-)
+is_android = _native_android or "--android" in sys.argv
 is_ios = sys.platform == "ios"
 is_mobile = is_android or is_ios
 is_main_process = mp.current_process().name == 'MainProcess' and "unittest" not in sys.modules and not os.environ.get("PORN_FETCH_TEST_ENV")
