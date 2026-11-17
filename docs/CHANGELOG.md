@@ -839,7 +839,7 @@ to be refactored.
 # 3.9.1
 - Fixed PornHub 410 Resource Gone Error
 
-# 4.0 (Beta development, unreleased)
+# 4.0
 ## Website support and downloads
 - Added Porndoe videos, pornstar profiles and channels, using MP4 downloads.
 - Added Pornhat videos, model profiles and channels, including supported localized
