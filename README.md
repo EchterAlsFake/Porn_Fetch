@@ -248,14 +248,8 @@ See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS
 
 ## 🌍 Translating
 
-> [!CAUTION]
-> Translations are still being brought up to date for 3.9. Please check with me
-> before starting a large translation update.
-
-Currently available in:
-- English
-
-<br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/TRANSLATING.md).
+GUI translations for German, Spanish, Hindi, and Simplified Chinese are planned for 4.0.
+See the [translation guide](docs/TRANSLATING.md) for generation and previews.
 
 ## 👏 Credits
 - GUI: [Qt](https://qt.io) for Python

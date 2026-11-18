@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en" sourcelanguage="en">
 <context>
     <name>AccountLoginHelp</name>
     <message>
@@ -388,7 +388,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <location line="+5"/>
+        <source>Any</source>
+        <comment>No minimum or maximum video resolution in the filter</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
@@ -974,12 +981,12 @@
     </message>
     <message>
         <location line="+207"/>
-        <location line="+477"/>
+        <location line="+472"/>
         <source>Import license file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-476"/>
+        <location line="-471"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1080,7 +1087,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+32"/>
+        <source>Best available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Middle quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Lowest quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Prefer content language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1316,11 +1338,6 @@
     </message>
     <message>
         <location line="+25"/>
-        <source>English only. Translations are not available yet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
         <source>Content language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1739,14 +1756,7 @@ Use a provider you trust. A proxy can see connection information and does not au
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Porn Fetch is currently English-only. The translation files and translation service are unfinished, so this control is disabled.
-
-The content-language setting is separate: it requests translated titles from supported websites.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Choose the text size used in the interface. A larger value makes text easier to read but leaves less room for controls.
 
 Long help messages and settings pages can be scrolled.</source>
@@ -1934,7 +1944,12 @@ For Linux source runs that need Strict mode, use sudo -E .venv/bin/python main.p
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+12"/>
+        <source>Choose the language for menus, buttons and dialogs. Restart Porn Fetch to apply the change. The content language requests translated titles from supported websites.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Choose the colour used for selected controls, highlights and other interface details.
 
 This changes the appearance only. High contrast can override the accent colour.</source>
@@ -2043,7 +2058,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+901"/>
+        <location filename="../../../backend/application.py" line="+906"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2194,7 +2209,17 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+90"/>
+        <source>The selected PocketBase data directory already exists. It will be used after restart, but the current data will not be moved into it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The PocketBase data directory will be moved after the application shuts down.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>Open Qt Maintenance Tool?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2573,17 +2598,17 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     </message>
     <message>
         <location line="+21"/>
-        <source>Checked %s files: %s missing, %s changed, %s unreadable.</source>
+        <source>Checked files: %(checked)d. Missing: %(missing)d. Changed: %(changed)d. Unreadable: %(unreadable)d.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Full verification: %s files hashed.</source>
+        <location line="+1"/>
+        <source>Quick check. Unchanged since the last checksum check: %(unchanged)d. Hashed: %(hashed)d.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Quick check: %s files unchanged since their last checksum check; %s files hashed.</source>
+        <source>Full verification: %s files hashed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2612,7 +2637,17 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+6"/>
+        <source>Library migration and file relocation currently require desktop filesystem access.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Stop scans and pause downloads before managing library storage.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Storage operation stopped</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2622,17 +2657,62 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
-        <source>Library imported. Imported subscriptions have startup scans and automatic downloads turned off. Use Locate moved files to update paths on this device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Updated %s completed video records and %s subscription destinations.</source>
+        <location line="+34"/>
+        <source>Preview the operation first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
+        <source>Clear the Downloads queue before importing a library. Saved completed files are kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Library imported. Imported subscriptions have startup scans and automatic downloads turned off. Use Locate moved files to update paths on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Files changed since the preview. Preview the move again before continuing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Updated completed video records: %(videos)d. Updated subscription destinations: %(folders)d.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+242"/>
+        <source>This video belongs to a different subscription.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+140"/>
+        <source>Choose a download destination in this subscription&apos;s settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>This video does not offer a stream at 720p or below for the free preview. Higher resolutions require Premium.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This video does not offer the requested quality.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>The saved quality is no longer available. Choose another quality in Downloads; existing progress was kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>The download could not be started. Check the selected quality and destination.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-448"/>
         <source>%s missing files were marked for retry. Choose Download all videos to fetch them into the new destination.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3144,7 +3224,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
 <context>
     <name>CreatorsPage</name>
     <message>
-        <location filename="../../UI/CreatorsPage.qml" line="+54"/>
+        <location filename="../../UI/CreatorsPage.qml" line="+63"/>
         <source>Not yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3176,11 +3256,6 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     </message>
     <message>
         <location line="+5"/>
-        <source>+ Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
         <source>+ Add subscription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3391,19 +3466,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+85"/>
-        <source>%1 videos found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-85"/>
-        <location line="+85"/>
-        <source> · %1 pages reached</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-84"/>
+        <location line="+2"/>
         <source>Finish sample scan</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3542,7 +3605,7 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-446"/>
+        <location line="-455"/>
         <source>Best available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3556,8 +3619,38 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
         <source>Lowest quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location line="+24"/>
+        <source>%n video(s) found</source>
+        <extracomment>Number of video links found during a creator scan, including links already in the library.</extracomment>
+        <translation>
+            <numerusform>%n video found</numerusform>
+            <numerusform>%n videos found</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+2"/>
+        <source>%n page(s) reached</source>
+        <extracomment>Number of source listing pages reached by the same scan.</extracomment>
+        <translation>
+            <numerusform>%n page reached</numerusform>
+            <numerusform>%n pages reached</numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+181"/>
+        <location line="+2"/>
+        <source>%1 · %2</source>
+        <extracomment>%1 and %2 are the complete video count and page count above.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+161"/>
+        <source>+ Add</source>
+        <comment>Short button that opens the creator subscription form</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Import library</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3748,6 +3841,19 @@ uv run python Porn_Fetch_CLI.py --install-pocketbase
     <message>
         <location filename="../../UI/CreatorsPreview.qml" line="+9"/>
         <source>Porn Fetch · Creator library preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DatabaseBridge</name>
+    <message>
+        <location filename="../../../database/bridge.py" line="+92"/>
+        <source>Could not save download history: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Could not refresh download history: %s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4185,7 +4291,14 @@ Arrow keys change a focused quality selection or number input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+9"/>
+        <location line="+7"/>
+        <source>Any</source>
+        <comment>No minimum or maximum video resolution in the filter</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-5"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4228,6 +4341,47 @@ Arrow keys change a focused quality selection or number input.</source>
         <location line="-941"/>
         <location line="+950"/>
         <source>Keyboard shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ErrorReporting</name>
+    <message>
+        <location filename="../../../shared/error_reporting.py" line="+28"/>
+        <source>Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a report after an operation fails. You can decline and still use all app features.
+
+Your reports stay private with me. I never publish them or share them with anyone. I am not interested in what you watch or download. I do not go through reported video URLs to see what you watched; I use diagnostic information only to reproduce and fix application errors.
+
+Choose how much to include
+Basic reports contain the correlation ID, timestamp, app/OS information, error type, operation, code location, and provider or selected quality when available. They exclude exception messages, video URLs, local file paths and Python tracebacks.
+
+Full error reports make a significant difference: they often give me the details I need to identify an issue immediately and fix it much faster. Each fix benefits everyone using Porn Fetch.
+
+Only if you separately choose full tracebacks do reports include the following additional details.
+
+What a report contains
+- A random correlation ID to identify that error.
+- The UTC timestamp, app version, operating system and CPU architecture.
+- The full Python traceback, including chained exceptions, error messages, source-code lines, filenames and line numbers.
+- The video URL that caused the failure, including its path and query string, when available. Related playlist, model or source URLs may also be included.
+- The operation, code location and diagnostic context, such as the provider and selected quality.
+
+These details can reveal which adult content you accessed. URLs, error messages and file paths can contain sensitive or personal information, such as account details, URL tokens or your local username. Reports are not anonymous. Python local-variable dumps, browsing history and download records are not collected. The app does not attach account credentials, cookies or authorization headers, but sensitive values may appear in the traceback or URLs.
+
+How reports are sent
+Reports are sent over HTTPS directly to my server at api.pornfetch.to/error_log. I store them securely, never share them with third parties and use them only to reproduce, diagnose and fix application errors. Media-provider proxy settings do not control this connection; the app&apos;s All app traffic Tor setting applies separately.
+
+The server receives connection metadata while handling the request. It is configured not to log or store client IP addresses in diagnostic records. If sending a report fails, your download continues.
+
+Storage and deletion
+I store reports privately in PocketBase and delete them manually. I plan to delete them when I publish the next version. There is no fixed storage period or automatic cleanup.
+
+Turning this off stops future reports. It does not delete reports already sent or change the lawfulness of their earlier processing. To request deletion, send the correlation ID to support@echteralsfake.me.
+
+If you previously enabled reports containing only structural diagnostics, you must choose again before these more detailed reports can be sent.
+
+Privacy details: https://pornfetch.to/privacy_policy</source>
+        <extracomment>Full privacy disclosure in first-run setup and Settings. Preserve its meaning and first-person voice.</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4465,6 +4619,20 @@ Arrow keys change a focused quality selection or number input.</source>
     </message>
 </context>
 <context>
+    <name>GuiLanguageSelector</name>
+    <message>
+        <location filename="../../UI/GuiLanguageSelector.qml" line="+13"/>
+        <location line="+6"/>
+        <source>Interface language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Restart Porn Fetch to apply the interface language.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HelpButton</name>
     <message>
         <location filename="../../UI/HelpButton.qml" line="+9"/>
@@ -4518,14 +4686,7 @@ Special thanks to [Egsagon](https://github.com/Egsagon), whose original PHUB API
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Thank you for the code, bug reports, ideas and translations contributed to earlier versions. The current interface is English-only.
-
-[Egsagon](https://github.com/Egsagon) · [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) · [Joshua-auhsoj](https://github.com/Joshua-auhsoj) · [RonLar1132](https://github.com/RonLar1132) · [xxIndirect](https://github.com/xxIndirect) · [efraxs](https://github.com/efraxs) · [omar-st](https://github.com/omar-st) · [SShattered](https://github.com/SShattered) · [journeym](https://github.com/journeym) · [Joly0](https://github.com/Joly0) · [FatalPuppet](https://github.com/FatalPuppet) · [HeathenSkwerl](https://github.com/HeathenSkwerl)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Built with</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4553,7 +4714,14 @@ Each component keeps its own license. The third-party notices contain the licens
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-7"/>
+        <source>Thank you for the code, bug reports, ideas and translations contributed to earlier versions.
+
+[Egsagon](https://github.com/Egsagon) · [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) · [Joshua-auhsoj](https://github.com/Joshua-auhsoj) · [RonLar1132](https://github.com/RonLar1132) · [xxIndirect](https://github.com/xxIndirect) · [efraxs](https://github.com/efraxs) · [omar-st](https://github.com/omar-st) · [SShattered](https://github.com/SShattered) · [journeym](https://github.com/journeym) · [Joly0](https://github.com/Joly0) · [FatalPuppet](https://github.com/FatalPuppet) · [HeathenSkwerl](https://github.com/HeathenSkwerl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Application-owned material uses the **Porn Fetch Source-Available License 1.0**. Earlier GPL copies retain their original rights.
 
 Thanks to the authors of the libraries, icons and other assets used by Porn Fetch. Full contributor and asset credits are kept in the repository.</source>
@@ -4975,6 +5143,14 @@ Thanks to the authors of the libraries, icons and other assets used by Porn Fetc
     </message>
 </context>
 <context>
+    <name>LicenseBridge</name>
+    <message>
+        <location filename="../../../backend/license_bridge.py" line="+80"/>
+        <source>Lifetime / Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LicenseOfferContent</name>
     <message>
         <location filename="../../UI/LicenseOfferContent.qml" line="+53"/>
@@ -5088,6 +5264,159 @@ No subscription.</source>
     <message>
         <location line="+22"/>
         <source>Continue with free version</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LicenseStatus</name>
+    <message>
+        <location filename="../../../licensing/service.py" line="+17"/>
+        <source>No production license is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lifetime Premium is active. Every future Porn Fetch update and feature I release is included.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Connect to activate this installation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The license was imported, but this installation was previously deactivated. The licensing server is unavailable, so reactivation could not finish. Restore the connection or retry when my emergency licensing service is enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The server was reached but activation did not complete. Please retry or contact support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The license server cannot be reached. Initial access is available for up to 3 days from first import; online validation is still required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The initial 3-day grace period has ended. Connect to validate your license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>My licensing server is unavailable. Temporary Premium access is active through my emergency licensing service.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License server unavailable. Using the last successful validation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Please connect to validate your license; the 7-day offline grace has ended.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License authentication was denied. The license may be suspended; please contact support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This license is suspended. Please contact support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The licensing server has revoked this license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This license has reached its activation limit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The licensing server rejected this license.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The licensing server could not find this license or machine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This installation has been deactivated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Deactivation is pending network access.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Deactivation failed. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Please correct the system clock and validate again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The signed license validation is dated in the future. Check your date, time and time zone, enable automatic time synchronization, then refresh. If your clock is correct, the licensing server clock may be incorrect; please contact support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Local licensing data could not be read. Contact support before resetting it to preserve your installation identity.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The installed license or cached validation could not be verified. Please validate online again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Network unavailable. Connect to complete license activation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License server unavailable. Please try again shortly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The license server returned an unreadable response. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This beta license belongs to an older licensing system and is no longer valid for the production release.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>For help, contact support@echteralsfake.me.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>The fallback licensing server can only be reached without Tor. To try it, turn Tor routing Off in Privacy settings, then refresh your license. This connects directly to echteralsfake.me.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5890,6 +6219,24 @@ Stopping downloads and saving application state.</source>
     </message>
 </context>
 <context>
+    <name>QualityComboBox</name>
+    <message>
+        <location filename="../../UI/QualityComboBox.qml" line="+129"/>
+        <source>Best available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Middle quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lowest quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RemoteNavigation</name>
     <message>
         <location filename="../../UI/RemoteNavigation.qml" line="+425"/>
@@ -5969,26 +6316,30 @@ Stopping downloads and saving application state.</source>
     </message>
     <message>
         <location line="+61"/>
+        <location line="+72"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-72"/>
+        <location line="+72"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-72"/>
+        <location line="+72"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-72"/>
+        <location line="+72"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-72"/>
         <source>UI</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6000,13 +6351,13 @@ Stopping downloads and saving application state.</source>
     <message>
         <location line="+5"/>
         <location line="+15"/>
-        <location line="+1300"/>
+        <location line="+1286"/>
         <location line="+2"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1316"/>
+        <location line="-1302"/>
         <source>Reset settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6026,19 +6377,59 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+94"/>
+        <location line="+8"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>%1 settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+70"/>
         <location line="+5"/>
         <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+3"/>
+        <source>Best available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Middle quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Lowest quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <location line="+4"/>
         <source>Model Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+3"/>
+        <source>Both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Uploaded videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Featured videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Content Language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6141,12 +6532,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>Network delay (requests/sec):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+14"/>
         <source>Network delay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6181,12 +6567,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Processing Delay (videos/sec):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+17"/>
         <source>Processing Delay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6291,7 +6672,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+139"/>
         <source>Theme accessibility</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6301,19 +6682,29 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-625"/>
+        <location line="-611"/>
         <source>Check for app updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="-740"/>
-        <location line="+1302"/>
+        <location line="+1288"/>
         <location line="+6"/>
         <source>Get lifetime Premium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-551"/>
+        <location line="-858"/>
+        <source>Delay between requests (seconds):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+69"/>
+        <source>Processing delay (seconds):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+252"/>
         <source>System notifications when the app is inactive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6470,22 +6861,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Graphical User Interface language:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Graphical User Interface Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Porn Fetch is English-only. Translations are not available yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+59"/>
+        <location line="+86"/>
         <source>Reduce motion</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6604,6 +6980,31 @@ Stopping downloads and saving application state.</source>
     <message>
         <location line="+35"/>
         <source>Initializing...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../backend/application.py" line="-1756"/>
+        <source>Importing (General).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Importing (Qt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Importing (Backend)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Importing (Frontend).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1954"/>
+        <source>Loading Window...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6936,6 +7337,15 @@ Stopping downloads and saving application state.</source>
     </message>
 </context>
 <context>
+    <name>UiTranslation</name>
+    <message>
+        <location filename="../../../backend/ui_translation.py" line="+60"/>
+        <source>System default</source>
+        <extracomment>Option in Appearance settings. Follow the operating system&apos;s preferred UI languages.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UkraineMessageContent</name>
     <message>
         <location filename="../../UI/UkraineMessageContent.qml" line="+17"/>
@@ -7055,7 +7465,7 @@ If you are using only the GUI this will not affect your user experience, but may
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+390"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+393"/>
         <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation type="unfinished"></translation>

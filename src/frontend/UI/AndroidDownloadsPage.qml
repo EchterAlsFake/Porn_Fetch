@@ -84,8 +84,8 @@ Pane {
             "author_regex": filterValue(authorRegex),
             "tags_regex": filterValue(tagsRegex),
             "title_regex": filterValue(titleRegex),
-            "quality_minimum": minQuality.currentText === "Any" ? null : minQuality.currentText,
-            "quality_maximum": maxQuality.currentText === "Any" ? null : maxQuality.currentText,
+            "quality_minimum": minQuality.currentIndex <= 0 ? null : minQuality.currentText,
+            "quality_maximum": maxQuality.currentIndex <= 0 ? null : maxQuality.currentText,
             "published_after": filterValue(afterDate),
             "published_before": filterValue(beforeDate)
         };
@@ -289,12 +289,12 @@ Pane {
                             AppComboBox {
                                 id: minQuality
                                 Layout.fillWidth: true
-                                model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
+                                model: [qsTr("Any", "No minimum or maximum video resolution in the filter"), "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
                             AppComboBox {
                                 id: maxQuality
                                 Layout.fillWidth: true
-                                model: ["Any", "144", "240", "360", "480", "720", "1080", "1440", "2160"]
+                                model: [qsTr("Any", "No minimum or maximum video resolution in the filter"), "144", "240", "360", "480", "720", "1080", "1440", "2160"]
                             }
                         }
                         AppTextField {

@@ -7,7 +7,10 @@ LANGUAGES = (
     ("zh_CN", "简体中文", "zh_CN"),
     ("fr", "Français", "fr"),
     ("it", "Italiano", "it"),
+    ("es", "Español", "es"),
+    ("hi_IN", "हिन्दी", "hi_IN"),
 )
+RELEASE_LOCALES = ("de_DE", "es", "hi_IN", "zh_CN")
 TRANSLATION_HELP_URL = "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/TRANSLATING.md"
 
 

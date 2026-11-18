@@ -160,7 +160,7 @@ QtObject {
         qsTr("A proxy forwards requests to websites for you. It affects Porn Fetch, not every app on your device.\n\nEnter the address and port from your proxy provider. Add a username and password only if the provider requires them, then test the connection.\n\nUse a provider you trust. A proxy can see connection information and does not automatically make you anonymous. All app traffic through Tor overrides this setting.")
 
     readonly property string guiLanguageHelp:
-        qsTr("Porn Fetch is currently English-only. The translation files and translation service are unfinished, so this control is disabled.\n\nThe content-language setting is separate: it requests translated titles from supported websites.")
+        qsTr("Choose the language for menus, buttons and dialogs. Restart Porn Fetch to apply the change. The content language requests translated titles from supported websites.")
 
     readonly property string fontSizeHelp:
         qsTr("Choose the text size used in the interface. A larger value makes text easier to read but leaves less room for controls.\n\nLong help messages and settings pages can be scrolled.")

@@ -71,7 +71,7 @@ Pane {
             }
             CreditCard {
                 title: qsTr("Contributors")
-                content: qsTr("Thank you for the code, bug reports, ideas and translations contributed to earlier versions. The current interface is English-only.\n\n[Egsagon](https://github.com/Egsagon) · [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) · [Joshua-auhsoj](https://github.com/Joshua-auhsoj) · [RonLar1132](https://github.com/RonLar1132) · [xxIndirect](https://github.com/xxIndirect) · [efraxs](https://github.com/efraxs) · [omar-st](https://github.com/omar-st) · [SShattered](https://github.com/SShattered) · [journeym](https://github.com/journeym) · [Joly0](https://github.com/Joly0) · [FatalPuppet](https://github.com/FatalPuppet) · [HeathenSkwerl](https://github.com/HeathenSkwerl)")
+                content: qsTr("Thank you for the code, bug reports, ideas and translations contributed to earlier versions.\n\n[Egsagon](https://github.com/Egsagon) · [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) · [Joshua-auhsoj](https://github.com/Joshua-auhsoj) · [RonLar1132](https://github.com/RonLar1132) · [xxIndirect](https://github.com/xxIndirect) · [efraxs](https://github.com/efraxs) · [omar-st](https://github.com/omar-st) · [SShattered](https://github.com/SShattered) · [journeym](https://github.com/journeym) · [Joly0](https://github.com/Joly0) · [FatalPuppet](https://github.com/FatalPuppet) · [HeathenSkwerl](https://github.com/HeathenSkwerl)")
             }
             CreditCard {
                 title: qsTr("Built with")

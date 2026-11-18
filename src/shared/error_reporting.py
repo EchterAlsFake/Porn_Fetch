@@ -16,6 +16,7 @@ from urllib.parse import urlsplit, urlunsplit
 from base_api.modules.errors import MediaLoadErrors
 from curl_cffi.requests import AsyncSession
 
+from .translation_markers import QT_TRANSLATE_NOOP
 from .version import __version__
 
 ERROR_REPORT_URL = "https://api.pornfetch.to/error_log"
@@ -23,7 +24,8 @@ MAX_BODY_BYTES = 1_048_576
 ERROR_REPORT_CONSENT_VERSION = 2
 _LOGGER = logging.getLogger(__name__)
 
-ERROR_REPORT_DISCLOSURE = """Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a report after an operation fails. You can decline and still use all app features.
+#: Full privacy disclosure in first-run setup and Settings. Preserve its meaning and first-person voice.
+ERROR_REPORT_DISCLOSURE = QT_TRANSLATE_NOOP("ErrorReporting", """Error reports are optional and disabled until you explicitly enable them. If enabled, Porn Fetch automatically sends a report after an operation fails. You can decline and still use all app features.
 
 Your reports stay private with me. I never publish them or share them with anyone. I am not interested in what you watch or download. I do not go through reported video URLs to see what you watched; I use diagnostic information only to reproduce and fix application errors.
 
@@ -55,7 +57,7 @@ Turning this off stops future reports. It does not delete reports already sent o
 
 If you previously enabled reports containing only structural diagnostics, you must choose again before these more detailed reports can be sent.
 
-Privacy details: https://pornfetch.to/privacy_policy"""
+Privacy details: https://pornfetch.to/privacy_policy""")
 
 ERROR_REPORT_EXAMPLE = """Porn Fetch error report
 correlation_id=a1b2c3d4e5f6

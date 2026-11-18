@@ -34,7 +34,7 @@ uv run --no-sync main.py --android
 ```
 
 This checks the layout only. Android storage, signing and notifications need a
-real device. The interface is English-only.
+real device. See [GUI translations](TRANSLATING.md) for language previews.
 
 ## Android TV and Google TV
 

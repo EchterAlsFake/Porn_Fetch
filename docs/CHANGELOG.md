@@ -953,3 +953,9 @@ to be refactored.
   staging for iOS, dependency resolution, tests and release documentation.
 - Fixed CI import lint, nullable Porn.com HTML attributes and a Creators access
   callback during GUI teardown.
+
+# Translations
+- Added Hindi
+- Added Chinese (Simplified)
+- Added Spanish
+- Added German

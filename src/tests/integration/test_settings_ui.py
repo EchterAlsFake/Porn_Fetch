@@ -14,7 +14,7 @@ from src.tests.integration.settings_support import SettingsGUITestBase
 class TestUITabGUI(SettingsGUITestBase):
     """Verifies that every change made on the UI settings tab modifies the actual settings file."""
 
-    def test_gui_language_is_english_only(self) -> None:
+    def test_gui_language_has_an_english_fallback_without_an_adapter(self) -> None:
         control = self.find_control("guiLanguageComboBox")
         self.assertFalse(control.property("enabled"))
         self.assertEqual(control.property("currentText"), "English")

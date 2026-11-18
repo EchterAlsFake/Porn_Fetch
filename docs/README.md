@@ -1,7 +1,5 @@
 # Porn Fetch guides
 
-Porn Fetch is English-only. Translations are unfinished.
-
 - [Install or build the app](INSTALLATION.md)
 - [Terminal interface and keyboard navigation](CLI.md)
 - [Android](ANDROID.md), [Automotive](AUTOMOTIVE.md) and [iOS](iOS.md)

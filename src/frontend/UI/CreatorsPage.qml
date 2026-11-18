@@ -50,6 +50,15 @@ Pane {
             Label { Layout.fillWidth: true; visible: note.length > 0; text: note; color: Theme.muted; font.pixelSize: 12 * root.fontScale; wrapMode: Text.WordWrap }
         }
     }
+    function scanProgressText(discovered, pages) {
+        //: Number of video links found during a creator scan, including links already in the library.
+        const videos = qsTr("%n video(s) found", "", discovered || 0)
+        //: Number of source listing pages reached by the same scan.
+        const reached = pages > 0 ? qsTr("%n page(s) reached", "", pages) : ""
+        //: %1 and %2 are the complete video count and page count above.
+        return reached ? qsTr("%1 · %2").arg(videos).arg(reached) : videos
+    }
+
     function dateText(value) {
         if (!value) return qsTr("Not yet")
         var date = new Date(String(value).replace(/^(\d{4}-\d\d-\d\d) /, "$1T"))
@@ -208,7 +217,7 @@ Pane {
                 Flow {
                     objectName: "creatorLibraryActions"
                     Layout.fillWidth: true; spacing: 8
-                    CreatorButton { id: addButton; objectName: "creatorAddButton"; enabled: root.dataSource.available && !root.dataSource.transferBusy; text: root.compact ? qsTr("+ Add") : qsTr("+ Add subscription"); highlighted: true; onClicked: subscriptionDialog.present("", this) }
+                    CreatorButton { id: addButton; objectName: "creatorAddButton"; enabled: root.dataSource.available && !root.dataSource.transferBusy; text: root.compact ? qsTr("+ Add", "Short button that opens the creator subscription form") : qsTr("+ Add subscription"); highlighted: true; onClicked: subscriptionDialog.present("", this) }
                     CreatorButton { objectName: "creatorImportButton"; text: qsTr("Import library"); enabled: root.dataSource.available && !root.dataSource.transferBusy; onClicked: storageDialog.presentMigration("import", this) }
                     CreatorButton { objectName: "creatorExportButton"; text: qsTr("Export library"); enabled: root.dataSource.available && !root.dataSource.transferBusy; onClicked: storageDialog.presentMigration("export", this) }
                 }
@@ -378,7 +387,7 @@ Pane {
                         Label { Layout.fillWidth: true; color: Theme.ink; wrapMode: Text.WordWrap
                             text: !root.selectedSource ? "" : root.selectedSource.scan === "incomplete" ? (root.selectedSource.error || qsTr("Scan incomplete. A page could not be reached. Your discovered videos are safe; scan again to retry.")) : root.selectedSource.scan === "stopped" ? qsTr("Scan stopped. Discovered videos are kept. Scan again whenever you are ready.") : qsTr("Discovering videos. You can browse and download the videos already found.") }
                         ProgressBar { visible: root.selectedSource !== null && root.selectedSource.scan === "scanning"; Layout.fillWidth: true; indeterminate: visible; Accessible.name: qsTr("Scanning source pages") }
-                        Label { Layout.fillWidth: true; visible: root.selectedSource !== null && root.selectedSource.scan === "scanning"; text: root.selectedSource ? qsTr("%1 videos found").arg(root.selectedSource.scan_discovered || 0) + (root.selectedSource.scan_pages > 0 ? qsTr(" · %1 pages reached").arg(root.selectedSource.scan_pages) : "") : ""; color: Theme.muted; wrapMode: Text.WordWrap }
+                        Label { Layout.fillWidth: true; visible: root.selectedSource !== null && root.selectedSource.scan === "scanning"; text: root.selectedSource ? root.scanProgressText(root.selectedSource.scan_discovered, root.selectedSource.scan_pages) : ""; color: Theme.muted; wrapMode: Text.WordWrap }
                         CreatorButton { visible: root.dataSource.isPreview && root.selectedSource !== null && root.selectedSource.scan === "scanning"; text: qsTr("Finish sample scan"); onClicked: dataSource.finishScan(root.selectedId) }
                     }
                 }
@@ -463,7 +472,7 @@ Pane {
                             Layout.fillWidth: true; spacing: 4
                             Label { Layout.fillWidth: true; text: root.dateText(modelData.started) + " · " + (modelData.trigger === "startup" ? qsTr("Startup") : modelData.trigger === "initial" ? qsTr("First scan") : qsTr("Manual")); color: Theme.ink; wrapMode: Text.WordWrap }
                             CreatorStatus { status: modelData.status === "running" ? "scanning" : modelData.status === "cancelled" ? "stopped" : modelData.status }
-                            Label { Layout.fillWidth: true; text: qsTr("%1 videos found").arg(modelData.discovered || 0) + (modelData.pages > 0 ? qsTr(" · %1 pages reached").arg(modelData.pages) : ""); color: Theme.muted; wrapMode: Text.WordWrap }
+                            Label { Layout.fillWidth: true; text: root.scanProgressText(modelData.discovered, modelData.pages); color: Theme.muted; wrapMode: Text.WordWrap }
                             Label { Layout.fillWidth: true; visible: !!modelData.finished; text: qsTr("Finished: %1").arg(root.dateText(modelData.finished)); color: Theme.muted; wrapMode: Text.WordWrap }
                             Label { Layout.fillWidth: true; visible: !!modelData.error; text: modelData.error || ""; textFormat: Text.PlainText; color: Theme.muted; wrapMode: Text.WordWrap }
                         }

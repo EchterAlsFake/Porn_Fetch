@@ -89,7 +89,7 @@ class DatabaseBridge(QObject):
             if self._closing:
                 logging.getLogger(__name__).error("History write failed during shutdown: %s", error)
             else:
-                self.initializationFailed.emit(f"Could not save download history: {error}")
+                self.initializationFailed.emit(self.tr("Could not save download history: %s") % error)
         if not self._tasks:
             self.busyChanged.emit()
 
@@ -111,7 +111,7 @@ class DatabaseBridge(QObject):
         except asyncio.CancelledError:
             raise
         except Exception as error:
-            self.initializationFailed.emit(f"Could not refresh download history: {error}")
+            self.initializationFailed.emit(self.tr("Could not refresh download history: %s") % error)
 
     @Slot(object)
     def on_video_updated(self, video: VideoObject) -> None:

@@ -126,9 +126,9 @@ AppComboBox {
         let newItems = [];
 
         // 2. Add auto labels
-        newItems.push({ text: "Best", value: "best", isItemEnabled: checkEnabled("best") });
-        newItems.push({ text: "Half", value: "half", isItemEnabled: checkEnabled("half") });
-        newItems.push({ text: "Worst", value: "worst", isItemEnabled: checkEnabled("worst") });
+        newItems.push({ text: qsTr("Best available"), value: "best", isItemEnabled: checkEnabled("best") });
+        newItems.push({ text: qsTr("Middle quality"), value: "half", isItemEnabled: checkEnabled("half") });
+        newItems.push({ text: qsTr("Lowest quality"), value: "worst", isItemEnabled: checkEnabled("worst") });
 
         // 3. Add numeric heights
         for (let i = 0; i < heights.length; i++) {

@@ -4,7 +4,12 @@ on:
     paths:
       - 'src/frontend/**'
       - 'src/backend/**'
-      - 'scripts/translations.py'
+      - 'src/database/bridge.py'
+      - 'src/licensing/service.py'
+      - 'src/shared/error_reporting.py'
+      - 'scripts/translation*.py'
+      - 'docs/TRANSLATION_CONTEXT.md'
+      - '.github/workflows/generate_translations.yml'
       - '.github/workflows/translations.yml'
   workflow_dispatch:
 permissions:

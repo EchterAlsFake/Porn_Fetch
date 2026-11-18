@@ -9,43 +9,45 @@ from pathlib import Path
 from typing import Any
 
 from src.shared.paths import shared_data_dir
+from src.shared.translation_markers import QT_TRANSLATE_NOOP
 
 from .client import LicenseClient, LicenseError, LicenseStatus
 
 REASONS = {
-    "unlicensed": "No production license is installed.",
-    "valid": "Lifetime Premium is active. Every future Porn Fetch update and feature I release is included.",
-    "activation_required": "Connect to activate this installation.",
-    "reactivation_required": "The license was imported, but this installation was previously deactivated. The licensing server is unavailable, so reactivation could not finish. Restore the connection or retry when my emergency licensing service is enabled.",
-    "activation_incomplete": "The server was reached but activation did not complete. Please retry or contact support.",
-    "activation_failed": "This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support.",
-    "initial_offline_grace": "The license server cannot be reached. Initial access is available for up to 3 days from first import; online validation is still required.",
-    "initial_grace_expired": "The initial 3-day grace period has ended. Connect to validate your license.",
-    "emergency_access": "My licensing server is unavailable. Temporary Premium access is active through my emergency licensing service.",
-    "offline_grace": "License server unavailable. Using the last successful validation.",
-    "expired_grace": "Please connect to validate your license; the 7-day offline grace has ended.",
-    "suspended_or_denied": "License authentication was denied. The license may be suspended; please contact support.",
-    "suspended": "This license is suspended. Please contact support.",
-    "revoked": "The licensing server has revoked this license.",
-    "installation_limit": "This license has reached its activation limit.",
-    "rejected": "The licensing server rejected this license.",
-    "not_found": "The licensing server could not find this license or machine.",
-    "deactivated": "This installation has been deactivated.",
-    "deactivation_pending": "Deactivation is pending network access.",
-    "deactivation_failed": "Deactivation failed. Please try again.",
-    "clock_invalid": "Please correct the system clock and validate again.",
-    "clock_mismatch": "The signed license validation is dated in the future. Check your date, time and time zone, enable automatic time synchronization, then refresh. If your clock is correct, the licensing server clock may be incorrect; please contact support.",
-    "local_state_invalid": "Local licensing data could not be read. Contact support before resetting it to preserve your installation identity.",
-    "invalid_signature": "The installed license or cached validation could not be verified. Please validate online again.",
-    "network_unavailable": "Network unavailable. Connect to complete license activation.",
-    "server_unavailable": "License server unavailable. Please try again shortly.",
-    "malformed_response": "The license server returned an unreadable response. Please try again.",
-    "beta_license": "This beta license belongs to an older licensing system and is no longer valid for the production release.",
+    "unlicensed": QT_TRANSLATE_NOOP("LicenseStatus", "No production license is installed."),
+    "valid": QT_TRANSLATE_NOOP("LicenseStatus", "Lifetime Premium is active. Every future Porn Fetch update and feature I release is included."),
+    "activation_required": QT_TRANSLATE_NOOP("LicenseStatus", "Connect to activate this installation."),
+    "reactivation_required": QT_TRANSLATE_NOOP("LicenseStatus", "The license was imported, but this installation was previously deactivated. The licensing server is unavailable, so reactivation could not finish. Restore the connection or retry when my emergency licensing service is enabled."),
+    "activation_incomplete": QT_TRANSLATE_NOOP("LicenseStatus", "The server was reached but activation did not complete. Please retry or contact support."),
+    "activation_failed": QT_TRANSLATE_NOOP("LicenseStatus", "This installation could not be activated. Check that your date, time and time zone are correct and synchronize your device clock, then refresh. If activation still fails, contact support."),
+    "initial_offline_grace": QT_TRANSLATE_NOOP("LicenseStatus", "The license server cannot be reached. Initial access is available for up to 3 days from first import; online validation is still required."),
+    "initial_grace_expired": QT_TRANSLATE_NOOP("LicenseStatus", "The initial 3-day grace period has ended. Connect to validate your license."),
+    "emergency_access": QT_TRANSLATE_NOOP("LicenseStatus", "My licensing server is unavailable. Temporary Premium access is active through my emergency licensing service."),
+    "offline_grace": QT_TRANSLATE_NOOP("LicenseStatus", "License server unavailable. Using the last successful validation."),
+    "expired_grace": QT_TRANSLATE_NOOP("LicenseStatus", "Please connect to validate your license; the 7-day offline grace has ended."),
+    "suspended_or_denied": QT_TRANSLATE_NOOP("LicenseStatus", "License authentication was denied. The license may be suspended; please contact support."),
+    "suspended": QT_TRANSLATE_NOOP("LicenseStatus", "This license is suspended. Please contact support."),
+    "revoked": QT_TRANSLATE_NOOP("LicenseStatus", "The licensing server has revoked this license."),
+    "installation_limit": QT_TRANSLATE_NOOP("LicenseStatus", "This license has reached its activation limit."),
+    "rejected": QT_TRANSLATE_NOOP("LicenseStatus", "The licensing server rejected this license."),
+    "not_found": QT_TRANSLATE_NOOP("LicenseStatus", "The licensing server could not find this license or machine."),
+    "deactivated": QT_TRANSLATE_NOOP("LicenseStatus", "This installation has been deactivated."),
+    "deactivation_pending": QT_TRANSLATE_NOOP("LicenseStatus", "Deactivation is pending network access."),
+    "deactivation_failed": QT_TRANSLATE_NOOP("LicenseStatus", "Deactivation failed. Please try again."),
+    "clock_invalid": QT_TRANSLATE_NOOP("LicenseStatus", "Please correct the system clock and validate again."),
+    "clock_mismatch": QT_TRANSLATE_NOOP("LicenseStatus", "The signed license validation is dated in the future. Check your date, time and time zone, enable automatic time synchronization, then refresh. If your clock is correct, the licensing server clock may be incorrect; please contact support."),
+    "local_state_invalid": QT_TRANSLATE_NOOP("LicenseStatus", "Local licensing data could not be read. Contact support before resetting it to preserve your installation identity."),
+    "invalid_signature": QT_TRANSLATE_NOOP("LicenseStatus", "The installed license or cached validation could not be verified. Please validate online again."),
+    "network_unavailable": QT_TRANSLATE_NOOP("LicenseStatus", "Network unavailable. Connect to complete license activation."),
+    "server_unavailable": QT_TRANSLATE_NOOP("LicenseStatus", "License server unavailable. Please try again shortly."),
+    "malformed_response": QT_TRANSLATE_NOOP("LicenseStatus", "The license server returned an unreadable response. Please try again."),
+    "beta_license": QT_TRANSLATE_NOOP("LicenseStatus", "This beta license belongs to an older licensing system and is no longer valid for the production release."),
 }
 
 
-def rejection_notice(state: str) -> str:
-    return REASONS.get(state, REASONS["rejected"]) + "\n\nFor help, contact support@echteralsfake.me."
+def rejection_notice(state: str, translate=str) -> str:
+    support = QT_TRANSLATE_NOOP("LicenseStatus", "For help, contact support@echteralsfake.me.")
+    return translate(REASONS.get(state, REASONS["rejected"])) + "\n\n" + translate(support)
 
 
 class LicenseService:
@@ -70,13 +72,18 @@ class LicenseService:
 
     @property
     def reason(self) -> str:
-        reason = REASONS.get(self.status.state, self.status.state.replace("_", " ").capitalize())
+        return self.describe_status()
+
+    def describe_status(self, translate=str) -> str:
+        reason = translate(REASONS.get(self.status.state, self.status.state.replace("_", " ").capitalize()))
         if getattr(self.core, "tor_enabled", False) is True:
             if (getattr(self.client, "emergency_public_key", None) is not None
                     and self.status.failure in {"network_unavailable", "server_unavailable"}):
-                reason += ("\n\nThe fallback licensing server can only be reached without Tor. "
-                           "To try it, turn Tor routing Off in Privacy settings, then refresh your license. "
-                           "This connects directly to echteralsfake.me.")
+                fallback = QT_TRANSLATE_NOOP(
+                    "LicenseStatus", "The fallback licensing server can only be reached without Tor. "
+                    "To try it, turn Tor routing Off in Privacy settings, then refresh your license. "
+                    "This connects directly to echteralsfake.me.")
+                reason += "\n\n" + translate(fallback)
             failure = getattr(getattr(self.core, "policy", None), "last_failure", "")
             if isinstance(failure, str) and failure and (
                 self.status.failure in {"network_unavailable", "server_unavailable"}

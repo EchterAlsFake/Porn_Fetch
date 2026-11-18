@@ -85,8 +85,8 @@ Pane {
             "author_regex": authorRegexField.text === "" ? null : authorRegexField.text,
             "tags_regex": tagsRegexField.text === "" ? null : tagsRegexField.text,
             "title_regex": titleRegexField.text === "" ? null : titleRegexField.text,
-            "quality_minimum": minQualityCombo.currentText === "Any" ? null : minQualityCombo.currentText,
-            "quality_maximum": maxQualityCombo.currentText === "Any" ? null : maxQualityCombo.currentText,
+            "quality_minimum": minQualityCombo.currentIndex <= 0 ? null : minQualityCombo.currentText,
+            "quality_maximum": maxQualityCombo.currentIndex <= 0 ? null : maxQualityCombo.currentText,
             "published_after": afterDateField.text === "" ? null : afterDateField.text,
             "published_before": beforeDateField.text === "" ? null : beforeDateField.text,
             "start_index": startSpin.value,
@@ -907,14 +907,14 @@ Pane {
                                     id: minQualityCombo
                                     objectName: "downloadMinimumQuality"
                                     Layout.fillWidth: true
-                                    model: ["Any", "144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
+                                    model: [qsTr("Any", "No minimum or maximum video resolution in the filter"), "144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
                                 }
                                 Label { text: qsTr("to") }
                                 AppComboBox {
                                     id: maxQualityCombo
                                     objectName: "downloadMaximumQuality"
                                     Layout.fillWidth: true
-                                    model: ["Any", "144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
+                                    model: [qsTr("Any", "No minimum or maximum video resolution in the filter"), "144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "4k"]
                                 }
                             }
 

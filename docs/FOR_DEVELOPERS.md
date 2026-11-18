@@ -39,8 +39,8 @@ After async shutdown, `src/backend/qml_lifecycle.py` destroys QML windows before
 engine-owned Python adapters. Keep this explicit order: reference cycles can
 otherwise leave bindings alive after their context objects disappear.
 
-Do not edit generated `resources.py` or QM files by hand. Draft translation
-catalogs are kept for contributors; the released interface stays English.
+Do not edit generated `resources.py` or QM files by hand. See the
+[GUI translation workflow](TRANSLATING.md) for generation and previews.
 
 The desktop and Android Creators page uses PocketBase subscriptions and the normal download
 engine. History recording and creator persistence share one process; disabling

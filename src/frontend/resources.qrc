@@ -61,10 +61,10 @@
         <file alias="production.json">../licensing/production.json</file>
     </qresource>
     <qresource prefix="/translations">
-        <file>translations/qm/en.qm</file>
-        <file>translations/qm/de_DE.qm</file>
-        <file>translations/qm/zh_CN.qm</file>
-        <file>translations/qm/fr.qm</file>
-        <file>translations/qm/it.qm</file>
+        <file alias="en.qm">translations/qm/en.qm</file>
+        <file alias="de_DE.qm">translations/qm/de_DE.qm</file>
+        <file alias="es.qm">translations/qm/es.qm</file>
+        <file alias="hi_IN.qm">translations/qm/hi_IN.qm</file>
+        <file alias="zh_CN.qm">translations/qm/zh_CN.qm</file>
     </qresource>
 </RCC>

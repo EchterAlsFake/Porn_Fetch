@@ -13,7 +13,7 @@ requirements = python3==3.15.2,hostpython3==3.15.2,shiboken6,PySide6,certifi,cff
 orientation = portrait, landscape
 android.manifest.orientation = unspecified
 fullscreen = 0
-android.archs = arm64-v8a
+android.archs = x86_64
 android.allow_backup = True
 presplash.filename = /home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/logo_square.png
 android.ndk_path = /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r28c

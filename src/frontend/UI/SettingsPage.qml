@@ -194,7 +194,7 @@ Pane {
                     currentIndex: stackLayout.currentIndex
 
                     // The 'model' is the data. Here it's just a simple list of strings.
-                    model: ["Video", "Performance", "System", "Privacy", "UI"]
+                    model: [qsTr("Video"), qsTr("Performance"), qsTr("System"), qsTr("Privacy"), qsTr("Appearance")]
 
                     SmoothWheelHandler {
                         id: navigationWheelHandler
@@ -210,7 +210,7 @@ Pane {
                     // 'delegate' defines how each individual item in the list looks
                     delegate: ItemDelegate {
                         Accessible.role: Accessible.ListItem
-                        Accessible.name: qsTr(modelData + " settings")
+                        Accessible.name: qsTr("%1 settings").arg(modelData)
                         font.pixelSize: 15 * appSettings.font_size / 12
                         // Make font bold if this item is currently selected
                         font.weight: ListView.isCurrentItem ? Font.Bold : Font.Normal
@@ -288,7 +288,7 @@ Pane {
                                     Accessible.name: qsTr("Quality")
                                     Accessible.description: AppStrings.videoQualityHelp
                                     Layout.fillWidth: true
-                                    model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "250p", "240p", "144p"]
+                                    model: [qsTr("Best available"), qsTr("Middle quality"), qsTr("Lowest quality"), "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "250p", "240p", "144p"]
                                     currentIndex: appSettings.quality
 
                                     function qualityRequiresLicense(index) {
@@ -356,7 +356,7 @@ Pane {
                                     Accessible.name: qsTr("Model Videos")
                                     Accessible.description: AppStrings.modelVideosHelp
                                     Layout.fillWidth: true
-                                    model: ["Both", "Uploaded Videos", "Featured Videos"]
+                                    model: [qsTr("Both"), qsTr("Uploaded videos"), qsTr("Featured videos")]
                                     currentIndex: appSettings.model_videos
                                     onActivated: appSettings.model_videos = currentIndex
                                 }
@@ -567,7 +567,7 @@ Pane {
                             }
                             HelpButton {Layout.fillWidth: false; helpText: AppStrings.networkDelayHelp}
                             Label {
-                                text: qsTr("Network delay (requests/sec):")
+                                text: qsTr("Delay between requests (seconds):")
                             }
                             AppSpinBox {
                                 objectName: "networkDelaySpinBox"
@@ -636,7 +636,7 @@ Pane {
                                 helpText: AppStrings.processingDelay
                             }
                             Label {
-                                text: qsTr("Processing Delay (videos/sec):")
+                                text: qsTr("Processing delay (seconds):")
                             }
                             AppSpinBox {
                                 objectName: "processingDelaySpinBox"
@@ -1287,23 +1287,9 @@ Pane {
                                 Layout.fillWidth: false
                                 helpText: AppStrings.guiLanguageHelp
                             }
-                            Label {
-                                text: qsTr("Graphical User Interface language:")
-                            }
-                            AppComboBox {
-                                objectName: "guiLanguageComboBox"
-                                Accessible.name: qsTr("Graphical User Interface Language")
-                                Accessible.description: AppStrings.guiLanguageHelp
+                            GuiLanguageSelector {
+                                Layout.columnSpan: window.compact ? 1 : 2
                                 Layout.fillWidth: true
-                                model: ["English"]
-                                currentIndex: 0
-                                enabled: false
-                            }
-                            Label {
-                                Layout.columnSpan: 3
-                                Layout.fillWidth: true
-                                wrapMode: Text.WordWrap
-                                text: qsTr("Porn Fetch is English-only. Translations are not available yet.")
                             }
                             HelpButton {
                                 Layout.fillWidth: false

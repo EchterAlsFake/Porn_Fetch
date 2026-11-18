@@ -209,9 +209,9 @@ activation/device-binding validation in the existing explicitly enabled license
 tests; these feature tests do not establish license-service readiness.
 
 Settings effects that need Tor or Strict SNI require their explicit flags and a
-suitable environment. Leaving them off does not count as a pass. The UI language
-control is disabled because the app is English-only. Provider content language
-is a separate setting and remains testable.
+suitable environment. Leaving them off does not count as a pass. For GUI
+language testing, use the [translation preview](TRANSLATING.md#review-in-the-app).
+Provider content language is a separate setting.
 
 `settings_gui --effect system-notification-controls` checks the actual QML
 opt-in/out, persistence and native bridge request files in an isolated directory.

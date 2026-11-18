@@ -405,7 +405,7 @@ Pane {
                 description: qsTr("Choose how links and model pages are processed.")
                 ChoiceRow {
                     label: qsTr("Default quality"); helpText: AppStrings.videoQualityHelp
-                    choices: ["Best", "Half", "Worst", "2160p", "1440p", "1080p", "720p",
+                    choices: [qsTr("Best available"), qsTr("Middle quality"), qsTr("Lowest quality"), "2160p", "1440p", "1080p", "720p",
                               "540p", "480p", "360p", "250p", "240p", "144p"]
                     selected: appSettings.quality
                     allowed: function(index) {
@@ -610,12 +610,7 @@ Pane {
             }
             SettingCard {
                 heading: qsTr("Language")
-                ChoiceRow {
-                    label: qsTr("English only. Translations are not available yet")
-                    choices: ["English"]
-                    selected: 0
-                    enabled: false
-                }
+                GuiLanguageSelector { Layout.fillWidth: true }
                 Label { text: qsTr("Content language") }
                 ContentLanguageComboBox { Layout.fillWidth: true }
             }

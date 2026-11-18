@@ -258,9 +258,8 @@ class CreatorBridge(QObject):
             if result is None:
                 return
             self._integrity_issues = result["missing"] + result["changed"] + result["unreadable"]
-            self._integrity_message = self.tr("Checked %s files: %s missing, %s changed, %s unreadable.") % (
-                result["checked"], result["missing"], result["changed"], result["unreadable"])
-            self._integrity_message = (self.tr("Full verification: %s files hashed.") % result["hashed"] if full else self.tr("Quick check: %s files unchanged since their last checksum check; %s files hashed.") % (result["unchanged"], result["hashed"])) + " " + self._integrity_message
+            self._integrity_message = self.tr("Checked files: %(checked)d. Missing: %(missing)d. Changed: %(changed)d. Unreadable: %(unreadable)d.") % result
+            self._integrity_message = (self.tr("Full verification: %s files hashed.") % result["hashed"] if full else self.tr("Quick check. Unchanged since the last checksum check: %(unchanged)d. Hashed: %(hashed)d.") % result) + " " + self._integrity_message
             if result["baselines"]:
                 self._integrity_message += " " + self.tr("Saved %s first-time checksums. These establish a baseline; they cannot detect earlier corruption.") % result["baselines"]
             if result["skipped"]:
@@ -290,11 +289,11 @@ class CreatorBridge(QObject):
         async def run():
             try:
                 if not self.transferSupported:
-                    raise ValueError("Library migration and file relocation currently require desktop filesystem access.")
+                    raise ValueError(self.tr("Library migration and file relocation currently require desktop filesystem access."))
                 library = await self.ensure_ready()
                 async with self._dispatch_lock:
                     if self._saving or self._workers or any(not t.done() for t in library.scan_tasks.values()) or any(not t.done() for t in self.backend._download_tasks.values()):
-                        raise ValueError("Stop scans and pause downloads before managing library storage.")
+                        raise ValueError(self.tr("Stop scans and pause downloads before managing library storage."))
                     job_save = getattr(self, "_job_save_task", None)
                     if job_save is not None and not job_save.done():
                         await job_save
@@ -358,9 +357,9 @@ class CreatorBridge(QObject):
         async def apply():
             from src.database.transfer import import_library, native_backup
             if pending is None:
-                raise ValueError("Preview the operation first.")
+                raise ValueError(self.tr("Preview the operation first."))
             if pending[0] == "import" and self.backend._downloads_model.rowCount():
-                raise ValueError("Clear the Downloads queue before importing a library. Saved completed files are kept.")
+                raise ValueError(self.tr("Clear the Downloads queue before importing a library. Saved completed files are kept."))
             backup = await native_backup(self.repo, self.tracker.data_path)
             if pending[0] == "import":
                 await import_library(self.repo, pending[1], mode)
@@ -373,12 +372,12 @@ class CreatorBridge(QObject):
                 from src.database.relocate import apply_relocation, mapped_path, plan_relocation
                 plan = await plan_relocation(self.repo, *pending[1])
                 if plan["missing"] != pending[2]:
-                    raise ValueError("Files changed since the preview. Preview the move again before continuing.")
+                    raise ValueError(self.tr("Files changed since the preview. Preview the move again before continuing."))
                 retained = await apply_relocation(self.repo, plan, progress=self._relocation_progress, paths_updated=self._refresh)
                 output = mapped_path(app_settings.output_path, Path(plan["old"]), Path(plan["new"]))
                 if output is not None:
                     app_settings.output_path = str(output)
-                message = self.tr("Updated %s completed video records and %s subscription destinations.") % (plan["videos"], plan["folders"])
+                message = self.tr("Updated completed video records: %(videos)d. Updated subscription destinations: %(folders)d.") % plan
                 if plan["missing"]:
                     message += " " + self.tr("%s missing files were marked for retry. Choose Download all videos to fetch them into the new destination.") % len(plan["missing"])
                 if retained:
@@ -620,7 +619,7 @@ class CreatorBridge(QObject):
             await self.ensure_ready()
             member = await self.repo.get(MEMBERSHIPS, member_id)
             if member["subscription"] != source_id:
-                raise ValueError("This video belongs to a different subscription.")
+                raise ValueError(self.tr("This video belongs to a different subscription."))
             video = await self.repo.get(VIDEOS, member["video"])
             if action in {"ignored", "new"}:
                 await self.repo.put(MEMBERSHIPS, member_id, {"ignored": action == "ignored"})
@@ -760,7 +759,7 @@ class CreatorBridge(QObject):
                 else:
                     source = await self.repo.get(SUBSCRIPTIONS, record["owner"])
                     if not source.get("folder"):
-                        raise ValueError("Choose a download destination in this subscription's settings.")
+                        raise ValueError(self.tr("Choose a download destination in this subscription's settings."))
                     native = await clients.get_video(record["url"])
                     video = await clients.load_video_attributes(native)
                     preference = source.get("quality") or "best"
@@ -770,7 +769,10 @@ class CreatorBridge(QObject):
                         preference = "best"
                     quality = select_allowed_quality(preference, offered, self.backend.has_premium_access())
                     if not quality:
-                        raise ValueError("This video does not offer a stream at 720p or below for the free preview. Higher resolutions require Premium." if not self.premium else "This video does not offer the requested quality.")
+                        raise ValueError(
+                            self.tr("This video does not offer a stream at 720p or below for the free preview. Higher resolutions require Premium.")
+                            if not self.premium else self.tr("This video does not offer the requested quality.")
+                        )
                     video.identifier = job
                     video.source_video = native
                     video.origin_iterator_url, video.origin_iterator_name = source["url"], source["name"]
@@ -812,7 +814,7 @@ class CreatorBridge(QObject):
                 video.source_video = native
                 self.backend._downloads_model.refresh_metadata(job)
                 if selected not in [str(q) for q in fresh.qualities]:
-                    raise ValueError("The saved quality is no longer available. Choose another quality in Downloads; existing progress was kept.")
+                    raise ValueError(self.tr("The saved quality is no longer available. Choose another quality in Downloads; existing progress was kept."))
                 self.backend._downloads_model.set_video_quality(job, selected)
             if self.backend._downloads_model.get_status(job) == "completed":
                 await self.repo.put(VIDEOS, record["id"], {"status": "completed", "progress": 100})
@@ -825,7 +827,7 @@ class CreatorBridge(QObject):
             self.backend.download_video(job)
             task = self.backend._download_tasks.get(job)
             if task is None:
-                raise ValueError("The download could not be started. Check the selected quality and destination.")
+                raise ValueError(self.tr("The download could not be started. Check the selected quality and destination."))
             await asyncio.shield(task)
             await self._save_job(job)
             if created and self.backend._downloads_model.get_status(job) == "completed":

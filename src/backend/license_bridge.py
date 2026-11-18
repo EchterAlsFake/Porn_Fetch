@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import Property, QFile, QIODevice, QObject, QStandardPaths, QUrl, Signal, Slot
+from PySide6.QtCore import Property, QCoreApplication, QFile, QIODevice, QObject, QStandardPaths, QUrl, Signal, Slot
 
 from src.licensing.service import LicenseService, rejection_notice
 
@@ -63,9 +63,13 @@ class LicenseBridge(QObject):
     def state(self) -> str:
         return self._service.status.state
 
+    @staticmethod
+    def _translate_status(source: str) -> str:
+        return QCoreApplication.translate("LicenseStatus", source)
+
     @Property(str, notify=statusChanged)
     def reason(self) -> str:
-        return self._service.reason
+        return self._service.describe_status(self._translate_status)
 
     @Property(str, notify=statusChanged)
     def licenseExpiresAt(self) -> str:
@@ -73,7 +77,7 @@ class LicenseBridge(QObject):
             return ""
         expiry = self._service.status.license_expires_at
         if expiry is None:
-            return "Lifetime / Never" if self._service.status.allowed else ""
+            return self.tr("Lifetime / Never") if self._service.status.allowed else ""
         return datetime.fromtimestamp(expiry).astimezone().strftime("%Y-%m-%d %H:%M")
 
     @Property(str, notify=statusChanged)
@@ -105,7 +109,7 @@ class LicenseBridge(QObject):
             self._entitlement = entitlement
             self.entitlementChanged.emit()
         if status.server_rejected:
-            self.licenseRejected.emit(rejection_notice(status.state))
+            self.licenseRejected.emit(rejection_notice(status.state, self._translate_status))
 
     async def _run_check(self, *, force: bool = False):
         try:

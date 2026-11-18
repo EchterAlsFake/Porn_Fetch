@@ -7,7 +7,7 @@ import traceback
 from pathlib import Path
 import multiprocessing as mp
 
-from PySide6.QtCore import QResource
+from PySide6.QtCore import QCoreApplication, QResource
 _native_android = (
     sys.platform == "android" or hasattr(sys, "getandroidapilevel")
     or "ANDROID_ARGUMENT" in os.environ or "ANDROID_BOOTSTRAP" in os.environ
@@ -61,6 +61,10 @@ if is_main_process:
     if sys.platform == "linux" and not is_mobile:
         app.setDesktopFileName("pornfetch")
     engine = QQmlApplicationEngine()
+    from src.backend.config import app_settings
+    from src.backend.ui_translation import UiTranslation
+    engine.ui_translation = UiTranslation(app_settings, engine)
+    engine.rootContext().setContextProperty("uiTranslation", engine.ui_translation)
     if not is_mobile:
         splash_qml_path = Path(__file__).resolve().parents[1] / "frontend" / "UI" / "SplashScreen.qml"
         splash = SplashController(engine, str(splash_qml_path))
@@ -105,7 +109,7 @@ def disable_nuitka_splash():
             os.unlink(splash_filename)
 
 
-update_splash("Importing (General).")
+update_splash(QCoreApplication.translate("SplashScreen", "Importing (General)."))
 import asyncio
 import argparse
 try:
@@ -119,12 +123,12 @@ from base_api.modules.errors import DownloadCancelled
 from src.shared.logging_setup import configure_app_logging
 from importlib.metadata import metadata, packages_distributions, version
 
-update_splash("Importing (Qt)")
+update_splash(QCoreApplication.translate("SplashScreen", "Importing (Qt)"))
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
-from PySide6.QtCore import (QUrl, Signal, Slot, Property, QTranslator, QCoreApplication, QStandardPaths, QObject, Qt,
+from PySide6.QtCore import (QUrl, Signal, Slot, Property, QStandardPaths, QObject, Qt,
                             QTimer, QFile, QIODevice)
 
-update_splash("Importing (Backend)")
+update_splash(QCoreApplication.translate("SplashScreen", "Importing (Backend)"))
 from src.backend import clients # Singleton instance for the client objects (really important)
 import src.backend.config as config
 from src.backend.license_bridge import LicenseBridge, load_production_config
@@ -169,7 +173,7 @@ from src.database.bridge import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
 from curl_cffi.requests.exceptions import SSLError
 
-update_splash("Importing (Frontend).")
+update_splash(QCoreApplication.translate("SplashScreen", "Importing (Frontend)."))
 from src.shared.ffmpeg import has_ffmpeg
 
 FORCE_DISABLE_AV = not has_ffmpeg()
@@ -313,7 +317,7 @@ class Backend(QObject):
 
     @Property(str, constant=True)
     def errorReportDisclosure(self) -> str:
-        return ERROR_REPORT_DISCLOSURE
+        return QCoreApplication.translate("ErrorReporting", ERROR_REPORT_DISCLOSURE)
 
     @Property(str, constant=True)
     def errorReportExample(self) -> str:
@@ -680,13 +684,13 @@ class Backend(QObject):
             return
         if new_directory.exists():
             ui_popup(
-                "The selected PocketBase data directory already exists. It will be used after restart, "
-                "but the current data will not be moved into it."
+                self.tr("The selected PocketBase data directory already exists. It will be used after restart, "
+                        "but the current data will not be moved into it.")
             )
             return
         source = self._pending_pocketbase_move[0] if self._pending_pocketbase_move else old_directory
         self._pending_pocketbase_move = (source, new_directory)
-        ui_popup("The PocketBase data directory will be moved after the application shuts down.")
+        ui_popup(self.tr("The PocketBase data directory will be moved after the application shuts down."))
 
     @staticmethod
     def _move_pocketbase_data(source: Path, destination: Path) -> None:
@@ -2102,8 +2106,6 @@ def main() -> None:
     engine.rootContext().setContextProperty("databaseBridge", database_bridge)
     engine.rootContext().setContextProperty("themeManager", theme_manager)
     engine.rootContext().setContextProperty("appSettings", app_settings)
-    from src.backend.ui_translation import UiTranslation
-    engine.ui_translation = UiTranslation(app_settings, engine)
     from src.backend.tor_status import TorStatus
     tor_status = TorStatus(parent=engine)
     tor_status.installResult.connect(backend_instance.updateStatus)
@@ -2125,7 +2127,7 @@ def main() -> None:
         engine.rootContext().setContextProperty(context_name, bytes(resource.readAll()).decode("utf-8"))
         resource.close()
 
-    update_splash("Loading Window...")
+    update_splash(QCoreApplication.translate("SplashScreen", "Loading Window..."))
 
     # 3. Choose the native layout, or open the Android layout as a desktop preview.
     qml_file = Path(__file__).resolve().parents[1] / "frontend" / "UI" / (

@@ -43,8 +43,10 @@ Read [the developer guide](docs/FOR_DEVELOPERS.md) for the source map.
 
 The desktop entry point is `main.py`; its backend is `src/backend/application.py`.
 `Porn_Fetch_CLI.py` loads the headless CLI. Mobile uses the shared backend and
-`AndroidMain.qml`. The interface is **English-only**. Translation catalogs and
-Weblate integration are unfinished; language selectors remain disabled.
+`AndroidMain.qml`. GUI translation generation targets German, Spanish, Hindi
+and Simplified Chinese for 4.0. Rebuild after catalog changes. Completed catalogs
+appear in Settings and apply at restart. Draft catalogs can be previewed. See
+[translations](docs/TRANSLATING.md) for the generator and contributor context. The CLI uses English.
 
 Creators is beside Account in desktop navigation, the tablet sidebar and phone
 bottom navigation. Its bundled Lucide user-round-star icon is credited in the
