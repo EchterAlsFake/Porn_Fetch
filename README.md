@@ -9,12 +9,12 @@
 <br>
 
 <a href="https://pornfetch.to/checklist">
-  <img src="https://pornfetch.to/checklist/progress.svg?label=Version%204.0%20Development%20Progress" alt="Version 4.0 Development Progress" width="400"/>
+  <img src="https://pornfetch.to/checklist/progress.svg?label=Version%204.1%20Development%20Progress" alt="Version 4.1 Development Progress" width="400"/>
 </a>
 
 ---
 
-**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.9.1)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v3.9.1)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v4.0.0)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v4.0.0)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/WEBSITES.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Installation Guide&nbsp;<br>&nbsp;</strong></kbd>](docs/INSTALLATION.md)** 
@@ -40,7 +40,7 @@
 - [License](#-license)
 
 ## 🌟 Features
-- Cross-platform
+- Cross-platform (seriously)
 - 15+ Supported Adult Sites
 - Downloading Videos
 - Downloading Playlists
@@ -184,13 +184,15 @@ See the [installation guide](docs/INSTALLATION.md).
 ## General Information
 #### GitHub Workflow Targets
 
-| Platform                  | App                | Architectures                        | OS Version (GUI)               |
-|---------------------------|--------------------|--------------------------------------|--------------------------------|
-| **Windows**               | GUI, CLI           | x64, ARM64                           | 10+                            |
-| **Linux (X11 / Wayland)** | GUI, CLI           | x64, ARM64, (experimental archs)     | Kernel 5.10+, BTF, glibc 2.28+ |
-| **macOS**                 | GUI, CLI           | x86_64, ARM64  (Universal build)     | Sonoma 14.4+                   |
-| **Android**               | GUI, CLI           | arm64-v8a, armeabi-v7a, x86_64, i686 | Android 9+, Custom OS possible |
-| **iOS**                   | GUI, CLI           | arm64                                | iOS 15+                        |
+| Platform                  | App      | Architectures                        | OS Version (GUI)               |
+|---------------------------|----------|--------------------------------------|--------------------------------|
+| **Windows**               | GUI, CLI | x64, ARM64                           | 10+                            |
+| **Linux (X11 / Wayland)** | GUI, CLI | x64, ARM64, (experimental archs)     | Kernel 5.10+, BTF, glibc 2.28+ |
+| **macOS**                 | GUI, CLI | x86_64, ARM64  (Universal build)     | Sonoma 14.4+                   |
+| **Android**               | GUI, CLI | arm64-v8a, armeabi-v7a, x86_64, i686 | Android 9+, Custom OS possible |
+| **iOS**                   | GUI, CLI | arm64                                | iOS 15+                        |
+| ** Android TV **          | GUI      | arm64, x86_64, i686, armv7a          | 9+                             |
+| ** Android Automotive     | GUI      | arm64, x86_64, i686, armv7a          | 9+                             |
 
 ##### About FreeBSD
 FreeBSD should theoretically work, as Qt has full support for it, however I have never tested it. 
@@ -206,6 +208,8 @@ Porn Fetch is tested actively on the following devices and systems:
 - Xiaomi Redmi 6 (Android 9)
 - Teclast T50 Pro (kp Bruder) 
 - virtual macOS Sequoia 
+- virtual Android TV 
+- virtual Android Automotive 
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -214,7 +218,7 @@ Porn Fetch is tested actively on the following devices and systems:
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
 - [xhamster.com](https://github.com/EchterAlsFake/xhamster_api)
 - [spankbang.com](https://spankbang.com)
-- [youjizz.com](https://github.com/EchterAlsFake/unofficial-api-for-youjizz) *
+- [youjizz.com](https://github.com/EchterAlsFake/unofficial-api-for-youjizz)
 - [youporn.com](https://youporn.com)
 - [beeg.com](https://github.com/echteralsfake/beeg_api)
 - [porntrex.com](https://github.com/echteralsfake/porntrex_api)
@@ -224,11 +228,11 @@ Porn Fetch is tested actively on the following devices and systems:
 - [tube8.com](https://tube8.com)
 - [empflix.com](https://empflix.com)
 - [tnaflix.com](https://tnaflix.com)
-- [bellesa.co](https://github.com/EchterAlsFake/unofficial-api-for-bellesa) *
-- [porn.com](https://github.com/EchterAlsFake/unofficial-api-for-porn) *
-- [pornhat.com](https://github.com/EchterAlsFake/unofficial-api-for-pornhat) *
-- [redgifs.com](https://github.com/EchterAlsFake/unofficial-api-for-redgifs) *
-- [porndoe.com](https://github.com/EchterAlsFake/unofficial-api-for-porndoe) *
+- [bellesa.co](https://github.com/EchterAlsFake/unofficial-api-for-bellesa)
+- [porn.com](https://github.com/EchterAlsFake/unofficial-api-for-porn)
+- [pornhat.com](https://github.com/EchterAlsFake/unofficial-api-for-pornhat)
+- [redgifs.com](https://github.com/EchterAlsFake/unofficial-api-for-redgifs)
+- [porndoe.com](https://github.com/EchterAlsFake/unofficial-api-for-porndoe)
 
 * = Current Development Branch
 
@@ -247,9 +251,8 @@ as well as the different concepts used.
 See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/docs/FOR_DEVELOPERS.md
 
 ## 🌍 Translating
-
-GUI translations for German, Spanish, Hindi, and Simplified Chinese are planned for 4.0.
-See the [translation guide](docs/TRANSLATING.md) for generation and previews.
+- GUI translations for German, Spanish, Hindi, and Simplified Chinese (AI Assisted)
+- See the [translation guide](docs/TRANSLATING.md) for generation and previews.
 
 ## 👏 Credits
 - GUI: [Qt](https://qt.io) for Python

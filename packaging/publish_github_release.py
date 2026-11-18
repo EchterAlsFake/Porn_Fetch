@@ -14,6 +14,7 @@ def gh(*args: str) -> str:
 
 def publish(assets: Path, version: str, commit: str, channel: str, notes: Path) -> None:
     tag = f'v{version}'
+    tag_ref = f'refs/tags/{tag}'
     repository = os.environ['GITHUB_REPOSITORY']
     def lookup(endpoint: str):
         result = subprocess.run(['gh', 'api', f'repos/{repository}/{endpoint}'], capture_output=True, text=True)
@@ -23,18 +24,15 @@ def publish(assets: Path, version: str, commit: str, channel: str, notes: Path) 
             raise RuntimeError(result.stderr)
         return json.loads(result.stdout)
 
-    tagged = lookup(f'commits/{tag}')
-    if tagged is None:
-        gh('api', f'repos/{repository}/git/refs', '-X', 'POST', '-f', f'ref=refs/tags/{tag}', '-f', f'sha={commit}')
-    elif tagged['sha'] != commit:
+    if lookup(f'git/ref/tags/{tag}') is None:
+        gh('api', f'repos/{repository}/git/refs', '-X', 'POST', '-f', f'ref={tag_ref}', '-f', f'sha={commit}')
+    actual_commit = gh('api', f'repos/{repository}/commits/{tag_ref}', '--jq', '.sha').strip()
+    if actual_commit != commit:
         raise ValueError('Existing release tag points to a different commit')
     releases = lookup(f'releases/tags/{tag}')
     if releases is None:
         gh('release', 'create', tag, '--draft', '--verify-tag', '--title', f'Porn Fetch {version}',
            '--notes-file', str(notes), f'--prerelease={str(channel == "beta").lower()}')
-    actual_commit = gh('api', f'repos/{os.environ["GITHUB_REPOSITORY"]}/commits/{tag}', '--jq', '.sha').strip()
-    if actual_commit != commit:
-        raise ValueError('Existing release tag points to a different commit')
     if releases is not None and releases['prerelease'] != (channel == 'beta'):
         raise ValueError('Existing release has a different channel')
     existing = {item['name'] for item in (releases or {}).get('assets', [])}
