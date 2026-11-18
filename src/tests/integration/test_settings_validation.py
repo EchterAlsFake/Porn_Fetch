@@ -176,7 +176,7 @@ class TestSettingsAccessibility(SettingsGUITestBase):
             ("sniObfuscationCheckBox", "SNI Obfuscation"),
             ("sniLiteRadio", "Lite SNI Obfuscation"),
             ("sniStrictRadio", "Strict SNI Obfuscation"),
-            ("guiLanguageComboBox", "Graphical User Interface Language"),
+            ("guiLanguageComboBox", "Interface language"),
             ("fontSizeSpinBox", "Font Size"),
             ("coreStyleComboBox", "Application Style"),
             ("darkModeSwitch", "Dark Mode"),
