@@ -152,7 +152,7 @@ class ProfileDiagnosticTests(unittest.IsolatedAsyncioTestCase):
         case = next(dict(case) for case in load_profile_cases() if case["id"] == "tube8.user")
         case["expected_factory"] = None
         backend = make_test_backend()
-        backend._process_model_url = AsyncMock(side_effect=RuntimeError("Main video container not found"))
+        backend._process_model_url = AsyncMock(side_effect=RuntimeError(case["public_feed_error"]))
         with patch("src.backend.profile_diagnostics.resolve_container", AsyncMock(return_value=SimpleNamespace(name="Example"))):
             with self.assertRaises(ProfileFeedUnavailable) as skipped:
                 await test_profile_url(backend, backend._downloads_model, case)
