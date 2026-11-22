@@ -12,6 +12,7 @@
   <img src="https://pornfetch.to/checklist/progress.svg?label=Version%204.1%20Development%20Progress" alt="Version 4.1 Development Progress" width="400"/>
 </a>
 
+
 ---
 
 **[<kbd><strong>&nbsp;<br>&nbsp;Download (v4.0.0)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/v4.0.0)** 
@@ -23,6 +24,10 @@
 
 ---
 </div>
+
+# Server Outage (Warning)
+The laptop running the Porn Fetch server experienced multiple hardware faults. The Porn Fetch website will stay down for a few days. For existing licenses, the fallback infrastructure is active. Your existing licenses will remain valid :) 
+
 
 > [!CAUTION]
 > Porn Fetch is an unofficial project and is not endorsed, sponsored, nor explicitly approved by its supported Websites. 
