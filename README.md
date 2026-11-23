@@ -25,10 +25,6 @@
 ---
 </div>
 
-# Server Outage (Warning)
-The laptop running the Porn Fetch server experienced multiple hardware faults. The Porn Fetch website will stay down for a few days. For existing licenses, the fallback infrastructure is active. Your existing licenses will remain valid :) 
-
-
 > [!CAUTION]
 > Porn Fetch is an unofficial project and is not endorsed, sponsored, nor explicitly approved by its supported Websites. 
 > Certain features of Porn Fetch are prohibited or restricted in [these countries](docs/PROHIBITED_COUNTRIES)
