@@ -1,4 +1,5 @@
 # v4.0.1
 
-- Updated the Pornhub, RedTube, and Tube8 integrations to stop sending preset
-  cookies that assert age or access status.
+- Removed age-cookies from PornHub, Redtube and Tube8 for legal compliance
+
+This is a hotfix with no additional features nor any other related changes
