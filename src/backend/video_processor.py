@@ -32,6 +32,7 @@ from src.shared.errors import (
     AppNotFoundError,
     safe_api_call,
 )
+from src.shared.public_media import RestrictedMediaError, account_media, account_video_row
 
 
 class ProcessVideos(QObject):
@@ -151,8 +152,28 @@ class ProcessVideos(QObject):
 
     @staticmethod
     async def process_single_video(video_object: str | clients.AnyVideoClass) -> tuple[
-        clients.AnyVideoClass, VideoObject]:
-        video = await clients.get_video(video_object)
+        clients.AnyVideoClass | None, VideoObject]:
+        from src.shared.provider_routing import PROVIDER_MODULES, unwrap_scrape_result
+
+        listed = unwrap_scrape_result(video_object)
+        if account_media(listed):
+            module = type(listed).__module__.split(".", 1)[0]
+            provider = next((name for name, package in PROVIDER_MODULES.items() if package == module), "")
+            row = account_video_row(listed, provider)
+            if row.provider_restricted:
+                return None, row
+            try:
+                video = await clients.get_video(row.url)
+                prepared = await clients.load_video_attributes(video=video)
+            except RestrictedMediaError:
+                row.provider_restricted = True
+                return None, row
+            except Exception:
+                # Keep the listing item visible if public metadata is unavailable.
+                return None, row
+            prepared.is_from_account = True
+            return video, prepared
+        video = await clients.get_video(listed)
         video_attributes = await clients.load_video_attributes(video=video)
         return video, video_attributes
 
@@ -176,8 +197,7 @@ class ProcessVideos(QObject):
                     continue
                 if self.video_filters.end_index and idx > self.video_filters.end_index:
                     break
-                print(f"Processing: {video} {idx}")
-                video_url = getattr(video, "url", str(video))
+                video_url = video if isinstance(video, str) else getattr(video, "url", None)
                 if self.result_limit is not None and examined >= self.result_limit:
                     break
                 examined += 1
@@ -196,7 +216,6 @@ class ProcessVideos(QObject):
                 try:
                     self.logger.debug(f"Current Index: {idx}")
                     video, video_object = await safe_api_call(self.process_single_video, video)
-                    print(f"Video: {video}")
 
                     self.logger.info("Checking Filters...")
                     if self.process_filter(self.video_filters, video_object):
@@ -217,6 +236,9 @@ class ProcessVideos(QObject):
 
                         self.download_manager.add_video(video_object)
 
+                except RestrictedMediaError as error:
+                    last_error = str(error)
+                    continue
                 except AppNetworkError as error:
                     last_exception = error
                     last_error = self.tr("A network error prevented this item from loading. Check your connection and submit the URL again. Continuing with the next item.")

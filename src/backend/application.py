@@ -168,6 +168,7 @@ from src.backend.download_manager import (
     select_allowed_quality,
 )
 from src.shared.access import bulk_video_requires_premium, download_parallelism, public_collection_items
+from src.shared.account_capabilities import ACCOUNT_PROVIDERS, account_provider_key, account_providers
 from src.backend.video_processor import ProcessVideos
 from src.database.bridge import DatabaseBridge
 from src.backend.proxy_tester import test_proxy as run_proxy_test, validate_proxy_url
@@ -365,11 +366,27 @@ class Backend(QObject):
             self._activity_active = active
             self.activityChanged.emit()
 
+    @Property("QVariantList", constant=True)
+    def accountProviders(self) -> list[dict]:
+        return [
+            {
+                "name": provider.name,
+                "login": provider.login or "",
+                "browserImport": provider.browser_import or "",
+                "emailRequired": provider.email_required,
+                "collections": [
+                    {"key": collection.key, "label": collection.label, "urlHint": collection.url_hint}
+                    for collection in provider.collections
+                ],
+            }
+            for provider in account_providers()
+        ]
+
     @Property("QVariantMap", notify=accountStateChanged)
     def accountLoginStatus(self) -> dict[str, bool]:
         return {
-            provider: provider_is_logged_in(provider)
-            for provider in ("PornHub", "XHamster", "XVideos")
+            provider.name: provider_is_logged_in(provider.key)
+            for provider in ACCOUNT_PROVIDERS.values()
         }
 
     def set_license_bridge(self, license_bridge: LicenseBridge) -> None:
@@ -1000,6 +1017,8 @@ class Backend(QObject):
 
     @Slot(str, bool)
     def download_video(self, job_id: str, cleanup_on_stop: bool = False) -> None:
+        from src.shared.public_media import RESTRICTED_MESSAGE
+
         if self._is_shutting_down:
             return
         if getattr(self, "creator_bridge", None) is not None and self.creator_bridge.transferBusy:
@@ -1019,6 +1038,9 @@ class Backend(QObject):
         if video is None:
             self.logger.warning("Cannot download unknown video: %s", job_id)
             return
+        if getattr(video, "provider_restricted", False):
+            self.showMessage.emit(RESTRICTED_MESSAGE)
+            return
         if bulk_video_requires_premium(video) and not self.has_premium_access():
             self.notifications.publish(
                 self.tr("Downloading beyond the first 5 videos of a public model, channel or playlist requires an active premium license."),
@@ -1035,6 +1057,8 @@ class Backend(QObject):
             # The provider exposes one MP4 without a reported resolution.
             # Licensed users can use it; free users still need a verified <=720p stream.
             allowed_quality = "best"
+        if not allowed_quality and getattr(video, "is_from_account", False) and not video.qualities:
+            allowed_quality = str(video.selected_quality or "best")
         if not allowed_quality:
             self.logger.warning("No permitted quality is available for this download")
             self.showMessage.emit(self.tr("No permitted quality is available for this video."))
@@ -1105,6 +1129,14 @@ class Backend(QObject):
         *,
         resuming: bool = False,
     ) -> None:
+        from src.shared.download_recovery import (
+            discard_changed_hls_quality, prepare_public_checkpoint, public_checkpoint_marker,
+        )
+        from src.shared.public_media import (
+            PublicMediaUnavailableError, RestrictedMediaError, account_media, guest_account_url, rejected_public_media,
+            require_public_media,
+        )
+
         download_started = False
         try:
             async with AsyncExitStack() as slots:
@@ -1129,17 +1161,28 @@ class Backend(QObject):
                         self.tr("Bulk downloading"), "info", key="bulk-preview")
                     return
 
-                if video.source_video is None:
+                if video.provider_restricted:
+                    raise RestrictedMediaError()
+                from_account = video.is_from_account or account_media(video.source_video)
+                if from_account:
+                    video.url = guest_account_url(video.url)
+                if resuming or from_account or video.source_video is None:
                     # Restored rows contain local metadata only. Resolve a fresh
                     # native video/session when the user explicitly resumes.
                     source = await clients.get_video(video.url)
                     fresh = await clients.load_video_attributes(source)
                     quality = select_allowed_quality(video.selected_quality, fresh.qualities, self.has_premium_access())
                     if not quality:
-                        raise ValueError("The restored video no longer offers a permitted quality")
+                        if from_account and not fresh.qualities:
+                            if not self.has_premium_access():
+                                raise PublicMediaUnavailableError()
+                            quality = "best"
+                        else:
+                            raise ValueError("The restored video no longer offers a permitted quality")
                     for attribute in ("title", "author", "length", "tags", "thumbnail_url", "video_id", "publish_date", "qualities", "library_metadata"):
                         setattr(video, attribute, getattr(fresh, attribute))
                     video.source_video = source
+                    video.selected_quality = quality
                     self._downloads_model.refresh_metadata(job_id)
                     self._downloads_model.set_video_quality(job_id, quality)
 
@@ -1208,6 +1251,7 @@ class Backend(QObject):
 
                 quality = video.selected_quality or "best"
                 source_video = video.source_video
+                require_public_media(source_video)
                 if isinstance(source_video, clients.rg_Video):
                     from src.shared.redgifs import quality_label
                     quality = await quality_label(source_video, quality)
@@ -1217,6 +1261,10 @@ class Backend(QObject):
                 if isinstance(source_video, clients.xf_Video):
                     from src.shared.media import xfreehd_quality
                     quality = xfreehd_quality(quality)
+                segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
+                segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
+                await asyncio.to_thread(prepare_public_checkpoint, output_path, segment_state_path, segment_dir,
+                                        video.url, str(quality))
                 raw_video_types = (
                     clients.ep_Video, clients.pt_Video, clients.xf_Video,
                     clients.ef_Video, clients.tf_Video, clients.pd_Video, clients.rg_Video,
@@ -1240,9 +1288,6 @@ class Backend(QObject):
                         result = await source_video.download(configuration)
                 else:
                     video.is_hls = getattr(source_video, "is_hls", True) is not False
-                    segment_dir = Path(TEMP_DIRECTORY_SEGMENTS) / job_id
-                    segment_state_path = Path(TEMP_DIRECTORY_STATES) / job_id
-                    from src.shared.download_recovery import discard_changed_hls_quality
                     await asyncio.to_thread(discard_changed_hls_quality, segment_state_path, segment_dir, quality)
                     segment_dir.mkdir(parents=True, exist_ok=True)
                     segment_state_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1312,6 +1357,7 @@ class Backend(QObject):
                 if status != "completed":
                     self._downloads_model.set_status(job_id, status)
                 if status == "completed":
+                    public_checkpoint_marker(segment_state_path).unlink(missing_ok=True)
                     metadata_written = bool(getattr(result, "metadata_written", False))
                     if is_mobile:
                         if app_settings.write_metadata and not FORCE_DISABLE_AV and not metadata_written and output_path.exists():
@@ -1367,6 +1413,11 @@ class Backend(QObject):
             video.status = "failed"
             self._downloads_model.set_status(job_id, "failed")
             self.download_manager.update_status(job_id, "failed")
+            if rejected_public_media(error):
+                message = str(error) if isinstance(error, RestrictedMediaError) else str(PublicMediaUnavailableError())
+                self._downloads_model.set_error(job_id, "", message)
+                self.notifications.download_failed("", message)
+                return
             self.logger.exception("Download failed for %s", job_id)
             report_id = await report_exception(
                 error,
@@ -1400,7 +1451,8 @@ class Backend(QObject):
                     raw_state = Path(f"{output_path}.raw-state.json")
                     hls_state = Path(TEMP_DIRECTORY_STATES) / job_id
                     for path in (output_path, Path(f"{output_path}.tmp"), raw_state,
-                                 Path(f"{raw_state}.tmp"), hls_state, Path(f"{hls_state}.tmp")):
+                                 Path(f"{raw_state}.tmp"), hls_state, Path(f"{hls_state}.tmp"),
+                                 public_checkpoint_marker(hls_state)):
                         try:
                             path.unlink(missing_ok=True)
                         except OSError:
@@ -1809,7 +1861,7 @@ class Backend(QObject):
         secret: str,
         from_cookies: bool = False,
     ) -> None:
-        provider_key = provider.strip().casefold()
+        provider_key = account_provider_key(provider)
 
         try:
             if provider_key == "pornhub":

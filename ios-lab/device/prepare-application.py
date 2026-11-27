@@ -23,16 +23,28 @@ shutil.copytree(repo / "src", app / "src", dirs_exist_ok=True,
 shutil.copytree(lab / "pornfetch/vendor", vendor, dirs_exist_ok=True,
     ignore=shutil.ignore_patterns("__pycache__", "*.so", "*.fwork"))
 shutil.copytree(device / "native/packages", vendor, dirs_exist_ok=True)
-# The archived overlay predates PyJWT, Porn.com, Pornhat, RedGIFs, Bellesa and YouJizz. Install their pure Python
-# wheels explicitly; resolving dependencies could replace matching native packages.
+# Refresh pure Python packages that are missing or outdated in the archived overlay.
+# Resolving their dependencies could replace matching native packages.
 requirements = tomllib.loads((repo / "pyproject.toml").read_text())["project"]["dependencies"]
 startup_requirements = [
     next(requirement for requirement in requirements if re.match(rf"(?i)^{name}\b", requirement))
     for name in ("pyjwt", "unofficial-api-for-porn", "unofficial-api-for-pornhat", "unofficial-api-for-redgifs", "unofficial-api-for-bellesa", "unofficial-api-for-youjizz")
 ]
+ios_pins = dict(line.split("==", 1) for line in (lab / "pornfetch/pure-requirements.txt").read_text().splitlines()
+                if "==" in line)
+refreshed_providers = ("unofficial-api-for-pornhub", "unofficial-api-for-redtube", "unofficial-api-for-tube8")
+startup_requirements.extend(f"{name}=={ios_pins[name]}" for name in refreshed_providers)
 subprocess.run([str(deploy_venv / "bin/python"), "-m", "pip", "install", "--disable-pip-version-check",
                 "--no-deps", "--only-binary=:all:", "--platform", "any", "--python-version", "3.15",
                 "--upgrade", "--target", str(vendor), *startup_requirements], check=True)
+for name in refreshed_providers:
+    distribution = name.replace("-", "_")
+    current_metadata = f"{distribution}-{ios_pins[name]}.dist-info"
+    if not (vendor / current_metadata / "METADATA").is_file():
+        raise SystemExit(f"Missing refreshed iOS dependency: {name}=={ios_pins[name]}")
+    for metadata in vendor.glob(f"{distribution}-*.dist-info"):
+        if metadata.name != current_metadata:
+            shutil.rmtree(metadata)
 subprocess.run([sys.executable, str(device / "patch-ios-ffmpeg.py")], check=True)
 subprocess.run([str(deploy_venv / "bin/pyside6-rcc"), "--binary", str(repo / "src/frontend/resources.qrc"),
                 "-o", str(app / "src/frontend/resources.rcc")], check=True)

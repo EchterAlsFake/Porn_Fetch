@@ -5,9 +5,12 @@ import asyncio
 import http.cookiejar
 import logging
 import re
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncGenerator, Mapping
 from typing import Any
 
+from base_api import make_iterator_config
+
+from src.shared.account_capabilities import ACCOUNT_PROVIDERS, account_provider_key
 from src.shared.provider_accounts import (
     connect_pornhub_cookies,
     connect_xvideos_cookies,
@@ -26,8 +29,10 @@ class AccountService:
         self.pool = pool
 
     def logged_in(self, provider: str) -> bool:
-        key = provider.casefold()
-        client = self.pool.client(key)
+        key = account_provider_key(provider)
+        if key not in ACCOUNT_PROVIDERS:
+            return False
+        client = self.pool.account_client(key)
         if key == "pornhub":
             return bool(getattr(client, "logged", False))
         return getattr(client, "account", None) is not None
@@ -42,10 +47,10 @@ class AccountService:
         browser: bool = False,
         browser_name: str | None = None,
     ) -> bool:
-        key = provider.casefold()
-        if key not in {"pornhub", "xhamster", "xvideos"}:
+        key = account_provider_key(provider)
+        if key not in ACCOUNT_PROVIDERS:
             raise ValueError(f"accounts are not supported for {provider}")
-        client = self.pool.client(key)
+        client = self.pool.account_client(key)
         cookies: Any = await browser_cookies(key, browser_name=browser_name) if browser else dict(tokens or {})
         if browser or cookies:
             if key == "pornhub":
@@ -77,13 +82,18 @@ class AccountService:
 
     def collection(
         self, provider: str, collection: str, playlist_url: str = "", *, pages: int | None = None
-    ) -> tuple[AsyncIterator[Any], str]:
-        key = provider.casefold()
+    ) -> tuple[AsyncGenerator[Any, None], str]:
+        key = account_provider_key(provider)
         name = collection.casefold()
         if not self.logged_in(key):
             raise ValueError(f"log in to {provider} first")
-        account = self.pool.client(key).account
-        options = {} if pages is None else {"pages": pages}
+        account = self.pool.account_client(key).account
+        options: dict[str, Any] = {
+            "iterator_config": make_iterator_config(load_specific_sources=(),
+                                                   page_request_method="POST" if key == "xvideos" else "GET"),
+        }
+        if pages is not None:
+            options["pages"] = pages
         if key == "pornhub":
             methods = {"history": "get_history", "recommended": "get_recommended", "favorites": "get_favorites", "feed": "get_feed"}
         elif key == "xhamster":

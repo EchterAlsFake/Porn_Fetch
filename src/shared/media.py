@@ -139,6 +139,7 @@ class VideoObject:
     is_hls: bool | None = None
     missing_segments: list[int] | None = None
     is_from_account: bool = False
+    provider_restricted: bool = False
     thumbnail_data: bytes | None = None
     library_metadata: LibraryMetadata | None = None
     export_destination: str | None = None

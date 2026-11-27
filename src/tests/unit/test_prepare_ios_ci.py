@@ -33,6 +33,14 @@ class IOSPreparationTests(unittest.TestCase):
             vendor = root / "lab/pornfetch/vendor"
             vendor.mkdir(parents=True)
             (vendor / "dependency.py").write_text("value = 1\n")
+            shutil.copyfile(ROOT / "ios-lab/pornfetch/pure-requirements.txt", vendor.parent / "pure-requirements.txt")
+            provider_versions = {
+                "unofficial-api-for-pornhub": ("6.0.1", "6.0.3"),
+                "unofficial-api-for-redtube": ("2.0.0", "2.0.1"),
+                "unofficial-api-for-tube8": ("2.0.0", "2.0.1"),
+            }
+            for package, (old, _) in provider_versions.items():
+                (vendor / f"{package.replace('-', '_')}-{old}.dist-info").mkdir()
             native = device / "native/packages"
             native.mkdir(parents=True)
             (native / "_ios_ffmpeg.cpython-315-iphoneos.so").write_bytes(b"device extension")
@@ -53,6 +61,10 @@ class IOSPreparationTests(unittest.TestCase):
             def deploy(command, **kwargs):
                 if command[1:4] == ["-m", "pip", "install"]:
                     installs.append(command)
+                    for package, (_, current) in provider_versions.items():
+                        metadata = device / "vendor" / f"{package.replace('-', '_')}-{current}.dist-info"
+                        metadata.mkdir()
+                        (metadata / "METADATA").write_text(f"Name: {package}\nVersion: {current}\n")
                 if Path(command[0]).name == "pyside6-ios-deploy":
                     project.parent.mkdir(parents=True)
                     project.write_text('/* Begin PBXFileReference section */\n/* End PBXFileReference section */\n'
@@ -78,6 +90,12 @@ class IOSPreparationTests(unittest.TestCase):
             self.assertEqual(len(installs), 1)
             for package in ("PyJWT", "unofficial-api-for-porn>="):
                 self.assertIn(next(req for req in requirements if req.startswith(package)), installs[0])
+            for package, (old, current) in provider_versions.items():
+                with self.subTest(package=package):
+                    self.assertIn(f"{package}=={current}", installs[0])
+                    distribution = package.replace("-", "_")
+                    self.assertFalse((device / "vendor" / f"{distribution}-{old}.dist-info").exists())
+                    self.assertTrue((device / "vendor" / f"{distribution}-{current}.dist-info" / "METADATA").is_file())
             self.assertEqual(installs[0][0], str(root / "venv/bin/python"))
             self.assertIn("--no-deps", installs[0])
             self.assertIn("--only-binary=:all:", installs[0])

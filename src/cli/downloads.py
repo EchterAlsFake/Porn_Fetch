@@ -63,9 +63,11 @@ def has_resume_state(target: str | Path, *, state_directory: Path | None = None)
 
 def clear_resume_state(target: str | Path, *, state_directory: Path | None = None) -> None:
     """Purge HLS/RAW resume state, segments and assembly temporary files."""
+    from src.shared.download_recovery import public_checkpoint_marker
+
     state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
     raw_state = Path(f"{target}.raw-state.json")
-    for temporary in (state_path, Path(f"{state_path}.tmp"), Path(f"{target}.tmp"),
+    for temporary in (state_path, public_checkpoint_marker(state_path), Path(f"{state_path}.tmp"), Path(f"{target}.tmp"),
                       raw_state, raw_state.with_name(raw_state.name + ".tmp")):
         try:
             temporary.unlink(missing_ok=True)
@@ -295,6 +297,15 @@ async def download_video(
     from base_api import DownloadConfigHLS, DownloadConfigRAW
     from base_api.modules.errors import DownloadCancelled
 
+    from src.shared.download_recovery import prepare_public_checkpoint
+    from src.shared.public_media import (
+        PublicMediaUnavailableError,
+        RestrictedMediaError,
+        rejected_public_media,
+        require_public_media,
+    )
+
+    require_public_media(video)
     target = Path(path)
     state_directory = controller.state_directory if controller else None
     paused_store = controller.paused_store if controller else PausedStore()
@@ -382,8 +393,10 @@ async def download_video(
         stop_event=event, max_workers=settings.download_workers,
         read_timeout=float(settings.timeout), max_retries=settings.request_attempts,
     )
+    state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
+    await asyncio.to_thread(prepare_public_checkpoint, target, state_path, segment_dir,
+                            str(getattr(video, "url", "")), str(configuration_quality))
     if not raw:
-        state_path, segment_dir = get_resume_paths(target, state_directory=state_directory)
         state_path.parent.mkdir(parents=True, exist_ok=True)
         segment_dir.mkdir(parents=True, exist_ok=True)
         can_remux = _has_av()
@@ -413,6 +426,12 @@ async def download_video(
             raise
         # RAW providers raise on cooperative stop; HLS can return a report.
         result = None
+    except RestrictedMediaError:
+        raise
+    except Exception as error:
+        if rejected_public_media(error):
+            raise PublicMediaUnavailableError() from error
+        raise
     finally:
         if controller:
             controller._download_running = False
@@ -468,7 +487,11 @@ async def download_gallery(
     from selectolax.lexbor import LexborHTMLParser
     from xfreehd_api import Album as XFreeHDAlbum
 
+    from src.shared.public_media import require_public_media
+
+    require_public_media(album)
     await _load_album(album)
+    require_public_media(album)
     fallback_title = "album-" + Path(urlparse(getattr(album, "url", "")).path).name
     title = _sanitize(str(getattr(album, "title", None) or fallback_title))
     directory = Path(output_root) / title

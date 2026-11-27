@@ -1,0 +1,56 @@
+name: Generate GUI translations
+on:
+  workflow_dispatch:
+    inputs:
+      locale:
+        description: GUI locale to translate
+        type: choice
+        options:
+          - all
+          - de_DE
+          - es
+          - hi_IN
+          - zh_CN
+        default: all
+      limit:
+        description: Maximum pending messages per locale (0 translates all)
+        type: number
+        default: 0
+permissions:
+  contents: read
+concurrency:
+  group: gui-translations-${{ github.ref }}
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.15.2'
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv sync --upgrade --extra gui --group dev
+      - run: uv run --no-sync python scripts/translations.py extract
+      - name: Translate pending messages
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TRANSLATION_MODEL: ${{ vars.OPENAI_TRANSLATION_MODEL }}
+          TARGET_LOCALE: ${{ inputs.locale }}
+          MESSAGE_LIMIT: ${{ inputs.limit }}
+        run: |
+          args=()
+          if [[ "$TARGET_LOCALE" != all ]]; then args+=(--locale "$TARGET_LOCALE"); fi
+          if [[ "$MESSAGE_LIMIT" != 0 ]]; then args+=(--limit "$MESSAGE_LIMIT"); fi
+          uv run --no-sync python scripts/translations.py generate "${args[@]}"
+      - run: uv run --no-sync python scripts/translations.py extract
+      - run: uv run --no-sync python scripts/translations.py build
+      - name: Create review patch
+        run: git diff --binary -- src/frontend > gui-translations.patch
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: gui-translations
+          path: |
+            gui-translations.patch
+            src/frontend/translations/ts/*.ts

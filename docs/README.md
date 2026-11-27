@@ -10,12 +10,9 @@
 - [Provider metadata capabilities and source audit](PROVIDER_METADATA.md)
 - [Creator subscriptions](CREATORS.md)
 - [Run tests](TESTING.md)
-- [Bellesa integration and verification](BELLESA.md)
-- [Porn.com integration and verification](PORN.md)
-- [YouJizz integration and verification](YOUJIZZ.md)
 - [Build and publish releases](RELEASING.md)
 - [Help with future translations](TRANSLATING.md)
 
 Release progress is on the [live checklist](https://pornfetch.to/checklist).
 [Changelog](CHANGELOG.md) and [credits](CREDITS.md) keep the project history.
-Older audit reports and task handoffs are available in Git history.
+Internal audit reports and task handoffs are routed through [AGENTS.md](../AGENTS.md).

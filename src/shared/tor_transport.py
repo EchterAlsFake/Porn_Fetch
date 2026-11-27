@@ -9,6 +9,7 @@ from base_api import BaseCore
 from curl_cffi import CurlError
 from curl_cffi.const import CurlOpt
 
+from .public_media import RestrictedMediaError, check_public_host
 from .tor_runtime import TorUnavailable, runtime
 
 FAIL_CLOSED_PROXY = "socks5h://127.0.0.1:9"
@@ -42,13 +43,25 @@ def tor_options(proxy):
 
 
 class MediaCore(BaseCore):
-    def __init__(self, configuration, *, settings=None, manager=None):
+    def __init__(self, configuration, *, settings=None, manager=None, account_only=False):
         super().__init__(configuration=configuration)
+        self.account_only = account_only
         self.routing_settings = settings if settings is not None else configuration
         self.tor_manager = manager or runtime
         self._dns_fallback_core = None
         self._dns_fallback_session = None
         self._dns_fallback_lock = asyncio.Lock()
+
+    def clone_for_retry(self, configuration):
+        """Retain the same routing and account boundary when a provider renews a session."""
+        return MediaCore(configuration, settings=self.routing_settings, manager=self.tor_manager,
+                         account_only=self.account_only)
+
+    def validate_playback(self, url, *, is_premium=None):
+        if not self.account_only:
+            check_public_host(url)
+            if is_premium is True:
+                raise RestrictedMediaError()
 
     async def close(self):
         if self._dns_fallback_core is not None:
@@ -65,7 +78,7 @@ class MediaCore(BaseCore):
                 configuration = copy(self.configuration)
                 configuration.dns_over_https = configuration.fallback_dns
                 configuration.fallback_dns = None
-                fallback = MediaCore(configuration, settings=self.routing_settings, manager=self.tor_manager)
+                fallback = self.clone_for_retry(configuration)
                 fallback.default_headers.update(self.default_headers)
                 fallback.initialize_session()
                 assert fallback.session is not None
@@ -91,6 +104,9 @@ class MediaCore(BaseCore):
 
         @wraps(request)
         async def routed_request(*args, **kwargs):
+            if not self.account_only:
+                url = kwargs.get("url") or (args[1] if len(args) > 1 else "")
+                check_public_host(str(url))
             if all_traffic_enabled(self.routing_settings):
                 # Guard the session, rather than only BaseCore.request: raw MP4
                 # range downloads and streams also call the session directly.
@@ -104,14 +120,24 @@ class MediaCore(BaseCore):
                 kwargs.pop("proxies", None)
                 kwargs.update(proxy=proxy, proxy_auth=None, interface=None, http_version="v2", verify=True)
             try:
-                return await request(*args, **kwargs)
+                response = await request(*args, **kwargs)
             except CurlError as error:
                 fallback = getattr(self.configuration, "fallback_dns", None)
                 if (error.code != 6 or not self.configuration.dns_over_https or not fallback
                         or fallback == self.configuration.dns_over_https or all_traffic_enabled(self.routing_settings)):
                     raise
                 self.logger.info("Primary DNS over HTTPS failed; trying the configured fallback")
-                return await self._fallback_dns_request(session, args, kwargs)
+                response = await self._fallback_dns_request(session, args, kwargs)
+            if not self.account_only:
+                try:
+                    check_public_host(str(getattr(response, "url", "")))
+                except RestrictedMediaError:
+                    if kwargs.get("stream"):
+                        if stop := getattr(response, "quit_now", None):
+                            stop.set()
+                        await response.aclose()
+                    raise
+            return response
 
         session.request = routed_request
         session._tor_routed = True

@@ -2,16 +2,24 @@ import QtQuick
 import QtQuick.Controls
 
 HelpButton {
-    property string provider: "PornHub"
-    property bool browserImportAvailable: true
+    property string provider: ""
+    property bool usesSessionTokens: false
+    property bool usesAccountCredentials: false
+    property bool browserUsernameRequired: false
+    property bool browserImportAvailable: false
+
     text: qsTr("How to login")
-    helpText: (provider === "PornHub"
-        ? qsTr("PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.")
-        : provider === "XHamster"
-          ? qsTr("XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.")
-          : qsTr("XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required."))
-        + "\n\n" + qsTr("Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.")
-        + "\n\n" + (browserImportAvailable
-          ? qsTr("To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site's cookies from local browser profiles and passes them to the site's client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.")
-          : qsTr("Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos."))
+
+    readonly property string manualHelp: usesSessionTokens
+        ? qsTr("%1: sign in on the website in a browser. In Developer Tools, open Application or Storage, then Cookies. Copy session_token and session_token_auth into the matching fields and select Login with Session Tokens. On Android, you can obtain both tokens from your desktop browser.").arg(provider)
+        : usesAccountCredentials
+          ? qsTr("%1: enter your account email address and password, then select Login.").arg(provider)
+          : ""
+    readonly property string browserHelp: browserImportAvailable
+        ? qsTr("To import cookies, first sign in to %1 in Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf. Then select Login with Browser Cookies. Your operating system may ask for keychain access. If import fails, try closing the browser. If the session expires, sign in on the website again.").arg(provider)
+          + (browserUsernameRequired ? " " + qsTr("Enter your profile username in the browser login section.") : "")
+        : qsTr("Automatic browser-cookie import is available on desktop only.")
+    helpText: [manualHelp, browserHelp,
+               qsTr("Login cookies identify your signed-in session. Treat them like a password and keep them private.")]
+              .filter(paragraph => paragraph.length > 0).join("\n\n")
 }

@@ -4,60 +4,81 @@
 <context>
     <name>AccountLoginHelp</name>
     <message>
-        <location filename="../../UI/AccountLoginHelp.qml" line="+7"/>
+        <location filename="../../UI/AccountLoginHelp.qml" line="+11"/>
         <source>How to login</source>
         <translation>如何登录</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>%1: sign in on the website in a browser. In Developer Tools, open Application or Storage, then Cookies. Copy session_token and session_token_auth into the matching fields and select Login with Session Tokens. On Android, you can obtain both tokens from your desktop browser.</source>
+        <translation>%1：先在浏览器中登录网站。在开发者工具中打开“应用”或“存储”，然后打开 Cookie。将 session_token 和 session_token_auth 复制到对应的输入框中，再选择“使用会话令牌登录”。在 Android 上，你可以从桌面浏览器获取这两个令牌。</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>%1: enter your account email address and password, then select Login.</source>
+        <translation>%1：输入账号的电子邮箱地址和密码，然后选择“登录”。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>To import cookies, first sign in to %1 in Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf. Then select Login with Browser Cookies. Your operating system may ask for keychain access. If import fails, try closing the browser. If the session expires, sign in on the website again.</source>
+        <translation>要导入 Cookie，请先在 Chrome、Firefox、Edge、Brave、Opera、Vivaldi、Safari 或 LibreWolf 中登录 %1，然后选择“使用浏览器 Cookie 登录”。系统可能会请求访问钥匙串。如果导入失败，请尝试关闭浏览器。如果会话已过期，请重新登录网站。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter your profile username in the browser login section.</source>
+        <translation>在浏览器登录区域输入你的个人资料用户名。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Automatic browser-cookie import is available on desktop only.</source>
+        <translation>仅桌面版支持自动导入浏览器 Cookie。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Login cookies identify your signed-in session. Treat them like a password and keep them private.</source>
+        <translation>登录 Cookie 用于识别你的登录会话。请像保护密码一样保护它们。</translation>
+    </message>
+    <message>
         <source>PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.</source>
-        <translation>PornHub：输入账户邮箱和密码，然后点击“登录”。登录后，可通过各合集按钮加载视频。若要通过浏览器登录，请在单独的浏览器登录区域填写 PornHub 用户名，而不是邮箱地址。</translation>
+        <translation type="vanished">PornHub：输入账户邮箱和密码，然后点击“登录”。登录后，可通过各合集按钮加载视频。若要通过浏览器登录，请在单独的浏览器登录区域填写 PornHub 用户名，而不是邮箱地址。</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.</source>
-        <translation>XHamster：输入账户邮箱和密码，然后点击“登录”。不能使用用户名登录。你可以加载喜欢的视频，也可以粘贴账户中播放列表的网址。此处通过浏览器登录时无需输入邮箱地址。</translation>
+        <translation type="vanished">XHamster：输入账户邮箱和密码，然后点击“登录”。不能使用用户名登录。你可以加载喜欢的视频，也可以粘贴账户中播放列表的网址。此处通过浏览器登录时无需输入邮箱地址。</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required.</source>
-        <translation>XVideos：先在浏览器中登录网站。打开开发者工具，依次进入 Application / Storage → Cookies → XVideos 域名。将 session_token 和 session_token_auth 的值复制到对应输入框，然后点击“使用会话令牌登录”。在手机上，请使用带开发者工具的浏览器，或从电脑浏览器获取令牌。两个令牌都必填。</translation>
+        <translation type="vanished">XVideos：先在浏览器中登录网站。打开开发者工具，依次进入 Application / Storage → Cookies → XVideos 域名。将 session_token 和 session_token_auth 的值复制到对应输入框，然后点击“使用会话令牌登录”。在手机上，请使用带开发者工具的浏览器，或从电脑浏览器获取令牌。两个令牌都必填。</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.</source>
-        <translation>Cookies 是由浏览器中的网站存储的小值。 登录 cookie 识别你的签名会话，所以对待它们像密码一样，并且永远不要分享它们。</translation>
+        <translation type="vanished">Cookies 是由浏览器中的网站存储的小值。 登录 cookie 识别你的签名会话，所以对待它们像密码一样，并且永远不要分享它们。</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site&apos;s cookies from local browser profiles and passes them to the site&apos;s client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.</source>
-        <translation>要导入 Cookie，请先在受支持的桌面浏览器（Chrome、Firefox、Edge、Brave、Opera、Vivaldi、Safari 或 LibreWolf）中登录所选网站，再点击“使用浏览器 Cookie 登录”。Porn Fetch 通过 browser-cookie3 从本地浏览器配置中读取该网站的 Cookie，并交给该网站的客户端处理。此操作不会打开新的登录窗口。操作系统可能会请求访问钥匙串。若导入失败，请关闭浏览器以释放 Cookie 数据库，检查权限后重试。会话过期后，请重新登录网站。</translation>
+        <translation type="vanished">要导入 Cookie，请先在受支持的桌面浏览器（Chrome、Firefox、Edge、Brave、Opera、Vivaldi、Safari 或 LibreWolf）中登录所选网站，再点击“使用浏览器 Cookie 登录”。Porn Fetch 通过 browser-cookie3 从本地浏览器配置中读取该网站的 Cookie，并交给该网站的客户端处理。此操作不会打开新的登录窗口。操作系统可能会请求访问钥匙串。若导入失败，请关闭浏览器以释放 Cookie 数据库，检查权限后重试。会话过期后，请重新登录网站。</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos.</source>
-        <translation>仅在桌面上可用自动浏览器- cookie 导入。 Android时，使用PornHub或XHamster的账户证书，并粘贴XVideos的会话牌。</translation>
+        <translation type="vanished">仅在桌面上可用自动浏览器- cookie 导入。 Android时，使用PornHub或XHamster的账户证书，并粘贴XVideos的会话牌。</translation>
     </message>
 </context>
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+70"/>
         <source>PornHub</source>
-        <translation>PornHub</translation>
+        <translation type="vanished">PornHub</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XHamster</source>
-        <translation>XHamster</translation>
+        <translation type="vanished">XHamster</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XVideos</source>
-        <translation>XVideos</translation>
+        <translation type="vanished">XVideos</translation>
     </message>
     <message>
-        <location line="+207"/>
+        <location filename="../../UI/AccountPage.qml" line="+259"/>
         <source>Logged in to %1</source>
         <translation>已登录 %1</translation>
     </message>
@@ -67,12 +88,21 @@
         <translation>未登录 %1</translation>
     </message>
     <message>
-        <location line="-21"/>
         <source>PornHub username for browser cookies (not email)</source>
-        <translation>浏览器 cookie (不是电子邮件) PornHub 用户名</translation>
+        <translation type="vanished">浏览器 cookie (不是电子邮件) PornHub 用户名</translation>
     </message>
     <message>
-        <location line="-177"/>
+        <location line="-194"/>
+        <source>Choose a website</source>
+        <translation>选择网站</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Account access for %1 is unavailable in Porn Fetch.</source>
+        <translation>Porn Fetch 暂不支持访问 %1 账号。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Email:</source>
         <translation>电子邮件：</translation>
     </message>
@@ -92,7 +122,12 @@
         <translation>Enter 你的密码</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+15"/>
+        <source>%1 requires your email address, not your username.</source>
+        <translation>%1 要求使用电子邮箱地址登录，而不是用户名。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Session token:</source>
         <translation>会话令牌：</translation>
     </message>
@@ -107,12 +142,12 @@
         <translation>会话认证令牌：</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Enter session_token_auth</source>
         <translation>输入 session_token_auth</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Login with Session Tokens</source>
         <translation>使用会话令牌登录</translation>
     </message>
@@ -122,63 +157,70 @@
         <translation>登录</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+51"/>
+        <source>%1 username for browser cookies (not email)</source>
+        <translation>用于浏览器 Cookie 的 %1 用户名（非电子邮箱）</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Login with Browser Cookies</source>
         <translation>使用浏览器 Cookie 登录</translation>
     </message>
     <message>
-        <location line="-63"/>
-        <location line="+15"/>
+        <location line="+43"/>
+        <source>Account playlist URL</source>
+        <translation>账号播放列表网址</translation>
+    </message>
+    <message>
+        <location filename="../../../shared/account_capabilities.py" line="+27"/>
         <source>Get Watch History</source>
         <translation>加载观看记录</translation>
     </message>
     <message>
-        <location line="-95"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster 需要你的电子邮件地址，而不是你的用户名。</translation>
+        <translation type="vanished">XHamster 需要你的电子邮件地址，而不是你的用户名。</translation>
     </message>
     <message>
-        <location line="+81"/>
+        <location line="+28"/>
         <source>Get Watch Later Videos</source>
         <translation>加载“稍后观看”中的视频</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-18"/>
         <source>Get Recommended Videos</source>
         <translation>获取推荐视频</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Get Subscription Feed</source>
         <translation>获取订阅种子</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Get Favorite Videos</source>
         <translation>获取最喜爱的视频</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-11"/>
         <source>Get Liked Videos</source>
         <translation>获取喜欢的视频</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location filename="../../UI/AccountPage.qml" line="-6"/>
         <source>Account playlist URL:</source>
         <translation>账户播放列表 URL :</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>https://xhamster.com/my/playlists/...</source>
-        <translation>https://xhamster.com/my/playlists/...</translation>
+        <translation type="vanished">https://xhamster.com/my/playlists/...</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location filename="../../../shared/account_capabilities.py" line="+19"/>
         <source>Get Playlist Videos</source>
         <translation>获取播放列表视频</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location filename="../../UI/AccountPage.qml" line="+45"/>
         <source>Loading account videos...</source>
         <translation>正在装入账户视频...</translation>
     </message>
@@ -191,111 +233,88 @@
 <context>
     <name>AndroidAccountPage</name>
     <message>
-        <location filename="../../UI/AndroidAccountPage.qml" line="+40"/>
-        <location line="+12"/>
         <source>Choose a website</source>
-        <translation>选择网站</translation>
+        <translation type="vanished">选择网站</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Connected to %1</source>
-        <translation>连接到 %1</translation>
+        <translation type="vanished">连接到 %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Connect to %1</source>
-        <translation>连接到 %1</translation>
+        <translation type="vanished">连接到 %1</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Email address</source>
-        <translation>电子邮箱</translation>
+        <translation type="vanished">电子邮箱</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster 需要你的电子邮件地址，而不是你的用户名。</translation>
+        <translation type="vanished">XHamster 需要你的电子邮件地址，而不是你的用户名。</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Password</source>
-        <translation>密码</translation>
+        <translation type="vanished">密码</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>session_token</source>
-        <translation>session_token</translation>
+        <translation type="vanished">session_token</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>session_token_auth</source>
-        <translation>session_token_auth</translation>
+        <translation type="vanished">session_token_auth</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Connecting…</source>
-        <translation>正在连接...</translation>
+        <translation type="vanished">正在连接...</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Sign in</source>
-        <translation>登录</translation>
+        <translation type="vanished">登录</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Your collections</source>
-        <translation>你的收藏</translation>
+        <translation type="vanished">你的收藏</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Videos you retrieve appear in Downloads.</source>
-        <translation>你获取的视频出现在下载中。</translation>
+        <translation type="vanished">你获取的视频出现在下载中。</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+8"/>
         <source>Watch history</source>
-        <translation>观看记录</translation>
+        <translation type="vanished">观看记录</translation>
     </message>
     <message>
-        <location line="-8"/>
         <source>Watch later</source>
-        <translation>稍后观看</translation>
+        <translation type="vanished">稍后观看</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Recommended</source>
-        <translation>建议</translation>
+        <translation type="vanished">建议</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Subscription feed</source>
-        <translation>订阅种子</translation>
+        <translation type="vanished">订阅种子</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Favorites</source>
-        <translation>收藏</translation>
+        <translation type="vanished">收藏</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Liked videos</source>
-        <translation>喜欢的视频</translation>
+        <translation type="vanished">喜欢的视频</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Account playlist URL</source>
-        <translation>账户播放列表 URL</translation>
+        <translation type="vanished">账户播放列表 URL</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Get playlist videos</source>
-        <translation>获取播放列表视频</translation>
+        <translation type="vanished">获取播放列表视频</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Loading account videos…</source>
-        <translation>正在装入账户视频...</translation>
+        <translation type="vanished">正在装入账户视频...</translation>
     </message>
 </context>
 <context>
@@ -2255,7 +2274,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+906"/>
+        <location filename="../../../backend/application.py" line="+923"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation>警告：SSL 连接或证书验证失败。跳过验证继续连接，可能使你的流量和登录凭据被截获。</translation>
     </message>
@@ -2275,8 +2294,8 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation>此视频没有允许的质量。</translation>
     </message>
     <message>
-        <location line="-758"/>
-        <location line="+228"/>
+        <location line="-774"/>
+        <location line="+244"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2284,12 +2303,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation>应用更新</translation>
     </message>
     <message>
-        <location line="-232"/>
+        <location line="-248"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation>准备下载列表。 增列项目：%s</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+45"/>
         <source>License rejected</source>
         <translation>许可证已被拒绝</translation>
     </message>
@@ -7237,7 +7256,7 @@ Stopping downloads and saving application state.</source>
         <translation>正在初始化...</translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="-1756"/>
+        <location filename="../../../backend/application.py" line="-1773"/>
         <source>Importing (General).</source>
         <translation>正在加载通用组件……</translation>
     </message>
@@ -7252,12 +7271,12 @@ Stopping downloads and saving application state.</source>
         <translation>正在加载后端……</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <source>Importing (Frontend).</source>
         <translation>正在加载界面……</translation>
     </message>
     <message>
-        <location line="+1954"/>
+        <location line="+1970"/>
         <source>Loading Window...</source>
         <translation>正在装入窗口...</translation>
     </message>
@@ -7722,7 +7741,7 @@ If you are using only the GUI this will not affect your user experience, but may
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+393"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+380"/>
         <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation>%d分钟</translation>

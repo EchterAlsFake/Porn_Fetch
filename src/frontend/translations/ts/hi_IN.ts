@@ -4,60 +4,81 @@
 <context>
     <name>AccountLoginHelp</name>
     <message>
-        <location filename="../../UI/AccountLoginHelp.qml" line="+7"/>
+        <location filename="../../UI/AccountLoginHelp.qml" line="+11"/>
         <source>How to login</source>
         <translation>लॉग इन करने का तरीका</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>%1: sign in on the website in a browser. In Developer Tools, open Application or Storage, then Cookies. Copy session_token and session_token_auth into the matching fields and select Login with Session Tokens. On Android, you can obtain both tokens from your desktop browser.</source>
+        <translation>%1: ब्राउज़र में वेबसाइट पर साइन इन करें। डेवलपर टूल में Application या Storage खोलें, फिर Cookies खोलें। session_token और session_token_auth को संबंधित फ़ील्ड में कॉपी करें और सत्र टोकन से लॉग इन करने का विकल्प चुनें। Android पर इस्तेमाल के लिए आप दोनों टोकन अपने डेस्कटॉप ब्राउज़र से ले सकते हैं।</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>%1: enter your account email address and password, then select Login.</source>
+        <translation>%1: अपने खाते का ईमेल पता और पासवर्ड दर्ज करें, फिर लॉग इन चुनें।</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>To import cookies, first sign in to %1 in Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf. Then select Login with Browser Cookies. Your operating system may ask for keychain access. If import fails, try closing the browser. If the session expires, sign in on the website again.</source>
+        <translation>कुकी आयात करने के लिए पहले Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari या LibreWolf में %1 पर साइन इन करें। फिर ब्राउज़र कुकी से लॉग इन करने का विकल्प चुनें। आपका ऑपरेटिंग सिस्टम कीचेन के उपयोग की अनुमति माँग सकता है। आयात विफल होने पर ब्राउज़र बंद करके देखें। सत्र की अवधि समाप्त होने पर वेबसाइट पर फिर से साइन इन करें।</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter your profile username in the browser login section.</source>
+        <translation>ब्राउज़र से लॉग इन करने वाले भाग में अपनी प्रोफ़ाइल का उपयोगकर्ता नाम दर्ज करें।</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Automatic browser-cookie import is available on desktop only.</source>
+        <translation>ब्राउज़र कुकी का स्वचालित आयात केवल डेस्कटॉप पर उपलब्ध है।</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Login cookies identify your signed-in session. Treat them like a password and keep them private.</source>
+        <translation>लॉगिन कुकी आपके साइन-इन किए गए सत्र की पहचान करती हैं। इन्हें पासवर्ड की तरह गोपनीय रखें।</translation>
+    </message>
+    <message>
         <source>PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.</source>
-        <translation>PornHub: अपने खाते का ईमेल पता और पासवर्ड डालें, फिर “लॉग इन करें” दबाएँ। लॉग इन होने के बाद संग्रह वाले बटनों से अपने वीडियो लोड करें। ब्राउज़र कुकीज़ से लॉग इन करने के लिए अलग ब्राउज़र सेक्शन में अपना PornHub प्रोफ़ाइल यूज़रनेम डालें, ईमेल पता नहीं।</translation>
+        <translation type="vanished">PornHub: अपने खाते का ईमेल पता और पासवर्ड डालें, फिर “लॉग इन करें” दबाएँ। लॉग इन होने के बाद संग्रह वाले बटनों से अपने वीडियो लोड करें। ब्राउज़र कुकीज़ से लॉग इन करने के लिए अलग ब्राउज़र सेक्शन में अपना PornHub प्रोफ़ाइल यूज़रनेम डालें, ईमेल पता नहीं।</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.</source>
-        <translation>XHamster: अपने खाते का ईमेल पता और पासवर्ड डालें, फिर “लॉग इन करें” दबाएँ। यूज़रनेम से लॉग इन नहीं कर सकते। आप पसंद किए गए वीडियो लोड कर सकते हैं या अपने खाते की प्लेलिस्ट का URL पेस्ट कर सकते हैं। यहाँ ब्राउज़र से लॉग इन करने के लिए ईमेल पता ज़रूरी नहीं है।</translation>
+        <translation type="vanished">XHamster: अपने खाते का ईमेल पता और पासवर्ड डालें, फिर “लॉग इन करें” दबाएँ। यूज़रनेम से लॉग इन नहीं कर सकते। आप पसंद किए गए वीडियो लोड कर सकते हैं या अपने खाते की प्लेलिस्ट का URL पेस्ट कर सकते हैं। यहाँ ब्राउज़र से लॉग इन करने के लिए ईमेल पता ज़रूरी नहीं है।</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required.</source>
-        <translation>XVideos: ब्राउज़र में वेबसाइट पर लॉग इन करें। Developer Tools खोलें और Application / Storage → Cookies → XVideos के डोमेन पर जाएँ। session_token और session_token_auth की वैल्यू संबंधित फ़ील्ड में कॉपी करें, फिर “सेशन टोकन से लॉग इन करें” दबाएँ। फ़ोन पर Developer Tools वाला ब्राउज़र इस्तेमाल करें या अपने कंप्यूटर के ब्राउज़र से टोकन लें। दोनों टोकन ज़रूरी हैं।</translation>
+        <translation type="vanished">XVideos: ब्राउज़र में वेबसाइट पर लॉग इन करें। Developer Tools खोलें और Application / Storage → Cookies → XVideos के डोमेन पर जाएँ। session_token और session_token_auth की वैल्यू संबंधित फ़ील्ड में कॉपी करें, फिर “सेशन टोकन से लॉग इन करें” दबाएँ। फ़ोन पर Developer Tools वाला ब्राउज़र इस्तेमाल करें या अपने कंप्यूटर के ब्राउज़र से टोकन लें। दोनों टोकन ज़रूरी हैं।</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.</source>
-        <translation>कुकीज़ छोटी जानकारियाँ हैं जिन्हें वेबसाइट आपके ब्राउज़र में सेव करती है। लॉगिन कुकीज़ से आपकी मौजूदा लॉगिन सेशन की पहचान होती है। उन्हें पासवर्ड की तरह सुरक्षित रखें और कभी शेयर न करें।</translation>
+        <translation type="vanished">कुकीज़ छोटी जानकारियाँ हैं जिन्हें वेबसाइट आपके ब्राउज़र में सेव करती है। लॉगिन कुकीज़ से आपकी मौजूदा लॉगिन सेशन की पहचान होती है। उन्हें पासवर्ड की तरह सुरक्षित रखें और कभी शेयर न करें।</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site&apos;s cookies from local browser profiles and passes them to the site&apos;s client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.</source>
-        <translation>कुकीज़ इंपोर्ट करने के लिए किसी समर्थित डेस्कटॉप ब्राउज़र (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari या LibreWolf) में चुनी हुई वेबसाइट पर लॉग इन करें। फिर “ब्राउज़र कुकीज़ से लॉग इन करें” दबाएँ। Porn Fetch, browser-cookie3 की मदद से आपके स्थानीय ब्राउज़र प्रोफ़ाइल से उस वेबसाइट की कुकीज़ पढ़कर उन्हें वेबसाइट से जुड़ने वाले क्लाइंट को देता है। कोई नई ब्राउज़र लॉगिन विंडो नहीं खुलती। आपका ऑपरेटिंग सिस्टम कीचेन का ऐक्सेस माँग सकता है। इंपोर्ट विफल हो, तो ब्राउज़र बंद करें ताकि उसकी कुकी डेटाबेस फ़ाइल इस्तेमाल में न रहे। फिर अनुमतियाँ जाँचकर दोबारा कोशिश करें। सेशन की समय-सीमा खत्म हो जाए, तो वेबसाइट पर फिर से लॉग इन करें।</translation>
+        <translation type="vanished">कुकीज़ इंपोर्ट करने के लिए किसी समर्थित डेस्कटॉप ब्राउज़र (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari या LibreWolf) में चुनी हुई वेबसाइट पर लॉग इन करें। फिर “ब्राउज़र कुकीज़ से लॉग इन करें” दबाएँ। Porn Fetch, browser-cookie3 की मदद से आपके स्थानीय ब्राउज़र प्रोफ़ाइल से उस वेबसाइट की कुकीज़ पढ़कर उन्हें वेबसाइट से जुड़ने वाले क्लाइंट को देता है। कोई नई ब्राउज़र लॉगिन विंडो नहीं खुलती। आपका ऑपरेटिंग सिस्टम कीचेन का ऐक्सेस माँग सकता है। इंपोर्ट विफल हो, तो ब्राउज़र बंद करें ताकि उसकी कुकी डेटाबेस फ़ाइल इस्तेमाल में न रहे। फिर अनुमतियाँ जाँचकर दोबारा कोशिश करें। सेशन की समय-सीमा खत्म हो जाए, तो वेबसाइट पर फिर से लॉग इन करें।</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos.</source>
-        <translation>ब्राउज़र कुकीज़ का अपने आप इंपोर्ट होना सिर्फ़ कंप्यूटर पर उपलब्ध है। Android पर PornHub या XHamster के लिए खाते की लॉगिन जानकारी इस्तेमाल करें और XVideos के लिए दोनों सेशन टोकन पेस्ट करें।</translation>
+        <translation type="vanished">ब्राउज़र कुकीज़ का अपने आप इंपोर्ट होना सिर्फ़ कंप्यूटर पर उपलब्ध है। Android पर PornHub या XHamster के लिए खाते की लॉगिन जानकारी इस्तेमाल करें और XVideos के लिए दोनों सेशन टोकन पेस्ट करें।</translation>
     </message>
 </context>
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+70"/>
         <source>PornHub</source>
-        <translation>PornHub</translation>
+        <translation type="vanished">PornHub</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XHamster</source>
-        <translation>XHamster</translation>
+        <translation type="vanished">XHamster</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XVideos</source>
-        <translation>XVideos</translation>
+        <translation type="vanished">XVideos</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location filename="../../UI/AccountPage.qml" line="+98"/>
         <source>Email:</source>
         <translation>ईमेलः</translation>
     </message>
@@ -77,9 +98,23 @@
         <translation>अपना पासवर्ड डालें</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster के लिए आपके ईमेल पते की आवश्यकता होती है, न कि आपके उपयोगकर्ता नाम की।</translation>
+        <translation type="vanished">XHamster के लिए आपके ईमेल पते की आवश्यकता होती है, न कि आपके उपयोगकर्ता नाम की।</translation>
+    </message>
+    <message>
+        <location line="-57"/>
+        <source>Choose a website</source>
+        <translation>कोई वेबसाइट चुनें</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Account access for %1 is unavailable in Porn Fetch.</source>
+        <translation>Porn Fetch में %1 के खाते का उपयोग उपलब्ध नहीं है।</translation>
+    </message>
+    <message>
+        <location line="+50"/>
+        <source>%1 requires your email address, not your username.</source>
+        <translation>%1 पर लॉग इन करने के लिए उपयोगकर्ता नाम की जगह ईमेल पता चाहिए।</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -97,12 +132,12 @@
         <translation>सेशन ऑथ टोकन:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Enter session_token_auth</source>
         <translation>session_token_auth दर्ज करें</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Login with Session Tokens</source>
         <translation>सेशन टोकन से लॉग इन करें</translation>
     </message>
@@ -112,48 +147,56 @@
         <translation>लॉग इन करें</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location line="+15"/>
+        <location line="+51"/>
+        <source>%1 username for browser cookies (not email)</source>
+        <translation>ब्राउज़र कुकी के लिए %1 का उपयोगकर्ता नाम (ईमेल नहीं)</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Account playlist URL</source>
+        <translation>खाते की प्लेलिस्ट का URL</translation>
+    </message>
+    <message>
+        <location filename="../../../shared/account_capabilities.py" line="+27"/>
         <source>Get Watch History</source>
         <translation>देखे गए वीडियो की सूची लोड करें</translation>
     </message>
     <message>
-        <location line="-14"/>
+        <location line="+28"/>
         <source>Get Watch Later Videos</source>
         <translation>“बाद में देखें” वाले वीडियो लोड करें</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-18"/>
         <source>Get Recommended Videos</source>
         <translation>अनुशंसित वीडियो प्राप्त करें</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Get Subscription Feed</source>
         <translation>सब्सक्रिप्शन फ़ीड लोड करें</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Get Favorite Videos</source>
         <translation>पसंदीदा वीडियो प्राप्त करें</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-11"/>
         <source>Get Liked Videos</source>
         <translation>पसंद किए गए वीडियो प्राप्त करें</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>PornHub username for browser cookies (not email)</source>
-        <translation>ब्राउज़र कुकीज़ के लिए PornHub उपयोगकर्ता नाम (ईमेल नहीं)</translation>
+        <translation type="vanished">ब्राउज़र कुकीज़ के लिए PornHub उपयोगकर्ता नाम (ईमेल नहीं)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location filename="../../UI/AccountPage.qml" line="-43"/>
         <source>Login with Browser Cookies</source>
         <translation>ब्राउज़र कुकीज़ से लॉग इन करें</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Logged in to %1</source>
         <translation>%1 पर लॉग इन किया गया</translation>
     </message>
@@ -163,22 +206,21 @@
         <translation>%1 में लॉग इन नहीं किया गया</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
         <source>Account playlist URL:</source>
         <translation>खाता प्लेलिस्ट URL:</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>https://xhamster.com/my/playlists/...</source>
-        <translation>https://xhamster.com/my/playlists/...</translation>
+        <translation type="vanished">https://xhamster.com/my/playlists/...</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location filename="../../../shared/account_capabilities.py" line="+19"/>
         <source>Get Playlist Videos</source>
         <translation>प्लेलिस्ट वीडियो प्राप्त करें</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location filename="../../UI/AccountPage.qml" line="+45"/>
         <source>Loading account videos...</source>
         <translation>खाता वीडियो लोड किया जा रहा है...</translation>
     </message>
@@ -191,111 +233,88 @@
 <context>
     <name>AndroidAccountPage</name>
     <message>
-        <location filename="../../UI/AndroidAccountPage.qml" line="+40"/>
-        <location line="+12"/>
         <source>Choose a website</source>
-        <translation>वेबसाइट चुनें</translation>
+        <translation type="vanished">वेबसाइट चुनें</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Connected to %1</source>
-        <translation>%1 से जुड़ा हुआ</translation>
+        <translation type="vanished">%1 से जुड़ा हुआ</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Connect to %1</source>
-        <translation>%1 से कनेक्ट करें</translation>
+        <translation type="vanished">%1 से कनेक्ट करें</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Email address</source>
-        <translation>ईमेल पता</translation>
+        <translation type="vanished">ईमेल पता</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster के लिए आपके ईमेल पते की आवश्यकता होती है, न कि आपके उपयोगकर्ता नाम की।</translation>
+        <translation type="vanished">XHamster के लिए आपके ईमेल पते की आवश्यकता होती है, न कि आपके उपयोगकर्ता नाम की।</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Password</source>
-        <translation>पासवर्ड</translation>
+        <translation type="vanished">पासवर्ड</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>session_token</source>
-        <translation>session_token</translation>
+        <translation type="vanished">session_token</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>session_token_auth</source>
-        <translation>session_token_auth</translation>
+        <translation type="vanished">session_token_auth</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Connecting…</source>
-        <translation>जुड़ रहा है...</translation>
+        <translation type="vanished">जुड़ रहा है...</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Sign in</source>
-        <translation>लॉग इन करें</translation>
+        <translation type="vanished">लॉग इन करें</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Your collections</source>
-        <translation>आपके संग्रह</translation>
+        <translation type="vanished">आपके संग्रह</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Videos you retrieve appear in Downloads.</source>
-        <translation>आपके द्वारा पुनर्प्राप्त किए गए वीडियो डाउनलोड में दिखाई देते हैं।</translation>
+        <translation type="vanished">आपके द्वारा पुनर्प्राप्त किए गए वीडियो डाउनलोड में दिखाई देते हैं।</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+8"/>
         <source>Watch history</source>
-        <translation>देखे गए वीडियो</translation>
+        <translation type="vanished">देखे गए वीडियो</translation>
     </message>
     <message>
-        <location line="-8"/>
         <source>Watch later</source>
-        <translation>बाद में देखें</translation>
+        <translation type="vanished">बाद में देखें</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Recommended</source>
-        <translation>अनुशंसित</translation>
+        <translation type="vanished">अनुशंसित</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Subscription feed</source>
-        <translation>सब्सक्रिप्शन फ़ीड</translation>
+        <translation type="vanished">सब्सक्रिप्शन फ़ीड</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Favorites</source>
-        <translation>पसंदीदा</translation>
+        <translation type="vanished">पसंदीदा</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Liked videos</source>
-        <translation>पसंद किए गए वीडियो</translation>
+        <translation type="vanished">पसंद किए गए वीडियो</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Account playlist URL</source>
-        <translation>खाता प्लेलिस्ट URL</translation>
+        <translation type="vanished">खाता प्लेलिस्ट URL</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Get playlist videos</source>
-        <translation>प्लेलिस्ट वीडियो प्राप्त करें</translation>
+        <translation type="vanished">प्लेलिस्ट वीडियो प्राप्त करें</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Loading account videos…</source>
-        <translation>खाता वीडियो लोड किया जा रहा है...</translation>
+        <translation type="vanished">खाता वीडियो लोड किया जा रहा है...</translation>
     </message>
 </context>
 <context>
@@ -2255,8 +2274,8 @@ ${title}_$video_id
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+282"/>
-        <location line="+228"/>
+        <location filename="../../../backend/application.py" line="+283"/>
+        <location line="+244"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2264,12 +2283,12 @@ ${title}_$video_id
         <translation>ऐप के अपडेट</translation>
     </message>
     <message>
-        <location line="-232"/>
+        <location line="-248"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation>डाउनलोड सूची तैयार हो रही है। जोड़े गए आइटम: %s</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+45"/>
         <source>License rejected</source>
         <translation>लाइसेंस अस्वीकार किया गया</translation>
     </message>
@@ -7237,7 +7256,7 @@ Stopping downloads and saving application state.</source>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../../backend/application.py" line="-1756"/>
+        <location filename="../../../backend/application.py" line="-1773"/>
         <source>Importing (General).</source>
         <translation>आयात (सामान्य)।</translation>
     </message>
@@ -7252,12 +7271,12 @@ Stopping downloads and saving application state.</source>
         <translation>आयात (बैकएंड)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <source>Importing (Frontend).</source>
         <translation>आयात (फ्रंटेंड)।</translation>
     </message>
     <message>
-        <location line="+1954"/>
+        <location line="+1970"/>
         <source>Loading Window...</source>
         <translation>विंडो लोड किया जा रहा है...</translation>
     </message>
@@ -7732,7 +7751,7 @@ If you are using only the GUI this will not affect your user experience, but may
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+393"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+380"/>
         <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation>%d मिनट</translation>

@@ -1,6 +1,7 @@
 """Atomic desktop queue snapshots. Native objects, cookies and sessions are excluded."""
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -9,11 +10,40 @@ import tempfile
 from dataclasses import fields
 from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 
 from src.shared.media import VideoObject
 from src.shared.provider_routing import ContentKind, route_url
+from src.shared.public_media import guest_account_url, restricted_host
 
 SAVED_FIELDS = {field.name for field in fields(VideoObject)} - {"source_video", "thumbnail_data", "thumbnail_url", "library_metadata"}
+
+
+def public_checkpoint_marker(checkpoint: Path) -> Path:
+    return checkpoint.with_name(f"{checkpoint.name}.public")
+
+
+def prepare_public_checkpoint(output: Path, checkpoint: Path, segments: Path, url: str, quality: str) -> None:
+    """Keep resumes tied to a guest download of this item and quality."""
+    marker = public_checkpoint_marker(checkpoint)
+    fingerprint = hashlib.sha256(json.dumps([str(output.resolve()), url, quality]).encode()).hexdigest()
+    if marker.is_file() and marker.read_text(encoding="ascii", errors="replace") == fingerprint:
+        return
+
+    # Move aside legacy state and partial bytes. The native HLS downloader can
+    # otherwise use saved segment URLs without fetching the current manifest.
+    suffix = f".unverified-{uuid4().hex}"
+    raw_state = Path(f"{output}.raw-state.json")
+    if raw_state.is_file():
+        for path in (output, raw_state):
+            if path.exists():
+                path.rename(path.with_name(path.name + suffix))
+    if checkpoint.exists() or segments.exists():
+        for path in (Path(f"{output}.tmp"), segments, checkpoint):
+            if path.exists():
+                path.rename(path.with_name(path.name + suffix))
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    marker.write_text(fingerprint, encoding="ascii")
 
 
 def discard_changed_hls_quality(checkpoint: Path, segments: Path, quality: str) -> bool:
@@ -34,6 +64,8 @@ def discard_changed_hls_quality(checkpoint: Path, segments: Path, quality: str) 
 
 def queue_record(video: VideoObject, progress: int = 0) -> dict:
     record = {name: getattr(video, name) for name in SAVED_FIELDS}
+    if video.is_from_account:
+        record["url"] = guest_account_url(video.url)
     record["publish_date"] = video.publish_date.isoformat() if video.publish_date else None
     record["output_path"] = str(Path(video.output_path).resolve()) if video.output_path else None
     record["status"] = "cancelled"  # Reopening never starts a transfer automatically.
@@ -55,9 +87,14 @@ def read_queue(path: Path) -> list[tuple[VideoObject, int]]:
         if (not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", identifier)
                 or identifier in identifiers):
             raise ValueError("Invalid or duplicate saved download identifier")
-        if route_url(saved["url"]).kind != ContentKind.VIDEO:
+        url = guest_account_url(saved["url"]) if saved.get("is_from_account") else saved["url"]
+        is_restricted = restricted_host(url)
+        if not is_restricted and route_url(url).kind != ContentKind.VIDEO:
             raise ValueError("Saved queue contains an unsupported video URL")
         values = {name: saved[name] for name in SAVED_FIELDS if name in saved}
+        values["url"] = url
+        if is_restricted:
+            values["provider_restricted"] = True
         values["publish_date"] = datetime.fromisoformat(saved["publish_date"]) if saved.get("publish_date") else None
         values["output_path"] = Path(saved["output_path"])
         values["thumbnail_url"] = ""

@@ -5,8 +5,11 @@ import inspect
 import re
 from dataclasses import dataclass
 from enum import StrEnum
+from importlib import import_module
 from typing import Any, AsyncIterator
 from urllib.parse import parse_qs, urljoin, urlparse
+
+from .public_media import check_public_host, require_public_media
 
 
 class ContentKind(StrEnum):
@@ -38,6 +41,24 @@ PROVIDER_MODULES = {
     "porn": "porn_api",
     "youjizz": "youjizz_api",
 }
+
+
+def provider_client_class(provider: str) -> type:
+    module = PROVIDER_MODULES[provider]
+    if provider in {"pornhub", "redtube", "tube8"}:
+        # Keep older provider wheels from injecting preset access cookies, even
+        # when their own code constructs a fresh client during a retry.
+        constants = import_module(f"{module}.modules.consts")
+        cookies = getattr(constants, "COOKIES", None)
+        if cookies is not None:
+            for name in cookies.keys() - {"cookieBannerState", "platform"}:
+                cookies.pop(name, None)
+    if provider == "tube8":
+        from .tube8 import Client
+
+        return Client
+    return import_module(module).Client
+
 
 HOST_PATTERNS = {
     "pornhub": r"(?:^|\.)pornhub(?:premium)?\.com$",
@@ -286,6 +307,14 @@ def eporner_video_id(url: str) -> str | None:
 
 
 async def resolve_video(client: Any, route: Route, *, strict_language: bool | None = None) -> Any:
+    check_public_host(route.url)
+    require_public_media(client)
+    video = await _resolve_video(client, route, strict_language=strict_language)
+    require_public_media(video)
+    return video
+
+
+async def _resolve_video(client: Any, route: Route, *, strict_language: bool | None) -> Any:
     path = urlparse(route.url).path.casefold()
     configuration = getattr(getattr(client, "core", None), "configuration", None)
     load_api = not (getattr(configuration, "strict_language", False) if strict_language is None else strict_language)
@@ -316,6 +345,8 @@ async def resolve_video(client: Any, route: Route, *, strict_language: bool | No
 
 
 async def resolve_container(client: Any, route: Route, *, pages: int | str = 5, iterator_config: Any = None) -> Any:
+    check_public_host(route.url)
+    require_public_media(client)
     if route.provider == "youjizz":
         from src.shared.youjizz import resolve_container as resolve_youjizz_container
         return await resolve_youjizz_container(client, route)

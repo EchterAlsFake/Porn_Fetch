@@ -251,7 +251,7 @@ async def run(args):
                             continue
                         if not backend.property("accountLoginStatus")[provider]:
                             continue
-                        for collection in COLLECTION_BUTTONS[layout][provider]:
+                        for collection in COLLECTION_BUTTONS[provider]:
                             async def collection_check(name=collection):
                                 nonlocal xh_playlist
                                 if name == "playlist" and not xh_playlist:
@@ -270,13 +270,11 @@ async def run(args):
                                 backend.accountStateChanged.emit()
                                 placeholders = ("session_token", "session_token_auth")
                                 for placeholder in placeholders:
-                                    field = "Enter " + placeholder if layout == "desktop" else placeholder
-                                    window.field(field, tokens[placeholder])
-                                text = "Login with Session Tokens" if layout == "desktop" else "Sign in"
-                                window.click(text)
+                                    window.field("Enter " + placeholder, tokens[placeholder])
+                                window.click("Login with Session Tokens")
                                 await window.finish(backend._login_task)
                                 for placeholder in placeholders:
-                                    window.field("Enter " + placeholder if layout == "desktop" else placeholder, "")
+                                    window.field("Enter " + placeholder, "")
                                 require(backend.property("accountLoginStatus")[provider], "Two-token login did not confirm an authenticated server session")
                                 return {"server_authenticated": True, "browser_session_not_reused": True}
                             if await check(f"{layout}.{provider}.manual-tokens", token_login):

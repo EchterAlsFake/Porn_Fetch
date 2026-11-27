@@ -23,6 +23,7 @@ from PySide6.QtQml import QQmlEngine, QQmlExpression
 _app = QGuiApplication.instance() or QGuiApplication([])
 
 from src.backend.account_diagnostics import COLLECTION_BUTTONS, PROVIDERS, AccountWindow, make_account_backend
+from src.backend.application import Backend
 from src.backend.download_manager import DownloadListModel
 from src.shared.errors import CookiesNotFound, LoginError
 
@@ -43,6 +44,10 @@ class RecordingAccountBridge(QObject):
     @Property(QObject, constant=True)
     def downloads(self):
         return self.model
+
+    @Property("QVariantList", constant=True)
+    def accountProviders(self):
+        return Backend.accountProviders.fget(self)
 
     @Property("QVariantMap", notify=accountStateChanged)
     def accountLoginStatus(self):
@@ -126,18 +131,16 @@ class AccountPageControlTests(unittest.TestCase):
                     with self.subTest(layout=layout, provider=provider):
                         window.provider(provider)
                         window.verify_action_inventory(provider)
-                        for collection in COLLECTION_BUTTONS[layout][provider]:
+                        for collection in COLLECTION_BUTTONS[provider]:
                             self.assertFalse(window.collection_button(provider, collection).property("enabled"))
                         token = provider == "XVideos"
                         if token:
-                            fields = ("Enter session_token", "Enter session_token_auth") if layout == "desktop" else (
-                                "session_token", "session_token_auth")
+                            fields = ("Enter session_token", "Enter session_token_auth")
                         else:
-                            fields = ("Enter your email address", "Enter your password") if layout == "desktop" else (
-                                "Email address", "Password")
+                            fields = ("Enter your email address", "Enter your password")
                         window.field(fields[0], "")
                         window.field(fields[1], "")
-                        button_text = ("Login with Session Tokens" if token else "Login") if layout == "desktop" else "Sign in"
+                        button_text = "Login with Session Tokens" if token else "Login"
                         button = window.control("text", button_text)
                         self.assertFalse(button.property("enabled"))
                         window.field(fields[0], "identity-fixture")
@@ -165,22 +168,28 @@ class AccountPageControlTests(unittest.TestCase):
                         else:
                             self.assertFalse(window.controls("text", "Login with Browser Cookies"))
                         bridge.set_state(provider=provider, logged=True)
-                        for collection in COLLECTION_BUTTONS[layout][provider]:
+                        for collection in COLLECTION_BUTTONS[provider]:
                             url = ""
                             if collection == "playlist":
-                                placeholder = "https://xhamster.com/my/playlists/..." if layout == "desktop" else "Account playlist URL"
+                                placeholder = "https://xhamster.com/my/playlists/..."
                                 url = "https://xhamster.com/my/favorites/videos/fixture"
                                 window.field(placeholder, " " + url + " ")
-                            window.click(COLLECTION_BUTTONS[layout][provider][collection])
+                            window.click(COLLECTION_BUTTONS[provider][collection])
                             self.assertEqual(bridge.fetches[-1], (provider, collection, url))
                         for phase in ("login", "fetch"):
                             bridge.set_state(**{phase: True})
                             self.assertFalse(button.property("enabled"))
                             self.assertTrue(all(not window.collection_button(provider, c).property("enabled")
-                                                for c in COLLECTION_BUTTONS[layout][provider]))
+                                                for c in COLLECTION_BUTTONS[provider]))
                             bridge.set_state()
                             self.assertTrue(button.property("enabled"))
                         self.assertIn(provider, window.control("text", "How to login").property("helpText"))
+                window.provider("Beeg")
+                self.assertTrue(window.controls("text", "Account access for Beeg is unavailable in Porn Fetch."))
+                for text in ("Login", "Login with Session Tokens", "Login with Browser Cookies", "How to login"):
+                    self.assertFalse(window.controls("text", text))
+                window.provider("PornHub")
+                self.assertEqual(window.control("placeholderText", "Enter your password").property("text"), "")
                 self.assertEqual(window.warnings, [])
             finally:
                 window.close()

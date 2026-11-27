@@ -1,9 +1,9 @@
 # Work on Porn Fetch
 
 Start with [source setup](INSTALLATION.md#run-from-source). Use Python 3.15,
-PySide6/QML for the GUI, and asyncio for background work. Read `BACKEND.md` and
-`CONTEXT.md` before changing the backend. Read `SNI_PROXY_AGENT_HANDOFF.md` before
-changing the SNI proxy.
+PySide6/QML for the GUI, and asyncio for background work. Use this guide and the
+current source for development. Contributors with private MCP access can find
+backend, UI, and release notes through [AGENTS.md](../AGENTS.md).
 
 ## Code layout
 

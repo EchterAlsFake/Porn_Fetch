@@ -292,8 +292,8 @@ reconciled 30 unique videos across a full scan/rescan. Bellesa HLS and RedGIFs R
 transfers completed and passed media readability checks, including normal
 pause/close/reopen/resume with stable job IDs and paths. A Porndoe fixture's media
 server returned HTTP 403; that attempt remained failed and was not counted as a
-successful transfer. Existing provider pagination reconciliation is documented in
-[pagination implementation](pagination-audit/IMPLEMENTATION.md).
+successful transfer. For current pagination behavior, follow the provider
+capabilities and continuation rules in this guide and the checked-out code.
 
 The free creator trial was also exercised with the real engine: a five-video
 Bellesa preview/rescan, Bellesa 720p HLS and RedGIFs 480p RAW completed, including

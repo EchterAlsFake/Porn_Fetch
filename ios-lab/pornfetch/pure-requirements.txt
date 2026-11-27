@@ -26,14 +26,14 @@ unofficial-api-for-eporner==3.0.0
 unofficial-api-for-porn==0.2.0
 unofficial-api-for-porndoe==2.0.0
 unofficial-api-for-pornhat==0.2.0
-unofficial-api-for-pornhub==6.0.1
+unofficial-api-for-pornhub==6.0.3
 unofficial-api-for-porntrex==2.0.0
 unofficial-api-for-redgifs==1.1.0
-unofficial-api-for-redtube==2.0.0
+unofficial-api-for-redtube==2.0.1
 unofficial-api-for-spankbang==3.0.0
 unofficial-api-for-thumbzilla==2.0.0
 unofficial-api-for-tnaflix==2.0.0
-unofficial-api-for-tube8==2.0.0
+unofficial-api-for-tube8==2.0.1
 unofficial-api-for-xfreehd==2.0.0
 unofficial-api-for-xhamster==3.0.0
 unofficial-api-for-xnxx==3.0.0

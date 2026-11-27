@@ -160,7 +160,7 @@ class NotificationCenter(QObject):
             "error",
             key="download-failed",
             action="retry",
-            details=self.tr("Error ID: %s") % report_id,
+            details=self.tr("Error ID: %s") % report_id if report_id else "",
             quiet=self.settings.supress_errors,
         )
         self.systemRequested.emit("failed")

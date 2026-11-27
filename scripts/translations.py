@@ -21,6 +21,7 @@ SOURCES = (
     *sorted((FRONTEND / "UI").rglob("*.qml")),
     ROOT / "src/database/bridge.py",
     ROOT / "src/licensing/service.py",
+    ROOT / "src/shared/account_capabilities.py",
     ROOT / "src/shared/error_reporting.py",
 )
 TOKENS = re.compile(

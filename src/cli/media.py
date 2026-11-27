@@ -9,11 +9,13 @@ from typing import Any
 
 from src.shared.media import VideoObject
 from src.shared.provider_parsing import parse_length, parse_publish_date
+from src.shared.public_media import require_public_media
 
 logger = logging.getLogger(__name__)
 
 
 async def prepare_video(video: Any, provider: str) -> VideoObject:
+    require_public_media(video)
     loaders = getattr(video, "loader_methods", {}) or {}
     source = "api" if provider in {"beeg", "redgifs", "bellesa"} and "api" in loaders else "html"
     if source in loaders:
@@ -25,6 +27,7 @@ async def prepare_video(video: Any, provider: str) -> VideoObject:
     config = _value(_value(video, "core"), "configuration")
     if provider == "eporner" and "api" in loaders and not getattr(config, "strict_language", False):
         await video.load_sources("api")
+    require_public_media(video)
 
     title = _value(video, "title") or _value(video, "video_id") or "Untitled"
     author = await _author(video, provider)

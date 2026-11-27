@@ -2,14 +2,14 @@
 from contextlib import aclosing, asynccontextmanager
 from copy import copy
 from dataclasses import replace
-from importlib import import_module
 
 from base_api.modules.config import config
+
 from src.backend import clients
 from src.backend.config import app_settings
 from src.shared.creator_library import listing_item, loaded, source_url
 from src.shared.creator_scans import discover, listing_config
-from src.shared.provider_routing import ContentKind, PROVIDER_MODULES, resolve_container, route_url
+from src.shared.provider_routing import ContentKind, provider_client_class, resolve_container, route_url
 from src.shared.tor_transport import MediaCore
 
 
@@ -19,14 +19,9 @@ async def session(provider):
     settings.response_cache_ttl = 0
     settings.response_cache_size_bytes = 0
     async with MediaCore(configuration=settings, settings=app_settings) as core:
-        # Preserve the user's current provider authentication without persisting it.
         original = clients.client_for(provider).core
         core.default_headers.update(original.default_headers)
-        core.initialize_session()
-        if original.session is not None:
-            core.session.cookies.update(original.session.cookies)
-        module = "src.shared.tube8" if provider == "tube8" else PROVIDER_MODULES[provider]
-        client = import_module(module).Client(core=core)
+        client = provider_client_class(provider)(core=core)
         yield client
 
 

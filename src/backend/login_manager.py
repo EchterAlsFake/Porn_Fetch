@@ -13,6 +13,7 @@ from pornhub_api.modules.errors import ClientAlreadyLogged, LoginFailed
 from xhamster_api.modules.errors import LoginFailed as xhLoginFailed
 
 from src.backend import clients
+from src.shared.account_capabilities import account_provider_key
 from src.shared.errors import CookiesNotFound, LoginError
 from src.shared.logging_setup import configure_app_logging
 from src.shared.provider_accounts import (
@@ -41,14 +42,14 @@ def _account_page_error(context: ScrapeErrorContext) -> ErrorAction:
 
 
 def _account_video_iterator_config(*, post: bool = False) -> IteratorConfig:
-    """Load the HTML metadata consumed by the shared video-list pipeline."""
-    return make_iterator_config(load_specific_sources=("html",), page_request_method="POST" if post else "GET",
+    """Keep authenticated iteration at the collection listing."""
+    return make_iterator_config(load_specific_sources=(), page_request_method="POST" if post else "GET",
                                 page_error_mode=ErrorMode.YIELD, item_error_mode=ErrorMode.YIELD,
                                 page_error_handler=_account_page_error)
 
 
 def provider_is_logged_in(provider: str) -> bool:
-    provider_key = provider.strip().casefold()
+    provider_key = account_provider_key(provider)
     if provider_key == "pornhub":
         return bool(clients.ph_client.logged)
     if provider_key == "xhamster":
@@ -64,7 +65,7 @@ def get_account_video_iterator(
     playlist_url: str = "",
 ) -> tuple[AsyncIterator, str]:
     """Return a provider account iterator and its user-facing source name."""
-    provider_key = provider.strip().casefold()
+    provider_key = account_provider_key(provider)
     collection_key = collection.strip().casefold()
 
     if not provider_is_logged_in(provider_key):

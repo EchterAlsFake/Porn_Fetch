@@ -4,60 +4,81 @@
 <context>
     <name>AccountLoginHelp</name>
     <message>
-        <location filename="../../UI/AccountLoginHelp.qml" line="+7"/>
+        <location filename="../../UI/AccountLoginHelp.qml" line="+11"/>
         <source>How to login</source>
         <translation>Cómo iniciar sesión</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>%1: sign in on the website in a browser. In Developer Tools, open Application or Storage, then Cookies. Copy session_token and session_token_auth into the matching fields and select Login with Session Tokens. On Android, you can obtain both tokens from your desktop browser.</source>
+        <translation>%1: inicia sesión en el sitio web desde un navegador. En las herramientas para desarrolladores, abre Aplicación o Almacenamiento y luego Cookies. Copia session_token y session_token_auth en los campos correspondientes y selecciona Iniciar sesión con tokens de sesión. En Android, puedes obtener ambos tokens desde tu navegador de escritorio.</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>%1: enter your account email address and password, then select Login.</source>
+        <translation>%1: introduce el correo electrónico y la contraseña de tu cuenta y selecciona Iniciar sesión.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>To import cookies, first sign in to %1 in Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf. Then select Login with Browser Cookies. Your operating system may ask for keychain access. If import fails, try closing the browser. If the session expires, sign in on the website again.</source>
+        <translation>Para importar cookies, inicia sesión en %1 desde Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari o LibreWolf. Luego selecciona Iniciar sesión con cookies del navegador. El sistema operativo puede solicitar acceso al llavero. Si falla la importación, prueba a cerrar el navegador. Si caduca la sesión, vuelve a iniciar sesión en el sitio web.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter your profile username in the browser login section.</source>
+        <translation>Introduce el nombre de usuario de tu perfil en la sección de inicio de sesión con el navegador.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Automatic browser-cookie import is available on desktop only.</source>
+        <translation>La importación automática de cookies del navegador solo está disponible en la versión de escritorio.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Login cookies identify your signed-in session. Treat them like a password and keep them private.</source>
+        <translation>Las cookies de inicio de sesión identifican tu sesión. Trátalas como una contraseña y mantenlas en privado.</translation>
+    </message>
+    <message>
         <source>PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.</source>
-        <translation>PornHub: ingresa el correo electrónico y la contraseña de tu cuenta y pulsa «Iniciar sesión». Una vez conectado, usa los botones de colecciones para cargar tus videos. Para iniciar sesión con el navegador, ingresa tu nombre de usuario de PornHub en la sección del navegador. No uses tu correo electrónico en esa sección.</translation>
+        <translation type="vanished">PornHub: ingresa el correo electrónico y la contraseña de tu cuenta y pulsa «Iniciar sesión». Una vez conectado, usa los botones de colecciones para cargar tus videos. Para iniciar sesión con el navegador, ingresa tu nombre de usuario de PornHub en la sección del navegador. No uses tu correo electrónico en esa sección.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.</source>
-        <translation>XHamster: ingresa el correo electrónico y la contraseña de tu cuenta y pulsa «Iniciar sesión». No se admite el nombre de usuario para iniciar sesión. Puedes cargar los videos que te gustaron o pegar la URL de una lista de reproducción de tu cuenta. Aquí no necesitas el correo electrónico para iniciar sesión con el navegador.</translation>
+        <translation type="vanished">XHamster: ingresa el correo electrónico y la contraseña de tu cuenta y pulsa «Iniciar sesión». No se admite el nombre de usuario para iniciar sesión. Puedes cargar los videos que te gustaron o pegar la URL de una lista de reproducción de tu cuenta. Aquí no necesitas el correo electrónico para iniciar sesión con el navegador.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required.</source>
-        <translation>XVideos: inicia sesión en el sitio web desde tu navegador. Abre las herramientas para desarrolladores y ve a Application / Storage → Cookies → dominio de XVideos. Copia session_token y session_token_auth en los campos correspondientes y pulsa «Iniciar sesión con tokens de sesión». Si estás en un teléfono, usa un navegador con herramientas para desarrolladores u obtén los tokens de tu navegador de escritorio. Se necesitan los dos tokens.</translation>
+        <translation type="vanished">XVideos: inicia sesión en el sitio web desde tu navegador. Abre las herramientas para desarrolladores y ve a Application / Storage → Cookies → dominio de XVideos. Copia session_token y session_token_auth en los campos correspondientes y pulsa «Iniciar sesión con tokens de sesión». Si estás en un teléfono, usa un navegador con herramientas para desarrolladores u obtén los tokens de tu navegador de escritorio. Se necesitan los dos tokens.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.</source>
-        <translation>Las cookies son pequeños valores almacenados por un sitio web en tu navegador. Iniciar sesión Las cookies identifican tu sesión de inicio de sesión, así que trátalas como una contraseña y nunca las compartas.</translation>
+        <translation type="vanished">Las cookies son pequeños valores almacenados por un sitio web en tu navegador. Iniciar sesión Las cookies identifican tu sesión de inicio de sesión, así que trátalas como una contraseña y nunca las compartas.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site&apos;s cookies from local browser profiles and passes them to the site&apos;s client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.</source>
-        <translation>Para importar cookies, primero inicia sesión en el sitio web seleccionado desde un navegador de escritorio compatible (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari o LibreWolf). Después pulsa «Iniciar sesión con cookies del navegador». Porn Fetch usa browser-cookie3 para leer las cookies de ese sitio en tus perfiles locales y entregarlas al cliente del sitio. No abre otra ventana para iniciar sesión. El sistema operativo puede solicitar acceso al llavero. Si la importación falla, cierra el navegador para liberar la base de datos de cookies, revisa los permisos e inténtalo nuevamente. Si la sesión venció, vuelve a iniciar sesión en el sitio web.</translation>
+        <translation type="vanished">Para importar cookies, primero inicia sesión en el sitio web seleccionado desde un navegador de escritorio compatible (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari o LibreWolf). Después pulsa «Iniciar sesión con cookies del navegador». Porn Fetch usa browser-cookie3 para leer las cookies de ese sitio en tus perfiles locales y entregarlas al cliente del sitio. No abre otra ventana para iniciar sesión. El sistema operativo puede solicitar acceso al llavero. Si la importación falla, cierra el navegador para liberar la base de datos de cookies, revisa los permisos e inténtalo nuevamente. Si la sesión venció, vuelve a iniciar sesión en el sitio web.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos.</source>
-        <translation>Importación automática de cookies del navegador sólo está disponible en el escritorio. En Android, use credenciales de cuenta para PornHub o XHamster y pegue ambos tokens de sesión para XVideos.</translation>
+        <translation type="vanished">Importación automática de cookies del navegador sólo está disponible en el escritorio. En Android, use credenciales de cuenta para PornHub o XHamster y pegue ambos tokens de sesión para XVideos.</translation>
     </message>
 </context>
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+70"/>
         <source>PornHub</source>
-        <translation>PornHub</translation>
+        <translation type="vanished">PornHub</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XHamster</source>
-        <translation>XHamster</translation>
+        <translation type="vanished">XHamster</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>XVideos</source>
-        <translation>XVideos</translation>
+        <translation type="vanished">XVideos</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location filename="../../UI/AccountPage.qml" line="+98"/>
         <source>Email:</source>
         <translation>Correo electrónico:</translation>
     </message>
@@ -77,9 +98,23 @@
         <translation>Ingresa tu contraseña</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster requiere tu dirección de correo electrónico, no tu nombre de usuario.</translation>
+        <translation type="vanished">XHamster requiere tu dirección de correo electrónico, no tu nombre de usuario.</translation>
+    </message>
+    <message>
+        <location line="-57"/>
+        <source>Choose a website</source>
+        <translation>Elige un sitio web</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Account access for %1 is unavailable in Porn Fetch.</source>
+        <translation>Porn Fetch no ofrece acceso a cuentas de %1.</translation>
+    </message>
+    <message>
+        <location line="+50"/>
+        <source>%1 requires your email address, not your username.</source>
+        <translation>%1 requiere tu dirección de correo electrónico en lugar de tu nombre de usuario.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -97,12 +132,12 @@
         <translation>Token de autenticación de sesión:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Enter session_token_auth</source>
         <translation>Ingresa session_token_auth</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Login with Session Tokens</source>
         <translation>Iniciar sesión con tokens de sesión</translation>
     </message>
@@ -112,48 +147,56 @@
         <translation>Iniciar sesión</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <location line="+15"/>
+        <location line="+51"/>
+        <source>%1 username for browser cookies (not email)</source>
+        <translation>Nombre de usuario de %1 para las cookies del navegador (no el correo electrónico)</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Account playlist URL</source>
+        <translation>URL de la lista de reproducción de la cuenta</translation>
+    </message>
+    <message>
+        <location filename="../../../shared/account_capabilities.py" line="+27"/>
         <source>Get Watch History</source>
         <translation>Obtener historia de reloj</translation>
     </message>
     <message>
-        <location line="-14"/>
+        <location line="+28"/>
         <source>Get Watch Later Videos</source>
         <translation>Obtener ver más tarde videos</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-18"/>
         <source>Get Recommended Videos</source>
         <translation>Obtener videos recomendados</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Get Subscription Feed</source>
         <translation>Obtener el feed de suscripción</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Get Favorite Videos</source>
         <translation>Obtener videos favoritos</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-11"/>
         <source>Get Liked Videos</source>
         <translation>Obtener videos de Me gusta</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>PornHub username for browser cookies (not email)</source>
-        <translation>Nombre de usuario PornHub para cookies del navegador (no correo electrónico)</translation>
+        <translation type="vanished">Nombre de usuario PornHub para cookies del navegador (no correo electrónico)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location filename="../../UI/AccountPage.qml" line="-43"/>
         <source>Login with Browser Cookies</source>
         <translation>Iniciar sesión con cookies del navegador</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Logged in to %1</source>
         <translation>Sesión iniciada en %1</translation>
     </message>
@@ -163,22 +206,21 @@
         <translation>Sesión no iniciada en %1</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
         <source>Account playlist URL:</source>
         <translation>Lista de reproducción de cuentas URL:</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>https://xhamster.com/my/playlists/...</source>
-        <translation>https://xhamster.com/my/playlists/...</translation>
+        <translation type="vanished">https://xhamster.com/my/playlists/...</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location filename="../../../shared/account_capabilities.py" line="+19"/>
         <source>Get Playlist Videos</source>
         <translation>Obtener videos de la lista de reproducción</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location filename="../../UI/AccountPage.qml" line="+45"/>
         <source>Loading account videos...</source>
         <translation>Cargando videos de la cuenta...</translation>
     </message>
@@ -191,111 +233,88 @@
 <context>
     <name>AndroidAccountPage</name>
     <message>
-        <location filename="../../UI/AndroidAccountPage.qml" line="+40"/>
-        <location line="+12"/>
         <source>Choose a website</source>
-        <translation>Elige un sitio web</translation>
+        <translation type="vanished">Elige un sitio web</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Connected to %1</source>
-        <translation>Conectado a %1</translation>
+        <translation type="vanished">Conectado a %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Connect to %1</source>
-        <translation>Conectar a %1</translation>
+        <translation type="vanished">Conectar a %1</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Email address</source>
-        <translation>Correo electrónico</translation>
+        <translation type="vanished">Correo electrónico</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>XHamster requires your email address, not your username.</source>
-        <translation>XHamster requiere tu dirección de correo electrónico, no tu nombre de usuario.</translation>
+        <translation type="vanished">XHamster requiere tu dirección de correo electrónico, no tu nombre de usuario.</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation type="vanished">Contraseña</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>session_token</source>
-        <translation>session_token</translation>
+        <translation type="vanished">session_token</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>session_token_auth</source>
-        <translation>session_token_auth</translation>
+        <translation type="vanished">session_token_auth</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Connecting…</source>
-        <translation>Conectando...</translation>
+        <translation type="vanished">Conectando...</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Sign in</source>
-        <translation>Iniciar sesión</translation>
+        <translation type="vanished">Iniciar sesión</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Your collections</source>
-        <translation>Sus colecciones</translation>
+        <translation type="vanished">Sus colecciones</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Videos you retrieve appear in Downloads.</source>
-        <translation>Los videos que recuperas aparecen en Descargas.</translation>
+        <translation type="vanished">Los videos que recuperas aparecen en Descargas.</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+8"/>
         <source>Watch history</source>
-        <translation>Historial de reproducción</translation>
+        <translation type="vanished">Historial de reproducción</translation>
     </message>
     <message>
-        <location line="-8"/>
         <source>Watch later</source>
-        <translation>Ver más tarde</translation>
+        <translation type="vanished">Ver más tarde</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Recommended</source>
-        <translation>Recomendado</translation>
+        <translation type="vanished">Recomendado</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Subscription feed</source>
-        <translation>Suscripción</translation>
+        <translation type="vanished">Suscripción</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Favorites</source>
-        <translation>Favoritos</translation>
+        <translation type="vanished">Favoritos</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Liked videos</source>
-        <translation>Videos preferidos</translation>
+        <translation type="vanished">Videos preferidos</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Account playlist URL</source>
-        <translation>Lista de reproducción de cuentas URL</translation>
+        <translation type="vanished">Lista de reproducción de cuentas URL</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Get playlist videos</source>
-        <translation>Obtener videos de lista de reproducción</translation>
+        <translation type="vanished">Obtener videos de lista de reproducción</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Loading account videos…</source>
-        <translation>Cargando videos de la cuenta...</translation>
+        <translation type="vanished">Cargando videos de la cuenta...</translation>
     </message>
 </context>
 <context>
@@ -2255,8 +2274,8 @@ Se sustituyen los caracteres que no se pueden usar de forma segura en un nombre 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+282"/>
-        <location line="+228"/>
+        <location filename="../../../backend/application.py" line="+283"/>
+        <location line="+244"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2264,12 +2283,12 @@ Se sustituyen los caracteres que no se pueden usar de forma segura en un nombre 
         <translation>Actualizaciones de la aplicación</translation>
     </message>
     <message>
-        <location line="-232"/>
+        <location line="-248"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation>Preparando tu lista de descargas. Temas añadidos: %s</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+45"/>
         <source>License rejected</source>
         <translation>Licencia rechazada</translation>
     </message>
@@ -7229,7 +7248,7 @@ Detener descargas y guardar estado de la aplicación.</translation>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../../backend/application.py" line="-1756"/>
+        <location filename="../../../backend/application.py" line="-1773"/>
         <source>Importing (General).</source>
         <translation>Importación (general).</translation>
     </message>
@@ -7244,12 +7263,12 @@ Detener descargas y guardar estado de la aplicación.</translation>
         <translation>Importación (backend)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <source>Importing (Frontend).</source>
         <translation>Importación (Frontend).</translation>
     </message>
     <message>
-        <location line="+1954"/>
+        <location line="+1970"/>
         <source>Loading Window...</source>
         <translation>Cargando ventana...</translation>
     </message>
@@ -7724,7 +7743,7 @@ Si solo usas la interfaz gráfica, esto no cambia cómo se usa la aplicación, p
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+393"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+380"/>
         <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation>%d min</translation>

@@ -1,5 +1,3 @@
-// qml/pages/AccountPage.qml
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -8,29 +6,30 @@ Pane {
     id: root
 
     required property var backendController
-    readonly property bool androidLayoutMode: Qt.platform.os === "android"
-                                              || (typeof androidLayout !== "undefined" && androidLayout)
-    readonly property string selectedProvider: {
-        if (providerTabs.currentIndex === 1)
-            return "XHamster"
-        if (providerTabs.currentIndex === 2)
-            return "XVideos"
-        return "PornHub"
-    }
-    readonly property bool usesAccountCredentials: selectedProvider !== "XVideos"
-    readonly property bool invalidXhamsterEmail: selectedProvider === "XHamster"
-                                               && identityField.text.trim().length > 0
-                                               && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identityField.text.trim())
+    property bool compact: Qt.platform.os === "android"
+                           || (typeof androidLayout !== "undefined" && androidLayout)
+    readonly property var accountProvider: (backendController.accountProviders || [])[providerSelector.currentIndex]
+                                           || ({})
+    readonly property string selectedProvider: accountProvider.name || ""
+    readonly property bool usesAccountCredentials: accountProvider.login === "password"
+    readonly property bool usesSessionTokens: accountProvider.login === "tokens"
+    readonly property bool browserImportAvailable: !compact && Boolean(accountProvider.browserImport)
+    readonly property bool browserUsernameRequired: accountProvider.browserImport === "username"
+    readonly property bool accountAvailable: usesAccountCredentials || usesSessionTokens || browserImportAvailable
+    readonly property var accountCollections: accountAvailable ? (accountProvider.collections || []) : []
+    readonly property bool invalidAccountEmail: Boolean(accountProvider.emailRequired)
+                                                && identityField.text.trim().length > 0
+                                                && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identityField.text.trim())
     readonly property bool providerLoggedIn:
         Boolean(backendController.accountLoginStatus[selectedProvider])
     readonly property bool accountBusy: backendController.loginInProgress
                                         || backendController.accountFetchInProgress
 
-    padding: 8
+    padding: compact ? 16 : 8
 
     background: Rectangle {
         color: "transparent"
-        border.width: 2
+        border.width: root.compact ? 0 : 2
         border.color: Theme.outline
         radius: 10
     }
@@ -53,35 +52,46 @@ Pane {
     }
 
     ScrollView {
+        id: accountScroll
         anchors.fill: parent
         clip: true
         contentWidth: availableWidth
 
         ColumnLayout {
-            width: parent.width
-            spacing: 6
+            width: accountScroll.availableWidth
+            spacing: root.compact ? 10 : 6
 
-            TabBar {
-                id: providerTabs
+            Label {
+                id: providerLabel
+                text: qsTr("Choose a website")
+            }
 
+            AppComboBox {
+                id: providerSelector
+                objectName: "accountProviderSelector"
                 Layout.fillWidth: true
-
-                TabButton {
-                    text: qsTr("PornHub")
+                textRole: "name"
+                model: root.backendController.accountProviders
+                Accessible.name: providerLabel.text
+                onActivated: {
+                    identityField.clear()
+                    passwordField.clear()
+                    sessionTokenField.clear()
+                    sessionTokenAuthField.clear()
+                    browserUsernameField.clear()
                 }
+            }
 
-                TabButton {
-                    text: qsTr("XHamster")
-                }
-
-                TabButton {
-                    text: qsTr("XVideos")
-                }
+            Label {
+                Layout.fillWidth: true
+                visible: !root.accountAvailable && root.selectedProvider.length > 0
+                text: qsTr("Account access for %1 is unavailable in Porn Fetch.").arg(root.selectedProvider)
+                wrapMode: Text.Wrap
             }
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: root.width < 700 ? 1 : 2
+                columns: root.compact || root.width < 700 ? 1 : 2
                 visible: root.usesAccountCredentials
 
                 Label {
@@ -95,7 +105,7 @@ Pane {
                     Accessible.name: placeholderText
                     placeholderText: qsTr("Enter your email address")
                     inputMethodHints: Qt.ImhEmailCharactersOnly
-                    Accessible.description: root.invalidXhamsterEmail ? emailWarning.text : ""
+                    Accessible.description: root.invalidAccountEmail ? emailWarning.text : ""
                     selectByMouse: true
                 }
 
@@ -124,16 +134,16 @@ Pane {
                 id: emailWarning
                 objectName: "xhamsterEmailWarning"
                 Layout.fillWidth: true
-                visible: root.invalidXhamsterEmail
-                text: qsTr("XHamster requires your email address, not your username.")
+                visible: root.invalidAccountEmail
+                text: qsTr("%1 requires your email address, not your username.").arg(root.selectedProvider)
                 color: Theme.highContrast ? Theme.ink : Theme.dark ? "#fca5a5" : "#b91c1c"
                 wrapMode: Text.WordWrap
             }
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: root.width < 700 ? 1 : 2
-                visible: !root.usesAccountCredentials
+                columns: root.compact || root.width < 700 ? 1 : 2
+                visible: root.usesSessionTokens
 
                 Label {
                     text: qsTr("Session token:")
@@ -156,6 +166,7 @@ Pane {
                     id: sessionTokenAuthField
                     Layout.fillWidth: true
                     echoMode: TextInput.Password
+                    Accessible.name: placeholderText
                     placeholderText: qsTr("Enter session_token_auth")
                     selectByMouse: true
 
@@ -170,12 +181,13 @@ Pane {
                 id: loginButton
                 Layout.fillWidth: true
 
-                text: root.selectedProvider === "XVideos"
+                visible: root.usesAccountCredentials || root.usesSessionTokens
+                text: root.usesSessionTokens
                       ? qsTr("Login with Session Tokens")
                       : qsTr("Login")
 
                 enabled: !root.accountBusy
-                         && !root.invalidXhamsterEmail
+                         && !root.invalidAccountEmail
                          && (root.usesAccountCredentials
                              ? identityField.text.trim().length > 0
                                && passwordField.text.length > 0
@@ -194,90 +206,52 @@ Pane {
                 }
             }
 
-
             GridLayout {
                 Layout.fillWidth: true
-                columns: root.androidLayoutMode ? (root.width < 700 ? 1 : 2) : 4
+                visible: root.accountCollections.some(collection => !collection.urlHint)
+                columns: root.compact ? 1 : (root.width < 700 ? 2 : 4)
                 uniformCellWidths: true
                 uniformCellHeights: true
                 columnSpacing: 12
 
-                CollectionButton {
-                    visible: root.selectedProvider !== "XHamster"
-                    text: root.selectedProvider === "PornHub"
-                          ? qsTr("Get Watch History")
-                          : qsTr("Get Watch Later Videos")
-                    enabled: root.providerLoggedIn && !root.accountBusy
+                Repeater {
+                    model: root.accountCollections.filter(collection => !collection.urlHint)
 
-                    onClicked: {
-                        root.backendController.fetch_account_videos(
-                            root.selectedProvider,
-                            root.selectedProvider === "PornHub" ? "history" : "watch_later",
-                            ""
-                        )
-                    }
-                }
-
-                CollectionButton {
-                    visible: root.selectedProvider !== "XHamster"
-                    text: root.selectedProvider === "PornHub" ? qsTr("Get Recommended Videos") : qsTr("Get Watch History")
-                    enabled: root.providerLoggedIn && !root.accountBusy
-
-                    onClicked: {
-                        root.backendController.fetch_account_videos(
-                            root.selectedProvider, root.selectedProvider === "PornHub" ? "recommended" : "history", ""
-                        )
-                    }
-                }
-
-                CollectionButton {
-                    visible: root.selectedProvider === "PornHub"
-                    text: qsTr("Get Subscription Feed")
-                    enabled: root.providerLoggedIn && !root.accountBusy
-                    onClicked: root.backendController.fetch_account_videos(root.selectedProvider, "feed", "")
-                }
-
-                CollectionButton {
-                    text: root.selectedProvider === "PornHub"
-                          ? qsTr("Get Favorite Videos")
-                          : qsTr("Get Liked Videos")
-                    enabled: root.providerLoggedIn && !root.accountBusy
-
-                    onClicked: {
-                        root.backendController.fetch_account_videos(
-                            root.selectedProvider,
-                            root.selectedProvider === "PornHub" ? "favorites" : "liked",
-                            ""
-                        )
+                    CollectionButton {
+                        required property var modelData
+                        text: qsTranslate("AccountPage", modelData.label)
+                        enabled: root.providerLoggedIn && !root.accountBusy
+                        onClicked: root.backendController.fetch_account_videos(root.selectedProvider, modelData.key, "")
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                visible: !root.androidLayoutMode
+                visible: root.browserImportAvailable
 
                 AppTextField {
                     id: browserUsernameField
                     Layout.fillWidth: true
-                    visible: root.selectedProvider === "PornHub"
+                    visible: root.browserUsernameRequired
                     Accessible.name: placeholderText
-                    placeholderText: qsTr("PornHub username for browser cookies (not email)")
+                    placeholderText: qsTr("%1 username for browser cookies (not email)").arg(root.selectedProvider)
                     selectByMouse: true
                 }
 
                 AppButton {
-                    Layout.fillWidth: root.selectedProvider !== "PornHub"
+                    Layout.fillWidth: !root.browserUsernameRequired
                     text: qsTr("Login with Browser Cookies")
-                    enabled: !root.accountBusy && (root.selectedProvider !== "PornHub"
-                                                  || browserUsernameField.text.trim().length > 0)
+                    enabled: !root.accountBusy
+                             && (!root.browserUsernameRequired || browserUsernameField.text.trim().length > 0)
                     onClicked: root.backendController.login_account(
-                        root.selectedProvider, browserUsernameField.text, "", true)
+                        root.selectedProvider, root.browserUsernameRequired ? browserUsernameField.text : "", "", true)
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
+                visible: root.accountAvailable
                 Label {
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
@@ -287,56 +261,66 @@ Pane {
                 }
                 AccountLoginHelp {
                     provider: root.selectedProvider
-                    browserImportAvailable: !root.androidLayoutMode
+                    usesSessionTokens: root.usesSessionTokens
+                    usesAccountCredentials: root.usesAccountCredentials
+                    browserUsernameRequired: root.browserUsernameRequired
+                    browserImportAvailable: root.browserImportAvailable
                 }
             }
 
-            GridLayout {
-                Layout.fillWidth: true
-                columns: root.width < 700 ? 1 : 3
-                visible: root.selectedProvider === "XHamster"
+            Repeater {
+                model: root.accountCollections.filter(collection => collection.urlHint)
 
-                Label {
-                    text: qsTr("Account playlist URL:")
-                }
-
-                AppTextField {
-                    id: accountPlaylistField
+                GridLayout {
+                    id: urlCollection
+                    required property var modelData
                     Layout.fillWidth: true
-                    Accessible.name: placeholderText
-                    placeholderText: qsTr("https://xhamster.com/my/playlists/...")
-                    selectByMouse: true
+                    columns: root.compact || root.width < 700 ? 1 : 3
 
-                    onAccepted: {
-                        if (accountPlaylistButton.enabled)
-                            accountPlaylistButton.clicked()
+                    Label {
+                        text: qsTr("Account playlist URL:")
                     }
-                }
 
-                AppButton {
-                    id: accountPlaylistButton
-                    text: qsTr("Get Playlist Videos")
-                    enabled: root.providerLoggedIn
-                             && !root.accountBusy
-                             && accountPlaylistField.text.trim().length > 0
+                    AppTextField {
+                        id: accountPlaylistField
+                        Layout.fillWidth: true
+                        Accessible.name: qsTr("Account playlist URL")
+                        placeholderText: urlCollection.modelData.urlHint
+                        inputMethodHints: Qt.ImhUrlCharactersOnly
+                        selectByMouse: true
 
-                    onClicked: {
-                        root.backendController.fetch_account_videos(
-                            root.selectedProvider,
-                            "playlist",
-                            accountPlaylistField.text.trim()
-                        )
+                        onAccepted: {
+                            if (accountPlaylistButton.enabled)
+                                accountPlaylistButton.clicked()
+                        }
+                    }
+
+                    AppButton {
+                        id: accountPlaylistButton
+                        text: qsTranslate("AccountPage", urlCollection.modelData.label)
+                        enabled: root.providerLoggedIn
+                                 && !root.accountBusy
+                                 && accountPlaylistField.text.trim().length > 0
+
+                        onClicked: root.backendController.fetch_account_videos(
+                            root.selectedProvider, urlCollection.modelData.key, accountPlaylistField.text.trim())
                     }
                 }
             }
 
             Rectangle {
                 Layout.fillWidth: true
-                implicitHeight: 56
+                implicitHeight: accountFeedback.implicitHeight + 20
+                visible: root.accountCollections.length > 0
                 color: "transparent"
 
                 Label {
-                    anchors.centerIn: parent
+                    id: accountFeedback
+                    anchors.fill: parent
+                    anchors.topMargin: 10
+                    anchors.bottomMargin: 10
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
 
                     text: root.backendController.accountFetchInProgress
                           ? qsTr("Loading account videos...")

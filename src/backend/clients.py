@@ -39,6 +39,7 @@ import os
 import re
 import logging
 import asyncio
+from copy import copy
 
 
 try:
@@ -51,7 +52,7 @@ from src.shared.errors import InvalidInput
 from src.backend.config import app_settings
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from typing import Any, List, TypeAlias, Dict
-from pornhub_api import Client as ph_Client, Video as ph_Video, Short as ph_Short
+from pornhub_api import Video as ph_Video, Short as ph_Short
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
@@ -62,7 +63,7 @@ from tube8_api import Video as tu_Video
 from thumbzilla_api import Client as th_Client, Video as th_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from xhamster_api.api import Short as xh_Short
-from redtube_api import Client as rt_Client, Video as rt_Video
+from redtube_api import Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from empflix_api import Client as ef_Client, Video as ef_Video
@@ -75,12 +76,14 @@ from pornhat_api import Client as pht_Client, Video as pht_Video  # noqa: E402
 from redgifs_api import Client as rg_Client, Video as rg_Video, Image as rg_Image  # noqa: E402
 from base_api import BaseCore, ScrapeResult, Cache
 from src.shared.errors import SomethingStupidHappened
-from src.shared.provider_routing import HOST_PATTERNS, ContentKind, eporner_video_id, resolve_video, route_url
+from src.shared.provider_routing import (
+    HOST_PATTERNS, ContentKind, eporner_video_id, provider_client_class, resolve_video, route_url,
+)
 from src.shared.logging_setup import configure_app_logging, log_file_path
 from src.shared.media import VideoObject
 from src.shared.tor_transport import MediaCore, FAIL_CLOSED_PROXY, all_traffic_enabled
 from src.shared.provider_parsing import parse_length, parse_publish_date
-from src.shared.tube8 import Client as tu_Client
+from src.shared.public_media import check_public_host, require_public_media
 from base_api.modules.static_functions import normalize_quality, choose_quality_from_list, \
     normalize_quality_value
 from curl_cffi.const import CurlOpt
@@ -187,9 +190,9 @@ SITE_PATTERNS = [(provider, re.compile(pattern, re.IGNORECASE)) for provider, pa
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
 core = MediaCore(configuration=config, settings=app_settings)
 core_ep = MediaCore(configuration=config, settings=app_settings)
-core_ph = MediaCore(configuration=config, settings=app_settings)
-core_xv = MediaCore(configuration=config, settings=app_settings)
-core_xh = MediaCore(configuration=config, settings=app_settings)
+core_ph = MediaCore(configuration=copy(config), settings=app_settings, account_only=True)
+core_xv = MediaCore(configuration=copy(config), settings=app_settings, account_only=True)
+core_xh = MediaCore(configuration=copy(config), settings=app_settings, account_only=True)
 core_xn = MediaCore(configuration=config, settings=app_settings)
 core_sp = MediaCore(configuration=config, settings=app_settings)
 core_yp = MediaCore(configuration=config, settings=app_settings)
@@ -217,10 +220,10 @@ yp_client = yp_Client(core=core_yp)
 bg_client = bg_Client(core=core_bg)
 pt_client = pt_Client(core=core_pt)
 xf_client = xf_Client(core=core_xf)
-ph_client = ph_Client(core=core_ph)
-rt_client = rt_Client(core=core_rt)
+ph_client = provider_client_class("pornhub")(core=core_ph)
+rt_client = provider_client_class("redtube")(core=core_rt)
 th_client = th_Client(core=core_th)
-tu_client = tu_Client(core=core_tu)
+tu_client = provider_client_class("tube8")(core=core_tu)
 ef_client = ef_Client(core=core_ef)
 tf_client = tf_Client(core=core_tf)
 pd_client = pd_Client(core=core_pd)
@@ -229,6 +232,10 @@ rg_client = rg_Client(core=core_rg)
 bl_client = bl_Client(core=core_bl)
 pc_client = pc_Client(core=core_pc)
 yj_client = yj_Client(core=core_yj)
+public_clients = {
+    provider: provider_client_class(provider)(core=MediaCore(configuration=config, settings=app_settings))
+    for provider in ("pornhub", "xvideos", "xhamster")
+}
 
 cores = [
     core_ep, core_ph, core_xv, core_xh, core_xn, core_sp, core_yp, core_bg, core_pt, core_xf, core_rt, core_th,
@@ -324,10 +331,14 @@ def refresh_clients() -> None:
 
     for client in clients_list:
         cores_to_update.add(client.core)
+    cores_to_update.update(client.core for client in public_clients.values())
 
     for c in cores_to_update:
         old_session = c.session
         c.session = None
+        if c.account_only:
+            c.configuration = copy(config)
+            c.configuration.cookies = locale_cookies.copy()
         c.cache = Cache(c.configuration)
         c.default_headers.update(locale_headers)
         c.initialize_session()
@@ -392,6 +403,7 @@ async def close_all_clients() -> None:
     await close_retired_sessions()
     unique_cores = set(cores)
     unique_cores.add(core)
+    unique_cores.update(client.core for client in public_clients.values())
     for client in (
         ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
         yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client,
@@ -419,16 +431,19 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
         if isinstance(video, rg_Image) or not isinstance(video, tuple(video_objects)):
             raise InvalidInput
+        require_public_media(video)
         return video
 
     if isinstance(url, rg_Image):
         raise InvalidInput
     if isinstance(url, tuple(video_objects)):
+        require_public_media(url)
         return url
 
     if not isinstance(url, str):
         raise InvalidInput
 
+    check_public_host(url)
     try:
         route = route_url(url)
     except ValueError as error:
@@ -441,9 +456,10 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
 
 def client_for(provider: str) -> Any:
     """Look up the current GUI client, including after a session refresh."""
+    if provider in public_clients:
+        return public_clients[provider]
     return {
-        "pornhub": ph_client, "eporner": ep_client, "xnxx": xn_client,
-        "xvideos": xv_client, "xhamster": xh_client, "spankbang": sp_client,
+        "eporner": ep_client, "xnxx": xn_client, "spankbang": sp_client,
         "youporn": yp_client, "beeg": bg_client, "porntrex": pt_client,
         "xfreehd": xf_client, "redtube": rt_client, "thumbzilla": th_client,
         "tube8": tu_client, "empflix": ef_client, "tnaflix": tf_client,
@@ -457,6 +473,7 @@ def client_for(provider: str) -> Any:
 
 
 async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
+    require_public_media(video)
     if isinstance(video, rg_Image):
         raise InvalidInput
     if isinstance(video, rg_Video):
@@ -472,6 +489,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         await video.load_sources(source)
     if isinstance(video, ep_Video) and not app_settings.strict_enforcement:
         await video.load_sources("api")
+    require_public_media(video)
 
     title = _safe_getattr(video, "title")
     video_source = ""

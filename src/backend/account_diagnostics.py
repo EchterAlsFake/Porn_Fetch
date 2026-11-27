@@ -13,28 +13,22 @@ from urllib.parse import urlsplit
 
 from base_api import BaseCore
 from base_api.modules.static_functions import parse_retry_after
-from PySide6.QtCore import Q_ARG, QCoreApplication, QEvent, QMetaObject, QPointF, Qt, QUrl
+from PySide6.QtCore import Q_ARG, QCoreApplication, QEvent, QMetaObject, Qt, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuick import QQuickWindow
 from PySide6.QtTest import QSignalSpy, QTest
 
 from src.backend.profile_diagnostics import make_test_backend
+from src.shared.account_capabilities import ACCOUNT_PROVIDERS, account_providers
 
 UI = Path(__file__).resolve().parents[1] / "frontend/UI"
-PROVIDERS = ("PornHub", "XHamster", "XVideos")
+PROVIDERS = tuple(provider.name for provider in ACCOUNT_PROVIDERS.values())
 COLLECTION_BUTTONS = {
-    "desktop": {
-        "PornHub": {"history": "Get Watch History", "recommended": "Get Recommended Videos",
-                    "feed": "Get Subscription Feed", "favorites": "Get Favorite Videos"},
-        "XHamster": {"liked": "Get Liked Videos", "playlist": "Get Playlist Videos"},
-        "XVideos": {"watch_later": "Get Watch Later Videos", "history": "Get Watch History", "liked": "Get Liked Videos"},
-    },
-    "mobile": {
-        "PornHub": {"history": "Watch history", "recommended": "Recommended", "feed": "Subscription feed", "favorites": "Favorites"},
-        "XHamster": {"liked": "Liked videos", "playlist": "Get playlist videos"},
-        "XVideos": {"watch_later": "Watch later", "history": "Watch history", "liked": "Liked videos"},
-    },
+    "PornHub": {"history": "Get Watch History", "recommended": "Get Recommended Videos",
+                "feed": "Get Subscription Feed", "favorites": "Get Favorite Videos"},
+    "XHamster": {"liked": "Get Liked Videos", "playlist": "Get Playlist Videos"},
+    "XVideos": {"watch_later": "Get Watch Later Videos", "history": "Get Watch History", "liked": "Get Liked Videos"},
 }
 
 
@@ -44,7 +38,7 @@ def account_check_inventory(layouts, providers):
         for provider in providers:
             checks.append(f"{layout}.{provider}.help")
             checks.append(f"{layout}.{provider}.browser-login")
-            checks.extend(f"{layout}.{provider}.{collection}" for collection in COLLECTION_BUTTONS[layout][provider])
+            checks.extend(f"{layout}.{provider}.{collection}" for collection in COLLECTION_BUTTONS[provider])
             if provider == "XVideos":
                 checks.extend((f"{layout}.{provider}.manual-tokens", f"{layout}.{provider}.token-liked"))
         checks.append(f"{layout}.validation-errors")
@@ -306,40 +300,33 @@ ApplicationWindow {
         QGuiApplication.processEvents()
 
     def provider(self, name):
-        key = "selectedProvider" if self.layout == "desktop" else "provider"
-        if self.page.property(key) == name:
+        if self.page.property("selectedProvider") == name:
             return
-        if self.layout == "desktop":
-            button = self.control("text", name)
-            point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2)).toPoint()
-            QTest.mouseClick(self.window, Qt.MouseButton.LeftButton, pos=point)
-        else:
-            selector = self.control("objectName", "mobileAccountProviderSelector")
-            index = PROVIDERS.index(name)
-            require(selector.setProperty("currentIndex", index), "Could not select the mobile provider")
-            require(QMetaObject.invokeMethod(selector, "activated", Qt.ConnectionType.DirectConnection, Q_ARG(int, index)),
-                    "Could not activate the mobile provider")
+        selector = self.control("objectName", "accountProviderSelector")
+        index = next(index for index, provider in enumerate(account_providers()) if provider.name == name)
+        require(selector.setProperty("currentIndex", index), "Could not select the provider")
+        require(QMetaObject.invokeMethod(selector, "activated", Qt.ConnectionType.DirectConnection, Q_ARG(int, index)),
+                "Could not activate the provider")
         QGuiApplication.processEvents()
-        require(self.page.property(key) == name, "Provider selection did not update")
+        require(self.page.property("selectedProvider") == name, "Provider selection did not update")
 
     def field(self, placeholder, text):
         self.control("placeholderText", placeholder).setProperty("text", text)
         QGuiApplication.processEvents()
 
     def collection_button(self, provider, collection):
-        return self.control("text", COLLECTION_BUTTONS[self.layout][provider][collection])
+        return self.control("text", COLLECTION_BUTTONS[provider][collection])
 
     def verify_action_inventory(self, provider):
         actual = {item.property("text") for item in visual_items(self.page)
                   if item.isVisible() and item.inherits("QQuickAbstractButton")}
-        expected = {"How to login"} | set(COLLECTION_BUTTONS[self.layout][provider].values())
+        expected = {"How to login", "Login with Session Tokens" if provider == "XVideos" else "Login"}
+        expected.update(COLLECTION_BUTTONS[provider].values())
         if self.layout == "desktop":
-            expected |= set(PROVIDERS) | {"Login with Browser Cookies", "Login with Session Tokens" if provider == "XVideos" else "Login"}
-        else:
-            expected.add("Sign in")
-            selector = self.control("objectName", "mobileAccountProviderSelector")
-            require(selector.property("count") == len(PROVIDERS), "The mobile provider selector is incomplete")
-            require(selector.property("currentText") == provider, "The mobile provider selector shows another provider")
+            expected.add("Login with Browser Cookies")
+        selector = self.control("objectName", "accountProviderSelector")
+        require(selector.property("count") == len(account_providers()), "The provider selector is incomplete")
+        require(selector.property("currentText") == provider, "The provider selector shows another provider")
         require(actual == expected, "Visible account actions differ from the complete action inventory")
         return len(expected)
 
@@ -438,11 +425,10 @@ async def test_account_collection(window, provider, collection, *, playlist_url=
     window.clear_rows()
     window.provider(provider)
     if collection == "playlist":
-        placeholder = "https://xhamster.com/my/playlists/..." if window.layout == "desktop" else "Account playlist URL"
-        window.field(placeholder, playlist_url)
+        window.field("https://xhamster.com/my/playlists/...", playlist_url)
     inserted, errors = QSignalSpy(model.rowsInserted), QSignalSpy(backend.showMessage)
     states = QSignalSpy(backend.accountFetchStateChanged)
-    window.click(COLLECTION_BUTTONS[window.layout][provider][collection])
+    window.click(COLLECTION_BUTTONS[provider][collection])
     require(backend.accountFetchInProgress and backend.busy, "Fetch did not expose its loading state")
     task = backend._account_fetch_task
     require(not window.collection_button(provider, collection).property("enabled"), "Collection controls remained enabled while loading")

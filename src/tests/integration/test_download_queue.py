@@ -99,6 +99,34 @@ class QueueLifecycleTests(unittest.IsolatedAsyncioTestCase):
             setattr(backend, method, MethodType(getattr(Backend, method), backend))
         return backend
 
+    async def test_unknown_account_item_remains_listed_when_the_guest_request_is_denied(self):
+        from base_api.modules.errors import VideoUnavailable
+
+        from src.backend.video_processor import ProcessVideos
+        from src.shared.public_media import UNAVAILABLE_MESSAGE
+
+        canonical = "https://www.xvideos.com/video.fixture/clip"
+        account = SimpleNamespace(
+            core=SimpleNamespace(account_only=True), url=canonical + "?token=account",
+            title="Account listing", download=AsyncMock(),
+        )
+        with patch("src.backend.clients.get_video", AsyncMock(side_effect=VideoUnavailable())) as guest:
+            source, item = await ProcessVideos.process_single_video(account)
+            self.assertIsNone(source)
+            self.assertTrue(item.is_from_account)
+            self.assertFalse(item.provider_restricted)
+            self.assertEqual(item.url, canonical)
+            self.assertEqual(item.title, "Account listing")
+            item.identifier = "job"
+            item.url += "?token=legacy"
+            backend = self.backend(item)
+            await Backend._download_video(backend, "job", item, asyncio.Event(), False)
+            self.assertEqual(guest.await_count, 2)
+            guest.assert_awaited_with(canonical)
+        account.download.assert_not_awaited()
+        self.assertEqual(backend._downloads_model.get_status("job"), "failed")
+        backend.notifications.download_failed.assert_called_once_with("", UNAVAILABLE_MESSAGE)
+
     async def test_success_records_completion_then_clears_both_lists(self):
         with tempfile.TemporaryDirectory() as directory:
             item = video("job")

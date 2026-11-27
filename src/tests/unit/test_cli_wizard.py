@@ -258,6 +258,25 @@ class WizardFlowTests(unittest.IsolatedAsyncioTestCase):
             "PornHub", username="testuser", password="secretpass",
         )
 
+        self.assertEqual(
+            mock_select.call_args_list[1].kwargs["choices"], ["PornHub", "XHamster", "XVideos", "Cancel"],
+        )
+
+    @patch("src.cli.prompts.select")
+    async def test_account_status_shows_unavailable_providers_without_creating_clients(self, mock_select):
+        mock_select.side_effect = [FakeQuestionaryPrompt("status"), FakeQuestionaryPrompt("back")]
+        self.ctx.account_service.logged_in = MagicMock(return_value=False)
+
+        await handle_account_auth(self.ctx)
+
+        output = self.console.file.getvalue()
+        self.assertIn("Beeg", output)
+        self.assertIn("Account access unavailable", output)
+        self.assertEqual(
+            [call.args[0] for call in self.ctx.account_service.logged_in.call_args_list],
+            ["PornHub", "XHamster", "XVideos"],
+        )
+
     @patch("src.cli.prompts.select")
     @patch("src.cli.prompts.confirm")
     async def test_license_management_flow(self, mock_confirm, mock_select):

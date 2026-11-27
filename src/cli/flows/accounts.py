@@ -1,13 +1,14 @@
 """Interactive provider authentication and account collection flow."""
 from __future__ import annotations
 
-from typing import Any
+from contextlib import aclosing
 
+from src.shared.account_capabilities import account_providers
 from src.shared.media import VideoObject
+from src.shared.public_media import account_video_row
 
 from .. import prompts as questionary
-from ..media import prepare_video
-from ..providers import ContentKind, Route, unwrap_scrape_result
+from ..providers import unwrap_scrape_result
 from ..terminal import Panel, Table
 from .context import WizardContext
 from .ui import WIZARD_STYLE, print_error, print_screen, print_success
@@ -16,6 +17,9 @@ from .ui import WIZARD_STYLE, print_error, print_screen, print_success
 async def handle_account_auth(ctx: WizardContext) -> None:
     """Handle site logins, browser cookie discovery, and account collection downloads."""
     print_screen(ctx.console, "Accounts")
+    providers = {provider.name: provider for provider in account_providers()}
+    manual_login = [name for name, provider in providers.items() if provider.login]
+    browser_login = [name for name, provider in providers.items() if provider.browser_import]
     focused = None
     while True:
         action = await questionary.select(
@@ -38,21 +42,26 @@ async def handle_account_auth(ctx: WizardContext) -> None:
             table = Table(title="Account Login Status", border_style="#00e5ff", header_style="bold cyan")
             table.add_column("Provider", style="bold cyan")
             table.add_column("Status", justify="center")
-            for prov in ("PornHub", "XHamster", "XVideos"):
-                logged = ctx.account_service.logged_in(prov)
-                table.add_row(prov, "[bold cyan]Logged In[/]" if logged else "[dim]Not Logged In[/]")
+            for name, provider in providers.items():
+                if not (provider.login or provider.browser_import):
+                    status = "[dim]Account access unavailable[/]"
+                elif ctx.account_service.logged_in(name):
+                    status = "[bold cyan]Logged In[/]"
+                else:
+                    status = "[dim]Not Logged In[/]"
+                table.add_row(name, status)
             ctx.console.print(table)
 
         elif action == "credentials":
             provider = await questionary.select(
                 "Select provider to authenticate:",
-                choices=["PornHub", "XHamster", "XVideos", "Cancel"],
+                choices=[*manual_login, "Cancel"],
                 style=WIZARD_STYLE,
             ).ask_async()
             if not provider or provider == "Cancel":
                 continue
 
-            if provider == "XVideos":
+            if providers[provider].login == "tokens":
                 token = await questionary.password("Enter XVideos session_token:", style=WIZARD_STYLE).ask_async()
                 token_auth = await questionary.password("Enter XVideos session_token_auth:", style=WIZARD_STYLE).ask_async()
                 if not token or not token_auth:
@@ -74,7 +83,7 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                         )
                         print_error(ctx.console, "Authentication Error", str(error))
             else:
-                user = await questionary.text(f"Enter {provider} username or email:", style=WIZARD_STYLE).ask_async()
+                user = await questionary.text(f"Enter {provider} email address:", style=WIZARD_STYLE).ask_async()
                 secret = await questionary.password(f"Enter {provider} password:", style=WIZARD_STYLE).ask_async()
                 if not user or not secret:
                     continue
@@ -95,15 +104,15 @@ async def handle_account_auth(ctx: WizardContext) -> None:
         elif action == "cookies":
             provider = await questionary.select(
                 "Select provider to import browser cookies:",
-                choices=["PornHub", "XHamster", "XVideos", "Cancel"],
+                choices=[*browser_login, "Cancel"],
                 style=WIZARD_STYLE,
             ).ask_async()
             if not provider or provider == "Cancel":
                 continue
             username = ""
-            if provider == "PornHub":
+            if providers[provider].browser_import == "username":
                 username = await questionary.text(
-                    "PornHub username for this browser session (not email):", style=WIZARD_STYLE,
+                    f"{provider} username for this browser session (not email):", style=WIZARD_STYLE,
                 ).ask_async() or ""
                 if not username.strip():
                     continue
@@ -122,7 +131,10 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                     print_error(ctx.console, "Cookie Import Error", str(error))
 
         elif action == "collections":
-            logged_providers = [p for p in ("PornHub", "XHamster", "XVideos") if ctx.account_service.logged_in(p)]
+            logged_providers = [
+                name for name, provider in providers.items()
+                if provider.collections and ctx.account_service.logged_in(name)
+            ]
             if not logged_providers:
                 ctx.console.print(Panel("[yellow]Please log in to an account first.[/]", border_style="yellow"))
                 continue
@@ -130,30 +142,34 @@ async def handle_account_auth(ctx: WizardContext) -> None:
             if not prov:
                 continue
 
-            col_choices = {
-                "PornHub": ["history", "recommended", "favorites", "feed"],
-                "XHamster": ["liked", "playlist"],
-                "XVideos": ["watch_later", "history", "liked"],
-            }[prov]
-            selected_col = await questionary.select(f"Select {prov} collection:", choices=col_choices, style=WIZARD_STYLE).ask_async()
+            collections = {collection.key: collection for collection in providers[prov].collections}
+            selected_col = await questionary.select(
+                f"Select {prov} collection:",
+                choices=[questionary.Choice(collection.label, value=collection.key)
+                         for collection in collections.values()],
+                style=WIZARD_STYLE,
+            ).ask_async()
             if not selected_col:
                 continue
 
+            collection = collections[selected_col]
             playlist_url = ""
-            if prov == "XHamster" and selected_col == "playlist":
-                playlist_url = await questionary.text("Enter authenticated XHamster playlist URL:", style=WIZARD_STYLE).ask_async() or ""
+            if collection.url_hint:
+                playlist_url = await questionary.text(
+                    f"Enter {prov} account playlist URL:", style=WIZARD_STYLE,
+                ).ask_async() or ""
 
-            items: list[tuple[Route, Any, VideoObject | None]] = []
-            with ctx.console.status(f"[bold cyan]Fetching {prov} {selected_col}...[/]", spinner="dots"):
+            items: list[VideoObject] = []
+            with ctx.console.status(f"[bold cyan]Fetching account videos from {prov}...[/]", spinner="dots"):
                 try:
                     stream, label = ctx.account_service.collection(prov, selected_col, playlist_url)
-                    route = Route(prov.casefold(), ContentKind.COLLECTION, playlist_url or f"https://{prov.casefold()}.com/account")
-                    async for result in stream:
-                        source = unwrap_scrape_result(result)
-                        media = await prepare_video(source, prov.casefold())
-                        items.append((route, source, media))
-                        if len(items) >= ctx.settings.result_limit:
-                            break
+                    provider_key = providers[prov].key
+                    async with aclosing(stream) as collection_items:
+                        async for result in collection_items:
+                            source = unwrap_scrape_result(result)
+                            items.append(account_video_row(source, provider_key))
+                            if len(items) >= ctx.settings.result_limit:
+                                break
                 except Exception as error:
                     await ctx.report(
                         error, "fetch account collection", "src.cli.wizard.handle_account_auth",
@@ -166,10 +182,12 @@ async def handle_account_auth(ctx: WizardContext) -> None:
                 ctx.console.print("[yellow]No items in this collection.[/]")
                 continue
 
-            col_table = Table(title=f"{prov} {selected_col.title()} ({len(items)} items)", border_style="#00e5ff", header_style="bold cyan")
+            col_table = Table(title=f"{label} ({len(items)} items)", border_style="#00e5ff", header_style="bold cyan")
             col_table.add_column("Index", style="cyan", justify="right")
             col_table.add_column("Title", style="white")
             col_table.add_column("Duration", style="magenta")
-            for idx, (_, _, med) in enumerate(items, 1):
-                col_table.add_row(str(idx), med.title if med else "Item", f"{med.length} min" if med and med.length else "-")
+            col_table.add_column("Access")
+            for idx, med in enumerate(items, 1):
+                col_table.add_row(str(idx), med.title, f"{med.length} min" if med.length else "-",
+                                  "Restricted" if med.provider_restricted else "Public access unchecked")
             ctx.console.print(col_table)

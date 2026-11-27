@@ -40,6 +40,7 @@ ApplicationWindow {
         property bool busy: false
         property bool loginInProgress: false
         property bool accountFetchInProgress: false
+        property var accountProviders: sampleAccountProviders
         property var accountLoginStatus: ({"PornHub": true})
         property var downloads: sampleModel
         function highlight_title_format(document, dark, highContrast) {}
@@ -54,6 +55,9 @@ class DesignLayoutTests(unittest.TestCase):
         self.engine = QQmlApplicationEngine()
         self.model = QueueModel()
         self.engine.rootContext().setContextProperty("sampleModel", self.model)
+        from src.backend.application import Backend
+
+        self.engine.rootContext().setContextProperty("sampleAccountProviders", Backend.accountProviders.fget(None))
         self.warnings = []
         self.engine.warnings.connect(lambda errors: self.warnings.extend(e.toString() for e in errors))
         self.engine.loadData(HARNESS.replace("PAGE", page).encode(), QUrl.fromLocalFile(str(UI / "DesignTest.qml")))

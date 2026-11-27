@@ -4,60 +4,45 @@
 <context>
     <name>AccountLoginHelp</name>
     <message>
-        <location filename="../../UI/AccountLoginHelp.qml" line="+7"/>
+        <location filename="../../UI/AccountLoginHelp.qml" line="+11"/>
         <source>How to login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>PornHub: enter your account email address and password, then press Login. Once connected, use the collection buttons to retrieve your videos. For browser login, enter your PornHub profile username (not your email) in the separate browser section.</source>
+        <location line="+3"/>
+        <source>%1: sign in on the website in a browser. In Developer Tools, open Application or Storage, then Cookies. Copy session_token and session_token_auth into the matching fields and select Login with Session Tokens. On Android, you can obtain both tokens from your desktop browser.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>XHamster: enter your account email address and password, then press Login. Usernames cannot be used to sign in. You can retrieve liked videos or paste an account playlist URL. Browser login does not require an email address here.</source>
+        <source>%1: enter your account email address and password, then select Login.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>To import cookies, first sign in to %1 in Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf. Then select Login with Browser Cookies. Your operating system may ask for keychain access. If import fails, try closing the browser. If the session expires, sign in on the website again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>XVideos: sign in on the website in your browser. Open Developer Tools, then Application / Storage → Cookies → the XVideos domain. Copy the values of session_token and session_token_auth into the matching fields, then press Login with Session Tokens. On a phone, use a browser with developer tools or obtain the tokens from your desktop browser. Both tokens are required.</source>
+        <source>Enter your profile username in the browser login section.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Cookies are small values stored by a website in your browser. Login cookies identify your signed-in session, so treat them like a password and never share them.</source>
+        <source>Automatic browser-cookie import is available on desktop only.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>To import cookies, first sign in to the selected website in a supported desktop browser (Chrome, Firefox, Edge, Brave, Opera, Vivaldi, Safari or LibreWolf), then press Login with Browser Cookies. Porn Fetch uses browser-cookie3 to read that site&apos;s cookies from local browser profiles and passes them to the site&apos;s client. It does not open a new browser login window. Your operating system may ask for keychain access. If import fails, close the browser to release its cookie database, check your permissions, and try again. Expired sessions require signing in on the website again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Automatic browser-cookie import is available on desktop only. On Android, use account credentials for PornHub or XHamster and paste both session tokens for XVideos.</source>
+        <source>Login cookies identify your signed-in session. Treat them like a password and keep them private.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AccountPage</name>
     <message>
-        <location filename="../../UI/AccountPage.qml" line="+70"/>
-        <source>PornHub</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>XHamster</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>XVideos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+207"/>
+        <location filename="../../UI/AccountPage.qml" line="+259"/>
         <source>Logged in to %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -67,12 +52,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-21"/>
-        <source>PornHub username for browser cookies (not email)</source>
+        <location line="-194"/>
+        <source>Choose a website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-177"/>
+        <location line="+22"/>
+        <source>Account access for %1 is unavailable in Porn Fetch.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Email:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,7 +82,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+15"/>
+        <source>%1 requires your email address, not your username.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Session token:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,12 +102,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Enter session_token_auth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Login with Session Tokens</source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,179 +117,68 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+51"/>
+        <source>%1 username for browser cookies (not email)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Login with Browser Cookies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-63"/>
-        <location line="+15"/>
+        <location line="+43"/>
+        <source>Account playlist URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../shared/account_capabilities.py" line="+27"/>
         <source>Get Watch History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-95"/>
-        <source>XHamster requires your email address, not your username.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+81"/>
+        <location line="+28"/>
         <source>Get Watch Later Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-18"/>
         <source>Get Recommended Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+1"/>
         <source>Get Subscription Feed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
         <source>Get Favorite Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-11"/>
         <source>Get Liked Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location filename="../../UI/AccountPage.qml" line="-6"/>
         <source>Account playlist URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>https://xhamster.com/my/playlists/...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location filename="../../../shared/account_capabilities.py" line="+19"/>
         <source>Get Playlist Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location filename="../../UI/AccountPage.qml" line="+45"/>
         <source>Loading account videos...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Retrieved videos are added to the Downloads page</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>AndroidAccountPage</name>
-    <message>
-        <location filename="../../UI/AndroidAccountPage.qml" line="+40"/>
-        <location line="+12"/>
-        <source>Choose a website</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Connected to %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Connect to %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Email address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>XHamster requires your email address, not your username.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>session_token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>session_token_auth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Connecting…</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Sign in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Your collections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Videos you retrieve appear in Downloads.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+8"/>
-        <source>Watch history</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-8"/>
-        <source>Watch later</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Recommended</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Subscription feed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Favorites</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Liked videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Account playlist URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Get playlist videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Loading account videos…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2058,7 +1942,7 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../../../backend/application.py" line="+906"/>
+        <location filename="../../../backend/application.py" line="+923"/>
         <source>Warning: The SSL connection or certificate verification failed. Continuing without verification can expose your traffic and credentials to interception.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2078,8 +1962,8 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-758"/>
-        <location line="+228"/>
+        <location line="-774"/>
+        <location line="+244"/>
         <location line="+9"/>
         <location line="+35"/>
         <location line="+27"/>
@@ -2087,12 +1971,12 @@ For example, 0.5 allows up to half a second of extra delay. Set 0 for no random 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-232"/>
+        <location line="-248"/>
         <source>Preparing your download list. Items added: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+45"/>
         <source>License rejected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6983,7 +6867,7 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../backend/application.py" line="-1756"/>
+        <location filename="../../../backend/application.py" line="-1773"/>
         <source>Importing (General).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6998,12 +6882,12 @@ Stopping downloads and saving application state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+46"/>
         <source>Importing (Frontend).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1954"/>
+        <location line="+1970"/>
         <source>Loading Window...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7465,7 +7349,7 @@ If you are using only the GUI this will not affect your user experience, but may
 <context>
     <name>model</name>
     <message>
-        <location filename="../../../backend/account_diagnostics.py" line="+393"/>
+        <location filename="../../../backend/account_diagnostics.py" line="+380"/>
         <location filename="../../../backend/profile_diagnostics.py" line="+233"/>
         <source>%d min</source>
         <translation type="unfinished"></translation>
