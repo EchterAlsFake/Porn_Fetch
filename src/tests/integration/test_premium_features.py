@@ -10,9 +10,14 @@ from PySide6.QtCore import QObject, QSettings
 
 from src.backend.application import Backend
 from src.backend.config import SettingsManager
+from src.backend.download_manager import DownloadListModel
+from src.backend.license_bridge import LicenseBridge
 from src.backend.video_processor import ProcessVideos
+from src.licensing import LicenseStatus
 from src.shared.access import public_collection_items
 from src.shared.media import VideoFilters
+from src.tests.integration.test_download_queue import video
+from src.tests.integration.test_license_integration import FakeLicenseClient
 
 
 async def source():
@@ -40,6 +45,51 @@ class GuiPremiumFeatures(unittest.IsolatedAsyncioTestCase):
             reloaded = SettingsManager(QSettings(path, QSettings.IniFormat))
             reloaded.apply_premium_quality_default()
             self.assertEqual(reloaded.quality, 8)
+
+    async def test_saved_premium_quality_survives_startup_and_license_loss(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = str(Path(directory) / "settings.ini")
+            saved = SettingsManager(QSettings(path, QSettings.IniFormat))
+            saved.apply_premium_quality_default()
+            settings = SettingsManager(QSettings(path, QSettings.IniFormat))
+
+            backend = Backend.__new__(Backend)
+            QObject.__init__(backend)
+            backend._enforce_parallel_access = Mock()
+            backend._update_activity = Mock()
+            backend._prepared_items = 0
+            client = FakeLicenseClient()
+            client.status = LicenseStatus("valid", True)
+            bridge = LicenseBridge(client)
+            self.addAsyncCleanup(bridge.close)
+
+            with patch("src.backend.application.app_settings", settings), \
+                 patch("src.backend.download_manager.app_settings", settings):
+                backend._downloads_model = DownloadListModel(backend, premium_access=backend.has_premium_access)
+                backend.set_license_bridge(bridge)
+                self.assertEqual(settings.quality, 6)
+                self.assertEqual(settings.get_int("Video/quality"), 0)
+
+                item = video("quality-preference")
+                item.qualities = [720, 1080]
+                backend.video_added_signal(item)
+                self.assertEqual(item.selected_quality, "720")
+
+                await bridge.start()
+                self.assertEqual(settings.quality, 0)
+                self.assertEqual(item.selected_quality, "1080")
+
+                client.status = LicenseStatus("expired_grace", False)
+                await bridge._run_check(force=True)
+                self.assertEqual(settings.quality, 6)
+                self.assertEqual(item.selected_quality, "720")
+                self.assertEqual(settings.get_int("Video/quality"), 0)
+
+                backend.set_default_quality(6)
+                client.status = LicenseStatus("valid", True)
+                await bridge._run_check(force=True)
+                self.assertEqual(settings.quality, 6)
+                self.assertEqual(settings.get_int("Video/quality"), 6)
 
     async def test_live_download_fixture_uses_the_same_entitlement_in_qml_and_backend(self):
         from PySide6.QtGui import QGuiApplication
@@ -86,8 +136,6 @@ class GuiPremiumFeatures(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(fetched, list(range(12)))
 
     async def test_previously_loaded_public_rows_beyond_preview_cannot_start_for_free(self):
-        from src.tests.integration.test_download_queue import video
-
         item = video("old-public-row")
         item.origin_iterator_url = "https://example.test/channel"
         item.index = 6

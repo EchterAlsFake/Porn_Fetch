@@ -15,6 +15,7 @@ from PySide6.QtCore import Property, QObject, QSettings, QStandardPaths, QUrl, S
 from PySide6.QtGui import QGuiApplication
 
 from src.shared.error_reporting import ERROR_REPORT_CONSENT_VERSION
+from src.shared.media import quality_requires_premium
 from src.shared.version import __version__ as __version__
 
 __license__ = "Porn Fetch Source-Available License 1.0"
@@ -133,6 +134,7 @@ class SettingsManager(QObject):
         self._normalize_sni_obfuscation_mode()
         # Runtime-only URL owned by SNIProxyManager; never persist ephemeral ports.
         self.active_sni_proxy_url: str | None = None
+        self._premium_quality_available = True
         self.log_level_map: dict[int, str] = {
             0: "DEBUG",
             1: "INFO",
@@ -295,13 +297,32 @@ class SettingsManager(QObject):
     # Video related
     @Property(int, notify=qualityChanged)
     def quality(self) -> int:
-        return self.get_int("Video/quality", 5)
+        preferred = self.get_int("Video/quality", 5)
+        if not self._premium_quality_available and quality_requires_premium(self.mappings_quality.get(preferred, "best")):
+            return 6  # 720p
+        return preferred
 
     @quality.setter
-    def quality(self, val):
-        if val != self.quality:      # noinspection PyPropertyDefinition
-            self._settings.setValue("Video/quality", val)
-            self.qualityChanged.emit(val)
+    def quality(self, val: int) -> None:
+        if val == self.get_int("Video/quality", 5):
+            return
+        previous = self.quality
+        self._settings.setValue("Video/quality", val)
+        current = self.quality
+        if current != previous:
+            self.qualityChanged.emit(current)
+
+    def set_premium_quality_available(self, available: bool) -> bool:
+        """Apply the runtime quality limit and report whether the effective quality changed."""
+        if available == self._premium_quality_available:
+            return False
+        previous = self.quality
+        self._premium_quality_available = available
+        current = self.quality
+        if current == previous:
+            return False
+        self.qualityChanged.emit(current)
+        return True
 
     @Property(int, notify=modelVideosChanged)
     def model_videos(self) -> int:

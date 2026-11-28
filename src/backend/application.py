@@ -413,11 +413,8 @@ class Backend(QObject):
             app_settings.apply_premium_quality_default()
 
     def _enforce_quality_access(self) -> None:
-        preferred_quality = app_settings.mappings_quality.get(app_settings.quality, "best")
-        if not self.has_premium_access() and quality_requires_premium(preferred_quality):
-            # 720p is the highest unrestricted entry in mappings_quality.
-            app_settings.quality = 6
-        else:
+        if not app_settings.set_premium_quality_available(self.has_premium_access()):
+            # Access can change the available streams even when the default stays the same.
             self._downloads_model.enforce_quality_access()
 
     @Slot(int)
